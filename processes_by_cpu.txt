@@ -1,0 +1,34 @@
+
+Name                  Id      CPU
+----                  --      ---
+vmmemWSL           12564 80882,25
+System                 4  7392,94
+MsMpEng             5184  7169,53
+Antigravity         5456  6258,25
+com.docker.backend 18320  5361,78
+Docker Desktop      3104  4614,95
+chrome             19140  3212,77
+dwm                 1736  3078,73
+chrome             19448  2813,64
+Antigravity         4324  1837,53
+Memory Compression  3848   926,97
+chrome              3076   697,11
+chrome             22048   548,39
+Antigravity        15680   435,36
+svchost             5192   425,64
+git                 6840   416,83
+Docker Desktop     13836   373,09
+WUDFHost            1404   326,25
+svchost             3084   315,47
+CrossDeviceService  7220   282,44
+wsl                 2032   267,67
+chrome             14156   256,38
+svchost             3252   252,34
+explorer            7444   242,98
+git                15704   227,33
+msedgewebview2      7844   216,41
+Antigravity        22488   197,81
+chrome             17080   195,08
+svchost             3648   169,16
+com.docker.backend 16152   157,47
+

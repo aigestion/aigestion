@@ -1,0 +1,33 @@
+name: Infra Apply
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'infra/**'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./infra/terraform/environments/pro
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./infra/terraform/environments/pro

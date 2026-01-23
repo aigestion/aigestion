@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo Dashboard - AIGestion</title>
+    <meta name="description" content="Dominio Inteligente - Showcase Interactivo AIGestion" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #000;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+      }
+      .dashboard {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      }
+      .header {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #8A2BE2 0%, #00F5FF 100%);
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Orbitron', monospace;
+        font-weight: bold;
+      }
+      .title {
+        font-family: 'Orbitron', monospace;
+        font-size: 1.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #8A2BE2 0%, #00F5FF 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 255, 0, 0.1);
+        border: 1px solid rgba(0, 255, 0, 0.3);
+        border-radius: 2rem;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.8rem;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #00ff00;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      .main {
+        padding: 2rem;
+      }
+      .demo-info {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .demo-info h2 {
+        font-family: 'Orbitron', monospace;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #00ff00;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+      }
+      .card:hover {
+        transform: translateY(-5px) scale(1.02);
+      }
+      .card h3 {
+        font-family: 'Orbitron', monospace;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: #00F5FF;
+      }
+      .metric {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      .metric-label {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+      }
+      .controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+      .btn {
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(135deg, #8A2BE2 0%, #00F5FF 100%);
+        border: none;
+        border-radius: 0.5rem;
+        color: white;
+        font-family: 'Orbitron', monospace;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(138, 43, 226, 0.5);
+      }
+      .btn-secondary {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .demo-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: linear-gradient(135deg, #00ff00 0%, #00cc00 100%);
+        border-radius: 2rem;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 1rem;
+      }
+      .interactive-demo {
+        background: rgba(0, 255, 0, 0.05);
+        border: 1px solid rgba(0, 255, 0, 0.2);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-top: 2rem;
+        text-align: center;
+      }
+      .demo-features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .feature-item {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        text-align: center;
+        transition: all 0.3s ease;
+      }
+      .feature-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <header class="header">
+        <div class="logo">
+          <div class="logo-icon">AI</div>
+          <div class="title">DEMO DASHBOARD</div>
+        </div>
+        <div class="status">
+          <div class="status-dot"></div>
+          <span>SHOWCASE_MODE</span>
+        </div>
+      </header>
+      
+      <main class="main">
+        <div class="demo-info">
+          <div class="demo-badge">SHOWCASE INTERACTIVO</div>
+          <h2>DOMINIO INTELIGENTE</h2>
+          <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1rem;">
+            Explora las capacidades del ecosistema AIGestion en modo demostración.
+            Funcionalidades en tiempo real, visualización de datos y control interactivo.
+          </p>
+        </div>
+        
+        <div class="controls">
+          <button class="btn">🎮 INICIAR TOUR</button>
+          <button class="btn btn-secondary">📊 VER DEMOS</button>
+          <button class="btn btn-secondary">🔧 PERSONALIZAR</button>
+          <button class="btn btn-secondary">📱 CONTACTAR</button>
+        </div>
+        
+        <div class="grid">
+          <div class="card" onclick="alert('Demo: IA Generativa')">
+            <h3>🤖 IA GENERATIVA</h3>
+            <div class="metric">GPT-4</div>
+            <div class="metric-label">Procesamiento Lenguaje</div>
+          </div>
+          
+          <div class="card" onclick="alert('Demo: Análisis Predictivo')">
+            <h3>📈 ANÁLISIS PREDICTIVO</h3>
+            <div class="metric">98.7%</div>
+            <div class="metric-label">Precisión</div>
+          </div>
+          
+          <div class="card" onclick="alert('Demo: Automatización')">
+            <h3>⚡ AUTOMATIZACIÓN</h3>
+            <div class="metric">24/7</div>
+            <div class="metric-label">Operaciones Continuas</div>
+          </div>
+          
+          <div class="card" onclick="alert('Demo: IoT Integration')">
+            <h3>🔌 IOT INTEGRATION</h3>
+            <div class="metric">1,247</div>
+            <div class="metric-label">Dispositivos Conectados</div>
+          </div>
+          
+          <div class="card" onclick="alert('Demo: Metaverso')">
+            <h3>🌐 METAVERSO</h3>
+            <div class="metric">3D</div>
+            <div class="metric-label">Mundos Virtuales</div>
+          </div>
+          
+          <div class="card" onclick="alert('Demo: Analytics')">
+            <h3>📊 ANALYTICS</h3>
+            <div class="metric">Real-time</div>
+            <div class="metric-label">Inteligencia de Negocio</div>
+          </div>
+        </div>
+        
+        <div class="interactive-demo">
+          <h3 style="color: #00ff00; margin-bottom: 1rem;">🎮 ZONA INTERACTIVA</h3>
+          <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1rem;">
+            Haz clic en las tarjetas arriba para ver demos específicas de cada funcionalidad.
+          </p>
+          <div class="demo-features">
+            <div class="feature-item">
+              <h4>🎨</h4>
+              <p>Generación de Contenido</p>
+            </div>
+            <div class="feature-item">
+              <h4>📊</h4>
+              <p>Visualización de Datos</p>
+            </div>
+            <div class="feature-item">
+              <h4>🔧</h4>
+              <p>Configuración</p>
+            </div>
+            <div class="feature-item">
+              <h4>📱</h4>
+              <p>Contacto</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    
+    <script>
+      // Demo interactions
+      function showDemo(feature) {
+        const demos = {
+          'IA Generativa': 'Demostración de procesamiento de lenguaje natural con GPT-4',
+          'Análisis Predictivo': 'Visualización de predicciones y tendencias en tiempo real',
+          'Automatización': 'Sistema de automatización de procesos empresariales',
+          'IoT Integration': 'Control y monitoreo de dispositivos IoT conectados',
+          'Metaverso': 'Exploración de mundos virtuales 3D interactivos',
+          'Analytics': 'Panel de inteligencia de negocio con métricas en tiempo real'
+        };
+        
+        alert(`🎯 ${feature}\n\n${demos[feature] || 'Demostración disponible'}`);
+      }
+    </script>
+  </body>
+</html>

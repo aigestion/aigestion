@@ -1,0 +1,15 @@
+action_id: trunk-single-player-auto-on-upgrade
+date: 2026-01-15 07:49:06
+run: trunk on-upgrade --single-player-only -n --no-progress --allow-daemon-start=false --print-summary --scope=check,plugins,runtimes,tools
+run_from: ""
+trigger: schedule 24h+5m
+result:
+  exit_code: 1
+  out: ""
+  err: Exception occurred while executing 'trunk-single-player-auto-on-upgrade'. See .trunk\out\LiMpN.yaml for details.
+  error_path: C:\Users\Alejandro\AIGestion\.trunk\out\LiMpN.yaml
+timestamp: 1768463346
+full_timestamp:
+  nanos: 410871000
+  seconds: 1768463346
+trunk_version: 1.22.15

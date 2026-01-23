@@ -1,0 +1,15 @@
+action_id: trunk-cache-prune
+date: 2026-01-15 07:47:50
+run: trunk cache prune --allow-daemon-start=false
+run_from: ""
+trigger: schedule 24h
+result:
+  exit_code: 1
+  out: ""
+  err: Exception occurred while executing 'trunk-cache-prune'. See .trunk\out\Og5BN.yaml for details.
+  error_path: C:\Users\Alejandro\AIGestion\.trunk\out\Og5BN.yaml
+timestamp: 1768463270
+full_timestamp:
+  nanos: 81158000
+  seconds: 1768463270
+trunk_version: 1.22.15

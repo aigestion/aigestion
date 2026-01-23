@@ -1,0 +1,17 @@
+name: Forward to N8N
+
+on:
+  issues:
+    types: [opened]
+  pull_request:
+    types: [opened]
+
+jobs:
+  forward:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Webhook
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '${{ toJson(github.event) }}' \
+          ${{ secrets.N8N_WEBHOOK_URL }}

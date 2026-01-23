@@ -1,0 +1,41 @@
+{
+  "name": "28-qa-bot-kb-sync",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "kb-update",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "index": "knowledge-base",
+        "id": "={{$node[\"Webhook\"].json[\"body\"][\"id\"]}}",
+        "data": "={{$node[\"Webhook\"].json[\"body\"][\"content\"]}}"
+      },
+      "name": "Pinecone",
+      "type": "n8n-nodes-base.pinecone",
+      "typeVersion": 1,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Pinecone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

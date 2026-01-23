@@ -1,0 +1,9 @@
+﻿
+Path                                   Files SizeGB
+----                                   ----- ------
+C:\Users\Alejandro\WORKSPACE\Data         17  0,008
+C:\Users\Alejandro\DEVELOPMENT\Scripts   150  0,001
+C:\Users\Alejandro\DEVELOPMENT\Tools    1647   3,16
+
+
+

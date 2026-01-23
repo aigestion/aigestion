@@ -1,0 +1,37 @@
+{
+  "display": {
+    "title": "AIGestion Virtual Office",
+    "description": "The official automated governance headquarters of AIGestion. Monitor system status in real-time.",
+    "favicon": "favicon_dcl.ico",
+    "navmapThumbnail": "images/scene-thumbnail.png"
+  },
+  "owner": "",
+  "contact": {
+    "name": "AIGestion",
+    "email": "contact@aigestion.com"
+  },
+  "main": "bin/index.js",
+  "runtimeVersion": "7",
+  "tags": ["office", "ai", "crypto", "business", "dashboard"],
+  "scene": {
+    "parcels": ["-51,114"],
+    "base": "-51,114"
+  },
+  "requiredPermissions": ["USE_FETCH"],
+  "spawnPoints": [
+    {
+      "name": "spawn1",
+      "default": true,
+      "position": {
+        "x": 8,
+        "y": 1,
+        "z": 8
+      },
+      "cameraTarget": {
+        "x": 8,
+        "y": 1,
+        "z": 16
+      }
+    }
+  ]
+}

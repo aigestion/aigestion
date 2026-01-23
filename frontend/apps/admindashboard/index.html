@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - AIGestion</title>
+    <meta name="description" content="Comando Omnipotente - Panel de Administración AIGestion" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #000;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+      }
+      .dashboard {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      }
+      .header {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #8A2BE2 0%, #00F5FF 100%);
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Orbitron', monospace;
+        font-weight: bold;
+      }
+      .title {
+        font-family: 'Orbitron', monospace;
+        font-size: 1.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #8A2BE2 0%, #00F5FF 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 2rem;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.8rem;
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        background: #00F5FF;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      .main {
+        padding: 2rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: transform 0.3s ease;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+      }
+      .card h3 {
+        font-family: 'Orbitron', monospace;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        color: #00F5FF;
+      }
+      .metric {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+      .metric-label {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+      }
+      .controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .btn {
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(135deg, #8A2BE2 0%, #00F5FF 100%);
+        border: none;
+        border-radius: 0.5rem;
+        color: white;
+        font-family: 'Orbitron', monospace;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(138, 43, 226, 0.5);
+      }
+      .btn-secondary {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .gcp-status {
+        background: rgba(0, 255, 0, 0.1);
+        border: 1px solid rgba(0, 255, 0, 0.3);
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+      }
+      .gcp-status h3 {
+        color: #00ff00;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <header class="header">
+        <div class="logo">
+          <div class="logo-icon">AI</div>
+          <div class="title">ADMIN DASHBOARD</div>
+        </div>
+        <div class="status">
+          <div class="status-dot"></div>
+          <span>PREDICTIVE_MODE_ACTIVE</span>
+        </div>
+      </header>
+      
+      <main class="main">
+        <div class="gcp-status">
+          <h3>🟢 GOOGLE CLOUD PROFESIONAL</h3>
+          <p><strong>Project ID:</strong> aigestion-production</p>
+          <p><strong>Cuenta:</strong> admin@aigestion.net</p>
+          <p><strong>Estado:</strong> Configurado y listo</p>
+        </div>
+        
+        <div class="controls">
+          <button class="btn">⚡ INICIAR AUTOMATIZACIÓN</button>
+          <button class="btn btn-secondary">📊 VER MÉTRICAS</button>
+          <button class="btn btn-secondary">🔧 CONFIGURACIÓN</button>
+        </div>
+        
+        <div class="grid">
+          <div class="card">
+            <h3>🤖 IA ACTIVA</h3>
+            <div class="metric">24/7</div>
+            <div class="metric-label">Procesos Automáticos</div>
+          </div>
+          
+          <div class="card">
+            <h3>📈 RENDIMIENTO</h3>
+            <div class="metric">98.7%</div>
+            <div class="metric-label">Eficiencia del Sistema</div>
+          </div>
+          
+          <div class="card">
+            <h3>🔌 CONECTADOS</h3>
+            <div class="metric">1,247</div>
+            <div class="metric-label">Dispositivos IoT</div>
+          </div>
+          
+          <div class="card">
+            <h3>⚡ ENERGÍA</h3>
+            <div class="metric">87.3%</div>
+            <div class="metric-label">Optimización Consumo</div>
+          </div>
+          
+          <div class="card">
+            <h3>🛡️ SEGURIDAD</h3>
+            <div class="metric">NIVEL 5</div>
+            <div class="metric-label">Protección Cuántica</div>
+          </div>
+          
+          <div class="card">
+            <h3>🌐 RED</h3>
+            <div class="metric">0.2ms</div>
+            <div class="metric-label">Latencia Global</div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-top: 2rem;">
+          <h3>🎛️ PANEL DE CONTROL CENTRAL</h3>
+          <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1rem;">
+            Sistema de administración omnipotente para control total del ecosistema AIGestion.
+            Conectado a Google Cloud Professional (aigestion-production).
+          </p>
+          <div class="controls">
+            <button class="btn">🚀 DEPLOY GLOBAL</button>
+            <button class="btn btn-secondary">📝 EXPORTAR LOGS</button>
+            <button class="btn btn-secondary">🔄 SINCRONIZAR</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

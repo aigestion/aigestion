@@ -1,0 +1,32 @@
+# EXCLUDE EVERYTHING BY DEFAULT
+*
+
+# INCLUDE ONLY FINAL PROJECTS
+!index.html
+!vercel.json
+!admin-dashboard/
+!admin-dashboard/index.html
+!admin-dashboard/vercel.json
+!client-dashboard/
+!client-dashboard/index.html
+!client-dashboard/vercel.json
+!demo-dashboard/
+!demo-dashboard/index.html
+!demo-dashboard/vercel.json
+
+# EXCLUDE ALL OLD PROJECTS
+frontend/
+nexus-auth/
+website-epic-clean/
+backend/
+aig-ia-engine/
+legacy-python-core/
+scripts/
+logs/
+coverage/
+backups/
+migration-backup/
+.git/
+node_modules/
+*.env*
+mcp-servers/

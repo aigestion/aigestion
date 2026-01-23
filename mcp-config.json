@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "gcp": {
+      "command": "node",
+      "args": ["./mcp-servers/gcp-server.js"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "${workspaceFolder}/.env.gcp"
+      }
+    },
+    "supabase": {
+      "command": "node",
+      "args": ["./mcp-servers/supabase-server.js"],
+      "env": {
+        "SUPABASE_URL": "${workspaceFolder}/.env.supabase"
+      }
+    }
+  }
+}

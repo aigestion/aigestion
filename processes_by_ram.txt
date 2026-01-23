@@ -1,0 +1,35 @@
+
+Name                           Id WorkingSet
+                                        (MB)
+----                           -- ----------
+Antigravity                 20864    1727,90
+Antigravity                 22488    1586,30
+Antigravity                 16992    1349,43
+vmmemWSL                    12564    1032,97
+git                          6840     994,17
+git                         15704     763,67
+Antigravity                 15680     688,28
+Antigravity                 22592     516,39
+git                         13928     509,62
+Antigravity                 15672     386,12
+language_server_windows_x64  3700     294,38
+MsMpEng                      5184     255,24
+java                        18964     228,99
+Antigravity                 22312     193,84
+Antigravity                 18044     179,36
+pwsh                        14656     165,09
+chrome                      19140     150,89
+Antigravity                  5456     144,96
+cloudcode_cli               22564     134,15
+node                        15460     130,18
+Antigravity                  4324     130,02
+Memory Compression           3848     120,61
+pwsh                         5040     120,27
+com.docker.backend          18320     119,87
+Secure System                 140     106,56
+Antigravity                  5728      93,42
+explorer                     7444      84,82
+Antigravity                 11528      75,48
+Antigravity                  5888      72,13
+Antigravity                 21936      70,82
+

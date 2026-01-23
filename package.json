@@ -1,0 +1,7 @@
+{
+  "name": "aigestion-main",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Main site build complete'"
+  }
+}

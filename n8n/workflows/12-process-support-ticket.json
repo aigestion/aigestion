@@ -1,0 +1,67 @@
+{
+  "name": "12-process-support-ticket",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "support-ticket",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$node[\"Webhook\"].json[\"body\"][\"priority\"]}}",
+              "value2": "high"
+            }
+          ]
+        }
+      },
+      "name": "Is High Priority",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "projectKey": "SUP",
+        "summary": "High Priority: {{$node[\"Webhook\"].json[\"body\"][\"subject\"]}}",
+        "issueType": "Bug"
+      },
+      "name": "Create Jira Issue",
+      "type": "n8n-nodes-base.jiraSoftware",
+      "typeVersion": 1,
+      "position": [650, 200]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Is High Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is High Priority": {
+      "main": [
+        [
+          {
+            "node": "Create Jira Issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

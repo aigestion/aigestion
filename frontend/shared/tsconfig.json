@@ -1,0 +1,21 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@shared/*": ["./*"],
+      "@/*": ["../apps/dashboard/src/*"]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "../node_modules/@types",
+      "../../node_modules/@types"
+    ],
+    "types": [
+      "react",
+      "react-dom",
+      "node"
+    ]
+  },
+  "include": ["components", "hooks", "utils", "*"],
+  "exclude": ["node_modules"]
+}

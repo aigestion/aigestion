@@ -1,0 +1,14 @@
+name: DB Migrate Staging
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Migrations
+        run: npm run typeorm:migration:run

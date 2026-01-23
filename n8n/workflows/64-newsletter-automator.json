@@ -1,0 +1,91 @@
+{
+  "name": "64-newsletter-automator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "name": "Weekly",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM content_curation WHERE created_at > NOW() - INTERVAL '7 days'"
+      },
+      "name": "Get Links",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "prompt": "=Create a newsletter introduction and summary for these links:\n{{$node[\"Get Links\"].json.map(l => l.title + ': ' + l.url).join(\"\\n\")}}"
+      },
+      "name": "Generate Content",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "newsletter@aigestion.com",
+        "toEmail": "me@aigestion.com",
+        "subject": "Weekly Digest Draft",
+        "text": "={{$node[\"Generate Content\"].json[\"choices\"][0][\"message\"][\"content\"]}}"
+      },
+      "name": "Email Draft",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Weekly": {
+      "main": [
+        [
+          {
+            "node": "Get Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Links": {
+      "main": [
+        [
+          {
+            "node": "Generate Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Content": {
+      "main": [
+        [
+          {
+            "node": "Email Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

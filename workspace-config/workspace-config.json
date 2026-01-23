@@ -1,0 +1,33 @@
+{
+  "workspace": {
+    "empresa": "AIGestion",
+    "dominio": "aigestion.net",
+    "plan": "Business Standard",
+    "adminEmail": "admin@aigestion.net",
+    "createdAt": "2026-01-22T07:26:00.000Z"
+  },
+  "separacionEmails": {
+    "personal": "alejandro.perez@gmail.com",
+    "profesional": "admin@aigestion.net",
+    "recomendaciones": [
+      "Usar email personal para redes sociales y suscripciones",
+      "Usar email profesional para negocios y clientes",
+      "Configurar forwarding de emails importantes"
+    ]
+  },
+  "usuarios": [
+    {
+      "nombre": "Alejandro",
+      "apellido": "Admin",
+      "email": "admin@aigestion.net",
+      "rol": "CEO/Admin",
+      "departamento": "Directiva"
+    }
+  ],
+  "costos": {
+    "plan": "Business Standard",
+    "costoPorUsuario": 12,
+    "costoMensual": 12,
+    "costoAnual": 144
+  }
+}

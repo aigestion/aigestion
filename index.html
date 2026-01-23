@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIGestion - Website Epic</title>
+    <meta name="description" content="Arquitectura de Inteligencia Soberana para Empresas del Futuro" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #000;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+      }
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+      }
+      .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(138, 43, 226, 0.1) 0%, rgba(0, 245, 255, 0.1) 100%);
+      }
+      .content {
+        position: relative;
+        z-index: 1;
+        padding: 2rem;
+      }
+      h1 {
+        font-family: 'Orbitron', monospace;
+        font-size: clamp(2rem, 8vw, 5rem);
+        font-weight: 900;
+        margin-bottom: 2rem;
+        line-height: 1.1;
+      }
+      .glow {
+        text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        color: #a855f7;
+      }
+      .btn {
+        display: inline-block;
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, #8A2BE2 0%, #00F5FF 100%);
+        border: none;
+        border-radius: 0.5rem;
+        color: white;
+        font-family: 'Orbitron', monospace;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        margin: 0.5rem;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(138, 43, 226, 0.5);
+      }
+      .dashboards {
+        padding: 4rem 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+      }
+      .card {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        padding: 2rem;
+        transition: transform 0.3s ease;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+      }
+      .card h3 {
+        font-family: 'Orbitron', monospace;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #00F5FF;
+      }
+      .status {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 245, 255, 0.1);
+        border: 1px solid rgba(0, 245, 255, 0.3);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.8rem;
+        z-index: 1000;
+      }
+      .auth-notice {
+        background: rgba(168, 85, 247, 0.1);
+        border: 1px solid rgba(168, 85, 247, 0.3);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="status">
+      ✅ www.aigestion.net - MAIN SITE
+    </div>
+    
+    <div id="root">
+      <section class="hero">
+        <div class="content">
+          <h1>
+            ARQUITECTURA DE<br>
+            <span class="glow">INTELIGENCIA SOBERANA</span>
+          </h1>
+          <p style="font-size: 1.25rem; margin-bottom: 2rem; opacity: 0.8;">
+            El núcleo neuronal para las empresas del mañana.<br>
+            Automatización, metaverso y transformación digital en una sola plataforma.
+          </p>
+          <div>
+            <a href="#dashboards" class="btn">Explorar Dashboards</a>
+            <a href="https://nexus.aigestion.net" class="btn" style="background: transparent; border: 1px solid rgba(255,255,255,0.2);">Iniciar Sesión</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboards" class="dashboards">
+        <div class="auth-notice">
+          🔐 Para acceder a los dashboards, primero autentícate en <a href="https://nexus.aigestion.net" style="color: #00F5FF;">nexus.aigestion.net</a>
+        </div>
+        
+        <h2 style="font-family: 'Orbitron', monospace; font-size: 2.5rem; text-align: center; margin-bottom: 1rem; color: #00F5FF;">
+          ECOSISTEMA DE DASHBOARDS
+        </h2>
+        <div class="grid">
+          <div class="card">
+            <h3>⚡ ADMIN DASHBOARD</h3>
+            <p style="opacity: 0.8; margin-bottom: 1rem;">Comando Omnipotente - Control total del sistema</p>
+            <a href="https://admin.aigestion.net" class="btn" style="font-size: 0.8rem; padding: 0.8rem 1.5rem;">Acceder Admin</a>
+          </div>
+          <div class="card">
+            <h3>💎 CLIENT DASHBOARD</h3>
+            <p style="opacity: 0.8; margin-bottom: 1rem;">Centro de Empresa Divino - Panel VIP</p>
+            <a href="https://client.aigestion.net" class="btn" style="font-size: 0.8rem; padding: 0.8rem 1.5rem;">Acceder Client</a>
+          </div>
+          <div class="card">
+            <h3>🎮 DEMO DASHBOARD</h3>
+            <p style="opacity: 0.8; margin-bottom: 1rem;">Dominio Inteligente - Showcase interactivo</p>
+            <a href="https://demo.aigestion.net" class="btn" style="font-size: 0.8rem; padding: 0.8rem 1.5rem;">Acceder Demo</a>
+          </div>
+        </div>
+        
+        <div style="margin-top: 4rem; text-align: center;">
+          <div class="card" style="max-width: 600px; margin: 0 auto;">
+            <h3>🔌 ARDUINO INTEGRATION</h3>
+            <p style="opacity: 0.8; margin-bottom: 1rem;">Control físico y sensores IoT conectados al ecosistema AIGestion</p>
+            <a href="#arduino" class="btn" style="font-size: 0.8rem; padding: 0.8rem 1.5rem;">Ver Arduino Hub</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

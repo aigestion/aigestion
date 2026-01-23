@@ -1,0 +1,17 @@
+﻿
+Name        Path                            Files SizeGB
+----        ----                            ----- ------
+Projects    C:\Users\Alejandro\Projects    678260 14,838
+AIGestion   C:\Users\Alejandro\AIGestion   464604  10,17
+Dev         C:\Users\Alejandro\Dev            254  8,711
+Tools       C:\Users\Alejandro\Tools         1647   3,16
+Data        C:\Users\Alejandro\Data            17  0,008
+scripts     C:\Users\Alejandro\scripts        150  0,001
+SYSTEM      C:\Users\Alejandro\SYSTEM           0      0
+PERSONAL    C:\Users\Alejandro\PERSONAL         0      0
+AI_TOOLS    C:\Users\Alejandro\AI_TOOLS         0      0
+WORKSPACE   C:\Users\Alejandro\WORKSPACE        0      0
+DEVELOPMENT C:\Users\Alejandro\DEVELOPMENT      0      0
+
+
+

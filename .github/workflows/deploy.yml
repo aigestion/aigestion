@@ -1,0 +1,50 @@
+name: Deploy AIGestion
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 * * * *' # Every hour, on the hour
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Docker image tag to deploy'
+        required: true
+        default: 'latest'
+
+permissions:
+  contents: read
+  id-token: write # Required for OIDC
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install kubectl
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+        shell: bash
+
+      - name: Set GKE context
+        run: |
+          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GKE_REGION }}
+        shell: bash
+
+      - name: Deploy using PowerShell script
+        run: |
+          pwsh ./deploy.ps1 -ImageTag ${{ github.event.inputs.image_tag }}
+        shell: pwsh

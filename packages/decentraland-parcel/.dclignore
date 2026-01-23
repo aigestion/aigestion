@@ -1,0 +1,9 @@
+.git
+node_modules
+.dclignore
+src
+tsconfig.json
+package.json
+package-lock.json
+*.ts
+*.tsx
