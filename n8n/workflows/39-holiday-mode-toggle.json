@@ -1,0 +1,62 @@
+{
+  "name": "39-holiday-mode-toggle",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "holiday-toggle",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "key": "HOLIDAY_MODE",
+        "value": "={{$node[\"Webhook\"].json[\"body\"][\"enabled\"]}}"
+      },
+      "name": "Set Config",
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "channel": "general",
+        "text": "=Holiday Mode is now {{$node[\"Webhook\"].json[\"body\"][\"enabled\"] ? 'ON' : 'OFF'}}",
+        "otherOptions": {}
+      },
+      "name": "Notify All",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Set Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Config": {
+      "main": [
+        [
+          {
+            "node": "Notify All",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

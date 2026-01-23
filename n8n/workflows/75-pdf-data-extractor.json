@@ -1,0 +1,67 @@
+{
+  "name": "75-pdf-data-extractor",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "pdf-extract",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "text"
+      },
+      "name": "Read PDF",
+      "type": "n8n-nodes-base.readBinaryFile",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "keepOnly": "set",
+        "values": {
+          "string": [
+            {
+              "name": "invoice_id",
+              "value": "={{$node[\"Read PDF\"].json[\"text\"].match(/Invoice #(\\d+)/)[1]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Regex Extract",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Read PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read PDF": {
+      "main": [
+        [
+          {
+            "node": "Regex Extract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,17 @@
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  appId: 'com.aigestion.frontend',
+  appName: 'AIGestion',
+  webDir: 'apps/website-epic/dist',
+  server: {
+    androidScheme: 'https'
+  },
+  plugins: {
+    SplashScreen: {
+      launchShowDuration: 0
+    }
+  }
+};
+
+export default config;

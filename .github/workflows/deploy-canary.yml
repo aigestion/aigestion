@@ -1,0 +1,12 @@
+name: Canary Deploy
+
+on: workflow_dispatch
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Canary
+        run: echo "Deploying Canary revision..."
+      - name: Split Traffic
+        run: echo "Route 10% traffic to Canary..."

@@ -1,0 +1,115 @@
+// src/routes/users.routes.ts
+import { Router } from 'express';
+
+import { validate, validateParams, validateBody, schemas } from '../middleware/validation.middleware';
+import {
+  createUser,
+  deleteUser,
+  getAllUsers,
+  getUserById,
+  updateUser,
+} from '../controllers/user.controller';
+
+const router = Router();
+console.log('[DEBUG] users.routes.ts: Router created');
+
+/**
+ * @openapi
+ * /users:
+ *   post:
+ *     summary: Create a new user
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       201:
+ *         description: User created
+ */
+router.post('/', validate({ body: schemas.user.create }), createUser);
+// router.post('/', createUser);
+/**
+ * @openapi
+ * /users:
+ *   get:
+ *     summary: Retrieve all users
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: List of users
+ */
+import { validatePagination } from '../middleware/pagination.middleware';
+router.get('/', validatePagination, getAllUsers);
+/**
+ * @openapi
+ * /users/{id}:
+ *   get:
+ *     summary: Get user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User data
+ *       404:
+ *         description: User not found
+ */
+router.get('/:id', validateParams(schemas.common.id), getUserById);
+/**
+ * @openapi
+ * /users/{id}:
+ *   put:
+ *     summary: Update user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserUpdate'
+ *     responses:
+ *       200:
+ *         description: User updated
+ *       404:
+ *         description: User not found
+ */
+router.put('/:id', validateParams(schemas.common.id), validateBody(schemas.user.update), updateUser);
+/**
+ * @openapi
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: User deleted
+ *       404:
+ *         description: User not found
+ */
+import { errorHandler } from '../middleware/error.middleware';
+
+router.delete('/:id', validateParams(schemas.common.id), deleteUser);
+
+// Explicitly handle errors within this router to prevent 404 fall-through
+router.use(errorHandler);
+
+export default router;

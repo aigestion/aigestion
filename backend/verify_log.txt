@@ -1,0 +1,25 @@
+--- STARTING MANUAL VERIFICATION ---
+
+Test 1: Standalone (Default)
+DEBUG: Inside resetRedisClient. Previous value: NULL
+DEBUG: Inside resetRedisClient. New value: NULL
+DEBUG: Inside getRedisClient. redisClient is: NULL
+DEBUG: redisClient is null, initializing...
+DEBUG: clusterNodes env: undefined
+Client created.
+
+Test 2: Cluster
+DEBUG: Inside resetRedisClient. Previous value: TRUTHY
+DEBUG: Inside resetRedisClient. New value: NULL
+DEBUG: Inside getRedisClient. redisClient is: NULL
+DEBUG: redisClient is null, initializing...
+DEBUG: clusterNodes env: redis://node1:6379,redis://node2:6379
+[32minfo[39m: Initializing Redis Cluster with nodes: [{"url":"redis://node1:6379"},{"url":"redis://node2:6379"}] {"timestamp":"2026-01-21T17:02:55.868Z"}
+Client created.
+--- END MANUAL VERIFICATION ---
+[32minfo[39m: Connected to Redis Standalone {"timestamp":"2026-01-21T17:02:56.019Z"}
+[31merror[39m: Redis Client Error: getaddrinfo ENOTFOUND node2 {"code":"ENOTFOUND","errno":-3008,"hostname":"node2","stack":"Error: getaddrinfo ENOTFOUND node2\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)","syscall":"getaddrinfo","timestamp":"2026-01-21T17:02:58.983Z"}
+[31merror[39m: Redis Client Error: getaddrinfo ENOTFOUND node2 {"code":"ENOTFOUND","errno":-3008,"hostname":"node2","stack":"Error: getaddrinfo ENOTFOUND node2\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)","syscall":"getaddrinfo","timestamp":"2026-01-21T17:02:58.999Z"}
+[31merror[39m: Redis Client Error: getaddrinfo ENOTFOUND node1 {"code":"ENOTFOUND","errno":-3008,"hostname":"node1","stack":"Error: getaddrinfo ENOTFOUND node1\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)","syscall":"getaddrinfo","timestamp":"2026-01-21T17:03:03.214Z"}
+[31merror[39m: Redis Client Error: getaddrinfo ENOTFOUND node1 {"code":"ENOTFOUND","errno":-3008,"hostname":"node1","stack":"Error: getaddrinfo ENOTFOUND node1\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:121:26)","syscall":"getaddrinfo","timestamp":"2026-01-21T17:03:03.217Z"}
+[31merror[39m: Failed to connect to Redis: All the root nodes are unavailable {"stack":"Error: All the root nodes are unavailable\n    at RedisClusterSlots._RedisClusterSlots_discoverWithRootNodes (C:\\Users\\Alejandro\\AIGestion\\node_modules\\.pnpm\\@redis+client@1.6.1\\node_modules\\@redis\\client\\dist\\lib\\cluster\\cluster-slots.js:169:11)\n    at processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async RedisClusterSlots.connect (C:\\Users\\Alejandro\\AIGestion\\node_modules\\.pnpm\\@redis+client@1.6.1\\node_modules\\@redis\\client\\dist\\lib\\cluster\\cluster-slots.js:81:13)\n    at async C:\\Users\\Alejandro\\AIGestion\\backend\\src\\cache\\redis.ts:63:11","timestamp":"2026-01-21T17:03:03.242Z"}

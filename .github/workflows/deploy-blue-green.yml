@@ -1,0 +1,12 @@
+name: Blue-Green Deploy
+
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Green
+        run: echo "Deploying Green revision..."
+      - name: Switch Traffic
+        run: echo "Switching 100% traffic to Green..."

@@ -1,0 +1,15 @@
+node_modules/
+**/node_modules/
+backend/
+legacy-python-core/
+.git/
+.railway/
+logs/
+coverage/
+migrations/
+scripts/
+tests/
+backups/
+aig-ia-engine/
+cloud/
+local-db/

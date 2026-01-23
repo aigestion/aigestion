@@ -1,0 +1,83 @@
+{
+  "name": "01-git-push-handler",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "git-push",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        250,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "keepOnly": "set",
+        "values": {
+          "string": [
+            {
+              "name": "commit_msg",
+              "value": "={{$node[\"Webhook\"].json[\"body\"][\"head_commit\"][\"message\"]}}"
+            },
+            {
+              "name": "branch",
+              "value": "={{$node[\"Webhook\"].json[\"body\"][\"ref\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "Extract Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        450,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "channel": "dev-builds",
+        "text": "=New push to {{$node[\"Extract Data\"].json[\"branch\"]}}: {{$node[\"Extract Data\"].json[\"commit_msg\"]}}",
+        "attachments": [],
+        "otherOptions": {}
+      },
+      "name": "Slack Notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        650,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Data": {
+      "main": [
+        [
+          {
+            "node": "Slack Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "85-email-triage",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "email-webhook",
+        "options": {}
+      },
+      "name": "New Email",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "prompt": "=Classify this email (Support, Sales, Spam, Personal) and draft a short reply if appropriate:\nSubject: {{$node[\"New Email\"].json[\"body\"][\"subject\"]}}\nBody: {{$node[\"New Email\"].json[\"body\"][\"text\"]}}"
+      },
+      "name": "AI Triage",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "account": "my-gmail",
+        "resource": "draft",
+        "operation": "create",
+        "subject": "Re: {{$node[\"New Email\"].json[\"body\"][\"subject\"]}}",
+        "message": "={{$node[\"AI Triage\"].json[\"choices\"][0][\"message\"][\"content\"]}}"
+      },
+      "name": "Create Draft",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "New Email": {
+      "main": [
+        [
+          {
+            "node": "AI Triage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Triage": {
+      "main": [
+        [
+          {
+            "node": "Create Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

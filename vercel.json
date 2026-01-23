@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "public": false,
+  "buildCommand": "cd frontend/apps/website-epic && pnpm install && npm run build",
+  "outputDirectory": "frontend/apps/website-epic/dist",
+  "installCommand": "pnpm install",
+  "framework": "vite",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
+  "domains": ["www.aigestion.net", "aigestion.net"]
+}
