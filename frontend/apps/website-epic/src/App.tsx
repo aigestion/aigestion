@@ -2,7 +2,7 @@ import type { Session } from '@supabase/supabase-js';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { VitureXRExperience } from './components/VitureXRExperience';
+import { CinematicExperience } from './components/CinematicExperience';
 import Login from './pages/Login';
 import WeaponDashboard from './pages/WeaponDashboard';
 import { supabase } from './services/supabase';
@@ -83,71 +83,8 @@ function App() {
           <Route path="/login" element={!session ? <Login /> : <Navigate to="/" />} />
           <Route path="/" element={
             <main>
-              {/* Hero Section - Sin tocar como solicitaste */}
-              <section id="hero" className="min-h-screen flex items-center justify-center bg-black">
-                <h1 className="text-6xl font-orbitron text-white text-center">
-                  AIGESTION.NET
-                  <span className="block text-nexus-cyan text-3xl mt-4">Experiencia Cinematográfica</span>
-                </h1>
-              </section>
-
-              {/* Enhanced Sections - Temporarily simplified */}
-              <section id="clients" className="py-32 bg-black">
-                <div className="max-w-7xl mx-auto px-6 text-center">
-                  <h2 className="text-5xl font-orbitron font-black text-white mb-6">
-                    CLIENTES FORTUNE 500
-                  </h2>
-                  <p className="text-xl text-gray-300">Tesla, Microsoft, Google, Amazon confían en nosotros</p>
-                </div>
-              </section>
-
-              <section id="features" className="py-32 bg-gray-900">
-                <div className="max-w-7xl mx-auto px-6 text-center">
-                  <h2 className="text-5xl font-orbitron font-black text-white mb-6">
-                    CARACTERÍSTICAS REVOLUCIONARIAS
-                  </h2>
-                  <p className="text-xl text-gray-300">IA Cuántica, Automatización, Metaverso</p>
-                </div>
-              </section>
-
-              <section id="daniela" className="py-32 bg-black">
-                <div className="max-w-7xl mx-auto px-6 text-center">
-                  <h2 className="text-5xl font-orbitron font-black text-white mb-6">
-                    DANIELA AI
-                  </h2>
-                  <p className="text-xl text-nexus-cyan">Conciencia Artificial 8K Ultra-Realista</p>
-                </div>
-              </section>
-
-              <section id="nexus" className="py-32 bg-gray-900">
-                <div className="max-w-7xl mx-auto px-6 text-center">
-                  <h2 className="text-5xl font-orbitron font-black text-white mb-6">
-                    NEXUS ANDROID
-                  </h2>
-                  <p className="text-xl text-nexus-cyan">Guardián Cuántico de la Innovación</p>
-                </div>
-              </section>
-
-              <section id="roi" className="py-32 bg-black">
-                <div className="max-w-7xl mx-auto px-6 text-center">
-                  <h2 className="text-5xl font-orbitron font-black text-white mb-6">
-                    CALCULADORA ROI
-                  </h2>
-                  <p className="text-xl text-gray-300">Descubre tu retorno de inversión</p>
-                </div>
-              </section>
-
-              <section id="contact" className="py-32 bg-gray-900">
-                <div className="max-w-7xl mx-auto px-6 text-center">
-                  <h2 className="text-5xl font-orbitron font-black text-white mb-6">
-                    CONTACTO
-                  </h2>
-                  <p className="text-xl text-nexus-cyan">Conecta con el futuro hoy</p>
-                </div>
-              </section>
-
-              {/* VITURE XR Experience - Magia Wuaw */}
-              <VitureXRExperience />
+              {/* CINEMATICS HERO EXPERIENCE - ARQUITECTURA DE INTELIGENCIA SOBERANA */}
+              <CinematicExperience />
             </main>
           } />
 
