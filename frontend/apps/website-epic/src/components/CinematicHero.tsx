@@ -101,7 +101,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-screen overflow-hidden bg-black" data-build="website-epic-v2">
       {/* Background Video Layer */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
