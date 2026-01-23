@@ -13,3 +13,20 @@ backups/
 aig-ia-engine/
 cloud/
 local-db/
+# Ignorar otras apps (solo website-epic)
+frontend/apps/admindashboard/
+frontend/apps/clientdashboard/
+frontend/apps/demodashboard/
+frontend/shared/
+ml-service/
+evaluation/
+docker/
+k8s/
+infra/
+optimization-plan/
+linters/
+tools/
+actions/
+docs/
+.agent/
+migration-backup/
