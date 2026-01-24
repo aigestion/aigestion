@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Star, Layout, Plus, Check, Search, Filter, X } from 'lucide-react';
+import { ShoppingBag, Star, Layout, Plus, Check, Search, Filter, X, ShieldAlert } from 'lucide-react';
 
 interface Widget {
   id: string;

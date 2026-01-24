@@ -29874,29 +29874,40 @@ function enhancedMain() {
   soundSystem.initialize();
   lightingSystem.initialize();
   uiSystem.initialize();
-  weatherSystem.initialize();
-  multiplayerSystem.initialize();
-  avatarSystem.initialize();
-  smartRoomSystem.initialize();
-  gestureSystem.initialize();
-  whiteboardSystem.initialize();
-  voiceCommandSystem.initialize();
-  blockchainSystem.initialize();
-  arIntegrationSystem.initialize();
-  contentManagementSystem.initialize();
-  physicsSystem.initialize();
-  proceduralSystem.initialize();
-  emotionDetectionSystem.initialize();
-  crossPlatformSyncSystem.initialize();
-  analyticsDashboardSystem.initialize();
-  hapticFeedbackSystem.initialize();
   createEnhancedArchitecture();
   createEnhancedInteractables();
-  initializeNPCs();
-  initializeDataVisualization();
-  startRealTimeUpdates();
-  createParticleEffects();
-  console.log(" Enhanced Virtual Office Initialized Successfully!");
+  console.log(" Core systems initialized - Starting advanced systems...");
+  setTimeout(() => {
+    weatherSystem.initialize();
+    multiplayerSystem.initialize();
+    avatarSystem.initialize();
+    smartRoomSystem.initialize();
+  }, 100);
+  setTimeout(() => {
+    gestureSystem.initialize();
+    whiteboardSystem.initialize();
+    voiceCommandSystem.initialize();
+    blockchainSystem.initialize();
+  }, 200);
+  setTimeout(() => {
+    arIntegrationSystem.initialize();
+    contentManagementSystem.initialize();
+    physicsSystem.initialize();
+    proceduralSystem.initialize();
+  }, 300);
+  setTimeout(() => {
+    emotionDetectionSystem.initialize();
+    crossPlatformSyncSystem.initialize();
+    analyticsDashboardSystem.initialize();
+    hapticFeedbackSystem.initialize();
+  }, 400);
+  setTimeout(() => {
+    initializeNPCs();
+    initializeDataVisualization();
+    startRealTimeUpdates();
+    createParticleEffects();
+    console.log(" Enhanced Virtual Office Initialized Successfully!");
+  }, 500);
 }
 var systemUpdateInterval;
 var diagnosticsInterval;
@@ -29925,7 +29936,7 @@ function startRealTimeUpdates() {
     } catch (error) {
       console.error(" Error updating system stats:", error);
     }
-  }, 3e3);
+  }, 5e3);
   diagnosticsInterval = setInterval(async () => {
     try {
       const diagnostics = await runSystemDiagnostics();
@@ -29937,7 +29948,7 @@ function startRealTimeUpdates() {
     } catch (error) {
       console.error(" Error running diagnostics:", error);
     }
-  }, 1e4);
+  }, 2e4);
   alertsInterval = setInterval(async () => {
     try {
       const alerts = await fetchAlertMessages();
@@ -29948,7 +29959,7 @@ function startRealTimeUpdates() {
     } catch (error) {
       console.error(" Error fetching alerts:", error);
     }
-  }, 5e3);
+  }, 1e4);
 }
 function initializeNPCs() {
   npcManager.createNPC(
@@ -29987,16 +29998,20 @@ function initializeDataVisualization() {
 var particlePool = [];
 var maxParticles = 50;
 function createParticleEffects() {
-  for (let i = 0; i < Math.min(20, maxParticles); i++) {
+  console.log("\u{1F3A8} Creating particle effects...");
+  const particleCount = Math.min(10, maxParticles);
+  for (let i = 0; i < particleCount; i++) {
     const particle = createParticle();
     animateParticle(particle);
     particlePool.push(particle);
   }
-  for (let i = 0; i < Math.min(15, maxParticles - 20); i++) {
+  const energyCount = Math.min(5, maxParticles - particleCount);
+  for (let i = 0; i < energyCount; i++) {
     const energyParticle = createEnergyParticle();
     animateEnergyParticle(energyParticle);
     particlePool.push(energyParticle);
   }
+  console.log(`\u2705 Created ${particleCount + energyCount} particles`);
 }
 function createParticle() {
   const particle = engine.addEntity();
@@ -30039,41 +30054,20 @@ function createEnergyParticle() {
   return energyParticle;
 }
 function animateParticle(particle) {
-  let time = 0;
-  const initialPos = Transform2.getMutable(particle).position;
-  setInterval(() => {
-    time += 0.1;
-    const transform = Transform2.getMutable(particle);
-    transform.position.x = initialPos.x + Math.sin(time) * 0.5;
-    transform.position.y = initialPos.y + Math.cos(time * 0.5) * 0.3;
-    transform.position.z = initialPos.z + Math.sin(time * 0.7) * 0.5;
-  }, 100);
+  console.log("\u26A0\uFE0F Particle animation disabled for performance");
+  return;
 }
 function animateEnergyParticle(particle) {
-  let time = 0;
-  const initialPos = Transform2.getMutable(particle).position;
-  setInterval(() => {
-    time += 0.15;
-    const transform = Transform2.getMutable(particle);
-    transform.position.y = initialPos.y + Math.sin(time) * 0.8;
-    transform.scale.x = 0.15 + Math.sin(time * 2) * 0.05;
-    transform.scale.z = 0.15 + Math.cos(time * 2) * 0.05;
-  }, 100);
+  console.log("\u26A0\uFE0F Energy particle animation disabled for performance");
+  return;
 }
 enhancedMain();
 
 // src/index.ts
 function main() {
-  const debugCube = engine.addEntity();
-  Transform2.create(debugCube, {
-    position: Vector32.create(8, 2, 8),
-    scale: Vector32.create(2, 2, 2)
-  });
-  MeshRenderer3.setBox(debugCube);
-  Material3.setPbrMaterial(debugCube, { albedoColor: Color42.Red() });
+  console.log("\u{1F680} Starting AIGestion Virtual Office...");
   enhancedMain();
 }
-main();
 /*! Bundled license information:
 
 long/index.js:

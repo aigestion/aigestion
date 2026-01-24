@@ -1,0 +1,152 @@
+{
+  "version": 2,
+  "name": "aigestion-frontend",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://aigestion-backend.onrender.com/api/$1",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization"
+      }
+    },
+    {
+      "src": "/daniela",
+      "dest": "/apps/website-epic/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/daniela/demo",
+      "dest": "/apps/website-epic/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/admin",
+      "dest": "/apps/admindashboard/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/client",
+      "dest": "/apps/clientdashboard/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/demo",
+      "dest": "/apps/demodashboard/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/apps/website-epic/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    }
+  ],
+  "env": {
+    "VITE_API_BASE_URL": "https://aigestion-backend.onrender.com/api/v1",
+    "VITE_VAPI_PUBLIC_KEY": "67c74f53-b26a-4d23-9f5b-91c68e1a6c4b",
+    "VITE_ELEVENLABS_VOICE_ID": "EXAVITQu4vr4xnSDxMaL",
+    "VITE_APP_NAME": "AIGestion - Daniela AI Assistant",
+    "VITE_APP_VERSION": "2.0.0",
+    "VITE_ENVIRONMENT": "production"
+  },
+  "functions": {
+    "apps/website-epic/package.json": {
+      "maxDuration": 10
+    },
+    "apps/admindashboard/package.json": {
+      "maxDuration": 10
+    },
+    "apps/clientdashboard/package.json": {
+      "maxDuration": 10
+    },
+    "apps/demodashboard/package.json": {
+      "maxDuration": 10
+    }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/daniela/(.*)",
+      "destination": "/apps/website-epic/index.html"
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": "/apps/admindashboard/index.html"
+    },
+    {
+      "source": "/client/(.*)",
+      "destination": "/apps/clientdashboard/index.html"
+    },
+    {
+      "source": "/demo/(.*)",
+      "destination": "/apps/demodashboard/index.html"
+    }
+  ]
+}

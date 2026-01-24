@@ -1,10 +1,11 @@
 import type { Session } from '@supabase/supabase-js';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { CommandTerminal } from './components/CommandTerminal';
+import { Dashboard } from './components/Dashboard';
 import { VitureXRExperience } from './components/VitureXRExperience';
-import Login from './pages/Login';
+import { Login } from './pages/Login';
 import WeaponDashboard from './pages/WeaponDashboard';
 import { supabase } from './services/supabase';
 
@@ -60,34 +61,75 @@ const Footer = () => (
 function App() {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [currentUser, setCurrentUser] = useState<any>(null)
 
-  const handleRedirection = (user: { email?: string; user_metadata?: { role?: string } }) => {
-    if (!user.email) return;
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
 
-    const role = user.user_metadata?.role || 'client'
-    const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com']
+      if (error) throw error
 
-    // Redirect logic
-    if (adminEmails.includes(user.email) || role === 'admin') {
-      window.location.href = 'https://admin.aigestion.net'
-    } else if (role === 'demo') {
-      window.location.href = 'https://demo.aigestion.net'
-    } else {
-      window.location.href = 'https://client.aigestion.net'
+      const user = data.user
+      const role = user.user_metadata?.role || 'client'
+
+      // Check if admin
+      const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com']
+      if (adminEmails.includes(user.email!) || role === 'admin') {
+        window.location.href = 'https://admin.aigestion.net'
+        return
+      }
+
+      setSession(data.session)
+      setCurrentUser({
+        email: user.email!,
+        name: user.user_metadata?.name || user.email!.split('@')[0],
+        subscription: user.user_metadata?.subscription || 'free'
+      })
+      setIsAuthenticated(true)
+
+    } catch (error) {
+      console.error('Login error:', error)
+      throw error
     }
+  }
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut()
+    setSession(null)
+    setIsAuthenticated(false)
+    setCurrentUser(null)
   }
 
   useEffect(() => {
     if (!supabase) {
-      console.warn('Supabase no configurado; se omiten redirecciones automáticas')
+      console.warn('Supabase no configurado; usando modo demo')
       setTimeout(() => setLoading(false), 0)
       return
     }
 
     supabase.auth.getSession().then(({ data: { session } }: { data: { session: Session | null } }) => {
       setSession(session)
-      if (session && window.location.pathname === '/login') {
-        handleRedirection(session.user)
+      if (session) {
+        const user = session.user
+        const role = user.user_metadata?.role || 'client'
+
+        // Check if admin
+        const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com']
+        if (adminEmails.includes(user.email!) || role === 'admin') {
+          window.location.href = 'https://admin.aigestion.net'
+          return
+        }
+
+        setCurrentUser({
+          email: user.email!,
+          name: user.user_metadata?.name || user.email!.split('@')[0],
+          subscription: user.user_metadata?.subscription || 'free'
+        })
+        setIsAuthenticated(true)
       }
       setLoading(false)
     }).catch(err => {
@@ -99,8 +141,26 @@ function App() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event: string, session: Session | null) => {
       setSession(session)
-      if (session && window.location.pathname === '/login') {
-        handleRedirection(session.user)
+      if (session) {
+        const user = session.user
+        const role = user.user_metadata?.role || 'client'
+
+        // Check if admin
+        const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com']
+        if (adminEmails.includes(user.email!) || role === 'admin') {
+          window.location.href = 'https://admin.aigestion.net'
+          return
+        }
+
+        setCurrentUser({
+          email: user.email!,
+          name: user.user_metadata?.name || user.email!.split('@')[0],
+          subscription: user.user_metadata?.subscription || 'free'
+        })
+        setIsAuthenticated(true)
+      } else {
+        setIsAuthenticated(false)
+        setCurrentUser(null)
       }
     })
 
@@ -119,34 +179,39 @@ function App() {
   return (
     <Router>
       <div className="bg-nexus-obsidian min-h-screen text-white font-sans selection:bg-nexus-violet selection:text-white relative">
-        <Navigation />
+        {!isAuthenticated ? <Navigation /> : null}
         <Routes>
-          <Route path="/login" element={!session ? <Login /> : <Navigate to="/" />} />
+          <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} isAuthenticated={isAuthenticated} /> : <Navigate to="/dashboard" />} />
+          <Route path="/dashboard" element={isAuthenticated ? <Dashboard user={currentUser} onLogout={handleLogout} /> : <Navigate to="/login" />} />
           <Route path="/" element={
-            <main>
-              {/* Advanced Presentation - Ahora es la primera sección */}
-              <AnimatePresence mode="wait">
-                <CinematicPresentation />
-              </AnimatePresence>
+            !isAuthenticated ? (
+              <main>
+                {/* Advanced Presentation - Ahora es la primera sección */}
+                <AnimatePresence mode="wait">
+                  <CinematicPresentation />
+                </AnimatePresence>
 
-              {/* Fortune 500 Showcase */}
-              <ClientShowcase />
+                {/* Fortune 500 Showcase */}
+                <ClientShowcase />
 
-              {/* synthetic Consciousness - Daniela AI */}
-              <DanielaShowcase />
+                {/* synthetic Consciousness - Daniela AI */}
+                <DanielaShowcase />
 
-              {/* Quantum Guardian - Nexus Android */}
-              <NexusAndroid />
+                {/* Quantum Guardian - Nexus Android */}
+                <NexusAndroid />
 
-              {/* Strategic ROI analysis */}
-              <EnhancedROI />
+                {/* Strategic ROI analysis */}
+                <EnhancedROI />
 
-              {/* Immersive Contact Experience */}
-              <ContactSection />
+                {/* Immersive Contact Experience */}
+                <ContactSection />
 
-              {/* VITURE XR Experience */}
-              <VitureXRExperience />
-            </main>
+                {/* VITURE XR Experience */}
+                <VitureXRExperience />
+              </main>
+            ) : (
+              <Navigate to="/dashboard" />
+            )
           } />
 
           <Route path="/lab" element={
@@ -156,6 +221,10 @@ function App() {
           } />
 
           <Route path="/weapon" element={<WeaponDashboard />} />
+
+          {/* Daniela AI Routes */}
+          <Route path="/daniela" element={<DanielaDemo />} />
+          <Route path="/daniela/demo" element={<DanielaDemo />} />
         </Routes>
 
         <Footer />

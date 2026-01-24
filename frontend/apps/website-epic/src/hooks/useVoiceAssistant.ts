@@ -1,4 +1,4 @@
-import { useCallback,useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * Global declaration for Vapi SDK when loaded via CDN
@@ -18,7 +18,29 @@ interface UseVoiceAssistantOptions {
   idleTimeoutSeconds?: number;
 }
 
+// Temporary disable Vapi functionality
+const VAPI_DISABLED = true;
+
 export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
+  // Early return if VAPI is disabled
+  if (VAPI_DISABLED) {
+    return {
+      status: 'idle' as CallStatus,
+      isSpeaking: false,
+      volume: 0,
+      error: null,
+      startCall: () => { },
+      stopCall: () => { },
+      toggleMute: () => { },
+      isMuted: false,
+      duration: 0,
+      suggestedActions: [],
+      isProcessing: false,
+      startRecording: () => { },
+      stopRecording: () => { }
+    };
+  }
+
   const {
     maxDurationSeconds = 120, // 2 minutes max to save credits
     idleTimeoutSeconds = 30    // 30 seconds of silence to disconnect
@@ -79,7 +101,7 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   }, []);
 
   const startTotalTimer = () => {
-    if (totalTimerRef.current) {clearTimeout(totalTimerRef.current);}
+    if (totalTimerRef.current) { clearTimeout(totalTimerRef.current); }
     totalTimerRef.current = setTimeout(() => {
       console.log('[VoiceAssistant] Max duration reached. Disconnecting to save credits.');
       stop();
@@ -87,7 +109,7 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   };
 
   const startIdleTimer = () => {
-    if (timerRef.current) {clearTimeout(timerRef.current);}
+    if (timerRef.current) { clearTimeout(timerRef.current); }
     timerRef.current = setTimeout(() => {
       console.log('[VoiceAssistant] Idle timeout reached. Disconnecting.');
       stop();
@@ -95,12 +117,12 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   };
 
   const resetIdleTimer = () => {
-    if (timerRef.current) {clearTimeout(timerRef.current);}
+    if (timerRef.current) { clearTimeout(timerRef.current); }
   };
 
   const stopTimers = () => {
-    if (timerRef.current) {clearTimeout(timerRef.current);}
-    if (totalTimerRef.current) {clearTimeout(totalTimerRef.current);}
+    if (timerRef.current) { clearTimeout(timerRef.current); }
+    if (totalTimerRef.current) { clearTimeout(totalTimerRef.current); }
   };
 
   const start = useCallback(async () => {

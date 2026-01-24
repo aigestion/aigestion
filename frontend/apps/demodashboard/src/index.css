@@ -43,6 +43,7 @@
   .text-glow { text-shadow: 0 0 20px rgba(138, 43, 226, 0.5); }
   .text-glow-cyan { text-shadow: 0 0 20px rgba(0, 245, 255, 0.5); }
   .premium-glass {
-    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0, 0, 0, 0.8)];
+    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/10;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
   }
 }

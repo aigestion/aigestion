@@ -29,6 +29,7 @@ import { getBillingSnapshot } from '../controllers/billing.controller';
 import { getCurrentUsage } from '../controllers/usage.controller';
 import analyticsRouter from './analytics.routes';
 import { requireAuth } from '../middleware/auth.middleware';
+import enhancedVoiceRouter from './enhanced-voice.routes';
 
 // ... (existing imports)
 
@@ -174,6 +175,19 @@ apiV1Router.use('/youtube', youtubeRouter);
 apiV1Router.get('/usage/current', getCurrentUsage);
 apiV1Router.get('/billing/snapshot', requireAuth, getBillingSnapshot);
 apiV1Router.use('/analytics', analyticsRouter);
+
+// Enhanced Voice Service (Daniela)
+/**
+ * @openapi
+ * /enhanced-voice:
+ *   get:
+ *     summary: Enhanced Voice Service endpoints for Daniela
+ *     tags: [EnhancedVoice]
+ *     responses:
+ *       200:
+ *         description: Enhanced Voice Service endpoints
+ */
+apiV1Router.use('/enhanced-voice', enhancedVoiceRouter);
 
 // AI and RAG Routes
 

@@ -1,6 +1,6 @@
-import React from 'react';
-import '@shared/index.css';
 import { DashboardLayout, NeonCard, Skeleton, BusinessIntelligence, GoogleServiceHub, IdeaSynthesizer } from '@shared/index';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
@@ -53,6 +53,8 @@ const App: React.FC = () => {
       <div className="mt-12">
         <IdeaSynthesizer />
       </div>
+      <Analytics />
+      <SpeedInsights />
     </DashboardLayout>
   );
 };

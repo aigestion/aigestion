@@ -30,7 +30,8 @@
     "@capacitor/android": "^8.0.0",
     "@capacitor/cli": "^8.0.0",
     "@capacitor/core": "^8.0.0",
-    "canvas-confetti": "^1.9.3"
+    "canvas-confetti": "^1.9.3",
+    "react-window": "^1.8.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

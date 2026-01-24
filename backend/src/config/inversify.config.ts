@@ -15,6 +15,7 @@ import { IPersonaRepository, PersonaRepository } from '../infrastructure/reposit
 import { CreatePersonaUseCase } from '../application/usecases/persona/CreatePersonaUseCase';
 import { GetMarketplacePersonasUseCase } from '../application/usecases/persona/GetMarketplacePersonasUseCase';
 import { AIService } from '../services/ai.service';
+import { EnhancedVoiceService } from '../services/enhanced-voice.service';
 import { AlertingService } from '../services/alerting.service';
 import { AnalyticsService } from '../services/analytics.service';
 import { AuthService } from '../services/auth.service';
@@ -89,6 +90,7 @@ container.bind<CommandBus>(TYPES.CommandBus).to(CommandBus).inSingletonScope();
 container.bind<QueryBus>(TYPES.QueryBus).to(QueryBus).inSingletonScope();
 container.bind<EventBus>(TYPES.EventBus).to(EventBus).inSingletonScope();
 container.bind<AIService>(TYPES.AIService).to(AIService).inSingletonScope();
+container.bind<EnhancedVoiceService>(TYPES.EnhancedVoiceService).to(EnhancedVoiceService).inSingletonScope();
 container.bind<AnalyticsService>(TYPES.AnalyticsService).to(AnalyticsService).inSingletonScope();
 container.bind<AuthService>(TYPES.AuthService).to(AuthService).inSingletonScope();
 container.bind<DockerService>(TYPES.DockerService).to(DockerService).inSingletonScope();

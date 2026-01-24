@@ -1,7 +1,6 @@
-import React from 'react';
-import '@shared/index.css';
-import { motion } from 'framer-motion';
 import { DashboardLayout, NeonCard, Skeleton, NexusHome } from '@shared/index';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
@@ -49,6 +48,8 @@ const App: React.FC = () => {
           </NeonCard>
         </div>
       </div>
+      <Analytics />
+      <SpeedInsights />
     </DashboardLayout>
   );
 };

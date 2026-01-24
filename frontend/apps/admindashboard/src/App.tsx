@@ -1,6 +1,8 @@
-import React from 'react';
+import { AutomationEngine, DashboardLayout, DecisionSynthesizer, GoogleServiceHub, NeonCard, Skeleton, WearableBridge } from '@shared/index';
 import '@shared/index.css';
-import { DashboardLayout, NeonCard, Skeleton, GoogleServiceHub, AutomationEngine, OracleChart, DecisionSynthesizer, WearableBridge } from '@shared/index';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
+import React from 'react';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
@@ -94,6 +96,14 @@ const App: React.FC = () => {
         </h3>
         {loading ? <Skeleton className="h-64" /> : <WearableBridge />}
       </div>
+
+      {/* Daniela AI Admin Panel */}
+      <div className="mt-12">
+        <AdminDanielaPanel />
+      </div>
+
+      <Analytics />
+      <SpeedInsights />
     </DashboardLayout>
   );
 };

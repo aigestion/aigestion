@@ -22,6 +22,7 @@ export const TYPES = {
   AnalyticsService: Symbol.for('AnalyticsService'),
   DockerService: Symbol.for('DockerService'),
   AIService: Symbol.for('AIService'),
+  EnhancedVoiceService: Symbol.for('EnhancedVoiceService'),
   SearchService: Symbol.for('SearchService'),
   NewsService: Symbol.for('NewsService'),
   MetaverseService: Symbol.for('MetaverseService'),

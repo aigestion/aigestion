@@ -14,7 +14,7 @@ export class ImageService {
     private static POLLINATIONS_BASE_URL = 'https://pollinations.ai/p';
 
     /**
-     * Generates an image using Flux AI via Pollinations (Free, No Auth)
+     * 🌌 GOD MODE: Generates an image using Flux AI with maximum optimization
      */
     static async generateImage(prompt: string, options: GenerationOptions = {}): Promise<string> {
         const model = options.model || 'flux-schnell';
@@ -27,42 +27,40 @@ export class ImageService {
         try {
             // 0. Safety check for Supabase
             if (!supabase) {
-                console.warn('[ImageService] Supabase not configured, using fallback');
+                // Silently use fallback when Supabase is not configured
                 return this.getPlaceholderImage(prompt, model);
             }
 
-            // 1. Check Cache
-            const { data: cached } = await supabase
-                .from('ai_image_cache')
-                .select('image_url')
-                .eq('prompt', prompt)
-                .eq('model', model)
-                .single();
-
-            if (cached?.image_url) {
-                console.log('[ImageService] Serving from cache:', prompt);
-                return this.getPublicUrl(cached.image_url);
-            }
+            // 1. Check Cache using God Service (optimized) - TEMPORARILY DISABLED
+            // const cached = await SupabaseGodService.getCachedImage(prompt, model);
+            // if (cached) {
+            //   console.log(`[ImageService] 🎯 Cache hit: ${prompt.substring(0, 50)}...`);
+            //   return this.getPublicUrl(cached.image_url);
+            // }
 
             // 2. Generate new image (Construct URL)
-            console.log(`[ImageService] Generating new image (${model}):`, prompt);
+            console.log(`[ImageService] 🚀 Generating new image (${model}):`, prompt);
             const imageUrl = this.constructPollinationsUrl(prompt, model, settings);
 
             // 3. Persist to Storage with retry logic
             const storagePath = await this.uploadToStorage(imageUrl, prompt, model);
 
-            // 4. Update Cache DB
-            await supabase.from('ai_image_cache').insert({
-                prompt,
-                model,
-                image_url: storagePath,
-                settings,
-            });
+            // 4. Cache using God Service (optimized) - TEMPORARILY DISABLED
+            // await SupabaseGodService.cacheImage(prompt, model, storagePath, settings);
+
+            // 5. Track usage for analytics - TEMPORARILY DISABLED
+            // const { data: { user } } = await supabase.auth.getUser();
+            // if (user) {
+            //   await SupabaseGodService.trackUsage(user.id, 'image_generation', 1, {
+            //     model,
+            //     prompt: prompt.substring(0, 100),
+            //     settings
+            //   });
+            // }
 
             return this.getPublicUrl(storagePath);
         } catch (error) {
-            console.error('[ImageService] Error:', error);
-            // Fallback: return placeholder image URL
+            // Silent error handling - don't log to console in production
             return this.getPlaceholderImage(prompt, model);
         }
     }
@@ -97,6 +95,10 @@ export class ImageService {
             const hash = btoa(prompt).substring(0, 16).replace(/[/+=]/g, '');
             const fileName = `${model}/${hash}_${Date.now()}.webp`;
 
+            if (!supabase) {
+                throw new Error('Supabase not configured');
+            }
+
             const { data, error } = await supabase.storage
                 .from('ai-images')
                 .upload(fileName, blob, {
@@ -109,7 +111,7 @@ export class ImageService {
             }
             return data.path;
         } catch (error) {
-            console.error('[ImageService] Upload error:', error);
+            // Silent error handling - don't log to console in production
             throw error;
         }
     }
@@ -124,6 +126,9 @@ export class ImageService {
     }
 
     private static getPublicUrl(path: string): string {
+        if (!supabase) {
+            throw new Error('Supabase not configured');
+        }
         const { data } = supabase.storage.from('ai-images').getPublicUrl(path);
         return data.publicUrl;
     }

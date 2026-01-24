@@ -11,7 +11,9 @@ export const Navigation: React.FC = () => {
     { label: 'Visión', path: '#vision' },
     { label: 'Inteligencia', path: '#intelligence' },
     { label: 'Daniela AI', path: '#daniela' },
-    { label: 'Metaverso', path: '#metaverse', highlight: true },
+    { label: 'Admin', path: '/admin' },
+    { label: 'Client', path: '/client' },
+    { label: 'Demo', path: '/demo' },
     { label: 'ROI', path: '#roi' },
   ];
 
@@ -52,9 +54,14 @@ export const Navigation: React.FC = () => {
               <Link
                 to={item.path}
                 onMouseEnter={playHover}
-                onClick={() => {
+                onClick={(e) => {
                   playClick();
                   playWuaw();
+                  // For hash links, we want smooth scroll
+                  if (item.path.startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelector(item.path)?.scrollIntoView({ behavior: 'smooth' });
+                  }
                 }}
                 className={`relative font-orbitron text-[10px] tracking-[0.2em] uppercase transition-all duration-300 hover:text-white group
                   ${item.highlight ? 'text-nexus-violet-glow font-bold' : 'text-nexus-silver/60'}`}

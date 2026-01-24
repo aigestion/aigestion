@@ -1,0 +1,110 @@
+services:
+  # Web Service
+  - type: web
+    name: aigestion-backend
+    env: node
+    plan: starter
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+
+    # Environment Variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: FRONTEND_URL
+        value: https://aigestion.net
+      - key: CORS_ORIGIN
+        value: https://aigestion.net,https://admin.aigestion.net,https://client.aigestion.net,https://demo.aigestion.net
+      - key: DANIELA_SYSTEM_PROMPT
+        value: "Eres Daniela, una asistente de IA futurista y empática de AIGestion. Tu objetivo es ayudar a los usuarios a entender cómo la IA soberana y la arquitectura de AIGestion pueden transformar sus empresas. Eres profesional, futurista, amable y experta en tecnología. Mantén tus respuestas concisas y claras."
+      - key: ELEVENLABS_VOICE_ID
+        value: EXAVITQu4vr4xnSDxMaL
+      - key: JWT_SECRET
+        generateValue: true
+      - key: BCRYPT_ROUNDS
+        value: "12"
+      - key: RATE_LIMIT_WINDOW_MS
+        value: "900000"
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: "100"
+      - key: LOG_LEVEL
+        value: info
+
+    # Addon Services
+    databases:
+      - name: aigestion-mongodb
+        databaseName: aigestion
+        user: aigestion-user
+
+    redis:
+      - name: aigestion-redis
+        ipAllowList: [] # Allow all IPs for now
+
+    # Build Configuration
+    buildFilter:
+      paths:
+        - src/**
+        - package.json
+        - package-lock.json
+        - tsconfig.json
+      ignoredPaths:
+        - src/__tests__/**
+        - src/**/*.test.ts
+        - src/**/*.spec.ts
+
+# Global Configuration
+version: "1"
+build:
+  packages:
+    - type: npm
+      packageManager: npm
+      cache: true
+
+# Deployment Hooks
+hooks:
+  # Pre-build hook
+  preBuild:
+    - npm install
+    - npm run lint
+    - npm run type-check
+
+  # Post-build hook
+  postBuild:
+    - echo "Build completed successfully"
+    - npm run test:unit
+
+# Scaling Configuration
+scaling:
+  minInstances: 1
+  maxInstances: 3
+  targetMemoryPercent: 80
+  targetCPUUtilization: 70
+
+# Security Configuration
+security:
+  allowedIPRanges:
+    - 0.0.0.0/0 # Allow all IPs initially
+
+# Monitoring Configuration
+monitoring:
+  healthCheck:
+    enabled: true
+    path: /api/v1/health
+    interval: 30
+    timeout: 10
+
+  alerts:
+    - type: deployment
+      enabled: true
+    - type: build
+      enabled: true
+    - type: service
+      enabled: true
+
+# Custom Domains
+domains:
+  - aigestion-backend.onrender.com

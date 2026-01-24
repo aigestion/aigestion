@@ -153,7 +153,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, titl
         <CollaborativeCursors />
         <WarRoomOverlay isOpen={isWarRoomOpen} onClose={() => setIsWarRoomOpen(false)} />
         <ZenMode isOpen={isZenOpen} onClose={() => setIsZenOpen(false)} />
-        <WarRoomMobile isOpen={isWarRoomOpen} onClose={() => setIsWarRoomOpen(false)} />
+        {/* <WarRoomMobile isOpen={isWarRoomOpen} onClose={() => setIsWarRoomOpen(false)} /> */}
         <WidgetMarketplace isOpen={isMarketplaceOpen} onClose={() => setIsMarketplaceOpen(false)} />
         <FlashAlertSystem />
         <CommandTerminal />
@@ -214,7 +214,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, titl
                 <Wind size={18} />
               </button>
               <EcoModeSwitch isEco={isEcoMode} onChange={setIsEcoMode} />
-              <VoiceToAction />
+              {/* <VoiceToAction /> */}
               <HardwareMonitor />
               <NetworkDiagnostics />
               <button
@@ -246,8 +246,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, titl
 
           <PullToRefresh onRefresh={handleRefresh}>
             <div className="px-12 py-12 relative animate-in fade-in slide-in-from-bottom-4 duration-1000 min-h-[calc(100vh-130px)]">
-              <EcosytemMonitor />
-              <ProactiveWidgets />
+              {/* <EcosytemMonitor /> */}
+              {/* <ProactiveWidgets /> */}
               {isAuthorized ? children : (
                 <div className="h-[60vh] flex flex-col items-center justify-center text-center">
                   <motion.div

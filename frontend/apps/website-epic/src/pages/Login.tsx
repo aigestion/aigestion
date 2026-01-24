@@ -1,58 +1,40 @@
-import { useState } from 'react'
-import { signInWithGoogle } from '../services/supabase'
+import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { Login as LoginComponent } from '../components/Login';
 
-function Login() {
-    const [error, setError] = useState<string | null>(null)
+interface LoginPageProps {
+    onLogin: (email: string, password: string) => Promise<void>;
+    isAuthenticated: boolean;
+}
 
-    const handleLogin = async () => {
+export const Login: React.FC<LoginPageProps> = ({ onLogin, isAuthenticated }) => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const handleLoginSubmit = async (email: string, password: string) => {
+        setLoading(true);
+        setError('');
+
         try {
-            const { error } = await signInWithGoogle()
-            if (error) throw error
+            await onLogin(email, password);
         } catch (err) {
-            if (err instanceof Error) {
-                setError(err.message)
-            } else {
-                setError('An error occurred during login')
-            }
+            setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
+        } finally {
+            setLoading(false);
         }
+    };
+
+    if (isAuthenticated) {
+        return <Navigate to="/dashboard" replace />;
     }
 
     return (
-        <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100vh',
-            gap: '2rem'
-        }}>
-            <h1>Login to AIGestion</h1>
-
-            {error && (
-                <div style={{ color: 'red', marginBottom: '1rem' }}>
-                    {error}
-                </div>
-            )}
-
-            <button
-                onClick={handleLogin}
-                style={{
-                    padding: '12px 24px',
-                    fontSize: '16px',
-                    cursor: 'pointer',
-                    backgroundColor: '#4285F4',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px'
-                }}
-            >
-                Sign in with Google
-            </button>
+        <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
+            <LoginComponent
+                onLogin={handleLoginSubmit}
+                loading={loading}
+                error={error}
+            />
         </div>
-    )
-}
-
-export default Login
+    );
+};

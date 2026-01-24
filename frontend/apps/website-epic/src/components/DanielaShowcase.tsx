@@ -93,6 +93,92 @@ export const DanielaShowcase: React.FC = () => {
                         Protocolo de Seducción Comercial v2.4 Activo
                     </span>
                 </p>
+
+                {/* Galería de Imágenes de Daniela */}
+                <div className="max-w-7xl mx-auto px-6 mb-20">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Imagen principal grande */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                            className="md:col-span-2 relative group overflow-hidden rounded-2xl"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-t from-nexus-violet/60 via-transparent to-transparent z-10" />
+                            <img
+                                src="/images/daniela-ai-8k.jpg"
+                                alt="Daniela AI - Ultra Realista 8K"
+                                className="w-full h-[500px] object-cover transform group-hover:scale-105 transition-transform duration-700"
+                            />
+                            <div className="absolute bottom-6 left-6 z-20">
+                                <p className="text-white font-orbitron text-2xl font-bold drop-shadow-lg">Ultra Realista 8K</p>
+                                <p className="text-nexus-cyan text-sm tracking-wider">Renderizado Neural Avanzado</p>
+                            </div>
+                        </motion.div>
+
+                        {/* Imágenes secundarias */}
+                        <div className="flex flex-col gap-6">
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.3 }}
+                                className="relative group overflow-hidden rounded-2xl"
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                                <img
+                                    src="/images/daniela/lobby.png"
+                                    alt="Daniela - Lobby Corporativo"
+                                    className="w-full h-[240px] object-cover transform group-hover:scale-105 transition-transform duration-700"
+                                />
+                                <div className="absolute bottom-3 left-3 z-20">
+                                    <p className="text-white font-orbitron text-sm font-bold">Lobby VIP</p>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ opacity: 0, x: 20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.4 }}
+                                className="relative group overflow-hidden rounded-2xl"
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                                <img
+                                    src="/images/daniela/lab.png"
+                                    alt="Daniela - Laboratorio AI"
+                                    className="w-full h-[240px] object-cover transform group-hover:scale-105 transition-transform duration-700"
+                                />
+                                <div className="absolute bottom-3 left-3 z-20">
+                                    <p className="text-white font-orbitron text-sm font-bold">Neural Lab</p>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </div>
+
+                    {/* Características técnicas */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+                        {[
+                            { label: 'Resolución', value: '8K HDR' },
+                            { label: 'Procesamiento', value: 'Neural' },
+                            { label: 'Respuesta', value: '<100ms' },
+                            { label: 'Precisión', value: '99.7%' }
+                        ].map((stat, i) => (
+                            <motion.div
+                                key={stat.label}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: 0.5 + i * 0.1 }}
+                                className="premium-glass p-4 rounded-xl text-center"
+                            >
+                                <p className="text-nexus-cyan text-2xl font-orbitron font-bold">{stat.value}</p>
+                                <p className="text-nexus-silver/60 text-xs uppercase tracking-wider mt-1">{stat.label}</p>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
             </motion.div>
 
             <div className="flex flex-col items-center justify-center space-y-16 relative z-10">
