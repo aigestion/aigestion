@@ -71,7 +71,7 @@ export const Navigation: React.FC = () => {
             transition={{ delay: 0.8 }}
           >
             <a
-              href="http://localhost:5174/dashboard?role=demo"
+              href="#roi"
               target="_blank"
               rel="noopener noreferrer"
               onMouseEnter={playHover}
@@ -90,12 +90,12 @@ export const Navigation: React.FC = () => {
         <div className="flex items-center gap-6">
           <SoundControl />
           <Link
-            to="/terminal"
+            to="#contact"
             onMouseEnter={playHover}
             onClick={playClick}
             className="btn-enterprise px-6! py-2! text-[10px]! tracking-[0.2em] uppercase"
           >
-            Acceso Terminal
+            Suscripción Core
           </Link>
         </div>
       </div>

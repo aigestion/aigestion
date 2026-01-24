@@ -25,6 +25,12 @@ export class ImageService {
         };
 
         try {
+            // 0. Safety check for Supabase
+            if (!supabase) {
+                console.warn('[ImageService] Supabase not configured, using fallback');
+                return this.getPlaceholderImage(prompt, model);
+            }
+
             // 1. Check Cache
             const { data: cached } = await supabase
                 .from('ai_image_cache')

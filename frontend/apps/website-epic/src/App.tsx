@@ -1,14 +1,23 @@
 import type { Session } from '@supabase/supabase-js';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { CinematicExperience } from './components/CinematicExperience';
+import { CommandTerminal } from './components/CommandTerminal';
+import { VitureXRExperience } from './components/VitureXRExperience';
 import Login from './pages/Login';
 import WeaponDashboard from './pages/WeaponDashboard';
 import { supabase } from './services/supabase';
 
-const Footer = () => (
+// God Mode Components
+import { CinematicPresentation } from './components/CinematicPresentation';
+import { ClientShowcase } from './components/ClientShowcase';
+import { ContactSection } from './components/ContactSection';
+import { DanielaShowcase } from './components/DanielaShowcase';
+import { EnhancedROI } from './components/EnhancedROI';
+import { Navigation } from './components/Navigation';
+import { NexusAndroid } from './components/NexusAndroid';
 
+const Footer = () => (
   <footer className="py-32 bg-nexus-obsidian-deep border-t border-white/5 relative overflow-hidden">
     <div className="absolute inset-0 bg-radial-at-bottom from-nexus-violet/5 via-transparent to-transparent pointer-events-none" />
     <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-16 relative z-10">
@@ -52,9 +61,37 @@ function App() {
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const handleRedirection = (user: { email?: string; user_metadata?: { role?: string } }) => {
+    if (!user.email) return;
+
+    const role = user.user_metadata?.role || 'client'
+    const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com']
+
+    // Redirect logic
+    if (adminEmails.includes(user.email) || role === 'admin') {
+      window.location.href = 'https://admin.aigestion.net'
+    } else if (role === 'demo') {
+      window.location.href = 'https://demo.aigestion.net'
+    } else {
+      window.location.href = 'https://client.aigestion.net'
+    }
+  }
+
   useEffect(() => {
+    if (!supabase) {
+      console.warn('Supabase no configurado; se omiten redirecciones automáticas')
+      setTimeout(() => setLoading(false), 0)
+      return
+    }
+
     supabase.auth.getSession().then(({ data: { session } }: { data: { session: Session | null } }) => {
       setSession(session)
+      if (session && window.location.pathname === '/login') {
+        handleRedirection(session.user)
+      }
+      setLoading(false)
+    }).catch(err => {
+      console.error('Supabase Session Error:', err)
       setLoading(false)
     })
 
@@ -62,6 +99,9 @@ function App() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event: string, session: Session | null) => {
       setSession(session)
+      if (session && window.location.pathname === '/login') {
+        handleRedirection(session.user)
+      }
     })
 
     return () => subscription.unsubscribe()
@@ -79,12 +119,33 @@ function App() {
   return (
     <Router>
       <div className="bg-nexus-obsidian min-h-screen text-white font-sans selection:bg-nexus-violet selection:text-white relative">
+        <Navigation />
         <Routes>
           <Route path="/login" element={!session ? <Login /> : <Navigate to="/" />} />
           <Route path="/" element={
             <main>
-              {/* CINEMATICS HERO EXPERIENCE - ARQUITECTURA DE INTELIGENCIA SOBERANA */}
-              <CinematicExperience />
+              {/* Advanced Presentation - Ahora es la primera sección */}
+              <AnimatePresence mode="wait">
+                <CinematicPresentation />
+              </AnimatePresence>
+
+              {/* Fortune 500 Showcase */}
+              <ClientShowcase />
+
+              {/* synthetic Consciousness - Daniela AI */}
+              <DanielaShowcase />
+
+              {/* Quantum Guardian - Nexus Android */}
+              <NexusAndroid />
+
+              {/* Strategic ROI analysis */}
+              <EnhancedROI />
+
+              {/* Immersive Contact Experience */}
+              <ContactSection />
+
+              {/* VITURE XR Experience */}
+              <VitureXRExperience />
             </main>
           } />
 
@@ -98,6 +159,7 @@ function App() {
         </Routes>
 
         <Footer />
+        <CommandTerminal />
       </div>
     </Router>
   );

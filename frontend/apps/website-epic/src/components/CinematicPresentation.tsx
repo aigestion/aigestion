@@ -187,13 +187,56 @@ export const CinematicPresentation: React.FC = () => {
           }}
         >
           {!backgrounds[activeSlide.id] && (
-            <div className="w-full h-full bg-linear-to-br from-nexus-obsidian-light to-nexus-obsidian-deep flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-nexus-obsidian-light to-nexus-obsidian-deep flex items-center justify-center">
               <span className="text-xl font-orbitron tracking-widest animate-pulse-glow text-white/20">SYNCHRONIZING...</span>
             </div>
           )}
-          <div className="absolute inset-0 bg-linear-to-t from-nexus-obsidian via-transparent to-nexus-obsidian/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-nexus-obsidian via-transparent to-nexus-obsidian/40" />
         </motion.div>
       </AnimatePresence>
+
+      {/* Cinematic Overlays */}
+      <motion.div
+        className="absolute top-0 inset-x-0 h-[8vh] bg-black z-40"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 1, delay: 0.5 }}
+      />
+      <motion.div
+        className="absolute bottom-0 inset-x-0 h-[8vh] bg-black z-40"
+        initial={{ y: 100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 1, delay: 0.5 }}
+      />
+
+      {/* Decorative HUD Elements */}
+      <div className="absolute inset-0 pointer-events-none z-30">
+        <div className="absolute top-[10vh] left-12 flex flex-col gap-2">
+          <div className="flex items-center gap-3">
+            <div className="w-1 h-8 bg-nexus-cyan/40" />
+            <div className="text-[8px] font-orbitron text-nexus-cyan/40 tracking-[0.5em] uppercase leading-relaxed">
+              Protocolo Dios v4.3 // Activo<br />
+              Sincronización Neuronal: 100%<br />
+              Latencia: 0.0001ms
+            </div>
+          </div>
+          <div className="w-48 h-px bg-gradient-to-r from-nexus-cyan/20 to-transparent" />
+        </div>
+
+        <div className="absolute top-[10vh] right-12 text-right">
+          <div className="text-[8px] font-orbitron text-nexus-silver/20 tracking-[0.5em] uppercase leading-relaxed">
+            Localización: Nodo Central AIG<br />
+            Encriptación: Cuántica Pura<br />
+            ID: CX-HE-882
+          </div>
+        </div>
+
+        <div className="absolute bottom-[10vh] left-12">
+          <div className="text-[8px] font-orbitron text-nexus-silver/10 tracking-[1em] uppercase">
+            AIGESTION // CINEMATIC_CORE
+          </div>
+        </div>
+      </div>
 
       {/* Content Layer */}
       <div className={`relative z-20 w-full h-full flex flex-col justify-center px-6 md:px-20 ${speakerStyle.align}`}>
@@ -218,9 +261,12 @@ export const CinematicPresentation: React.FC = () => {
                 }}
                 transition={{ delay: 0.3 }}
               >
-                <span className={`text-[10px] font-orbitron tracking-[0.4em] uppercase ${speakerStyle.color}`}>
-                  {speakerStyle.name} // ONLINE
-                </span>
+                <div className="flex items-center gap-2">
+                  <div className={`w-1.5 h-1.5 rounded-full ${speakerStyle.color.replace('text-', 'bg-')} animate-pulse`} />
+                  <span className={`text-[10px] font-orbitron tracking-[0.4em] uppercase ${speakerStyle.color}`}>
+                    {speakerStyle.name} // ONLINE
+                  </span>
+                </div>
               </motion.div>
             </div>
 
@@ -229,45 +275,57 @@ export const CinematicPresentation: React.FC = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className={`${speakerStyle.color} tracking-[0.5em] text-xs md:text-sm uppercase font-bold mb-6 text-glow`}>
+              <h2 className={`${speakerStyle.color} tracking-[0.6em] text-xs md:text-sm uppercase font-bold mb-6 text-glow`}>
                 {activeSlide.subtitle}
               </h2>
             </motion.div>
 
-            <h1 className="text-6xl md:text-9xl font-black font-orbitron mb-10 leading-none tracking-tight">
+            <h1 className="text-6xl md:text-[8rem] xl:text-[9rem] font-black font-orbitron mb-10 leading-none tracking-[-0.05em]">
               <motion.span
-                className="bg-clip-text text-transparent bg-linear-to-b from-white via-white to-white/40"
-                animate={{ textShadow: `0 0 20px ${colors.glow}` }}
+                className="bg-clip-text text-transparent bg-white drop-shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+                animate={{
+                  opacity: [0.9, 1, 0.9],
+                  scale: [0.99, 1, 0.99]
+                }}
+                transition={{ duration: 4, repeat: Infinity }}
               >
                 {activeSlide.title}
               </motion.span>
             </h1>
 
             <motion.div
-              className={`premium-glass p-8 rounded-3xl border-white/5 backdrop-blur-xl relative overflow-hidden ${colors.bg}`}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              className={`premium-glass p-8 md:p-12 rounded-3xl border-white/10 backdrop-blur-3xl relative overflow-hidden ${colors.bg} shadow-[0_32px_64px_-16px_rgba(0,0,0,0.8)]`}
+              initial={{ scale: 0.9, opacity: 0, x: -50 }}
+              animate={{ scale: 1, opacity: 1, x: 0 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
             >
               <motion.div
                 className="absolute inset-x-0 bottom-0 h-1"
                 animate={{ backgroundColor: colors.glow }}
               />
-              <p className="text-xl md:text-3xl text-nexus-silver/80 max-w-2xl leading-relaxed font-light italic">
+              <p className="text-xl md:text-3xl text-nexus-silver/90 max-w-2xl leading-relaxed font-light italic">
                 "{activeSlide.desc}"
               </p>
             </motion.div>
 
             {activeSlide.id === 'cta' && (
-              <motion.button
+              <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.8, type: 'spring' }}
-                className="btn-enterprise mt-12 px-12! py-5! text-lg! rounded-full! font-orbitron tracking-[0.2em]"
-                onClick={() => window.location.href = '#contact'}
+                className="flex flex-col md:flex-row gap-6 items-center mt-12"
               >
-                AUTORIZAR ACCESO
-              </motion.button>
+                <button
+                  className="btn-enterprise px-12 py-5 text-lg rounded-full font-orbitron tracking-[0.2em]"
+                  onClick={() => window.location.href = '#contact'}
+                >
+                  AUTORIZAR ACCESO
+                </button>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-0.5 bg-white/20" />
+                  <span className="text-[10px] font-orbitron text-nexus-silver/40 tracking-[0.3em] uppercase">Eslabón de Seguridad v2.4</span>
+                </div>
+              </motion.div>
             )}
           </motion.div>
         </AnimatePresence>
