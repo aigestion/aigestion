@@ -1,9 +1,10 @@
-import { AutomationEngine, DashboardLayout, DecisionSynthesizer, GoogleServiceHub, NeonCard, Skeleton, WearableBridge } from '@shared/index';
+import { AutomationEngine, DashboardLayout, DecisionSynthesizer, GoogleServiceHub, NeonCard, Skeleton, WearableBridge, GlobalParticleMesh, DanielaOmniWidget, SocketProvider, useMetrics, GodViewMap, SecurityMatrix } from '@shared/index';
 import '@shared/index.css';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import React from 'react';
 import { AdminDanielaPanel } from './components/AdminDanielaPanel';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
@@ -51,17 +52,17 @@ const App: React.FC = () => {
       <div className="mt-12">
         <h3 className="text-xl font-orbitron font-black mb-8 flex items-center gap-4">
           <div className="w-1 h-8 bg-nexus-cyan-glow" />
-          CONTROL DE INFRAESTRUCTURA EXTERNA
+          GOD VIEW // GLOBAL INFRASTRUCTURE
         </h3>
-        {loading ? <Skeleton className="h-96 w-full" /> : <GoogleServiceHub />}
+        {loading ? <Skeleton className="h-96 w-full" /> : <GodViewMap />}
       </div>
 
       <div className="mt-12">
         <h3 className="text-xl font-orbitron font-black mb-8 flex items-center gap-4">
           <div className="w-1 h-8 bg-orange-500 shadow-[0_0_10px_rgba(255,100,0,0.8)]" />
-          MOTOR DE AUTOMATIZACIÓN n8n
+          MATRIX DE SEGURIDAD // LIVE THREATS
         </h3>
-        {loading ? <Skeleton className="h-96 w-full" /> : <AutomationEngine />}
+        {loading ? <Skeleton className="h-96 w-full" /> : <SecurityMatrix />}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12 mb-12">
@@ -106,6 +107,14 @@ const App: React.FC = () => {
       <Analytics />
       <SpeedInsights />
     </DashboardLayout>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <SocketProvider>
+      <AdminContent />
+    </SocketProvider>
   );
 };
 

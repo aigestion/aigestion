@@ -44,17 +44,23 @@ export const ROICalculator: React.FC = () => {
                             <div className="space-y-4">
                                 <div className="flex justify-between text-xs font-orbitron tracking-[0.2em] text-nexus-silver/40 uppercase">
                                     <span>Personal Operativo</span>
-                                    <span className="text-white">{staffCount} Agentes</span>
+                                    <span className="text-white font-mono">{staffCount} Agentes</span>
                                 </div>
-                                <input
-                                    type="range"
-                                    min="1"
-                                    max="100"
-                                    step="1"
-                                    value={staffCount}
-                                    onChange={(e) => setStaffCount(Number(e.target.value))}
-                                    className="w-full h-1.5 bg-white/5 rounded-full appearance-none cursor-pointer accent-nexus-violet-glow"
-                                />
+                                <div className="relative w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                                    <div
+                                        className="absolute top-0 left-0 h-full bg-gradient-to-r from-nexus-violet to-nexus-cyan rounded-full transition-all duration-200"
+                                        style={{ width: `${(staffCount / 100) * 100}%` }}
+                                    />
+                                    <input
+                                        type="range"
+                                        min="1"
+                                        max="100"
+                                        step="1"
+                                        value={staffCount}
+                                        onChange={(e) => setStaffCount(Number(e.target.value))}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -29,6 +29,7 @@
     "god-mode": "pnpm pre-commit && pnpm ci:build && pnpm ci:test && pnpm ci:security"
   },
   "dependencies": {
+    "@google/model-viewer": "^4.1.0",
     "@supabase/supabase-js": "^2.90.1",
     "framer-motion": "^12.26.2",
     "howler": "^2.2.4",

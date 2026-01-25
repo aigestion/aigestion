@@ -137,12 +137,8 @@ export const ContactSection: React.FC = () => {
                       <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
                         <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-nexus-cyan focus:outline-none transition-colors"
+                          className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 focus:outline-none transition-all duration-300 hover:border-white/20 hover:bg-black/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
                           placeholder="tu@email.com"
                         />
                       </div>
@@ -156,7 +152,7 @@ export const ContactSection: React.FC = () => {
                         name="company"
                         value={formData.company}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-nexus-cyan focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 focus:outline-none transition-all duration-300 hover:border-white/20 hover:bg-black/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
                         placeholder="Tu empresa"
                       />
                     </div>

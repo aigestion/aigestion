@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App-cinematic.tsx'
+import App from './App.tsx'
 import { AppProvider } from './contexts/AppContext'
 import './index.css'
 

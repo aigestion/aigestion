@@ -10,7 +10,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 // Configuration
 const PINECONE_INDEX = 'aigestion-docs';
-const DOCS_DIR = path.resolve(__dirname, '../../../docs');
+const DOCS_DIR = path.resolve(__dirname, '../../docs');
 const CHUNK_SIZE = 500; // words
 const OVERLAP = 50; // words
 

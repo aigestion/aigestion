@@ -13,10 +13,13 @@ import { supabase } from './services/supabase';
 import { CinematicPresentation } from './components/CinematicPresentation';
 import { ClientShowcase } from './components/ClientShowcase';
 import { ContactSection } from './components/ContactSection';
+import { DecentralandOffice } from './components/DecentralandOffice';
 import { DanielaShowcase } from './components/DanielaShowcase';
 import { EnhancedROI } from './components/EnhancedROI';
 import { Navigation } from './components/Navigation';
 import { NexusAndroid } from './components/NexusAndroid';
+import { CommandPalette } from './components/CommandPalette';
+import { DanielaOmniWidget } from './components/DanielaOmniWidget';
 
 const Footer = () => (
   <footer className="py-32 bg-nexus-obsidian-deep border-t border-white/5 relative overflow-hidden">
@@ -203,6 +206,9 @@ function App() {
                 {/* Strategic ROI analysis */}
                 <EnhancedROI />
 
+                {/* Decentraland Headquarters */}
+                <DecentralandOffice />
+
                 {/* Immersive Contact Experience */}
                 <ContactSection />
 
@@ -256,10 +262,15 @@ function App() {
           {/* Daniela AI Routes */}
           <Route path="/daniela" element={<DanielaDemo />} />
           <Route path="/daniela/demo" element={<DanielaDemo />} />
+
+          {/* Virtual Office Route */}
+          <Route path="/virtual-office" element={<DecentralandOffice />} />
         </Routes>
 
         <Footer />
         <CommandTerminal />
+        <CommandPalette />
+        <DanielaOmniWidget />
       </div>
     </Router>
   );

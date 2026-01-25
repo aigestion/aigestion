@@ -1,7 +1,8 @@
 import React from 'react';
-import { DashboardLayout, NeonCard, Skeleton, BusinessIntelligence, GoogleServiceHub, IdeaSynthesizer } from '@shared/index';
+import { DashboardLayout, NeonCard, Skeleton, BusinessIntelligence, GoogleServiceHub, IdeaSynthesizer, GlobalParticleMesh, DanielaOmniWidget, SocketProvider, ROISimulator, GoalGamification } from '@shared/index';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
@@ -12,6 +13,21 @@ const App: React.FC = () => {
 
   return (
     <DashboardLayout title="CENTRO DE EMPRESA DIVINO" type="CLIENT">
+      <GlobalParticleMesh />
+
+      {/* Premium Loading State */}
+      <AnimatePresence>
+        {loading && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-nexus-obsidian flex flex-col items-center justify-center"
+          >
+            <div className="w-32 h-32 rounded-full border-4 border-nexus-violet/20 border-t-nexus-violet animate-spin" />
+            <div className="mt-8 text-nexus-violet font-orbitron tracking-widest animate-pulse">CONNECTING_TO_NEXUS...</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4">
         <NeonCard title="CLIENTE PREMIUM" accentColor="rgba(168, 85, 247, 0.5)" className="lg:col-span-2">
           {loading ? <Skeleton className="h-44" /> : (
@@ -28,12 +44,7 @@ const App: React.FC = () => {
           )}
         </NeonCard>
 
-        <NeonCard title="CONSUMO NEURONAL" accentColor="rgba(255, 255, 255, 0.2)">
-          <div className="text-6xl font-orbitron font-black text-white tracking-tighter">84%</div>
-          <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mt-4">
-            <div className="h-full bg-nexus-violet-glow" style={{ width: '84%' }} />
-          </div>
-        </NeonCard>
+        {loading ? <Skeleton className="h-44" /> : <GoalGamification />}
       </div>
 
       <div className="mt-12">
@@ -44,13 +55,23 @@ const App: React.FC = () => {
         {loading ? <Skeleton className="h-96 w-full" /> : <BusinessIntelligence />}
       </div>
 
-      <div className="mt-12 mb-12">
-        <h3 className="text-xl font-orbitron font-black mb-8 flex items-center gap-4">
-          <div className="w-1 h-8 bg-white/20" />
-          GOOGLE WORKSPACE ECOSYSTEM
-        </h3>
-        {loading ? <Skeleton className="h-64 w-full" /> : <GoogleServiceHub />}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12 mb-12">
+        <div>
+          <h3 className="text-xl font-orbitron font-black mb-8 flex items-center gap-4">
+            <div className="w-1 h-8 bg-nexus-cyan" />
+            ROI SIMULATOR // PROJECTIONS
+          </h3>
+          {loading ? <Skeleton className="h-[500px]" /> : <ROISimulator />}
+        </div>
+        <div>
+          <h3 className="text-xl font-orbitron font-black mb-8 flex items-center gap-4">
+            <div className="w-1 h-8 bg-white/20" />
+            GOOGLE WORKSPACE ECOSYSTEM
+          </h3>
+          {loading ? <Skeleton className="h-[500px] w-full" /> : <GoogleServiceHub />}
+        </div>
       </div>
+
       <div className="mt-12">
         <IdeaSynthesizer />
       </div>
@@ -60,4 +81,10 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+const WrappedApp: React.FC = () => (
+  <SocketProvider>
+    <App />
+  </SocketProvider>
+);
+
+export default WrappedApp;
