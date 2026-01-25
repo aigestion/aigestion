@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/brand/icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIGestion | Client Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="/client/assets/index-DhwBXG8o.js"></script>
+  <link rel="stylesheet" crossorigin href="/client/assets/index-sR-ABVSU.css">
+</head>
+<body class="bg-[#010103] text-white">
+  <div id="root"></div>
+  <script>
+    // Handle SPA routing
+    const path = window.location.pathname;
+    if (!path.startsWith('/client/')) {
+      window.history.replaceState({}, '', '/client' + path);
+    }
+  </script>
+</body>
+</html>
