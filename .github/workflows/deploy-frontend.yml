@@ -46,11 +46,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Build all apps
+      - name: Build website-epic app
         run: |
           pnpm install --frozen-lockfile
-          pnpm -C frontend run build:all
-          node scripts/vercel-prepare.mjs
+          pnpm -C frontend/apps/website-epic build
+          mkdir -p dist
+          cp -r frontend/apps/website-epic/dist/* dist/
+          # Copy other apps if they exist
+          if [ -d "frontend/apps/admindashboard/dist" ]; then
+            mkdir -p dist/admin
+            cp -r frontend/apps/admindashboard/dist/* dist/admin/
+          fi
+          if [ -d "frontend/apps/clientdashboard/dist" ]; then
+            mkdir -p dist/client
+            cp -r frontend/apps/clientdashboard/dist/* dist/client/
+          fi
+          if [ -d "frontend/apps/demodashboard/dist" ]; then
+            mkdir -p dist/demo
+            cp -r frontend/apps/demodashboard/dist/* dist/demo/
+          fi
         env:
           VITE_API_URL: https://api.aigestion.net
 
