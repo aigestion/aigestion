@@ -1,103 +1,158 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-export const useEnhancedVoiceAssistant = () => {
-  const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState('');
-  const [isSpeaking, setIsSpeaking] = useState(false);
+interface EmotionalAnalysis {
+  emotion: string;
+  confidence: number;
+  sentiment: string;
+}
 
-  const startListening = useCallback(async () => { // Added async here
-    setIsListening(true);
-    // Mock listening for now or use Web Speech API
-    console.log('Voice Assistant: Listening...');
+interface SuggestedAction {
+  id: string;
+  text: string;
+  type: string;
+  priority: string;
+  context: string;
+}
 
-    try {
-      // Attempt real API call
-      /*
-      const response = await fetch('/api/enhanced-voice/process', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId, userId, text })
-      });
-      */
+interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+  emotionalAnalysis?: EmotionalAnalysis;
+}
 
-      // MOCK RESPONSE FOR DEMO STABILITY
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate latency
+export const useEnhancedVoiceAssistant = (options: {
+  sessionId: string;
+  userId: string;
+  onEmotionalChange?: (analysis: EmotionalAnalysis) => void;
+}) => {
+  const [status, setStatus] = useState<'idle' | 'connecting' | 'active' | 'error'>('idle');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [emotionalAnalysis, setEmotionalAnalysis] = useState<EmotionalAnalysis | null>(null);
+  const [suggestedActions, setSuggestedActions] = useState<SuggestedAction[]>([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-      // Assuming 'text' is derived from speech recognition, for this mock, we'll use a placeholder
-      const recognizedText = Math.random() > 0.5 ? "Muéstrame el estado de los servidores." : "Necesito un análisis de ROI.";
-      setTranscript(recognizedText); // Update transcript based on mock recognition
+  // Mock emotional analysis
+  const mockEmotionalAnalysis: EmotionalAnalysis = {
+    emotion: 'neutral',
+    confidence: 0.85,
+    sentiment: 'positive'
+  };
 
-      // Define a mock ConversationResponse type for clarity, though not strictly needed for JS
-      type ConversationResponse = {
-        transcription: string;
-        response: string;
-        emotionalAnalysis: {
-          emotion: string;
-          confidence: number;
-          sentiment: string;
-          suggestions: string[];
-        };
-        suggestedActions: { id: string; text: string; type: string; priority: string; context: string; }[];
-        context: {
-          messages: any[];
-          emotionalHistory: any[];
-          clientProfile: { preferences: any[]; previousTopics: any[]; interactionStyle: string; };
-        };
-      };
+  // Mock suggested actions
+  const mockSuggestedActions: SuggestedAction[] = [
+    { id: '1', text: 'Ver dashboard principal', type: 'navigation', priority: 'high', context: 'main' },
+    { id: '2', text: 'Analizar métricas', type: 'analysis', priority: 'medium', context: 'analytics' },
+    { id: '3', text: 'Contactar soporte', type: 'support', priority: 'low', context: 'help' }
+  ];
 
-      const mockResponse: ConversationResponse = {
-        transcription: recognizedText, // Use the recognizedText here
-        response: `Entendido. He procesado tu solicitud: "${recognizedText}". ¿Deseas ejecutar alguna otra acción en el sistema?`,
-        emotionalAnalysis: {
-          emotion: 'professional',
-          confidence: 0.98,
-          sentiment: 'positive',
-          suggestions: ['Ejecutar análisis', 'Ver reporte']
-        },
-        suggestedActions: [
-          { id: '1', text: 'Ver estatus', type: 'action', priority: 'high', context: 'system' }
-        ],
-        context: {
-          messages: [],
-          emotionalHistory: [],
-          clientProfile: { preferences: [], previousTopics: [], interactionStyle: 'formal' }
-        }
-      };
-
-      // In a real scenario, handleConversationResponse would process this mockResponse
-      // For now, we'll just log it to show it was "handled"
-      console.log('Mock conversation response:', mockResponse);
-
-    } catch (error) {
-      console.error('Error sending message:', error);
-      // Assuming setError and setIsProcessing are defined elsewhere or need to be added
-      // For this context, we'll just log the error and simulate a failure state.
-      // setError('Mode offline: Simulación activa'); // This would require a state variable
-    } finally {
-      setIsListening(false); // Stop listening regardless of success or failure
-      // setIsProcessing(false); // This would require a state variable
-    }
+  useEffect(() => {
+    // Initialize connection
+    setStatus('connecting');
+    setTimeout(() => {
+      setStatus('active');
+      setEmotionalAnalysis(mockEmotionalAnalysis);
+      setSuggestedActions(mockSuggestedActions);
+    }, 1000);
   }, []);
 
-  const stopListening = useCallback(() => {
-    setIsListening(false);
-    console.log('Voice Assistant: Stopped listening.');
-  }, []);
+  const startRecording = useCallback(async () => {
+    if (isRecording) return;
 
-  const speak = useCallback((text: string) => {
-    setIsSpeaking(true);
-    const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.onend = () => setIsSpeaking(false);
-    synth.speak(utterance);
+    setIsRecording(true);
+    setError(null);
+
+    // Mock recording process
+    setTimeout(() => {
+      const mockMessage: Message = {
+        id: Date.now().toString(),
+        role: 'user',
+        content: 'Hola Daniela, ¿cómo estás?',
+        timestamp: new Date(),
+        emotionalAnalysis: mockEmotionalAnalysis
+      };
+
+      setMessages(prev => [...prev, mockMessage]);
+
+      // Mock AI response
+      setTimeout(() => {
+        const aiResponse: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: '¡Hola! Estoy perfectamente, gracias por preguntar. ¿En qué puedo ayudarte hoy?',
+          timestamp: new Date(),
+          emotionalAnalysis: mockEmotionalAnalysis
+        };
+
+        setMessages(prev => [...prev, aiResponse]);
+        setIsRecording(false);
+      }, 1500);
+    }, 2000);
+  }, [isRecording]);
+
+  const stopRecording = useCallback(() => {
+    if (!isRecording) return;
+    setIsRecording(false);
+  }, [isRecording]);
+
+  const sendTextMessage = useCallback(async (text: string) => {
+    if (isProcessing) return;
+
+    setIsProcessing(true);
+    setError(null);
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: text,
+      timestamp: new Date(),
+      emotionalAnalysis: mockEmotionalAnalysis
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+
+    // Mock AI response
+    setTimeout(() => {
+      const responses = [
+        'Entendido. Estoy procesando tu solicitud.',
+        'He analizado tu petión. Aquí está la respuesta.',
+        'Interesante. Déjame generar un reporte para ti.',
+        'Perfecto. Ejecutando la acción solicitada.',
+        'Comprendido. ¿Hay algo más en lo que pueda ayudarte?'
+      ];
+
+      const aiResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: responses[Math.floor(Math.random() * responses.length)],
+        timestamp: new Date(),
+        emotionalAnalysis: mockEmotionalAnalysis
+      };
+
+      setMessages(prev => [...prev, aiResponse]);
+      setIsProcessing(false);
+    }, 1000);
+  }, [isProcessing]);
+
+  const clearConversation = useCallback(() => {
+    setMessages([]);
+    setError(null);
   }, []);
 
   return {
-    isListening,
-    transcript,
-    isSpeaking,
-    startListening,
-    stopListening,
-    speak
+    status,
+    messages,
+    emotionalAnalysis,
+    suggestedActions,
+    isRecording,
+    isProcessing,
+    error,
+    startRecording,
+    stopRecording,
+    sendTextMessage,
+    clearConversation
   };
 };

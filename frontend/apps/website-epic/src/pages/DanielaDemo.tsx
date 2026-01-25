@@ -1,7 +1,7 @@
-import { DanielaConversationPanel } from '@shared/components/DanielaConversationPanel';
 import { motion } from 'framer-motion';
 import { Brain, Cpu, Globe, Shield, Sparkles, Zap } from 'lucide-react';
 import React, { useState } from 'react';
+import { DanielaConversationPanel } from '../components/DanielaConversationPanel';
 import { useEnhancedVoiceAssistant } from '../hooks/useEnhancedVoiceAssistant';
 
 export const DanielaDemo: React.FC = () => {
