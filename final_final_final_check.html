@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/brand/icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIGestion.net | Arquitectura de Inteligencia Soberana</title>
+  <meta name="description"
+    content="AIGestion.net: El núcleo neuronal y la arquitectura de IA más avanzada para empresas del futuro. Integración con Metaverso, Daniela AI y soberanía digital." />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#8a2be2" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Nexus" />
+  <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aigestion.net/" />
+  <meta property="og:title" content="AIGestion.net | Arquitectura de Inteligencia Soberana" />
+  <meta property="og:description"
+    content="Transformación neuronal y soberanía digital. La IA que escala su empresa al metaverso." />
+  <meta property="og:image" content="/images/daniela/lobby.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://aigestion.net/" />
+  <meta property="twitter:title" content="AIGestion.net | Arquitectura de Inteligencia Soberana" />
+  <meta property="twitter:description" content="Liderando el futuro con IA soberana e integración en el metaverso." />
+  <meta property="twitter:image" content="/images/daniela/lobby.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'">
+  <!-- Vapi SDK Fallback -->
+  <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.js"></script>
+  <script type="module" crossorigin src="/assets/index-ZUqhsmLb.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DrwDa8TM.css">
+</head>
+
+<body class="bg-nexus-obsidian">
+  <div id="root"></div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Nexus Service Worker registrado.', reg))
+          .catch(err => console.log('Error registrando Service Worker.', err));
+      });
+    }
+  </script>
+</body>
+
+</html>

@@ -6,7 +6,7 @@
     {
       "state": {"entity_id":"conversation.home_assistant","state":"unknown","attributes":{"friendly_name":"Home Assistant","supported_features":1},"last_changed":"2026-01-23T08:24:28.309981+00:00","last_reported":"2026-01-23T08:24:28.309981+00:00","last_updated":"2026-01-23T08:24:28.309981+00:00","context":{"id":"01KFMZ8TWNS93STZKNN6BKKS0E","parent_id":null,"user_id":null}},
       "extra_data": null,
-      "last_seen": "2026-01-25T05:25:14.897081+00:00"
+      "last_seen": "2026-01-25T05:40:14.741352+00:00"
     },
     {
       "state": {"entity_id":"event.backup_automatic_backup","state":"unknown","attributes":{"event_types":["completed","failed","in_progress"],"event_type":null,"friendly_name":"Backup Automatic backup"},"last_changed":"2026-01-23T08:24:28.367216+00:00","last_reported":"2026-01-23T08:24:28.367216+00:00","last_updated":"2026-01-23T08:24:28.367216+00:00","context":{"id":"01KFMZ8TYFV42FEWC7EZVS6R5T","parent_id":null,"user_id":null}},
@@ -14,7 +14,7 @@
         "last_event_type": null,
         "last_event_attributes": null
       },
-      "last_seen": "2026-01-25T05:25:14.897081+00:00"
+      "last_seen": "2026-01-25T05:40:14.741352+00:00"
     }
   ]
 }
