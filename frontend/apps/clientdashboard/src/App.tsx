@@ -1,3 +1,4 @@
+import React from 'react';
 import { DashboardLayout, NeonCard, Skeleton, BusinessIntelligence, GoogleServiceHub, IdeaSynthesizer } from '@shared/index';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';

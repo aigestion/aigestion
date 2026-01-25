@@ -327,6 +327,33 @@ export const CinematicPresentation: React.FC = () => {
                 </div>
               </motion.div>
             )}
+
+            {/* Dashboard Access Buttons */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 1.0, type: 'spring' }}
+              className="flex flex-col md:flex-row gap-4 items-center mt-8"
+            >
+              <button
+                className="px-8 py-3 rounded-full bg-nexus-violet/10 border border-nexus-violet/30 text-nexus-violet-glow hover:bg-nexus-violet/20 transition-all font-orbitron text-[10px] tracking-[0.2em] uppercase"
+                onClick={() => window.location.href = '/admin'}
+              >
+                🎛️ Admin Dashboard
+              </button>
+              <button
+                className="px-8 py-3 rounded-full bg-nexus-cyan/10 border border-nexus-cyan/30 text-nexus-cyan-glow hover:bg-nexus-cyan/20 transition-all font-orbitron text-[10px] tracking-[0.2em] uppercase"
+                onClick={() => window.location.href = '/client'}
+              >
+                👤 Client Dashboard
+              </button>
+              <button
+                className="px-8 py-3 rounded-full bg-nexus-gold/10 border border-nexus-gold/30 text-nexus-gold hover:bg-nexus-gold/20 transition-all font-orbitron text-[10px] tracking-[0.2em] uppercase"
+                onClick={() => window.location.href = '/demo'}
+              >
+                🚀 Demo Dashboard
+              </button>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
       </div>

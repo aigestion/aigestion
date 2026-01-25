@@ -222,6 +222,37 @@ function App() {
 
           <Route path="/weapon" element={<WeaponDashboard />} />
 
+          {/* Dashboard Routes */}
+          <Route path="/admin" element={<div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
+            <div className="text-center">
+              <h1 className="text-4xl font-orbitron text-nexus-violet-glow mb-4">Admin Dashboard</h1>
+              <p className="text-nexus-silver/60 mb-8">Panel de administración avanzada</p>
+              <a href="https://admin.aigestion.net" className="btn-enterprise px-8 py-3 rounded-full">
+                Acceder al Admin Dashboard
+              </a>
+            </div>
+          </div>} />
+
+          <Route path="/client" element={<div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
+            <div className="text-center">
+              <h1 className="text-4xl font-orbitron text-nexus-cyan-glow mb-4">Client Dashboard</h1>
+              <p className="text-nexus-silver/60 mb-8">Portal exclusivo para clientes</p>
+              <a href="https://client.aigestion.net" className="btn-enterprise px-8 py-3 rounded-full">
+                Acceder al Client Dashboard
+              </a>
+            </div>
+          </div>} />
+
+          <Route path="/demo" element={<div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
+            <div className="text-center">
+              <h1 className="text-4xl font-orbitron text-nexus-gold mb-4">Demo Dashboard</h1>
+              <p className="text-nexus-silver/60 mb-8">Experiencia interactiva de demostración</p>
+              <a href="https://demo.aigestion.net" className="btn-enterprise px-8 py-3 rounded-full">
+                Acceder al Demo Dashboard
+              </a>
+            </div>
+          </div>} />
+
           {/* Daniela AI Routes */}
           <Route path="/daniela" element={<DanielaDemo />} />
           <Route path="/daniela/demo" element={<DanielaDemo />} />

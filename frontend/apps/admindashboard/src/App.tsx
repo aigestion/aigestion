@@ -3,6 +3,7 @@ import '@shared/index.css';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import React from 'react';
+import { AdminDanielaPanel } from './components/AdminDanielaPanel';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);

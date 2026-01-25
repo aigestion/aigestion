@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DanielaConversationPanel } from '@shared/components/DanielaConversationPanel';
 import { Brain, Activity, Users, Zap, Shield, Globe } from 'lucide-react';
 
