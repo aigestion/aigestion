@@ -1,0 +1,327 @@
+name: ☁️ Google Cloud Integration - Professional
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'frontend/apps/website-epic/**'
+      - '.github/workflows/google-cloud-integration.yml'
+  workflow_dispatch:
+    inputs:
+      deploy_target:
+        description: 'Deployment target'
+        required: true
+        default: 'cloud-run'
+        type: choice
+        options:
+          - cloud-run
+          - app-engine
+          - firebase-hosting
+          - cloud-storage
+      environment:
+        description: 'Environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+      vertex_ai_deploy:
+        description: 'Deploy Vertex AI models'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  GCP_PROJECT_ID: 'aigestion-prod'
+  GCP_REGION: 'us-central1'
+  CLOUD_RUN_SERVICE: 'aigestion-frontend'
+  VERTEX_AI_MODEL: 'text-bison@001'
+  ANTIGRAVITY_API: 'https://api.antigravity.com/v1'
+
+permissions:
+  contents: read
+  id-token: write
+  actions: read
+  checks: write
+
+jobs:
+  # 🏗️ Build for Google Cloud
+  build-gcp:
+    name: 🏗️ Build for Google Cloud
+    runs-on: ubuntu-latest
+    outputs:
+      image-tag: ${{ steps.build.outputs.image-tag }}
+      artifact-name: ${{ steps.build.outputs.artifact-name }}
+    steps:
+      - name: 🚚 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔐 Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: 📦 Setup Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+          version: 'latest'
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 🔄 Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: '8'
+
+      - name: 📋 Install Dependencies
+        working-directory: ./frontend/apps/website-epic
+        run: pnpm install --frozen-lockfile
+
+      - name: 🔨 Build Application
+        id: build
+        working-directory: ./frontend/apps/website-epic
+        run: |
+          IMAGE_TAG="gcr.io/${{ env.GCP_PROJECT_ID }}/aigestion-frontend:${{ github.sha }}"
+          ARTIFACT_NAME="aigestion-gcp-${{ github.sha }}"
+
+          echo "image-tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "artifact-name=$ARTIFACT_NAME" >> $GITHUB_OUTPUT
+
+          # Build with production optimizations
+          pnpm build
+
+          # Create Docker image metadata
+          cat > docker-metadata.json << EOF
+          {
+            "image": "$IMAGE_TAG",
+            "tag": "${{ github.sha }}",
+            "created": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "commit": "${{ github.sha }}",
+            "branch": "${{ github.ref_name }}"
+          }
+          EOF
+
+      - name: 🐳 Build Docker Image
+        run: |
+          cd frontend/apps/website-epic
+          docker build -t ${{ steps.build.outputs.image-tag }} .
+          docker push ${{ steps.build.outputs.image-tag }}
+
+      - name: 📦 Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.build.outputs.artifact-name }}
+          path: |
+            ./frontend/apps/website-epic/dist/
+            ./frontend/apps/website-epic/docker-metadata.json
+          retention-days: 30
+
+  # 🚀 Deploy to Cloud Run
+  deploy-cloud-run:
+    name: 🚀 Deploy to Cloud Run
+    needs: build-gcp
+    if: github.event.inputs.deploy_target == 'cloud-run' || github.event.inputs.deploy_target == ''
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment || 'staging' }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: 🔐 Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: 📦 Setup Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: 🚀 Deploy to Cloud Run
+        id: deploy
+        run: |
+          # Deploy new revision
+          gcloud run deploy ${{ env.CLOUD_RUN_SERVICE }} \
+            --image ${{ needs.build-gcp.outputs.image-tag }} \
+            --region ${{ env.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --memory 1Gi \
+            --cpu 1 \
+            --timeout 300 \
+            --concurrency 80 \
+            --max-instances 100 \
+            --set-env-vars="NODE_ENV=production" \
+            --set-env-vars="VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" \
+            --set-env-vars="VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
+            --set-env-vars="VERTEX_AI_API_KEY=${{ secrets.VERTEX_AI_API_KEY }}" \
+            --set-env-vars="ANTIGRAVITY_API_KEY=${{ secrets.ANTIGRAVITY_API_KEY }}" \
+            --tag ${{ github.sha }}
+
+          # Get service URL
+          SERVICE_URL=$(gcloud run services describe ${{ env.CLOUD_RUN_SERVICE }} \
+            --region ${{ env.GCP_REGION }} \
+            --format 'value(status.url)')
+
+          echo "url=$SERVICE_URL" >> $GITHUB_OUTPUT
+          echo "✅ Deployed to: $SERVICE_URL"
+
+      - name: 🧪 Smoke Test
+        run: |
+          # Wait for deployment to be ready
+          sleep 30
+
+          # Test the deployed service
+          response=$(curl -s -o /dev/null -w "%{http_code}" ${{ steps.deploy.outputs.url }})
+          if [ $response -eq 200 ]; then
+            echo "✅ Cloud Run deployment is healthy"
+          else
+            echo "❌ Cloud Run deployment failed (HTTP $response)"
+            exit 1
+          fi
+
+  # 🤖 Deploy Vertex AI Models
+  deploy-vertex-ai:
+    name: 🤖 Deploy Vertex AI Models
+    needs: build-gcp
+    if: github.event.inputs.vertex_ai_deploy == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔐 Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: 📦 Setup Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: 🤖 Deploy Vertex AI Model
+        run: |
+          # Create Vertex AI model endpoint
+          gcloud ai models upload \
+            --region=${{ env.GCP_REGION }} \
+            --display-name="aigestion-ai-model-${{ github.sha }}" \
+            --container-image-uri=${{ needs.build-gcp.outputs.image-tag }} \
+            --project=${{ env.GCP_PROJECT_ID }}
+
+          # Deploy model to endpoint
+          gcloud ai endpoints deploy-model ${{ env.VERTEX_AI_MODEL }} \
+            --region=${{ env.GCP_REGION }} \
+            --model=$MODEL_ID \
+            --display-name="aigestion-endpoint-${{ github.sha }}" \
+            --traffic-split=0=100 \
+            --project=${{ env.GCP_PROJECT_ID }}
+
+  # 🎯 Configure Antigravity Integration
+  antigravity-config:
+    name: 🎯 Antigravity Configuration
+    needs: [build-gcp, deploy-cloud-run]
+    if: always() && needs.deploy-cloud-run.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🎯 Update Antigravity Configuration
+        run: |
+          # Update Antigravity API with new deployment
+          curl -X POST "${{ env.ANTIGRAVITY_API }}/deployments" \
+            -H "Authorization: Bearer ${{ secrets.ANTIGRAVITY_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "service": "aigestion-frontend",
+              "version": "${{ github.sha }}",
+              "url": "${{ needs.deploy-cloud-run.outputs.url }}",
+              "environment": "${{ github.event.inputs.environment || 'staging' }}",
+              "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
+              "deployed_by": "${{ github.actor }}",
+              "vertex_ai_enabled": ${{ github.event.inputs.vertex_ai_deploy || 'false' }}
+            }'
+
+      - name: 📊 Update Antigravity Metrics
+        run: |
+          # Send deployment metrics to Antigravity
+          curl -X POST "${{ env.ANTIGRAVITY_API }}/metrics" \
+            -H "Authorization: Bearer ${{ secrets.ANTIGRAVITY_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "service": "aigestion-frontend",
+              "deployment_id": "${{ github.run_id }}",
+              "build_time": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'",
+              "commit": "${{ github.sha }}",
+              "branch": "${{ github.ref_name }}",
+              "environment": "${{ github.event.inputs.environment || 'staging' }}"
+            }'
+
+  # 📊 Performance Monitoring
+  performance-monitor:
+    name: 📊 Performance Monitoring
+    needs: [deploy-cloud-run]
+    if: always() && needs.deploy-cloud-run.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📊 Lighthouse Performance Test
+        run: |
+          # Install Lighthouse CI
+          npm install -g @lhci/cli@0.12.x
+
+          # Run Lighthouse tests
+          lhci autorun \
+            --config=./lighthouserc.json \
+            --collect.url="${{ needs.deploy-cloud-run.outputs.url }}" \
+            --collect.url="${{ needs.deploy-cloud-run.outputs.url }}/about" \
+            --upload.target=temporary-public-storage
+
+      - name: 📊 Performance Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report-${{ github.run_number }}
+          path: .lighthouseci/
+
+  # 📱 Notifications
+  notify:
+    name: 📱 Notifications
+    needs: [build-gcp, deploy-cloud-run, antigravity-config]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📧 Slack Notification
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#gcp-deployments'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          fields: repo,message,commit,author,action,eventName,ref,workflow
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+      - name: 📧 Email Notification
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "🚨 GCP Deployment Failed - AIGestion"
+          body: |
+            Google Cloud deployment failed for commit ${{ github.sha }}
+
+            Build Status: ${{ needs.build-gcp.result }}
+            Deploy Status: ${{ needs.deploy-cloud-run.result }}
+            Antigravity: ${{ needs.antigravity-config.result }}
+
+            Check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          to: ${{ secrets.ADMIN_EMAIL }}
+          from: "GCP Deployments <noreply@aigestion.net>"

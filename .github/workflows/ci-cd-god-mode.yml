@@ -1,4 +1,4 @@
-name: 🚀 AIGestion CI/CD - God Mode
+name: 🚀 AIGestion CI/CD - Professional God Mode
 
 on:
   push:
@@ -20,16 +20,28 @@ on:
         options:
           - staging
           - production
+          - cloud-run-staging
+          - cloud-run-production
       force_deploy:
         description: 'Force deployment even if tests fail'
         required: false
         default: false
+        type: boolean
+      vertex_ai_enabled:
+        description: 'Enable Vertex AI integration'
+        required: false
+        default: true
         type: boolean
 
 env:
   NODE_VERSION: '22'
   PNPM_VERSION: '8'
   CACHE_VERSION: 'v1'
+  # Professional Account Configuration
+  GCP_PROJECT_ID: 'aigestion-prod'
+  GCP_REGION: 'us-central1'
+  VERTEX_AI_ENDPOINT: 'https://us-central1-aiplatform.googleapis.com'
+  CLOUD_RUN_SERVICE: 'aigestion-frontend'
 
 permissions:
   contents: read

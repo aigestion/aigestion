@@ -1,13 +1,22 @@
-# Global owners
-* @Alejandro
+# Global owners - AIGestion Professional Account
+* @aigestion-admin
 
-# Frontend
-/frontend/ @Alejandro
+# Frontend Team
+/frontend/ @aigestion-admin @aigestion-frontend
 
-# Backend / AI Engine
-/aig-ia-engine/ @Alejandro
-/swarm/ @Alejandro
+# Backend / AI Engine Team
+/aig-ia-engine/ @aigestion-admin @aigestion-backend
+/swarm/ @aigestion-admin @aigestion-ai
 
-# Infrastructure & CI
-/.github/ @Alejandro
-/docker/ @Alejandro
+# Infrastructure & DevOps Team
+/.github/ @aigestion-admin @aigestion-devops
+/docker/ @aigestion-admin @aigestion-devops
+
+# Security Team
+/security/ @aigestion-admin @aigestion-security
+
+# Documentation Team
+/docs/ @aigestion-admin @aigestion-docs
+
+# Emergency Contacts (for critical issues)
+/EMERGENCY_CONTACTS.md @aigestion-admin
