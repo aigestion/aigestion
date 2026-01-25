@@ -1,0 +1,10 @@
+name: Security Rotate Keys
+
+on: workflow_dispatch
+
+jobs:
+  rotate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rotate Secrets
+        run: echo "Rotating API keys..."

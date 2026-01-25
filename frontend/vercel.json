@@ -12,6 +12,18 @@
   ],
   "routes": [
     {
+      "src": "/sw.js",
+      "dest": "/sw.js"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/manifest.json"
+    },
+    {
+      "src": "/icons/(.*)",
+      "dest": "/icons/$1"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "https://aigestion-backend.onrender.com/api/$1",
       "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
@@ -71,20 +83,6 @@
     "VITE_APP_NAME": "AIGestion - Daniela AI Assistant",
     "VITE_APP_VERSION": "2.0.0",
     "VITE_ENVIRONMENT": "production"
-  },
-  "functions": {
-    "apps/website-epic/package.json": {
-      "maxDuration": 10
-    },
-    "apps/admindashboard/package.json": {
-      "maxDuration": 10
-    },
-    "apps/clientdashboard/package.json": {
-      "maxDuration": 10
-    },
-    "apps/demodashboard/package.json": {
-      "maxDuration": 10
-    }
   },
   "headers": [
     {

@@ -37,12 +37,21 @@
 <body class="bg-nexus-obsidian">
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
-  <script>
+  <script type="module">
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then(reg => console.log('✅ Nexus Service Worker registrado.', reg))
-          .catch(err => console.log('❌ Error registrando Service Worker.', err));
+      window.addEventListener('load', async () => {
+        try {
+          const resp = await fetch('/sw.js', { cache: 'no-store' });
+          const ct = resp.headers.get('content-type') || '';
+          if (!ct.includes('javascript')) {
+            console.warn('sw.js no es JavaScript, omitiendo registro. Content-Type:', ct);
+            return;
+          }
+          const reg = await navigator.serviceWorker.register('/sw.js');
+          console.log('✅ Nexus Service Worker registrado.', reg);
+        } catch (err) {
+          console.warn('❌ Error/omisión registro Service Worker:', err);
+        }
       });
     }
   </script>
