@@ -16,6 +16,19 @@
   },
   "headers": [
     {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
@@ -78,6 +91,18 @@
     {
       "source": "/daniela/:path*",
       "destination": "/index.html"
+    },
+    {
+      "source": "/sw.js",
+      "destination": "/sw.js"
+    },
+    {
+      "source": "/manifest.json",
+      "destination": "/manifest.json"
+    },
+    {
+      "source": "/icons/:path*",
+      "destination": "/icons/:path*"
     },
     {
       "source": "/((?!api|admin|client|demo).*)",

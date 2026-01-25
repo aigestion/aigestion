@@ -1,42 +1,58 @@
-name: Deploy AIGestion
+name: Deploy aigestion.net to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   workflow_dispatch:
-    inputs:
-      image_tag:
-        description: 'Docker image tag to deploy'
-        required: true
-        default: 'latest'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-
-
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-        shell: bash
-
-      - name: Authenticate to GKE
-        uses: google-github-actions/auth@v1
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          version: 8
 
-      - name: Set GKE context
-        run: |
-          gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --region ${{ secrets.GKE_REGION }}
-        shell: bash
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
 
-      - name: Deploy using PowerShell script
-        run: |
-          pwsh ./deploy.ps1 -ImageTag ${{ github.event.inputs.image_tag }}
-        shell: pwsh
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build website-epic
+        run: pnpm --filter website-epic build
+
+      - name: Create CNAME file for custom domain
+        run: echo "aigestion.net" > frontend/apps/website-epic/dist/CNAME
+
+      - name: Upload artifact to GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'frontend/apps/website-epic/dist'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

@@ -1,0 +1,15 @@
+name: E2E Smoke Test
+
+on:
+  deployment_status:
+
+jobs:
+  smoke-test:
+    if: github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Smoke Test
+        run: |
+          echo "Running smoke tests against ${{ github.event.deployment_status.target_url }}"
+          # Add actual curl or cypress check here

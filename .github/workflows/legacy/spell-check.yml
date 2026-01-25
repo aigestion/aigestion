@@ -1,0 +1,12 @@
+name: Spell Check
+
+on: [pull_request]
+
+jobs:
+  cspell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: streetsidesoftware/cspell-action@v2
+        with:
+          files: '**/*.{ts,tsx,js,md}'
