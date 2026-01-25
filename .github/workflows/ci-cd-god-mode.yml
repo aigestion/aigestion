@@ -1,4 +1,6 @@
-name: 🚀 AIGestion CI/CD - Professional God Mode
+# name: 🚀 AIGestion CI/CD - Professional God Mode
+# TEMPORARILY DISABLED - FIXING MATRIX ERROR
+name: 🚀 [DISABLED] AIGestion CI/CD - Professional God Mode
 
 on:
   push:
