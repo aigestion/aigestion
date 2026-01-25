@@ -110,12 +110,4 @@ const App: React.FC = () => {
   );
 };
 
-const App: React.FC = () => {
-  return (
-    <SocketProvider>
-      <AdminContent />
-    </SocketProvider>
-  );
-};
-
 export default App;
