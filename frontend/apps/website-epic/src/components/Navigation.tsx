@@ -1,6 +1,6 @@
+import { motion } from 'framer-motion';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { useSound } from '../hooks/useSound';
 import { SoundControl } from './SoundControl';
 
@@ -38,7 +38,7 @@ export const Navigation: React.FC = () => {
           >
             <img src="/images/brand/logo.png" alt="AIGestion.net" className="h-9 w-auto filter drop-shadow-[0_0_8px_rgba(138,43,226,0.3)]" />
           </motion.div>
-          <span className="text-2xl font-orbitron font-bold tracking-[0.2em] text-transparent bg-clip-text bg-linear-to-r from-nexus-violet-glow via-white to-nexus-cyan-glow hidden sm:block">
+          <span className="text-2xl font-orbitron font-bold tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-nexus-violet-glow via-white to-nexus-cyan-glow hidden sm:block">
             AIGestion.net
           </span>
         </Link>
@@ -64,7 +64,7 @@ export const Navigation: React.FC = () => {
                   }
                 }}
                 className={`relative font-orbitron text-[10px] tracking-[0.2em] uppercase transition-all duration-300 hover:text-white group
-                  ${item.highlight ? 'text-nexus-violet-glow font-bold' : 'text-nexus-silver/60'}`}
+                  ${item.path.includes('admin') || item.path.includes('client') || item.path.includes('demo') ? 'text-nexus-violet-glow font-bold' : 'text-nexus-silver/60'}`}
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-nexus-cyan transition-all duration-300 group-hover:w-full" />

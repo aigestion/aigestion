@@ -12,14 +12,15 @@ import { supabase } from './services/supabase';
 // God Mode Components
 import { CinematicPresentation } from './components/CinematicPresentation';
 import { ClientShowcase } from './components/ClientShowcase';
+import { CommandPalette } from './components/CommandPalette';
 import { ContactSection } from './components/ContactSection';
-import { DecentralandOffice } from './components/DecentralandOffice';
+import { DanielaOmniWidget } from './components/DanielaOmniWidget';
 import { DanielaShowcase } from './components/DanielaShowcase';
+import { DecentralandOffice } from './components/DecentralandOffice';
 import { EnhancedROI } from './components/EnhancedROI';
 import { Navigation } from './components/Navigation';
 import { NexusAndroid } from './components/NexusAndroid';
-import { CommandPalette } from './components/CommandPalette';
-import { DanielaOmniWidget } from './components/DanielaOmniWidget';
+import { DanielaDemo } from './pages/DanielaDemo';
 
 const Footer = () => (
   <footer className="py-32 bg-nexus-obsidian-deep border-t border-white/5 relative overflow-hidden">
