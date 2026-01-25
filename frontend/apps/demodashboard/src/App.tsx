@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { DashboardLayout, NeonCard, Skeleton, NexusHome } from '@shared/index';
+import { motion, AnimatePresence } from 'framer-motion';
+import { DashboardLayout, NeonCard, Skeleton, NexusHome, GlobalParticleMesh, DanielaOmniWidget, SocketProvider } from '@shared/index';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
@@ -13,6 +13,8 @@ const App: React.FC = () => {
 
   return (
     <DashboardLayout title="DOMINIO INTELIGENTE" type="DEMO">
+      <GlobalParticleMesh />
+      <DanielaOmniWidget />
       <div className="max-w-7xl mx-auto">
         <motion.h3
           initial={{ opacity: 0, x: -20 }}
@@ -56,4 +58,10 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+const WrappedApp: React.FC = () => (
+  <SocketProvider>
+    <App />
+  </SocketProvider>
+);
+
+export default WrappedApp;

@@ -65,15 +65,22 @@ export const CommandTerminal: React.FC = () => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="fixed inset-x-0 top-0 z-10000 p-4"
+                    className="fixed inset-x-0 top-0 z-[100] p-4 font-mono"
                 >
-                    <div className="max-w-4xl mx-auto premium-glass border-nexus-cyan/20 bg-black/90 rounded-b-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-                        <div className="bg-white/5 px-4 py-2 border-b border-white/5 flex justify-between items-center text-[10px] font-orbitron tracking-widest text-nexus-silver/40">
-                            <span>AIGESTION_TERMINAL_v2.6 // SECURE_SHELL</span>
+                    <div className="max-w-4xl mx-auto premium-glass border-nexus-cyan/30 bg-black/95 rounded-b-2xl overflow-hidden shadow-[0_0_50px_rgba(0,245,255,0.2)] relative">
+                        {/* Scanline Effect */}
+                        <div className="scanline pointer-events-none" />
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] pointer-events-none" />
+
+                        <div className="bg-nexus-cyan/5 px-4 py-2 border-b border-nexus-cyan/20 flex justify-between items-center text-[10px] font-orbitron tracking-[0.2em] text-nexus-cyan">
+                            <span className="flex items-center gap-2">
+                                <span className="animate-pulse">●</span>
+                                AIGESTION_TERMINAL_v2.6 // SECURE_SHELL
+                            </span>
                             <div className="flex gap-2">
-                                <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                                <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-                                <div className="w-2 h-2 rounded-full bg-green-500/50" />
+                                <div className="w-2 h-2 rounded-full bg-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.5)]" />
+                                <div className="w-2 h-2 rounded-full bg-yellow-500/50 shadow-[0_0_10px_rgba(234,179,8,0.5)]" />
+                                <div className="w-2 h-2 rounded-full bg-green-500/50 shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
                             </div>
                         </div>
 

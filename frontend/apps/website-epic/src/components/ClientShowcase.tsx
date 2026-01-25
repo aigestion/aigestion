@@ -112,6 +112,27 @@ export const ClientShowcase: React.FC = () => {
           </p>
         </motion.div>
 
+        {/* NEW: Infinite Marquee */}
+        <div className="relative w-full overflow-hidden mb-20 py-8 border-y border-white/5 bg-white/5 backdrop-blur-sm">
+          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10" />
+
+          <div className="flex">
+            <motion.div
+              className="flex gap-16 items-center whitespace-nowrap px-8"
+              animate={{ x: ["0%", "-50%"] }}
+              transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+            >
+              {[...clients, ...clients].map((client, i) => (
+                <div key={i} className="flex items-center gap-4 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                  <img src={client.logo} alt={client.name} className="h-12 w-auto object-contain" />
+                  <span className="text-xl font-orbitron font-bold text-white/80">{client.name}</span>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+
         {/* Clients Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {clients.map((client, index) => (

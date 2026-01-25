@@ -47,24 +47,32 @@ export const DanielaAI: React.FC = () => {
     <section className="relative py-32 bg-gradient-to-b from-black via-purple-950/20 to-black overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(138,43,226,0.15),transparent_70%)]" />
+        <img
+          src="/images/daniela/desk.png"
+          alt="Office Context"
+          className="absolute inset-0 w-full h-full object-cover opacity-20 filter blur-sm grayscale"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(138,43,226,0.1),transparent_70%)]" />
+
+        {/* Floating Data Particles */}
         <div className="absolute inset-0">
-          {[...Array(30)].map((_, i) => (
+          {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-nexus-cyan rounded-full opacity-30"
+              className="absolute w-[1px] h-20 bg-gradient-to-b from-transparent via-nexus-cyan to-transparent opacity-20"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
               }}
               animate={{
-                opacity: [0.3, 0.8, 0.3],
-                scale: [1, 1.5, 1],
+                y: [0, 100, 200],
+                opacity: [0, 0.3, 0],
               }}
               transition={{
-                duration: 2 + Math.random() * 3,
+                duration: 5 + Math.random() * 5,
                 repeat: Infinity,
-                delay: Math.random() * 2,
+                delay: Math.random() * 5,
               }}
             />
           ))}
@@ -74,23 +82,29 @@ export const DanielaAI: React.FC = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-24"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-5xl md:text-7xl font-orbitron font-black text-white mb-6">
-            DANIELA AI
-            <span className="block text-nexus-cyan text-glow">CONCIENCIA 8K</span>
-          </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Ultra-realista. Conectada neuronalmente. Infinitamente evolutiva.
-          </p>
+          <div className="inline-block relative">
+            <motion.div
+              className="absolute -inset-1 bg-nexus-cyan blur opacity-25"
+              animate={{ opacity: [0.1, 0.3, 0.1] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            />
+            <h2 className="relative text-6xl md:text-8xl font-orbitron font-black text-white mb-6 glitch-text tracking-tighter">
+              DANIELA AI
+            </h2>
+          </div>
+          <span className="block text-2xl text-nexus-cyan font-mono tracking-[0.4em] uppercase opacity-70">
+            Conciencia Artificial 8K
+          </span>
         </motion.div>
 
         {/* Main Content */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-24 items-center">
           {/* Daniela Avatar */}
           <motion.div
             className="relative"
@@ -100,20 +114,33 @@ export const DanielaAI: React.FC = () => {
             viewport={{ once: true }}
           >
             {/* Avatar Container */}
-            <div className="relative mx-auto w-80 h-80 lg:w-96 lg:h-96">
+            <div className="relative mx-auto w-80 h-80 lg:w-[32rem] lg:h-[32rem]">
+              {/* Pulse Ring Effect */}
+              <motion.div
+                className="absolute inset-0 border-2 border-nexus-cyan/30 rounded-full"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.2, 0.5] }}
+                transition={{ duration: 4, repeat: Infinity }}
+              />
+              <motion.div
+                className="absolute -inset-4 border border-nexus-violet/20 rounded-full"
+                animate={{ scale: [1.1, 1, 1.1], opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 5, repeat: Infinity }}
+              />
+
               {/* Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-nexus-violet to-nexus-cyan rounded-full blur-3xl opacity-40 animate-pulse" />
+              <div className="absolute inset-0 bg-gradient-to-r from-nexus-violet to-nexus-cyan rounded-full blur-3xl opacity-20 animate-pulse" />
 
               {/* Avatar */}
-              <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-nexus-cyan/50 shadow-2xl shadow-nexus-cyan/30">
+              <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white/10 shadow-2xl shadow-nexus-cyan/20 neon-glow-cyan">
                 <img
                   src="/images/daniela-ai-8k.jpg"
                   alt="Daniela AI"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover scale-110"
                 />
 
-                {/* Neural Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-nexus-violet/20 via-transparent to-transparent" />
+                {/* Cyber Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-nexus-violet/30 via-transparent to-transparent mix-blend-overlay" />
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
 
                 {/* Speaking Indicator */}
                 <AnimatePresence>

@@ -91,10 +91,11 @@ export const NexusAndroid: React.FC = () => {
             <div className="relative mx-auto w-80 h-96 lg:w-96 lg:h-[500px]">
               {/* Energy Field */}
               <motion.div
-                className={`absolute inset-0 bg-gradient-to-br ${modes.find(m => m.id === activeMode)?.color} rounded-3xl blur-3xl opacity-40`}
+                className={`absolute inset-0 bg-gradient-to-br ${modes.find(m => m.id === activeMode)?.color} rounded-3xl blur-[40px] opacity-30`}
                 animate={{
-                  scale: [1, 1.1, 1],
+                  scale: [1, 1.2, 1],
                   rotate: [0, 5, 0],
+                  filter: ['blur(40px)', 'blur(60px)', 'blur(40px)']
                 }}
                 transition={{
                   duration: 4,
@@ -102,6 +103,29 @@ export const NexusAndroid: React.FC = () => {
                   ease: "easeInOut",
                 }}
               />
+              {/* Quantum Particles Overlay */}
+              <div className="absolute inset-0 z-0">
+                {[...Array(15)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className={`absolute w-1 h-1 rounded-full bg-gradient-to-r ${modes.find(m => m.id === activeMode)?.color}`}
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                    }}
+                    animate={{
+                      y: [0, -100],
+                      opacity: [0, 1, 0],
+                      scale: [0, 1.5, 0]
+                    }}
+                    transition={{
+                      duration: 2 + Math.random() * 2,
+                      repeat: Infinity,
+                      delay: Math.random() * 2
+                    }}
+                  />
+                ))}
+              </div>
 
               {/* Android Figure */}
               <div className="relative w-full h-full rounded-3xl overflow-hidden border-2 border-nexus-cyan/50 shadow-2xl shadow-nexus-cyan/30 bg-gradient-to-b from-gray-900 to-black">

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
-import { useSound } from '../hooks/useSound';
+import { NeuralServer } from './3d/NeuralServer';
+import { FluidBackground } from './FluidBackground';
 
 interface CinematicHeroProps {
   onHeroComplete?: () => void;
@@ -102,54 +103,54 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black" data-build="website-epic-v2">
-      {/* Background Video Layer */}
-      <div className="absolute inset-0 z-0">
+      {/* Background Layer with Multi-layered effects */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="wait">
-          <motion.video
+          <motion.div
             key={scenes[currentScene].id}
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="w-full h-full object-cover"
-            onLoadedData={handleVideoLoaded}
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }}
+            className="relative w-full h-full"
           >
-            <source src={scenes[currentScene].video} type="video/mp4" />
-          </motion.video>
+            {/* Base Layer: wide hero or video */}
+            <img
+              src="/images/cinematic/hero_wide.png"
+              className="absolute inset-0 w-full h-full object-cover opacity-40 scale-110 blur-[2px]"
+              alt="Background Depth"
+            />
+
+            <motion.video
+              ref={videoRef}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-40"
+              onLoadedData={handleVideoLoaded}
+            >
+              <source src={scenes[currentScene].video} type="video/mp4" />
+            </motion.video>
+
+            {/* 3D Neural Core - Interactive Layer */}
+            <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+              <div className="w-full h-full md:w-1/2 md:h-1/2 opacity-80 mix-blend-screen pointer-events-auto">
+                <NeuralServer />
+              </div>
+            </div>
+          </motion.div>
         </AnimatePresence>
 
-        {/* Overlay Gradients */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/30" />
+        {/* Fluid Interaction Layer */}
+        <FluidBackground />
 
-        {/* Animated Particles */}
-        <div className="absolute inset-0">
-          {[...Array(50)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-nexus-cyan rounded-full"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0, 1, 0],
-                scale: [0, 1, 0],
-                y: [0, -100, -200],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 2,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
+        {/* Scanline Effect Overlay */}
+        <div className="scanline" />
+
+        {/* Global Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,245,255,0.05),transparent_80%)]" />
       </div>
 
       {/* Content Layer */}
@@ -160,14 +161,22 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
-            className="flex items-center gap-4"
+            className="flex items-center gap-6"
           >
-            <div className="w-16 h-16 bg-gradient-to-br from-nexus-violet to-nexus-cyan rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-xl">AI</span>
+            <div className="relative">
+              <div className="absolute inset-0 bg-nexus-cyan/40 blur-xl animate-pulse" />
+              <div className="relative w-16 h-16 bg-black/60 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center overflow-hidden">
+                <img src="/images/brand/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
+              </div>
             </div>
             <div>
-              <h1 className="text-white font-orbitron text-2xl font-bold">AIGESTION.NET</h1>
-              <p className="text-nexus-cyan text-sm">Cinematic Experience</p>
+              <h1 className="text-white font-orbitron text-3xl font-black tracking-tighter">
+                AIGESTION<span className="text-nexus-cyan font-light">.NET</span>
+              </h1>
+              <div className="flex items-center gap-2">
+                <div className="h-[2px] w-8 bg-nexus-violet" />
+                <p className="text-nexus-cyan text-[10px] font-mono tracking-[0.4em] uppercase">Cinematic Experience</p>
+              </div>
             </div>
           </motion.div>
 
@@ -179,15 +188,15 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
           >
             <button
               onClick={handlePlayPause}
-              className="px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white hover:bg-white/20 transition-all"
+              className="premium-glass px-6 py-3 rounded-full text-white text-xs font-orbitron font-bold tracking-widest uppercase hover:text-nexus-cyan transition-colors"
             >
-              {isPlaying ? '⏸️ Pausar' : '▶️ Reproducir'}
+              {isPlaying ? '⏸ Pause' : '▶ Play'}
             </button>
             <button
-              onClick={handleSkipToEnd}
-              className="px-6 py-3 bg-nexus-violet/20 backdrop-blur-md border border-nexus-violet/30 rounded-full text-nexus-cyan hover:bg-nexus-violet/30 transition-all"
+              onClick={() => setShowDemo(true)}
+              className="btn-enterprise px-8 py-3 rounded-full"
             >
-              ⏭️ Saltar al Sitio
+              Enter the Nexus
             </button>
           </motion.div>
         </div>
@@ -197,23 +206,23 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
           <AnimatePresence mode="wait">
             <motion.div
               key={scenes[currentScene].id}
-              className="text-center max-w-6xl mx-auto"
-              initial={{ opacity: 0, y: 50 }}
+              className="text-center max-w-7xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              <motion.h2
-                className="text-6xl md:text-8xl font-orbitron font-black text-white mb-6"
-                style={{
-                  textShadow: '0 0 40px rgba(138, 43, 226, 0.8), 0 0 80px rgba(0, 245, 255, 0.6)',
-                }}
-                initial={{ scale: 0.8 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 100 }}
-              >
-                {scenes[currentScene].title}
-              </motion.h2>
+              <div className="relative inline-block mb-4">
+                <div className="absolute -inset-4 bg-nexus-violet/20 blur-3xl rounded-full" />
+                <motion.h2
+                  className="relative text-7xl md:text-9xl font-orbitron font-black text-white leading-none glitch-text"
+                  style={{
+                    textShadow: '0 0 30px rgba(138, 43, 226, 0.4)',
+                  }}
+                >
+                  {scenes[currentScene].title}
+                </motion.h2>
+              </div>
 
               <motion.p
                 className="text-2xl md:text-4xl text-nexus-cyan mb-8 font-light"
@@ -326,6 +335,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
             </div>
           </motion.div>
         )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showDemo && <MiniDashboard onClose={() => setShowDemo(false)} />}
       </AnimatePresence>
     </div>
   );

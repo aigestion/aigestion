@@ -4,6 +4,7 @@ export * from './components/CursorFollower';
 export * from './components/CommandTerminal';
 export * from './components/Skeleton';
 export * from './components/NeonCard';
+export * from './components/GlobalParticleMesh'; // New Export
 export * from './components/GoogleServiceHub';
 export * from './components/AutomationEngine';
 export * from './components/NexusHome';
@@ -40,3 +41,11 @@ export * from './hooks/useSound';
 export * from './hooks/useAuth';
 export * from './services/AudioService';
 export * from './services/SupabaseService';
+export * from './components/DanielaOmniWidget'; // New Export
+export * from './hooks/useDanielaVoice'; // New Export
+export * from './contexts/SocketContext'; // New Export
+export * from './hooks/useMetrics'; // New Export
+export * from './components/GodViewMap'; // New Export
+export * from './components/SecurityMatrix'; // New Export
+export * from './components/ROISimulator'; // New Export
+export * from './components/GoalGamification'; // New Export
