@@ -1,14 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-/**
- * Global declaration for Vapi SDK when loaded via CDN
- */
-declare global {
-  interface Window {
-    Vapi: any;
-  }
-}
-
 export type CallStatus = 'idle' | 'connecting' | 'active' | 'error';
 
 interface UseVoiceAssistantOptions {
@@ -18,12 +9,12 @@ interface UseVoiceAssistantOptions {
   idleTimeoutSeconds?: number;
 }
 
-// Temporary disable Vapi functionality
-const VAPI_DISABLED = true;
+// Voice Assistant disabled - Vapi integration removed
+const VOICE_ASSISTANT_DISABLED = true;
 
 export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
-  // Early return if VAPI is disabled
-  if (VAPI_DISABLED) {
+  // Early return if voice assistant is disabled
+  if (VOICE_ASSISTANT_DISABLED) {
     return {
       status: 'idle' as CallStatus,
       isSpeaking: false,
