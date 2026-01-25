@@ -42,6 +42,9 @@ env:
   GCP_REGION: 'us-central1'
   VERTEX_AI_ENDPOINT: 'https://us-central1-aiplatform.googleapis.com'
   CLOUD_RUN_SERVICE: 'aigestion-frontend'
+  # Alternative Monitoring Configuration
+  MONITORING_API: 'https://api.aigestion.net/v1'
+  TELEMETRY_ENDPOINT: 'https://telemetry.aigestion.net/v1'
 
 permissions:
   contents: read

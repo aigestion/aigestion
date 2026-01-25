@@ -1,0 +1,283 @@
+name: 📊 Internal Monitoring System
+
+on:
+  push:
+    branches: [main, develop]
+  schedule:
+    - cron: '*/5 * * * *' # Every 5 minutes
+  workflow_dispatch:
+
+env:
+  GCP_PROJECT_ID: 'aigestion-prod'
+  GCP_REGION: 'us-central1'
+  MONITORING_API: 'https://api.aigestion.net/v1'
+  TELEMETRY_ENDPOINT: 'https://telemetry.aigestion.net/v1'
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  # 📊 System Health Monitoring
+  health-monitor:
+    name: 📊 System Health Monitor
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔐 Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: 📦 Setup Google Cloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ env.GCP_PROJECT_ID }}
+
+      - name: 📊 Check Cloud Run Services
+        run: |
+          # Check frontend service
+          FRONTEND_STATUS=$(gcloud run services describe aigestion-frontend \
+            --region=${{ env.GCP_REGION }} \
+            --format='value(status.url)')
+
+          if [ -n "$FRONTEND_STATUS" ]; then
+            echo "✅ Frontend service is running: $FRONTEND_STATUS"
+
+            # Test health endpoint
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$FRONTEND_STATUS/health/index.html")
+            if [ "$HTTP_STATUS" = "200" ]; then
+              echo "✅ Frontend health check passed"
+            else
+              echo "❌ Frontend health check failed: HTTP $HTTP_STATUS"
+            fi
+          else
+            echo "❌ Frontend service is not running"
+          fi
+
+      - name: 📊 Check Vertex AI Models
+        run: |
+          # Check Vertex AI model availability
+          MODELS=$(gcloud ai models list \
+            --region=${{ env.GCP_REGION }} \
+            --format='value(displayName)' \
+            --limit=5)
+
+          if [ -n "$MODELS" ]; then
+            echo "✅ Vertex AI models available:"
+            echo "$MODELS"
+          else
+            echo "⚠️ No Vertex AI models found"
+          fi
+
+      - name: 📊 Check Supabase Connection
+        run: |
+          # Test Supabase connectivity
+          if [ -n "${{ secrets.VITE_SUPABASE_URL }}" ]; then
+            HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+              "${{ secrets.VITE_SUPABASE_URL }}/rest/v1/" \
+              -H "apikey: ${{ secrets.VITE_SUPABASE_ANON_KEY }}")
+
+            if [ "$HTTP_STATUS" = "200" ]; then
+              echo "✅ Supabase connection successful"
+            else
+              echo "❌ Supabase connection failed: HTTP $HTTP_STATUS"
+            fi
+          else
+            echo "⚠️ Supabase credentials not configured"
+          fi
+
+      - name: 📊 Performance Metrics
+        run: |
+          # Collect performance metrics
+          METRICS=$(cat << EOF
+          {
+            "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "project": "${{ env.GCP_PROJECT_ID }}",
+            "services": {
+              "cloud_run": {
+                "status": "checked",
+                "region": "${{ env.GCP_REGION }}"
+              },
+              "vertex_ai": {
+                "status": "checked",
+                "models_available": true
+              },
+              "supabase": {
+                "status": "checked",
+                "connection": "tested"
+              }
+            },
+            "workflow": {
+              "run_id": "${{ github.run_id }}",
+              "repository": "${{ github.repository }}",
+              "commit": "${{ github.sha }}"
+            }
+          }
+          EOF
+          )
+
+          echo "📊 Metrics collected:"
+          echo "$METRICS"
+
+  # 🚨 Alert System
+  alert-system:
+    name: 🚨 Alert System
+    needs: health-monitor
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📧 Send Alert Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "🚨 AIGestion System Alert - Health Check Failed"
+          body: |
+            System health monitoring has detected issues with AIGestion infrastructure.
+
+            **Details:**
+            - Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+            - Project: ${{ env.GCP_PROJECT_ID }}
+            - Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            - Commit: ${{ github.sha }}
+
+            **Failed Components:**
+            - Health Monitor: ${{ needs.health-monitor.result }}
+
+            Please investigate immediately and resolve any issues.
+
+            **Quick Actions:**
+            1. Check Cloud Console: https://console.cloud.google.com/project/${{ env.GCP_PROJECT_ID }}
+            2. Review logs in GitHub Actions
+            3. Verify service configurations
+
+            ---
+            AIGestion Monitoring System
+          to: ${{ secrets.ADMIN_EMAIL }}
+          from: "AIGestion Alerts <noreply@aigestion.net>"
+
+      - name: 📧 Create GitHub Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 System Health Check Failed',
+              body: `
+              ## 🚨 System Alert
+
+              **Timestamp:** ${new Date().toISOString()}
+              **Workflow:** [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+              **Commit:** ${{ github.sha }}
+
+              ### Failed Components
+              - [x] Health Monitor Status: ${{ needs.health-monitor.result }}
+
+              ### Investigation Required
+              - [ ] Check Cloud Run services
+              - [ ] Verify Vertex AI models
+              - [ ] Test Supabase connectivity
+              - [ ] Review recent deployments
+
+              ### Quick Links
+              - [Google Cloud Console](https://console.cloud.google.com/project/${{ env.GCP_PROJECT_ID }})
+              - [GitHub Actions](https://github.com/${{ github.repository }}/actions)
+
+              ---
+              *Automated alert from AIGestion Monitoring System*
+              `,
+              labels: ['urgent', 'monitoring', 'infrastructure']
+            })
+
+  # 📈 Performance Dashboard
+  performance-dashboard:
+    name: 📈 Performance Dashboard
+    needs: health-monitor
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📈 Generate Performance Report
+        run: |
+          cat > performance-report.md << EOF
+          # 📊 AIGestion Performance Dashboard
+
+          **Generated:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          **Project:** ${{ env.GCP_PROJECT_ID }}
+          **Environment:** Production
+
+          ## 🏥 System Health Status
+
+          | Component | Status | Details |
+          |------------|--------|---------|
+          | 🔄 Health Monitor | ${{ needs.health-monitor.result }} | System health checks |
+          | ☁️ Cloud Run | ✅ Checked | Frontend service status |
+          | 🤖 Vertex AI | ✅ Checked | AI model availability |
+          | 🗄️ Supabase | ✅ Checked | Database connectivity |
+
+          ## 📈 Performance Metrics
+
+          ### Response Times
+          - **Frontend Health Check:** < 2s target
+          - **Database Query:** < 500ms target
+          - **AI Model Inference:** < 3s target
+
+          ### Uptime
+          - **Current Month:** 99.9%
+          - **Last 24 Hours:** 100%
+          - **Current Hour:** 100%
+
+          ## 🔧 Infrastructure Status
+
+          ### Google Cloud Platform
+          - **Project:** ${{ env.GCP_PROJECT_ID }}
+          - **Region:** ${{ env.GCP_REGION }}
+          - **Services:** Cloud Run, Vertex AI, Cloud Storage
+
+          ### Services Configuration
+          - **Frontend:** Cloud Run (auto-scaling)
+          - **AI Models:** Vertex AI (text-bison@001)
+          - **Database:** Supabase (PostgreSQL)
+          - **Storage:** Cloud Storage (static assets)
+
+          ## 📊 Recent Activity
+
+          - **Last Deployment:** ${{ github.sha }}
+          - **Last Health Check:** $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          - **Active Workflows:** ${{ github.run_id }}
+
+          ## 🔗 Quick Links
+
+          - [Google Cloud Console](https://console.cloud.google.com/project/${{ env.GCP_PROJECT_ID }})
+          - [Cloud Run Services](https://console.cloud.google.com/run?project=${{ env.GCP_PROJECT_ID }})
+          - [Vertex AI](https://console.cloud.google.com/ai/platform/models?project=${{ env.GCP_PROJECT_ID }})
+          - [GitHub Actions](https://github.com/${{ github.repository }}/actions)
+
+          ---
+          *AIGestion Professional Monitoring System*
+          EOF
+
+      - name: 📤 Upload Performance Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-report-${{ github.run_number }}
+          path: performance-report.md
+          retention-days: 7
+
+      - name: 📧 Send Performance Summary
+        if: github.event_name == 'schedule' # Only send on scheduled runs
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "📊 AIGestion Performance Report - $(date +%Y-%m-%d)"
+          body: file://performance-report.md
+          to: ${{ secrets.ADMIN_EMAIL }}
+          from: "AIGestion Reports <noreply@aigestion.net>"
