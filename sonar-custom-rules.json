@@ -1,0 +1,182 @@
+# Custom Quality Rules for AIGestion - Elite Standards
+
+# TypeScript/JavaScript Rules
+{
+  "rules": {
+    // Security Rules - Maximum Protection
+    "security/detect-object-injection": "error",
+    "security/detect-non-literal-regexp": "error",
+    "security/detect-unsafe-regex": "error",
+    "security/detect-buffer-noassert": "error",
+    "security/detect-child-process": "error",
+    "security/detect-disable-mustache-escape": "error",
+    "security/detect-eval-with-expression": "error",
+    "security/detect-no-csrf-before-method-override": "error",
+    "security/detect-non-literal-fs-filename": "error",
+    "security/detect-non-literal-require": "error",
+    "security/detect-possible-timing-attacks": "error",
+    "security/detect-pseudoRandomBytes": "error",
+
+    // Code Quality Rules - Elite Standards
+    "complexity": ["error", { "max": 10 }],
+    "max-lines": ["error", { "max": 300 }],
+    "max-lines-per-function": ["error", { "max": 50 }],
+    "max-params": ["error", { "max": 4 }],
+    "max-depth": ["error", { "max": 3 }],
+    "max-nested-callbacks": ["error", { "max": 3 }],
+    "max-statements": ["error", { "max": 20 }],
+    "max-statements-per-line": ["error", { "max": 1 }],
+
+    // Maintainability Rules
+    "no-duplicate-imports": "error",
+    "no-unused-vars": "error",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "prefer-const": "error",
+    "no-var": "error",
+    "object-shorthand": "error",
+    "prefer-template": "error",
+    "prefer-arrow-callback": "error",
+
+    // Performance Rules
+    "no-loop-func": "error",
+    "no-inner-declarations": "error",
+    "no-new-func": "error",
+    "no-new-wrappers": "error",
+    "no-undef-init": "error",
+    "no-unneeded-ternary": "error",
+
+    // Best Practices
+    "eqeqeq": ["error", "always"],
+    "curly": ["error", "all"],
+    "dot-notation": "error",
+    "no-else-return": "error",
+    "no-empty-function": "error",
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-new": "error",
+    "no-return-assign": "error",
+    "no-return-await": "error",
+    "no-self-compare": "error",
+    "no-throw-literal": "error",
+    "no-unmodified-loop-condition": "error",
+    "no-unused-expressions": "error",
+    "no-useless-call": "error",
+    "no-useless-concat": "error",
+    "no-useless-return": "error",
+    "radix": "error",
+    "yoda": "error"
+  }
+}
+
+# Python Rules - Enterprise Grade
+{
+  "bandit": {
+    "enabled_rules": [
+      # Security Rules
+      "B101", "B102", "B103", "B104", "B105", "B106", "B107", "B108", "B110",
+      "B112", "B201", "B301", "B302", "B303", "B304", "B305", "B306", "B307",
+      "B308", "B309", "B310", "B311", "B312", "B313", "B314", "B315", "B316",
+      "B317", "B318", "B319", "B320", "B321", "B322", "B323", "B324", "B325",
+      "B401", "B402", "B403", "B404", "B405", "B406", "B407", "B408", "B409",
+      "B410", "B411", "B412", "B413", "B501", "B502", "B503", "B504", "B505",
+      "B506", "B507", "B601", "B602", "B603", "B604", "B605", "B606", "B607",
+      "B608", "B609", "B610", "B611", "B701", "B702", "B703"
+    ]
+  },
+
+  "pylint": {
+    "min_score": 9.0,
+    "enabled_rules": [
+      # Basic Rules
+      "missing-docstring",
+      "trailing-whitespace",
+      "trailing-newlines",
+      "missing-final-newline",
+      "line-too-long",
+      "too-many-lines",
+      "too-many-statements",
+      "too-many-branches",
+      "too-many-arguments",
+      "too-many-locals",
+      "too-many-instance-attributes",
+      "too-many-public-methods",
+      "too-many-return-statements",
+      "too-many-boolean-expressions",
+      "too-many-nested-blocks",
+      "consider-using-enumerate",
+      "consider-using-set-comprehension",
+      "consider-using-dict-comprehension",
+      "consider-using-generator",
+      "consider-using-with",
+      "consider-iterating-dictionary",
+      "consider-using-f-string",
+      "useless-return",
+      "useless-else-on-loop",
+      "useless-import-alias",
+      "unspecified-encoding",
+      "superfluous-parens",
+      "simplifiable-if-expression",
+      "redefined-outer-name",
+      "reimported",
+      "redefined-builtin",
+      "invalid-name",
+      "import-error",
+      "import-outside-toplevel",
+      "inconsistent-return-statements",
+      "dangerous-default-value",
+      "chained-comparison",
+      "broad-except",
+      "bare-except",
+      "abstract-method",
+      "access-member-before-definition"
+    ]
+  }
+}
+
+# Custom Metrics Configuration
+{
+  "custom_metrics": [
+    {
+      "key": "code_complexity_score",
+      "name": "Code Complexity Score",
+      "description": "Overall complexity score based on cyclomatic complexity",
+      "type": "INT",
+      "direction": -1
+    },
+    {
+      "key": "security_vulnerability_count",
+      "name": "Security Vulnerability Count",
+      "description": "Number of security vulnerabilities found",
+      "type": "INT",
+      "direction": -1
+    },
+    {
+      "key": "test_coverage_percentage",
+      "name": "Test Coverage Percentage",
+      "description": "Percentage of code covered by tests",
+      "type": "FLOAT",
+      "direction": 1
+    },
+    {
+      "key": "technical_debt_hours",
+      "name": "Technical Debt Hours",
+      "description": "Estimated hours to fix technical debt",
+      "type": "INT",
+      "direction": -1
+    },
+    {
+      "key": "code_duplication_percentage",
+      "name": "Code Duplication Percentage",
+      "description": "Percentage of duplicated code",
+      "type": "FLOAT",
+      "direction": -1
+    },
+    {
+      "key": "maintainability_index",
+      "name": "Maintainability Index",
+      "description": "Maintainability index (0-100 scale)",
+      "type": "INT",
+      "direction": 1
+    }
+  ]
+}

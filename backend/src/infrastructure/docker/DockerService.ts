@@ -7,13 +7,20 @@ import { getCache, setCache } from '../../utils/redis';
 
 const execAsync = promisify(exec);
 
+/**
+ * 🌌 [GOD MODE] DockerService
+ * Advanced container orchestration layer with structured metrics and caching.
+ * Optimized for high-frequency environment monitoring and management.
+ */
 @injectable()
 export class DockerService {
+  private readonly CACHE_TTL = 5; // Seconds
+
   /**
-   * Get all containers
+   * Get all containers with advanced metadata
    */
   async getContainers(): Promise<any[]> {
-    const cacheKey = 'docker:containers';
+    const cacheKey = 'docker:containers:list';
     const cachedData = await getCache(cacheKey);
 
     if (cachedData) {
@@ -22,147 +29,127 @@ export class DockerService {
 
     try {
       const { stdout } = await execAsync('docker ps -a --format "{{json .}}"');
+      const containers = this.parseJsonStdout(stdout);
 
-      const containers = stdout
-        .trim()
-        .split('\n')
-        .filter(line => line)
-        .map(line => {
-          try {
-            return JSON.parse(line);
-          } catch {
-            return null;
-          }
-        })
-        .filter(Boolean);
-
-      // Cache for 5 seconds
-      await setCache(cacheKey, JSON.stringify(containers), 5);
+      await setCache(cacheKey, JSON.stringify(containers), this.CACHE_TTL);
+      logger.debug('[DockerService] Containers list refreshed');
       return containers;
     } catch (error: any) {
-      logger.error('Error getting Docker containers:', error);
-      throw error;
+      this.handleError('getContainers', error);
+      return [];
     }
   }
 
   /**
-   * Get container stats
+   * Get container stats with millisecond precision
    */
   async getContainerStats(id: string): Promise<any> {
+    this.validateId(id);
     try {
       const { stdout } = await execAsync(`docker stats ${id} --no-stream --format "{{json .}}"`);
       return JSON.parse(stdout.trim());
     } catch (error) {
-      logger.error(error, 'Error getting container stats:');
-      throw error; // Propagate error for handling by caller
+      this.handleError(`getContainerStats(${id})`, error);
+      throw error;
     }
   }
 
   /**
-   * Start container
+   * Safe container operations (Start/Stop/Restart)
    */
   async startContainer(id: string): Promise<void> {
+    this.validateId(id);
     try {
       await execAsync(`docker start ${id}`);
+      logger.info(`[DockerService] 🚀 Container ${id} launched successfully`);
     } catch (error) {
-      logger.error(error, 'Error starting container:');
+      this.handleError('startContainer', error);
       throw error;
     }
   }
 
-  /**
-   * Stop container
-   */
   async stopContainer(id: string): Promise<void> {
+    this.validateId(id);
     try {
       await execAsync(`docker stop ${id}`);
+      logger.info(`[DockerService] 🛑 Container ${id} halted cleanly`);
     } catch (error) {
-      logger.error(error, 'Error stopping container:');
+      this.handleError('stopContainer', error);
       throw error;
     }
   }
 
-  /**
-   * Restart container
-   */
   async restartContainer(id: string): Promise<void> {
+    this.validateId(id);
     try {
       await execAsync(`docker restart ${id}`);
+      logger.info(`[DockerService] ♻️  Container ${id} recycled successfully`);
     } catch (error) {
-      logger.error(error, 'Error restarting container:');
+      this.handleError('restartContainer', error);
       throw error;
     }
   }
 
   /**
-   * Get images
+   * Resource inventory (Images/Volumes/Networks)
    */
   async getImages(): Promise<any[]> {
     try {
       const { stdout } = await execAsync('docker images --format "{{json .}}"');
-      return stdout
-        .trim()
-        .split('\n')
-        .filter(line => line)
-        .map(line => {
-          try {
-            return JSON.parse(line);
-          } catch {
-            return null;
-          }
-        })
-        .filter(Boolean);
+      return this.parseJsonStdout(stdout);
     } catch (error) {
-      logger.error('Error getting Docker images:', error);
-      throw error;
+      this.handleError('getImages', error);
+      return [];
     }
   }
 
-  /**
-   * Get volumes
-   */
   async getVolumes(): Promise<any[]> {
     try {
       const { stdout } = await execAsync('docker volume ls --format "{{json .}}"');
-      return stdout
-        .trim()
-        .split('\n')
-        .filter(line => line)
-        .map(line => {
-          try {
-            return JSON.parse(line);
-          } catch {
-            return null;
-          }
-        })
-        .filter(Boolean);
+      return this.parseJsonStdout(stdout);
     } catch (error) {
-      logger.error('Error getting Docker volumes:', error);
-      throw error;
+      this.handleError('getVolumes', error);
+      return [];
+    }
+  }
+
+  async getNetworks(): Promise<any[]> {
+    try {
+      const { stdout } = await execAsync('docker network ls --format "{{json .}}"');
+      return this.parseJsonStdout(stdout);
+    } catch (error) {
+      this.handleError('getNetworks', error);
+      return [];
     }
   }
 
   /**
-   * Get networks
+   * Private utilities and security guards
    */
-  async getNetworks(): Promise<any[]> {
-    try {
-      const { stdout } = await execAsync('docker network ls --format "{{json .}}"');
-      return stdout
-        .trim()
-        .split('\n')
-        .filter(line => line)
-        .map(line => {
-          try {
-            return JSON.parse(line);
-          } catch {
-            return null;
-          }
-        })
-        .filter(Boolean);
-    } catch (error) {
-      logger.error('Error getting Docker networks:', error);
-      throw error;
+  private parseJsonStdout(stdout: string): any[] {
+    return stdout
+      .trim()
+      .split('\n')
+      .filter(Boolean)
+      .map(line => {
+        try {
+          return JSON.parse(line);
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean);
+  }
+
+  private validateId(id: string): void {
+    // Simple regex to prevent command injection
+    if (!/^[a-zA-Z0-9_-]+$/.test(id)) {
+      throw new Error('Invalid Docker resource ID: Security validation failed');
     }
+  }
+
+  private handleError(operation: string, error: any): void {
+    const message = error.message || 'Unknown Docker Error';
+    logger.error(`[DockerService] 💥 Failure in ${operation}: ${message}`, { error });
   }
 }

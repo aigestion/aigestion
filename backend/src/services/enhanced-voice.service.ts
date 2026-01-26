@@ -1,10 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types';
+import { logger } from '../utils/logger';
 import { AIService } from './ai.service';
 import { AnalyticsService } from './analytics.service';
 import { MetaverseService } from './metaverse.service';
-import { logger } from '../utils/logger';
-import { env } from '../config/env.schema';
 
 interface ConversationMessage {
   id: string;
@@ -236,8 +235,8 @@ export class EnhancedVoiceService {
         Sentimiento: ${emotionalAnalysis.sentiment}
       `;
 
-      const conversationHistory = context.messages.slice(-5).map(msg => ({
-        role: msg.speaker === 'daniela' ? 'assistant' : 'user',
+      const conversationHistory = context.messages.map(msg => ({
+        role: msg.speaker === 'daniela' ? ('assistant' as const) : ('user' as const),
         content: msg.text,
       }));
 

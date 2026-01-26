@@ -71,6 +71,20 @@
 }
 
 @layer utilities {
+  /* God Level Input Focus (Item #30) */
+    .nexus-input-focus {
+      @apply transition-all duration-300;
+    }
+  
+    .nexus-input-focus:focus {
+      @apply border-nexus-cyan/50 ring-1 ring-nexus-cyan/30 shadow-[0_0_15px_rgba(0, 245, 255, 0.2)];
+      outline: none;
+    }
+  
+    .nexus-input-focus-violet:focus {
+      @apply border-nexus-violet/50 ring-1 ring-nexus-violet/30 shadow-[0_0_15px_rgba(138, 43, 226, 0.2)];
+      outline: none;
+    }
   .text-glow {
     text-shadow: 0 0 20px rgba(138,43,226,0.5);
   }
@@ -201,5 +215,41 @@
   .card-enterprise:hover {
     transform: scale(1.02);
     border-color: rgba(255,255,255,0.2);
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.15);
+    }
+    
+    /* NEW: Magnetic Pull Effect Base */
+    .magnetic-wrap {
+      display: inline-block;
+      position: relative;
+      touch-action: none;
+    }
+    
+    /* NEW: Spotlight Effect */
+    .spotlight-overlay {
+      background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
+          rgba(255, 255, 255, 0.06),
+          transparent 40%);
+      z-index: 10;
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+    }
+    
+    /* NEW: Custom Cursor Hide */
+    body.custom-cursor {
+      cursor: none;
+    }
+    
+    a,
+    button,
+    input {
+      cursor: none;
+      /* If using custom cursor */
+    }
+    
+    /* NEW: Smooth standard cursor fallback */
+    html {
+      cursor: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4" fill="white" fill-opacity="0.8"/></svg>') 12 12, auto;
   }
 }

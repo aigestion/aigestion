@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
-import { useSound } from '../hooks/useSound';
+import { useSoundEffects } from '../hooks/useSoundEffects';
+import { MagneticWrapper } from './MagneticWrapper';
+import { GlitchText } from './GlitchText';
 
 export const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +14,7 @@ export const ContactSection: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { playHover } = useSound();
+  const { playHover, playClick, playSuccess, playWhoosh } = useSoundEffects();
 
   const interests = [
     { id: 'demo', label: 'Demo Personalizada', icon: '🎬' },
@@ -23,11 +25,13 @@ export const ContactSection: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    playClick();
     setIsSubmitting(true);
 
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000));
 
+    playSuccess();
     setIsSubmitted(true);
     setIsSubmitting(false);
 
@@ -39,20 +43,24 @@ export const ContactSection: React.FC = () => {
         email: '',
         company: '',
         message: '',
-        interest: 'demo'
+        interest: 'demo',
       });
-    }, 3000);
+    }, 4000);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    // Play tick on input focus/change could be annoying, so skip or use very subtle
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   return (
-    <section id="contact" className="relative py-32 bg-gradient-to-b from-black via-nexus-obsidian to-black overflow-hidden">
+    <section
+      id="contact"
+      className="relative py-32 bg-gradient-to-b from-black via-nexus-obsidian to-black overflow-hidden"
+    >
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(138,43,226,0.1),transparent_60%)]" />
@@ -92,7 +100,9 @@ export const ContactSection: React.FC = () => {
         >
           <h2 className="text-5xl md:text-7xl font-orbitron font-black text-white mb-6">
             CONECTA CON EL
-            <span className="block text-nexus-cyan text-glow">FUTURO HOY</span>
+            <span className="block text-nexus-cyan text-glow">
+              <GlitchText text="FUTURO HOY" />
+            </span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Da el primer paso hacia la transformación digital cuántica
@@ -108,7 +118,9 @@ export const ContactSection: React.FC = () => {
             viewport={{ once: true }}
           >
             <div className="premium-glass p-8 rounded-3xl border border-white/20">
-              <h3 className="text-2xl font-orbitron font-bold text-white mb-8">Inicia tu Transformación</h3>
+              <h3 className="text-2xl font-orbitron font-bold text-white mb-8">
+                Inicia tu Transformación
+              </h3>
 
               <AnimatePresence mode="wait">
                 {!isSubmitted ? (
@@ -123,22 +135,26 @@ export const ContactSection: React.FC = () => {
                     {/* Name and Email */}
                     <div className="grid md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Nombre *</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Nombre *
+                        </label>
                         <input
                           type="text"
                           name="name"
                           value={formData.name}
                           onChange={handleInputChange}
                           required
-                          className="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-nexus-cyan focus:outline-none transition-colors"
+                          className="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-lg text-white placeholder-gray-500 nexus-input-focus transition-colors"
                           placeholder="Tu nombre"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">
+                          Email *
+                        </label>
                         <input
                           required
-                          className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 focus:outline-none transition-all duration-300 hover:border-white/20 hover:bg-black/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
+                          className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 nexus-input-focus transition-all duration-300 hover:border-white/20 hover:bg-black/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
                           placeholder="tu@email.com"
                         />
                       </div>
@@ -146,27 +162,31 @@ export const ContactSection: React.FC = () => {
 
                     {/* Company */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Empresa</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Empresa
+                      </label>
                       <input
                         type="text"
                         name="company"
                         value={formData.company}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 focus:outline-none transition-all duration-300 hover:border-white/20 hover:bg-black/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
+                        className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-white placeholder-gray-500 nexus-input-focus-violet transition-all duration-300 hover:border-white/20 hover:bg-black/60 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
                         placeholder="Tu empresa"
                       />
                     </div>
 
                     {/* Interest */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Interés Principal</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Interés Principal
+                      </label>
                       <select
                         name="interest"
                         value={formData.interest}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-lg text-white focus:border-nexus-cyan focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-lg text-white nexus-input-focus transition-colors"
                       >
-                        {interests.map(interest => (
+                        {interests.map((interest) => (
                           <option key={interest.id} value={interest.id}>
                             {interest.icon} {interest.label}
                           </option>
@@ -176,34 +196,39 @@ export const ContactSection: React.FC = () => {
 
                     {/* Message */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Mensaje</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Mensaje
+                      </label>
                       <textarea
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
                         rows={4}
-                        className="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-nexus-cyan focus:outline-none transition-colors resize-none"
+                        className="w-full px-4 py-3 bg-black/50 border border-white/20 rounded-lg text-white placeholder-gray-500 nexus-input-focus transition-colors resize-none"
                         placeholder="Cuéntanos sobre tus necesidades..."
                       />
                     </div>
 
                     {/* Submit Button */}
-                    <motion.button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full btn-enterprise py-4 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-                      whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                      whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                    >
-                      {isSubmitting ? (
-                        <span className="flex items-center justify-center gap-3">
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                          Enviando...
-                        </span>
-                      ) : (
-                        'INICIAR TRANSFORMACIÓN'
-                      )}
-                    </motion.button>
+                    <MagneticWrapper strength={40}>
+                      <motion.button
+                        type="submit"
+                        disabled={isSubmitting}
+                        onMouseEnter={() => !isSubmitting && playHover()}
+                        className="w-full btn-enterprise py-4 text-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                        whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                        whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+                      >
+                        {isSubmitting ? (
+                          <span className="flex items-center justify-center gap-3">
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Enviando...
+                          </span>
+                        ) : (
+                          'INICIAR TRANSFORMACIÓN'
+                        )}
+                      </motion.button>
+                    </MagneticWrapper>
                   </motion.form>
                 ) : (
                   <motion.div
@@ -285,7 +310,9 @@ export const ContactSection: React.FC = () => {
 
             {/* Office Hours */}
             <div className="premium-glass p-8 rounded-3xl border border-nexus-cyan/30">
-              <h3 className="text-2xl font-orbitron font-bold text-white mb-6">Horario de Atención</h3>
+              <h3 className="text-2xl font-orbitron font-bold text-white mb-6">
+                Horario de Atención
+              </h3>
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
@@ -305,14 +332,16 @@ export const ContactSection: React.FC = () => {
 
             {/* Social Links */}
             <div className="premium-glass p-8 rounded-3xl border border-white/20">
-              <h3 className="text-2xl font-orbitron font-bold text-white mb-6">Conecta con Nosotros</h3>
+              <h3 className="text-2xl font-orbitron font-bold text-white mb-6">
+                Conecta con Nosotros
+              </h3>
 
               <div className="grid grid-cols-2 gap-4">
                 {[
                   { name: 'LinkedIn', icon: '💼', color: 'from-blue-500 to-blue-700' },
                   { name: 'Twitter', icon: '🐦', color: 'from-sky-400 to-sky-600' },
                   { name: 'GitHub', icon: '🐙', color: 'from-gray-600 to-gray-800' },
-                  { name: 'YouTube', icon: '📺', color: 'from-red-500 to-red-700' }
+                  { name: 'YouTube', icon: '📺', color: 'from-red-500 to-red-700' },
                 ].map((social) => (
                   <motion.button
                     key={social.name}

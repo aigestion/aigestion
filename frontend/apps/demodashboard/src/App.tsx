@@ -1,8 +1,8 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { DashboardLayout, NeonCard, Skeleton, NexusHome, GlobalParticleMesh, DanielaOmniWidget, SocketProvider } from '@shared/index';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { DanielaOmniWidget, DashboardLayout, GlobalParticleMesh, NeonCard, NexusHome, Skeleton, SocketProvider } from './mock-components';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);

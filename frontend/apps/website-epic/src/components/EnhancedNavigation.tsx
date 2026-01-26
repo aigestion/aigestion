@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSound } from '../hooks/useSound';
 import { SoundControl } from './SoundControl';
 
@@ -9,14 +9,16 @@ export const EnhancedNavigation: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const { playHover, playClick } = useSound();
+  const navigate = useNavigate();
 
   const navItems = [
     { label: 'Inicio', path: '#hero', icon: '🏠' },
-    { label: 'Clientes', path: '#clients', icon: '🏢' },
-    { label: 'Daniela AI', path: '#daniela', icon: '🤖' },
-    { label: 'Nexus', path: '#nexus', icon: '⚡' },
-    { label: 'ROI', path: '#roi', icon: '📊' },
-    { label: 'Contacto', path: '#contact', icon: '📞' },
+    { label: 'Clientes', path: '#clients', icon: '🏢' }, 
+    { label: 'Ayuda', path: '#daniela', icon: '🤖' },
+    { label: 'Velocidad', path: '#nexus', icon: '⚡' },
+    { label: 'Ganancias', path: '#roi', icon: '📊' },
+    { label: 'Escribirnos', path: '#contact', icon: '📞' },
+    { label: 'Oficina', path: '/virtual-office', icon: '🏢' },
   ];
 
   useEffect(() => {
@@ -52,16 +54,17 @@ export const EnhancedNavigation: React.FC = () => {
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
+    } else {
+      navigate(path);
     }
   };
 
   return (
     <>
       <motion.nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
-            ? 'bg-black/80 backdrop-blur-xl border-b border-white/10'
-            : 'bg-transparent'
-          }`}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          isScrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
+        }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -78,7 +81,7 @@ export const EnhancedNavigation: React.FC = () => {
               <motion.div
                 className="relative"
                 whileHover={{ rotate: 10, scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 10 }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-nexus-violet to-nexus-cyan rounded-lg blur-md opacity-50 group-hover:opacity-100 transition-opacity" />
                 <div className="relative w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center border border-white/20 backdrop-blur-sm overflow-hidden">
@@ -95,7 +98,9 @@ export const EnhancedNavigation: React.FC = () => {
                 </span>
                 <div className="flex items-center gap-2">
                   <div className="h-[1px] w-4 bg-nexus-cyan/50" />
-                  <div className="text-[10px] text-nexus-cyan/70 font-mono tracking-widest uppercase">Nexus Flagship v2</div>
+                  <div className="text-[10px] text-nexus-cyan/70 font-mono tracking-widest uppercase">
+                    Versión Moderna
+                  </div>
                 </div>
               </div>
             </Link>
@@ -106,10 +111,11 @@ export const EnhancedNavigation: React.FC = () => {
                 <motion.button
                   key={item.path}
                   onClick={() => handleNavClick(item.path)}
-                  className={`relative group px-5 py-2.5 rounded-xl transition-all duration-500 overflow-hidden ${activeSection === item.path.slice(1)
-                    ? 'text-white'
-                    : 'text-gray-400 hover:text-white'
-                    }`}
+                  className={`relative group px-5 py-2.5 rounded-xl transition-all duration-500 overflow-hidden ${
+                    activeSection === item.path.slice(1)
+                      ? 'text-white'
+                      : 'text-gray-400 hover:text-white'
+                  }`}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + index * 0.1 }}
@@ -117,7 +123,9 @@ export const EnhancedNavigation: React.FC = () => {
                   whileHover={{ y: -2 }}
                 >
                   <span className="relative z-10 flex items-center gap-2 text-xs font-orbitron font-bold tracking-widest uppercase">
-                    <span className="text-sm opacity-80 group-hover:scale-125 transition-transform duration-300">{item.icon}</span>
+                    <span className="text-sm opacity-80 group-hover:scale-125 transition-transform duration-300">
+                      {item.icon}
+                    </span>
                     {item.label}
                   </span>
 
@@ -126,7 +134,7 @@ export const EnhancedNavigation: React.FC = () => {
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-nexus-violet/30 to-nexus-cyan/30 border border-white/10"
                       layoutId="activeNavBackground"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
                     />
                   ) : (
                     <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-300" />
@@ -151,18 +159,21 @@ export const EnhancedNavigation: React.FC = () => {
               >
                 <div className="w-6 h-5 flex flex-col justify-center gap-1">
                   <motion.span
-                    className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''
-                      }`}
+                    className={`w-full h-0.5 bg-white transition-all duration-300 ${
+                      isMobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''
+                    }`}
                     animate={{ rotate: isMobileMenuOpen ? 45 : 0, y: isMobileMenuOpen ? 6 : 0 }}
                   />
                   <motion.span
-                    className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''
-                      }`}
+                    className={`w-full h-0.5 bg-white transition-all duration-300 ${
+                      isMobileMenuOpen ? 'opacity-0' : ''
+                    }`}
                     animate={{ opacity: isMobileMenuOpen ? 0 : 1 }}
                   />
                   <motion.span
-                    className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''
-                      }`}
+                    className={`w-full h-0.5 bg-white transition-all duration-300 ${
+                      isMobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''
+                    }`}
                     animate={{ rotate: isMobileMenuOpen ? -45 : 0, y: isMobileMenuOpen ? -6 : 0 }}
                   />
                 </div>
@@ -186,10 +197,11 @@ export const EnhancedNavigation: React.FC = () => {
                   <motion.button
                     key={item.path}
                     onClick={() => handleNavClick(item.path)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 ${activeSection === item.path.slice(1)
+                    className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 ${
+                      activeSection === item.path.slice(1)
                         ? 'bg-nexus-violet/20 text-nexus-cyan'
                         : 'text-gray-300 hover:text-white hover:bg-white/5'
-                      }`}
+                    }`}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}

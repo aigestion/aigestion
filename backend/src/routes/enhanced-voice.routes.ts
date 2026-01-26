@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import {
-  processConversation,
-  getConversationHistory,
   clearConversation,
+  getConversationHistory,
+  processConversation,
 } from '../controllers/enhanced-voice.controller';
-import { authenticateToken } from '../middleware/auth.middleware';
+import { protect } from '../middleware/auth.middleware';
 
 const router = Router();
 
 // All enhanced voice routes require authentication
-router.use(authenticateToken);
+router.use(protect);
 
 /**
  * @route POST /api/enhanced-voice/process

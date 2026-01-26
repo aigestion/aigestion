@@ -1,6 +1,19 @@
 {
-  "name": "AIGestion",
+  "name": "aigestion-net",
+  "displayName": "AIGestion.net",
+  "description": "Arquitectura de Inteligencia Soberana - Development Environment",
   "private": true,
+  "version": "2.0.0",
+  "homepage": "https://aigestion.net",
+  "packageManager": "pnpm@8.15.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aigestion/aigestion-net.git"
+  },
+  "author": {
+    "name": "AIGestion Team",
+    "email": "dev@aigestion.net"
+  },
   "scripts": {
     "parse": "ts-node tests/parse/index.ts",
     "test": "jest --config jest.config.cjs",
@@ -11,11 +24,40 @@
     "prepare": "husky",
     "push:hourly": "ts-node ./scripts/push_repo.ts --hourly",
     "dev:backend": "cd backend && pnpm install && pnpm dev",
-    "dev:frontend": "cd frontend && pnpm install && pnpm dev",
+    "dev:frontend": "cd frontend && pnpm install && pnpm dev:all",
     "dev:docker": "docker-compose up -d --build",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "test:full": "pnpm -r test && pnpm -C backend test && pnpm -C frontend test",
     "test:coverage": "turbo run test:coverage",
-    "sonar": "sonar-scanner"
+    "test:complete": "bash scripts/test-complete.sh",
+    "test:unit": "bash scripts/test-complete.sh unit",
+    "test:integration": "bash scripts/test-complete.sh integration",
+    "test:e2e": "bash scripts/test-complete.sh e2e",
+    "test:performance": "bash scripts/test-complete.sh performance",
+    "test:security": "bash scripts/test-complete.sh security",
+    "test:ai": "bash scripts/test-complete.sh ai",
+    "sonar": "sonar-scanner",
+    "deploy": "npm run build && npm run deploy:cloud",
+    "deploy:cloud": "gcloud app deploy",
+    "deploy:vercel": "cd frontend && vercel --prod",
+    "setup": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "setup:complete": "bash scripts/setup-complete.sh",
+    "setup:check": "bash scripts/setup-complete.sh health",
+    "setup:monitoring": "bash scripts/setup-monitoring.sh",
+    "monitoring:status": "bash scripts/monitoring-status.sh",
+    "monitoring:cleanup": "bash scripts/monitoring-cleanup.sh",
+    "monitoring:restart": "docker-compose -f docker-compose.monitoring.yml restart",
+    "deploy:multi-region": "bash scripts/deploy-multi-region.sh",
+    "multi-region:status": "bash scripts/multi-region-status.sh",
+    "multi-region:lag": "bash scripts/check-replication-lag.sh",
+    "multi-region:dns": "bash scripts/deploy-multi-region.sh dns",
+    "multi-region:monitoring": "bash scripts/deploy-multi-region.sh monitoring",
+    "clean": "npm run clean:frontend && npm run clean:backend",
+    "clean:frontend": "cd frontend && rm -rf node_modules dist && npm install",
+    "clean:backend": "cd backend && rm -rf node_modules dist && npm install",
+    "git:sync": "git add . && git commit -m 'Auto-sync AIGestion.net' && git push origin main",
+    "docker:build": "docker build -t aigestion-net .",
+    "docker:run": "docker run -p 3000:3000 aigestion-net"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
@@ -37,6 +79,7 @@
     "babel-jest": "^30.2.0",
     "caller": "^1.1.0",
     "chalk": "^4.1.2",
+    "concurrently": "^9.0.1",
     "debug": "^4.4.1",
     "eslint": "9.27.0",
     "eslint-config-prettier": "^10.1.5",
@@ -49,6 +92,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "fast-sort": "^3.4.1",
     "husky": "^9.1.7",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-extended": "^7.0.0",
@@ -66,9 +110,6 @@
     "yaml": "^2.8.0",
     "zod": "^3.22.4"
   },
-  "bundleDependencies": [
-    "tests"
-  ],
   "engines": {
     "node": ">=22"
   },

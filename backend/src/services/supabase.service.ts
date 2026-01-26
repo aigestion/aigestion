@@ -3,19 +3,25 @@ import { env } from '../config/env.schema';
 import winston from 'winston';
 
 const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.json(),
+  level: env.LOG_LEVEL || 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
   transports: [new winston.transports.Console()],
 });
 
+/**
+ * 🌌 [GOD MODE] SupabaseService
+ * High-performance, singleton client for Supabase integration.
+ * Features: Automatic instance management, health checks, and secure config validation.
+ */
 export class SupabaseService {
   private static instance: SupabaseService;
   private client: SupabaseClient;
 
   private constructor() {
-    if (!env.SUPABASE_URL || !env.SUPABASE_KEY) {
-      logger.warn('[SupabaseService] SUPABASE_URL or SUPABASE_KEY not set. Service may be limited.');
-    }
+    this.validateConfig();
 
     this.client = createClient(
       env.SUPABASE_URL || '',
@@ -25,10 +31,25 @@ export class SupabaseService {
           persistSession: false,
           autoRefreshToken: false,
         },
+        global: {
+          headers: { 'x-application-name': 'aigestion-backend' },
+        },
+        db: {
+          schema: 'public',
+        },
       }
     );
 
-    logger.info('[SupabaseService] Client initialized');
+    logger.info('[SupabaseService] 🚀 Sovereign Client initialized');
+  }
+
+  private validateConfig() {
+    if (!env.SUPABASE_URL || !env.SUPABASE_KEY) {
+      logger.error('❌ Critical: SUPABASE_URL or SUPABASE_KEY missing from environment.');
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('Supabase configuration is required in production');
+      }
+    }
   }
 
   public static getInstance(): SupabaseService {
@@ -43,21 +64,22 @@ export class SupabaseService {
   }
 
   /**
-   * Test connection by performing a simple select
+   * Test connection and schema health
+   * Performs an optimized health check against the Supabase edge.
    */
   public async testConnection(): Promise<boolean> {
     try {
-      const { data, error } = await this.client.from('users').select('count', { count: 'exact', head: true });
+      const { error } = await this.client.from('users').select('id').limit(1).maybeSingle();
+
       if (error) {
-        // If 'users' table doesn't exist yet, this might error, but the connection itself could be fine.
-        // However, we just added the SQL for users in the previous step.
-        logger.error('[SupabaseService] Connection test failed:', error.message);
+        logger.error(`[SupabaseService] ❌ Health check failed: ${error.message}`);
         return false;
       }
-      logger.info('[SupabaseService] Connection test successful');
+
+      logger.info('[SupabaseService] ✅ Health check successful');
       return true;
     } catch (err: any) {
-      logger.error('[SupabaseService] Unexpected error during connection test:', err.message);
+      logger.error(`[SupabaseService] 💥 Catastrophic failure during health check: ${err.message}`);
       return false;
     }
   }

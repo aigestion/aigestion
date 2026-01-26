@@ -122,11 +122,19 @@ export const schemas = {
     }),
     chat: z.object({
       prompt: z.string().min(1),
-      history: z.array(z.object({
-        role: z.enum(['user', 'assistant', 'system']),
-        content: z.string().min(1)
-      })).optional()
-    })
+      history: z
+        .array(
+          z.object({
+            role: z.enum(['user', 'assistant', 'system']),
+            content: z.string().min(1),
+          }),
+        )
+        .optional(),
+    }),
+    sessionId: z.string().optional(),
+    userId: z.string().optional(),
+    text: z.string().optional(),
+    audio: z.string().optional(),
   },
   pagination: z.object({
     page: z.string().regex(/^\d+$/).transform(Number).optional(),

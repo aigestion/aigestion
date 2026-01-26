@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSoundEffects } from '../hooks/useSoundEffects';
 
 export const CommandTerminal: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const { playWhoosh, playPop } = useSoundEffects();
     const [input, setInput] = useState('');
     const [history, setHistory] = useState<string[]>(['SISTEMA OPERATIVO AIGESTION v2.6', 'Consola de comandos autorizada.', 'Escribe "help" para ver opciones.']);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -10,6 +12,8 @@ export const CommandTerminal: React.FC = () => {
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.key === '`') {
+                if (!isOpen) playWhoosh();
+                else playPop();
                 setIsOpen(prev => !prev);
             }
             if (e.key === 'Escape' && isOpen) {
