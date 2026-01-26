@@ -1,35 +1,45 @@
 import type { Session } from '@supabase/supabase-js';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { CommandTerminal } from './components/CommandTerminal';
+import { ScrollProgress } from './components/ScrollProgress';
 import { VitureXRExperience } from './components/VitureXRExperience';
+import { WorkbenchLayout } from './components/workbench/WorkbenchLayout';
+import { NexusProvider } from './contexts/NexusContext';
+import { NotificationProvider, useNotification } from './contexts/NotificationContext';
+import { SoundProvider } from './contexts/SoundContext';
 import { Login } from './pages/Login';
 import WeaponDashboard from './pages/WeaponDashboard';
 import { supabase } from './services/supabase';
-import { WorkbenchLayout } from './components/workbench/WorkbenchLayout';
-import { SoundProvider } from './contexts/SoundContext';
-import { NexusProvider } from './contexts/NexusContext';
-import { NotificationProvider, useNotification } from './contexts/NotificationContext';
-import { ScrollProgress } from './components/ScrollProgress';
 
-// God Mode Components
-import { CinematicPresentation } from './components/CinematicPresentation';
-import { ClientShowcase } from './components/ClientShowcase';
-import { CommandPalette } from './components/CommandPalette';
-import { ContactSection } from './components/ContactSection';
-import { DanielaOmniWidget } from './components/DanielaOmniWidget';
-import { DanielaShowcase } from './components/DanielaShowcase';
-import { DecentralandOffice } from './components/DecentralandOffice';
-import { EnhancedROI } from './components/EnhancedROI';
-import { Navigation } from './components/Navigation';
-import { NexusAndroid } from './components/NexusAndroid';
-import { DanielaDemo } from './pages/DanielaDemo';
-import { NexusCursor } from './components/NexusCursor';
+// God Mode Components - Lazy Loaded
 import { AnimatedMeshGradient } from './components/AnimatedMeshGradient';
 import { CyberpunkGrid } from './components/CyberpunkGrid';
+import { Navigation } from './components/Navigation';
 import { NeuralParticles } from './components/NeuralParticles';
+import { NexusCursor } from './components/NexusCursor';
 import VirtualOfficePreview from './pages/VirtualOfficePreview';
+
+const CinematicPresentation = lazy(() => import('./components/CinematicPresentation'));
+const ClientShowcase = lazy(() => import('./components/ClientShowcase'));
+const CommandPalette = lazy(() => import('./components/CommandPalette'));
+const ContactSection = lazy(() => import('./components/ContactSection'));
+const DanielaOmniWidget = lazy(() => import('./components/DanielaOmniWidget'));
+const DanielaShowcase = lazy(() => import('./components/DanielaShowcase'));
+const DecentralandOffice = lazy(() => import('./components/DecentralandOffice'));
+const EnhancedROI = lazy(() => import('./components/EnhancedROI'));
+const NexusAndroid = lazy(() => import('./components/NexusAndroid'));
+const DanielaDemo = lazy(() => import('./pages/DanielaDemo'));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="min-h-[400px] bg-nexus-obsidian-deep flex items-center justify-center">
+    <div className="text-nexus-cyan-glow font-orbitron tracking-[0.5em] text-xs animate-pulse">
+      LOADING...
+    </div>
+  </div>
+);
 
 const Footer = () => (
   <footer className="py-32 bg-nexus-obsidian-deep border-t border-white/5 relative overflow-hidden">
@@ -92,10 +102,10 @@ const Footer = () => (
 );
 
 function App() {
-  const [session, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
   const { notify } = useNotification();
 
   useEffect(() => {
@@ -108,104 +118,106 @@ function App() {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password
-      })
+        password,
+      });
 
-      if (error) throw error
+      if (error) throw error;
 
-      const user = data.user
-      const role = user.user_metadata?.role || 'client'
+      const user = data.user;
+      const role = user.user_metadata?.role || 'client';
 
       // Check if admin
-      const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com']
+      const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com'];
       if (adminEmails.includes(user.email!) || role === 'admin') {
-        window.location.href = 'https://admin.aigestion.net'
-        return
+        window.location.href = 'https://admin.aigestion.net';
+        return;
       }
 
-      setSession(data.session)
+      setSession(data.session);
       setCurrentUser({
         email: user.email!,
         name: user.user_metadata?.name || user.email!.split('@')[0],
-        subscription: user.user_metadata?.subscription || 'free'
-      })
-      setIsAuthenticated(true)
-
+        subscription: user.user_metadata?.subscription || 'free',
+      });
+      setIsAuthenticated(true);
     } catch (error) {
-      console.error('Login error:', error)
-      throw error
+      console.error('Login error:', error);
+      throw error;
     }
-  }
+  };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
-    setSession(null)
-    setIsAuthenticated(false)
-    setCurrentUser(null)
-  }
+    await supabase.auth.signOut();
+    setSession(null);
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+  };
 
   useEffect(() => {
     if (!supabase) {
-      console.warn('Supabase no configurado; usando modo demo')
-      setTimeout(() => setLoading(false), 0)
-      return
+      console.warn('Supabase no configurado; usando modo demo');
+      setTimeout(() => setLoading(false), 0);
+      return;
     }
 
-    supabase.auth.getSession().then(({ data: { session } }: { data: { session: Session | null } }) => {
-      setSession(session)
-      if (session) {
-        const user = session.user
-        const role = user.user_metadata?.role || 'client'
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }: { data: { session: Session | null } }) => {
+        setSession(session);
+        if (session) {
+          const user = session.user;
+          const role = user.user_metadata?.role || 'client';
 
-        // Check if admin
-        const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com']
-        if (adminEmails.includes(user.email!) || role === 'admin') {
-          window.location.href = 'https://admin.aigestion.net'
-          return
+          // Check if admin
+          const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com'];
+          if (adminEmails.includes(user.email!) || role === 'admin') {
+            window.location.href = 'https://admin.aigestion.net';
+            return;
+          }
+
+          setCurrentUser({
+            email: user.email!,
+            name: user.user_metadata?.name || user.email!.split('@')[0],
+            subscription: user.user_metadata?.subscription || 'free',
+          });
+          setIsAuthenticated(true);
         }
-
-        setCurrentUser({
-          email: user.email!,
-          name: user.user_metadata?.name || user.email!.split('@')[0],
-          subscription: user.user_metadata?.subscription || 'free'
-        })
-        setIsAuthenticated(true)
-      }
-      setLoading(false)
-    }).catch(err => {
-      console.error('Supabase Session Error:', err)
-      setLoading(false)
-    })
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Supabase Session Error:', err);
+        setLoading(false);
+      });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event: string, session: Session | null) => {
-      setSession(session)
+      setSession(session);
       if (session) {
-        const user = session.user
-        const role = user.user_metadata?.role || 'client'
+        const user = session.user;
+        const role = user.user_metadata?.role || 'client';
 
         // Check if admin
-        const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com']
+        const adminEmails = ['admin@aigestion.net', 'nemisanalex@gmail.com'];
         if (adminEmails.includes(user.email!) || role === 'admin') {
-          window.location.href = 'https://admin.aigestion.net'
-          return
+          window.location.href = 'https://admin.aigestion.net';
+          return;
         }
 
         setCurrentUser({
           email: user.email!,
           name: user.user_metadata?.name || user.email!.split('@')[0],
-          subscription: user.user_metadata?.subscription || 'free'
-        })
-        setIsAuthenticated(true)
+          subscription: user.user_metadata?.subscription || 'free',
+        });
+        setIsAuthenticated(true);
       } else {
-        setIsAuthenticated(false)
-        setCurrentUser(null)
+        setIsAuthenticated(false);
+        setCurrentUser(null);
       }
-    })
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => subscription.unsubscribe();
+  }, []);
 
   if (loading) {
     return (
@@ -252,26 +264,40 @@ function App() {
                       <main>
                         {/* Advanced Presentation - Ahora es la primera sección */}
                         <AnimatePresence mode="wait">
-                          <CinematicPresentation />
+                          <Suspense fallback={<LoadingFallback />}>
+                            <CinematicPresentation />
+                          </Suspense>
                         </AnimatePresence>
 
                         {/* Fortune 500 Showcase */}
-                        <ClientShowcase />
+                        <Suspense fallback={<LoadingFallback />}>
+                          <ClientShowcase />
+                        </Suspense>
 
                         {/* synthetic Consciousness - Daniela AI */}
-                        <DanielaShowcase />
+                        <Suspense fallback={<LoadingFallback />}>
+                          <DanielaShowcase />
+                        </Suspense>
 
                         {/* Quantum Guardian - Nexus Android */}
-                        <NexusAndroid />
+                        <Suspense fallback={<LoadingFallback />}>
+                          <NexusAndroid />
+                        </Suspense>
 
                         {/* Strategic ROI analysis */}
-                        <EnhancedROI />
+                        <Suspense fallback={<LoadingFallback />}>
+                          <EnhancedROI />
+                        </Suspense>
 
                         {/* Decentraland Headquarters */}
-                        <DecentralandOffice />
+                        <Suspense fallback={<LoadingFallback />}>
+                          <DecentralandOffice />
+                        </Suspense>
 
                         {/* Immersive Contact Experience */}
-                        <ContactSection />
+                        <Suspense fallback={<LoadingFallback />}>
+                          <ContactSection />
+                        </Suspense>
 
                         {/* VITURE XR Experience */}
                         <VitureXRExperience />
