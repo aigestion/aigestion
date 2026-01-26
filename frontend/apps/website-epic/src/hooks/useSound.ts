@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { audioService, type SoundType } from '../services/audio';
+import { audioService, type SoundType } from '../services/audio-silent';
 
 export const useSound = () => {
   const play = useCallback((type: SoundType) => {
@@ -21,6 +21,6 @@ export const useSound = () => {
     playHover,
     playClick,
     playWuaw,
-    playPulse
+    playPulse,
   };
 };

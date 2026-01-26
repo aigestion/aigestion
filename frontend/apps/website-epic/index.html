@@ -1,63 +1,262 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/images/brand/icon.png" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AIGestion.net | Arquitectura de Inteligencia Soberana</title>
-  <meta name="description" content="AIGestion.net: El núcleo neuronal y la arquitectura de IA más avanzada para empresas del futuro. Integración con Metaverso, Daniela AI y soberanía digital." />
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#8a2be2" />
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Nexus" />
-  <script>
-    // Fallback for Vapi SDK and other scripts expecting 'exports'
-    window.exports = window.exports || {};
-  </script>
-  <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/images/brand/icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIGestion.net | Arquitectura de Inteligencia Soberana</title>
+    <meta
+      name="description"
+      content="AIGestion.net: El núcleo neuronal y la arquitectura de IA más avanzada para empresas del futuro. Integración con Metaverso, Daniela AI y soberanía digital."
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#8a2be2" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Nexus" />
+    <script>
+      // Fallback for Vapi SDK and other scripts expecting 'exports'
+      window.exports = window.exports || {};
+    </script>
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://aigestion.net/" />
-  <meta property="og:title" content="AIGestion.net | Arquitectura de Inteligencia Soberana" />
-  <meta property="og:description" content="Transformación neuronal y soberanía digital. La IA que escala su empresa al metaverso." />
-  <meta property="og:image" content="/images/daniela/lobby.png" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aigestion.net/" />
+    <meta property="og:title" content="AIGestion.net | Arquitectura de Inteligencia Soberana" />
+    <meta
+      property="og:description"
+      content="Transformación neuronal y soberanía digital. La IA que escala su empresa al metaverso."
+    />
+    <meta property="og:image" content="/images/daniela/lobby.png" />
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://aigestion.net/" />
-  <meta property="twitter:title" content="AIGestion.net | Arquitectura de Inteligencia Soberana" />
-  <meta property="twitter:description" content="Liderando el futuro con IA soberana e integración en el metaverso." />
-  <meta property="twitter:image" content="/images/daniela/lobby.png" />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://aigestion.net/" />
+    <meta
+      property="twitter:title"
+      content="AIGestion.net | Arquitectura de Inteligencia Soberana"
+    />
+    <meta
+      property="twitter:description"
+      content="Liderando el futuro con IA soberana e integración en el metaverso."
+    />
+    <meta property="twitter:image" content="/images/daniela/lobby.png" />
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-</head>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Orbitron:wght@400;700;900&display=swap"
+      rel="stylesheet"
+      media="print"
+      onload="this.media = 'all'"
+    />
 
-<body class="bg-nexus-obsidian">
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-  <script type="module">
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', async () => {
-        try {
-          const resp = await fetch('/sw.js', { cache: 'no-store' });
-          const ct = resp.headers.get('content-type') || '';
-          if (!ct.includes('javascript')) {
-            console.warn('sw.js no es JavaScript, omitiendo registro. Content-Type:', ct);
-            return;
-          }
-          const reg = await navigator.serviceWorker.register('/sw.js');
-          console.log('✅ Nexus Service Worker registrado.', reg);
-        } catch (err) {
-          console.warn('❌ Error/omisión registro Service Worker:', err);
+    <!-- Critical CSS Inline -->
+    <style>
+      /* Critical CSS - Above the Fold */
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+          'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #0a0a0f;
+        color: #fff;
+      }
+      #root {
+        min-height: 100vh;
+      }
+      .min-h-screen {
+        min-height: 100vh;
+      }
+      .bg-nexus-obsidian-deep {
+        background-color: #0a0a0f;
+      }
+      .flex {
+        display: flex;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .text-nexus-cyan-glow {
+        color: #00f5ff;
+        text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+      }
+      .font-orbitron {
+        font-family: 'Orbitron', monospace;
+      }
+      .tracking-\[0\.5em\] {
+        letter-spacing: 0.5em;
+      }
+      .text-xs {
+        font-size: 0.75rem;
+      }
+      .animate-pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
         }
-      });
-    }
-  </script>
-</body>
+        50% {
+          opacity: 0.5;
+        }
+      }
+      .absolute {
+        position: absolute;
+      }
+      .inset-0 {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+      .w-full {
+        width: 100%;
+      }
+      .h-full {
+        height: 100%;
+      }
+      .object-cover {
+        object-fit: cover;
+      }
+      .relative {
+        position: relative;
+      }
+      .z-10 {
+        z-index: 10;
+      }
+      .fixed {
+        position: fixed;
+      }
+      .top-0 {
+        top: 0;
+      }
+      .left-0 {
+        right: 0;
+      }
+      .right-0 {
+        right: 0;
+      }
+      .backdrop-blur-md {
+        backdrop-filter: blur(12px);
+      }
+      .border-b {
+        border-bottom-width: 1px;
+      }
+      .border-white\/10 {
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      .px-6 {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+      .py-4 {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+      .text-4xl {
+        font-size: 2.25rem;
+        line-height: 2.5rem;
+      }
+      .text-6xl {
+        font-size: 3.75rem;
+        line-height: 1;
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+      .text-center {
+        text-align: center;
+      }
+      .mb-8 {
+        margin-bottom: 2rem;
+      }
+      .inline-block {
+        display: inline-block;
+      }
+      .px-8 {
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+      .rounded-full {
+        border-radius: 9999px;
+      }
+      .bg-nexus-violet {
+        background-color: #8a2be2;
+      }
+      .hover\:bg-nexus-violet\/80:hover {
+        background-color: rgba(138, 43, 226, 0.8);
+      }
+      .transition-colors {
+        transition-property:
+          color, background-color, border-color, text-decoration-color, fill, stroke;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+      }
+      .animate-\[pulse_1s_infinite\] {
+        animation: pulse 1s infinite;
+      }
+    </style>
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" as="image" href="/images/nexus/hero.png" />
+    <link rel="preload" as="image" href="/images/brand/logo.png" />
+
+    <!-- Performance Monitoring -->
+    <script>
+      // Initialize performance monitoring
+      if ('PerformanceObserver' in window) {
+        const observer = new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            if (entry.entryType === 'largest-contentful-paint') {
+              console.log('LCP:', entry.startTime);
+            }
+            if (entry.entryType === 'first-input') {
+              console.log('FID:', entry.processingStart - entry.startTime);
+            }
+          }
+        });
+        observer.observe({ entryTypes: ['largest-contentful-paint', 'first-input'] });
+      }
+    </script>
+  </head>
+
+  <body class="bg-nexus-obsidian">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script type="module">
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            const resp = await fetch('/sw.js', { cache: 'no-store' });
+            const ct = resp.headers.get('content-type') || '';
+            if (!ct.includes('javascript')) {
+              console.warn('sw.js no es JavaScript, omitiendo registro. Content-Type:', ct);
+              return;
+            }
+            const reg = await navigator.serviceWorker.register('/sw.js');
+            console.log('✅ Nexus Service Worker registrado.', reg);
+          } catch (err) {
+            console.warn('❌ Error/omisión registro Service Worker:', err);
+          }
+        });
+      }
+    </script>
+  </body>
 </html>
