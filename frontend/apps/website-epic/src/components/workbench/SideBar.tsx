@@ -1,4 +1,3 @@
-import React from 'react';
 import { useWorkbench } from './WorkbenchContext';
 import { DanielaPanel } from './DanielaPanel';
 

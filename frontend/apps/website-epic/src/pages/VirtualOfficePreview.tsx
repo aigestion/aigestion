@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useMotionTemplate, useMotionValue } from 'framer-motion';
-import { Users, Layout, Monitor, ArrowRight, Camera, Sparkles } from 'lucide-react';
+import { motion, useScroll, useTransform, useMotionValue } from 'framer-motion';
+import { Users, Monitor, ArrowRight, Camera, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { MagneticWrapper } from '../components/MagneticWrapper';

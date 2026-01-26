@@ -5,7 +5,7 @@ interface NeuralSignalProps {
   isSpeaking: boolean;
 }
 
-export const NeuralSignal: React.FC<NeuralSignalProps> = ({ volume, isSpeaking }) => {
+export const NeuralSignal: React.FC<NeuralSignalProps> = ({ volume }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -50,10 +50,10 @@ export const NeuralSignal: React.FC<NeuralSignalProps> = ({ volume, isSpeaking }
 
         // Glow effect
         if (vol > 0.1) {
-            context.shadowBlur = 10 * vol;
-            context.shadowColor = '#22d3ee';
+          context.shadowBlur = 10 * vol;
+          context.shadowColor = '#22d3ee';
         } else {
-            context.shadowBlur = 0;
+          context.shadowBlur = 0;
         }
       }
     }
@@ -61,7 +61,10 @@ export const NeuralSignal: React.FC<NeuralSignalProps> = ({ volume, isSpeaking }
     const resize = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
-      particles = Array.from({ length: particleCount }, () => new Particle(canvas.width, canvas.height));
+      particles = Array.from(
+        { length: particleCount },
+        () => new Particle(canvas.width, canvas.height),
+      );
     };
 
     window.addEventListener('resize', resize);
@@ -89,7 +92,7 @@ export const NeuralSignal: React.FC<NeuralSignalProps> = ({ volume, isSpeaking }
       }
       ctx.stroke();
 
-      particles.forEach(p => {
+      particles.forEach((p) => {
         p.update(canvas.width, canvas.height, volume);
         p.draw(ctx, volume);
       });
@@ -105,11 +108,5 @@ export const NeuralSignal: React.FC<NeuralSignalProps> = ({ volume, isSpeaking }
     };
   }, [volume]);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="w-full h-full"
-      style={{ filter: 'blur(1px)' }}
-    />
-  );
+  return <canvas ref={canvasRef} className="w-full h-full" style={{ filter: 'blur(1px)' }} />;
 };

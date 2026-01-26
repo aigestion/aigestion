@@ -10,7 +10,7 @@
     "name": "AIGestion",
     "email": "contact@aigestion.com"
   },
-  "main": "bin/index.js",
+  "main": "index.js",
   "runtimeVersion": "7",
   "tags": ["office", "ai", "crypto", "business", "dashboard"],
   "scene": {

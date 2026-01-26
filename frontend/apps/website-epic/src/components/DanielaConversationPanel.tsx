@@ -1,6 +1,7 @@
-import { motion, AnimatePresence } from 'framer-motion';
+
+import { motion } from 'framer-motion';
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Mic, Volume2, StopCircle } from 'lucide-react';
+import { Send, Mic, StopCircle } from 'lucide-react';
 import { useDanielaVoice } from '../hooks/useDanielaVoice';
 
 export const DanielaConversationPanel: React.FC = () => {

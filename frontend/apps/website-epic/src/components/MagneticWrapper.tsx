@@ -7,17 +7,18 @@ interface MagneticWrapperProps {
   strength?: number; // How strong the pull is (default: 30)
 }
 
-export const MagneticWrapper: React.FC<MagneticWrapperProps> = ({
-  children,
-  className = "",
-  strength = 30
-}) => {
+export const MagneticWrapper: React.FC<MagneticWrapperProps> = ({ children, className = '' }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { clientX, clientY } = e;
-    const { height, width, left, top } = ref.current?.getBoundingClientRect() || { height: 0, width: 0, left: 0, top: 0 };
+    const { height, width, left, top } = ref.current?.getBoundingClientRect() || {
+      height: 0,
+      width: 0,
+      left: 0,
+      top: 0,
+    };
 
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
@@ -37,7 +38,7 @@ export const MagneticWrapper: React.FC<MagneticWrapperProps> = ({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       animate={{ x, y }}
-      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
       className={`magnetic-wrap ${className}`}
     >
       {children}

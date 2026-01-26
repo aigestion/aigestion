@@ -1,0 +1,42 @@
+
+> aigestion-parcel@1.0.0 build
+> esbuild src/index.ts --bundle --outfile=bin/index.js --platform=browser --format=cjs --external:~system/* --external:@dcl/inspector --external:@dcl/inspector/* --target=es2020
+
+X [ERROR] Unterminated string literal
+
+    src/holographic-data-walls.ts:459:0:
+      459 Ôöé 
+          ÔòÁ ^
+
+X [ERROR] Expected ";" but found "­ƒÄ»"
+
+    src/gesture-recognition.ts:549:17:
+      549 Ôöé     console.log(`­ƒÄ» Executing action: ${action.action} with par...
+          Ôöé                  ~
+          ÔòÁ                  ;
+
+2 errors
+node:child_process:964
+    throw err;
+    ^
+
+Error: Command failed: C:\Users\Alejandro\AIGestion\node_modules\.pnpm\@esbuild+win32-x64@0.27.2\node_modules\@esbuild\win32-x64\esbuild.exe src/index.ts --bundle --outfile=bin/index.js --platform=browser --format=cjs --external:~system/* --external:@dcl/inspector --external:@dcl/inspector/* --target=es2020
+    at genericNodeError (node:internal/errors:998:15)
+    at wrappedFn (node:internal/errors:543:14)
+    at checkExecSyncError (node:child_process:925:11)
+    at Object.execFileSync (node:child_process:961:15)
+    at Object.<anonymous> (C:\Users\Alejandro\AIGestion\node_modules\.pnpm\esbuild@0.27.2\node_modules\esbuild\bin\esbuild:222:28)
+    at Module._compile (node:internal/modules/cjs/loader:1760:14)
+    at Object..js (node:internal/modules/cjs/loader:1892:10)
+    at Module.load (node:internal/modules/cjs/loader:1480:32)
+    at Module._load (node:internal/modules/cjs/loader:1299:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:328:14) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 3432,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v25.2.1

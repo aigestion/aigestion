@@ -274,7 +274,7 @@ export const VitureXRExperience: React.FC = () => {
           className="absolute inset-x-[-10%] inset-y-[-10%] z-[-1] opacity-20 pointer-events-none"
           style={{ x: springX, y: springY }}
         >
-          <div className="w-full h-full bg-[url('/images/nexus/grid.png')] bg-repeat opacity-30" />
+          <div className="w-full h-full bg-[url('/images/nexus/grid.svg')] bg-repeat opacity-30" />
         </motion.div>
       </div>
 

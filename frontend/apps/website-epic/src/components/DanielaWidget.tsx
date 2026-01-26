@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Brain, Sparkles, Minimize2, Maximize2 } from 'lucide-react';
-import { DanielaConversationPanel } from '@shared/components/DanielaConversationPanel';
+import { DanielaConversationPanel } from './DanielaConversationPanel';
 
 interface DanielaWidgetProps {
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';

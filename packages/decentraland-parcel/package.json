@@ -4,16 +4,15 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "npx kill-port 9000 && npm run build && dcl start --port 9000 --no-browser",
-    "build": "esbuild src/index.ts --bundle --outfile=bin/index.js --platform=browser --format=cjs --external:~system/* --external:@dcl/inspector --external:@dcl/inspector/*",
+    "build": "esbuild src/index.ts --bundle --outfile=bin/index.js --platform=browser --format=cjs --external:~system/* --external:@dcl/inspector --external:@dcl/inspector/* --target=es2020",
     "deploy": "npm run build && dcl deploy",
     "watch": "echo Watch mode disabled for stability",
     "lint": "eslint ."
   },
-  "dependencies": {
-    "@dcl/sdk": "7.17.0"
-  },
   "devDependencies": {
+    "@dcl/sdk": "7.17.0",
     "kill-port": "^2.0.1",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "@dcl/js-runtime": "7.17.0"
   }
 }

@@ -1,5 +1,6 @@
 // Voice Command System with AI Processing for AIGestion Virtual Office
 import { engine, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform } from '@dcl/sdk/ecs'
+import { setTimeout, setInterval } from './utils/timers'
 import { Color4, Vector3 } from '@dcl/sdk/math'
 import { soundSystem } from './enhanced-sound'
 

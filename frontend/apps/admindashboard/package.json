@@ -12,6 +12,9 @@
     "build:production": "NODE_ENV=production vite build"
   },
   "dependencies": {
+    "@capacitor/android": "^8.0.1",
+    "@capacitor/cli": "^8.0.1",
+    "@capacitor/core": "^8.0.1",
     "@supabase/supabase-js": "^2.90.1",
     "framer-motion": "^12.26.2",
     "howler": "^2.2.4",
@@ -19,7 +22,8 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^6.30.2",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "vite-plugin-pwa": "^1.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

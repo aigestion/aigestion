@@ -10,20 +10,16 @@ export const DanielaDemo: React.FC = () => {
     status,
     messages,
     emotionalAnalysis,
-    suggestedActions,
     isRecording,
-    isProcessing,
-    error,
-    startRecording,
-    stopRecording,
+
     sendTextMessage,
-    clearConversation
+    clearConversation,
   } = useEnhancedVoiceAssistant({
     sessionId: 'demo_session',
     userId: 'demo_user',
     onEmotionalChange: (analysis) => {
       console.log('Emotional state changed:', analysis);
-    }
+    },
   });
 
   const features = [

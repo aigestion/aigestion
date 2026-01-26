@@ -1,5 +1,7 @@
+```
 // Gesture Recognition System for Hands-Free Control
-import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { engine, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform } from '@dcl/sdk/ecs'
+import { setTimeout, setInterval } from './utils/timers'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { soundSystem } from './enhanced-sound'
 
@@ -110,7 +112,7 @@ export class GestureRecognitionSystem {
       enabled: enabled
     }
 
-    this.gestureActions.set(`${gestureType}_${action}`, gestureAction)
+    this.gestureActions.set(gestureType + '_' + action, gestureAction)
   }
 
   // Create gesture UI
@@ -520,7 +522,7 @@ export class GestureRecognitionSystem {
 
   // Handle detected gesture
   private onGestureDetected(gesture: Gesture) {
-    console.log(`👋 Gesture detected: ${gesture.name} (confidence: ${gesture.confidence.toFixed(2)})`)
+    console.log('👋 Gesture detected: ' + gesture.name + ' (confidence: ' + gesture.confidence.toFixed(2) + ')')
 
     // Add to history
     this.gestureHistory.push(gesture)
@@ -544,7 +546,7 @@ export class GestureRecognitionSystem {
 
   // Execute gesture action
   private executeGestureAction(action: GestureAction) {
-    console.log(`🎯 Executing action: ${action.action} with parameters:`, action.parameters)
+    console.log('🎯 Executing action: ' + action.action + ' with parameters:', action.parameters)
 
     switch (action.action) {
       case 'navigate':
