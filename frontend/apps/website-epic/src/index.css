@@ -8,24 +8,25 @@
     --color-nexus-obsidian-light: #0a0a0a;
     --color-nexus-obsidian-deep: #010101;
 
-    --color-nexus-violet: #8A2BE2;
+    --color-nexus-violet: #8a2be2;
     --color-nexus-violet-glow: #a855f7;
 
-    --color-nexus-cyan: #00F5FF;
+    --color-nexus-cyan: #00f5ff;
     --color-nexus-cyan-glow: #22d3ee;
 
-    --color-nexus-gold: #FFD700;
-    --color-nexus-silver: #C0C0C0;
+    --color-nexus-gold: #ffd700;
+    --color-nexus-silver: #c0c0c0;
 
-    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-orbitron: "Orbitron", sans-serif;
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-orbitron: 'Orbitron', sans-serif;
 
     --animate-float: float 6s ease-in-out infinite;
     --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   @keyframes float {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0);
     }
     50% {
@@ -34,7 +35,8 @@
   }
 
   @keyframes pulse-glow {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
       filter: brightness(1);
     }
@@ -65,39 +67,39 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: rgba(255,255,255,0.1);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 9999px;
   }
 }
 
 @layer utilities {
   /* God Level Input Focus (Item #30) */
-    .nexus-input-focus {
-      @apply transition-all duration-300;
-    }
-  
-    .nexus-input-focus:focus {
-      @apply border-nexus-cyan/50 ring-1 ring-nexus-cyan/30 shadow-[0_0_15px_rgba(0, 245, 255, 0.2)];
-      outline: none;
-    }
-  
-    .nexus-input-focus-violet:focus {
-      @apply border-nexus-violet/50 ring-1 ring-nexus-violet/30 shadow-[0_0_15px_rgba(138, 43, 226, 0.2)];
-      outline: none;
-    }
+  .nexus-input-focus {
+    @apply transition-all duration-300;
+  }
+
+  .nexus-input-focus:focus {
+    @apply border-nexus-cyan/50 ring-1 ring-nexus-cyan/30 shadow-cyan-500/20;
+    outline: none;
+  }
+
+  .nexus-input-focus-violet:focus {
+    @apply border-nexus-violet/50 ring-1 ring-nexus-violet/30 shadow-violet-500/20;
+    outline: none;
+  }
   .text-glow {
-    text-shadow: 0 0 20px rgba(138,43,226,0.5);
+    text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
   }
 
   .text-glow-cyan {
-    text-shadow: 0 0 20px rgba(0,245,255,0.5);
+    text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
   }
 
   .premium-glass {
-    background-color: rgba(255,255,255,0.03);
+    background-color: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(40px);
-    border: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
     position: relative;
     overflow: hidden;
   }
@@ -122,16 +124,21 @@
   .neon-border {
     position: relative;
     border: 1px solid transparent;
-    background: linear-gradient(var(--color-nexus-obsidian), var(--color-nexus-obsidian)) padding-box,
-                linear-gradient(135deg, var(--color-nexus-violet), var(--color-nexus-cyan)) border-box;
+    background:
+      linear-gradient(var(--color-nexus-obsidian), var(--color-nexus-obsidian)) padding-box,
+      linear-gradient(135deg, var(--color-nexus-violet), var(--color-nexus-cyan)) border-box;
   }
 
   .neon-glow-violet {
-    box-shadow: 0 0 15px rgba(138, 43, 226, 0.4), inset 0 0 15px rgba(138, 43, 226, 0.2);
+    box-shadow:
+      0 0 15px rgba(138, 43, 226, 0.4),
+      inset 0 0 15px rgba(138, 43, 226, 0.2);
   }
 
   .neon-glow-cyan {
-    box-shadow: 0 0 15px rgba(0, 245, 255, 0.4), inset 0 0 15px rgba(0, 245, 255, 0.2);
+    box-shadow:
+      0 0 15px rgba(0, 245, 255, 0.4),
+      inset 0 0 15px rgba(0, 245, 255, 0.2);
   }
 
   /* NEW: Glitch Effect */
@@ -141,11 +148,24 @@
   }
 
   @keyframes glitch {
-    0% { transform: translate(0); }
-    1% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
-    2% { transform: translate(2px, -2px); filter: hue-rotate(-90deg); }
-    3% { transform: translate(0); filter: none; }
-    100% { transform: translate(0); }
+    0% {
+      transform: translate(0);
+    }
+    1% {
+      transform: translate(-2px, 2px);
+      filter: hue-rotate(90deg);
+    }
+    2% {
+      transform: translate(2px, -2px);
+      filter: hue-rotate(-90deg);
+    }
+    3% {
+      transform: translate(0);
+      filter: none;
+    }
+    100% {
+      transform: translate(0);
+    }
   }
 
   /* NEW: Scanline Effect */
@@ -153,7 +173,12 @@
     width: 100%;
     height: 100px;
     z-index: 10;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
     opacity: 0.1;
     position: absolute;
     bottom: 100%;
@@ -161,8 +186,12 @@
   }
 
   @keyframes scanline {
-    0% { bottom: 100%; }
-    100% { bottom: -100px; }
+    0% {
+      bottom: 100%;
+    }
+    100% {
+      bottom: -100px;
+    }
   }
 
   .liquid-metal {
@@ -209,47 +238,52 @@
     border-radius: 1.5rem;
     padding: 2rem;
     transition: all 0.5s;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .card-enterprise:hover {
     transform: scale(1.02);
-    border-color: rgba(255,255,255,0.2);
+    border-color: rgba(255, 255, 255, 0.2);
     box-shadow: 0 0 30px rgba(138, 43, 226, 0.15);
-    }
-    
-    /* NEW: Magnetic Pull Effect Base */
-    .magnetic-wrap {
-      display: inline-block;
-      position: relative;
-      touch-action: none;
-    }
-    
-    /* NEW: Spotlight Effect */
-    .spotlight-overlay {
-      background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y),
-          rgba(255, 255, 255, 0.06),
-          transparent 40%);
-      z-index: 10;
-      pointer-events: none;
-      position: absolute;
-      inset: 0;
-    }
-    
-    /* NEW: Custom Cursor Hide */
-    body.custom-cursor {
-      cursor: none;
-    }
-    
-    a,
-    button,
-    input {
-      cursor: none;
-      /* If using custom cursor */
-    }
-    
-    /* NEW: Smooth standard cursor fallback */
-    html {
-      cursor: url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4" fill="white" fill-opacity="0.8"/></svg>') 12 12, auto;
+  }
+
+  /* NEW: Magnetic Pull Effect Base */
+  .magnetic-wrap {
+    display: inline-block;
+    position: relative;
+    touch-action: none;
+  }
+
+  /* NEW: Spotlight Effect */
+  .spotlight-overlay {
+    background: radial-gradient(
+      800px circle at var(--mouse-x) var(--mouse-y),
+      rgba(255, 255, 255, 0.06),
+      transparent 40%
+    );
+    z-index: 10;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  /* NEW: Custom Cursor Hide */
+  body.custom-cursor {
+    cursor: none;
+  }
+
+  a,
+  button,
+  input {
+    cursor: none;
+    /* If using custom cursor */
+  }
+
+  /* NEW: Smooth standard cursor fallback */
+  html {
+    cursor:
+      url('data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4" fill="white" fill-opacity="0.8"/></svg>')
+        12 12,
+      auto;
   }
 }

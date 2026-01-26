@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sparkles, Send, Mic } from 'lucide-react';
 
 export const DanielaPanel = () => {

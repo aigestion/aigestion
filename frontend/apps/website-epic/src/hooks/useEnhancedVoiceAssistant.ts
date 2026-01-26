@@ -22,7 +22,7 @@ interface Message {
   emotionalAnalysis?: EmotionalAnalysis;
 }
 
-export const useEnhancedVoiceAssistant = (options: {
+export const useEnhancedVoiceAssistant = (_options: {
   sessionId: string;
   userId: string;
   onEmotionalChange?: (analysis: EmotionalAnalysis) => void;

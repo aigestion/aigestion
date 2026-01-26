@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import React, { useState, useEffect } from 'react';
 import { X, TrendingUp, Users, Shield, Zap } from 'lucide-react';
 
@@ -13,10 +13,10 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
   // Simulate live data updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setData(prev => ({
+      setData((prev) => ({
         revenue: prev.revenue + Math.floor(Math.random() * 100),
         users: prev.users + Math.floor(Math.random() * 5),
-        security: Math.min(100, Math.max(90, prev.security + (Math.random() - 0.5)))
+        security: Math.min(100, Math.max(90, prev.security + (Math.random() - 0.5))),
       }));
     }, 2000);
     return () => clearInterval(interval);
@@ -36,7 +36,9 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
             <div className="w-3 h-3 rounded-full bg-red-500" />
             <div className="w-3 h-3 rounded-full bg-yellow-500" />
             <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="ml-4 text-xs font-orbitron tracking-widest text-nexus-cyan">NEXUS_OS // DEMO_MODE</span>
+            <span className="ml-4 text-xs font-orbitron tracking-widest text-nexus-cyan">
+              NEXUS_OS // DEMO_MODE
+            </span>
           </div>
           <button
             onClick={onClose}
@@ -55,7 +57,7 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
               { id: 'users', icon: <Users className="w-4 h-4" />, label: 'Usuarios Activos' },
               { id: 'security', icon: <Shield className="w-4 h-4" />, label: 'Seguridad' },
               { id: 'ai', icon: <Zap className="w-4 h-4" />, label: 'Daniela AI' },
-            ].map(item => (
+            ].map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
@@ -73,7 +75,9 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
             <div className="mt-auto">
               <div className="p-4 rounded-xl bg-gradient-to-br from-nexus-violet/20 to-purple-900/20 border border-nexus-violet/30">
                 <h4 className="text-xs font-bold text-white mb-2">Plan Enterprise</h4>
-                <p className="text-[10px] text-gray-400 mb-3">Desbloquea el poder total de Nexus OS.</p>
+                <p className="text-[10px] text-gray-400 mb-3">
+                  Desbloquea el poder total de Nexus OS.
+                </p>
                 <button className="w-full py-2 bg-nexus-violet hover:bg-nexus-violet-glow text-white text-xs font-bold rounded-lg transition-all">
                   ACTUALIZAR AHORA
                 </button>
@@ -85,7 +89,9 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
           <div className="flex-1 p-8 bg-[radial-gradient(circle_at_top_right,rgba(0,245,255,0.05),transparent_50%)]">
             <div className="grid grid-cols-3 gap-6 mb-8">
               <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                <span className="text-xs text-gray-400 uppercase tracking-wider">Ingresos en Tiempo Real</span>
+                <span className="text-xs text-gray-400 uppercase tracking-wider">
+                  Ingresos en Tiempo Real
+                </span>
                 <div className="text-3xl font-orbitron font-bold text-white mt-2">
                   ${data.revenue.toLocaleString()}
                 </div>
@@ -94,7 +100,9 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
                 </span>
               </div>
               <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                <span className="text-xs text-gray-400 uppercase tracking-wider">Usuarios Conectados</span>
+                <span className="text-xs text-gray-400 uppercase tracking-wider">
+                  Usuarios Conectados
+                </span>
                 <div className="text-3xl font-orbitron font-bold text-white mt-2">
                   {data.users.toLocaleString()}
                 </div>
@@ -106,7 +114,9 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
                 </div>
               </div>
               <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
-                <span className="text-xs text-gray-400 uppercase tracking-wider">Integridad del Sistema</span>
+                <span className="text-xs text-gray-400 uppercase tracking-wider">
+                  Integridad del Sistema
+                </span>
                 <div className="text-3xl font-orbitron font-bold text-white mt-2">
                   {data.security.toFixed(1)}%
                 </div>
@@ -120,7 +130,9 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
               <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:20px_20px]" />
               <div className="text-center z-10">
                 <h3 className="text-xl font-bold text-white mb-2">Mapa Neuronal Global</h3>
-                <p className="text-sm text-gray-400 mb-6">Visualización 3D no disponible en modo demo.</p>
+                <p className="text-sm text-gray-400 mb-6">
+                  Visualización 3D no disponible en modo demo.
+                </p>
                 <button className="px-6 py-3 border border-nexus-cyan text-nexus-cyan rounded-full hover:bg-nexus-cyan hover:text-black transition-all font-bold text-xs tracking-widest uppercase">
                   Desbloquear Full Access
                 </button>

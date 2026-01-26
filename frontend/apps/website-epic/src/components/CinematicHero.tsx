@@ -1,18 +1,21 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
+import { useSound } from '../hooks/useSound';
 import { NeuralServer } from './3d/NeuralServer';
 import { FluidBackground } from './FluidBackground';
+import { MiniDashboard } from './MiniDashboard';
 
 interface CinematicHeroProps {
   onHeroComplete?: () => void;
 }
 
-export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) => {
+export const CinematicHero: React.FC<CinematicHeroProps> = () => {
   const [currentScene, setCurrentScene] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [showDemo, setShowDemo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { playHover, playClick, playWuaw } = useSound();
+  const { playHover, playClick } = useSound();
 
   const scenes = [
     {
@@ -96,11 +99,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
     }
   };
 
-  const handleSkipToEnd = () => {
-    playWuaw();
-    onHeroComplete?.();
-  };
-
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black" data-build="website-epic-v2">
       {/* Background Layer with Multi-layered effects */}
@@ -175,7 +173,9 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
               </h1>
               <div className="flex items-center gap-2">
                 <div className="h-[2px] w-8 bg-nexus-violet" />
-                <p className="text-nexus-cyan text-[10px] font-mono tracking-[0.4em] uppercase">Cinematic Experience</p>
+                <p className="text-nexus-cyan text-[10px] font-mono tracking-[0.4em] uppercase">
+                  Cinematic Experience
+                </p>
               </div>
             </div>
           </motion.div>
@@ -210,7 +210,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
             >
               <div className="relative inline-block mb-4">
                 <div className="absolute -inset-4 bg-nexus-violet/20 blur-3xl rounded-full" />
@@ -293,17 +293,20 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
             <motion.button
               key={scene.id}
               onClick={() => handleSceneClick(index)}
-              className={`relative w-32 h-20 rounded-lg overflow-hidden border-2 transition-all ${currentScene === index
+              className={`relative w-32 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                currentScene === index
                   ? 'border-nexus-cyan shadow-lg shadow-nexus-cyan/50'
                   : 'border-white/20 hover:border-white/40'
-                }`}
+              }`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onMouseEnter={playHover}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-nexus-violet/20 to-nexus-cyan/20" />
               <div className="relative z-10 p-2">
-                <p className="text-white text-xs font-bold text-center">{scene.title.split(' ')[0]}</p>
+                <p className="text-white text-xs font-bold text-center">
+                  {scene.title.split(' ')[0]}
+                </p>
                 <p className="text-nexus-cyan text-xs text-center mt-1">{index + 1}/6</p>
               </div>
               {currentScene === index && (
@@ -311,7 +314,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
                   className="absolute bottom-0 left-0 right-0 h-1 bg-nexus-cyan"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: scene.duration / 1000, ease: "linear" }}
+                  transition={{ duration: scene.duration / 1000, ease: 'linear' }}
                   style={{ originX: 0 }}
                 />
               )}

@@ -8,7 +8,8 @@ import {
   Settings,
   Shield,
   TrendingUp,
-  User
+  User,
+  X
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useEnhancedVoiceAssistant } from '../hooks/useEnhancedVoiceAssistant';
@@ -32,10 +33,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     messages,
     emotionalAnalysis,
     suggestedActions,
-    isRecording,
     isProcessing,
-    error
-  } = useEnhancedVoiceAssistant();
+  } = useEnhancedVoiceAssistant({
+    sessionId: 'dashboard-session',
+    userId: user.email,
+  });
 
   const menuItems = [
     {
@@ -153,13 +155,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-nexus-silver text-sm">Estado</span>
-                    <span className={`text-sm font-medium ${status === 'active' ? 'text-green-400' :
-                      status === 'processing' ? 'text-yellow-400' :
+                    <span className={`text-sm font-medium ${isProcessing ? 'text-yellow-400' :
+                      status === 'active' ? 'text-green-400' :
                         status === 'error' ? 'text-red-400' :
                           'text-nexus-silver'
                       }`}>
-                      {status === 'active' ? 'Activo' :
-                        status === 'processing' ? 'Procesando' :
+                      {isProcessing ? 'Procesando' :
+                        status === 'active' ? 'Activo' :
                           status === 'error' ? 'Error' :
                             'Inactivo'}
                     </span>
@@ -207,14 +209,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             <div className="flex items-center gap-4">
               {/* Status Indicator */}
               <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${status === 'active' ? 'bg-green-400' :
-                  status === 'processing' ? 'bg-yellow-400 animate-pulse' :
+                <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-yellow-400 animate-pulse' :
+                  status === 'active' ? 'bg-green-400' :
                     status === 'error' ? 'bg-red-400' :
                       'bg-nexus-silver'
                   }`} />
                 <span className="text-sm text-nexus-silver hidden sm:block">
-                  {status === 'active' ? 'Daniela Activa' :
-                    status === 'processing' ? 'Procesando...' :
+                  {isProcessing ? 'Procesando...' :
+                    status === 'active' ? 'Daniela Activa' :
                       status === 'error' ? 'Error' :
                         'Inactivo'}
                 </span>

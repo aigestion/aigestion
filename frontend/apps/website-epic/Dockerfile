@@ -1,94 +1,55 @@
-# Multi-stage Dockerfile optimizado para AIGestion Professional Account
+# 🌌 [GOD MODE] AIGestion Frontend Multi-Stage Dockerfile
+# Optimized for: Cloud Build + Cloud Run (Europe-Southwest1)
 
-# =====================================
-# STAGE 1: BUILDER
-# =====================================
-FROM node:22-alpine AS builder
-
-# Metadata
-LABEL maintainer="AIGestion Professional Team"
-LABEL description="AIGestion Frontend - Professional Production"
-LABEL version="2.0.0"
+# ---------- Build Stage ----------
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copiar configuración de workspaces
-COPY pnpm-lock.yaml ./
-COPY pnpm-workspace.yaml ./
+# Copy package info
 COPY package.json ./
 
-# Instalar pnpm
-RUN npm install -g pnpm@8
+# Install dependencies
+RUN npm install
 
-# Instalar dependencias con lockfile congelado
-RUN pnpm install --frozen-lockfile
+# Copy source code
+COPY . .
 
-# Copiar código fuente
-COPY frontend/ ./frontend/
-COPY packages/ ./packages/
-COPY tsconfig.json ./
+# Build the application
+RUN npm run build
 
-# Build específico de website-epic con optimizaciones
-WORKDIR /app/frontend/apps/website-epic
-RUN pnpm run build
-
-# =====================================
-# STAGE 2: RUNTIME (NGINX + Professional Features)
-# =====================================
+# ---------- Runtime Stage ----------
 FROM nginx:alpine
 
-# Professional metadata
-LABEL maintainer="AIGestion Professional Team <admin@aigestion.net>"
-LABEL description="AIGestion Professional Frontend - Production Ready"
-LABEL version="2.0.0"
-LABEL project="aigestion-prod"
-LABEL environment="production"
-
-# Instalar herramientas adicionales para monitoreo
-RUN apk add --no-cache \
-    curl \
-    wget \
-    tzdata \
-    && rm -rf /var/cache/apk/*
-
-# Configurar zona horaria
-ENV TZ=UTC
-
-# Copiar configuración nginx mejorada
-COPY frontend/apps/website-epic/nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copiar archivos buildados
-COPY --from=builder /app/frontend/apps/website-epic/dist /usr/share/nginx/html
-
-# Crear directorios necesarios
-RUN mkdir -p /var/log/nginx \
-    && mkdir -p /usr/share/nginx/html/health \
-    && mkdir -p /var/cache/nginx
-
-# Crear health check endpoint
-RUN echo '<!DOCTYPE html><html><head><title>Health Check</title></head><body><h1>OK</h1><p>Timestamp: '$(date -u +%Y-%m-%dT%H:%M:%SZ)'</p></body></html>' > /usr/share/nginx/html/health/index.html
-
-# Configurar logs
-RUN touch /var/log/nginx/access.log \
-    && touch /var/log/nginx/error.log \
-    && chmod 644 /var/log/nginx/*.log
-
-# Health check mejorado
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost/health/index.html || exit 1
-
-# Variables de entorno para producción
+# Set production environment
 ENV NODE_ENV=production
-ENV VITE_SUPABASE_URL=""
-ENV VITE_SUPABASE_ANON_KEY=""
-ENV VERTEX_AI_API_KEY=""
-ENV ANTIGRAVITY_API_KEY=""
 
-# Expose port
+# Install basic tools for health checks
+RUN apk add --no-cache curl
+
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Remove default assets
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy built assets from builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Cloud Run Security: Implement non-root user
+RUN touch /var/run/nginx.pid && \
+    chown -R nginx:nginx /var/run/nginx.pid /var/cache/nginx /var/log/nginx /usr/share/nginx/html && \
+    chmod -R 755 /usr/share/nginx/html
+
+# Switch to non-root user
+USER nginx
+
+# Expose the Cloud Run default port
 EXPOSE 8080
 
-# Configurar nginx para Cloud Run
-RUN sed -i 's/listen 80;/listen 8080;/' /etc/nginx/conf.d/default.conf
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/ || exit 1
 
-# Run nginx con configuración profesional
+# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]

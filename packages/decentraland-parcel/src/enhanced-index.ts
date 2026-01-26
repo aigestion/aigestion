@@ -1,5 +1,9 @@
 import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
 import { Color4, Vector3 } from '@dcl/sdk/math'
+
+import { setTimeout, setInterval, clearTimeout, clearInterval } from './utils/timers'
+
+
 import { lightingSystem } from './advanced-lighting'
 import { npcManager } from './ai-npc-system'
 import { analyticsDashboardSystem } from './analytics-dashboard'
@@ -199,23 +203,47 @@ const maxParticles = 50
 function createParticleEffects() {
   console.log('🎨 Creating particle effects...')
 
-  // Create floating data particles with pooling - REDUCED COUNT
-  const particleCount = Math.min(10, maxParticles) // Reduced from 20 to 10
+  // Create floating data particles with pooling
+  const particleCount = Math.min(32, maxParticles) // Increased for better visuals
   for (let i = 0; i < particleCount; i++) {
     const particle = createParticle()
-    animateParticle(particle)
-    particlePool.push(particle)
+    particlePool.push({ entity: particle, type: 'data', offset: Math.random() * Math.PI * 2 })
   }
 
-  // Create energy stream particles - REDUCED COUNT
-  const energyCount = Math.min(5, maxParticles - particleCount) // Reduced from 15 to 5
+  // Create energy stream particles
+  const energyCount = Math.min(16, maxParticles - particleCount)
   for (let i = 0; i < energyCount; i++) {
     const energyParticle = createEnergyParticle()
-    animateEnergyParticle(energyParticle)
-    particlePool.push(energyParticle)
+    particlePool.push({ entity: energyParticle, type: 'energy', offset: Math.random() * Math.PI * 2 })
   }
 
+  // Add unified particle system
+  engine.addSystem(particleSystem)
+
   console.log(`✅ Created ${particleCount + energyCount} particles`)
+}
+
+// Unified particle system for better performance
+function particleSystem(dt: number) {
+  const t = Date.now() / 1000
+
+  for (const p of particlePool) {
+    const transform = Transform.getMutable(p.entity)
+
+    if (p.type === 'data') {
+      // Floating motion
+      transform.position.y += Math.sin(t + p.offset) * dt * 0.5
+      transform.rotation = { x: 0, y: (t * 20 + p.offset * 10) % 360, z: 0, w: 1 } // Simple rotation
+    } else if (p.type === 'energy') {
+      // Spiral motion
+      transform.position.y += dt * 1.5
+      if (transform.position.y > 10) transform.position.y = 2
+
+      const radius = 1.0
+      transform.position.x += Math.cos(t * 2 + p.offset) * dt
+      transform.position.z += Math.sin(t * 2 + p.offset) * dt
+    }
+  }
 }
 
 function createParticle() {
@@ -260,18 +288,13 @@ function createEnergyParticle() {
   return energyParticle
 }
 
-// Simple particle animation with pooling optimization - DISABLED FOR PERFORMANCE
+// Animations handled by unified system
 function animateParticle(particle: any) {
-  // DISABLED - Too many animations causing performance issues
-  console.log('⚠️ Particle animation disabled for performance')
-  return
+  // Deprecated in favor of particleSystem
 }
 
-// Energy particle animation with pooling optimization - DISABLED FOR PERFORMANCE
 function animateEnergyParticle(particle: any) {
-  // DISABLED - Too many animations causing performance issues
-  console.log('⚠️ Energy particle animation disabled for performance')
-  return
+  // Deprecated in favor of particleSystem
 }
 
 // Cleanup function to prevent memory leaks

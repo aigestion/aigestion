@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+declare global {
+  interface Window {
+    Vapi: any;
+  }
+}
+
 export type CallStatus = 'idle' | 'connecting' | 'active' | 'error';
 
 interface UseVoiceAssistantOptions {

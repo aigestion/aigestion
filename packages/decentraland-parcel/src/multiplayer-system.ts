@@ -1,5 +1,6 @@
 // Multiplayer Collaboration System for AIGestion Virtual Office
 import { engine, InputAction, Material, MeshRenderer, pointerEventsSystem, TextShape, Transform } from '@dcl/sdk/ecs'
+import { setTimeout, setInterval } from './utils/timers'
 import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { soundSystem } from './enhanced-sound'
 

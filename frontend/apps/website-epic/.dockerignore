@@ -1,0 +1,21 @@
+# Logs
+node_modules
+.git
+.github
+.vercel
+.idea
+.vscode
+dist
+*.log
+npm-debug.log*
+
+# Allow these for multi-stage build
+!src
+!public
+!package.json
+!nginx.conf
+!Dockerfile
+!postcss.config.js
+!tailwind.config.js
+!tsconfig*.json
+!vite.config.ts

@@ -1,4 +1,4 @@
-import { Wifi, Cpu, Bell, CheckCircle2, GitBranch, Activity } from 'lucide-react';
+import { Wifi, Bell, GitBranch, CheckCircle2, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const StatusBar = () => {

@@ -1,5 +1,7 @@
+```typescript
 // Holographic Data Visualization Walls for AIGestion Virtual Office
-import { engine, Material, MeshRenderer, TextShape, Transform } from '@dcl/sdk/ecs'
+import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { setTimeout, setInterval } from './utils/timers'
 import { Color3, Color4, Vector3 } from '@dcl/sdk/math'
 
 interface DataPoint {
@@ -332,7 +334,7 @@ export class HolographicDataWall {
 
     // Add new data point
     const newPoint: DataPoint = {
-      label: `T${Date.now() % 1000}`,
+      label: 'T' + (Date.now() % 1000),
       value: Math.random() * 100,
       color: Color3.create(Math.random(), Math.random(), Math.random()),
       timestamp: Date.now()
@@ -439,7 +441,7 @@ export class DataVisualizationManager {
   static createRealtimeDataSource(): () => DataPoint {
     let counter = 0
     return () => ({
-      label: `Data${counter++}`,
+      label: 'Data' + (counter++),
       value: Math.random() * 100,
       color: Color3.create(Math.random(), Math.random(), Math.random()),
       timestamp: Date.now()

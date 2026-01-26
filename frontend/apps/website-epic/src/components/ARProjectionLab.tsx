@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Box, Scan, BoxSelect, Maximize2, Share2, Info } from 'lucide-react';
+import { Box, Scan, BoxSelect, Maximize2, Info } from 'lucide-react';
 import SpatialPresentation from './SpatialPresentation';
 
 interface ARAsset {

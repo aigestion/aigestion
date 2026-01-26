@@ -14,7 +14,7 @@ export const ContactSection: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { playHover, playClick, playSuccess, playWhoosh } = useSoundEffects();
+  const { playHover, playClick, playSuccess } = useSoundEffects();
 
   const interests = [
     { id: 'demo', label: 'Demo Personalizada', icon: '🎬' },

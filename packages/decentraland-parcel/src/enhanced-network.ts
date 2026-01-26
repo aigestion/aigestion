@@ -1,4 +1,5 @@
 // Enhanced Network System for AIGestion Virtual Office
+import { setTimeout, setInterval } from './utils/timers'
 
 export type EnhancedSystemStats = {
   activeUsers: number

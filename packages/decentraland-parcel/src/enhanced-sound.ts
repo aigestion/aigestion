@@ -1,5 +1,6 @@
 // Enhanced Sound System for AIGestion Virtual Office
 import { AudioSource, engine } from '@dcl/sdk/ecs'
+import { setTimeout, setInterval } from './utils/timers'
 
 export class SoundSystem {
   private audioSources: Map<string, any> = new Map()

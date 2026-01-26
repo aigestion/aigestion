@@ -28,7 +28,7 @@ export const StaggeredText: React.FC<StaggeredTextProps> = ({
       y: 0,
       filter: 'blur(0px)',
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 12,
         stiffness: 100,
       },

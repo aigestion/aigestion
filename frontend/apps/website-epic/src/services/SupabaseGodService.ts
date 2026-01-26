@@ -1,5 +1,13 @@
 import { supabase } from './supabase';
 
+const getSupabase = () => {
+  if (!supabase) {
+    console.warn('Supabase not configured');
+    throw new Error('Supabase not configured');
+  }
+  return supabase;
+};
+
 export interface AIImageCache {
   id: string;
   prompt: string;
@@ -64,7 +72,7 @@ export class SupabaseGodService {
   static async getCachedImage(prompt: string, model: string = 'flux-schnell'): Promise<AIImageCache | null> {
     const hash = this.generatePromptHash(prompt, model);
 
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('ai_image_cache')
       .select('*')
       .eq('hash', hash)
@@ -73,7 +81,7 @@ export class SupabaseGodService {
 
     if (data && !error) {
       // Update access count
-      await supabase.rpc('update_ai_image_cache_access', { image_id: data.id });
+      await getSupabase().rpc('update_ai_image_cache_access', { image_id: data.id });
       return data;
     }
 
@@ -88,17 +96,20 @@ export class SupabaseGodService {
   ): Promise<AIImageCache> {
     const hash = this.generatePromptHash(prompt, model);
 
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('ai_image_cache')
-      .upsert({
-        prompt,
-        model,
-        image_url: imageUrl,
-        settings,
-        hash
-      }, {
-        onConflict: 'hash,model'
-      })
+      .upsert(
+        {
+          prompt,
+          model,
+          image_url: imageUrl,
+          settings,
+          hash,
+        },
+        {
+          onConflict: 'hash,model',
+        },
+      )
       .select()
       .single();
 
@@ -107,7 +118,7 @@ export class SupabaseGodService {
   }
 
   static async getPopularImages(limit: number = 10): Promise<AIImageCache[]> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('ai_image_cache')
       .select('*')
       .order('access_count', { ascending: false })
@@ -119,12 +130,12 @@ export class SupabaseGodService {
 
   // PROJECT OPERATIONS
   static async createProject(project: Partial<AIProject>): Promise<AIProject> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('projects')
       .insert({
         ...project,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single();
@@ -134,7 +145,7 @@ export class SupabaseGodService {
   }
 
   static async getProjects(userId: string): Promise<AIProject[]> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('projects')
       .select('*')
       .eq('user_id', userId)
@@ -146,11 +157,11 @@ export class SupabaseGodService {
   }
 
   static async updateProject(id: string, updates: Partial<AIProject>): Promise<AIProject> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('projects')
       .update({
         ...updates,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .eq('id', id)
       .select()
@@ -162,12 +173,12 @@ export class SupabaseGodService {
 
   // DOCUMENT OPERATIONS
   static async createDocument(document: Partial<AIDocument>): Promise<AIDocument> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('documents')
       .insert({
         ...document,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single();
@@ -177,7 +188,7 @@ export class SupabaseGodService {
   }
 
   static async getProjectDocuments(projectId: string): Promise<AIDocument[]> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('documents')
       .select('*')
       .eq('project_id', projectId)
@@ -189,12 +200,12 @@ export class SupabaseGodService {
 
   // AI SESSION OPERATIONS
   static async createSession(session: Partial<AISession>): Promise<AISession> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('ai_sessions')
       .insert({
         ...session,
         created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       })
       .select()
       .single();
@@ -204,7 +215,7 @@ export class SupabaseGodService {
   }
 
   static async getUserSessions(userId: string, limit: number = 20): Promise<AISession[]> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('ai_sessions')
       .select('*')
       .eq('user_id', userId)
@@ -217,11 +228,11 @@ export class SupabaseGodService {
 
   // MESSAGE OPERATIONS
   static async addMessage(message: Partial<AIMessage>): Promise<AIMessage> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('ai_messages')
       .insert({
         ...message,
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
       })
       .select()
       .single();
@@ -231,7 +242,7 @@ export class SupabaseGodService {
   }
 
   static async getSessionMessages(sessionId: string): Promise<AIMessage[]> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('ai_messages')
       .select('*')
       .eq('session_id', sessionId)
@@ -248,15 +259,13 @@ export class SupabaseGodService {
     amount: number,
     metadata: Record<string, any> = {}
   ): Promise<void> {
-    const { error } = await supabase
-      .from('usage_records')
-      .insert({
-        user_id: userId,
-        feature,
-        amount,
-        metadata,
-        created_at: new Date().toISOString()
-      });
+    const { error } = await getSupabase().from('usage_records').insert({
+      user_id: userId,
+      feature,
+      amount,
+      metadata,
+      created_at: new Date().toISOString(),
+    });
 
     if (error) throw error;
   }
@@ -265,7 +274,7 @@ export class SupabaseGodService {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('usage_records')
       .select('*')
       .eq('user_id', userId)
@@ -281,7 +290,7 @@ export class SupabaseGodService {
     userId: string,
     callback: (payload: any) => void
   ): () => void {
-    const subscription = supabase
+    const subscription = getSupabase()
       .channel('ai_sessions')
       .on(
         'postgres_changes',
@@ -289,9 +298,9 @@ export class SupabaseGodService {
           event: '*',
           schema: 'public',
           table: 'ai_sessions',
-          filter: `user_id=eq.${userId}`
+          filter: `user_id=eq.${userId}`,
         },
-        callback
+        callback,
       )
       .subscribe();
 
@@ -302,7 +311,7 @@ export class SupabaseGodService {
     sessionId: string,
     callback: (payload: any) => void
   ): () => void {
-    const subscription = supabase
+    const subscription = getSupabase()
       .channel('ai_messages')
       .on(
         'postgres_changes',
@@ -310,9 +319,9 @@ export class SupabaseGodService {
           event: '*',
           schema: 'public',
           table: 'ai_messages',
-          filter: `session_id=eq.${sessionId}`
+          filter: `session_id=eq.${sessionId}`,
         },
-        callback
+        callback,
       )
       .subscribe();
 
@@ -330,11 +339,10 @@ export class SupabaseGodService {
     queryEmbedding: number[],
     limit: number = 5
   ): Promise<any[]> {
-    const { data, error } = await supabase
-      .rpc('get_similar_documents', {
-        query_embedding: queryEmbedding,
-        limit_count: limit
-      });
+    const { data, error } = await getSupabase().rpc('get_similar_documents', {
+      query_embedding: queryEmbedding,
+      limit_count: limit,
+    });
 
     if (error) throw error;
     return data || [];
@@ -345,16 +353,14 @@ export class SupabaseGodService {
     file: File,
     path: string
   ): Promise<{ data: any; error: any }> {
-    return await supabase.storage
-      .from('ai-images')
-      .upload(path, file, {
-        contentType: file.type,
-        upsert: true
-      });
+    return await getSupabase().storage.from('ai-images').upload(path, file, {
+      contentType: file.type,
+      upsert: true,
+    });
   }
 
   static async getPublicImageUrl(path: string): Promise<string> {
-    const { data } = supabase.storage
+    const { data } = getSupabase().storage
       .from('ai-images')
       .getPublicUrl(path);
 
@@ -363,7 +369,7 @@ export class SupabaseGodService {
 
   // USER OPERATIONS
   static async getUserProfile(userId: string): Promise<any> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('users')
       .select('*')
       .eq('id', userId)
@@ -377,7 +383,7 @@ export class SupabaseGodService {
     userId: string,
     updates: Record<string, any>
   ): Promise<any> {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('users')
       .update({
         ...updates,

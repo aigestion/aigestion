@@ -1,4 +1,3 @@
-import React from 'react';
 import { useWorkbench } from './WorkbenchContext';
 import { LayoutDashboard, Search, Bot, Settings, FolderGit2 } from 'lucide-react'; // Assuming lucide-react is available, consistent with modern stacks
 

@@ -1,5 +1,6 @@
 // Advanced Lighting System for AIGestion Virtual Office (DCL Compatible)
 import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
+import { setTimeout, setInterval } from './utils/timers'
 import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 
 export class AdvancedLightingSystem {

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import React, { useState } from 'react';
 import { useSound } from '../hooks/useSound';
 
@@ -10,75 +10,70 @@ export const NexusAndroid: React.FC = () => {
     {
       id: 'warrior',
       name: 'GUARDIÁN GUERRERO',
-      description: 'Protección cuántica máxima',
-      color: 'from-nexus-violet to-purple-600',
+      description: 'Protección cuántica máxima y defensa neural avanzada.',
+      color: 'from-nexus-violet to-purple-800',
+      accent: 'text-nexus-violet-glow',
+      image: '/images/nexus/nexus_guardian_godmode.png',
       abilities: ['Escudo Energético', 'Campo de Fuerza', 'Defensa Neural']
     },
     {
       id: 'strategist',
       name: 'ESTRATEGA CUÁNTICO',
-      description: 'Análisis predictivo avanzado',
-      color: 'from-nexus-cyan to-blue-600',
+      description: 'Análisis predictivo profundo y optimización sistémica.',
+      color: 'from-nexus-cyan to-blue-800',
+      accent: 'text-nexus-cyan-glow',
+      image: '/images/nexus/nexus_strategist_godmode.png',
       abilities: ['Predicción Futura', 'Análisis de Datos', 'Optimización']
     },
     {
       id: 'creator',
       name: 'CREADOR INNOVADOR',
-      description: 'Generación de soluciones',
-      color: 'from-green-400 to-emerald-600',
+      description: 'Generación de soluciones disruptivas y arquitectura digital.',
+      color: 'from-green-400 to-emerald-800',
+      accent: 'text-green-400-glow',
+      image: '/images/nexus/nexus_creator_godmode.png',
       abilities: ['Diseño Creativo', 'Innovación', 'Desarrollo']
     }
   ];
 
+  const currentMode = modes.find(m => m.id === activeMode) || modes[0];
+
   return (
-    <section className="relative py-32 bg-gradient-to-b from-black via-gray-900/20 to-black overflow-hidden">
-      {/* Background Effects */}
+    <section className="relative py-32 bg-nexus-obsidian overflow-hidden">
+      <div className="grain-overlay" />
+
+      {/* Background Ambience */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(0,245,255,0.1),transparent_60%)]" />
-        <div className="absolute inset-0">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-white rounded-full opacity-20"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-              }}
-              animate={{
-                opacity: [0.2, 0.8, 0.2],
-                y: [0, -50, 0],
-                x: [0, Math.random() * 100 - 50, 0],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 4,
-                repeat: Infinity,
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-nexus-cyan/20 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-nexus-violet/20 to-transparent" />
+        <div className="absolute inset-0 bg-radial-at-center from-nexus-cyan/5 via-transparent to-transparent pointer-events-none" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-24"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-5xl md:text-7xl font-orbitron font-black text-white mb-6">
-            NEXUS ANDROID
-            <span className="block text-nexus-cyan text-glow">GUARDIÁN CUÁNTICO</span>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <div className="w-12 h-0.5 bg-nexus-cyan-glow" />
+            <span className="text-nexus-cyan text-xs font-orbitron tracking-[0.5em] uppercase">Security Unit Nexus-9</span>
+            <div className="w-12 h-0.5 bg-nexus-cyan-glow" />
+          </div>
+          <h2 className="text-5xl md:text-8xl font-orbitron font-black text-white mb-6 tracking-tighter">
+            NEXUS <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-nexus-cyan-glow to-nexus-violet-glow">ANDROID</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Defensor de la innovación. Protector del futuro. Guardián de tu transformación.
+          <p className="text-xl text-nexus-silver/60 max-w-3xl mx-auto font-light leading-relaxed">
+            "No es una máquina. Es la manifestación física de tu inteligencia corporativa. <br />
+            Lealtad absoluta. Poder ilimitado."
           </p>
         </motion.div>
 
         {/* Main Content */}
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Android Visual */}
           <motion.div
             className="relative"
@@ -87,134 +82,65 @@ export const NexusAndroid: React.FC = () => {
             transition={{ duration: 1 }}
             viewport={{ once: true }}
           >
-            {/* Android Container */}
-            <div className="relative mx-auto w-80 h-96 lg:w-96 lg:h-[500px]">
-              {/* Energy Field */}
-              <motion.div
-                className={`absolute inset-0 bg-gradient-to-br ${modes.find(m => m.id === activeMode)?.color} rounded-3xl blur-[40px] opacity-30`}
-                animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 5, 0],
-                  filter: ['blur(40px)', 'blur(60px)', 'blur(40px)']
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-              {/* Quantum Particles Overlay */}
-              <div className="absolute inset-0 z-0">
-                {[...Array(15)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className={`absolute w-1 h-1 rounded-full bg-gradient-to-r ${modes.find(m => m.id === activeMode)?.color}`}
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                    }}
-                    animate={{
-                      y: [0, -100],
-                      opacity: [0, 1, 0],
-                      scale: [0, 1.5, 0]
-                    }}
-                    transition={{
-                      duration: 2 + Math.random() * 2,
-                      repeat: Infinity,
-                      delay: Math.random() * 2
+            {/* Display Container */}
+            <div className="relative mx-auto w-full max-w-[500px] aspect-[4/5] perspective-1000">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeMode}
+                  initial={{ opacity: 0, scale: 0.9, rotateY: 20 }}
+                  animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                  exit={{ opacity: 0, scale: 1.1, rotateY: -20 }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative w-full h-full rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-black group"
+                >
+                  <img
+                    src={currentMode.image}
+                    alt={currentMode.name}
+                    className="w-full h-full object-cover filter brightness-110 contrast-125 group-hover:scale-105 transition-transform duration-1000"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546776150-a04a5b9c0275?auto=format&fit=crop&q=80&w=1000';
                     }}
                   />
-                ))}
-              </div>
 
-              {/* Android Figure */}
-              <div className="relative w-full h-full rounded-3xl overflow-hidden border-2 border-nexus-cyan/50 shadow-2xl shadow-nexus-cyan/30 bg-gradient-to-b from-gray-900 to-black">
-                {/* Android Head */}
-                <div className="relative h-1/3 flex items-center justify-center">
-                  {/* Energy Core */}
-                  <motion.div
-                    className={`w-24 h-24 rounded-full bg-gradient-to-br ${modes.find(m => m.id === activeMode)?.color} flex items-center justify-center`}
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [0.8, 1, 0.8],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <div className="w-16 h-16 bg-black/50 rounded-full flex items-center justify-center">
-                      <span className="text-4xl">🤖</span>
-                    </div>
-                  </motion.div>
+                  {/* HUD Overlays */}
+                  <div className="absolute inset-0 pointer-events-none z-20">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                    <div className="absolute inset-0 border-[20px] border-black/20" />
 
-                  {/* Neural Connections */}
-                  <div className="absolute inset-0">
-                    {[...Array(8)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        className="absolute w-1 h-8 bg-nexus-cyan/60"
-                        style={{
-                          top: '50%',
-                          left: '50%',
-                          transform: `translate(-50%, -50%) rotate(${i * 45}deg)`,
-                          transformOrigin: 'center',
-                        }}
-                        animate={{
-                          scaleY: [0.5, 1, 0.5],
-                          opacity: [0.3, 0.8, 0.3],
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: Infinity,
-                          delay: i * 0.2,
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Android Body */}
-                <div className="h-2/3 relative">
-                  {/* Armor Plates */}
-                  <div className="absolute inset-4 border-2 border-nexus-cyan/30 rounded-2xl">
-                    <div className="grid grid-cols-3 gap-2 p-4">
-                      {[...Array(9)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          className="h-8 bg-gradient-to-br from-nexus-violet/20 to-nexus-cyan/20 rounded border border-nexus-cyan/20"
-                          animate={{
-                            opacity: [0.3, 0.8, 0.3],
-                            scale: [0.9, 1.1, 0.9],
-                          }}
-                          transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            delay: i * 0.3,
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Power Core */}
-                  <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                    {/* Scanning Line */}
                     <motion.div
-                      className="w-16 h-16 bg-gradient-to-br from-red-500 to-orange-500 rounded-full"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        boxShadow: ['0 0 20px rgba(255, 0, 0, 0.5)', '0 0 40px rgba(255, 0, 0, 0.8)', '0 0 20px rgba(255, 0, 0, 0.5)'],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
+                      className={`absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_rgba(255,255,255,0.5)] opacity-20`}
+                      animate={{ top: ['0%', '100%', '0%'] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
                     />
+
+                    {/* Corner HUD Data */}
+                    <div className="absolute top-8 left-8 flex flex-col gap-1 text-left">
+                      <span className="text-[10px] font-mono text-white/40 uppercase tracking-widest text-left">Target Locked</span>
+                      <div className="w-16 h-1 bg-white/10 overflow-hidden">
+                        <motion.div
+                          className={`h-full bg-gradient-to-r ${currentMode.color}`}
+                          animate={{ width: ['20%', '90%', '40%'] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="absolute bottom-10 left-10 text-left">
+                       <h4 className={`text-4xl font-orbitron font-black text-white mb-2 drop-shadow-lg uppercase`}>
+                        {currentMode.name.split(' ')[1]}
+                      </h4>
+                      <p className={`text-xs font-mono font-bold tracking-[0.3em] uppercase ${currentMode.accent}`}>
+                        MODE: {currentMode.id} ACTIVE
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </div>
+
+                  {/* Technical Lens Flare */}
+                  <div className="absolute -top-20 -left-20 w-80 h-80 bg-nexus-cyan/10 blur-[100px] rounded-full" />
+                </motion.div>
+              </AnimatePresence>
+
 
               {/* Floating Elements */}
               <motion.div

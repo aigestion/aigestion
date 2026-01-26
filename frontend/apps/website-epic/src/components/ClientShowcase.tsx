@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import { useSound } from '../hooks/useSound';
-import { Car, HeartPulse, ShoppingBag, Utensils, TrendingUp, Users, Clock } from 'lucide-react';
+import { Car, HeartPulse, ShoppingBag, Utensils, TrendingUp } from 'lucide-react';
 
 interface CaseStudy {
   title: string;
@@ -23,46 +23,50 @@ export const ClientShowcase: React.FC = () => {
       title: 'Ventas Automáticas',
       icon: Car,
       business: 'Concesionario de Coches',
-      result: 'Daniela atiende a los clientes por WhatsApp, les enseña fotos de los coches y cierra citas para probarlos. ¡Venden más incluso cuando duermen!',
+      result:
+        'Daniela atiende a los clientes por WhatsApp, les enseña fotos de los coches y cierra citas para probarlos. ¡Venden más incluso cuando duermen!',
       stats: [
         { label: 'Citas', value: '+50%', color: 'text-nexus-cyan' },
         { label: 'Ventas', value: '+20%', color: 'text-nexus-violet' },
-        { label: 'Ahorro', value: 'Mucho', color: 'text-green-400' }
-      ]
+        { label: 'Ahorro', value: 'Mucho', color: 'text-green-400' },
+      ],
     },
     {
       title: 'Citas sin Esperas',
       icon: HeartPulse,
       business: 'Clínica de Salud',
-      result: 'Se acabaron las llamadas perdidas. El sistema organiza todas las citas de los pacientes solo, sin que nadie tenga que coger el teléfono.',
+      result:
+        'Se acabaron las llamadas perdidas. El sistema organiza todas las citas de los pacientes solo, sin que nadie tenga que coger el teléfono.',
       stats: [
         { label: 'Tiempo', value: '-80%', color: 'text-nexus-cyan' },
         { label: 'Felicidad', value: '100%', color: 'text-nexus-violet' },
-        { label: 'Errores', value: '0', color: 'text-red-400' }
-      ]
+        { label: 'Errores', value: '0', color: 'text-red-400' },
+      ],
     },
     {
       title: 'Tu Tienda Lista',
       icon: ShoppingBag,
       business: 'Tienda de Ropa Online',
-      result: 'Ayuda a los clientes a elegir su talla y responde dudas sobre los envíos al instante. Es como tener la mejor dependienta 24 horas.',
+      result:
+        'Ayuda a los clientes a elegir su talla y responde dudas sobre los envíos al instante. Es como tener la mejor dependienta 24 horas.',
       stats: [
         { label: 'Dudas', value: 'Todas', color: 'text-nexus-cyan' },
         { label: 'Clientes', value: '+30%', color: 'text-nexus-violet' },
-        { label: 'Devolución', value: '-15%', color: 'text-green-400' }
-      ]
+        { label: 'Devolución', value: '-15%', color: 'text-green-400' },
+      ],
     },
     {
       title: 'Reservas Llenas',
       icon: Utensils,
       business: 'Restaurante Famoso',
-      result: 'Gestiona las mesas y las alergias de los clientes de forma perfecta. El restaurante siempre está lleno y los camareros más tranquilos.',
+      result:
+        'Gestiona las mesas y las alergias de los clientes de forma perfecta. El restaurante siempre está lleno y los camareros más tranquilos.',
       stats: [
         { label: 'Mesas', value: 'Llenas', color: 'text-nexus-cyan' },
         { label: 'Acierto', value: 'Top', color: 'text-nexus-violet' },
-        { label: 'Paz', value: 'Total', color: 'text-green-400' }
-      ]
-    }
+        { label: 'Paz', value: 'Total', color: 'text-green-400' },
+      ],
+    },
   ];
 
   return (
@@ -99,20 +103,38 @@ export const ClientShowcase: React.FC = () => {
           <div className="flex">
             <motion.div
               className="flex gap-24 items-center whitespace-nowrap px-8"
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+              animate={{ x: ['0%', '-50%'] }}
+              transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
             >
-              {['Concesionarios', 'Clínicas', 'Restaurantes', 'Tiendas', 'Oficinas', 'Fábricas'].map((type, i) => (
+              {[
+                'Concesionarios',
+                'Clínicas',
+                'Restaurantes',
+                'Tiendas',
+                'Oficinas',
+                'Fábricas',
+              ].map((type, i) => (
                 <div key={i} className="flex items-center gap-4 opacity-30">
-                   <TrendingUp className="w-6 h-6 text-nexus-cyan" />
-                  <span className="text-2xl font-orbitron font-bold text-white/60 uppercase tracking-widest">{type}</span>
+                  <TrendingUp className="w-6 h-6 text-nexus-cyan" />
+                  <span className="text-2xl font-orbitron font-bold text-white/60 uppercase tracking-widest">
+                    {type}
+                  </span>
                 </div>
               ))}
               {/* Duplicate for infinite effect */}
-              {['Concesionarios', 'Clínicas', 'Restaurantes', 'Tiendas', 'Oficinas', 'Fábricas'].map((type, i) => (
+              {[
+                'Concesionarios',
+                'Clínicas',
+                'Restaurantes',
+                'Tiendas',
+                'Oficinas',
+                'Fábricas',
+              ].map((type, i) => (
                 <div key={`dup-${i}`} className="flex items-center gap-4 opacity-30">
-                   <TrendingUp className="w-6 h-6 text-nexus-cyan" />
-                  <span className="text-2xl font-orbitron font-bold text-white/60 uppercase tracking-widest">{type}</span>
+                  <TrendingUp className="w-6 h-6 text-nexus-cyan" />
+                  <span className="text-2xl font-orbitron font-bold text-white/60 uppercase tracking-widest">
+                    {type}
+                  </span>
                 </div>
               ))}
             </motion.div>
@@ -140,7 +162,9 @@ export const ClientShowcase: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="text-2xl font-orbitron font-bold text-white">{item.title}</h3>
-                      <p className="text-nexus-cyan text-xs uppercase tracking-widest">{item.business}</p>
+                      <p className="text-nexus-cyan text-xs uppercase tracking-widest">
+                        {item.business}
+                      </p>
                     </div>
                   </div>
 
@@ -152,7 +176,9 @@ export const ClientShowcase: React.FC = () => {
                     {item.stats.map((stat) => (
                       <div key={stat.label} className="text-center">
                         <div className={`text-xl font-bold ${stat.color}`}>{stat.value}</div>
-                        <div className="text-[10px] text-gray-500 uppercase tracking-widest">{stat.label}</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-widest">
+                          {stat.label}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -172,12 +198,13 @@ export const ClientShowcase: React.FC = () => {
         >
           <div className="inline-block">
             <div className="premium-glass px-12 py-10 rounded-[3rem] border border-nexus-cyan/30 relative overflow-hidden">
-               <div className="absolute inset-0 bg-gradient-to-r from-nexus-violet/10 to-nexus-cyan/10 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-r from-nexus-violet/10 to-nexus-cyan/10 pointer-events-none" />
               <h3 className="text-3xl font-orbitron font-bold text-white mb-4">
                 ¿TU NEGOCIO ES EL SIGUIENTE?
               </h3>
               <p className="text-gray-300 mb-10 max-w-md mx-auto">
-                No importa el tamaño de tu empresa. La inteligencia de Daniela te ayudará a crecer sin esfuerzo.
+                No importa el tamaño de tu empresa. La inteligencia de Daniela te ayudará a crecer
+                sin esfuerzo.
               </p>
               <button className="btn-enterprise px-12 py-5 text-xl font-orbitron font-black tracking-widest rounded-full">
                 ¡EMPEZAR YA!

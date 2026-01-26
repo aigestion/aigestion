@@ -1,10 +1,7 @@
 import { useState, useCallback } from 'react';
 
 // Speech Recognition Type Definition
-interface IWindow extends Window {
-  webkitSpeechRecognition: any;
-  SpeechRecognition: any;
-}
+
 
 export const useDanielaVoice = () => {
   const [isListening, setIsListening] = useState(false);

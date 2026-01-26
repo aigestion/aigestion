@@ -121,16 +121,13 @@ module.exports = [
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
     },
-    settings: [
-      'error',
-      {
-        'import-x/resolver': {
-          typescript: {
-            alwaysTryTypes: true,
-          },
+    settings: {
+      'import-x/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
         },
       },
-    ],
+    },
   }),
   {
     files: ['**/*test.ts'],

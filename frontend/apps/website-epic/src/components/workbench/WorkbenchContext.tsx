@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 type ActivityId = 'dashboard' | 'search' | 'ai' | 'settings' | 'files' | string;
 
@@ -16,7 +16,7 @@ export const WorkbenchProvider = ({ children }: { children: ReactNode }) => {
   const [activeActivity, setActiveActivity] = useState<ActivityId>('dashboard');
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
-  const toggleSidebar = () => setSidebarOpen(prev => !prev);
+  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
 
   // Logic: if clicking the same activity that is active, toggle sidebar
   const handleActivityChange = (id: ActivityId) => {
@@ -29,13 +29,15 @@ export const WorkbenchProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <WorkbenchContext.Provider value={{
-      activeActivity,
-      setActiveActivity: handleActivityChange,
-      isSidebarOpen,
-      toggleSidebar,
-      setSidebarOpen
-    }}>
+    <WorkbenchContext.Provider
+      value={{
+        activeActivity,
+        setActiveActivity: handleActivityChange,
+        isSidebarOpen,
+        toggleSidebar,
+        setSidebarOpen,
+      }}
+    >
       {children}
     </WorkbenchContext.Provider>
   );

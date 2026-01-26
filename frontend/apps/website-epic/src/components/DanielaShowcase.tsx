@@ -92,16 +92,16 @@ export const DanielaShowcase: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="relative z-10"
         >
-          <h2 className="text-5xl md:text-6xl font-orbitron font-black mb-8 text-nexus-violet-glow text-glow">
-            DANIELA: TU AYUDANTE
+          <h2 className="text-5xl md:text-7xl font-orbitron font-black mb-8 text-nexus-violet-glow text-glow tracking-tighter">
+            SYNTHETIC CONSCIOUSNESS: <span className="text-white">DANIELA.AI</span>
           </h2>
-          <p className="text-nexus-silver/60 max-w-2xl mx-auto mb-16 text-lg font-light tracking-wide">
-            Daniela es una chica virtual inteligente que ayuda a tu empresa a vender más sin que tú
-            tengas que hacer nada.
+          <p className="text-nexus-silver/60 max-w-2xl mx-auto mb-16 text-xl font-light tracking-wide italic">
+            "La inteligencia no es solo lógica, es conexión. <br />
+            Redefiniendo la interacción humana a través de la red neuronal soberana."
             <br />
-            <span className="text-xs font-mono text-nexus-cyan/40 mt-4 block uppercase tracking-[0.3em]">
+            <span className="text-xs font-mono text-nexus-cyan/40 mt-4 block uppercase tracking-[0.3em] not-italic">
               <AITypingFlutter
-                text="Sistema de Ayuda Inteligente Activado • Nodo Global On"
+                text="Protocolos de Conciencia v4.2 • Nodo Global God Mode Online"
                 speed={50}
               />
             </span>
@@ -115,15 +115,15 @@ export const DanielaShowcase: React.FC = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="md:col-span-2 relative group overflow-hidden rounded-2xl"
+                className="md:col-span-2 relative group overflow-hidden rounded-3xl"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-nexus-violet/60 via-transparent to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-nexus-obsidian via-transparent to-transparent z-10" />
                 <img
-                  src="/images/daniela/lab.png"
+                  src="/images/daniela/daniela_lab_godmode.png"
                   alt="Daniela AI - Neural Interface"
-                  className="w-full h-[500px] object-cover transform group-hover:scale-105 transition-transform duration-1000 filter brightness-110 contrast-110"
+                  className="w-full h-[600px] object-cover transform group-hover:scale-105 transition-transform duration-1000 filter brightness-110 contrast-110"
                 />
-                {/* Holographic Overlays - CSS Implementation */}
+                {/* Holographic Overlays */}
                 <div
                   className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-30"
                   style={{
@@ -136,13 +136,15 @@ export const DanielaShowcase: React.FC = () => {
                   transition={{ duration: 4, repeat: Infinity }}
                   className="absolute inset-0 bg-gradient-to-r from-nexus-cyan/10 via-transparent to-nexus-violet/10 pointer-events-none"
                 />
-                {/* SVG Grid Overlay */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZD0iTTAgNDBoNDBWMEgwek0xIDM5VjFoMzh2MzhIMXoiIGZpbGw9IiMyMmQzZWUiIGZpbGwtb3BhY2l0eT0iLjMiLz48L2c+PC9zdmc+')] shadow-inner" />
-                <div className="absolute bottom-6 left-6 z-20">
-                  <p className="text-white font-orbitron text-2xl font-bold drop-shadow-lg">
-                    Calidad Máxima
+                <div className="absolute bottom-10 left-10 z-20 text-left">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-12 h-0.5 bg-nexus-cyan-glow" />
+                    <span className="text-nexus-cyan text-[10px] font-orbitron tracking-[0.4em] uppercase">Laboratorio de Conciencia</span>
+                  </div>
+                  <p className="text-white font-orbitron text-4xl font-black drop-shadow-2xl">
+                    NÚCLEO NEURONAL 8K
                   </p>
-                  <p className="text-nexus-cyan text-sm tracking-wider">Parece una persona real</p>
+                  <p className="text-nexus-silver/60 text-sm tracking-widest mt-2">Sincronización total en tiempo real</p>
                 </div>
               </motion.div>
 
@@ -153,16 +155,17 @@ export const DanielaShowcase: React.FC = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.3 }}
-                  className="relative group overflow-hidden rounded-2xl"
+                  className="relative group overflow-hidden rounded-3xl"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-nexus-obsidian/80 to-transparent z-10" />
                   <img
-                    src="/images/daniela/lobby.png"
-                    alt="Daniela - Lobby Corporativo"
-                    className="w-full h-[240px] object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    src="/images/daniela/daniela_office_godmode.png"
+                    alt="Daniela - Entorno Corporativo"
+                    className="w-full h-[288px] object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute bottom-3 left-3 z-20">
-                    <p className="text-white font-orbitron text-sm font-bold">Oficina Nueva</p>
+                  <div className="absolute bottom-6 left-6 z-20 text-left">
+                    <p className="text-nexus-violet-glow text-[10px] font-orbitron tracking-widest mb-1 uppercase">Sede Virtual</p>
+                    <p className="text-white font-orbitron text-xl font-bold">Oficina Cuántica</p>
                   </div>
                 </motion.div>
 
@@ -171,18 +174,17 @@ export const DanielaShowcase: React.FC = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.4 }}
-                  className="relative group overflow-hidden rounded-2xl"
+                  className="relative group overflow-hidden rounded-3xl"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-nexus-obsidian/80 to-transparent z-10" />
                   <img
-                    src="/images/daniela/lab.png"
-                    alt="Daniela - Laboratorio AI"
-                    className="w-full h-[240px] object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    src="/images/daniela/lobby.png"
+                    alt="Daniela - Lobby de Integración"
+                    className="w-full h-[288px] object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute bottom-3 left-3 z-20">
-                    <p className="text-white font-orbitron text-sm font-bold">
-                      Laboratorio Espacial
-                    </p>
+                  <div className="absolute bottom-6 left-6 z-20 text-left">
+                    <p className="text-nexus-cyan-glow text-[10px] font-orbitron tracking-widest mb-1 uppercase">Integración</p>
+                    <p className="text-white font-orbitron text-xl font-bold">Lobby Estratégico</p>
                   </div>
                 </motion.div>
               </div>
