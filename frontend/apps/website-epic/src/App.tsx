@@ -3,11 +3,15 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { CommandTerminal } from './components/CommandTerminal';
-import { Dashboard } from './components/Dashboard';
 import { VitureXRExperience } from './components/VitureXRExperience';
 import { Login } from './pages/Login';
 import WeaponDashboard from './pages/WeaponDashboard';
 import { supabase } from './services/supabase';
+import { WorkbenchLayout } from './components/workbench/WorkbenchLayout';
+import { SoundProvider } from './contexts/SoundContext';
+import { NexusProvider } from './contexts/NexusContext';
+import { NotificationProvider, useNotification } from './contexts/NotificationContext';
+import { ScrollProgress } from './components/ScrollProgress';
 
 // God Mode Components
 import { CinematicPresentation } from './components/CinematicPresentation';
@@ -21,6 +25,11 @@ import { EnhancedROI } from './components/EnhancedROI';
 import { Navigation } from './components/Navigation';
 import { NexusAndroid } from './components/NexusAndroid';
 import { DanielaDemo } from './pages/DanielaDemo';
+import { NexusCursor } from './components/NexusCursor';
+import { AnimatedMeshGradient } from './components/AnimatedMeshGradient';
+import { CyberpunkGrid } from './components/CyberpunkGrid';
+import { NeuralParticles } from './components/NeuralParticles';
+import VirtualOfficePreview from './pages/VirtualOfficePreview';
 
 const Footer = () => (
   <footer className="py-32 bg-nexus-obsidian-deep border-t border-white/5 relative overflow-hidden">
@@ -32,30 +41,50 @@ const Footer = () => (
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
-          <img src="/images/brand/logo.png" alt="AIGestion" className="h-10 mb-8 filter brightness-110 drop-shadow-[0_0_10px_rgba(138,43,226,0.3)]" />
+          <img
+            src="/images/brand/logo.png"
+            alt="AIGestion"
+            className="h-10 mb-8 filter brightness-110 drop-shadow-[0_0_10px_rgba(138,43,226,0.3)]"
+          />
           <p className="text-nexus-silver/50 text-lg max-w-sm mb-12 font-light leading-relaxed italic">
             "Arquitectura de Inteligencia Soberana. <br />
             El núcleo neuronal para las empresas del mañana."
           </p>
           <div className="text-[10px] text-nexus-silver/20 font-mono uppercase tracking-[0.4em] mt-12">
-            © 2026 AIGestion.net | God Level AI Restored
+            © 2026 AIGestion.net | God Level AI Restored v2.1 (Fixes Applied)
           </div>
         </motion.div>
       </div>
       <div>
-        <h4 className="font-orbitron text-xs text-nexus-cyan-glow mb-8 uppercase tracking-[0.3em] font-bold">Ecosistema</h4>
+        <h4 className="font-orbitron text-xs text-nexus-cyan-glow mb-8 uppercase tracking-[0.3em] font-bold">
+          Ecosistema
+        </h4>
         <ul className="space-y-6 text-[10px] text-nexus-silver/40 font-orbitron tracking-widest uppercase">
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Casos de Uso</li>
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Daniela AI</li>
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Nodos Globales</li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Casos de Uso
+          </li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Daniela AI
+          </li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Nodos Globales
+          </li>
         </ul>
       </div>
       <div>
-        <h4 className="font-orbitron text-xs text-nexus-violet-glow mb-8 uppercase tracking-[0.3em] font-bold">Metaverso</h4>
+        <h4 className="font-orbitron text-xs text-nexus-violet-glow mb-8 uppercase tracking-[0.3em] font-bold">
+          Metaverso
+        </h4>
         <ul className="space-y-6 text-[10px] text-nexus-silver/40 font-orbitron tracking-widest uppercase">
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Sedes Decentraland</li>
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Virtual Office</li>
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300 text-nexus-cyan-glow font-bold">Acceso Terminal</li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Sedes Decentraland
+          </li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Virtual Office
+          </li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300 text-nexus-cyan-glow font-bold">
+            Acceso Terminal
+          </li>
         </ul>
       </div>
     </div>
@@ -67,6 +96,13 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
+  const { notify } = useNotification();
+
+  useEffect(() => {
+    if (!loading) {
+      notify('SISTEMA ACTIVADO', 'Protocolos Antigravity God Mode Online', 'success');
+    }
+  }, [loading]);
 
   const handleLogin = async (email: string, password: string) => {
     try {
@@ -182,97 +218,167 @@ function App() {
 
   return (
     <Router>
-      <div className="bg-nexus-obsidian min-h-screen text-white font-sans selection:bg-nexus-violet selection:text-white relative">
-        {!isAuthenticated ? <Navigation /> : null}
-        <Routes>
-          <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} isAuthenticated={isAuthenticated} /> : <Navigate to="/dashboard" />} />
-          <Route path="/dashboard" element={isAuthenticated ? <Dashboard user={currentUser} onLogout={handleLogout} /> : <Navigate to="/login" />} />
-          <Route path="/" element={
-            !isAuthenticated ? (
-              <main>
-                {/* Advanced Presentation - Ahora es la primera sección */}
-                <AnimatePresence mode="wait">
-                  <CinematicPresentation />
-                </AnimatePresence>
+      <NexusProvider>
+        <NotificationProvider>
+          <SoundProvider>
+            <div className="bg-nexus-obsidian min-h-screen text-white font-sans selection:bg-nexus-violet selection:text-white relative">
+              <ScrollProgress />
+              {!isAuthenticated ? <Navigation /> : null}
+              <Routes>
+                <Route
+                  path="/login"
+                  element={
+                    !isAuthenticated ? (
+                      <Login onLogin={handleLogin} isAuthenticated={isAuthenticated} />
+                    ) : (
+                      <Navigate to="/dashboard" />
+                    )
+                  }
+                />
+                <Route
+                  path="/dashboard"
+                  element={
+                    isAuthenticated ? (
+                      <WorkbenchLayout user={currentUser} onLogout={handleLogout} />
+                    ) : (
+                      <Navigate to="/login" />
+                    )
+                  }
+                />
+                <Route
+                  path="/"
+                  element={
+                    !isAuthenticated ? (
+                      <main>
+                        {/* Advanced Presentation - Ahora es la primera sección */}
+                        <AnimatePresence mode="wait">
+                          <CinematicPresentation />
+                        </AnimatePresence>
 
-                {/* Fortune 500 Showcase */}
-                <ClientShowcase />
+                        {/* Fortune 500 Showcase */}
+                        <ClientShowcase />
 
-                {/* synthetic Consciousness - Daniela AI */}
-                <DanielaShowcase />
+                        {/* synthetic Consciousness - Daniela AI */}
+                        <DanielaShowcase />
 
-                {/* Quantum Guardian - Nexus Android */}
-                <NexusAndroid />
+                        {/* Quantum Guardian - Nexus Android */}
+                        <NexusAndroid />
 
-                {/* Strategic ROI analysis */}
-                <EnhancedROI />
+                        {/* Strategic ROI analysis */}
+                        <EnhancedROI />
 
-                {/* Decentraland Headquarters */}
-                <DecentralandOffice />
+                        {/* Decentraland Headquarters */}
+                        <DecentralandOffice />
 
-                {/* Immersive Contact Experience */}
-                <ContactSection />
+                        {/* Immersive Contact Experience */}
+                        <ContactSection />
 
-                {/* VITURE XR Experience */}
-                <VitureXRExperience />
-              </main>
-            ) : (
-              <Navigate to="/dashboard" />
-            )
-          } />
+                        {/* VITURE XR Experience */}
+                        <VitureXRExperience />
+                      </main>
+                    ) : (
+                      <Navigate to="/dashboard" />
+                    )
+                  }
+                />
 
-          <Route path="/lab" element={
-            <div className="pt-32 pb-20 px-6">
-              <h1 className="text-4xl font-orbitron text-white text-center">Lab Section</h1>
+                <Route
+                  path="/lab"
+                  element={
+                    <div className="pt-32 pb-20 px-6">
+                      <h1 className="text-4xl font-orbitron text-white text-center">Lab Section</h1>
+                    </div>
+                  }
+                />
+
+                <Route path="/weapon" element={<WeaponDashboard />} />
+
+                {/* Dashboard Routes */}
+                <Route
+                  path="/admin"
+                  element={
+                    <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
+                      <div className="text-center">
+                        <h1 className="text-4xl font-orbitron text-nexus-violet-glow mb-4">
+                          Admin Dashboard
+                        </h1>
+                        <p className="text-nexus-silver/60 mb-8">
+                          Panel de administración avanzada
+                        </p>
+                        <a
+                          href="https://admin.aigestion.net"
+                          className="btn-enterprise px-8 py-3 rounded-full"
+                        >
+                          Acceder al Admin Dashboard
+                        </a>
+                      </div>
+                    </div>
+                  }
+                />
+
+                <Route
+                  path="/client"
+                  element={
+                    <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
+                      <div className="text-center">
+                        <h1 className="text-4xl font-orbitron text-nexus-cyan-glow mb-4">
+                          Client Dashboard
+                        </h1>
+                        <p className="text-nexus-silver/60 mb-8">Portal exclusivo para clientes</p>
+                        <a
+                          href="https://client.aigestion.net"
+                          className="btn-enterprise px-8 py-3 rounded-full"
+                        >
+                          Acceder al Client Dashboard
+                        </a>
+                      </div>
+                    </div>
+                  }
+                />
+
+                <Route
+                  path="/demo"
+                  element={
+                    <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
+                      <div className="text-center">
+                        <h1 className="text-4xl font-orbitron text-nexus-gold mb-4">
+                          Demo Dashboard
+                        </h1>
+                        <p className="text-nexus-silver/60 mb-8">
+                          Experiencia interactiva de demostración
+                        </p>
+                        <a
+                          href="https://demo.aigestion.net"
+                          className="btn-enterprise px-8 py-3 rounded-full"
+                        >
+                          Acceder al Demo Dashboard
+                        </a>
+                      </div>
+                    </div>
+                  }
+                />
+
+                {/* Daniela AI Routes */}
+                <Route path="/daniela" element={<DanielaDemo />} />
+                <Route path="/daniela/demo" element={<DanielaDemo />} />
+
+                {/* Virtual Office Routes */}
+                <Route path="/virtual-office" element={<VirtualOfficePreview />} />
+                <Route path="/virtual-office/go" element={<DecentralandOffice />} />
+              </Routes>
+
+              <Footer />
+              <CommandTerminal />
+              <CommandPalette />
+              <DanielaOmniWidget />
+              <NexusCursor />
+              <AnimatedMeshGradient />
+              <CyberpunkGrid />
+              <NeuralParticles />
             </div>
-          } />
-
-          <Route path="/weapon" element={<WeaponDashboard />} />
-
-          {/* Dashboard Routes */}
-          <Route path="/admin" element={<div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-4xl font-orbitron text-nexus-violet-glow mb-4">Admin Dashboard</h1>
-              <p className="text-nexus-silver/60 mb-8">Panel de administración avanzada</p>
-              <a href="https://admin.aigestion.net" className="btn-enterprise px-8 py-3 rounded-full">
-                Acceder al Admin Dashboard
-              </a>
-            </div>
-          </div>} />
-
-          <Route path="/client" element={<div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-4xl font-orbitron text-nexus-cyan-glow mb-4">Client Dashboard</h1>
-              <p className="text-nexus-silver/60 mb-8">Portal exclusivo para clientes</p>
-              <a href="https://client.aigestion.net" className="btn-enterprise px-8 py-3 rounded-full">
-                Acceder al Client Dashboard
-              </a>
-            </div>
-          </div>} />
-
-          <Route path="/demo" element={<div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
-            <div className="text-center">
-              <h1 className="text-4xl font-orbitron text-nexus-gold mb-4">Demo Dashboard</h1>
-              <p className="text-nexus-silver/60 mb-8">Experiencia interactiva de demostración</p>
-              <a href="https://demo.aigestion.net" className="btn-enterprise px-8 py-3 rounded-full">
-                Acceder al Demo Dashboard
-              </a>
-            </div>
-          </div>} />
-
-          {/* Daniela AI Routes */}
-          <Route path="/daniela" element={<DanielaDemo />} />
-          <Route path="/daniela/demo" element={<DanielaDemo />} />
-
-          {/* Virtual Office Route */}
-          <Route path="/virtual-office" element={<DecentralandOffice />} />
-        </Routes>
-
-        <Footer />
-        <CommandTerminal />
-        <CommandPalette />
-        <DanielaOmniWidget />
-      </div>
+          </SoundProvider>
+        </NotificationProvider>
+      </NexusProvider>
     </Router>
   );
 }

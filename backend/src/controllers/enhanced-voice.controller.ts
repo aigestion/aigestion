@@ -1,19 +1,20 @@
 import type { NextFunction, Request, Response } from 'express-serve-static-core';
-import { container } from '../config/inversify.config';
+import { z } from 'zod';
 import { buildResponse } from '../common/response-builder';
-import { validate, schemas } from '../middleware/validation.middleware';
+import { container } from '../config/inversify.config';
+import { validate } from '../middleware/validation.middleware';
 import { EnhancedVoiceService } from '../services/enhanced-voice.service';
-import { TYPES } from '../types';
 import { RateLimitService } from '../services/rate-limit.service';
+import { TYPES } from '../types';
 
 export const processConversation = [
   validate({
-    body: {
-      sessionId: { type: 'string', required: true },
-      userId: { type: 'string', required: true },
-      text: { type: 'string', optional: true },
-      audio: { type: 'string', optional: true }, // Base64 encoded audio
-    },
+    body: z.object({
+      sessionId: z.string(),
+      userId: z.string(),
+      text: z.string().optional(),
+      audio: z.string().optional(), // Base64 encoded audio
+    }),
   }),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -55,9 +56,9 @@ export const processConversation = [
 
 export const getConversationHistory = [
   validate({
-    query: {
-      sessionId: { type: 'string', required: true },
-    },
+    query: z.object({
+      sessionId: z.string(),
+    }),
   }),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -76,9 +77,9 @@ export const getConversationHistory = [
 
 export const clearConversation = [
   validate({
-    body: {
-      sessionId: { type: 'string', required: true },
-    },
+    body: z.object({
+      sessionId: z.string(),
+    }),
   }),
   async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -1,88 +1,67 @@
 import { motion } from 'framer-motion';
 import React from 'react';
 import { useSound } from '../hooks/useSound';
+import { Car, HeartPulse, ShoppingBag, Utensils, TrendingUp, Users, Clock } from 'lucide-react';
 
-interface Client {
-  name: string;
-  logo: string;
-  industry: string;
-  transformation: string;
-  metrics: {
-    efficiency: string;
-    innovation: string;
-    roi: string;
-  };
+interface CaseStudy {
+  title: string;
+  icon: any;
+  business: string;
+  result: string;
+  stats: {
+    label: string;
+    value: string;
+    color: string;
+  }[];
 }
 
 export const ClientShowcase: React.FC = () => {
   const { playHover } = useSound();
 
-  const clients: Client[] = [
+  const cases: CaseStudy[] = [
     {
-      name: 'Tesla',
-      logo: '/images/clients/tesla-logo.png',
-      industry: 'Automotive & Energy',
-      transformation: 'Producción Autónoma con IA Predictiva',
-      metrics: {
-        efficiency: '+347%',
-        innovation: 'Nivel 10',
-        roi: '+892%'
-      }
+      title: 'Ventas Automáticas',
+      icon: Car,
+      business: 'Concesionario de Coches',
+      result: 'Daniela atiende a los clientes por WhatsApp, les enseña fotos de los coches y cierra citas para probarlos. ¡Venden más incluso cuando duermen!',
+      stats: [
+        { label: 'Citas', value: '+50%', color: 'text-nexus-cyan' },
+        { label: 'Ventas', value: '+20%', color: 'text-nexus-violet' },
+        { label: 'Ahorro', value: 'Mucho', color: 'text-green-400' }
+      ]
     },
     {
-      name: 'Microsoft',
-      logo: '/images/clients/microsoft-logo.png',
-      industry: 'Cloud & Software',
-      transformation: 'Computación Cuántica Empresarial',
-      metrics: {
-        efficiency: '+256%',
-        innovation: 'Nivel 9',
-        roi: '+678%'
-      }
+      title: 'Citas sin Esperas',
+      icon: HeartPulse,
+      business: 'Clínica de Salud',
+      result: 'Se acabaron las llamadas perdidas. El sistema organiza todas las citas de los pacientes solo, sin que nadie tenga que coger el teléfono.',
+      stats: [
+        { label: 'Tiempo', value: '-80%', color: 'text-nexus-cyan' },
+        { label: 'Felicidad', value: '100%', color: 'text-nexus-violet' },
+        { label: 'Errores', value: '0', color: 'text-red-400' }
+      ]
     },
     {
-      name: 'Google',
-      logo: '/images/clients/google-logo.png',
-      industry: 'Search & AI',
-      transformation: 'Búsqueda Neuronal Avanzada',
-      metrics: {
-        efficiency: '+423%',
-        innovation: 'Nivel 10',
-        roi: '+945%'
-      }
+      title: 'Tu Tienda Lista',
+      icon: ShoppingBag,
+      business: 'Tienda de Ropa Online',
+      result: 'Ayuda a los clientes a elegir su talla y responde dudas sobre los envíos al instante. Es como tener la mejor dependienta 24 horas.',
+      stats: [
+        { label: 'Dudas', value: 'Todas', color: 'text-nexus-cyan' },
+        { label: 'Clientes', value: '+30%', color: 'text-nexus-violet' },
+        { label: 'Devolución', value: '-15%', color: 'text-green-400' }
+      ]
     },
     {
-      name: 'Amazon',
-      logo: '/images/clients/amazon-logo.png',
-      industry: 'E-Commerce & Cloud',
-      transformation: 'Logística Cuántica Optimizada',
-      metrics: {
-        efficiency: '+389%',
-        innovation: 'Nivel 8',
-        roi: '+723%'
-      }
-    },
-    {
-      name: 'Apple',
-      logo: '/images/clients/apple-logo.png',
-      industry: 'Technology & Design',
-      transformation: 'Diseño Generativo con IA',
-      metrics: {
-        efficiency: '+298%',
-        innovation: 'Nivel 10',
-        roi: '+812%'
-      }
-    },
-    {
-      name: 'SpaceX',
-      logo: '/images/clients/spacex-logo.png',
-      industry: 'Aerospace',
-      transformation: 'Navegación Estelar con IA',
-      metrics: {
-        efficiency: '+567%',
-        innovation: 'Nivel 11',
-        roi: '+1,234%'
-      }
+      title: 'Reservas Llenas',
+      icon: Utensils,
+      business: 'Restaurante Famoso',
+      result: 'Gestiona las mesas y las alergias de los clientes de forma perfecta. El restaurante siempre está lleno y los camareros más tranquilos.',
+      stats: [
+        { label: 'Mesas', value: 'Llenas', color: 'text-nexus-cyan' },
+        { label: 'Acierto', value: 'Top', color: 'text-nexus-violet' },
+        { label: 'Paz', value: 'Total', color: 'text-green-400' }
+      ]
     }
   ];
 
@@ -104,29 +83,36 @@ export const ClientShowcase: React.FC = () => {
           viewport={{ once: true }}
         >
           <h2 className="text-5xl md:text-7xl font-orbitron font-black text-white mb-6">
-            FORTUNE 500
-            <span className="block text-nexus-cyan text-glow">TRANSFORMADA</span>
+            HISTORIAS DE
+            <span className="block text-nexus-cyan text-glow uppercase">ÉXITO REAL</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Líderes globales confían en AIGestion.net para su transformación digital cuántica
+            Mira cómo ayudamos a negocios de todo tipo a ser mejores y más rápidos
           </p>
         </motion.div>
 
-        {/* NEW: Infinite Marquee */}
+        {/* Infinite Marquee - Simplified */}
         <div className="relative w-full overflow-hidden mb-20 py-8 border-y border-white/5 bg-white/5 backdrop-blur-sm">
           <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black to-transparent z-10" />
           <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black to-transparent z-10" />
 
           <div className="flex">
             <motion.div
-              className="flex gap-16 items-center whitespace-nowrap px-8"
+              className="flex gap-24 items-center whitespace-nowrap px-8"
               animate={{ x: ["0%", "-50%"] }}
-              transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
             >
-              {[...clients, ...clients].map((client, i) => (
-                <div key={i} className="flex items-center gap-4 opacity-50 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
-                  <img src={client.logo} alt={client.name} className="h-12 w-auto object-contain" />
-                  <span className="text-xl font-orbitron font-bold text-white/80">{client.name}</span>
+              {['Concesionarios', 'Clínicas', 'Restaurantes', 'Tiendas', 'Oficinas', 'Fábricas'].map((type, i) => (
+                <div key={i} className="flex items-center gap-4 opacity-30">
+                   <TrendingUp className="w-6 h-6 text-nexus-cyan" />
+                  <span className="text-2xl font-orbitron font-bold text-white/60 uppercase tracking-widest">{type}</span>
+                </div>
+              ))}
+              {/* Duplicate for infinite effect */}
+              {['Concesionarios', 'Clínicas', 'Restaurantes', 'Tiendas', 'Oficinas', 'Fábricas'].map((type, i) => (
+                <div key={`dup-${i}`} className="flex items-center gap-4 opacity-30">
+                   <TrendingUp className="w-6 h-6 text-nexus-cyan" />
+                  <span className="text-2xl font-orbitron font-bold text-white/60 uppercase tracking-widest">{type}</span>
                 </div>
               ))}
             </motion.div>
@@ -134,64 +120,46 @@ export const ClientShowcase: React.FC = () => {
         </div>
 
         {/* Clients Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {clients.map((client, index) => (
-            <motion.div
-              key={client.name}
-              className="group relative"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              onMouseEnter={playHover}
-            >
-              {/* Card */}
-              <div className="premium-glass p-8 rounded-2xl h-full border border-white/10 hover:border-nexus-cyan/30 transition-all duration-500">
-                {/* Logo Section */}
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-20 h-20 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm">
-                    <img
-                      src={client.logo}
-                      alt={client.name}
-                      className="w-16 h-16 object-contain filter brightness-0 invert"
-                    />
+        <div className="grid md:grid-cols-2 gap-8">
+          {cases.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={item.business}
+                className="group relative"
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                onMouseEnter={playHover}
+              >
+                <div className="premium-glass p-10 rounded-[2rem] h-full border border-white/10 hover:border-nexus-cyan/30 transition-all duration-500">
+                  <div className="flex items-center gap-6 mb-8">
+                    <div className="w-16 h-16 bg-nexus-violet/20 rounded-2xl flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform">
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-orbitron font-bold text-white">{item.title}</h3>
+                      <p className="text-nexus-cyan text-xs uppercase tracking-widest">{item.business}</p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <h3 className="text-2xl font-orbitron font-bold text-white">{client.name}</h3>
-                    <p className="text-nexus-cyan text-sm">{client.industry}</p>
+
+                  <p className="text-gray-300 text-base leading-relaxed mb-8 italic">
+                    "{item.result}"
+                  </p>
+
+                  <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/5">
+                    {item.stats.map((stat) => (
+                      <div key={stat.label} className="text-center">
+                        <div className={`text-xl font-bold ${stat.color}`}>{stat.value}</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-widest">{stat.label}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-
-                {/* Transformation */}
-                <div className="mb-6">
-                  <p className="text-gray-300 text-sm leading-relaxed">{client.transformation}</p>
-                </div>
-
-                {/* Metrics */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-nexus-violet">{client.metrics.efficiency}</div>
-                    <div className="text-xs text-gray-400">Eficiencia</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-nexus-cyan">{client.metrics.innovation}</div>
-                    <div className="text-xs text-gray-400">Innovación</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold text-green-400">{client.metrics.roi}</div>
-                    <div className="text-xs text-gray-400">ROI</div>
-                  </div>
-                </div>
-
-                {/* Hover Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-nexus-violet/10 to-nexus-cyan/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              </div>
-
-              {/* Floating Particles */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-nexus-cyan rounded-full opacity-20 group-hover:opacity-60 transition-opacity duration-300" />
-              <div className="absolute -bottom-2 -left-2 w-6 h-6 bg-nexus-violet rounded-full opacity-20 group-hover:opacity-60 transition-opacity duration-300" />
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Call to Action */}
@@ -203,15 +171,16 @@ export const ClientShowcase: React.FC = () => {
           viewport={{ once: true }}
         >
           <div className="inline-block">
-            <div className="premium-glass px-12 py-8 rounded-2xl border border-nexus-cyan/30">
+            <div className="premium-glass px-12 py-10 rounded-[3rem] border border-nexus-cyan/30 relative overflow-hidden">
+               <div className="absolute inset-0 bg-gradient-to-r from-nexus-violet/10 to-nexus-cyan/10 pointer-events-none" />
               <h3 className="text-3xl font-orbitron font-bold text-white mb-4">
-                ÚNETE A LA REVOLUCIÓN
+                ¿TU NEGOCIO ES EL SIGUIENTE?
               </h3>
-              <p className="text-gray-300 mb-6 max-w-md">
-                Transforma tu empresa con la misma tecnología que está revolucionando a los gigantes globales
+              <p className="text-gray-300 mb-10 max-w-md mx-auto">
+                No importa el tamaño de tu empresa. La inteligencia de Daniela te ayudará a crecer sin esfuerzo.
               </p>
-              <button className="btn-enterprise px-8 py-4 text-lg font-bold">
-                COMENZAR TRANSFORMACIÓN
+              <button className="btn-enterprise px-12 py-5 text-xl font-orbitron font-black tracking-widest rounded-full">
+                ¡EMPEZAR YA!
               </button>
             </div>
           </div>

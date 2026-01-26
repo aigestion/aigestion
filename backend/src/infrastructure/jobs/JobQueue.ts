@@ -18,6 +18,11 @@ export class JobQueue {
   }
 
   private initializeQueues() {
+    if (process.env.ENABLE_REDIS === 'false') {
+      logger.info('JobQueue: Redis disabled, skipping queue initialization');
+      return;
+    }
+
     Object.values(JobName).forEach(name => {
       const queue = new Queue(name, {
         connection: this.redisOptions,
@@ -33,6 +38,10 @@ export class JobQueue {
   ): Promise<void> {
     const queue = this.queues.get(name as string);
     if (!queue) {
+      if (process.env.ENABLE_REDIS === 'false') {
+        logger.warn(`JobQueue: Redis disabled, skipping job ${name}`);
+        return;
+      }
       logger.error(`Queue not found for job: ${name}`);
       throw new Error(`Queue not found for job: ${name}`);
     }

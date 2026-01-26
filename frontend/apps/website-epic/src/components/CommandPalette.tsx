@@ -33,6 +33,8 @@ export const CommandPalette: React.FC = () => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
+        if (!isOpen) playWhoosh();
+        else playPop();
         setIsOpen(prev => !prev);
       }
       if (e.key === 'Escape') {

@@ -10,7 +10,7 @@ interface UseVoiceAssistantOptions {
 }
 
 // Voice Assistant disabled - Vapi integration removed
-const VOICE_ASSISTANT_DISABLED = true;
+const VOICE_ASSISTANT_DISABLED = false;
 
 export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   // Early return if voice assistant is disabled

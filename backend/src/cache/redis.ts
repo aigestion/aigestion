@@ -1,5 +1,5 @@
-import * as redis from 'redis';
 import type { RedisClientType } from 'redis';
+import * as redis from 'redis';
 
 import { logger } from '../utils/logger';
 
@@ -9,6 +9,33 @@ export const resetRedisClient = () => {
 let redisClient: RedisClientType | null = null;
 
 export const getRedisClient = (): RedisClientType => {
+  if (process.env.ENABLE_REDIS === 'false') {
+    // Return a mock that satisfies the basic needs of rate-limit-redis and other consumers
+    if (!redisClient) {
+      redisClient = {
+        on: () => {},
+        connect: async () => {},
+        quit: async () => {},
+        isOpen: true,
+        get: async () => null,
+        set: async () => 'OK',
+        sendCommand: async () => ({}), // Satisfies rate-limit-redis
+        del: async () => 1,
+        hGet: async () => null,
+        hSet: async () => 1,
+        hGetAll: async () => ({}),
+        exists: async () => 0,
+        expire: async () => true,
+        ttl: async () => -1,
+        incr: async () => 1,
+        decr: async () => 0,
+        // Add others as needed
+      } as any;
+      logger.info('Redis is disabled: Using God Mode Mock');
+    }
+    return redisClient!;
+  }
+
   if (!redisClient) {
     const clusterNodes = process.env.REDIS_CLUSTER_NODES;
 
@@ -38,7 +65,9 @@ export const getRedisClient = (): RedisClientType => {
           reconnectStrategy: retries => {
             const delay = Math.min(retries * 200, 5000);
             if (retries > 10) {
-              logger.error(`Redis reconnection failed after ${retries} attempts. Delay: ${delay}ms`);
+              logger.error(
+                `Redis reconnection failed after ${retries} attempts. Delay: ${delay}ms`,
+              );
             }
             return delay;
           },
@@ -52,11 +81,14 @@ export const getRedisClient = (): RedisClientType => {
 
     // Connect in the background
     const isTest = process.env.NODE_ENV === 'test' || !!process.env.JEST_WORKER_ID;
+
     if (!isTest) {
       (async () => {
         try {
           await redisClient?.connect();
-          logger.info(clusterNodes ? 'Connected to Redis Cluster' : 'Connected to Redis Standalone');
+          logger.info(
+            clusterNodes ? 'Connected to Redis Cluster' : 'Connected to Redis Standalone',
+          );
         } catch (err) {
           logger.error(err, 'Failed to connect to Redis:');
         }

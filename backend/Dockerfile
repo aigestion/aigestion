@@ -1,33 +1,55 @@
-# ---------- Build Stage ----------
-FROM node:18-alpine AS builder
+# 🌌 [GOD MODE] AIGestion Backend Optimized Dockerfile
+# Optimized for: Multi-Region / Autonomous Railway Build
+
+# ---------- Builder Stage ----------
+FROM node:20-alpine AS builder
+
 WORKDIR /app
 
-# Install dependencies
+# Install build dependencies
 COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps
 
 # Copy source and build
-COPY . .
-RUN npm run build   # assumes a "build" script that compiles TypeScript to ./dist
+COPY tsconfig.json ./
+COPY src ./src
+RUN npm run build
 
 # ---------- Runtime Stage ----------
-FROM node:18-alpine AS runtime
+FROM node:20-alpine AS runtime
+
+# Set production environment
+ENV NODE_ENV=production
+ENV PORT=8080
+
 WORKDIR /app
 
-# Copy compiled output and production dependencies
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/package-lock.json ./
-# Install runtime dependencies (ClamAV, YARA for security scanning)
+# Install security tools (ClamAV, YARA)
 RUN apk add --no-cache clamav yara
 
-# Create necessary directories
-RUN mkdir -p /app/quarantine /app/uploads
+# Copy package files
+COPY package.json package-lock.json ./
 
+# Install only production dependencies
 RUN npm ci --only=production --legacy-peer-deps
 
-# Expose service port (adjust if needed)
-EXPOSE 3000
+# Create non-root user for security
+RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
+RUN mkdir -p /app/quarantine /app/uploads && \
+  chown -R nodejs:nodejs /app
 
-# Run the compiled entry point
-CMD ["node", "dist/main.js"]
+# Copy built artifacts from builder stage
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+
+# Switch to non-root user
+USER nodejs
+
+# Expose the Cloud Run / Railway default port
+EXPOSE 8080
+
+# Health check to ensure the container is healthy
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8080/api/v1/health', (r) => r.statusCode === 200 ? process.exit(0) : process.exit(1))"
+
+# Start the application
+CMD ["node", "dist/server.js"]

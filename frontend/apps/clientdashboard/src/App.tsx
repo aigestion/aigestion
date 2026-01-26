@@ -1,8 +1,8 @@
-import React from 'react';
-import { DashboardLayout, NeonCard, Skeleton, BusinessIntelligence, GoogleServiceHub, IdeaSynthesizer, GlobalParticleMesh, DanielaOmniWidget, SocketProvider, ROISimulator, GoalGamification } from '@shared/index';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import React from 'react';
+import { BusinessIntelligence, DashboardLayout, GlobalParticleMesh, GoalGamification, GoogleServiceHub, IdeaSynthesizer, NeonCard, ROISimulator, Skeleton, SocketProvider } from './mock-components';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
