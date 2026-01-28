@@ -1,71 +1,58 @@
 import { motion } from 'framer-motion';
 import { Brain, Cpu, Globe, Shield, Sparkles, Zap } from 'lucide-react';
 import React, { useState } from 'react';
-import { DanielaConversationPanel } from '../components/DanielaConversationPanel';
-import { useEnhancedVoiceAssistant } from '../hooks/useEnhancedVoiceAssistant';
 
 export const DanielaDemo: React.FC = () => {
-  const [demoMode, setDemoMode] = useState<'conversation' | 'features' | 'analytics'>('conversation');
-  const {
-    status,
-    messages,
-    emotionalAnalysis,
-    isRecording,
-
-    sendTextMessage,
-    clearConversation,
-  } = useEnhancedVoiceAssistant({
-    sessionId: 'demo_session',
-    userId: 'demo_user',
-    onEmotionalChange: (analysis) => {
-      console.log('Emotional state changed:', analysis);
-    },
-  });
+  const [demoMode, setDemoMode] = useState<'conversation' | 'features' | 'analytics'>(
+    'conversation',
+  );
+  const [variant, setVariant] = useState<'widget' | 'assistant' | 'advisor'>('assistant');
+  const [context, setContext] = useState<'homepage' | 'contact' | 'pricing' | 'about'>('homepage');
 
   const features = [
     {
       icon: <Brain className="w-6 h-6" />,
       title: 'Inteligencia Emocional',
       description: 'Análisis en tiempo real del estado emocional del cliente',
-      color: 'from-nexus-cyan to-blue-500'
+      color: 'from-nexus-cyan to-blue-500',
     },
     {
       icon: <Sparkles className="w-6 h-6" />,
       title: 'Respuestas Contextuales',
       description: 'Memoria conversacional y adaptación al contexto',
-      color: 'from-nexus-violet to-purple-500'
+      color: 'from-nexus-violet to-purple-500',
     },
     {
       icon: <Zap className="w-6 h-6" />,
       title: 'Acciones Proactivas',
       description: 'Sugerencias inteligentes basadas en la conversación',
-      color: 'from-nexus-gold to-yellow-500'
+      color: 'from-nexus-gold to-yellow-500',
     },
     {
       icon: <Shield className="w-6 h-6" />,
       title: 'Seguridad Total',
       description: 'Encriptación de extremo a extremo y privacidad garantizada',
-      color: 'from-green-500 to-emerald-500'
+      color: 'from-green-500 to-emerald-500',
     },
     {
       icon: <Globe className="w-6 h-6" />,
       title: 'Multiidioma',
       description: 'Soporte para español, inglés y más idiomas',
-      color: 'from-orange-500 to-red-500'
+      color: 'from-orange-500 to-red-500',
     },
     {
       icon: <Cpu className="w-6 h-6" />,
       title: 'Procesamiento Neural',
       description: 'Modelos de IA de última generación',
-      color: 'from-pink-500 to-rose-500'
-    }
+      color: 'from-pink-500 to-rose-500',
+    },
   ];
 
   const stats = [
     { label: 'Conversaciones', value: '12,847', trend: '+23%' },
     { label: 'Satisfacción', value: '98.2%', trend: '+5%' },
     { label: 'Respuesta Rápida', value: '<200ms', trend: '-15%' },
-    { label: 'Precisión', value: '99.7%', trend: '+2%' }
+    { label: 'Precisión', value: '99.7%', trend: '+2%' },
   ];
 
   return (
@@ -95,10 +82,11 @@ export const DanielaDemo: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setDemoMode('conversation')}
-                className={`px-8 py-3 rounded-full font-orbitron font-black tracking-wider transition-all ${demoMode === 'conversation'
-                  ? 'bg-nexus-cyan-glow text-black'
-                  : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'
-                  }`}
+                className={`px-8 py-3 rounded-full font-orbitron font-black tracking-wider transition-all ${
+                  demoMode === 'conversation'
+                    ? 'bg-nexus-cyan-glow text-black'
+                    : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'
+                }`}
               >
                 PROBAR CONVERSACIÓN
               </motion.button>
@@ -106,10 +94,11 @@ export const DanielaDemo: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setDemoMode('features')}
-                className={`px-8 py-3 rounded-full font-orbitron font-black tracking-wider transition-all ${demoMode === 'features'
-                  ? 'bg-nexus-violet-glow text-black'
-                  : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'
-                  }`}
+                className={`px-8 py-3 rounded-full font-orbitron font-black tracking-wider transition-all ${
+                  demoMode === 'features'
+                    ? 'bg-nexus-violet-glow text-black'
+                    : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'
+                }`}
               >
                 CARACTERÍSTICAS
               </motion.button>
@@ -117,10 +106,11 @@ export const DanielaDemo: React.FC = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setDemoMode('analytics')}
-                className={`px-8 py-3 rounded-full font-orbitron font-black tracking-wider transition-all ${demoMode === 'analytics'
-                  ? 'bg-nexus-gold text-black'
-                  : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'
-                  }`}
+                className={`px-8 py-3 rounded-full font-orbitron font-black tracking-wider transition-all ${
+                  demoMode === 'analytics'
+                    ? 'bg-nexus-gold text-black'
+                    : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'
+                }`}
               >
                 ANALÍTICA
               </motion.button>
@@ -142,107 +132,136 @@ export const DanielaDemo: React.FC = () => {
               <h2 className="text-3xl font-orbitron font-black mb-4">
                 Conversa con <span className="text-nexus-cyan-glow">Daniela</span>
               </h2>
-              <p className="text-nexus-silver/60">
+              <p className="text-nexus-silver/60 mb-6">
                 Experimenta una conversación natural con análisis emocional en tiempo real
               </p>
+
+              {/* Variant and Context Selectors */}
+              <div className="flex justify-center gap-4 mb-6">
+                <div className="flex gap-2">
+                  <span className="text-sm text-nexus-silver/60 py-2">Variante:</span>
+                  {(['widget', 'assistant', 'advisor'] as const).map((v) => (
+                    <motion.button
+                      key={v}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setVariant(v)}
+                      className={`px-4 py-2 rounded-lg text-sm font-orbitron transition-all ${
+                        variant === v
+                          ? 'bg-nexus-cyan-glow text-black'
+                          : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'
+                      }`}
+                    >
+                      {v.charAt(0).toUpperCase() + v.slice(1)}
+                    </motion.button>
+                  ))}
+                </div>
+
+                <div className="flex gap-2">
+                  <span className="text-sm text-nexus-silver/60 py-2">Contexto:</span>
+                  {(['homepage', 'contact', 'pricing', 'about'] as const).map((c) => (
+                    <motion.button
+                      key={c}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setContext(c)}
+                      className={`px-4 py-2 rounded-lg text-sm font-orbitron transition-all ${
+                        context === c
+                          ? 'bg-nexus-violet-glow text-black'
+                          : 'bg-white/10 border border-white/20 text-white hover:bg-white/20'
+                      }`}
+                    >
+                      {c.charAt(0).toUpperCase() + c.slice(1)}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2">
-                <DanielaConversationPanel />
+                <div className="relative">
+                  {variant === 'widget' && (
+                    <div className="h-96 relative">
+                      <DanielaWebsite variant="widget" context={context} />
+                    </div>
+                  )}
+                  {variant === 'assistant' && (
+                    <div className="h-96">
+                      <DanielaWebsite variant="assistant" context={context} />
+                    </div>
+                  )}
+                  {variant === 'advisor' && (
+                    <div className="h-96">
+                      <DanielaWebsite variant="advisor" context={context} />
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-6">
-                {/* Status Panel */}
+                {/* Variant Info */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                   <h3 className="text-lg font-orbitron font-bold mb-4 text-nexus-cyan-glow">
-                    ESTADO DE CONEXIÓN
+                    CONFIGURACIÓN ACTUAL
                   </h3>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-nexus-silver/60">Estado</span>
-                      <span className={`text-sm font-orbitron font-black ${status === 'active' ? 'text-green-400' :
-                        status === 'error' ? 'text-red-400' :
-                          'text-yellow-400'
-                        }`}>
-                        {status.toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-nexus-silver/60">Grabando</span>
-                      <span className={`text-sm font-orbitron font-black ${isRecording ? 'text-nexus-cyan-glow' : 'text-nexus-silver/40'
-                        }`}>
-                        {isRecording ? 'ACTIVO' : 'INACTIVO'}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-nexus-silver/60">Mensajes</span>
+                      <span className="text-sm text-nexus-silver/60">Variante</span>
                       <span className="text-sm font-orbitron font-black text-white">
-                        {messages.length}
+                        {variant.toUpperCase()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-nexus-silver/60">Contexto</span>
+                      <span className="text-sm font-orbitron font-black text-white">
+                        {context.toUpperCase()}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Emotional Analysis */}
-                {emotionalAnalysis && (
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                    <h3 className="text-lg font-orbitron font-bold mb-4 text-nexus-violet-glow">
-                      ANÁLISIS EMOCIONAL
-                    </h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-nexus-silver/60">Emoción</span>
-                        <span className="text-sm font-orbitron font-black text-white">
-                          {emotionalAnalysis.emotion.toUpperCase()}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-nexus-silver/60">Confianza</span>
-                        <span className="text-sm font-orbitron font-black text-white">
-                          {Math.round(emotionalAnalysis.confidence * 100)}%
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-nexus-silver/60">Sentimiento</span>
-                        <span className="text-sm font-orbitron font-black text-white">
-                          {emotionalAnalysis.sentiment.toUpperCase()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Quick Actions */}
+                {/* Feature Description */}
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                  <h3 className="text-lg font-orbitron font-bold mb-4 text-nexus-gold">
-                    ACCIONES RÁPIDAS
+                  <h3 className="text-lg font-orbitron font-bold mb-4 text-nexus-violet-glow">
+                    CARACTERÍSTICAS
                   </h3>
-                  <div className="space-y-3">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => sendTextMessage('Hola Daniela, ¿cómo estás?')}
-                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-nexus-silver/80 hover:bg-white/10 transition-colors text-left"
-                    >
-                      "Hola Daniela, ¿cómo estás?"
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => sendTextMessage('Muéstrame el dashboard principal')}
-                      className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-nexus-silver/80 hover:bg-white/10 transition-colors text-left"
-                    >
-                      "Muéstrame el dashboard principal"
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={clearConversation}
-                      className="w-full px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-lg text-sm text-red-400 hover:bg-red-500/20 transition-colors"
-                    >
-                      Limpiar Conversación
-                    </motion.button>
+                  <div className="space-y-3 text-sm text-nexus-silver/60">
+                    {variant === 'widget' && (
+                      <p>
+                        Widget flotante ideal para esquinas de sitios web. Minimalista y expansible.
+                      </p>
+                    )}
+                    {variant === 'assistant' && (
+                      <p>
+                        Asistente completo con panel de conversación y estado del sistema en tiempo
+                        real.
+                      </p>
+                    )}
+                    {variant === 'advisor' && (
+                      <p>Asesor integrado con capacidades avanzadas y análisis contextual.</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Context Description */}
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                  <h3 className="text-lg font-orbitron font-bold mb-4 text-nexus-gold">CONTEXTO</h3>
+                  <div className="space-y-3 text-sm text-nexus-silver/60">
+                    {context === 'homepage' && (
+                      <p>
+                        Diseñado para la página principal con enfoque en servicios y tecnología.
+                      </p>
+                    )}
+                    {context === 'contact' && (
+                      <p>Orientado a generar conexiones y agendar reuniones con expertos.</p>
+                    )}
+                    {context === 'pricing' && (
+                      <p>Especializado en planes, precios y cálculo de ROI para clientes.</p>
+                    )}
+                    {context === 'about' && (
+                      <p>Enfocado en mostrar la historia, misión y tecnología de la empresa.</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -275,11 +294,16 @@ export const DanielaDemo: React.FC = () => {
                   transition={{ delay: index * 0.1 }}
                   className="group relative"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-20 transition-opacity rounded-2xl"
-                    style={{ backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-20 transition-opacity rounded-2xl"
+                    style={{
+                      backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))`,
+                    }}
                   />
                   <div className="relative bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all">
-                    <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6`}>
+                    <div
+                      className={`w-16 h-16 rounded-full bg-gradient-to-br ${feature.color} flex items-center justify-center mb-6`}
+                    >
                       {feature.icon}
                     </div>
                     <h3 className="text-xl font-orbitron font-bold mb-3 text-white">
@@ -323,12 +347,8 @@ export const DanielaDemo: React.FC = () => {
                   <div className="text-3xl font-orbitron font-black text-white mb-2">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-nexus-silver/60 mb-2">
-                    {stat.label}
-                  </div>
-                  <div className="text-xs font-orbitron text-green-400">
-                    {stat.trend}
-                  </div>
+                  <div className="text-sm text-nexus-silver/60 mb-2">{stat.label}</div>
+                  <div className="text-xs font-orbitron text-green-400">{stat.trend}</div>
                 </motion.div>
               ))}
             </div>
