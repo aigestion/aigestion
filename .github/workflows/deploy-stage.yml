@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Deploy to Cloud Run (Staging)
         run: echo "Deploying to staging..."
         # Add real gcloud commands here

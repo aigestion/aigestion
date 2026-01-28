@@ -16,7 +16,7 @@ jobs:
   sbom:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Build Docker images
         run: |
@@ -52,27 +52,27 @@ jobs:
           format: spdx-json
 
       - name: Attest SBOM (repository)
-        uses: actions/attest-sbom@v1
+        uses: actions/attest-sbom@v3
         with:
           sbom-path: sbom.spdx.json
 
       - name: Attest SBOM (backend image)
-        uses: actions/attest-sbom@v1
+        uses: actions/attest-sbom@v3
         with:
           sbom-path: sbom-backend-image.spdx.json
 
       - name: Attest SBOM (frontend image)
-        uses: actions/attest-sbom@v1
+        uses: actions/attest-sbom@v3
         with:
           sbom-path: sbom-frontend-image.spdx.json
 
       - name: Attest SBOM (ml-service image)
-        uses: actions/attest-sbom@v1
+        uses: actions/attest-sbom@v3
         with:
           sbom-path: sbom-ml-service-image.spdx.json
 
       - name: Upload SBOM artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sbom
           path: |
