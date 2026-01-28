@@ -9,12 +9,13 @@ import { SearchWebTool } from '../tools/web-search.tool';
 import { TYPES } from '../types';
 import { logger } from '../utils/logger';
 // import { StripeService } from './stripe.service';
+import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
+import { AIModelRouter, AIModelTier, ModelConfig } from '../utils/aiRouter';
 import { AnalyticsService } from './analytics.service';
 import { RagService } from './rag.service';
+import { SemanticCacheService } from './semantic-cache.service';
 import { UsageService } from './usage.service';
-import { AIModelRouter, AIModelTier, ModelConfig } from '../utils/aiRouter';
-import OpenAI from 'openai';
-import Anthropic from '@anthropic-ai/sdk';
 // Types for function declarations and schema types are loosely typed as any to avoid TS2709 errors
 type FunctionDeclaration = any;
 
@@ -37,6 +38,7 @@ export class AIService {
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.RagService) private ragService: RagService,
     @inject(TYPES.UsageService) private usageService: UsageService,
+    @inject(TYPES.SemanticCacheService) private semanticCache: SemanticCacheService,
   ) {
     // Breakers initialized with async lambdas that will call getModel() on execution
     this.generateContentBreaker = CircuitBreakerFactory.create(
@@ -274,6 +276,13 @@ export class AIService {
         ? AIModelTier.PREMIUM
         : AIModelRouter.route(prompt);
 
+      // [GOD MODE] Semantic Cache Check
+      const cached = await this.semanticCache.getSemantic(prompt);
+      if (cached) {
+        logger.info(`[AIService] Semantic Cache Hit for: "${prompt.substring(0, 30)}..."`);
+        return cached;
+      }
+
       const config = AIModelRouter.getModelConfig(tier);
 
       logger.info(`[AIService] Routing to Tier: ${tier} (${config.provider}/${config.modelId})`);
@@ -291,6 +300,8 @@ export class AIService {
           prompt: prompt,
           completion: text,
         });
+
+        await this.semanticCache.setSemantic(prompt, text);
 
         return text;
       } else if (config.provider === 'anthropic') {
@@ -310,6 +321,8 @@ export class AIService {
           completion: text,
         });
 
+        await this.semanticCache.setSemantic(prompt, text);
+
         return text;
       } else if (config.provider === 'openai') {
         const openai = (await this.getProviderModel(config)) as OpenAI;
@@ -326,6 +339,8 @@ export class AIService {
           prompt: prompt,
           completion: text,
         });
+
+        await this.semanticCache.setSemantic(prompt, text);
 
         return text;
       }

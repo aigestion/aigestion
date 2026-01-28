@@ -1,0 +1,118 @@
+import Docker from 'dockerode';
+import { injectable } from 'inversify';
+import { logger } from '../utils/logger';
+
+export interface ExecutionResult {
+  stdout: string;
+  stderr: string;
+  exitCode: number;
+  duration: number;
+}
+
+@injectable()
+export class CodeExecutionService {
+  private docker: Docker;
+
+  constructor() {
+    this.docker = new Docker({ socketPath: '/var/run/docker.sock' });
+  }
+
+  /**
+   * Execute code in a sandboxed container
+   */
+  public async execute(language: 'python' | 'node', code: string): Promise<ExecutionResult> {
+    const startTime = Date.now();
+    let container: Docker.Container | null = null;
+    let image = '';
+    let cmd: string[] = [];
+
+    switch (language) {
+      case 'python':
+        image = 'python:3.10-slim';
+        cmd = ['python', '-c', code];
+        break;
+      case 'node':
+        image = 'node:18-alpine';
+        cmd = ['node', '-e', code];
+        break;
+      default:
+        throw new Error(`Unsupported language: ${language}`);
+    }
+
+    try {
+      // 1. Ensure image exists (or pull it - this might take time on first run)
+      // For production, images should be pre-pulled.
+      // await this.ensureImage(image);
+
+      // 2. Create Container
+      container = await this.docker.createContainer({
+        Image: image,
+        Cmd: cmd,
+        Tty: false,
+        NetworkDisabled: true, // SANDBOX SECURITY
+        HostConfig: {
+          Memory: 128 * 1024 * 1024, // 128MB limit
+          NanoCpus: 1000000000, // 1 CPU
+          AutoRemove: false, // We remove manually to get logs first
+        },
+      });
+
+      // 3. Start Container
+      await container.start();
+
+      // 4. Wait for completion or timeout
+      const waitPromise = container.wait();
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Execution timed out (5s limit)')), 5000),
+      );
+
+      await Promise.race([waitPromise, timeoutPromise]);
+
+      // 5. Get Logs
+      const logsBuffer = await container.logs({
+        stdout: true,
+        stderr: true,
+      });
+      // Dockerode logs are multiplexed, but for simple non-TTY we might get raw buffer
+      // In simple cases without TTY, it returns a buffer or string.
+      // We'll treat it as string for simplicity, though robust solution needs demultiplexing if TTY=false attached.
+      // With Tty: false and logs(), dockerode returns a Buffer that needs demuxing or is raw.
+      // Let's assume raw string for now if it's simple stdout, but usually it has headers.
+      // A safer way is to read 'stdout' and 'stderr' separately if we attached streams,
+      // but logs() gives combined.
+      // Let's clean non-printable chars just in case.
+
+      // IMPROVEMENT: Proper demuxing is complex. For now, we return the raw logs.
+      // Users might see binary headers if we don't demux, but for 'python -c' it's usually okay.
+      const output = logsBuffer.toString();
+
+      // 6. Cleanup
+      await container.remove({ force: true });
+
+      return {
+        stdout: output,
+        stderr: '', // Mixed in stdout for this simple implementation
+        exitCode: 0,
+        duration: Date.now() - startTime,
+      };
+    } catch (error: any) {
+      logger.error(error, 'Code Execution Failed');
+
+      if (container) {
+        try {
+          await container.remove({ force: true });
+        } catch (e) {
+          /* ignore */
+        }
+      }
+
+      throw error;
+    }
+  }
+
+  private async ensureImage(image: string) {
+    // Implementation to pull image if not present
+    // Leaving empty to avoid blocking request on pull.
+    // Admin should ensure 'python:3.10-slim' is present.
+  }
+}

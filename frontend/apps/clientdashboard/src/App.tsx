@@ -1,8 +1,20 @@
+import {
+  BusinessIntelligence,
+  DashboardLayout,
+  GlobalParticleMesh,
+  GoalGamification,
+  GoogleServiceHub,
+  IdeaSynthesizer,
+  NeonCard,
+  ROISimulator,
+  Skeleton,
+  SocketProvider,
+} from '@shared/index';
+import '@shared/index.css';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import React from 'react';
-import { BusinessIntelligence, DashboardLayout, GlobalParticleMesh, GoalGamification, GoogleServiceHub, IdeaSynthesizer, NeonCard, ROISimulator, Skeleton, SocketProvider } from './mock-components';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
@@ -24,20 +36,32 @@ const App: React.FC = () => {
             className="fixed inset-0 z-50 bg-nexus-obsidian flex flex-col items-center justify-center"
           >
             <div className="w-32 h-32 rounded-full border-4 border-nexus-violet/20 border-t-nexus-violet animate-spin" />
-            <div className="mt-8 text-nexus-violet font-orbitron tracking-widest animate-pulse">CONNECTING_TO_NEXUS...</div>
+            <div className="mt-8 text-nexus-violet font-orbitron tracking-widest animate-pulse">
+              CONNECTING_TO_NEXUS...
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4">
-        <NeonCard title="CLIENTE PREMIUM" accentColor="rgba(168, 85, 247, 0.5)" className="lg:col-span-2">
-          {loading ? <Skeleton className="h-44" /> : (
+        <NeonCard
+          title="CLIENTE PREMIUM"
+          accentColor="rgba(168, 85, 247, 0.5)"
+          className="lg:col-span-2"
+        >
+          {loading ? (
+            <Skeleton className="h-44" />
+          ) : (
             <div className="flex justify-between items-center h-full">
               <div>
                 <h3 className="text-4xl font-orbitron font-black text-white">ALJANDRO CORP</h3>
-                <p className="text-nexus-silver/40 font-mono mt-2">ID: AIG-99228-G | Status: VIP GOD MODE</p>
+                <p className="text-nexus-silver/40 font-mono mt-2">
+                  ID: AIG-99228-G | Status: VIP GOD MODE
+                </p>
               </div>
               <div className="text-right">
-                <span className="text-[10px] font-orbitron text-nexus-violet-glow tracking-widest uppercase">Crédito AI</span>
+                <span className="text-[10px] font-orbitron text-nexus-violet-glow tracking-widest uppercase">
+                  Crédito AI
+                </span>
                 <p className="text-2xl font-orbitron font-bold text-white">UNLIMITED</p>
               </div>
             </div>

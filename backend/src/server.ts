@@ -2,7 +2,7 @@
 // import fs from 'fs';
 import { createServer } from 'http';
 import path from 'path';
-import { Server, type Socket } from 'socket.io';
+import { type Socket } from 'socket.io';
 
 import { app } from './app';
 import { connectToDatabase } from './config/database';
@@ -15,13 +15,12 @@ import { HistoryService } from './services/history.service';
 // import { youtubeTranscriptionQueue } from './queue/youtube-transcription.queue';
 // import { youtubeWatcherService } from './utils/youtube-watcher.service';
 // import { GoogleSecretManagerService } from './services/google/secret-manager.service';
+import { neuralHealthService } from './services/NeuralHealthService';
+import { SocketService } from './services/socket.service';
 import { SystemMetricsService } from './services/system-metrics.service';
 import { TelegramService } from './services/telegram.service';
-import { SocketService } from './services/socket.service';
 import { logger } from './utils/logger';
 import { stats } from './utils/stats';
-import { neuralHealthService } from './services/NeuralHealthService';
-import { predictiveHealingService } from './services/PredictiveHealingService';
 
 console.log('🔵 [DEBUG] server.ts starting...');
 
@@ -271,9 +270,9 @@ process.on('uncaughtException', (err: Error) => {
   }
 });
 
-import { WorkerSetup } from './infrastructure/jobs/WorkerSetup';
 import { JobName } from './infrastructure/jobs/job-definitions';
 import { JobQueue } from './infrastructure/jobs/JobQueue';
+import { WorkerSetup } from './infrastructure/jobs/WorkerSetup';
 
 /**
  * Initialize and boot
@@ -295,13 +294,22 @@ const initializeAndStart = async () => {
   WorkerSetup.startWorkers();
 
   // Schedule Recurring Jobs
-  const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
-  await jobQueue.addJob(JobName.MALWARE_CLEANUP, {}, {
-    repeat: {
-      pattern: '0 0 * * *', // Every day at midnight
-    }
-  }).catch(err => logger.error('Failed to schedule Malware Cleanup job:', err));
+  try {
+    const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
+    await jobQueue.addJob(
+      JobName.MALWARE_CLEANUP,
+      {},
+      {
+        repeat: {
+          pattern: '0 0 * * *', // Every day at midnight
+        },
+      },
+    );
+  } catch (err) {
+    logger.error('Failed to schedule Malware Cleanup job (likely due to missing Redis/DB):', err);
+  }
 
+  // Attempt DB connection but proceed even if it fails (handled in connectToDatabase resilient mode)
   await connectToDatabase();
 
   startServer();
@@ -310,3 +318,4 @@ const initializeAndStart = async () => {
 initializeAndStart();
 
 export { app, io };
+

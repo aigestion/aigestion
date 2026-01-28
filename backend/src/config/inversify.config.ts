@@ -2,50 +2,69 @@ import 'reflect-metadata';
 
 import { Container } from 'inversify';
 
-import { DockerService } from '../infrastructure/docker/DockerService';
-import { DeFiStrategistService } from '../services/defi-strategist.service';
-import { InfraOptimizerService } from '../services/infra-optimizer.service';
-import { MetaverseService } from '../services/metaverse.service';
-import { RateLimitService } from '../services/rate-limit.service';
-import { SwarmService } from '../services/swarm.service';
-import { RegisterUserUseCase } from '../application/usecases/RegisterUserUseCase';
 import { LoginUserUseCase } from '../application/usecases/LoginUserUseCase';
-import { IUserRepository, UserRepository } from '../infrastructure/repository/UserRepository';
-import { IPersonaRepository, PersonaRepository } from '../infrastructure/repository/PersonaRepository';
+import { RegisterUserUseCase } from '../application/usecases/RegisterUserUseCase';
 import { CreatePersonaUseCase } from '../application/usecases/persona/CreatePersonaUseCase';
 import { GetMarketplacePersonasUseCase } from '../application/usecases/persona/GetMarketplacePersonasUseCase';
+import { SwarmController } from '../controllers/swarm.controller';
+import { DockerService } from '../infrastructure/docker/DockerService';
+import {
+    IMissionRepository,
+    MissionRepository,
+} from '../infrastructure/repository/MissionRepository';
+import {
+    INotificationRepository,
+    NotificationRepository,
+} from '../infrastructure/repository/NotificationRepository';
+import {
+    IPersonaRepository,
+    PersonaRepository,
+} from '../infrastructure/repository/PersonaRepository';
+import { IUserRepository, UserRepository } from '../infrastructure/repository/UserRepository';
 import { AIService } from '../services/ai.service';
-import { EnhancedVoiceService } from '../services/enhanced-voice.service';
 import { AlertingService } from '../services/alerting.service';
 import { AnalyticsService } from '../services/analytics.service';
+import { AnomalyDetectionService } from '../services/anomaly-detection.service';
 import { AuthService } from '../services/auth.service';
-import { BackupService } from '../services/backup.service';
+import { AutoDocumentationService } from '../services/auto-documentation.service';
 import { BackupSchedulerService } from '../services/backup-scheduler.service';
+import { BackupService } from '../services/backup.service';
+import { CloudFailoverService } from '../services/cloud-failover.service';
 import { CredentialManagerService } from '../services/credential-manager.service';
+import { DeFiStrategistService } from '../services/defi-strategist.service';
+import { DoraMetricsService } from '../services/dora-metrics.service';
 import { EmailService } from '../services/email.service';
+import { EnhancedVoiceService } from '../services/enhanced-voice.service';
+import { FeatureFlagService } from '../services/feature-flag.service';
+import { ErrorReportingService } from '../services/google/error-reporting.service';
 import { GoogleDriveService } from '../services/google/google-drive.service';
 import { GoogleSecretManagerService } from '../services/google/secret-manager.service';
+import { HealthService } from '../services/health.service';
 import { HistoryService } from '../services/history.service';
+import { InfraOptimizerService } from '../services/infra-optimizer.service';
 import { InstagramService } from '../services/instagram.service';
+import { KnowledgeGraphService } from '../services/knowledge-graph.service';
 import { LinkedInService } from '../services/linkedin.service';
+import { MetaverseService } from '../services/metaverse.service';
+import { NotificationService } from '../services/notification.service';
+import { QwenTTSService } from '../services/qwen-tts.service';
 import { RagService } from '../services/rag.service';
+import { RateLimitService } from '../services/rate-limit.service';
 import { SearchService } from '../services/search.service';
+import { SemanticCacheService } from '../services/semantic-cache.service';
+import { ServiceMeshService } from '../services/service-mesh.service';
+import { SocketService } from '../services/socket.service';
 import { StripeService } from '../services/stripe.service';
+import { SwarmService } from '../services/swarm.service';
 import { SystemMetricsService } from '../services/system-metrics.service';
 import { TelegramService } from '../services/telegram.service';
 import { TikTokService } from '../services/tiktok.service';
-import { UserService } from '../services/user.service';
-import { UsageService } from '../services/usage.service';
-import { SocketService } from '../services/socket.service';
-import { NotificationService } from '../services/notification.service';
 import { TwoFactorService } from '../services/two-factor.service';
+import { UsageService } from '../services/usage.service';
+import { UserService } from '../services/user.service';
 import { XService } from '../services/x.service';
-import { SwarmController } from '../controllers/swarm.controller';
-import { MissionRepository, IMissionRepository } from '../infrastructure/repository/MissionRepository';
-import { NotificationRepository, INotificationRepository } from '../infrastructure/repository/NotificationRepository';
+import { ZeroTrustService } from '../services/zero-trust.service';
 import { TYPES } from '../types';
-import { ErrorReportingService } from '../services/google/error-reporting.service';
-import { HealthService } from '../services/health.service';
 
 const container = new Container();
 
@@ -66,12 +85,12 @@ container
   .inSingletonScope();
 container.bind('Container').toConstantValue(container);
 
+import { Enable2FAUseCase } from '../application/usecases/Enable2FAUseCase';
+import { Verify2FALoginUseCase } from '../application/usecases/Verify2FALoginUseCase';
+import { Verify2FAUseCase } from '../application/usecases/Verify2FAUseCase';
+import { EventBus } from '../infrastructure/eventbus/EventBus';
 import { CommandBus } from '../shared/cqrs/CommandBus';
 import { QueryBus } from '../shared/cqrs/QueryBus';
-import { EventBus } from '../infrastructure/eventbus/EventBus';
-import { Enable2FAUseCase } from '../application/usecases/Enable2FAUseCase';
-import { Verify2FAUseCase } from '../application/usecases/Verify2FAUseCase';
-import { Verify2FALoginUseCase } from '../application/usecases/Verify2FALoginUseCase';
 
 container.bind<MetaverseService>(TYPES.MetaverseService).to(MetaverseService).inSingletonScope();
 container.bind<RateLimitService>(TYPES.RateLimitService).to(RateLimitService).inSingletonScope();
@@ -124,14 +143,17 @@ container.bind<SwarmController>(TYPES.SwarmController).to(SwarmController).inSin
 container.bind<IMissionRepository>(TYPES.MissionRepository).to(MissionRepository).inSingletonScope();
 
 import { JobQueue } from '../infrastructure/jobs/JobQueue';
-import { MalwareScannerService } from '../services/malware-scanner.service';
-import { DocumentProcessorService } from '../services/google/document-processor.service';
-import { WAFService } from '../services/waf.service';
-import { ThreatIntelligenceService } from '../services/threat-intelligence.service';
-import { MonitoringService } from '../services/monitoring.service';
 import { BackupRestoreService } from '../services/backup-restore.service';
-import { CentralizedLoggingService, CENTRAL_LOGGING_SERVICE_NAME } from '../services/centralized-logging.service';
+import {
+    CENTRAL_LOGGING_SERVICE_NAME,
+    CentralizedLoggingService,
+} from '../services/centralized-logging.service';
+import { DocumentProcessorService } from '../services/google/document-processor.service';
+import { MalwareScannerService } from '../services/malware-scanner.service';
+import { MonitoringService } from '../services/monitoring.service';
+import { ThreatIntelligenceService } from '../services/threat-intelligence.service';
 import { UserBehaviorService } from '../services/user-behavior.service';
+import { WAFService } from '../services/waf.service';
 
 container.bind<JobQueue>(TYPES.JobQueue).to(JobQueue).inSingletonScope();
 container.bind<MalwareScannerService>(TYPES.MalwareScannerService).to(MalwareScannerService).inSingletonScope();
@@ -145,9 +167,20 @@ container.bind<BackupRestoreService>(TYPES.BackupRestoreService).to(BackupRestor
 container.bind<CentralizedLoggingService>(CENTRAL_LOGGING_SERVICE_NAME).to(CentralizedLoggingService).inSingletonScope();
 container.bind<UserBehaviorService>(UserBehaviorService).toSelf().inSingletonScope();
 
-import { DevicePostureService } from '../services/device-posture.service';
 import { DevicePostureController } from '../controllers/DevicePostureController';
+import { DevicePostureService } from '../services/device-posture.service';
 container.bind<DevicePostureService>(TYPES.DevicePostureService).to(DevicePostureService).inSingletonScope();
 container.bind<DevicePostureController>(TYPES.DevicePostureController).to(DevicePostureController).inSingletonScope();
+container.bind<SemanticCacheService>(TYPES.SemanticCacheService).to(SemanticCacheService).inSingletonScope();
+container.bind<KnowledgeGraphService>(TYPES.KnowledgeGraphService).to(KnowledgeGraphService).inSingletonScope();
+container.bind<CloudFailoverService>(TYPES.CloudFailoverService).to(CloudFailoverService).inSingletonScope();
+container.bind<ServiceMeshService>(TYPES.ServiceMeshService).to(ServiceMeshService).inSingletonScope();
+container.bind<ZeroTrustService>(TYPES.ZeroTrustService).to(ZeroTrustService).inSingletonScope();
+container.bind<AnomalyDetectionService>(TYPES.AnomalyDetectionService).to(AnomalyDetectionService).inSingletonScope();
+container.bind<AutoDocumentationService>(TYPES.AutoDocumentationService).to(AutoDocumentationService).inSingletonScope();
+container.bind<FeatureFlagService>(TYPES.FeatureFlagService).to(FeatureFlagService).inSingletonScope();
+container.bind<DoraMetricsService>(TYPES.DoraMetricsService).to(DoraMetricsService).inSingletonScope();
+container.bind<QwenTTSService>(TYPES.QwenTTSService).to(QwenTTSService).inSingletonScope();
 
-export { container, TYPES };
+export { TYPES, container };
+

@@ -31,7 +31,9 @@ export const DanielaOmniWidget: React.FC = () => {
                   </p>
                 ) : (
                   <div className="space-y-2">
-                    <p className="opacity-70">¡Hola! Soy Daniela. Estoy aquí para ayudarte con tu negocio.</p>
+                    <p className="opacity-70">
+                      ¡Hola! Soy Daniela. Estoy aquí para ayudarte con tu negocio.
+                    </p>
                     <p className="text-[10px] uppercase tracking-widest text-nexus-cyan/40">
                       Dime algo, te escucho...
                     </p>
@@ -70,7 +72,7 @@ export const DanielaOmniWidget: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-nexus-violet to-nexus-cyan rounded-full blur-md opacity-70 group-hover:opacity-100 transition-opacity animate-pulse" />
           <div className="relative w-full h-full bg-black/40 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center overflow-hidden group-hover:border-nexus-cyan/50 transition-colors">
             <img
-              src="/images/brand/icon.png"
+              src="/website-epic/images/brand/icon.png"
               alt="AI"
               className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-500"
             />

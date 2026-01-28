@@ -146,6 +146,11 @@ const envSchema = z.object({
     .default('europe-west1')
     .describe('Google Cloud location (region)'),
 
+  // AWS Configuration (for Multi-Cloud Failover)
+  AWS_ACCESS_KEY_ID: z.string().optional().describe('AWS Access Key ID'),
+  AWS_SECRET_ACCESS_KEY: z.string().optional().describe('AWS Secret Access Key'),
+  AWS_REGION: z.string().default('us-east-1').describe('AWS Region'),
+
   GOOGLE_APPLICATION_CREDENTIALS: z
     .string()
     .optional()
@@ -375,6 +380,10 @@ const envSchema = z.object({
   DANIELA_SYSTEM_PROMPT: z.string().optional().default('Eres Daniela, una asistente de voz experta en gestión empresarial.'),
   ELEVENLABS_VOICE_ID: z.string().optional().default('eleven_monica'),
   ELEVENLABS_API_KEY: z.string().optional().describe('ElevenLabs API Key'),
+
+  // Voice AI - Qwen
+  DASHSCOPE_API_KEY: z.string().optional().describe('Alibaba DashScope API Key'),
+  QWEN_TTS_VOICE_ID: z.string().optional().default('longxiaomiao').describe('Qwen TTS Voice ID'),
 
   // Finance / AlphaVantage
   ALPHAVANTAGE_KEY: z.string().optional().describe('AlphaVantage API Key'),

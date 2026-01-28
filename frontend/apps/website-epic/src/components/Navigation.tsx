@@ -58,7 +58,7 @@ export const Navigation: React.FC = () => {
           <div className="relative z-10 w-10 h-10 mr-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12">
             <div className="absolute inset-0 bg-nexus-violet/50 blur-lg rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
             <img
-              src="/images/brand/logo.png"
+              src="/website-epic/images/brand/logo.png"
               alt="Logo"
               className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(138,43,226,0.5)]"
             />
@@ -105,30 +105,30 @@ export const Navigation: React.FC = () => {
           <SoundControl />
 
           <MagneticWrapper strength={20}>
-              <Link
-                to="/login"
-                onMouseEnter={() => {
-                  playHover();
-                  playWhoosh();
-                }}
-                onClick={playClick}
-                className="hidden sm:flex group relative items-center gap-3 px-6 py-2.5 overflow-hidden rounded-full bg-white/5 border border-white/10 hover:border-nexus-violet/50 transition-all duration-300"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-nexus-violet/20 via-nexus-cyan/20 to-nexus-violet/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+            <Link
+              to="/login"
+              onMouseEnter={() => {
+                playHover();
+                playWhoosh();
+              }}
+              onClick={playClick}
+              className="hidden sm:flex group relative items-center gap-3 px-6 py-2.5 overflow-hidden rounded-full bg-white/5 border border-white/10 hover:border-nexus-violet/50 transition-all duration-300"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-nexus-violet/20 via-nexus-cyan/20 to-nexus-violet/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
 
-                <Lock
-                  size={14}
-                  className="text-nexus-violet-glow group-hover:text-white transition-colors"
-                />
-                <span className="relative font-orbitron text-[10px] font-bold tracking-[0.2em] uppercase text-white group-hover:text-shadow-glow">
-                  ENTRAR
-                </span>
-                <ChevronRight
-                  size={14}
-                  className="text-nexus-silver/50 group-hover:text-white group-hover:translate-x-1 transition-all"
-                />
-              </Link>
+              <Lock
+                size={14}
+                className="text-nexus-violet-glow group-hover:text-white transition-colors"
+              />
+              <span className="relative font-orbitron text-[10px] font-bold tracking-[0.2em] uppercase text-white group-hover:text-shadow-glow">
+                ENTRAR
+              </span>
+              <ChevronRight
+                size={14}
+                className="text-nexus-silver/50 group-hover:text-white group-hover:translate-x-1 transition-all"
+              />
+            </Link>
           </MagneticWrapper>
 
           <button

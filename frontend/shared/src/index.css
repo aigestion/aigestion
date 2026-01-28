@@ -1,8 +1,10 @@
 :root {
-  --nexus-obsidian: #010103;
-  --nexus-silver: #a0a0a0;
+  --nexus-obsidian: #020202;
+    --nexus-obsidian-light: #0a0a0a;
+    --nexus-obsidian-deep: #010101;
+    --nexus-silver: #c0c0c0;
   --nexus-cyan: #00f5ff;
-  --nexus-cyan-glow: #33f8ff;
+  --nexus-cyan-glow: #22d3ee;
   --nexus-violet: #8a2be2;
   --nexus-violet-glow: #a855f7;
   --nexus-gold: #ffd700;
@@ -11,11 +13,13 @@
   --nexus-font-weight: 400;
   --nexus-letter-spacing: 0.1em;
   --nexus-text-glow-intensity: 0px;
+--font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-orbitron: 'Orbitron', sans-serif;
 }
 
 @layer base {
   html {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-sans);
     font-weight: var(--nexus-font-weight);
     letter-spacing: var(--nexus-letter-spacing);
     scroll-behavior: smooth;
@@ -30,24 +34,37 @@
   h5,
   h6,
   .font-orbitron {
-    font-family: 'Orbitron', sans-serif;
+    font-family: var(--font-orbitron);
+    }
+    
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background-color: var(--nexus-obsidian);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
   }
 }
 
 @layer utilities {
   .text-glow {
-    text-shadow: 0 0 20px rgba(138,43,226,0.5);
+    text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
   }
 
   .text-glow-cyan {
-    text-shadow: 0 0 20px rgba(0,245,255,0.5);
+    text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
   }
 
   .premium-glass {
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 32px 0 rgba(0,0,0,0.8);
+    backdrop-filter: blur(40px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
     position: relative;
     overflow: hidden;
   }
@@ -68,12 +85,11 @@
     left: 100%;
   }
 
-  /* NEW: Cyber Neon Border */
   .neon-border {
     position: relative;
     border: 1px solid transparent;
     background: linear-gradient(var(--nexus-obsidian), var(--nexus-obsidian)) padding-box,
-                linear-gradient(135deg, var(--nexus-violet), var(--nexus-cyan)) border-box;
+      linear-gradient(135deg, var(--nexus-violet), var(--nexus-cyan)) border-box;
   }
 
   .neon-glow-violet {
@@ -84,21 +100,36 @@
     box-shadow: 0 0 15px rgba(0, 245, 255, 0.4), inset 0 0 15px rgba(0, 245, 255, 0.2);
   }
 
-  /* NEW: Glitch Effect */
   .glitch-text {
     position: relative;
     animation: glitch 5s infinite;
   }
 
   @keyframes glitch {
-    0% { transform: translate(0); }
-    1% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
-    2% { transform: translate(2px, -2px); filter: hue-rotate(-90deg); }
-    3% { transform: translate(0); filter: none; }
-    100% { transform: translate(0); }
+    0% {
+        transform: translate(0);
+      }
+    
+      1% {
+        transform: translate(-2px, 2px);
+        filter: hue-rotate(90deg);
+      }
+    
+      2% {
+        transform: translate(2px, -2px);
+        filter: hue-rotate(-90deg);
+      }
+    
+      3% {
+        transform: translate(0);
+        filter: none;
+      }
+    
+      100% {
+        transform: translate(0);
+      }
   }
 
-  /* NEW: Scanline Effect */
   .scanline {
     width: 100%;
     height: 100px;
@@ -111,8 +142,13 @@
   }
 
   @keyframes scanline {
-    0% { bottom: 100%; }
-    100% { bottom: -100px; }
+    0% {
+        bottom: 100%;
+      }
+    
+      100% {
+        bottom: -100px;
+      }
   }
 
   .liquid-metal {
@@ -132,6 +168,41 @@
     background-image: url('https://grainy-gradients.vercel.app/noise.svg');
   }
 
+    .btn-enterprise {
+      position: relative;
+      overflow: hidden;
+      padding: 1rem 2.5rem;
+      border-radius: 1rem;
+      font-family: var(--font-orbitron);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      transition: all 0.5s;
+      color: white;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--nexus-violet) 0%, var(--nexus-cyan) 100%);
+      box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: inline-block;
+    }
+  
+    .btn-enterprise:hover {
+      transform: translateY(-0.25rem) scale(1.05);
+      box-shadow: 0 0 40px rgba(138, 43, 226, 0.6);
+    }
+  
+    .card-enterprise {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      transition: all 0.5s;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+  
+    .card-enterprise:hover {
+      transform: scale(1.02);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 30px rgba(138, 43, 226, 0.15);
+    }
   .animate-pulse-glow {
     animation: pulse-glow 3s infinite ease-in-out;
   }
@@ -139,10 +210,14 @@
   .nexus-heartbeat {
     animation: nexus-heartbeat 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
   }
+.focus-mode-transition {
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+    100% {
     filter: drop-shadow(0 0 5px var(--nexus-cyan));
     opacity: 0.8;
   }
@@ -153,7 +228,8 @@
 }
 
 @keyframes nexus-heartbeat {
-  0%, 100% {
+  0%,
+    100% {
     transform: scale(1);
     filter: brightness(1);
   }
@@ -175,12 +251,3 @@
   }
 }
 
-/* Liquid UI SVG Placeholder (Must be rendered in DOM) */
-.liquid-ui {
-  filter: url(#nexus-gooey);
-}
-
-/* Focus Mode Transitions */
-.focus-mode-transition {
-  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-}

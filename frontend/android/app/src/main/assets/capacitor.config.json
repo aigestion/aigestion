@@ -3,11 +3,6 @@
 	"appName": "AIGestion",
 	"webDir": "apps/website-epic/dist",
 	"server": {
-		"androidScheme": "https"
-	},
-	"plugins": {
-		"SplashScreen": {
-			"launchShowDuration": 0
-		}
+		"androidScheme": "http"
 	}
 }

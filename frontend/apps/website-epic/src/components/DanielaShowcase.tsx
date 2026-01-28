@@ -119,7 +119,7 @@ export const DanielaShowcase: React.FC = () => {
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-nexus-obsidian via-transparent to-transparent z-10" />
                 <img
-                  src="/images/daniela/daniela_lab_godmode.png"
+                  src="/website-epic/images/daniela/daniela_lab_godmode.png"
                   alt="Daniela AI - Neural Interface"
                   className="w-full h-[600px] object-cover transform group-hover:scale-105 transition-transform duration-1000 filter brightness-110 contrast-110"
                 />
@@ -159,7 +159,7 @@ export const DanielaShowcase: React.FC = () => {
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-nexus-obsidian/80 to-transparent z-10" />
                   <img
-                    src="/images/daniela/daniela_office_godmode.png"
+                    src="/website-epic/images/daniela/daniela_office_godmode.png"
                     alt="Daniela - Entorno Corporativo"
                     className="w-full h-[288px] object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />
@@ -178,7 +178,7 @@ export const DanielaShowcase: React.FC = () => {
                 >
                   <div className="absolute inset-0 bg-gradient-to-t from-nexus-obsidian/80 to-transparent z-10" />
                   <img
-                    src="/images/daniela/lobby.png"
+                    src="/website-epic/images/daniela/lobby.png"
                     alt="Daniela - Lobby de Integración"
                     className="w-full h-[288px] object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />

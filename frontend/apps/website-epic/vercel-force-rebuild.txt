@@ -1,2 +1,0 @@
-FORCE REBUILD - $(date +%Y%m%d-%H%M%S)
-Remove old cached version and deploy new clean build without Vapi SDK

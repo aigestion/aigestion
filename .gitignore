@@ -242,3 +242,6 @@ ml-service/.venv/
 # Validated Secrets (Purged from History)
 logs/manual_output/env_dump.txt
 config/secrets.local.json
+
+# Token Optimization
+linters/

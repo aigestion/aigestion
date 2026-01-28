@@ -19,7 +19,7 @@ const SLIDES: Slide[] = [
     title: 'AIGESTION',
     subtitle: 'SISTEMA OPERATIVO CENTRAL',
     desc: 'Iniciando protocolos de amplificación empresarial...',
-    staticImage: '/images/cinematic/aigestion_core.png',
+    staticImage: '/website-epic/images/cinematic/aigestion_core.png',
   },
   {
     id: 'nexus_iot',
@@ -27,7 +27,7 @@ const SLIDES: Slide[] = [
     title: 'CONTROL NEXUS',
     subtitle: 'YO VEO LOS DATOS',
     desc: 'Mientras tú descansas, yo optimizo tu infraestructura. Gestión de IoT, servidores y logística con precisión milimétrica.',
-    staticImage: '/images/cinematic/nexus_iot.png',
+    staticImage: '/website-epic/images/cinematic/nexus_iot.png',
   },
   {
     id: 'daniela_sales',
@@ -35,7 +35,7 @@ const SLIDES: Slide[] = [
     title: 'DANIELA VOZ',
     subtitle: 'YO CREO LA CONEXIÓN',
     desc: 'Hablo con mil clientes a la vez. Cierro ventas, reservo citas y fidelizo a tu audiencia con calidez humana.',
-    staticImage: '/images/daniela/desk.png',
+    staticImage: '/website-epic/images/daniela/desk.png',
   },
   {
     id: 'nexus_social',
@@ -43,7 +43,7 @@ const SLIDES: Slide[] = [
     title: 'ARQUITECTURA VIRAL',
     subtitle: 'ANÁLISIS DE TENDENCIAS',
     desc: 'Detecto patrones de crecimiento. Automatizo la publicación omnicanal para maximizar el impacto.',
-    staticImage: '/images/cinematic/viral_architecture.png',
+    staticImage: '/website-epic/images/cinematic/viral_architecture.png',
   },
   {
     id: 'roi',
@@ -51,7 +51,7 @@ const SLIDES: Slide[] = [
     title: 'SINERGIA TOTAL',
     subtitle: 'LÓGICA + EMPATÍA',
     desc: 'Reduce costes operativos un 70%. Multiplica tu eficiencia un 300%. La matemática del futuro.',
-    staticImage: '/images/cinematic/roi_synergy.png',
+    staticImage: '/website-epic/images/cinematic/roi_synergy.png',
   },
   {
     id: 'cta',
@@ -59,7 +59,7 @@ const SLIDES: Slide[] = [
     title: 'TU NUEVA REALIDAD',
     subtitle: '¿EMPEZAMOS?',
     desc: 'No es ciencia ficción. Es tu negocio, hoy.',
-    staticImage: '/images/cinematic/future_portal.png',
+    staticImage: '/website-epic/images/cinematic/future_portal.png',
   },
 ];
 

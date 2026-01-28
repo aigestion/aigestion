@@ -1,4 +1,5 @@
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
@@ -6,10 +7,9 @@ import type { Request, Response } from 'express-serve-static-core';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
-import cookieParser from 'cookie-parser';
 import RateLimitRedisStore from 'rate-limit-redis';
-import { createClient } from 'redis';
 // @ts-ignore
+// import responseTime from 'response-time';
 import xssClean from 'xss-clean';
 
 // Middleware to ensure every JSON response follows the standard API for
@@ -22,9 +22,9 @@ import routes from './routes';
 import mcpRouter from './routes/mcp.routes';
 import { logger } from './utils/logger';
 
-import { cdnCache } from './middleware/cdnCache';
-import getRedisClient from './utils/redis';
 import { buildResponse } from './common/response-builder';
+import { cdnCache } from './middleware/cdn-cache.middleware';
+import getRedisClient from './utils/redis';
 
 const app = express();
 
@@ -77,9 +77,11 @@ if (!isTest) {
   redisClient = getRedisClient();
 }
 
+const useRedis = !isTest && process.env.ENABLE_REDIS !== 'false';
+
 const apiLimiter = rateLimit({
-  store: isTest
-    ? undefined // Use default MemoryStore for tests
+  store: !useRedis
+    ? undefined // Use default MemoryStore for tests or if Redis is disabled
     : new RateLimitRedisStore({
         sendCommand: (...args) => redisClient.sendCommand(args),
       }),
@@ -98,11 +100,13 @@ if (!isTest) {
 app.use(hpp());
 app.use(xssClean());
 
+// app.use(responseTime());
+
 // Performance Middleware
 app.use(
   compression({
-    level: 6, // Equilibrium between speed and compression
-    threshold: 1024, // Only compress responses above 1KB
+    level: 7, // Slightly higher compression
+    threshold: 512, // Compress smaller payloads for mobile speed
   }),
 );
 
@@ -163,3 +167,4 @@ process.on('SIGTERM', async () => {
 });
 
 export { app };
+

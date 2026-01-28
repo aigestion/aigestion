@@ -1,24 +1,24 @@
-import { test, expect, beforeAll, afterAll, beforeEach } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-describe('AIGestion E2E Tests', () => {
+test.describe('AIGestion E2E Tests', () => {
   let page: any;
 
-  beforeAll(async () => {
+  test.beforeAll(async () => {
     // Setup browser context
     const { chromium } = require('playwright');
     const browser = await chromium.launch();
     page = await browser.newPage();
   });
 
-  afterAll(async () => {
+  test.afterAll(async () => {
     await page.close();
   });
 
-  beforeEach(async () => {
+  test.beforeEach(async () => {
     await page.goto('http://localhost:5173');
   });
 
-  describe('Authentication Flow', () => {
+  test.describe('Authentication Flow', () => {
     test('User can login with valid credentials', async () => {
       // Navigate to login page
       await page.click('[data-testid="login-button"]');
@@ -45,7 +45,9 @@ describe('AIGestion E2E Tests', () => {
 
       // Verify error message
       await expect(page.locator('[data-testid="error-message"]')).toBeVisible();
-      await expect(page.locator('[data-testid="error-message"]')).toHaveText(/invalid credentials/i);
+      await expect(page.locator('[data-testid="error-message"]')).toHaveText(
+        /invalid credentials/i,
+      );
     });
 
     test('User can logout', async () => {
@@ -64,8 +66,8 @@ describe('AIGestion E2E Tests', () => {
     });
   });
 
-  describe('Dashboard Navigation', () => {
-    beforeEach(async () => {
+  test.describe('Dashboard Navigation', () => {
+    test.beforeEach(async () => {
       // Login before each test
       await page.click('[data-testid="login-button"]');
       await page.fill('[data-testid="email-input"]', 'test@example.com');
@@ -100,8 +102,8 @@ describe('AIGestion E2E Tests', () => {
     });
   });
 
-  describe('Conversation Management', () => {
-    beforeEach(async () => {
+  test.describe('Conversation Management', () => {
+    test.beforeEach(async () => {
       // Login
       await page.click('[data-testid="login-button"]');
       await page.fill('[data-testid="email-input"]', 'test@example.com');
@@ -122,7 +124,9 @@ describe('AIGestion E2E Tests', () => {
       await page.click('[data-testid="create-conversation"]');
 
       // Verify conversation created
-      await expect(page.locator('[data-testid="conversation-list"]')).toContainText('Test Conversation');
+      await expect(page.locator('[data-testid="conversation-list"]')).toContainText(
+        'Test Conversation',
+      );
     });
 
     test('User can send messages in conversation', async () => {
@@ -136,7 +140,9 @@ describe('AIGestion E2E Tests', () => {
       await page.click('[data-testid="send-message"]');
 
       // Verify message appears
-      await expect(page.locator('[data-testid="message-list"]')).toContainText('Hello, this is a test message!');
+      await expect(page.locator('[data-testid="message-list"]')).toContainText(
+        'Hello, this is a test message!',
+      );
     });
 
     test('User can search conversations', async () => {
@@ -152,13 +158,17 @@ describe('AIGestion E2E Tests', () => {
       await page.fill('[data-testid="search-input"]', 'Test Conversation 1');
 
       // Verify search results
-      await expect(page.locator('[data-testid="conversation-list"]')).toContainText('Test Conversation 1');
-      await expect(page.locator('[data-testid="conversation-list"]')).not.toContainText('Test Conversation 2');
+      await expect(page.locator('[data-testid="conversation-list"]')).toContainText(
+        'Test Conversation 1',
+      );
+      await expect(page.locator('[data-testid="conversation-list"]')).not.toContainText(
+        'Test Conversation 2',
+      );
     });
   });
 
-  describe('AI Chat Interface', () => {
-    beforeEach(async () => {
+  test.describe('AI Chat Interface', () => {
+    test.beforeEach(async () => {
       // Login
       await page.click('[data-testid="login-button"]');
       await page.fill('[data-testid="email-input"]', 'test@example.com');
@@ -214,8 +224,8 @@ describe('AIGestion E2E Tests', () => {
     });
   });
 
-  describe('Settings and Preferences', () => {
-    beforeEach(async () => {
+  test.describe('Settings and Preferences', () => {
+    test.beforeEach(async () => {
       // Login
       await page.click('[data-testid="login-button"]');
       await page.fill('[data-testid="email-input"]', 'test@example.com');
@@ -261,7 +271,7 @@ describe('AIGestion E2E Tests', () => {
     });
   });
 
-  describe('Responsive Design', () => {
+  test.describe('Responsive Design', () => {
     test('Mobile view works correctly', async () => {
       await page.setViewportSize({ width: 375, height: 667 }); // iPhone size
 
@@ -294,7 +304,7 @@ describe('AIGestion E2E Tests', () => {
     });
   });
 
-  describe('Performance Tests', () => {
+  test.describe('Performance Tests', () => {
     test('Page load performance', async () => {
       const startTime = Date.now();
 
@@ -335,7 +345,7 @@ describe('AIGestion E2E Tests', () => {
     });
   });
 
-  describe('Accessibility Tests', () => {
+  test.describe('Accessibility Tests', () => {
     test('Keyboard navigation works', async () => {
       // Login using keyboard
       await page.keyboard.press('Tab'); // Focus login button
@@ -367,10 +377,10 @@ describe('AIGestion E2E Tests', () => {
     });
   });
 
-  describe('Error Handling', () => {
+  test.describe('Error Handling', () => {
     test('Network error handling', async () => {
       // Mock network failure
-      await page.route('/api/v1/**', route => route.abort());
+      await page.route('/api/v1/**', (route: any) => route.abort());
 
       // Try to login
       await page.click('[data-testid="login-button"]');

@@ -1,0 +1,57 @@
+// src/routes/code_execution.routes.ts
+import { Router } from 'express';
+// Note: Since we are using inversify-express-utils @controller,
+// we generally don't need manual routing if the container and server are set up to use the library.
+// However, the existing app seems to use manual routing in some places and decorators in others?
+// Actually, 'src/server.ts' doesn't seem to set up InversifyExpressServer.
+// It uses standard 'app.use()'.
+// Wait, if 'server.ts' uses 'app.use('/api/v1', routes)', then standard Express routing is used.
+// The existing controllers seem to be mixed.
+// 'docker.controller.ts' is just functions, not a class.
+// But 'inversify.config.ts' binds 'SwarmController' etc.
+// Let's follow the 'docker.controller.ts' pattern (functional controller) if the project mainly uses that,
+// OR adapt the class-based one.
+//
+// CHECK: 'src/controllers/docker.controller.ts' exported functions 'getContainers', etc.
+// CHECK: 'src/routes/docker.routes.ts' imported the service manually and defined routes.
+//
+// The 'CodeExecutionController' I wrote just now uses decorators.
+// If the app doesn't use InversifyExpressServer, those decorators do nothing.
+// I should probably switch to the functional pattern used in 'docker.controller.ts'
+// OR the class-based pattern if I can confirm it's wired up.
+//
+// In 'server.ts', `const socketService = container.get<SocketService>(TYPES.SocketService);`
+// It pulls manually.
+// It does NOT look like `new InversifyExpressServer(container).build()` is called.
+//
+// THEREFORE: I should rewrite the controller to be a standard class or internal functions,
+// and create a standard router file like 'docker.routes.ts'.
+
+import { buildError, buildResponse } from '../common/response-builder';
+import { container } from '../config/inversify.config';
+import { CodeExecutionService } from '../services/code_execution.service';
+import { TYPES } from '../types';
+
+const router = Router();
+
+// Lazy resolve or resolve immediately
+const codeExecutionService = container.get<CodeExecutionService>(TYPES.CodeExecutionService);
+
+router.post('/run', async (req, res) => {
+  const { language, code } = req.body;
+  const requestId = (req as any).requestId;
+
+  if (!code || !language) {
+    res.status(400).json(buildError('Missing code or language', 'BAD_REQUEST', 400, requestId));
+    return;
+  }
+
+  try {
+    const result = await codeExecutionService.execute(language, code);
+    res.json(buildResponse(result, 200, requestId));
+  } catch (error: any) {
+    res.status(500).json(buildError(error.message, 'EXECUTION_ERROR', 500, requestId));
+  }
+});
+
+export default router;

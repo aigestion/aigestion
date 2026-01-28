@@ -1,15 +1,16 @@
-import { injectable, inject } from 'inversify';
-import { TYPES } from '../types';
-import { AIService } from './ai.service';
-import { MetaverseService } from './metaverse.service';
-import { DeFiStrategistService } from './defi-strategist.service';
-import { InfraOptimizerService } from './infra-optimizer.service';
-import { RagService } from './rag.service';
-import { logger } from '../utils/logger';
+import { inject, injectable } from 'inversify';
 import { JobQueue } from '../infrastructure/jobs/JobQueue';
 import { JobName } from '../infrastructure/jobs/job-definitions';
 import { IMissionRepository } from '../infrastructure/repository/MissionRepository';
 import { MissionStatus } from '../models/Mission';
+import { TYPES } from '../types';
+import { logger } from '../utils/logger';
+import { AIService } from './ai.service';
+import { DeFiStrategistService } from './defi-strategist.service';
+import { InfraOptimizerService } from './infra-optimizer.service';
+import { KnowledgeGraphService } from './knowledge-graph.service';
+import { MetaverseService } from './metaverse.service';
+import { RagService } from './rag.service';
 
 @injectable()
 export class SwarmService {
@@ -21,6 +22,7 @@ export class SwarmService {
         @inject(TYPES.RagService) private ragService: RagService,
         @inject(TYPES.JobQueue) private jobQueue: JobQueue,
         @inject(TYPES.MissionRepository) private missionRepo: IMissionRepository,
+        @inject(TYPES.KnowledgeGraphService) private kgService: KnowledgeGraphService,
     ) { }
 
     /**
@@ -147,4 +149,37 @@ export class SwarmService {
             return { status: 'error', message: error instanceof Error ? error.message : 'Execution failed' };
         }
     }
+
+    /**
+     * [GOD MODE] Multi-Agent Orchestration Loop
+     * Recursively solves complex missions by spawning sub-agents.
+     */
+    async executeAutonomousLoop(missionId: string, depth: number = 0): Promise<void> {
+        if (depth > 5) {
+             logger.warn(`[Swarm] Max depth reached for mission ${missionId}`);
+             return;
+        }
+
+        const mission = await this.getMission(missionId);
+        logger.info(`[Swarm] Agent Active: Analyzing mission "${mission.objective}" (Depth: ${depth})`);
+
+        // 1. Consult Knowledge Graph for context
+        const contextNodes = await this.kgService.getRelated(mission.userId, 'focus_on');
+        const contextStr = contextNodes.map(n => n.label).join(', ');
+
+        // 2. Plan steps including context
+        const prompt = `Objective: ${mission.objective}. Context: ${contextStr}. Return a definition of 3 sub-tasks to achieve this.`;
+        const plan = await this.aiService.generateContent(prompt, mission.userId, 'system_architect');
+
+        logger.info(`[Swarm] Generated Plan: ${plan}`);
+
+        // 3. Execute or Delegate (Simplified simulation)
+        // In a full implementation, this would parse the 'plan' JSON and spawn concrete jobs.
+        // For now, we update the KG to reflect progress.
+        await this.kgService.addNode({ id: missionId, type: 'mission', label: mission.objective });
+        await this.kgService.addEdge({ source: mission.userId, target: missionId, relation: 'created', weight: 1 });
+
+        logger.info(`[Swarm] Mission ${missionId} graph nodes updated.`);
+    }
 }
+

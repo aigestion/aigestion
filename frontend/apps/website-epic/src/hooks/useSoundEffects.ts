@@ -3,14 +3,14 @@ import { Howl } from 'howler';
 import { useSoundContext } from '../contexts/SoundContext';
 
 const SOUND_URLS = {
-  tick: 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3',
-  thud: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
-  glass: 'https://assets.mixkit.co/active_storage/sfx/2570/2570-preview.mp3',
-  whoosh: 'https://assets.mixkit.co/active_storage/sfx/2572/2572-preview.mp3',
-  pop: 'https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3',
-  error: 'https://assets.mixkit.co/active_storage/sfx/2573/2573-preview.mp3',
-  click: 'https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3',
-  toggle: 'https://assets.mixkit.co/active_storage/sfx/2569/2569-preview.mp3',
+  tick: '/website-epic/sounds/hover_glass.mp3',
+  thud: '/website-epic/sounds/click_activate.mp3',
+  glass: '/website-epic/sounds/success_chime.mp3',
+  whoosh: '/website-epic/sounds/menu_open.mp3',
+  pop: '/website-epic/sounds/data_pulse.mp3',
+  error: '/website-epic/sounds/error_buzzer.mp3',
+  click: '/website-epic/sounds/click_activate.mp3',
+  toggle: '/website-epic/sounds/menu_open.mp3',
 };
 
 const useHowl = (src: string, options: { volume: number; soundEnabled: boolean }) => {
