@@ -110,6 +110,6 @@ import { errorHandler } from '../middleware/error.middleware';
 router.delete('/:id', validateParams(schemas.common.id), deleteUser);
 
 // Explicitly handle errors within this router to prevent 404 fall-through
-router.use(errorHandler);
+// router.use(errorHandler);
 
 export default router;

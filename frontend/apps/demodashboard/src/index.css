@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 @theme {
-  --color-nexus-obsidian: #020202;
-  --color-nexus-obsidian-light: #0a0a0a;
-  --color-nexus-obsidian-deep: #010101;
+  --color-nexus-obsidian: var(--nexus-obsidian);
+    --color-nexus-obsidian-light: var(--nexus-obsidian-light);
+    --color-nexus-obsidian-deep: var(--nexus-obsidian-deep);
 
-  --color-nexus-violet: #8A2BE2;
-  --color-nexus-violet-glow: #a855f7;
+  --color-nexus-violet: var(--nexus-violet);
+    --color-nexus-violet-glow: var(--nexus-violet-glow);
 
-  --color-nexus-cyan: #00F5FF;
-  --color-nexus-cyan-glow: #22d3ee;
+  --color-nexus-cyan: var(--nexus-cyan);
+    --color-nexus-cyan-glow: var(--nexus-cyan-glow);
 
-  --color-nexus-gold: #FFD700;
-  --color-nexus-silver: #C0C0C0;
+  --color-nexus-gold: var(--nexus-gold);
+    --color-nexus-silver: var(--nexus-silver);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-orbitron: "Orbitron", sans-serif;
+  --font-sans: var(--font-sans);
+    --font-orbitron: var(--font-orbitron);
 
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -39,11 +39,3 @@
   }
 }
 
-@layer utilities {
-  .text-glow { text-shadow: 0 0 20px rgba(138, 43, 226, 0.5); }
-  .text-glow-cyan { text-shadow: 0 0 20px rgba(0, 245, 255, 0.5); }
-  .premium-glass {
-    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/10;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
-  }
-}

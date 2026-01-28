@@ -1,8 +1,17 @@
+import {
+  DanielaOmniWidget,
+  DashboardLayout,
+  GlobalParticleMesh,
+  NeonCard,
+  NexusHome,
+  Skeleton,
+  SocketProvider,
+} from '@shared/index';
+import '@shared/index.css';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { motion } from 'framer-motion';
 import React from 'react';
-import { DanielaOmniWidget, DashboardLayout, GlobalParticleMesh, NeonCard, NexusHome, Skeleton, SocketProvider } from './mock-components';
 
 const App: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
@@ -36,19 +45,30 @@ const App: React.FC = () => {
           <NeonCard title="SIMULACIÓN DE ESCENAS" accentColor="rgba(168, 85, 247, 0.3)">
             <div className="grid grid-cols-1 gap-4">
               {['Modo Enfoque Máximo', 'Seguridad Total', 'Cena de Negocios'].map((scene, i) => (
-                <button key={i} className="py-4 rounded-xl bg-white/5 border border-white/5 hover:border-nexus-violet/40 text-center font-orbitron text-[10px] tracking-widest text-nexus-silver/60 uppercase transition-all">
+                <button
+                  key={i}
+                  className="py-4 rounded-xl bg-white/5 border border-white/5 hover:border-nexus-violet/40 text-center font-orbitron text-[10px] tracking-widest text-nexus-silver/60 uppercase transition-all"
+                >
                   ACTIVAR {scene}
                 </button>
               ))}
             </div>
           </NeonCard>
 
-          <NeonCard title="VOZ DANIELA AI" accentColor="rgba(0, 245, 255, 0.3)" className="flex flex-col justify-center items-center text-center">
+          <NeonCard
+            title="VOZ DANIELA AI"
+            accentColor="rgba(0, 245, 255, 0.3)"
+            className="flex flex-col justify-center items-center text-center"
+          >
             <div className="w-20 h-20 rounded-full bg-nexus-cyan/5 border border-nexus-cyan/20 flex items-center justify-center mb-6">
               <div className="w-4 h-4 rounded-full bg-nexus-cyan-glow animate-ping" />
             </div>
-            <p className="text-nexus-silver/60 italic text-sm">"Daniela: Ajustando clima a 22 grados en oficina principal..."</p>
-            <span className="mt-4 text-[8px] font-mono text-nexus-cyan-glow tracking-[0.4em] uppercase">Audio Output Active</span>
+            <p className="text-nexus-silver/60 italic text-sm">
+              "Daniela: Ajustando clima a 22 grados en oficina principal..."
+            </p>
+            <span className="mt-4 text-[8px] font-mono text-nexus-cyan-glow tracking-[0.4em] uppercase">
+              Audio Output Active
+            </span>
           </NeonCard>
         </div>
       </div>

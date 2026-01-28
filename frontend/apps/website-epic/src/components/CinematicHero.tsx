@@ -114,7 +114,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
           >
             {/* Base Layer: wide hero or video */}
             <img
-              src="/images/cinematic/hero_wide.png"
+              src="/website-epic/images/cinematic/hero_wide.png"
               className="absolute inset-0 w-full h-full object-cover opacity-40 scale-110 blur-[2px]"
               alt="Background Depth"
             />
@@ -164,7 +164,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-nexus-cyan/40 blur-xl animate-pulse" />
               <div className="relative w-16 h-16 bg-black/60 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center overflow-hidden">
-                <img src="/images/brand/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
+                <img src="/website-epic/images/brand/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
               </div>
             </div>
             <div>
@@ -263,7 +263,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
                 >
                   <div className="w-64 h-64 mx-auto rounded-full overflow-hidden border-4 border-nexus-cyan shadow-2xl shadow-nexus-cyan/50">
                     <img
-                      src="/images/daniela-ai-8k.jpg"
+                      src="/website-epic/images/daniela-ai-8k.jpg"
                       alt="Daniela AI"
                       className="w-full h-full object-cover"
                     />

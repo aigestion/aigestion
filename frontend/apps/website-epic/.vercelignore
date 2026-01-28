@@ -1,7 +1,0 @@
-# Force Vercel to rebuild everything
-node_modules
-.git
-dist
-*.log
-.DS_Store
-.env*

@@ -21,7 +21,11 @@ const Footer = () => (
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
-          <img src="/images/brand/logo.png" alt="AIGestion" className="h-10 mb-8 filter brightness-110 drop-shadow-[0_0_10px_rgba(138,43,226,0.3)]" />
+          <img
+            src="/website-epic/images/brand/logo.png"
+            alt="AIGestion"
+            className="h-10 mb-8 filter brightness-110 drop-shadow-[0_0_10px_rgba(138,43,226,0.3)]"
+          />
           <p className="text-nexus-silver/50 text-lg max-w-sm mb-12 font-light leading-relaxed italic">
             "Arquitectura de Inteligencia Soberana. <br />
             El núcleo neuronal para las empresas del mañana."
@@ -32,19 +36,35 @@ const Footer = () => (
         </motion.div>
       </div>
       <div>
-        <h4 className="font-orbitron text-xs text-nexus-cyan-glow mb-8 uppercase tracking-[0.3em] font-bold">Ecosistema</h4>
+        <h4 className="font-orbitron text-xs text-nexus-cyan-glow mb-8 uppercase tracking-[0.3em] font-bold">
+          Ecosistema
+        </h4>
         <ul className="space-y-6 text-[10px] text-nexus-silver/40 font-orbitron tracking-widest uppercase">
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Casos de Uso</li>
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Daniela AI</li>
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Nodos Globales</li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Casos de Uso
+          </li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Daniela AI
+          </li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Nodos Globales
+          </li>
         </ul>
       </div>
       <div>
-        <h4 className="font-orbitron text-xs text-nexus-violet-glow mb-8 uppercase tracking-[0.3em] font-bold">Metaverso</h4>
+        <h4 className="font-orbitron text-xs text-nexus-violet-glow mb-8 uppercase tracking-[0.3em] font-bold">
+          Metaverso
+        </h4>
         <ul className="space-y-6 text-[10px] text-nexus-silver/40 font-orbitron tracking-widest uppercase">
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Sedes Decentraland</li>
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">Virtual Office</li>
-          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300 text-nexus-cyan-glow font-bold">Acceso Terminal</li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Sedes Decentraland
+          </li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300">
+            Virtual Office
+          </li>
+          <li className="hover:text-white transition-colors cursor-pointer hover:translate-x-1 duration-300 text-nexus-cyan-glow font-bold">
+            Acceso Terminal
+          </li>
         </ul>
       </div>
     </div>

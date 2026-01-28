@@ -9,15 +9,23 @@ interface SoundAsset {
     loop?: boolean;
 }
 
+// Get the base path for sounds - handle both dev and prod
+const getBasePath = () => {
+    if (import.meta.env.DEV) {
+        return '/sounds';
+    }
+    return '/website-epic/sounds';
+};
+
 const SOUND_ASSETS: Record<SoundType, SoundAsset> = {
-    hover_glass: { src: '/sounds/hover_glass.mp3', volume: 0.1 },
-    click_activate: { src: '/sounds/click_activate.mp3', volume: 0.3 },
-    menu_open: { src: '/sounds/menu_open.mp3', volume: 0.2 },
-    success_chime: { src: '/sounds/success_chime.mp3', volume: 0.2 },
-    error_buzzer: { src: '/sounds/error_buzzer.mp3', volume: 0.2 },
-    nexus_hum: { src: '/sounds/nexus_hum.mp3', volume: 0.05, loop: true },
-    wuaw_subtle: { src: '/sounds/wuaw_subtle.mp3', volume: 0.15 },
-    data_pulse: { src: '/sounds/data_pulse.mp3', volume: 0.1 },
+  hover_glass: { src: `${getBasePath()}/hover_glass.mp3`, volume: 0.1 },
+  click_activate: { src: `${getBasePath()}/click_activate.mp3`, volume: 0.3 },
+  menu_open: { src: `${getBasePath()}/menu_open.mp3`, volume: 0.2 },
+  success_chime: { src: `${getBasePath()}/success_chime.mp3`, volume: 0.2 },
+  error_buzzer: { src: `${getBasePath()}/error_buzzer.mp3`, volume: 0.2 },
+  nexus_hum: { src: `${getBasePath()}/nexus_hum.mp3`, volume: 0.05, loop: true },
+  wuaw_subtle: { src: `${getBasePath()}/wuaw_subtle.mp3`, volume: 0.15 },
+  data_pulse: { src: `${getBasePath()}/data_pulse.mp3`, volume: 0.1 },
 };
 
 class AudioService {

@@ -1,9 +1,14 @@
+import fs from 'fs/promises';
 import { inject, injectable } from 'inversify';
+import path from 'path';
+import { env } from '../config/env.schema';
 import { TYPES } from '../types';
 import { logger } from '../utils/logger';
 import { AIService } from './ai.service';
 import { AnalyticsService } from './analytics.service';
+import { ElevenLabsService } from './elevenlabs.service';
 import { MetaverseService } from './metaverse.service';
+import { QwenTTSService } from './qwen-tts.service';
 
 interface ConversationMessage {
   id: string;
@@ -47,6 +52,8 @@ export class EnhancedVoiceService {
     @inject(TYPES.AIService) private aiService: AIService,
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.MetaverseService) private metaverseService: MetaverseService,
+    @inject(TYPES.ElevenLabsService) private elevenLabsService: ElevenLabsService,
+    @inject(TYPES.QwenTTSService) private qwenTTSService: QwenTTSService,
   ) {}
 
   /**
@@ -289,15 +296,33 @@ export class EnhancedVoiceService {
   }
 
   /**
-   * Convert text to speech using ElevenLabs or similar
+   * Convert text to speech using ElevenLabs or Qwen3
    */
-  private async textToSpeech(text: string): Promise<Buffer> {
+  private async textToSpeech(text: string, provider: 'elevenlabs' | 'qwen' = 'qwen'): Promise<Buffer> {
     try {
-      // TODO: Implement ElevenLabs integration
-      logger.info('[EnhancedVoiceService] Converting text to speech...');
-      return Buffer.from('mock audio data');
+      const tempPath = path.join(process.cwd(), 'uploads', 'voice', `${Date.now()}.mp3`);
+      
+      let audioPath: string;
+      if (provider === 'qwen') {
+        audioPath = await this.qwenTTSService.textToSpeech(text, tempPath);
+      } else {
+        // Fallback to ElevenLabs if needed
+        audioPath = await this.elevenLabsService.textToSpeech(text, env.ELEVENLABS_VOICE_ID || '', tempPath);
+      }
+
+      const audioBuffer = await fs.readFile(audioPath);
+      
+      // Cleanup temp file (optional, depends on if we want to stream or cache)
+      // await fs.unlink(audioPath);
+
+      return audioBuffer;
     } catch (error) {
       logger.error(error, '[EnhancedVoiceService] Error converting text to speech');
+      // If one fails, try the other as fallback
+      if (provider === 'qwen' && env.ELEVENLABS_API_KEY) {
+        logger.info('[EnhancedVoiceService] Falling back to ElevenLabs...');
+        return this.textToSpeech(text, 'elevenlabs');
+      }
       throw error;
     }
   }

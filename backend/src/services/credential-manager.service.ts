@@ -4,6 +4,7 @@ import Stripe from 'stripe';
 import { Telegraf } from 'telegraf';
 
 // import { TYPES } from '../types';
+import { loadPremiumCredentials } from '../../premium_management';
 import { logger } from '../utils/logger';
 
 export interface CredentialStatus {
@@ -27,6 +28,7 @@ export class CredentialManagerService {
       this.verifyStripe(),
       this.verifyTelegram(),
       this.verifyInstagram(),
+      this.verifyProfessionalAccount(),
     ]);
 
     logger.info('Credential Verification Report Generated');
@@ -107,6 +109,26 @@ export class CredentialManagerService {
       return this.report('Instagram', 'valid');
     } catch (e) {
       return this.report('Instagram', 'invalid', e.message);
+    }
+  }
+
+  async verifyProfessionalAccount(): Promise<CredentialStatus> {
+    try {
+      const creds = loadPremiumCredentials();
+      const proAccount = creds.find((c) => c.type === 'professional');
+
+      if (!proAccount) {
+        return this.report('Professional Account', 'missing', 'No professional account configured');
+      }
+
+      // Basic validation (could be extended to check license servers etc)
+      if (proAccount.email === 'admin@aigestion.net') {
+        return this.report('Professional Account', 'valid', `Active: ${proAccount.email}`);
+      }
+
+      return this.report('Professional Account', 'invalid', 'Unauthorized professional email');
+    } catch (e) {
+      return this.report('Professional Account', 'invalid', e.message);
     }
   }
 

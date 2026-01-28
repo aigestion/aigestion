@@ -5,13 +5,8 @@ const config: CapacitorConfig = {
   appName: 'AIGestion',
   webDir: 'apps/website-epic/dist',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'http'
   },
-  plugins: {
-    SplashScreen: {
-      launchShowDuration: 0
-    }
-  }
 };
 
 export default config;

@@ -44,6 +44,7 @@
     "use-sound": "^5.0.0"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.28.5",
     "@types/howler": "^2.2.12",
     "@types/node": "^24.10.1",
     "@types/react": "^18.3.0",

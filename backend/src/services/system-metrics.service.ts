@@ -1,9 +1,11 @@
 import { exec } from 'child_process';
-import { injectable } from 'inversify';
+import { inject, injectable } from 'inversify';
 import * as os from 'os';
 import { promisify } from 'util';
 
+import { TYPES } from '../types';
 import { logger } from '../utils/logger';
+import { CredentialManagerService } from './credential-manager.service';
 
 const execAsync = promisify(exec);
 
@@ -17,23 +19,31 @@ export interface SystemMetrics {
   hostname: string;
   timestamp: number;
   dockerContainerCount?: number;
+  accountTier?: string;
 }
 
 @injectable()
 export class SystemMetricsService {
   private lastNetworkStats: { rx: number; tx: number; time: number } | null = null;
 
+  constructor(
+    @inject(TYPES.CredentialManagerService) private credentialManager: CredentialManagerService,
+  ) {}
+
   /**
    * Get all system metrics aggregated
    */
   async getSystemMetrics(): Promise<SystemMetrics> {
-    const [cpu, memory, network, disk, dockerCount] = await Promise.all([
+    const [cpu, memory, network, disk, dockerCount, proStatus] = await Promise.all([
       this.getCPUUsage(),
       this.getMemoryUsage(),
       this.getNetworkUsage(),
       this.getDiskUsage(),
       this.getDockerContainerCount(),
+      this.credentialManager.verifyProfessionalAccount(),
     ]);
+
+    const accountTier = proStatus.status === 'valid' ? 'Professional' : 'Standard';
 
     return {
       cpu,
@@ -41,6 +51,7 @@ export class SystemMetricsService {
       network,
       disk,
       dockerContainerCount: dockerCount,
+      accountTier,
       uptime: os.uptime(),
       platform: os.platform(),
       hostname: os.hostname(),

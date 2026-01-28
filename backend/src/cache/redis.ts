@@ -63,11 +63,15 @@ export const getRedisClient = (): RedisClientType => {
         url,
         socket: {
           reconnectStrategy: retries => {
+            if (retries > 50) {
+              logger.error(
+                `Redis reconnection GAVE UP after 50 attempts. Manual intervention required.`,
+              );
+              return new Error('Redis reconnection failed');
+            }
             const delay = Math.min(retries * 200, 5000);
             if (retries > 10) {
-              logger.error(
-                `Redis reconnection failed after ${retries} attempts. Delay: ${delay}ms`,
-              );
+              logger.warn(`Redis reconnection attempt ${retries}. Delay: ${delay}ms`);
             }
             return delay;
           },

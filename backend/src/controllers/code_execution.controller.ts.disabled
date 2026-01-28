@@ -1,0 +1,30 @@
+import { Request, Response } from 'express';
+import { inject } from 'inversify';
+import { controller, httpPost } from 'inversify-express-utils';
+import { buildError, buildResponse } from '../common/response-builder';
+import { CodeExecutionService } from '../services/code_execution.service';
+import { TYPES } from '../types';
+
+@controller('/api/v1/code-execution')
+export class CodeExecutionController {
+  constructor(
+    @inject(TYPES.CodeExecutionService) private codeExecutionService: CodeExecutionService
+  ) {}
+
+  @httpPost('/run')
+  public async runCode(req: Request, res: Response) {
+    const { language, code } = req.body;
+    const requestId = (req as any).requestId;
+
+    if (!code || !language) {
+      return res.status(400).json(buildError('Missing code or language', 'BAD_REQUEST', 400, requestId));
+    }
+
+    try {
+      const result = await this.codeExecutionService.execute(language, code);
+      return res.json(buildResponse(result, 200, requestId));
+    } catch (error: any) {
+      return res.status(500).json(buildError(error.message, 'EXECUTION_ERROR', 500, requestId));
+    }
+  }
+}

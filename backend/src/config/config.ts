@@ -102,6 +102,12 @@ export const config = {
     apiKey: env.SUNO_API_KEY || '',
     baseUrl: env.SUNO_API_BASE_URL,
   },
+  // Monitoring Configuration
+  monitoring: {
+    cpuThreshold: 90, // %
+    memoryThreshold: 90, // %
+    retentionMs: 24 * 60 * 60 * 1000, // 24 hours
+  },
   // RabbitMQ Configuration
   rabbitmq: {
     url: env.RABBITMQ_URL,

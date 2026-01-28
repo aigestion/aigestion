@@ -1,15 +1,15 @@
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
 import {
-  Battery,
-  Cpu,
-  Fingerprint,
-  Layout,
-  Maximize2,
-  Monitor,
-  Radio,
-  ScanLine,
-  ShieldCheck,
-  Zap,
+    Battery,
+    Cpu,
+    Fingerprint,
+    Layout,
+    Maximize2,
+    Monitor,
+    Radio,
+    ScanLine,
+    ShieldCheck,
+    Zap,
 } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSound } from '../hooks/useSound';
@@ -523,7 +523,7 @@ export const VitureXRExperience: React.FC = () => {
             <div className="absolute inset-0 opacity-10 mix-blend-screen bg-gradient-to-r from-red-500/10 via-green-500/10 to-blue-500/10" />
 
             {/* Scanlines layer */}
-            <div className="absolute inset-0 bg-[url('/images/nexus/scanlines.png')] opacity-[0.03] pointer-events-none" />
+            <div className="absolute inset-0 bg-[url('/images/nexus/scanlines.svg')] opacity-[0.03] pointer-events-none" />
 
             {/* Crosshair */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 opacity-20">

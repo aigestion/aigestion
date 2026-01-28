@@ -1,0 +1,345 @@
+# =============================================================================
+# AIGestion - Master Environment Configuration (GOD MODE OPTIMIZED)
+# Consolidation Date: 2026-01-17
+# Status: Unified Maximum Configuration
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 1️⃣ SERVER & RUNTIME
+# -----------------------------------------------------------------------------
+NODE_ENV=development
+PORT=3000
+FRONTEND_URL=https://www.aigestion.net
+BASE_URL=https://api.aigestion.net
+CORS_ORIGIN=*
+
+# -----------------------------------------------------------------------------
+# 2️⃣ SECURITY & AUTHENTICATION
+# -----------------------------------------------------------------------------
+JWT_SECRET=0f76667ad7fe991219ac2e5f501f140e14703326336b4ed846e4ae7dd7d524b84bac75144e6ece37a837784d25b7a6e51a39378f4e4d3b5aeb9a1c607cf7c6c0
+JWT_EXPIRES_IN=7d
+JWT_COOKIE_EXPIRES_IN=7
+SESSION_SECRET=eac910b5399a3ee3ef7e10f9c4f9fd14cd5bd05a94222a027d8bf3f53512949a2aed3052de15e59a27c9eebffffff
+API_KEY=FqEOqlJzFWiwXlDmgR0mtv7uDmlT-FSE3PtwhSMVu4I
+N8N_JWT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZjUxOGMwYy0wOTNkLTQ2MTQtOTRhNS1jOWM4MWUyMmEwYjUiLCJpc3MiOiJuOG4iLCJhdWQiOiJwdWJsaWMtYXBpIiwiaWF0IjoxNzY3OTQ1NTQ1fQ.JEIR4Az1mgQzHcRWw-Rp3P6HPXG4UstUUbU62Yl_YLM
+RECAPTCHA_SITE_KEY=6LfgdzYsAAAAAISJ9zDDVq7Nxfe1cwxcxvPorClq
+RECAPTCHA_SECRET_KEY=6LfgdzYsAAAAAPPvraxcyEkTdUc4Ffh6c59UmBRN
+IAP_EXPECTED_AUDIENCE=/projects/PROJECT_NUMBER/apps/APP_ID
+IAP_ENABLED=false
+
+# -----------------------------------------------------------------------------
+# 3️⃣ RATE LIMITING
+# -----------------------------------------------------------------------------
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX=100
+AUTH_RATE_LIMIT_WINDOW_MS=3600000
+AUTH_RATE_LIMIT_MAX=10
+AI_RATE_LIMIT_WINDOW_MS=600000
+AI_RATE_LIMIT_MAX=30
+
+# -----------------------------------------------------------------------------
+# 4️⃣ DATABASES, QUEUES & CACHING
+# -----------------------------------------------------------------------------
+# MongoDB
+MONGODB_URI=mongodb://admin:AWReTznw7k3Sf4lWFEenRw@mongodb:27017/aigestion-platform?authSource=admin
+MONGO_ROOT_USER=admin
+MONGO_ROOT_PASSWORD=AWReTznw7k3Sf4lWFEenRw
+
+# Redis
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_PASSWORD=YSdkuZw3307jaWUZZBssTm36k2HB_T8lM7gOonn4oc5w
+REDIS_URL=redis://:YSdkuZw3307jaWUZZBssTm36k2HB_T8lM7gOonn4oc5w@redis:6379/0
+
+# PostgreSQL (dev SQLite)
+POSTGRES_USER=AIG_user
+POSTGRES_PASSWORD=w4hlIPKo45VyyQyOvwz4EQ
+POSTGRES_DB=AIG_ia
+DATABASE_URL=sqlite:///./data/AIG_ia.db
+
+# RabbitMQ
+RABBITMQ_DEFAULT_USER=admin
+RABBITMQ_DEFAULT_PASS=YZZcWg5hbm6Av7AeE5dgGA
+RABBITMQ_URI=amqp://admin:YZZcWg5hbm6Av7AeE5dgGA@localhost:5672
+
+# -----------------------------------------------------------------------------
+# 5️⃣ AI ENGINE (ML SPECIFIC)
+# -----------------------------------------------------------------------------
+APP_NAME=AIG-ia-engine
+IA_ENGINE_URL=http://ml-service:5000
+APP_DEBUG=true
+APP_WORKERS=4
+MODEL_PATH=./data/trained_models
+DEFAULT_MODEL=hope-lite-v1
+MAX_BATCH_SIZE=32
+INFERENCE_TIMEOUT=30
+ONNX_ENABLED=true
+ONNX_THREADS=4
+ONNX_USE_GPU=false
+TRAINING_EPOCHS=10
+LEARNING_RATE=0.001
+CHECKPOINT_DIR=./data/checkpoints
+UPLOAD_DIR=./data/uploads
+MAX_UPLOAD_SIZE=10485760
+ENABLE_RETRAINING=true
+ENABLE_RAG=false
+ENABLE_ANOMALY_DETECTION=true
+
+# -----------------------------------------------------------------------------
+# 6️⃣ AI PROVIDERS (LLM & TOOLS)
+# -----------------------------------------------------------------------------
+OPENAI_API_KEY=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
+ANTHROPIC_API_KEY=sk-ant-api03-K9unlKt7OacW18Or8glhqj4whvTfBmUoyPXT_9v-WPCConC0wXctE22VEoWycac0IU1S3ZecSyE
+GEMINI_API_KEY=AIzaSyCim3MiOaI2Szx3IxqrWNX8igZ5XKMD06Q
+GOOGLE_GENAI_API_KEY=AIzaSyC4r_moHyNm8gfSmyqR1CAUesgZUZwMZ78
+DEEPSEEK_API_TOKEN=sk-2a0ff47ecc734d6cb0771bec2c4df857
+HUGGINGFACE_API_TOKEN=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
+TAVILY_API_KEY=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
+RUNWAY_API_KEY=
+
+# -----------------------------------------------------------------------------
+# 7️⃣ GOOGLE CLOUD PLATFORM (GCP)
+# -----------------------------------------------------------------------------
+GOOGLE_CLOUD_PROJECT=aigestion-v2
+GOOGLE_CLOUD_PROJECT_ID=aigestion-v2
+CLOUDRUN_PROJECT_ID=aigestion-v2
+CLOUDRUN_SERVICE_NAME=aigestion-app
+CLOUDRUN_REGION=europe-west1
+GOOGLE_APPLICATION_CREDENTIALS=C:/Users/Alejandro/AIGestion/infra/keys/gcp_service_account.json
+GOOGLE_CLIENT_ID=742472155410-ntgl3tkb6b3egpfe60fg5vfto9f0vn1r.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+GOOGLE_REDIRECT_URI=http://localhost:5000/api/v1/google/oauth2callback
+GOOGLE_ORGANIZATION_ID=
+VERTEX_AI_LOCATION=europe-west1
+VERTEX_SEARCH_LOCATION=global
+VERTEX_SEARCH_DATASTORE_ID=nexus-docs
+DOCUMENT_AI_LOCATION=eu
+INVOICE_PROCESSOR_ID=44810ed19aca3d4d
+CONTRACT_PROCESSOR_ID=642ec0f1f1f58ee7
+CLOUD_TASKS_LOCATION=europe-west1
+CLOUD_TASKS_TARGET_URL=https://api.nexus-v1.net
+CLOUD_TASKS_SERVICE_ACCOUNT=tasks@nexus-v1.iam.gserviceaccount.com
+BIGQUERY_DATASET=nexus_analytics
+BIGQUERY_MAX_BYTES=10000000000
+
+# -----------------------------------------------------------------------------
+# 8️⃣ FIREBASE
+# -----------------------------------------------------------------------------
+FIREBASE_PROJECT_ID=your-firebase-project-id
+FIREBASE_API_KEY=your-firebase-api-key
+FIREBASE_AUTH_DOMAIN=your-firebase-auth-domain
+FIREBASE_DATABASE_URL=your-firebase-database-url
+FIREBASE_STORAGE_BUCKET=your-firebase-storage-bucket
+FIREBASE_MESSAGING_SENDER_ID=your-firebase-messaging-sender-id
+FIREBASE_APP_ID=your-firebase-app-id
+# Admin / MCP Configuration
+FIREBASE_CLIENT_EMAIL=your-firebase-client-email
+FIREBASE_PRIVATE_KEY=your-firebase-private-key
+FIREBASE_SERVICE_ACCOUNT_PATH=./infra/keys/firebase-service-account.json
+
+# -----------------------------------------------------------------------------
+# 9️⃣ COMMUNICATIONS (Twilio, Whatsapp, Telegram, Email)
+# -----------------------------------------------------------------------------
+TWILIO_ACCOUNT_SID=AC4cac94948099656167be1c09b2d58857
+TWILIO_AUTH_TOKEN=10a0e74c56cf88d4053e5b4b4ddc708c
+TWILIO_PHONE_NUMBER=+15707125695
+WHATSAPP_PHONE_NUMBER=34618779308
+WHATSAPP_API_URL=https://graph.facebook.com/v17.0
+TELEGRAM_BOT_TOKEN=8507984320:AAFgRw_gQOM6uB4wq2-lSQ6vkWzqU-HjMp8
+WHATSAPP_ACCESS_TOKEN=your-whatsapp-access-token
+TELEGRAM_CHAT_ID=5279281613
+TELEGRAM_PRO_CHAT_ID=YOUR_PRO_CHAT_ID_HERE
+MAILJET_API_KEY=c7b71456a11361f81d0e63906e3f680
+MAILJET_SECRET_KEY=650b7e7ef5b4b292f82b142cc5b343c9
+DISCORD_WEBHOOK_URL=
+SLACK_WEBHOOK_URL=
+# Personal & Business Email
+EMAIL_PERSONAL_GMAIL=noemisanalex@gmail.com
+EMAIL_PERSONAL_GMAIL_PASSWORD=Iris.8374
+EMAIL_BUSINESS_MAIN=alejandro@aigestion.net
+EMAIL_BUSINESS_MAIN_PASSWORD=admin123
+
+# -----------------------------------------------------------------------------
+# 🔟 PAYMENTS & COMMERCE
+# -----------------------------------------------------------------------------
+# Stripe
+STRIPE_SECRET_KEY=sk_test_51S7epmRFjthIHYdCDkrjEzZCSyyJME8nuHX1TPXMEDAe9nZfkko8rgpUpC2xCXhImHHyW3CD0BAauz1NxAuY08DA00iywWY2fR
+STRIPE_PUBLISHABLE_KEY=pk_test_51S7epmRFjthIHYdCO404GzFvR69nOkY7uuIwUaDBgX48Aajj0Qk9C6Uby88vCAm3gIZLFciwvdtQONiWOrkfVEHU0023mea8oB
+STRIPE_WEBHOOK_SECRET=whsec_1234567890abcdef1234567890abcdef
+
+# PayPal
+PAYPAL_CLIENT_ID=AWFxFxd3npxgRIVdJ7b_vTCGApmMMpn5prbeqcBDuXiLfIx_C9TaZpXAu74voAN8euFI3b8DxejOZV6B
+PAYPAL_CLIENT_SECRET=EObC2XyUHSxEcmJ3bvm30dowZbsV7d1VQaXKDuHzUgSlf9YOP7f9y6NDulCE-tY5ZJQJJW_X1CH1GT0t
+PAYPAL_MODE=sandbox
+
+# -----------------------------------------------------------------------------
+# 1️⃣1️⃣ EXTRNAL INTEGRATIONS (Marketing, Social, Design)
+# -----------------------------------------------------------------------------
+# Figma
+FIGMA_CLIENT_ID=TH57pjTZ2VqNYAIPOlKTm
+FIGMA_CLIENT_SECRET=rNp6jipq4NuJu2LDl3KNwj09oJTNh7
+FIGMA_ACCESS_TOKEN=figd_MxHwCtSGD30hgDLVJJGbAzJK59tR-qaVLEYwF_yd
+FIGMA_FILE_KEY=Uk9m5Gr8vWbprhAa3L1VTS # AIGestion Landing Page
+FIGMA_DASHBOARDS_FILE_KEY=42Ak9FkdubnLAYjfT0pqBx # AIGestion Dashboards
+
+# YouTube / Google Social
+YOUTUBE_API_KEY=AIzaSyCnvJeSYO9ELp1kPy6qbYKCEEZEeHkz6P4 # Auto-generated via gcloud (aigestion-v2)
+YOUTUBE_PERSONAL_CHANNEL_ID=UCfkU-9IY9xQC2q2y56L2SPw # Found via API (noemisanalex)
+YOUTUBE_PERSONAL_EMAIL=noemisanalex@gmail.com
+YOUTUBE_PERSONAL_CLIENT_ID=742472155410-ntgl3tkb6b3egpfe60fg5vfto9f0vn1r.apps.googleusercontent.com
+YOUTUBE_PERSONAL_CLIENT_SECRET=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
+YOUTUBE_PERSONAL_REFRESH_TOKEN=1//03ja156qnksnjCgYIARAAGAMSNwFow.kLkfP6QE0t_-7UVvCjvxlZYbySG1PwgiUqEub7aVl3JO
+YOUTUBE_BUSINESS_CHANNEL_ID=UCfkU-9IY9xQC2q2y56L2SPw # Using Personal ID temporarily per user confirmation
+YOUTUBE_BUSINESS_EMAIL=alejandro@aigestion.net
+YOUTUBE_BUSINESS_CLIENT_ID=742472155410-ntgl3tkb6b3egpfe60fg5vfto9f0vn1r.apps.googleusercontent.com
+YOUTUBE_BUSINESS_CLIENT_SECRET=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
+YOUTUBE_BUSINESS_REFRESH_TOKEN=1//03ja156qnksnjCgYIARAAGAMSNwFow.kLkfP6QE0t_-7UVvCjvxlZYbySG1PwgiUqEub7aVl3JO
+
+# Notion
+NOTION_API_KEY=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
+NOTION_INTEGRATION_TOKEN=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 # Assumed same as API Key
+NOTION_DATABASE_ID=2eccfa3d-2f61-81b1-8a51-ed03286a0713 # Tasks Database
+NOTION_CONTENT_DB_ID=2eccfa3d-2f61-8178-be75-f9238f2a498f
+NOTION_CLIENTS_DB_ID=2eccfa3d-2f61-814f-aea8-cf7f611e9d10
+NOTION_OS_PAGE_ID=2eccfa3d-2f61-81d4-8974-f7a69e8bbeef
+
+# GitHub
+GITHUB_APP_ID=2680118
+GITHUB_CLIENT_SECRET=3e2b28ddf8eaa1c3044c4bfa686e6c7cf4382e58
+GITHUB_WEBHOOK_SECRET=537ba027e1d50cb9211f0d6eb29b4abb59cdb4dbccac02d1043e576c7527d66d
+GITHUB_API_TOKEN=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
+GITHUB_REPO_URL=https://github.com/noepab/aigestion.git
+
+
+# Social Media (Meta, X, LinkedIn, TikTok)
+# Meta (Facebook / Instagram)
+ADMIN_PHONE_NUMBER=618779308
+ADMIN_EMAIL=noemisanalex@hotmail.com
+META_APP_ID=1190972579810871
+META_APP_SECRET=b5ced3deb39d97b8cd31185466d1d8f8
+FACEBOOK_PAGE_ACCESS_TOKEN=your-facebook-page-access-token
+FECEBOOK_PASSWORD=Danieli.8374
+INSTAGRAM_ACCESS_TOKEN=your-instagram-access-token
+
+# X (Twitter)
+TWITTER_API_KEY=your-twitter-api-key
+TWITTER_API_SECRET=your-twitter-api-secret
+TWITTER_ACCESS_TOKEN=your-twitter-access-token
+TWITTER_ACCESS_SECRET=your-twitter-access-secret
+
+# LinkedIn
+LINKEDIN_CLIENT_ID=your-linkedin-client-id
+LINKEDIN_CLIENT_SECRET=your-linkedin-client-secret
+
+# TikTok
+TIKTOK_CLIENT_KEY=your-tiktok-client-key
+TIKTOK_CLIENT_SECRET=your-tiktok-client-secret
+
+# Misc
+ALPHAVANTAGE_KEY=0KZODMB077NO4U4A
+QUICKCHART_URL=https://quickchart.io/chart
+
+# -----------------------------------------------------------------------------
+# 1️⃣2️⃣ MONITORING & OBSERVABILITY
+# -----------------------------------------------------------------------------
+LOG_LEVEL=debug
+LOG_FORMAT=json
+OTEL_SERVICE_NAME=aigestion-backend
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+DATADOG_API_TOKEN=e0890ac7b21c86716f796d118f29a98b
+DATADOG_APP_KEY=your-datadog-app-key
+SENTRY_DSN=your_sentry_dsn_here
+NEW_RELIC_LICENSE_KEY=your-new-relic-license-key
+PROMETHEUS_ENABLED=true
+PROMETHEUS_PORT=9090
+
+# -----------------------------------------------------------------------------
+# 1️⃣3️⃣ DEPLOYMENT & INFRASTRUCTURE
+# -----------------------------------------------------------------------------
+# Railway
+RAILWAY_API_TOKEN=54029a35-c25b-453d-91d9-c36ed4fa070b
+
+# AWS
+AWS_ACCESS_KEY_ID=AKIAXLAPBCYRYLJAU67H
+AWS_SECRET_ACCESS_KEY=cur5P9FAZN/DJv9NRMPsDTfXzr9vV3eIrjcAe0hq
+AWS_S3_BUCKET=your-s3-bucket-name
+AWS_S3_REGION=us-east-1
+AWS_SQS_QUEUE_URL=your-sqs-queue-url
+
+COMPOSE_PROJECT_NAME=aigestion
+
+# -----------------------------------------------------------------------------
+# 1️⃣4️⃣ TOOLING (MCP / ANTIGRAVITY)
+# -----------------------------------------------------------------------------
+MCP_SERVER_URL=http://localhost:4000
+MCP_API_KEY=T8i6s0mMQXtapMZgXd4ca18rCvXTUKxt0YW8jkFP57Q
+
+# -----------------------------------------------------------------------------
+# 1️⃣5️⃣ FEATURE FLAGS
+# -----------------------------------------------------------------------------
+FEATURE_PREMIUM_SUBSCRIPTIONS=true
+FEATURE_USAGE_BILLING=true
+FEATURE_ADVANCED_ANALYTICS=true
+
+# -----------------------------------------------------------------------------
+# 1️⃣6️⃣ OWNERSHIP & PROPRIETARY RIGHTS
+# -----------------------------------------------------------------------------
+NEXUS_OWNER_NAME=Alejandro Manuel Alfonso Fernández
+NEXUS_OWNER_DNI=28921591B
+NEXUS_ADMIN_ROLE=ROOT_OPERATOR_GOD_LEVEL
+
+# -----------------------------------------------------------------------------
+# 1️⃣7️⃣ MISC DEFAULTS
+# -----------------------------------------------------------------------------
+DEFAULT_TIMEZONE=UTC
+
+# -----------------------------------------------------------------------------
+# 1️⃣8️⃣ WEB3 & BLOCKCHAIN
+# -----------------------------------------------------------------------------
+# MetaMask
+METAMASK_PASSWORD=Danieli.8374$$$
+METAMASK_WALLET_ADDRESS=your-wallet-address
+METAMASK_SRP=your-secret-recovery-phrase
+
+# SafePal
+SAFEPAL_WALLET_ADDRESS=track fosil arm erase gauge local endless exhibit magic rule second green
+SAFEPAL_PASSWORD=837483
+SAFEPAL_MNEMONIC=your-safepal-mnemonic-phrase
+
+# -----------------------------------------------------------------------------
+# 1️⃣9️⃣ DATA SOURCES & NEWS FEEDS (RSS/ATOM)
+# -----------------------------------------------------------------------------
+# Economy & Finance
+NEWS_FEED_ECONOMY=https://finance.yahoo.com/news/rssindex,https://feeds.bloomberg.com/economics/news.xml
+
+# Cryptocurrency
+NEWS_FEED_CRYPTO=https://cointelegraph.com/rss,https://www.coindesk.com/arc/outboundfeeds/rss/
+
+# Geopolitics & World News
+NEWS_FEED_GEOPOLITICS=http://feeds.bbci.co.uk/news/world/rss.xml,https://cnn.com/rss/cnn_world.rss
+
+# Artificial Intelligence
+NEWS_FEED_AI=https://techcrunch.com/category/artificial-intelligence/feed/,https://www.wired.com/feed/tag/ai/latest/rss
+
+# -----------------------------------------------------------------------------
+# 2️⃣0️⃣ ADVANCED CAPABILITIES (Voice, RAG, Geo)
+# -----------------------------------------------------------------------------
+# Voice Synthesis (The "Mouth")
+ELEVENLABS_API_KEY=sk_e10cc74189ef0a3256d01d06f4e7f43f3a569a6eefb2a45e
+ELEVENLABS_VOICE_ID=your-voice-id
+openAI_TTS_MODEL=tts-1-hd
+VAPI_PUBLIC_KEY=665723f5-d86c-423a-aafd-faa3eecf902d
+VAPI_PRIVATE_KEY=2175cfc8-45f0-4f39-b0e8-cc29461bc8f0
+
+# Vector Memory (The "Long-Term Brain")
+PINECONE_API_KEY=pcsk_4pPkGH_9hEy5vg3x5V6TzPomG3ndJgZybcMzaSaiSzXqos2oSG4fVWtHGRe7hNK5HyS9YU
+PINECONE_ENVIRONMENT=gcp-starter
+
+# Perception (Maps & Weather)
+GOOGLE_MAPS_API_KEY=<YOUR_GOOGLE_MAPS_API_KEY>
+OPENWEATHER_API_KEY=<YOUR_OPENWEATHER_API_KEY>
+
+# Deep Navigation (Scraping)
+BROWSERLESS_API_KEY=<YOUR_BROWSERLESS_API_KEY>
+
+DEFAULT_LANGUAGE=es-SP

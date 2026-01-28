@@ -6,11 +6,12 @@ import { config } from './config';
 const { mongo } = config;
 
 const connectOptions: ConnectOptions = {
-  // Add any MongoDB connection options here
-  // For example:
-  // connectTimeoutMS: 10000, // 10 seconds
-  // socketTimeoutMS: 45000, // 45 seconds
-  // family: 4, // Use IPv4, skip trying IPv6
+  serverSelectionTimeoutMS: 5000,
+  maxPoolSize: 100, // Increase pool for high concurrency
+  minPoolSize: 10,  // Keep warm connections
+  connectTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+  family: 4, // Faster IPv4 lookup
 };
 
 let isConnected = false;
@@ -52,9 +53,8 @@ export const connectToDatabase = async (): Promise<void> => {
     });
   } catch (error) {
     const err = error as Error;
-    logger.error(err, 'MongoDB connection error:');
-
-    // WARNING: Continuing without DB for development resilience
-    // process.exit(1);
+    logger.error(err, 'MongoDB connection error (Resilient Mode Active):');
+    logger.warn('⚠️ SERVER STARTING WITHOUT DATABASE. SOME FEATURES WILL FAIL. ⚠️');
+    // Do NOT exit process. Allow server to start for health check.
   }
 };

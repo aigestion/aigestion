@@ -13,7 +13,7 @@ export const EnhancedNavigation: React.FC = () => {
 
   const navItems = [
     { label: 'Inicio', path: '#hero', icon: '🏠' },
-    { label: 'Clientes', path: '#clients', icon: '🏢' }, 
+    { label: 'Clientes', path: '#clients', icon: '🏢' },
     { label: 'Ayuda', path: '#daniela', icon: '🤖' },
     { label: 'Velocidad', path: '#nexus', icon: '⚡' },
     { label: 'Ganancias', path: '#roi', icon: '📊' },
@@ -86,7 +86,7 @@ export const EnhancedNavigation: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-br from-nexus-violet to-nexus-cyan rounded-lg blur-md opacity-50 group-hover:opacity-100 transition-opacity" />
                 <div className="relative w-12 h-12 bg-black/40 rounded-lg flex items-center justify-center border border-white/20 backdrop-blur-sm overflow-hidden">
                   <img
-                    src="/images/brand/logo.png"
+                    src="/website-epic/images/brand/logo.png"
                     alt="AIGestion Logo"
                     className="w-8 h-8 object-contain"
                   />

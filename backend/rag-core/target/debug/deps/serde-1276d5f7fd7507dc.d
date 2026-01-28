@@ -1,0 +1,14 @@
+C:\Users\Alejandro\AIGestion\backend\rag-core\target\debug\deps\serde-1276d5f7fd7507dc.d: C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Alejandro\AIGestion\backend\rag-core\target\debug\build\serde-291d5c27960f80df\out/private.rs
+
+C:\Users\Alejandro\AIGestion\backend\rag-core\target\debug\deps\libserde-1276d5f7fd7507dc.rlib: C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Alejandro\AIGestion\backend\rag-core\target\debug\build\serde-291d5c27960f80df\out/private.rs
+
+C:\Users\Alejandro\AIGestion\backend\rag-core\target\debug\deps\libserde-1276d5f7fd7507dc.rmeta: C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs C:\Users\Alejandro\AIGestion\backend\rag-core\target\debug\build\serde-291d5c27960f80df\out/private.rs
+
+C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\lib.rs:
+C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\integer128.rs:
+C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\mod.rs:
+C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\de.rs:
+C:\Users\Alejandro\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\serde-1.0.228\src\private\ser.rs:
+C:\Users\Alejandro\AIGestion\backend\rag-core\target\debug\build\serde-291d5c27960f80df\out/private.rs:
+
+# env-dep:OUT_DIR=C:\\Users\\Alejandro\\AIGestion\\backend\\rag-core\\target\\debug\\build\\serde-291d5c27960f80df\\out

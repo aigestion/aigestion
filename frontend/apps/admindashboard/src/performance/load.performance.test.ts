@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { performance } from 'perf_hooks';
+import { performance as nodePerformance } from 'perf_hooks';
 
-describe('AIGestion Performance Tests', () => {
+test.describe('AIGestion Performance Tests', () => {
   let page: any;
 
-  test.beforeAll(async ({ browser }) => {
+  test.beforeAll(async ({ browser }: { browser: any }) => {
     page = await browser.newPage();
   });
 
@@ -13,25 +13,26 @@ describe('AIGestion Performance Tests', () => {
   });
 
   test('Page load performance - Homepage', async () => {
-    const startTime = performance.now();
+    const startTime = nodePerformance.now();
 
     await page.goto('http://localhost:5173');
     await page.waitForLoadState('networkidle');
 
-    const endTime = performance.now();
-    const loadTime = endTime - startTime;
+    const loadTime = nodePerformance.now() - startTime;
 
     // Performance assertions
     expect(loadTime).toBeLessThan(3000); // 3 seconds max
 
     // Check Core Web Vitals
     const metrics = await page.evaluate(() => {
-      const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const navigation = performance.getEntriesByType('navigation' as any)[0] as any;
       return {
-        domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+        domContentLoaded:
+          navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
         loadComplete: navigation.loadEventEnd - navigation.loadEventStart,
         firstPaint: performance.getEntriesByName('first-paint')[0]?.startTime || 0,
-        firstContentfulPaint: performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0,
+        firstContentfulPaint:
+          performance.getEntriesByName('first-contentful-paint')[0]?.startTime || 0,
       };
     });
 
@@ -44,12 +45,12 @@ describe('AIGestion Performance Tests', () => {
     // Monitor API calls
     const apiCalls: any[] = [];
 
-    page.on('response', response => {
+    page.on('response', (response: any) => {
       if (response.url().includes('/api/')) {
         apiCalls.push({
           url: response.url(),
           status: response.status(),
-          timing: response.timing()
+          timing: response.timing(),
         });
       }
     });
@@ -62,7 +63,7 @@ describe('AIGestion Performance Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Check API performance
-    const loginApiCall = apiCalls.find(call => call.url.includes('/auth/login'));
+    const loginApiCall = apiCalls.find((call) => call.url.includes('/auth/login'));
     expect(loginApiCall).toBeDefined();
     expect(loginApiCall.timing.responseEnd - loginApiCall.timing.requestStart).toBeLessThan(2000);
     expect(loginApiCall.status).toBe(200);
@@ -95,7 +96,7 @@ describe('AIGestion Performance Tests', () => {
     });
 
     // Measure scroll performance
-    const startTime = performance.now();
+    const startTime = nodePerformance.now();
 
     await page.evaluate(() => {
       const list = document.querySelector('[data-testid="conversation-list"]');
@@ -104,7 +105,7 @@ describe('AIGestion Performance Tests', () => {
       }
     });
 
-    const endTime = performance.now();
+    const endTime = nodePerformance.now();
     const scrollTime = endTime - startTime;
 
     expect(scrollTime).toBeLessThan(500); // Should be smooth
@@ -145,12 +146,12 @@ describe('AIGestion Performance Tests', () => {
   test('Bundle size analysis', async () => {
     const responses: any[] = [];
 
-    page.on('response', response => {
+    page.on('response', (response: any) => {
       if (response.url().includes('.js') || response.url().includes('.css')) {
         responses.push({
           url: response.url(),
           size: response.headers()['content-length'] || 0,
-          type: response.url().includes('.js') ? 'js' : 'css'
+          type: response.url().includes('.js') ? 'js' : 'css',
         });
       }
     });
@@ -160,16 +161,16 @@ describe('AIGestion Performance Tests', () => {
 
     // Calculate total bundle size
     const totalJSSize = responses
-      .filter(r => r.type === 'js')
+      .filter((r) => r.type === 'js')
       .reduce((sum, r) => sum + parseInt(r.size || 0), 0);
 
     const totalCSSSize = responses
-      .filter(r => r.type === 'css')
+      .filter((r) => r.type === 'css')
       .reduce((sum, r) => sum + parseInt(r.size || 0), 0);
 
     // Bundle size should be reasonable
     expect(totalJSSize).toBeLessThan(2 * 1024 * 1024); // 2MB max for JS
-    expect(totalCSSSize).toBeLessThan 200 * 1024); // 200KB max for CSS
+    expect(totalCSSSize).toBeLessThan(200 * 1024); // 200KB max for CSS
   });
 
   test('Database query performance', async () => {
@@ -187,11 +188,11 @@ describe('AIGestion Performance Tests', () => {
     // Monitor database queries through API timing
     const apiTimings: any[] = [];
 
-    page.on('response', response => {
+    page.on('response', (response: any) => {
       if (response.url().includes('/api/conversations')) {
         apiTimings.push({
           url: response.url(),
-          timing: response.timing()
+          timing: response.timing(),
         });
       }
     });
@@ -200,9 +201,11 @@ describe('AIGestion Performance Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Check database query performance
-    const conversationApiCall = apiTimings.find(call => call.url.includes('/conversations'));
+    const conversationApiCall = apiTimings.find((call) => call.url.includes('/conversations'));
     expect(conversationApiCall).toBeDefined();
-    expect(conversationApiCall.timing.responseEnd - conversationApiCall.timing.requestStart).toBeLessThan(1000);
+    expect(
+      conversationApiCall.timing.responseEnd - conversationApiCall.timing.requestStart,
+    ).toBeLessThan(1000);
   });
 
   test('Concurrent user load simulation', async () => {
@@ -212,22 +215,24 @@ describe('AIGestion Performance Tests', () => {
       page.context().newPage(),
       page.context().newPage(),
       page.context().newPage(),
-      page.context().newPage()
+      page.context().newPage(),
     ]);
 
-    const startTime = performance.now();
+    const startTime = nodePerformance.now();
 
     // All users login simultaneously
-    await Promise.all(pages.map(async (p, index) => {
-      await p.goto('http://localhost:5173');
-      await p.click('[data-testid="login-button"]');
-      await p.fill('[data-testid="email-input"]', `user${index}@example.com`);
-      await p.fill('[data-testid="password-input"]', 'testpassword123');
-      await p.click('[data-testid="login-submit"]');
-      await p.waitForLoadState('networkidle');
-    }));
+    await Promise.all(
+      pages.map(async (p, index) => {
+        await p.goto('http://localhost:5173');
+        await p.click('[data-testid="login-button"]');
+        await p.fill('[data-testid="email-input"]', `user${index}@example.com`);
+        await p.fill('[data-testid="password-input"]', 'testpassword123');
+        await p.click('[data-testid="login-submit"]');
+        await p.waitForLoadState('networkidle');
+      }),
+    );
 
-    const endTime = performance.now();
+    const endTime = nodePerformance.now();
     const totalTime = endTime - startTime;
 
     // Average time per user should be reasonable
@@ -235,7 +240,7 @@ describe('AIGestion Performance Tests', () => {
     expect(avgTimePerUser).toBeLessThan(5000); // 5 seconds max per user
 
     // Clean up
-    await Promise.all(pages.map(p => p.close()));
+    await Promise.all(pages.map((p) => p.close()));
   });
 
   test('Image optimization performance', async () => {
@@ -244,7 +249,7 @@ describe('AIGestion Performance Tests', () => {
     // Monitor image loading
     const imageLoadTimes: any[] = [];
 
-    page.on('response', response => {
+    page.on('response', (response: any) => {
       if (response.url().match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
         const startTime = Date.now();
         response.text().then(() => {
@@ -252,7 +257,7 @@ describe('AIGestion Performance Tests', () => {
           imageLoadTimes.push({
             url: response.url(),
             loadTime: endTime - startTime,
-            size: response.headers()['content-length'] || 0
+            size: response.headers()['content-length'] || 0,
           });
         });
       }
@@ -268,11 +273,12 @@ describe('AIGestion Performance Tests', () => {
 
     // Check image optimization
     if (imageLoadTimes.length > 0) {
-      const avgLoadTime = imageLoadTimes.reduce((sum, img) => sum + img.loadTime, 0) / imageLoadTimes.length;
+      const avgLoadTime =
+        imageLoadTimes.reduce((sum, img) => sum + img.loadTime, 0) / imageLoadTimes.length;
       expect(avgLoadTime).toBeLessThan(1000); // 1 second max average
 
       // Check if images are optimized (WebP preferred)
-      const webpImages = imageLoadTimes.filter(img => img.url.includes('.webp'));
+      const webpImages = imageLoadTimes.filter((img) => img.url.includes('.webp'));
       const totalImages = imageLoadTimes.length;
 
       if (totalImages > 0) {
@@ -292,12 +298,12 @@ describe('AIGestion Performance Tests', () => {
     await page.click('[data-testid="login-submit"]');
 
     // Test animation performance
-    const animationStart = performance.now();
+    const animationStart = nodePerformance.now();
 
     await page.click('[data-testid="animated-button"]');
     await page.waitForSelector('[data-testid="animation-complete"]');
 
-    const animationEnd = performance.now();
+    const animationEnd = nodePerformance.now();
     const animationTime = animationEnd - animationStart;
 
     // Animation should be smooth (60fps = 16.67ms per frame)
@@ -326,12 +332,12 @@ describe('AIGestion Performance Tests', () => {
   test('Resource loading prioritization', async () => {
     const resourceTiming: any[] = [];
 
-    page.on('response', response => {
+    page.on('response', (response: any) => {
       resourceTiming.push({
         url: response.url(),
         type: response.request().resourceType(),
         timing: response.timing(),
-        size: response.headers()['content-length'] || 0
+        size: response.headers()['content-length'] || 0,
       });
     });
 
@@ -339,22 +345,26 @@ describe('AIGestion Performance Tests', () => {
     await page.waitForLoadState('networkidle');
 
     // Check critical resources load first
-    const criticalResources = resourceTiming.filter(r =>
-      r.type === 'script' || r.type === 'stylesheet'
+    const criticalResources = resourceTiming.filter(
+      (r) => r.type === 'script' || r.type === 'stylesheet',
     );
 
-    const nonCriticalResources = resourceTiming.filter(r =>
-      r.type === 'image' || r.type === 'font'
+    const nonCriticalResources = resourceTiming.filter(
+      (r) => r.type === 'image' || r.type === 'font',
     );
 
     if (criticalResources.length > 0 && nonCriticalResources.length > 0) {
-      const avgCriticalTime = criticalResources.reduce((sum, r) =>
-        sum + (r.timing.responseEnd - r.timing.requestStart), 0
-      ) / criticalResources.length;
+      const avgCriticalTime =
+        criticalResources.reduce(
+          (sum, r) => sum + (r.timing.responseEnd - r.timing.requestStart),
+          0,
+        ) / criticalResources.length;
 
-      const avgNonCriticalTime = nonCriticalResources.reduce((sum, r) =>
-        sum + (r.timing.responseEnd - r.timing.requestStart), 0
-      ) / nonCriticalResources.length;
+      const avgNonCriticalTime =
+        nonCriticalResources.reduce(
+          (sum, r) => sum + (r.timing.responseEnd - r.timing.requestStart),
+          0,
+        ) / nonCriticalResources.length;
 
       // Critical resources should load faster
       expect(avgCriticalTime).toBeLessThan(avgNonCriticalTime);

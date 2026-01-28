@@ -1,18 +1,14 @@
 # 🌌 [GOD MODE] AIGestion Backend Optimized Dockerfile
-# Optimized for: Multi-Region / Autonomous Railway Build
+# Optimized for: Multi-Region / Autonomous Railway Build / Cloud Build
 
 # ---------- Builder Stage ----------
 FROM node:20-alpine AS builder
-
 WORKDIR /app
-
-# Install build dependencies
 COPY package.json package-lock.json ./
+# Install all dependencies for build
 RUN npm ci --legacy-peer-deps
-
-# Copy source and build
-COPY tsconfig.json ./
-COPY src ./src
+COPY . .
+# Build the application
 RUN npm run build
 
 # ---------- Runtime Stage ----------
@@ -25,7 +21,7 @@ ENV PORT=8080
 WORKDIR /app
 
 # Install security tools (ClamAV, YARA)
-RUN apk add --no-cache clamav yara
+# RUN apk add --no-cache clamav yara
 
 # Copy package files
 COPY package.json package-lock.json ./

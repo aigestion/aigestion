@@ -1,6 +1,10 @@
 import axios from 'axios';
+import { exec } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
 
 import { logger } from '../utils/logger';
 import { pineconeService } from './pinecone.service';
@@ -101,17 +105,29 @@ export class RagService {
 
       let sortedFiles = files;
 
-      // 3. Hybrid Search / RRF Simulation (Code Context)
+      // [GOD MODE] Use Rust-powered rag-core if query is provided
       if (query && query.trim().length > 0) {
         context += `[Code Context optimized for query: "${query}"]\n\n`;
-        sortedFiles = this.rankFiles(files, query);
 
-        // 3.5 Append Documentation Context (Cloud + Local)
+        try {
+          const rustResults = await this.queryRustCore(query);
+          if (rustResults && rustResults.length > 0) {
+            logger.info(`[RagService] Rust RagCore provided ${rustResults.length} optimized results.`);
+            sortedFiles = rustResults;
+          } else {
+            sortedFiles = this.rankFiles(files, query!);
+          }
+        } catch (err) {
+          logger.warn(`[RagService] Rust RagCore failed, falling back to JS ranking: ${err}`);
+          sortedFiles = this.rankFiles(files, query!);
+        }
+
+        // Append Documentation Context (Cloud + Local)
         if (docContext) {
           context += `[Cloud Knowledge Memory (Pinecone)]\n${docContext}\n\n`;
         }
 
-        const localContext = await this.queryLocalMemory(query);
+        const localContext = await this.queryLocalMemory(query!);
         if (localContext) {
           context += `[Local Neural Memory (NeuroCore)]\n${localContext}\n\n`;
         }
@@ -400,6 +416,26 @@ export class RagService {
       }
     }
     return result;
+  }
+
+  /**
+   * [GOD MODE] Invokes the Rust RagCore binary for extreme performance.
+   */
+  private async queryRustCore(query: string): Promise<FileContext[]> {
+    const binPath = path.resolve(__dirname, '../../rag-core/target/release/rag-core.exe');
+    const rootPath = this.rootDir;
+
+    // Command: rag-core --root <path> --query <query> --limit 20
+    const cmd = `"${binPath}" --root "${rootPath}" --query "${query}" --limit 25`;
+
+    const { stdout } = await execAsync(cmd, { maxBuffer: 10 * 1024 * 1024 });
+    const results = JSON.parse(stdout);
+
+    return results.map((res: any) => ({
+      path: res.path,
+      content: res.content,
+      size: res.content.length
+    }));
   }
 }
 

@@ -1,6 +1,6 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 
-import { buildResponse, buildError } from '../common/response-builder';
+import { buildError, buildResponse } from '../common/response-builder';
 // import { buildError, buildResponse, requestIdMiddleware } from '../common/response-builder';
 
 // import { getEmailTracking } from '../controllers/email-tracking.controller';
@@ -18,33 +18,34 @@ import ragRoutes from './rag.routes';
 // import jwt from 'jsonwebtoken';
 // import { env } from '../config/env.schema';
 // import { dashboardAuth } from '../middleware/dashboardAuth';
-import stripeRouter from './stripe.routes';
-import usersRouter from './users.routes';
-import youtubeRouter from './youtube.routes';
-import authRouter from './auth.routes';
-import dockerRouter from './docker.routes';
-import personaRouter from './persona.routes';
-import swarmRouter from './swarm.routes';
 import { getBillingSnapshot } from '../controllers/billing.controller';
 import { getCurrentUsage } from '../controllers/usage.controller';
-import analyticsRouter from './analytics.routes';
 import { requireAuth } from '../middleware/auth.middleware';
+import analyticsRouter from './analytics.routes';
+import authRouter from './auth.routes';
+import dockerRouter from './docker.routes';
 import enhancedVoiceRouter from './enhanced-voice.routes';
+import personaRouter from './persona.routes';
+import stripeRouter from './stripe.routes';
+import swarmRouter from './swarm.routes';
+import usersRouter from './users.routes';
+import youtubeRouter from './youtube.routes';
 
 // ... (existing imports)
 
 import { idempotencyMiddleware } from '../middleware/idempotency.middleware';
 import { dynamicRateLimiter } from '../middleware/rate-limit.middleware';
-import systemRouter from './system.routes';
-import socialRouter from './social.routes';
+import { redisCache } from '../middleware/redis-cache.middleware';
+import devicePostureRouter from './device-posture.routes';
 import logsRouter from './logs.routes';
-import securityDashboardRouter from './security-dashboard.routes';
-import wafRouter from './waf.routes';
 import malwareScannerRouter from './malware-scanner.routes';
+import nexusRouter from './nexus.routes';
+import securityDashboardRouter from './security-dashboard.routes';
+import socialRouter from './social.routes';
+import systemRouter from './system.routes';
 import threatIntelRouter from './threat-intelligence.routes';
 import behaviorRouter from './user-behavior.routes';
-import devicePostureRouter from './device-posture.routes';
-import nexusRouter from './nexus.routes';
+import wafRouter from './waf.routes';
 
 /**
  * API v1 Router
@@ -172,9 +173,9 @@ apiV1Router.use('/youtube', youtubeRouter);
 // Nueva ruta para el tracking de emails
 // apiV1Router.get('/email/tracking', getEmailTracking);
 
-apiV1Router.get('/usage/current', getCurrentUsage);
-apiV1Router.get('/billing/snapshot', requireAuth, getBillingSnapshot);
-apiV1Router.use('/analytics', analyticsRouter);
+apiV1Router.get('/usage/current', redisCache(60), getCurrentUsage);
+apiV1Router.get('/billing/snapshot', requireAuth, redisCache(300), getBillingSnapshot);
+apiV1Router.use('/analytics', redisCache(30), analyticsRouter);
 
 // Enhanced Voice Service (Daniela)
 /**
