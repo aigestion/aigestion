@@ -74,18 +74,18 @@ jobs:
       security-status: ${{ steps.security.outcome }}
     steps:
       - name: 🚚 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: 🔄 Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -108,7 +108,7 @@ jobs:
         run: pnpm test --coverage --watchAll=false
 
       - name: 📊 Coverage Report
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           file: ./frontend/apps/website-epic/coverage/lcov.info
           flags: frontend
@@ -158,16 +158,16 @@ jobs:
       deploy-url: ${{ matrix.environment == 'production' && 'https://aigestion.net' || 'https://aigestion.github.io/aigestion-staging/' }}
     steps:
       - name: 🚚 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
       - name: 🔄 Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
@@ -192,7 +192,7 @@ jobs:
           echo "Environment: ${{ matrix.environment }}" >> build-info.txt
 
       - name: 📦 Upload Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.build.outputs.artifact-name }}
           path: |
@@ -228,7 +228,7 @@ jobs:
       url: ${{ needs.build-matrix.outputs.deploy-url }}
     steps:
       - name: 📥 Download Build Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: website-epic-${{ matrix.environment }}-${{ github.sha }}
           path: ./dist
@@ -241,7 +241,7 @@ jobs:
 
       - name: 🚀 Deploy to Staging
         if: matrix.environment == 'staging'
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
@@ -249,7 +249,7 @@ jobs:
 
       - name: 📊 Performance Audit
         if: matrix.environment == 'production'
-        uses: treosh/lighthouse-ci-action@v10
+        uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             https://aigestion.net
@@ -276,7 +276,7 @@ jobs:
 
       - name: 📧 Email Notification
         if: failure()
-        uses: dawidd6/action-send-mail@v3
+        uses: dawidd6/action-send-mail@v7
         with:
           server_address: smtp.gmail.com
           server_port: 587
@@ -302,7 +302,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🗑️ Clean Old Artifacts
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           script: |
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
