@@ -1,54 +1,19 @@
-import type { Session } from '@supabase/supabase-js';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { ViewTransitions } from './components/ViewTransitions';
+import { AnimatedMeshGradient } from './components/AnimatedMeshGradient';
 import { CommandTerminal } from './components/CommandTerminal';
+import { CyberpunkGrid } from './components/CyberpunkGrid';
+import { Navigation } from './components/Navigation';
+import { NeuralParticles } from './components/NeuralParticles';
+import { NexusCursor } from './components/NexusCursor';
 import { ScrollProgress } from './components/ScrollProgress';
 import { VitureXRExperience } from './components/VitureXRExperience';
 import { WorkbenchLayout } from './components/workbench/WorkbenchLayout';
 import { useNotification } from './contexts/NotificationContext';
 import { Login } from './pages/Login';
-import WeaponDashboard from './pages/WeaponDashboard';
-
-// God Mode Components - Lazy Loaded
-import { AnimatedMeshGradient } from './components/AnimatedMeshGradient';
-import { CyberpunkGrid } from './components/CyberpunkGrid';
-import { Navigation } from './components/Navigation';
-import { NeuralParticles } from './components/NeuralParticles';
-import { NexusCursor } from './components/NexusCursor';
 import VirtualOfficePreview from './pages/VirtualOfficePreview';
-
-const CinematicPresentation = lazy(() =>
-  import('./components/CinematicPresentation').then((m) => ({ default: m.CinematicPresentation })),
-);
-const ClientShowcase = lazy(() =>
-  import('./components/ClientShowcase').then((m) => ({ default: m.ClientShowcase })),
-);
-const CommandPalette = lazy(() =>
-  import('./components/CommandPalette').then((m) => ({ default: m.CommandPalette })),
-);
-const ContactSection = lazy(() =>
-  import('./components/ContactSection').then((m) => ({ default: m.ContactSection })),
-);
-const DanielaOmniWidget = lazy(() =>
-  import('./components/DanielaOmniWidget').then((m) => ({ default: m.DanielaOmniWidget })),
-);
-const DanielaShowcase = lazy(() =>
-  import('./components/DanielaShowcase').then((m) => ({ default: m.DanielaShowcase })),
-);
-const DecentralandOffice = lazy(() =>
-  import('./components/DecentralandOffice').then((m) => ({ default: m.DecentralandOffice })),
-);
-const EnhancedROI = lazy(() =>
-  import('./components/EnhancedROI').then((m) => ({ default: m.EnhancedROI })),
-);
-const NexusAndroid = lazy(() =>
-  import('./components/NexusAndroid').then((m) => ({ default: m.NexusAndroid })),
-);
-const DanielaDemo = lazy(() =>
-  import('./pages/DanielaDemo').then((m) => ({ default: m.DanielaDemo })),
-);
+import WeaponDashboard from './pages/WeaponDashboard';
 
 // Loading fallback component
 export const LoadingFallback = () => (
