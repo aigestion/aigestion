@@ -28,16 +28,16 @@ jobs:
       coverage-badge: ${{ steps.coverage.outputs.badge }}
     steps:
       - name: 🚚 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: 🔄 Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: '8'
 
@@ -58,14 +58,14 @@ jobs:
           echo "badge=${COVERAGE}" >> $GITHUB_OUTPUT
 
       - name: 📊 Upload Coverage to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           file: ./frontend/apps/website-epic/coverage/lcov.info
           flags: frontend
           name: frontend-coverage
 
       - name: 📊 Coverage Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         if: github.event_name == 'pull_request'
         with:
           script: |
@@ -93,16 +93,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: 🔄 Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: '8'
 
@@ -132,7 +132,7 @@ jobs:
           npx puppeteer screenshot --url=http://localhost:4173/about --path=./screenshots/about.png
 
       - name: 📤 Upload Screenshots
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: component-screenshots-${{ github.run_number }}
           path: ./frontend/apps/website-epic/screenshots/
@@ -143,16 +143,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: 🔄 Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: '8'
 
@@ -180,7 +180,7 @@ jobs:
           npx playwright test || true
 
       - name: 📊 E2E Test Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: e2e-report-${{ github.run_number }}
@@ -194,18 +194,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: 🔄 Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: '8'
 
@@ -282,7 +282,7 @@ jobs:
           npx backstop test || true
 
       - name: 📤 Upload Visual Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: visual-regression-${{ github.run_number }}
@@ -305,16 +305,16 @@ jobs:
           --health-retries 5
     steps:
       - name: 🚚 Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: 🔄 Setup pnpm
-        uses: pnpm/action-setup@v3
+        uses: pnpm/action-setup@v4
         with:
           version: '8'
 
@@ -373,13 +373,13 @@ jobs:
           EOF
 
       - name: 📤 Upload Summary
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: test-summary-${{ github.run_number }}
           path: test-summary.md
 
       - name: 📧 Summary Comment
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         if: github.event_name == 'pull_request'
         with:
           script: |
