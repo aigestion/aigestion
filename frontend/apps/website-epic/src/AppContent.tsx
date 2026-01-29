@@ -14,7 +14,6 @@ import { CursorGlow } from './components/CursorGlow';
 import { MeshGradientBG } from './components/MeshGradientBG';
 import { useNotification } from './contexts/NotificationContext';
 import { Login } from './pages/Login';
-import { FloatingShapes, Logo, Card, HeroSection } from '@aigestion/ui';
 import VirtualOfficePreview from './pages/VirtualOfficePreview';
 import WeaponDashboard from './pages/WeaponDashboard';
 
