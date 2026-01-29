@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: '20'
 
-      # --- 1. Website Epic (Root) ---
+      # --- 1. Website Epic (Landing) ---
       - name: Install Website Dependencies
         working-directory: frontend/apps/website-epic
         run: npm install
@@ -66,14 +66,29 @@ jobs:
       - name: Assemble Deployment Artifact
         run: |
           mkdir -p deploy_dist
+
+          # Copy Main Website
           cp -r frontend/apps/website-epic/dist/* deploy_dist/
+
+          # Add SPA support for Main Website
+          cp deploy_dist/index.html deploy_dist/404.html
+
+          # Create and copy Dashboard subdirectories
           mkdir -p deploy_dist/admin
           mkdir -p deploy_dist/client
           mkdir -p deploy_dist/demo
+
           cp -r frontend/apps/admindashboard/dist/* deploy_dist/admin/
           cp -r frontend/apps/clientdashboard/dist/* deploy_dist/client/
           cp -r frontend/apps/demodashboard/dist/* deploy_dist/demo/
-          echo "www.aigestion.net" > deploy_dist/CNAME
+
+          # Ensure sub-dashboards also have 404 fallbacks for their own internal routing
+          cp deploy_dist/admin/index.html deploy_dist/admin/404.html
+          cp deploy_dist/client/index.html deploy_dist/client/404.html
+          cp deploy_dist/demo/index.html deploy_dist/demo/404.html
+
+          # CNAME for Custom Domain
+          echo "aigestion.net" > deploy_dist/CNAME
 
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
