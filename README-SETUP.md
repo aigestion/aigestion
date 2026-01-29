@@ -3,19 +3,22 @@
 ## Quick Start
 
 1. **Open VSCode Workspace**
-   ```bash
-   code aigestion-net.code-workspace
-   ```
+
+```bash
+code aigestion-net.code-workspace
+```
 
 2. **Install Dependencies**
-   ```bash
-   npm run setup
-   ```
+
+```bash
+npm run setup
+```
 
 3. **Start Development**
-   ```bash
-   npm run dev
-   ```
+
+```bash
+npm run dev
+```
 
 ## Project URLs
 
@@ -30,6 +33,7 @@
 ## IDE Configuration
 
 ### VSCode Extensions (Auto-installed)
+
 - TypeScript & React Support
 - Tailwind CSS
 - ESLint & Prettier
@@ -39,6 +43,7 @@
 - Git Graph
 
 ### Windsurf Configuration
+
 - Project configured for AIGestion.net
 - All services mapped correctly
 - Git integration ready
@@ -47,23 +52,25 @@
 ## Git Configuration
 
 ```bash
-git remote set-url origin https://github.com/aigestion/aigestion-net.git
+git remote set-url origin https://github.com/aigestion/aigestion.git
 git branch -M main
+
+# The repository uses GitHub Actions for all deployment and CI/CD operations
+# Pushes to main trigger automated workflows
 ```
 
 ## Cloud Services
 
-### Google Cloud
-- Project: `aigestion-net`
-- Region: `us-central1`
-- Run: `gcloud app deploy`
+### GitHub Pages & Actions
 
-### Supabase
-- URL: `https://jhvtjyfmgncrrbzqpbkt.supabase.co`
-- Auto-configured in all dashboards
+- **Deployment**: GitHub Actions CI/CD pipeline
+- **Hosting**: GitHub Pages for static sites  
+- **CI/CD**: Automated testing, building, and deployment on push to main branch
 
 ## Audio Effects
+
 All dashboards include wuaw audio effects:
+
 - Hover sounds
 - Click sounds
 - Special wuaw effects
@@ -96,7 +103,7 @@ npm run clean
 
 ## File Structure
 
-```
+```ini
 AIGestion.net/
 ├── frontend/
 │   ├── apps/
@@ -114,6 +121,7 @@ AIGestion.net/
 ## Environment Variables
 
 All services are pre-configured with:
+
 - Supabase credentials
 - Google Cloud project settings
 - Development URLs

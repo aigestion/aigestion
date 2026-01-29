@@ -8,11 +8,11 @@
     "apps/*"
   ],
   "scripts": {
-    "dev:all": "pnpm -r dev",
-    "build:all": "pnpm -r build",
-    "build": "pnpm run build:ui",
-    "lint:all": "pnpm -r lint",
-    "test:all": "pnpm -r test",
+    "dev:all": "npm run dev --workspaces",
+    "build:all": "npm run build --workspaces",
+    "build": "npm run build:ui",
+    "lint:all": "npm run lint --workspaces",
+    "test:all": "npm run test --workspaces",
     "lint": "eslint . --fix",
     "format": "prettier --write .",
     "test": "vitest run --config vitest.config.ts",
@@ -21,8 +21,8 @@
     "css:watch": "postcss src/**/*.css -o dist/styles.css --watch",
     "storybook": "storybook dev -p 6006 --config-dir ./frontend/.storybook",
     "build-storybook": "storybook build --config-dir ./frontend/.storybook",
-    "dev:ui": "pnpm --filter website-epic dev",
-    "build:ui": "pnpm --filter website-epic build",
+    "dev:ui": "npm run dev --workspace=website-epic",
+    "build:ui": "npm run build --workspace=website-epic",
     "lint:ui": "eslint src",
     "format:ui": "prettier --write src"
   },

@@ -13,10 +13,10 @@ const EUR_USD_RATE = 1.09; // Fixed rate for calculation
 async function aggregateCosts() {
   console.log('🚀 Iniciando agregación mensual de costos (God-Mode)...');
 
-  // Simulated data from Vercel (Pro Plan + Usage)
-  const vercelBase = 20.00; // $20 Pro plan
-  const vercelUsage = 15.50; // Addons / Bandwidth
-  const vercelSubtotalUSD = vercelBase + vercelUsage;
+  // Simulated data from GitHub (Actions + Codespaces)
+  const githubActionsBase = 0.00; // Free tier included in org plan
+  const githubActionsUsage = 8.75; // Excess minutes & storage
+  const githubActionsSubtotalUSD = githubActionsBase + githubActionsUsage;
 
   // Simulated data from Google Cloud (Vertex AI + storage)
   const gcpVertexAI = 45.30;
@@ -25,7 +25,7 @@ async function aggregateCosts() {
 
   const othersUSD = 12.00; // Domain, etc.
 
-  const subtotalUSD = vercelSubtotalUSD + gcpSubtotalUSD + othersUSD;
+  const subtotalUSD = githubActionsSubtotalUSD + gcpSubtotalUSD + othersUSD;
 
   // Calculate IVA (Applied to the final base in Spain if billing address is ES)
   // Assuming these services bill in USD and we pay in EUR or converted USD
@@ -36,11 +36,11 @@ async function aggregateCosts() {
     currency: 'EUR',
     exchangeRate: EUR_USD_RATE,
     providers: {
-      vercel: {
-        base: vercelBase,
-        usage: vercelUsage,
-        totalUSD: vercelSubtotalUSD,
-        totalEUR: vercelSubtotalUSD / EUR_USD_RATE
+      github: {
+        base: githubActionsBase,
+        usage: githubActionsUsage,
+        totalUSD: githubActionsSubtotalUSD,
+        totalEUR: githubActionsSubtotalUSD / EUR_USD_RATE
       },
       googleCloud: {
         vertexAI: gcpVertexAI,

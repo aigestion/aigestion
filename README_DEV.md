@@ -10,9 +10,11 @@
 ![NEXUS DASHBOARD](https://raw.githubusercontent.com/your-org/AIGestion/main/assets/banner.png)
 
 ## 🎯 Active Mission
+
 Transforming business management through **Hyper-Automated AI Orchestration** with revolutionary **Daniela AI** - the future of human-AI interaction.
 
 ### 🌟 Daniela AI - Revolutionary Features
+
 - 🧠 **Emotional Intelligence**: Real-time sentiment analysis and adaptive responses
 - 🗣️ **Natural Conversation**: Voice-to-voice interaction with contextual memory
 - 🎨 **Futuristic Interface**: Holographic design with predictive interactions
@@ -20,6 +22,7 @@ Transforming business management through **Hyper-Automated AI Orchestration** wi
 - 📊 **Advanced Analytics**: Emotional trends and conversation insights
 
 ### 📊 Project Metrics
+
 ![Build Status](https://img.shields.io/github/actions/workflow/status/your-org/AIGestion/ci.yml?branch=main&style=for-the-badge)
 ![Coverage](https://img.shields.io/badge/Coverage-85%25-green?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
@@ -46,18 +49,21 @@ NEXUS V1 is a multi-scale monorepo designed for high availability and hyper-scal
 ## 🚀 Quick Launch Control
 
 ### 🛠️ One-Click Setup
+
 ```powershell
 # Auto-provision the entire ecosystem
 pnpm setup:godmode
 ```
 
 ### 🐳 Docker Deployment (Recommended)
+
 ```bash
 # Production mode with all auxiliary tools
 docker-compose up -d --build
 ```
 
 ### ⚡ Local Development
+
 - **Backend API**: `cd backend && pnpm dev` (Port 3000)
 - **Frontend App**: `cd frontend && pnpm dev` (Port 5173)
 - **ML Service**: `cd ml-service && pnpm dev` (Port 5000)
@@ -69,12 +75,14 @@ docker-compose up -d --build
 Detailed documentation for every component:
 
 ### 🌟 Daniela AI Documentation
+
 - [🎭 Daniela Futurista Experience](docs/DANIELA_FUTURISTIC_EXPERIENCE.md) - Complete feature overview
 - [🔧 Environment Setup](docs/ENVIRONMENT_SETUP.md) - Configuration guide
 - [📡 API Reference](docs/API_REFERENCE.md) - Complete API documentation
-- [🚀 Vercel Deployment Guide](docs/VERCEL_DEPLOYMENT_GUIDE.md) - Production deployment
+- [🚀 GitHub Deployment Guide](docs/GITHUB_DEPLOYMENT_GUIDE.md) - Production deployment via GitHub Actions
 
 ### 🏗️ Core Architecture
+
 - [📘 Full Development Tutorial](TUTORIAL_FULL.md)
 - [🌌 DOCUMENTACIÓN SUPREMA (The Zenith)](DOCS_NEXUS_SUPREME.md)
 - [📋 Technical Documentation](docs/TECHNICAL_DOCUMENTATION.md) - Complete technical reference
@@ -99,6 +107,7 @@ Experience Daniela AI in action:
 ## 🚀 Quick Start with Daniela
 
 ### 1. Experience Daniela AI
+
 ```bash
 # Visit the live demo
 open https://aigestion.net/daniela
@@ -110,6 +119,7 @@ pnpm dev
 ```
 
 ### 2. Backend Setup
+
 ```bash
 # Configure environment variables
 cp docs/ENVIRONMENT_SETUP.md .env.example
@@ -123,19 +133,23 @@ pnpm dev
 ```
 
 ### 3. Frontend Deployment
-```bash
-# Deploy to Vercel
-cd frontend/apps/website-epic
-vercel --prod
 
-# All apps configured for production deployment
-pnpm run deploy:all
+```bash
+# Deployment is handled automatically by GitHub Actions
+# Push to main branch triggers automated CI/CD pipeline
+git add .
+git commit -m "feat: update feature"
+git push origin main
+
+# View deployment status in GitHub Actions
+# https://github.com/aigestion/aigestion/actions
 ```
 
 ---
 
 ## 🛡️ Security & Compliance
-- **Audit**: Weekly security audits via `/security_audit`.
+
+- __Audit__: Weekly security audits via `/security_audit`.
 - **Encryption**: AES-256 for sensitive config.
 - **Privacy**: GDPR/DSGVO compliant headers & data handling.
 - **AI Ethics**: Responsible AI implementation with bias detection.
@@ -145,6 +159,7 @@ pnpm run deploy:all
 ## 💡 Innovation Highlights
 
 ### 🎯 Daniela AI Breakthrough
+
 - **First AI with Emotional Intelligence**: Real-time sentiment analysis
 - **Multi-modal Interaction**: Voice, text, and visual interfaces
 - **Contextual Memory**: Remembers preferences and conversation history
@@ -152,6 +167,7 @@ pnpm run deploy:all
 - **Futuristic Design**: Holographic UI with particle effects
 
 ### 🏆 Technical Achievements
+
 - **99.7% Uptime**: Enterprise-grade reliability
 - **<200ms Response Time**: Real-time conversation
 - **Multi-provider AI**: OpenAI, Anthropic, Google Gemini

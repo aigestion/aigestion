@@ -5,7 +5,7 @@
   "private": true,
   "version": "2.0.0",
   "homepage": "https://aigestion.net",
-  "packageManager": "pnpm@8.15.0",
+  "packageManager": "npm@10.9.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/aigestion/aigestion-net.git"
@@ -17,17 +17,17 @@
   "scripts": {
     "parse": "ts-node tests/parse/index.ts",
     "test": "jest --config jest.config.cjs",
-    "build": "pnpm -r run build",
+    "build": "npm run build --workspaces",
     "trunk": "trunk",
     "lint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky",
     "push:hourly": "ts-node ./scripts/push_repo.ts --hourly",
-    "dev:backend": "cd backend && pnpm install && pnpm dev",
-    "dev:frontend": "cd frontend && pnpm install && pnpm dev:all",
+    "dev:backend": "cd backend && npm install && npm run dev",
+    "dev:frontend": "cd frontend && npm install && npm run dev:all",
     "dev:docker": "docker-compose up -d --build",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "test:full": "pnpm -r test && pnpm -C backend test && pnpm -C frontend test",
+    "test:full": "npm run test --workspaces && npm run test --prefix backend && npm run test --prefix frontend",
     "test:coverage": "turbo run test:coverage",
     "test:complete": "bash scripts/test-complete.sh",
     "test:unit": "bash scripts/test-complete.sh unit",
@@ -37,9 +37,8 @@
     "test:security": "bash scripts/test-complete.sh security",
     "test:ai": "bash scripts/test-complete.sh ai",
     "sonar": "sonar-scanner",
-    "deploy": "npm run build && npm run deploy:cloud",
-    "deploy:cloud": "gcloud app deploy",
-    "deploy:vercel": "cd frontend && vercel --prod",
+    "deploy": "echo 'Deployment handled by GitHub Actions CI/CD pipeline'",
+    "deploy:github-pages": "echo 'GitHub Pages deployment triggered via GitHub Actions'",
     "setup": "npm install && cd frontend && npm install && cd ../backend && npm install",
     "setup:complete": "bash scripts/setup-complete.sh",
     "setup:check": "bash scripts/setup-complete.sh health",
@@ -47,7 +46,7 @@
     "monitoring:status": "bash scripts/monitoring-status.sh",
     "monitoring:cleanup": "bash scripts/monitoring-cleanup.sh",
     "monitoring:restart": "docker-compose -f docker-compose.monitoring.yml restart",
-    "deploy:multi-region": "bash scripts/deploy-multi-region.sh",
+    "deploy:multi-region": "echo 'Multi-region deployment handled by GitHub Actions'",
     "multi-region:status": "bash scripts/multi-region-status.sh",
     "multi-region:lag": "bash scripts/check-replication-lag.sh",
     "multi-region:dns": "bash scripts/deploy-multi-region.sh dns",
@@ -114,8 +113,6 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@vercel/analytics": "^1.6.1",
-    "@vercel/speed-insights": "^1.3.1",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"
   }
