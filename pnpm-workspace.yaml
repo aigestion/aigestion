@@ -3,4 +3,5 @@ packages:
   - 'frontend'
   - 'frontend/apps/*'
   - 'frontend/shared'
+  - 'frontend/libs/*'
   - 'packages/*'
