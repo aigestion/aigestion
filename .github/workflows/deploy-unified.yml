@@ -79,6 +79,17 @@ jobs:
 
           echo "aigestion.net" > deploy_dist/CNAME
 
+      - name: Debug Deployment Artifact
+        run: |
+          echo "📁 Deployment structure:"
+          ls -la deploy_dist/
+          echo ""
+          echo "📄 Root files:"
+          ls -la deploy_dist/*.html || echo "No HTML files found"
+          echo ""
+          echo "🗂️ Subdirectories:"
+          ls -la deploy_dist/*/ || echo "No subdirectories found"
+
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
@@ -94,3 +105,10 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify Deployment
+        run: |
+          echo "🌐 Deployment URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "⏰ Deployment completed at: $(date)"
+          echo "🔍 Checking deployment status..."
+          curl -I ${{ steps.deployment.outputs.page_url }} || echo "Failed to reach deployment"
