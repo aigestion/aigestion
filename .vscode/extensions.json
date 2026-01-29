@@ -14,6 +14,15 @@
     "wallabyjs.console-ninja",
     "aaron-bond.better-comments",
     "ms-python.python",
-    "ms-python.vscode-pylance"
+    "ms-python.vscode-pylance",
+    "ms-vscode.vscode-json",
+    "humao.rest-client",
+    "christian-kohler.path-intellisense"
+  ],
+  "unwantedRecommendations": [
+    "googlecloudtools.cloudcode",
+    "ms-vscode.vscode-node-azure-pack",
+    "google.cloudcode",
+    "google.gemini"
   ]
 }
