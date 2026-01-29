@@ -74,6 +74,11 @@ jobs:
 
       - name: Configure GitHub Pages & Fix Paths
         run: |
+          # Ensure CNAME is present for custom domain
+          if [ -f "CNAME" ]; then
+            cp CNAME dist/
+          fi
+
           # Add .nojekyll to bypass Jekyll
           touch dist/.nojekyll
 
