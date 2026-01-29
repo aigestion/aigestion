@@ -4,16 +4,51 @@ import App from './App.tsx'
 import { AppProvider } from './contexts/AppContext'
 import './index.css'
 
-// Main App Entry
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <AppProvider>
-      <App />
-    </AppProvider>
-  </React.StrictMode>
-)
+// Mobile detection and error handling
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-// Register Service Worker
+// Main App Entry with mobile error handling
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  console.error('Root element not found!');
+} else {
+  try {
+    ReactDOM.createRoot(rootElement).render(
+      <React.StrictMode>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </React.StrictMode>
+    );
+
+    // Mobile-specific logging
+    if (isMobile) {
+      console.log('📱 Mobile device detected - App loaded successfully');
+    }
+  } catch (error) {
+    console.error('❌ Failed to render React app:', error);
+
+    // Fallback for mobile if React fails
+    if (isMobile) {
+      rootElement.innerHTML = `
+        <div style="padding: 20px; text-align: center; color: white; font-family: system-ui;">
+          <h2>🌌 AIGestion / NEXUS V1</h2>
+          <p>Cargando aplicación optimizada para móvil...</p>
+          <button onclick="window.location.reload()" style="
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 10px;
+          ">Recargar</button>
+        </div>
+      `;
+    }
+  }
+}
+
+// Register Service Worker with mobile considerations
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
@@ -23,6 +58,10 @@ if ('serviceWorker' in navigator) {
       })
       .catch((registrationError) => {
         console.log('SW registration failed: ', registrationError);
+        // Don't fail the app if SW fails on mobile
+        if (isMobile) {
+          console.warn('Service Worker registration failed on mobile - continuing without SW');
+        }
       });
   });
 }
