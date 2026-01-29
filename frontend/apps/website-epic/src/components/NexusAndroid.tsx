@@ -22,7 +22,7 @@ export const NexusAndroid: React.FC = () => {
       description: 'Análisis predictivo profundo y optimización sistémica.',
       color: 'from-nexus-cyan to-blue-800',
       accent: 'text-nexus-cyan-glow',
-      image: '/images/nexus/nexus_strategist_godmode.png',
+      image: '/images/nexus/collaboration.png',
       abilities: ['Predicción Futura', 'Análisis de Datos', 'Optimización']
     },
     {
@@ -31,7 +31,7 @@ export const NexusAndroid: React.FC = () => {
       description: 'Generación de soluciones disruptivas y arquitectura digital.',
       color: 'from-green-400 to-emerald-800',
       accent: 'text-green-400-glow',
-      image: '/images/nexus/nexus_creator_godmode.png',
+      image: '/images/nexus/hero.png',
       abilities: ['Diseño Creativo', 'Innovación', 'Desarrollo']
     }
   ];
@@ -91,7 +91,7 @@ export const NexusAndroid: React.FC = () => {
                   animate={{ opacity: 1, scale: 1, rotateY: 0 }}
                   exit={{ opacity: 0, scale: 1.1, rotateY: -20 }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative w-full h-full rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] bg-black group"
+                  className="relative w-full h-full rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl bg-black group"
                 >
                   <img
                     src={currentMode.image}
@@ -109,7 +109,7 @@ export const NexusAndroid: React.FC = () => {
 
                     {/* Scanning Line */}
                     <motion.div
-                      className={`absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_rgba(255,255,255,0.5)] opacity-20`}
+                      className={`absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-lg opacity-20`}
                       animate={{ top: ['0%', '100%', '0%'] }}
                       transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
                     />
