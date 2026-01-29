@@ -218,7 +218,7 @@ export const AppContent = ({
                 </h1>
                 <p className="text-nexus-silver/60 mb-8">Panel de administración avanzada</p>
                 <a
-                  href="https://admin.aigestion.net"
+                  href="/admin"
                   className="btn-enterprise px-8 py-3 rounded-full"
                 >
                   Acceder al Admin Dashboard
@@ -238,7 +238,7 @@ export const AppContent = ({
                 </h1>
                 <p className="text-nexus-silver/60 mb-8">Portal exclusivo para clientes</p>
                 <a
-                  href="https://client.aigestion.net"
+                  href="/client"
                   className="btn-enterprise px-8 py-3 rounded-full"
                 >
                   Acceder al Client Dashboard
@@ -256,7 +256,7 @@ export const AppContent = ({
                 <h1 className="text-4xl font-orbitron text-nexus-gold mb-4">Demo Dashboard</h1>
                 <p className="text-nexus-silver/60 mb-8">Experiencia interactiva de demostración</p>
                 <a
-                  href="https://demo.aigestion.net"
+                  href="/demo"
                   className="btn-enterprise px-8 py-3 rounded-full"
                 >
                   Acceder al Demo Dashboard
