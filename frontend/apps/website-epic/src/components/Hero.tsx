@@ -1,20 +1,49 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { PlasmaButton } from './PlasmaButton';
+import { TextReveal } from './TextReveal';
 
 export const Hero: React.FC = () => {
     return (
         <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
-            {/* Video Background Placeholder */}
+            {/* Parallax Background Layers */}
             <div className="absolute inset-0 z-0 bg-black">
-                {/* In a real scenario, we would use <video src="/videos/hero.mp4" autoPlay muted loop /> */}
+                {/* Gradient layers for depth */}
                 <div className="absolute inset-0 bg-linear-to-b from-nexus-obsidian/40 via-transparent to-nexus-obsidian z-10" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--color-nexus-violet)_0%,transparent_70%)] opacity-20" />
 
-                {/* Animated Noise/Glow as fallback for video */}
+                {/* Animated noise layer */}
                 <motion.div
-                    animate={{ opacity: [0.1, 0.3, 0.1] }}
+                    animate={{ opacity: [0.05, 0.15, 0.05] }}
                     transition={{ duration: 5, repeat: Infinity }}
                     className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/asfalt-dark.png')] opacity-10"
+                />
+
+                {/* Animated blobs */}
+                <motion.div
+                    animate={{
+                        x: [0, 50, 0],
+                        y: [0, 30, 0],
+                    }}
+                    transition={{
+                        duration: 8,
+                        repeat: Infinity,
+                        repeatType: 'mirror',
+                    }}
+                    className="absolute top-20 -left-40 w-80 h-80 bg-gradient-to-r from-nexus-violet/20 to-transparent rounded-full blur-3xl"
+                />
+                <motion.div
+                    animate={{
+                        x: [0, -50, 0],
+                        y: [0, -30, 0],
+                    }}
+                    transition={{
+                        duration: 8,
+                        repeat: Infinity,
+                        repeatType: 'mirror',
+                        delay: 1,
+                    }}
+                    className="absolute bottom-20 -right-40 w-80 h-80 bg-gradient-to-l from-nexus-cyan/20 to-transparent rounded-full blur-3xl"
                 />
             </div>
 
@@ -25,25 +54,31 @@ export const Hero: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
-                    <h1 className="text-5xl md:text-8xl font-orbitron font-bold tracking-tighter mb-6">
-                        <span className="text-white">TRANSFORMACIÓN</span><br />
-                        <span className="text-nexus-cyan text-glow">NEURONAL</span>
-                    </h1>
-                    <p className="text-lg md:text-2xl text-nexus-silver/80 font-sans max-w-2xl mx-auto mb-10 leading-relaxed">
+                    <TextReveal
+                        text="TRANSFORMACIÓN NEURONAL"
+                        className="text-5xl md:text-8xl font-orbitron font-bold tracking-tighter mb-6"
+                        useWords={true}
+                    />
+
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3, duration: 0.8 }}
+                        className="text-lg md:text-2xl text-nexus-silver/80 font-sans max-w-2xl mx-auto mb-10 leading-relaxed"
+                    >
                         Soberanía digital escalable para empresas que lideran el futuro.
                         Arquitectura de IA integrada en el borde del metaverso.
-                    </p>
+                    </motion.p>
 
-                    <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                        <button className="group relative px-10 py-4 bg-nexus-violet text-white font-orbitron tracking-widest overflow-hidden transition-all hover:scale-105 active:scale-95">
-                            <span className="relative z-10 uppercase">Iniciar Expansión</span>
-                            <div className="absolute inset-0 bg-linear-to-r from-nexus-cyan to-nexus-violet opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
-
-                        <button className="px-10 py-4 border border-white/20 hover:border-nexus-cyan transition-colors font-orbitron tracking-widest uppercase hover:bg-white/5">
-                            Ver Ecosistema
-                        </button>
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.5, duration: 0.8 }}
+                        className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+                    >
+                        <PlasmaButton label="Iniciar Expansión" variant="primary" />
+                        <PlasmaButton label="Ver Ecosistema" variant="secondary" />
+                    </motion.div>
                 </motion.div>
             </div>
 
