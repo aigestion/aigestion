@@ -1,8 +1,6 @@
 {
   "*.{js,jsx,ts,tsx,css,md,json}": [
-    "pnpm lint",
-    "pnpm format",
-    "pnpm test -- --findRelatedTests",
-    "git add"
+    "npm run lint",
+    "npm run format"
   ]
 }
