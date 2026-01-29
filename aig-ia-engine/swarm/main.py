@@ -5,6 +5,7 @@ from agents.detective import Detective
 from agents.mechanic import Mechanic
 from agents.overlord import Overlord
 from core import SwarmOrchestrator
+
 from utils import configure_swarm_logging
 
 
@@ -31,6 +32,12 @@ def main():
     orchestrator.register_agent(critic)
     orchestrator.register_agent(mechanic)
 
+    # Initialize Navigator
+    from agents.navigator import Navigator
+
+    navigator = Navigator(orchestrator)
+    orchestrator.register_agent(navigator)
+
     print("Swarm assembled. Handing control to Overlord...")
 
     # Start the loop
@@ -40,4 +47,5 @@ def main():
 
 
 if __name__ == "__main__":
+    main()
     main()

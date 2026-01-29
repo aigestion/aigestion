@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { container, TYPES } from '../config/inversify.config';
-import { buildResponse, buildError } from '../common/response-builder';
-import { DocumentProcessorService } from '../services/google/document-processor.service';
-import { PineconeService } from '../services/pinecone.service';
-import { malwareScanner } from '../middleware/malware-scanner.middleware';
 import fs from 'fs/promises';
+import { buildError, buildResponse } from '../common/response-builder';
+import { container, TYPES } from '../config/inversify.config';
 import { JobQueue } from '../infrastructure/jobs/JobQueue';
 import { JobName } from '../infrastructure/jobs/job-definitions';
+import { malwareScanner } from '../middleware/malware-scanner.middleware';
+import { DocumentProcessorService } from '../services/google/document-processor.service';
+import { PineconeService } from '../services/pinecone.service';
 
 const documentRouter = Router();
 // Removed raw multer: const upload = multer();
@@ -119,7 +119,7 @@ documentRouter.post('/process', malwareScanner.uploadSingle('file'), async (req:
  */
 documentRouter.post('/process-bulk', malwareScanner.uploadMultiple('files', 10), async (req: any, res: any) => {
   const requestId = req.requestId;
-  const files = req.files as Express.Multer.File[];
+  const files = req.files as any[]; // Type workaround for Multer files
 
   if (!files || files.length === 0) {
     return res.status(400).json(buildError('No files provided', 'INVALID_REQUEST', 400, requestId as string));

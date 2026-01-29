@@ -14,7 +14,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY backend/app ./app
-COPY .env .
+COPY backend/app/main_simple.py ./app/main.py
+COPY backend/app/api/routes_simple.py ./app/api/routes.py
+COPY backend/app/services/agent_service_simple.py ./app/services/agent_service.py
+COPY backend/app/services/daniela_clowd_safe.py ./app/services/
+COPY backend/app/api/daniela_routes.py ./app/api/
+
 
 # Create data and logs directories
 RUN mkdir -p data logs

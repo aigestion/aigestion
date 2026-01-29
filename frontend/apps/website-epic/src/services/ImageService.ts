@@ -1,4 +1,5 @@
 import { CORSImageService } from './CORSImageService';
+import { LocalImageService } from './LocalImageService';
 import { supabase } from './supabase';
 
 export type FluxModel = 'flux-schnell' | 'flux-pro';
@@ -16,7 +17,7 @@ export class ImageService {
 
     /**
      * 🌌 GOD MODE: Generates an image using Flux AI with maximum optimization
-     * Now with CORS fallback strategies
+     * Now with local-first strategy to avoid CORS issues completely
      */
     static async generateImage(prompt: string, options: GenerationOptions = {}): Promise<string> {
         const model = options.model || 'flux-schnell';
@@ -29,11 +30,26 @@ export class ImageService {
         try {
             // 0. Safety check for Supabase
             if (!supabase) {
-                // Use CORS-aware service when Supabase is not configured
-                return CORSImageService.generateImage(prompt, options);
+                // Use local-first strategy when Supabase is not configured
+                return this.useLocalFirstStrategy(prompt, options);
             }
 
-            // 1. Try CORS-aware service first (handles all CORS issues)
+            // 1. Try LocalImageService first (no CORS issues)
+            try {
+                const localImage = await LocalImageService.generateImage(prompt, options);
+                console.log(`[ImageService] 🎯 Local image success: ${prompt.substring(0, 50)}...`);
+
+                // Try to upload to storage if local image succeeded
+                if (localImage && !localImage.includes('picsum.photos')) {
+                    const storagePath = await this.uploadToStorage(localImage, prompt, model);
+                    return this.getPublicUrl(storagePath);
+                }
+                return localImage;
+            } catch (localError) {
+                console.warn(`[ImageService] ⚠️ Local service failed, trying CORS service:`, localError);
+            }
+
+            // 2. Try CORS-aware service as fallback
             try {
                 const corsImageUrl = await CORSImageService.generateImage(prompt, options);
                 console.log(`[ImageService] 🎯 CORS Service success: ${prompt.substring(0, 50)}...`);
@@ -43,22 +59,32 @@ export class ImageService {
                     const storagePath = await this.uploadToStorage(corsImageUrl, prompt, model);
                     return this.getPublicUrl(storagePath);
                 }
+                return corsImageUrl;
             } catch (corsError) {
                 console.warn(`[ImageService] ⚠️ CORS Service failed, trying direct method:`, corsError);
             }
 
-            // 2. Fallback to direct method (original implementation)
+            // 3. Fallback to direct method (original implementation)
             console.log(`[ImageService] 🚀 Generating new image (${model}):`, prompt);
             const imageUrl = this.constructPollinationsUrl(prompt, model, settings);
 
-            // 3. Persist to Storage with retry logic
+            // 4. Persist to Storage with retry logic
             const storagePath = await this.uploadToStorage(imageUrl, prompt, model);
 
             return this.getPublicUrl(storagePath);
         } catch (error) {
-            // Final fallback to CORS service
-            console.warn(`[ImageService] 🆘 All methods failed, using CORS fallback:`, error);
-            return CORSImageService.generateImage(prompt, options);
+            // Final fallback to local-first strategy
+            console.warn(`[ImageService] 🆘 All methods failed, using local fallback:`, error);
+            return this.useLocalFirstStrategy(prompt, options);
+        }
+    }
+
+    private static async useLocalFirstStrategy(prompt: string, options: GenerationOptions): Promise<string> {
+        try {
+            return await LocalImageService.generateImage(prompt, options);
+        } catch (error) {
+            console.warn('[ImageService] Local fallback failed, using placeholder:', error);
+            return this.getPlaceholderImage(prompt, options.model || 'flux-schnell');
         }
     }
 
