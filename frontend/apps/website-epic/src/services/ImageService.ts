@@ -1,3 +1,4 @@
+import { CORSImageService } from './CORSImageService';
 import { supabase } from './supabase';
 
 export type FluxModel = 'flux-schnell' | 'flux-pro';
@@ -15,6 +16,7 @@ export class ImageService {
 
     /**
      * 🌌 GOD MODE: Generates an image using Flux AI with maximum optimization
+     * Now with CORS fallback strategies
      */
     static async generateImage(prompt: string, options: GenerationOptions = {}): Promise<string> {
         const model = options.model || 'flux-schnell';
@@ -27,41 +29,36 @@ export class ImageService {
         try {
             // 0. Safety check for Supabase
             if (!supabase) {
-                // Silently use fallback when Supabase is not configured
-                return this.getPlaceholderImage(prompt, model);
+                // Use CORS-aware service when Supabase is not configured
+                return CORSImageService.generateImage(prompt, options);
             }
 
-            // 1. Check Cache using God Service (optimized) - TEMPORARILY DISABLED
-            // const cached = await SupabaseGodService.getCachedImage(prompt, model);
-            // if (cached) {
-            //   console.log(`[ImageService] 🎯 Cache hit: ${prompt.substring(0, 50)}...`);
-            //   return this.getPublicUrl(cached.image_url);
-            // }
+            // 1. Try CORS-aware service first (handles all CORS issues)
+            try {
+                const corsImageUrl = await CORSImageService.generateImage(prompt, options);
+                console.log(`[ImageService] 🎯 CORS Service success: ${prompt.substring(0, 50)}...`);
 
-            // 2. Generate new image (Construct URL)
+                // Try to upload to storage if CORS service succeeded
+                if (corsImageUrl && !corsImageUrl.includes('picsum.photos')) {
+                    const storagePath = await this.uploadToStorage(corsImageUrl, prompt, model);
+                    return this.getPublicUrl(storagePath);
+                }
+            } catch (corsError) {
+                console.warn(`[ImageService] ⚠️ CORS Service failed, trying direct method:`, corsError);
+            }
+
+            // 2. Fallback to direct method (original implementation)
             console.log(`[ImageService] 🚀 Generating new image (${model}):`, prompt);
             const imageUrl = this.constructPollinationsUrl(prompt, model, settings);
 
             // 3. Persist to Storage with retry logic
             const storagePath = await this.uploadToStorage(imageUrl, prompt, model);
 
-            // 4. Cache using God Service (optimized) - TEMPORARILY DISABLED
-            // await SupabaseGodService.cacheImage(prompt, model, storagePath, settings);
-
-            // 5. Track usage for analytics - TEMPORARILY DISABLED
-            // const { data: { user } } = await supabase.auth.getUser();
-            // if (user) {
-            //   await SupabaseGodService.trackUsage(user.id, 'image_generation', 1, {
-            //     model,
-            //     prompt: prompt.substring(0, 100),
-            //     settings
-            //   });
-            // }
-
             return this.getPublicUrl(storagePath);
         } catch (error) {
-            // Silent error handling - don't log to console in production
-            return this.getPlaceholderImage(prompt, model);
+            // Final fallback to CORS service
+            console.warn(`[ImageService] 🆘 All methods failed, using CORS fallback:`, error);
+            return CORSImageService.generateImage(prompt, options);
         }
     }
 
@@ -82,14 +79,26 @@ export class ImageService {
         return url.toString();
     }
 
-    private static async uploadToStorage(url: string, prompt: string, model: string): Promise<string> {
+    private static async uploadToStorage(urlOrBlob: string, prompt: string, model: string): Promise<string> {
         try {
-            // Fetching the URL triggers the generation on Pollinations side
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Pollinations API Error: ${response.statusText}`);
+            let blob: Blob;
+
+            // Handle both URLs and blob URLs
+            if (urlOrBlob.startsWith('blob:')) {
+                // It's already a blob URL, fetch it
+                const response = await fetch(urlOrBlob);
+                if (!response.ok) {
+                    throw new Error(`Blob fetch Error: ${response.statusText}`);
+                }
+                blob = await response.blob();
+            } else {
+                // It's a regular URL, fetch it (triggers generation on Pollinations side)
+                const response = await fetch(urlOrBlob);
+                if (!response.ok) {
+                    throw new Error(`Pollinations API Error: ${response.statusText}`);
+                }
+                blob = await response.blob();
             }
-            const blob = await response.blob();
 
             // Create a safe filename
             const hash = btoa(prompt).substring(0, 16).replace(/[/+=]/g, '');
