@@ -22,7 +22,7 @@
     "analyze:ci": "npm run build -- --analyze",
     "performance": "npm run build && npm run analyze",
     "lighthouse": "npx lighthouse http://localhost:5173 --output=html --output-path=./lighthouse-results",
-    "perf:audit": "npm run build && npm run analyze && npm run lighthouse"
+    "perf:audit": "npm run build && npm run analyze && npm run lighthouse",
     "security:audit": "pnpm audit --audit-level moderate",
     "security:scan": "npm audit --json > security-report.json",
     "coverage:report": "codecov",
