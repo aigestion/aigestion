@@ -162,11 +162,6 @@ export const AppContent = ({
                   ]}
                 />
 
-                {/* Fortune 500 Showcase */}
-                <Suspense fallback={<LoadingFallback />}>
-                  <ClientShowcase />
-                </Suspense>
-
                 {/* synthetic Consciousness - Daniela AI */}
                 <Suspense fallback={<LoadingFallback />}>
                   <DanielaShowcase />
