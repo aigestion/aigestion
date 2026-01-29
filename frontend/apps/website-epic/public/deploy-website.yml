@@ -54,10 +54,10 @@ on:
   pages:
     branches:
       - main
-    source: frontend/apps/website-epic/src
+    source: frontend/apps/src
     build:
       output: 'dist'
-      base: '/website-epic/'
+      base: '/'
     domain: aigestion.net
 
   # Custom domain configuration
@@ -77,23 +77,23 @@ on:
 
   # Exclude files from processing
   exclude:
-    - frontend/apps/website-epic/node_modules/
-    - frontend/apps/website-epic/.vite/
-    - frontend/apps/website-epic/dist/
-    - frontend/apps/website-epic/src/__tests__/
-    - frontend/apps/website-epic/src/__tests__/e2e/
-    - frontend/apps/website-epic/src/monitoring/
-    - frontend/apps/website-epic/src/security/
-    - frontend/apps/website-epic/src/testing/
-    frontend/apps/website-epic/src/patterns/
+    - frontend/apps/node_modules/
+    - frontend/apps/.vite/
+    - frontend/apps/dist/
+    - frontend/apps/src/__tests__/
+    - frontend/apps/src/__tests__/e2e/
+    - frontend/apps/src/monitoring/
+    - frontend/apps/src/security/
+    - frontend/apps/src/testing/
+    frontend/apps/src/patterns/
 
   # Include specific files
   include:
-    - frontend/apps/website-epic/public/
-    - frontend/apps/website-epic/src/
-    - frontend/apps/website-epic/manifest.json
-    - frontend/apps/website-epic/sw.js
-    - frontend/apps/website-epic/sw-advanced.js
+    - frontend/apps/public/
+    - frontend/apps/src/
+    - frontend/apps/manifest.json
+    - frontend/apps/sw.js
+    - frontend/apps/sw-advanced.js
 
 # Additional build optimizations
 build:
@@ -154,3 +154,4 @@ test:
     ],
   },
 }
+

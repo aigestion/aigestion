@@ -3,14 +3,14 @@ import { Howl } from 'howler';
 import { useSoundContext } from '../contexts/SoundContext';
 
 const SOUND_URLS = {
-  tick: '/website-epic/sounds/hover_glass.mp3',
-  thud: '/website-epic/sounds/click_activate.mp3',
-  glass: '/website-epic/sounds/success_chime.mp3',
-  whoosh: '/website-epic/sounds/menu_open.mp3',
-  pop: '/website-epic/sounds/data_pulse.mp3',
-  error: '/website-epic/sounds/error_buzzer.mp3',
-  click: '/website-epic/sounds/click_activate.mp3',
-  toggle: '/website-epic/sounds/menu_open.mp3',
+  tick: '/sounds/hover_glass.mp3',
+  thud: '/sounds/click_activate.mp3',
+  glass: '/sounds/success_chime.mp3',
+  whoosh: '/sounds/menu_open.mp3',
+  pop: '/sounds/data_pulse.mp3',
+  error: '/sounds/error_buzzer.mp3',
+  click: '/sounds/click_activate.mp3',
+  toggle: '/sounds/menu_open.mp3',
 };
 
 const useHowl = (src: string, options: { volume: number; soundEnabled: boolean }) => {
@@ -68,3 +68,4 @@ export const useSoundEffects = () => {
     playToggle,
   };
 };
+

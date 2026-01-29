@@ -72,7 +72,7 @@ export const DanielaOmniWidget: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-br from-nexus-violet to-nexus-cyan rounded-full blur-md opacity-70 group-hover:opacity-100 transition-opacity animate-pulse" />
           <div className="relative w-full h-full bg-black/40 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center overflow-hidden group-hover:border-nexus-cyan/50 transition-colors">
             <img
-              src="/website-epic/images/brand/icon.png"
+              src="/images/brand/icon.png"
               alt="AI"
               className="w-10 h-10 object-contain group-hover:scale-110 transition-transform duration-500"
             />
@@ -93,3 +93,4 @@ export const DanielaOmniWidget: React.FC = () => {
       </div>
     );
 };
+

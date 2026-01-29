@@ -37,7 +37,7 @@ export const Footer = () => (
           viewport={{ once: true }}
         >
           <img
-            src="/website-epic/images/brand/logo.png"
+            src="/images/brand/logo.png"
             alt="AIGestion"
             className="h-10 mb-8 filter brightness-110 drop-shadow-[0_0_10px_rgba(138,43,226,0.3)]"
           />
@@ -152,7 +152,7 @@ export const AppContent = ({
                   }
                   subtitle="Arquitectura de Inteligencia Soberana"
                   description="El núcleo neuronal para las empresas del mañana. Sincronización absoluta entre inteligencia artificial, IoT y logística global."
-                  videoSrc="/website-epic/videos/cinematic/space-intro.mp4"
+                  videoSrc="/videos/cinematic/space-intro.mp4"
                   ctas={[
                     {
                       label: 'AUTORIZAR ACCESO',
@@ -207,64 +207,7 @@ export const AppContent = ({
 
         <Route path="/weapon" element={<WeaponDashboard />} />
 
-        {/* Dashboard Routes */}
-        <Route
-          path="/admin"
-          element={
-            <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
-              <div className="text-center">
-                <h1 className="text-4xl font-orbitron text-nexus-violet-glow mb-4">
-                  Admin Dashboard
-                </h1>
-                <p className="text-nexus-silver/60 mb-8">Panel de administración avanzada</p>
-                <a
-                  href="/admin"
-                  className="btn-enterprise px-8 py-3 rounded-full"
-                >
-                  Acceder al Admin Dashboard
-                </a>
-              </div>
-            </div>
-          }
-        />
-
-        <Route
-          path="/client"
-          element={
-            <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
-              <div className="text-center">
-                <h1 className="text-4xl font-orbitron text-nexus-cyan-glow mb-4">
-                  Client Dashboard
-                </h1>
-                <p className="text-nexus-silver/60 mb-8">Portal exclusivo para clientes</p>
-                <a
-                  href="/client"
-                  className="btn-enterprise px-8 py-3 rounded-full"
-                >
-                  Acceder al Client Dashboard
-                </a>
-              </div>
-            </div>
-          }
-        />
-
-        <Route
-          path="/demo"
-          element={
-            <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
-              <div className="text-center">
-                <h1 className="text-4xl font-orbitron text-nexus-gold mb-4">Demo Dashboard</h1>
-                <p className="text-nexus-silver/60 mb-8">Experiencia interactiva de demostración</p>
-                <a
-                  href="/demo"
-                  className="btn-enterprise px-8 py-3 rounded-full"
-                >
-                  Acceder al Demo Dashboard
-                </a>
-              </div>
-            </div>
-          }
-        />
+        {/* Dashboards are handled by physical subdirectories */}
 
         {/* Daniela AI Routes */}
         <Route path="/daniela" element={<DanielaDemo />} />
@@ -286,3 +229,4 @@ export const AppContent = ({
     </div>
   );
 };
+
