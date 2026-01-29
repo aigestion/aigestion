@@ -47,8 +47,18 @@ jobs:
         run: |
           pnpm install --frozen-lockfile
 
-          # Build website-epic (root site) using filter
-          pnpm --filter website-epic build
+          # Build website-epic (root site) - Explicit path
+          echo "Building website-epic..."
+          cd frontend/apps/website-epic
+          pnpm build
+
+          # Verify build output immediately
+          if [ ! -f "dist/index.html" ]; then
+            echo "ERROR: frontend/apps/website-epic/dist/index.html is missing after build!"
+            ls -R dist || true
+            exit 1
+          fi
+          cd ../../..
 
           echo "Listing build output for debugging:"
           ls -R frontend/apps/website-epic/dist
@@ -58,9 +68,9 @@ jobs:
           # Copy to root dist
           cp -r frontend/apps/website-epic/dist/* dist/
 
-          # Verify index.html exists
+          # Verify root dist
           if [ ! -f "dist/index.html" ]; then
-            echo "ERROR: dist/index.html is missing!"
+            echo "ERROR: dist/index.html is missing after copy!"
             exit 1
           fi
 
