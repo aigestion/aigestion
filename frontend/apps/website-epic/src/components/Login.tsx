@@ -175,7 +175,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
               </div>
             </div>
           </form>
-        </motion.div>
+        </Card>
 
         {/* Footer */}
         <motion.div
