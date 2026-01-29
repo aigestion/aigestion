@@ -1,5 +1,5 @@
 # Backend-only build for Fly.io using pnpm and workspaces
-FROM node:20-alpine AS base
+FROM node:25-alpine AS base
 RUN apk add --no-cache libc6-compat openssl ca-certificates \
   && corepack enable \
   && corepack prepare pnpm@9 --activate
@@ -21,7 +21,7 @@ COPY --from=deps /app/server/node_modules ./server/node_modules
 # Build backend
 RUN pnpm --filter aigestion-dashboard-backend run build
 
-FROM node:20-alpine AS runner
+FROM node:25-alpine AS runner
 RUN apk add --no-cache ca-certificates \
   && addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 appuser

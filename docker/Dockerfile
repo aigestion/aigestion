@@ -1,5 +1,5 @@
 # ---------- Build stage ----------
-FROM node:20-alpine AS builder
+FROM node:25-alpine AS builder
 WORKDIR /app
 
 # Install pnpm and turbo
@@ -15,7 +15,7 @@ RUN pnpm install
 RUN turbo run build --filter=nexus-v1-dashboard-backend --filter=landingpage
 
 # ---------- Runtime stage ----------
-FROM node:20-alpine
+FROM node:25-alpine
 WORKDIR /app
 
 # Copy built artifacts and node_modules

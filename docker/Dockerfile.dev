@@ -1,5 +1,5 @@
 # Development environment with hot reload
-FROM node:20-alpine
+FROM node:25-alpine
 
 # Install build dependencies
 RUN apk add --no-cache \
