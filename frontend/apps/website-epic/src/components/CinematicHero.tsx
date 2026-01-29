@@ -33,13 +33,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
       duration: 5000,
     },
     {
-      id: 'corporate-transform',
-      title: 'FORTUNE 500 TRANSFORMADA',
-      subtitle: 'Tesla, Microsoft, Google, Amazon',
-      video: '/videos/cinematic/corporate-transform.mp4',
-      duration: 6000,
-    },
-    {
       id: 'daniela-ai',
       title: 'DANIELA AI',
       subtitle: 'Conciencia Artificial 8K Ultra-Realista',
@@ -234,26 +227,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
               </motion.p>
 
               {/* Scene-specific content */}
-              {scenes[currentScene].id === 'corporate-transform' && (
-                <motion.div
-                  className="flex justify-center gap-8 mt-8"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 }}
-                >
-                  {['Tesla', 'Microsoft', 'Google', 'Amazon'].map((company) => (
-                    <motion.div
-                      key={company}
-                      className="premium-glass px-6 py-3 rounded-full"
-                      whileHover={{ scale: 1.05 }}
-                      onMouseEnter={playHover}
-                    >
-                      <span className="text-white font-bold">{company}</span>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              )}
-
               {scenes[currentScene].id === 'daniela-ai' && (
                 <motion.div
                   className="mt-8"
@@ -263,7 +236,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
                 >
                   <div className="w-64 h-64 mx-auto rounded-full overflow-hidden border-4 border-nexus-cyan shadow-2xl shadow-nexus-cyan/50">
                     <img
-                      src="/images/daniela-ai-8k.jpg"
+                      src="/images/daniela/daniela_lab_godmode.png"
                       alt="Daniela AI"
                       className="w-full h-full object-cover"
                     />

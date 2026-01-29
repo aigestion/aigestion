@@ -12,15 +12,15 @@ export default defineConfig({
   resolve: {},
   build: {
     outDir: 'dist',
-    // Enable optimizations for production
-    minify: false,
+    // Enable optimizations for GitHub Pages
+    minify: 'terser',
     terserOptions: {
       compress: {
         pure_funcs: [],
         drop_console: false,
       },
       output: {
-        comments: true,
+        comments: false,
       },
     },
     // Ensure dead code elimination
@@ -45,7 +45,7 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 1000,
-    // Enable sourcemaps for debugging in production
+    // Disable sourcemaps for production GitHub Pages
     sourcemap: false,
   },
   // Environment variables
