@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { NavGroup, NavItem } from '@aigestion/ui';
 import { useSound } from '../hooks/useSound';
 import { SoundControl } from './SoundControl';
 
@@ -106,45 +107,19 @@ export const EnhancedNavigation: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-2 premium-glass px-4 py-2 rounded-2xl border-white/5">
+            <NavGroup isScrolled={isScrolled}>
               {navItems.map((item, index) => (
-                <motion.button
+                <NavItem
                   key={item.path}
+                  label={item.label}
+                  icon={item.icon}
+                  isActive={activeSection === item.path.slice(1)}
                   onClick={() => handleNavClick(item.path)}
-                  className={`relative group px-5 py-2.5 rounded-xl transition-all duration-500 overflow-hidden ${
-                    activeSection === item.path.slice(1)
-                      ? 'text-white'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.1 }}
-                  onMouseEnter={playHover}
-                  whileHover={{ y: -2 }}
-                >
-                  <span className="relative z-10 flex items-center gap-2 text-xs font-orbitron font-bold tracking-widest uppercase">
-                    <span className="text-sm opacity-80 group-hover:scale-125 transition-transform duration-300">
-                      {item.icon}
-                    </span>
-                    {item.label}
-                  </span>
-
-                  {/* Active Indicator & Background */}
-                  {activeSection === item.path.slice(1) ? (
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-nexus-violet/30 to-nexus-cyan/30 border border-white/10"
-                      layoutId="activeNavBackground"
-                      transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 transition-colors duration-300" />
-                  )}
-
-                  {/* Magnetic Glow */}
-                  <div className="absolute -inset-2 bg-nexus-cyan/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                </motion.button>
+                  layoutId="activeNavBackground"
+                  className={index === 0 ? '' : 'ml-0'}
+                />
               ))}
-            </div>
+            </NavGroup>
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-4">

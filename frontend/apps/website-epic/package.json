@@ -29,6 +29,7 @@
     "god-mode": "pnpm pre-commit && pnpm ci:build && pnpm ci:test && pnpm ci:security"
   },
   "dependencies": {
+    "@aigestion/ui": "workspace:*",
     "@google/model-viewer": "^4.1.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^8.18.0",

@@ -12,6 +12,7 @@ import { VitureXRExperience } from './components/VitureXRExperience';
 import { WorkbenchLayout } from './components/workbench/WorkbenchLayout';
 import { useNotification } from './contexts/NotificationContext';
 import { Login } from './pages/Login';
+import { FloatingShapes, Logo, Card, HeroSection } from '@aigestion/ui';
 import VirtualOfficePreview from './pages/VirtualOfficePreview';
 import WeaponDashboard from './pages/WeaponDashboard';
 
@@ -139,12 +140,24 @@ export const AppContent = ({
           element={
             !isAuthenticated ? (
               <main>
-                {/* Advanced Presentation - Ahora es la primera sección */}
-                <AnimatePresence mode="wait">
-                  <Suspense fallback={<LoadingFallback />}>
-                    <CinematicPresentation />
-                  </Suspense>
-                </AnimatePresence>
+                {/* HeroSection - New Organism */}
+                <HeroSection
+                  title={
+                    <>
+                      AIGESTION<span className="text-nexus-cyan font-light">.NET</span>
+                    </>
+                  }
+                  subtitle="Arquitectura de Inteligencia Soberana"
+                  description="El núcleo neuronal para las empresas del mañana. Sincronización absoluta entre inteligencia artificial, IoT y logística global."
+                  videoSrc="/website-epic/videos/cinematic/space-intro.mp4"
+                  ctas={[
+                    {
+                      label: 'AUTORIZAR ACCESO',
+                      onClick: () => (window.location.href = '#contact'),
+                    },
+                    { label: 'VER ECOSISTEMA', onClick: () => {}, variant: 'outline' },
+                  ]}
+                />
 
                 {/* Fortune 500 Showcase */}
                 <Suspense fallback={<LoadingFallback />}>

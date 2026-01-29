@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', '../../libs/ui/src/**/*.{js,ts,jsx,tsx}'],
+module.exports = {
   theme: {
     extend: {
       colors: {
@@ -11,11 +10,12 @@ export default {
         'nexus-gold': '#FFD700',
         'nexus-silver': '#C0C0C0',
         'nexus-obsidian': '#0a0a0a',
-        'nexus-obsidian-light': '#0a0a0a',
+        'nexus-obsidian-light': '#1a1a1a', // Adjusted for slightly lighter background
         'nexus-obsidian-deep': '#010101',
       },
       fontFamily: {
         orbitron: ['Orbitron', 'monospace'],
+        inter: ['Inter', 'sans-serif'],
       },
     },
   },
