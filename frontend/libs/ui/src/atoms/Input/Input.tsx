@@ -1,13 +1,8 @@
-import React, { forwardRef } from 'react';
-import { motion, HTMLMotionProps } from 'framer-motion';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { HTMLMotionProps, motion } from 'framer-motion';
+import { forwardRef } from 'react';
+import { cn } from '../../utils/cn';
 
-function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-export interface InputProps extends Omit<HTMLMotionProps<'input'>, 'className'> {
+export interface InputProps extends HTMLMotionProps<'input'> {
   label?: string;
   error?: string;
   leftIcon?: React.ReactNode;
@@ -20,8 +15,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, leftIcon, rightIcon, className, wrapperClassName, variant = 'default', ...props }, ref) => {
 
     const variants = {
-        default: "bg-nexus-obsidian-light border-zinc-700 focus:border-nexus-violet focus:ring-nexus-violet/30",
-        glass: "bg-white/5 border-white/10 backdrop-blur-md focus:bg-white/10 focus:border-white/20 focus:ring-white/10"
+      default: "bg-nexus-obsidian-light border-zinc-700 focus:border-nexus-violet focus:ring-nexus-violet/30",
+      glass: "bg-white/5 border-white/10 backdrop-blur-md focus:bg-white/10 focus:border-white/20 focus:ring-white/10"
     }
 
     return (
