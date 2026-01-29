@@ -1,0 +1,223 @@
+{
+  "folders": [
+    {
+      "name": "AIGestion (Root)",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "workbench.colorTheme": "One Dark Pro",
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace",
+    "editor.fontSize": 14,
+    "editor.lineHeight": 1.6,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "on",
+    "editor.minimap.enabled": true,
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "trunk.io",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs": "active",
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.stickyScroll.enabled": true,
+    "editor.inlayHints.enabled": "on",
+    "editor.inlineSuggest.enabled": true,
+    "editor.rulers": [
+      100,
+      120
+    ],
+    "editor.renderWhitespace": "selection",
+    "editor.suggestSelection": "first",
+    "editor.linkedEditing": true,
+    "files.autoSave": "onFocusChange",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "files.eol": "\n",
+    "git.enableSmartCommit": true,
+    "git.ignoreLimitWarning": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+    "gitlens.advanced.fileHistoryFollowsRenames": true,
+    "gitlens.codeLens.enabled": false,
+    "terminal.integrated.scrollback": 100000,
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.fontFamily": "Fira Code",
+    "terminal.integrated.cursorStyle": "underline",
+    "terminal.integrated.cursorBlinking": true,
+    "workbench.list.horizontalScrolling": true,
+    "workbench.editor.enablePreview": false,
+    "workbench.startupEditor": "none",
+    "workbench.editor.labelFormat": "short",
+    "workbench.colorCustomizations": {
+      "editorRuler.foreground": "#2a2a2a"
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+      "*.ts": "${capture}.test.ts, ${capture}.spec.ts, ${capture}.d.ts",
+      "*.tsx": "${capture}.test.tsx, ${capture}.spec.tsx",
+      "*.js": "${capture}.test.js, ${capture}.spec.js",
+      "package.json": "package-lock.json, pnpm-lock.yaml, .npmrc"
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/build": true,
+      "**/.next": true,
+      "**/.turbo": true,
+      "**/coverage": true,
+      "**/.git": true,
+      "**/.DS_Store": true,
+      "**/pnpm-lock.yaml": true,
+      "**/package-lock.json": true
+    },
+    "files.watcherExclude": {
+      "**/node_modules/**": true,
+      "**/dist/**": true,
+      "**/build/**": true,
+      "**/.next/**": true,
+      "**/.turbo/**": true,
+      "**/coverage/**": true
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[jsonc]": {
+      "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[typescript]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[dockercompose]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[github-actions-workflow]": {
+      "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[yaml]": {
+      "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "typescript.tsserver.maxTsServerMemory": 4096,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.suggest.autoImports": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ],
+    "eslint.workingDirectories": [
+      {
+        "mode": "auto"
+      }
+    ],
+    "cSpell.words": [
+      "AIGestion",
+      "Supabase",
+      "aigestion",
+      "website-epic",
+      "nexus",
+      "antigravity"
+    ],
+    "sonarlint.connectedMode.project": {
+      "connectionId": "aigestion",
+      "projectKey": "aigestion"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "[css]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "git.commitTemplate": ".github/git-commit-template.txt",
+    "extensions.ignoreRecommendations": false,
+    "extensions.autoUpdate": false,
+    "remote.autoForwardPorts": true,
+    "python.defaultInterpreterPath": ".venv/Scripts/python.exe",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": false,
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.python"
+    },
+    "googleCloud.promptForDefaultProject": false,
+    "googleCloud.promptForDefaultApplication": false,
+    "cloudcode.showDebugInfo": false,
+    "cloudcode.showWelcomeOnStartup": false,
+    "gemini.enabled": false,
+    "gemini.showWelcome": false
+  },
+  "extensions": {
+    "recommendations": [
+      "redhat.vscode-yaml",
+      "trunk.io",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode",
+      "bradlc.vscode-tailwindcss",
+      "usernamehw.errorlens",
+      "eamodio.gitlens",
+      "ms-azuretools.vscode-docker",
+      "formulahendry.auto-close-tag",
+      "formulahendry.auto-rename-tag",
+      "wix.vscode-import-cost",
+      "wallabyjs.console-ninja",
+      "aaron-bond.better-comments",
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "googlecloudtools.cloudcode",
+      "ms-vscode.vscode-json",
+      "humao.rest-client",
+      "christian-kohler.path-intellisense"
+    ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Launch Backend",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/backend/src/server.ts",
+        "outFiles": [
+          "${workspaceFolder}/backend/dist/**/*.js"
+        ],
+        "runtimeArgs": [
+          "-r",
+          "tsx/cjs"
+        ],
+        "env": {
+          "NODE_ENV": "development"
+        },
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      },
+      {
+        "name": "Launch Website Epic",
+        "type": "node",
+        "request": "launch",
+        "program": "${workspaceFolder}/frontend/apps/website-epic/node_modules/.bin/vite",
+        "args": [
+          "--mode",
+          "development"
+        ],
+        "cwd": "${workspaceFolder}/frontend/apps/website-epic",
+        "console": "integratedTerminal"
+      }
+    ]
+  }
+}

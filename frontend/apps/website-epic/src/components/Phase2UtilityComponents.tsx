@@ -287,15 +287,11 @@ export const GradientText: React.FC<GradientTextProps> = ({
 // SUCCESS STATE ANIMATION
 // ============================================================================
 
-export const SuccessToast: React.FC<{ message: string; onClose?: () => void }> = ({
-  message,
-  onClose,
-}) => {
-  React.useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
-    return () => clearTimeout(timer);
-  }, [onClose]);
+type SuccessToastProps = {
+  message: string;
+};
 
+export function SuccessToast({ message }: SuccessToastProps) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 20, y: -20 }}
@@ -312,4 +308,4 @@ export const SuccessToast: React.FC<{ message: string; onClose?: () => void }> =
       {message}
     </motion.div>
   );
-};
+}

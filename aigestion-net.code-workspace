@@ -72,8 +72,10 @@
     "aigestion.frontend.demo": "http://localhost:5176",
     "aigestion.frontend.main": "http://localhost:5173",
     // Google Cloud Integration
-    "gcloud.project.id": "aigestion-net",
+    "gcloud.project.id": "aigestion-pro-2026",
     "gcloud.region": "us-central1",
+    "googleCloud.projectId": "aigestion-pro-2026",
+    "googleCloud.region": "us-central1",
     // Supabase Configuration
     "supabase.project.url": "https://jhvtjyfmgncrrbzqpbkt.supabase.co",
     "supabase.project.anonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpodnRqeWZtZ25jcnJienFwYmt0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4ODIwNjksImV4cCI6MjA4NDQ1ODA2OX0.biJUe_dP1CScwXD7RqqR-5p74cwuOZOkawODtoO5evU",

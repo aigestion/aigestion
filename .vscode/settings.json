@@ -1,22 +1,44 @@
 {
   "editor.defaultFormatter": "trunk.io",
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
   "editor.cursorBlinking": "smooth",
   "editor.cursorSmoothCaretAnimation": "on",
   "editor.stickyScroll.enabled": true,
+  "editor.inlayHints.enabled": "on",
+  "editor.inlineSuggest.enabled": true,
+  "editor.rulers": [
+    100,
+    120
+  ],
+  "editor.renderWhitespace": "selection",
+  "editor.suggestSelection": "first",
+  "editor.linkedEditing": true,
   "files.autoSave": "onFocusChange",
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
+  "files.eol": "\n",
   "git.enableSmartCommit": true,
   "git.ignoreLimitWarning": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
   "gitlens.advanced.fileHistoryFollowsRenames": true,
   "gitlens.codeLens.enabled": false,
   "terminal.integrated.scrollback": 100000,
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
   "workbench.list.horizontalScrolling": true,
   "workbench.editor.enablePreview": false,
+  "workbench.startupEditor": "none",
+  "workbench.editor.labelFormat": "short",
+  "workbench.colorCustomizations": {
+    "editorRuler.foreground": "#2a2a2a"
+  },
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
@@ -37,6 +59,14 @@
     "**/.DS_Store": true,
     "**/pnpm-lock.yaml": true,
     "**/package-lock.json": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true,
+    "**/.turbo/**": true,
+    "**/coverage/**": true
   },
   "terminal.integrated.fontFamily": "Fira Code",
   "terminal.integrated.cursorStyle": "underline",
@@ -65,14 +95,45 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
+  "typescript.tsserver.maxTsServerMemory": 4096,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ],
+  "cSpell.words": [
+    "AIGestion",
+    "Supabase",
+    "aigestion",
+    "website-epic"
+  ],
   "sonarlint.connectedMode.project": {
     "connectionId": "aigestion",
     "projectKey": "aigestion"
   },
+  "security.workspace.trust.untrustedFiles": "open",
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[html]": {
     "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-  }
+  },
+  "gcloud.project.id": "aigestion-pro-2026",
+  "gcloud.region": "us-central1",
+  "googleCloud.projectId": "aigestion-pro-2026",
+  "googleCloud.region": "us-central1",
+  "googleCloud.promptForDefaultProject": false,
+  "googleCloud.promptForDefaultApplication": false,
+  "cloudcode.showDebugInfo": false,
+  "cloudcode.showWelcomeOnStartup": false,
+  "gemini.enabled": false,
+  "gemini.showWelcome": false
 }
