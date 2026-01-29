@@ -40,7 +40,7 @@ jobs:
       # --- Build Apps ---
       - name: Build Website Epic (Root)
         working-directory: frontend/apps/website-epic
-        run: npm run build
+        run: npm run build -- --base=/
 
       - name: Build Admin Dashboard
         working-directory: frontend/apps/admindashboard
