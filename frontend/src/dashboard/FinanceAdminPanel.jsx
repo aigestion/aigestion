@@ -36,7 +36,7 @@ export const FinanceAdminPanel = () => {
 
   const chartData = [
     { name: 'Google Cloud', value: billing.googleCloudUSD, color: '#4285F4' },
-    { name: 'Vercel', value: billing.vercelUSD, color: '#000000' },
+    { name: 'GitHub Actions', value: billing.githubActionsUSD, color: '#238636' },
     { name: 'Otros', value: billing.otherUSD, color: '#10B981' },
   ];
 
@@ -58,8 +58,8 @@ export const FinanceAdminPanel = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <KpiCard title="Subtotal (Base)" value={`$${billing.googleCloudUSD + billing.vercelUSD + billing.otherUSD}`} sub="Neto" />
-        <KpiCard title="IVA (21%)" value={`$${(billing.totalUSD - (billing.googleCloudUSD + billing.vercelUSD + billing.otherUSD)).toFixed(2)}`} sub="Fiscal ES" color="text-emerald-400" />
+        <KpiCard title="Subtotal (Base)" value={`$${billing.googleCloudUSD + billing.githubActionsUSD + billing.otherUSD}`} sub="Neto" />
+        <KpiCard title="IVA (21%)" value={`$${(billing.totalUSD - (billing.googleCloudUSD + billing.githubActionsUSD + billing.otherUSD)).toFixed(2)}`} sub="Fiscal ES" color="text-emerald-400" />
         <KpiCard title="Total Bruto" value={`$${billing.totalUSD.toFixed(2)}`} sub="USD" />
         <KpiCard title="Total en EUR" value={`€${billing.totalEUR.toFixed(2)}`} sub="Estimado" highlight={true} />
       </div>

@@ -3,8 +3,6 @@
 **/.github
 **/.vscode
 **/.idea
-!**/dist
-!dist
 **/coverage
 **/build
 .env
@@ -15,3 +13,14 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Monorepo optimization for website-epic deployment
+backend/**/*
+!backend/package.json
+frontend/apps/admin-dashboard/**/*
+!frontend/apps/admin-dashboard/package.json
+frontend/apps/ai-management/**/*
+!frontend/apps/ai-management/package.json
+frontend/shared/**/*
+!frontend/shared/package.json
+**/dist

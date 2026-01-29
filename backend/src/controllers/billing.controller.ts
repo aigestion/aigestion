@@ -20,11 +20,11 @@ export const getBillingSnapshot = async (req: Request, res: Response, next: Next
         const aiTotal = aiCostData[0]?.total || 0;
 
         // 2. Compose full snapshot
-        // For GCP/Vercel, in a real env we might query APIs, but here we can derive from usage or constants
+        // For GCP/GitHub, in a real env we might query APIs, but here we can derive from usage or constants
         const snapshot = {
             updatedAt: new Date().toISOString(),
             googleCloudUSD: parseFloat((aiTotal * 0.4).toFixed(2)), // Assume 40% of AI cost is infra overhead
-            vercelUSD: 15.00, // Fixed baseline for hosting
+            githubActionsUSD: 8.75, // Fixed baseline for CI/CD & deployment
             otherUSD: 5.00,
             ivaRate: 0.21,
             totalUSD: parseFloat(( (aiTotal + 20) * 1.21 ).toFixed(2)),
