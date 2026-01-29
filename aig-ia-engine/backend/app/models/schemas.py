@@ -217,3 +217,33 @@ class HealthResponse(BaseModel):
     env: str = Field(..., description="Environment (development, production)")
     version: Optional[str] = Field(None, description="Application version")
     uptime_seconds: Optional[float] = Field(None, description="Uptime in seconds")
+
+
+# ============================================
+# AGENT SCHEMAS
+# ============================================
+
+
+class BrowserRequest(BaseModel):
+    """Request to the Navigator agent."""
+
+    url: str = Field(..., description="The URL to navigate to and analyze")
+    task: str = Field(
+        "Summarize", description="The task to perform (Summarize, Extract, etc.)"
+    )
+    instruction: Optional[str] = Field(
+        None, description="Specific instructions for the LLM"
+    )
+
+
+class BrowserResponse(BaseModel):
+    """Response from the Navigator agent."""
+
+    url: str
+    original_task: str
+    status: str
+    summary: str
+    extracted_data: Optional[Dict[str, Any]] = Field(
+        None, description="Structured data extracted from the page"
+    )
+    timestamp: str = Field(..., description="Processing timestamp")

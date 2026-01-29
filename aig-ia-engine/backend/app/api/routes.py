@@ -4,16 +4,19 @@ API Routes for AIGestion IA Engine.
 Defines all REST API endpoints for inference, training, and job management.
 """
 
+import logging
 from typing import Optional
 
 from app.config import get_settings
 from app.models.schemas import (
+    BrowserRequest,
+    BrowserResponse,
+    FeedbackRequest,
+    FeedbackResponse,
     FileInferenceResponse,
     HealthResponse,
     InferenceRequest,
     InferenceResponse,
-    FeedbackRequest,
-    FeedbackResponse,
     JobCancelResponse,
     JobListResponse,
     JobResponse,
@@ -21,12 +24,12 @@ from app.models.schemas import (
     TrainingRequest,
     TrainingResponse,
 )
+from app.services.agent_service import agent_service
 from app.services.file_inference_service import file_inference_service
 from app.services.inference_service import inference_service
 from app.services.job_service import JobStatus, JobType, job_service
 from app.services.training_service import training_service
 from fastapi import APIRouter, File, HTTPException, Query, UploadFile
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -292,3 +295,25 @@ async def list_models():
         "active_model": settings.DEFAULT_MODEL,
         "available_models": ["hope-lite-v1", "hope-pro-v1"],
     }
+
+
+# ============================================
+# AGENT ENDPOINTS
+# ============================================
+
+
+@router.post("/agent/browse", response_model=BrowserResponse, tags=["Agent"])
+async def agent_browse(request: BrowserRequest):
+    """
+    Trigger the AI Navigator agent to browse a website.
+
+    This uses the secure 'Ghost Browser' infrastructure to navigate,
+    extract, and summarize web content safely.
+    """
+    try:
+        return await agent_service.browse(request)
+    except Exception as e:
+        logger.error(f"Browse request failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))

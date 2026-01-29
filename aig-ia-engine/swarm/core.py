@@ -2,9 +2,11 @@ import abc
 import os
 from enum import Enum
 from typing import Any, Dict, List, Union
-from utils import get_swarm_logger, persist_swarm_event
-from security import SecurityLayer
+
 from models import MessageType
+from security import SecurityLayer
+
+from utils import get_swarm_logger, persist_swarm_event
 
 # Initialize structured logger
 logger = get_swarm_logger("SwarmCore")
@@ -17,6 +19,7 @@ class AgentType(Enum):
     BUILDER = "Builder"
     CRITIC = "Critic"
     MECHANIC = "Mechanic"
+    NAVIGATOR = "Navigator"
 
 
 class Message:
@@ -37,6 +40,7 @@ class Message:
 
 
 import time
+
 from utils.agent_monitor import AgentMonitor
 
 # Global monitor instance
@@ -140,6 +144,9 @@ class SwarmOrchestrator:
 
     def broadcast(self, sender: AgentType, content: Any, msg_type: str = "BROADCAST"):
         logger.info("broadcasting_message", sender=sender.value, type=msg_type)
+        for agent_type, agent in self.agents.items():
+            if agent_type != sender:
+                self.dispatch(Message(sender, agent_type, content, msg_type))
         for agent_type, agent in self.agents.items():
             if agent_type != sender:
                 self.dispatch(Message(sender, agent_type, content, msg_type))

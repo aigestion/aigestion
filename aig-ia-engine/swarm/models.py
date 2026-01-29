@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional, Any
 from enum import Enum
+from typing import Any, List, Optional
+
+from pydantic import BaseModel, Field
+
 
 class MessageType(str, Enum):
     START_SCAN = "START_SCAN"
@@ -11,6 +13,8 @@ class MessageType(str, Enum):
     TASK_COMPLETE = "TASK_COMPLETE"
     ERROR = "ERROR"
     INFO = "INFO"
+    BROWSE_REQUEST = "BROWSE_REQUEST"
+    BROWSE_RESULT = "BROWSE_RESULT"
 
 class ScanIssue(BaseModel):
     category: str  # e.g., SIZE, TODO, AI_CANDIDATE
@@ -36,5 +40,7 @@ class BuildResult(BaseModel):
     error_message: Optional[str] = None
 
 class SwarmMessageContent(BaseModel):
+    data: Any
+    metadata: Optional[dict] = Field(default_factory=dict)
     data: Any
     metadata: Optional[dict] = Field(default_factory=dict)
