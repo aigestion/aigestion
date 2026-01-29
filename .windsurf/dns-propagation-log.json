@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-01-29T04:08:23.742Z",
+  "domain": "aigestion.net",
+  "wwwDomain": "www.aigestion.net",
+  "rootDNS": [
+    "185.199.109.153",
+    "185.199.108.153",
+    "185.199.110.153",
+    "185.199.111.153"
+  ],
+  "wwwDNS": [
+    "185.199.109.153",
+    "185.199.110.153",
+    "185.199.111.153",
+    "185.199.108.153"
+  ],
+  "sslStatus": {
+    "valid": false,
+    "error": "No certificate found"
+  },
+  "propagationComplete": true
+}
