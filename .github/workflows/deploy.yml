@@ -1,8 +1,8 @@
-name: Deploy aigestion.net to GitHub Pages
+name: Deploy Unified Ecosystem to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -15,44 +15,71 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      # --- 1. Website Epic (Root) ---
+      - name: Install Website Dependencies
+        working-directory: frontend/apps/website-epic
+        run: npm install
 
-      - name: Build website-epic
-        run: pnpm --filter website-epic build
+      - name: Build Website Epic
+        working-directory: frontend/apps/website-epic
+        run: npm run build
 
-      - name: Create CNAME file for custom domain
-        run: echo "aigestion.net" > frontend/apps/website-epic/dist/CNAME
+      # --- 2. Admin Dashboard ---
+      - name: Install Admin Dependencies
+        working-directory: frontend/apps/admindashboard
+        run: npm install
+
+      - name: Build Admin Dashboard
+        working-directory: frontend/apps/admindashboard
+        run: npm run build -- --base=/admin/
+
+      # --- 3. Client Dashboard ---
+      - name: Install Client Dependencies
+        working-directory: frontend/apps/clientdashboard
+        run: npm install
+
+      - name: Build Client Dashboard
+        working-directory: frontend/apps/clientdashboard
+        run: npm run build -- --base=/client/
+
+      # --- 4. Demo Dashboard ---
+      - name: Install Demo Dependencies
+        working-directory: frontend/apps/demodashboard
+        run: npm install
+
+      - name: Build Demo Dashboard
+        working-directory: frontend/apps/demodashboard
+        run: npm run build -- --base=/demo/
+
+      # --- Assemble Ecosystem ---
+      - name: Assemble Deployment Artifact
+        run: |
+          mkdir -p deploy_dist
+          cp -r frontend/apps/website-epic/dist/* deploy_dist/
+          mkdir -p deploy_dist/admin
+          mkdir -p deploy_dist/client
+          mkdir -p deploy_dist/demo
+          cp -r frontend/apps/admindashboard/dist/* deploy_dist/admin/
+          cp -r frontend/apps/clientdashboard/dist/* deploy_dist/client/
+          cp -r frontend/apps/demodashboard/dist/* deploy_dist/demo/
+          # Ensure CNAME is present
+          echo "aigestion.net" > deploy_dist/CNAME
 
       - name: Upload artifact to GitHub Pages
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: 'frontend/apps/website-epic/dist'
+          path: './deploy_dist'
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v4
