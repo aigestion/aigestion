@@ -23,7 +23,7 @@ export default defineConfig({
         comments: false,
       },
     },
-    // Ensure dead code elimination
+    // Enable dead code elimination
     rollupOptions: {
       input: './index.html',
       output: {
@@ -34,6 +34,7 @@ export default defineConfig({
           framer: ['framer-motion'],
           lucide: ['lucide-react'],
           supabase: ['@supabase/supabase-js'],
+          utils: ['clsx', 'tailwind-merge'],
         },
       },
       onwarn(warning, warn) {
@@ -47,10 +48,20 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     // Disable sourcemaps for production GitHub Pages
     sourcemap: false,
+    // Enable CSS code splitting
+    cssCodeSplit: true,
+    // Optimize chunk loading
+    modulePreload: {
+      polyfill: true,
+    },
   },
   // Environment variables
   server: {
     port: 5173,
     strictPort: false,
+  },
+  // Build optimizations
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'framer-motion'],
   },
 });
