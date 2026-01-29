@@ -14,7 +14,7 @@ const getBasePath = () => {
     if (import.meta.env.DEV) {
         return '/sounds';
     }
-    return '/website-epic/sounds';
+    return '/sounds';
 };
 
 const SOUND_ASSETS: Record<SoundType, SoundAsset> = {
@@ -125,3 +125,4 @@ class AudioService {
 }
 
 export const audioService = AudioService.getInstance();
+

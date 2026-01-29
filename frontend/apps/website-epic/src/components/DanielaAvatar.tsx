@@ -46,7 +46,7 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
       <div className={`${sizeClasses[size]} relative z-10 rounded-full border border-white/10 p-1.5 bg-nexus-obsidian/40 backdrop-blur-xl overflow-hidden transition-all duration-500 group-hover:scale-105 group-hover:border-nexus-violet-glow/50 shadow-2xl`}>
         <div className="absolute inset-0 bg-radial-at-center from-white/10 to-transparent opacity-50" />
         <img
-          src="/website-epic/images/brand/icon.png"
+          src="/images/brand/icon.png"
           alt="Daniela"
           className="w-full h-full object-cover rounded-full filter contrast-125 saturate-125 brightness-110"
         />
@@ -87,3 +87,4 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
     </div>
   );
 };
+

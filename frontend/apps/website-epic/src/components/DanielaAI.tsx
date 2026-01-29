@@ -48,7 +48,7 @@ export const DanielaAI: React.FC = () => {
       {/* Background Effects */}
       <div className="absolute inset-0">
         <img
-          src="/website-epic/images/daniela/desk.png"
+          src="/images/daniela/desk.png"
           alt="Office Context"
           className="absolute inset-0 w-full h-full object-cover opacity-20 filter blur-sm grayscale"
         />
@@ -133,7 +133,7 @@ export const DanielaAI: React.FC = () => {
               {/* Avatar */}
               <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white/10 shadow-2xl shadow-nexus-cyan/20 neon-glow-cyan">
                 <img
-                  src="/website-epic/images/daniela-ai-8k.jpg"
+                  src="/images/daniela-ai-8k.jpg"
                   alt="Daniela AI"
                   className="w-full h-full object-cover scale-110"
                 />
@@ -304,3 +304,4 @@ export const DanielaAI: React.FC = () => {
     </section>
   );
 };
+

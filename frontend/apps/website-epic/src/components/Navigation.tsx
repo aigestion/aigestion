@@ -58,7 +58,7 @@ export const Navigation: React.FC = () => {
           <div className="relative z-10 w-10 h-10 mr-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12">
             <div className="absolute inset-0 bg-nexus-violet/50 blur-lg rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
             <img
-              src="/website-epic/images/brand/logo.png"
+              src="/images/brand/logo.png"
               alt="Logo"
               className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(138,43,226,0.5)]"
             />
@@ -181,3 +181,4 @@ export const Navigation: React.FC = () => {
     </motion.nav>
   );
 };
+

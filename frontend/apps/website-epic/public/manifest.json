@@ -2,12 +2,12 @@
   "name": "AIGestion Nexus",
   "short_name": "Nexus",
   "description": "Plataforma Omnipotente de Gestión AI",
-  "start_url": "/website-epic/",
+  "start_url": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
   "background_color": "#010103",
   "theme_color": "#8a2be2",
-  "scope": "/website-epic/",
+  "scope": "/",
   "lang": "es",
   "dir": "ltr",
   "orientation": "portrait-primary",
@@ -15,49 +15,49 @@
   "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/website-epic/icons/icon-72x72.png",
+      "src": "/icons/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/website-epic/icons/icon-96x96.png",
+      "src": "/icons/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/website-epic/icons/icon-128x128.png",
+      "src": "/icons/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/website-epic/icons/icon-144x144.png",
+      "src": "/icons/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/website-epic/icons/icon-152x152.png",
+      "src": "/icons/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/website-epic/icons/icon-192x192.png",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/website-epic/icons/icon-384x384.png",
+      "src": "/icons/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/website-epic/icons/icon-512x512.png",
+      "src": "/icons/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -68,40 +68,40 @@
       "name": "Panel General",
       "short_name": "Dashboard",
       "description": "Acceso rápido al panel principal",
-      "url": "/website-epic/dashboard",
+      "url": "/dashboard",
       "icons": [
-        { "src": "/website-epic/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
+        { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
       ]
     },
     {
       "name": "War Room",
       "short_name": "War Room",
       "description": "Centro de control estratégico",
-      "url": "/website-epic/war-room",
+      "url": "/war-room",
       "icons": [
-        { "src": "/website-epic/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
+        { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
       ]
     },
     {
       "name": "IA Assistant",
       "short_name": "Daniela",
       "description": "Asistente de IA conversacional",
-      "url": "/website-epic/daniela",
+      "url": "/daniela",
       "icons": [
-        { "src": "/website-epic/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
+        { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
       ]
     }
   ],
   "screenshots": [
     {
-      "src": "/website-epic/screenshots/desktop-1.png",
+      "src": "/screenshots/desktop-1.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
       "label": "Dashboard principal en desktop"
     },
     {
-      "src": "/website-epic/screenshots/mobile-1.png",
+      "src": "/screenshots/mobile-1.png",
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
@@ -119,11 +119,11 @@
   "protocol_handlers": [
     {
       "protocol": "web+aigestion",
-      "url": "/website-epic/handle/%s"
+      "url": "/handle/%s"
     }
   ],
   "share_target": {
-    "action": "/website-epic/share",
+    "action": "/share",
     "method": "POST",
     "enctype": "multipart/form-data",
     "params": {
@@ -140,7 +140,7 @@
   },
   "file_handlers": [
     {
-      "action": "/website-epic/file-handler",
+      "action": "/file-handler",
       "accept": {
         "application/pdf": [".pdf"],
         "image/*": [".jpg", ".jpeg", ".png", ".gif", ".webp"],

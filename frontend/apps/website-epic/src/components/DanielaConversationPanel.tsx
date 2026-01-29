@@ -51,7 +51,7 @@ export const DanielaConversationPanel: React.FC = () => {
           <div className="relative">
             <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-nexus-cyan">
               <img
-                src="/website-epic/images/daniela-avatar.jpg"
+                src="/images/daniela-avatar.jpg"
                 alt="Daniela"
                 className="w-full h-full object-cover"
                 onError={(e) =>
@@ -145,3 +145,4 @@ export const DanielaConversationPanel: React.FC = () => {
     </div>
   );
 };
+

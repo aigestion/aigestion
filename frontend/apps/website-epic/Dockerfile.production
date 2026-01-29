@@ -21,13 +21,14 @@ FROM nginx:alpine
 
 # Copy built assets from builder stage
 # Path reference must match the monorepo structure in the builder
-COPY --from=builder /app/frontend/apps/website-epic/dist /usr/share/nginx/html
+COPY --from=builder /app/frontend/apps/dist /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY --from=builder /app/frontend/apps/website-epic/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/frontend/apps/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
 
 # Start nginx
 CMD ["nginx", "-g", "daemon off;"]
+
