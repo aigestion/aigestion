@@ -15,14 +15,14 @@ interface GenerationOptions {
 export class LocalImageService {
     // Pre-generated local images for common prompts
     private static readonly LOCAL_IMAGES = {
-        'neural network': '/images/nexus/neural_network.jpg',
-        'ai avatar': '/images/nexus/ai_avatar.jpg',
-        'financial growth': '/images/nexus/financial_chart.jpg',
-        'android robot': '/images/nexus/android_robot.jpg',
-        'cinematic portal': '/images/nexus/cinematic_portal.jpg',
-        'digital network': '/images/nexus/digital_network.jpg',
-        'futuristic': '/images/nexus/futuristic_abstract.jpg',
-        'default': '/images/nexus/default_ai.jpg'
+        'neural network': 'https://picsum.photos/seed/neural/1024/1024.jpg',
+        'ai avatar': 'https://picsum.photos/seed/avatar/1024/1024.jpg',
+        'financial growth': 'https://picsum.photos/seed/financial/1024/1024.jpg',
+        'android robot': 'https://picsum.photos/seed/android/1024/1024.jpg',
+        'cinematic portal': 'https://picsum.photos/seed/portal/1024/1024.jpg',
+        'digital network': 'https://picsum.photos/seed/digital/1024/1024.jpg',
+        'futuristic': 'https://picsum.photos/seed/futuristic/1024/1024.jpg',
+        'default': 'https://picsum.photos/seed/default/1024/1024.jpg'
     };
 
     /**
@@ -30,12 +30,12 @@ export class LocalImageService {
      */
     static async generateImage(prompt: string, options: GenerationOptions = {}): Promise<string> {
         const model = options.model || 'flux-schnell';
-        
+
         console.log(`[LocalImageService] 🚀 Using local image (${model}):`, prompt);
 
         // Try to match prompt with local images
         const localImage = this.findLocalImage(prompt);
-        
+
         if (localImage) {
             console.log(`[LocalImageService] ✅ Found local image: ${localImage}`);
             return localImage;
@@ -48,7 +48,7 @@ export class LocalImageService {
 
     private static findLocalImage(prompt: string): string | null {
         const lowerPrompt = prompt.toLowerCase();
-        
+
         // Check for exact matches first
         for (const [key, path] of Object.entries(this.LOCAL_IMAGES)) {
             if (lowerPrompt.includes(key)) {
