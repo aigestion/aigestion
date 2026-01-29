@@ -63,6 +63,15 @@ jobs:
           echo ""
           echo "🗂️ Subdirectories:"
           ls -la deploy_dist/*/ || echo "No subdirectories found"
+          echo ""
+          echo "🖼️ Images directory:"
+          ls -la deploy_dist/images/ || echo "No images directory found"
+          echo ""
+          echo "🖼️ Nexus images:"
+          ls -la deploy_dist/images/nexus/ || echo "No nexus images found"
+          echo ""
+          echo "🔊 Sounds directory:"
+          ls -la deploy_dist/sounds/ || echo "No sounds directory found"
 
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
