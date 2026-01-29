@@ -1,4 +1,4 @@
-name: 00-DEPLOY-ECOSYSTEM
+name: DEPLOY-UNIFIED-ECOSYSTEM
 
 on:
   push:
@@ -73,7 +73,7 @@ jobs:
           cp -r frontend/apps/admindashboard/dist/* deploy_dist/admin/
           cp -r frontend/apps/clientdashboard/dist/* deploy_dist/client/
           cp -r frontend/apps/demodashboard/dist/* deploy_dist/demo/
-          echo "aigestion.net" > deploy_dist/CNAME
+          echo "www.aigestion.net" > deploy_dist/CNAME
 
       - name: Upload artifact to GitHub Pages
         uses: actions/upload-pages-artifact@v3
