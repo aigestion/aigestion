@@ -3,9 +3,6 @@ name: Deploy Frontend to GitHub Pages
 on:
   push:
     branches: [main, master]
-    paths:
-      - 'frontend/apps/website-epic/**'
-      - '.github/workflows/deploy-frontend.yml'
   workflow_dispatch:
 
 permissions:
