@@ -1,4 +1,4 @@
-name: Deploy Unified Ecosystem to GitHub Pages
+name: Deploy Unified Ecosystem
 
 on:
   push:
@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build_and_deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -73,7 +73,6 @@ jobs:
           cp -r frontend/apps/admindashboard/dist/* deploy_dist/admin/
           cp -r frontend/apps/clientdashboard/dist/* deploy_dist/client/
           cp -r frontend/apps/demodashboard/dist/* deploy_dist/demo/
-          # Ensure CNAME is present
           echo "aigestion.net" > deploy_dist/CNAME
 
       - name: Upload artifact to GitHub Pages
@@ -81,5 +80,13 @@ jobs:
         with:
           path: './deploy_dist'
 
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
