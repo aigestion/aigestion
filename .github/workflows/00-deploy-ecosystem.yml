@@ -1,4 +1,4 @@
-name: Deploy Unified Ecosystem
+name: 00-DEPLOY-ECOSYSTEM
 
 on:
   push:
