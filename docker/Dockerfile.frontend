@@ -24,7 +24,7 @@ COPY --from=deps /app/frontend/node_modules ./frontend/node_modules
 # Build the UI using the updated script
 RUN pnpm --filter nexus-v1-frontend-monorepo run build:ui
 
-FROM nginx:1.25-alpine AS runner
+FROM nginx:1.29-alpine AS runner
 WORKDIR /usr/share/nginx/html
 # Copy static build output from frontend/dist
 COPY --from=builder /app/frontend/dist .
