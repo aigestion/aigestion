@@ -113,6 +113,7 @@
     "node": ">=22"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.93.1",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"
   }

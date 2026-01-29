@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIGestion - Redirecting...</title>
+    <script>
+        // Redirect all 404s to index.html for SPA routing
+        var path = window.location.pathname;
+        if (path && path !== '/') {
+            // Store the path for restoration after the page loads
+            sessionStorage.redirect = path;
+            window.location.href = '/index.html';
+        }
+    </script>
+</head>
+<body>
+    Redirecting...
+</body>
+</html>
