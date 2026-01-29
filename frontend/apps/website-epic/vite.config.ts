@@ -36,6 +36,13 @@ export default defineConfig({
           supabase: ['@supabase/supabase-js'],
         },
       },
+      onwarn(warning, warn) {
+        // Ignore unresolved external dependencies
+        if (warning.code === 'UNRESOLVED_IMPORT') {
+          return;
+        }
+        warn(warning);
+      },
     },
     chunkSizeWarningLimit: 1000,
     // Enable sourcemaps for debugging in production
