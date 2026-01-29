@@ -2,7 +2,10 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
     <title>AIGestion - Daniela Nervous System</title>
     <meta
       name="description"
@@ -54,6 +57,30 @@
         background-color: #0f0f23;
         color: #ffffff;
         overflow-x: hidden;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+
+      /* Mobile-specific fixes */
+      @media (max-width: 768px) {
+        body {
+          font-size: 16px;
+          line-height: 1.5;
+        }
+
+        /* Prevent horizontal scroll */
+        html,
+        body {
+          overflow-x: hidden;
+          width: 100%;
+          max-width: 100%;
+        }
+
+        /* Ensure proper viewport */
+        #root {
+          width: 100%;
+          min-height: 100vh;
+        }
       }
 
       /* Loading screen */
@@ -69,10 +96,13 @@
         justify-content: center;
         z-index: 9999;
         transition: opacity 0.5s ease-out;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       .loading-content {
         text-align: center;
+        padding: 20px;
       }
 
       .loading-spinner {
@@ -99,12 +129,25 @@
         font-weight: 500;
         color: #a78bfa;
         letter-spacing: 0.05em;
+        text-align: center;
       }
 
       /* Hide loading when app is ready */
       .app-ready #loading {
         opacity: 0;
         pointer-events: none;
+      }
+
+      /* Prevent text-only mode on mobile */
+      .app-ready #root {
+        display: block !important;
+        visibility: visible !important;
+      }
+
+      /* Ensure React app loads properly on mobile */
+      #root {
+        display: block;
+        visibility: visible;
       }
     </style>
   </head>
