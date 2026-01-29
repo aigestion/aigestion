@@ -72,16 +72,25 @@ jobs:
         env:
           VITE_API_URL: https://api.aigestion.net
 
-      - name: Configure GitHub Pages
+      - name: Configure GitHub Pages & Fix Paths
         run: |
-          # echo "aigestion.net" > dist/CNAME
-          cp dist/index.html dist/404.html
-          # Add fallback for sub-apps if needed
-          mkdir -p dist/admin dist/client dist/demo
-          cp dist/index.html dist/admin/404.html || true
-          cp dist/index.html dist/client/404.html || true
-          cp dist/index.html dist/demo/404.html || true
+          # Add .nojekyll to bypass Jekyll
           touch dist/.nojekyll
+
+          # Fix paths for sub-apps to work in subdirectories
+          # Replace /assets/ with ./assets/ in sub-app index.html files
+          for app in admin client demo; do
+            if [ -f "dist/$app/index.html" ]; then
+              echo "Fixing paths in dist/$app/index.html"
+              sed -i 's|src="/assets/|src="./assets/|g' dist/$app/index.html
+              sed -i 's|href="/assets/|href="./assets/|g' dist/$app/index.html
+              sed -i 's|src="/images/|src="./images/|g' dist/$app/index.html
+              sed -i 's|href="/images/|href="./images/|g' dist/$app/index.html
+            fi
+          done
+
+          # Root index.html should be fine as it's at the domain root
+          cp dist/index.html dist/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
