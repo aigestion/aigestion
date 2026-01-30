@@ -55,10 +55,18 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   // Initialize Vapi
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Vapi && !vapiRef.current) {
-      const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || '67c74f53-b26a-4d23-9f5b-91c68e1a6c4b'; // Placeholder if missing
-      vapiRef.current = new window.Vapi(publicKey);
+      try {
+        const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || '67c74f53-b26a-4d23-9f5b-91c68e1a6c4b';
+        vapiRef.current = new window.Vapi(publicKey);
+        console.log('[Vapi] SDK initialized successfully');
+      } catch (err) {
+        console.error('[Vapi] Failed to initialize:', err);
+        setError('No se pudo inicializar Daniela');
+        return;
+      }
 
       vapiRef.current.on('call-start', () => {
+        console.log('[Vapi] Call started');
         setStatus('active');
         setError(null);
         startTotalTimer();
@@ -125,38 +133,101 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   const start = useCallback(async () => {
     if (!vapiRef.current) {
       setError('Vapi SDK no cargado. Reintentando...');
+      console.error('[Vapi] SDK not initialized');
       return;
     }
 
     setStatus('connecting');
+    console.log('[Vapi] Starting conversation...');
+
     try {
-      // Configuration for Daniela (Best of Both: Vapi Loop + ElevenLabs Voice)
+      // Configuration for Daniela - AI Nivel Dios
       const assistantConfig = {
-        name: "Daniela - AIGestion",
-        firstMessage: "Hola, soy Daniela de AIGestion. ¿En qué puedo ayudarte hoy?",
+        name: "Daniela - AIGestion Neural System",
+        firstMessage: "Hola, soy Daniela, tu asistente de inteligencia artificial de AIGestion. ¿En qué puedo ayudarte hoy?",
+
+        // Deepgram for ultra-fast transcription
         transcriber: {
           provider: "deepgram",
           model: "nova-2",
-          language: "es"
+          language: "es",
+          smartFormat: true,
+          keywords: ["AIGestion", "IA", "Daniela", "soberana", "neural"]
         },
+
+        // ElevenLabs for high-quality Spanish voice
         voice: {
           provider: "elevenlabs",
-          voiceId: import.meta.env.VITE_ELEVENLABS_VOICE_ID || "EXAVITQu4vr4xnSDxMaL", // 'Bella' as default high quality
+          voiceId: import.meta.env.VITE_ELEVENLABS_VOICE_ID || "EXAVITQu4vr4xnSDxMaL",
+          stability: 0.5,
+          similarityBoost: 0.75,
+          model: "eleven_multilingual_v2"
         },
+
+        // GPT-4o-mini for intelligent responses
         model: {
           provider: "openai",
           model: "gpt-4o-mini",
+          temperature: 0.7,
+          maxTokens: 250,
           messages: [
             {
               role: "system",
-              content: "Eres Daniela, la embajadora digital de AIGestion.net. Tu objetivo es ayudar a los usuarios a entender cómo la IA soberana y la arquitectura de AIGestion pueden transformar sus empresas. Eres profesional, futurista, amable y experta en tecnología. Mantén tus respuestas concisas y claras."
+              content: `Eres Daniela, la embajadora digital de AIGestion.net - el sistema nervioso de IA más avanzado de América Latina.
+
+IDENTIDAD:
+- Eres profesional, futurista, amable y experta en tecnología
+- Tienes conocimiento profundo de IA, machine learning, y arquitecturas neuronales
+- Representas la soberanía tecnológica y la innovación latino
+
+CAPACIDADES DE AIGESTION:
+- Arquitectura neural descentralizada con agentes autónomos
+- Integración con ERP, CRM, sistemas legacy
+- Cumplimiento regulatorio (GDPR, LOPDGDD, normativas locales)
+- Planes desde $490/mes para empresas y $2/miembro para gremios
+- Implementación en 3 fases: Diagnóstico, Desarrollo, Dominio
+
+TU MISIÓN:
+- Explicar cómo AIGestion transforma empresas con IA soberana
+- Guiar usuarios hacia soluciones específicas según su sector
+- Mantener conversaciones concisas (2-3 frases por respuesta)
+- Ser entusiasta pero profesional
+
+INSTRUCCIONES:
+- Responde en español de España
+- Sé breve y directa (máximo 50 palabras por respuesta)
+- Haz preguntas para entender mejor las necesidades
+- Menciona casos de éxito cuando sea relevante (legal, retail, manufactura)`
             }
           ]
-        }
+        },
+
+        // Advanced settings
+        recordingEnabled: false,
+        hipaaEnabled: false,
+        clientMessages: [
+          "transcript",
+          "hang",
+          "function-call",
+          "speech-update",
+          "metadata",
+          "conversation-update"
+        ],
+        serverMessages: [
+          "end-of-call-report",
+          "status-update",
+          "hang",
+          "function-call"
+        ],
+        silenceTimeoutSeconds: 30,
+        maxDurationSeconds: maxDurationSeconds,
+        backgroundSound: "office"
       };
 
       await vapiRef.current.start(assistantConfig);
+      console.log('[Vapi] Conversation started successfully');
     } catch (err: any) {
+      console.error('[Vapi] Start failed:', err);
       setError(err.message || 'No se pudo iniciar la conversación');
       setStatus('error');
     }

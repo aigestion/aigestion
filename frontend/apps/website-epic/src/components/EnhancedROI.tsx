@@ -92,7 +92,7 @@ export const EnhancedROI: React.FC = () => {
           {[...Array(8)].map((_, i) => (
             <motion.path
               key={i}
-              d={`M${i * 15}% 100% Q${i * 15 + 7.5}% ${70 - i * 15}% ${i * 15 + 15}% 0%`}
+              d={`M${i * 15} 100 Q${i * 15 + 7.5} ${70 - i * 15} ${i * 15 + 15} 0`}
               stroke="url(#chartGradient)"
               strokeWidth="1"
               fill="none"

@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import { audioService } from '../services/audio';
+import React from 'react';
+import { useSoundContext } from '../contexts/SoundContext';
 
 export const SoundControl: React.FC = () => {
-    const [isMuted, setIsMuted] = useState(audioService.getMutedState());
+    const { isMuted, toggleMute, playSfx } = useSoundContext();
 
     const toggleSound = () => {
-        const newState = audioService.toggleMute();
-        setIsMuted(newState);
+        toggleMute();
 
-        // Play a verification chime if unmuted
-        if (!newState) {
-            audioService.play('success_chime');
+        // Play a verification chime if unmuting
+        if (isMuted) {
+            setTimeout(() => playSfx('success_chime'), 100);
         }
     };
 

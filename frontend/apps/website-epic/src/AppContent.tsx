@@ -2,18 +2,25 @@ import { motion } from 'framer-motion';
 import { Suspense, lazy, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatedMeshGradient } from './components/AnimatedMeshGradient';
+import { CaseStudies } from './components/CaseStudies';
 import { CommandPalette } from './components/CommandPalette';
 import { CommandTerminal } from './components/CommandTerminal';
 import { ContactSection } from './components/ContactSection';
-import { CursorGlow } from './components/CursorGlow';
 import { CyberpunkGrid } from './components/CyberpunkGrid';
 import { DanielaOmniWidget } from './components/DanielaOmniWidget';
 import { DanielaShowcase } from './components/DanielaShowcase';
+import { FAQSection } from './components/FAQSection';
+import { IngeniousPlan } from './components/IngeniousPlan';
 import { MeshGradientBG } from './components/MeshGradientBG';
 import { Navigation } from './components/Navigation';
 import { NeuralParticles } from './components/NeuralParticles';
-import { NexusCursor } from './components/NexusCursor';
+import { PricingSection } from './components/PricingSection';
 import { ScrollProgress } from './components/ScrollProgress';
+import { ServicesDeepDive } from './components/ServicesDeepDive';
+import { VideoTutorials } from './components/VideoTutorials';
+import { AdminDashboard } from './components/dashboard/AdminDashboard';
+import { ClientDashboard } from './components/dashboard/ClientDashboard';
+import { DemoDashboard } from './components/dashboard/DemoDashboard';
 import { WorkbenchLayout } from './components/workbench/WorkbenchLayout';
 import { useNotification } from './contexts/NotificationContext';
 import { DanielaDemo } from './pages/DanielaDemo';
@@ -125,7 +132,6 @@ export const AppContent = ({
   return (
     <div className="bg-nexus-obsidian min-h-screen text-white font-sans selection:bg-nexus-violet selection:text-white relative">
       <MeshGradientBG />
-      <CursorGlow />
       <ScrollProgress />
       {!isAuthenticated ? <Navigation /> : null}
       <Routes>
@@ -145,10 +151,55 @@ export const AppContent = ({
             isAuthenticated ? (
               <WorkbenchLayout user={currentUser} onLogout={handleLogout} />
             ) : (
-              <Navigate to="/login" />
+                <div style={{ minHeight: '100vh', padding: '2rem' }}>
+                  <h1 style={{ textAlign: 'center', fontSize: '3rem', marginBottom: '2rem' }}>
+                    Centro de Control AIGestion
+                  </h1>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+                    <a href="/dashboard/admin" style={{
+                      background: 'rgba(139, 92, 246, 0.1)',
+                      padding: '2rem',
+                      borderRadius: '12px',
+                      textDecoration: 'none',
+                      color: 'white',
+                      border: '1px solid rgba(139, 92, 246, 0.3)'
+                    }}>
+                      <h3>🏆 Panel Administrativo</h3>
+                      <p>Control administrativo y análisis</p>
+                    </a>
+                    <a href="/dashboard/client" style={{
+                      background: 'rgba(6, 182, 212, 0.1)',
+                      padding: '2rem',
+                      borderRadius: '12px',
+                      textDecoration: 'none',
+                      color: 'white',
+                      border: '1px solid rgba(6, 182, 212, 0.3)'
+                    }}>
+                      <h3>👥 Panel de Cliente</h3>
+                      <p>Portal de clientes y gestión de proyectos</p>
+                    </a>
+                    <a href="/dashboard/demo" style={{
+                      background: 'rgba(16, 185, 129, 0.1)',
+                      padding: '2rem',
+                      borderRadius: '12px',
+                      textDecoration: 'none',
+                      color: 'white',
+                      border: '1px solid rgba(16, 185, 129, 0.3)'
+                    }}>
+                      <h3>🎪 Panel de Demostración</h3>
+                      <p>Demos interactivas y showcases</p>
+                    </a>
+                  </div>
+                  <p style={{ textAlign: 'center', marginTop: '2rem' }}>
+                    <a href="/login" style={{ color: '#667eea' }}>Iniciar Sesión para Acceso Completo</a>
+                  </p>
+                </div>
             )
           }
         />
+        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+        <Route path="/dashboard/client" element={<ClientDashboard />} />
+        <Route path="/dashboard/demo" element={<DemoDashboard />} />
         <Route
           path="/"
           element={
@@ -169,15 +220,33 @@ export const AppContent = ({
                   <NexusAndroid />
                 </Suspense>
 
+                {/* Servicios Integrales */}
+                <ServicesDeepDive />
+
+                {/* Casos de éxito */}
+                <CaseStudies />
+
                 {/* Strategic ROI analysis */}
                 <Suspense fallback={<LoadingFallback />}>
                   <EnhancedROI />
                 </Suspense>
 
+                {/* Precios y planes por cliente/gremio */}
+                <PricingSection />
+
+                {/* Plan Ingenioso */}
+                <IngeniousPlan />
+
+                {/* Tutoriales en video */}
+                <VideoTutorials />
+
                 {/* Decentraland Headquarters */}
                 <Suspense fallback={<LoadingFallback />}>
                   <DecentralandOffice />
                 </Suspense>
+
+                {/* Preguntas clave */}
+                <FAQSection />
 
                 {/* Immersive Contact Experience */}
                 <Suspense fallback={<LoadingFallback />}>
@@ -206,7 +275,53 @@ export const AppContent = ({
 
         <Route path="/weapon" element={<WeaponDashboard />} />
 
-        {/* Dashboards are handled by physical subdirectories */}
+        {/* Dashboard Hub Routes */}
+        <Route path="/dashboard" element={<Navigate to="/dashboard/" />} />
+        <Route path="/dashboard/" element={
+          <div style={{ minHeight: '100vh', padding: '2rem' }}>
+            <h1 style={{ textAlign: 'center', fontSize: '3rem', marginBottom: '2rem' }}>
+              AIGestion Dashboard Hub
+            </h1>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+              <a href="/dashboard/admin" style={{
+                background: 'rgba(139, 92, 246, 0.1)',
+                padding: '2rem',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                color: 'white',
+                border: '1px solid rgba(139, 92, 246, 0.3)'
+              }}>
+                <h3>🏆 Admin Dashboard</h3>
+                <p>Administrative control and analytics</p>
+              </a>
+              <a href="/dashboard/client" style={{
+                background: 'rgba(6, 182, 212, 0.1)',
+                padding: '2rem',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                color: 'white',
+                border: '1px solid rgba(6, 182, 212, 0.3)'
+              }}>
+                <h3>👥 Client Dashboard</h3>
+                <p>Client portal and project management</p>
+              </a>
+              <a href="/dashboard/demo" style={{
+                background: 'rgba(16, 185, 129, 0.1)',
+                padding: '2rem',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                color: 'white',
+                border: '1px solid rgba(16, 185, 129, 0.3)'
+              }}>
+                <h3>🎪 Demo Dashboard</h3>
+                <p>Interactive demos and showcases</p>
+              </a>
+            </div>
+          </div>
+        } />
+        <Route path="/dashboard/admin" element={<AdminDashboard />} />
+        <Route path="/dashboard/client" element={<ClientDashboard />} />
+        <Route path="/dashboard/demo" element={<DemoDashboard />} />
 
         {/* Daniela AI Routes */}
         <Route path="/daniela" element={<DanielaDemo />} />
@@ -221,7 +336,6 @@ export const AppContent = ({
       <CommandTerminal />
       <CommandPalette />
       <DanielaOmniWidget />
-      <NexusCursor />
       <AnimatedMeshGradient />
       <CyberpunkGrid />
       <NeuralParticles />
