@@ -27,6 +27,7 @@ export const Navigation: React.FC = () => {
     { label: 'Plan', path: '#plan', isHash: true },
     { label: 'Tutoriales', path: '#tutoriales', isHash: true },
     { label: 'Contacto', path: '#contact', isHash: true },
+    { label: 'HeartMuLa', path: '/heartmula' },
     { label: 'Daniela AI', path: '/daniela' },
     { label: 'Dashboard', path: '/dashboard' },
   ];

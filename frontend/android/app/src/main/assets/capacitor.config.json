@@ -1,8 +1,0 @@
-{
-	"appId": "com.aigestion.frontend",
-	"appName": "AIGestion",
-	"webDir": "apps/website-epic/dist",
-	"server": {
-		"androidScheme": "http"
-	}
-}
