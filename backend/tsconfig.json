@@ -7,7 +7,8 @@
     "outDir": "./dist",
     "rootDir": "./src",
     // Strict Mode: Gradual Migration Plan (see docs/TYPESCRIPT_STRICT_MIGRATION.md)
-    // TODO: Enable after resolving @types/express version conflicts
+    // Enabled individual strict settings instead of full "strict: true"
+    // This allows incremental adoption - Phase 1 in progress
     "strict": false,
     "noImplicitAny": false,
     "esModuleInterop": true,
