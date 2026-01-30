@@ -12,11 +12,12 @@
   VITE_SUPABASE_URL = "https://jhvtjyfmgncrrbzqpbkt.supabase.co"
   VITE_SUPABASE_ANON_KEY = "sbp_6a9e93bb95ca84a18e4c3f480ea37e0690124b21"
 
-# Redirect all routes to index.html for SPA routing
+# Redirect all routes to index.html for SPA routing (except /api/*)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
 # Security headers
 [[headers]]
@@ -62,6 +63,12 @@
   to = "https://aigestion-backend.onrender.com/api/:splat"
   status = 200
   force = true
+
+# 404 page handling
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
 
 # Environment-specific configurations
 [context.production]
