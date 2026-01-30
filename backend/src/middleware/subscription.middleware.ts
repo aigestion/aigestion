@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express';
 
 import { User } from '../models/User';
 import { logger } from '../utils/logger';

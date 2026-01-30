@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Request, Response } from 'express-serve-static-core';
+import type { Request, Response } from 'express';
 import { Container } from 'typedi';
 
 import { buildError } from '../common/response-builder';

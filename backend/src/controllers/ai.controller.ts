@@ -1,5 +1,5 @@
 // src/controllers/ai.controller.ts
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express';
 
 import { container } from '../config/inversify.config';
 import { buildResponse } from '../common/response-builder';

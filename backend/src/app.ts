@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import type { Request, Response } from 'express-serve-static-core';
+import type { Request, Response } from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
@@ -97,8 +97,8 @@ if (!isTest) {
 }
 
 // Security middlewares
-app.use(hpp());
-app.use(xssClean());
+app.use(hpp() as any);
+app.use(xssClean() as any);
 
 // app.use(responseTime());
 
@@ -107,7 +107,7 @@ app.use(
   compression({
     level: 7, // Slightly higher compression
     threshold: 512, // Compress smaller payloads for mobile speed
-  }),
+  }) as any,
 );
 
 // Logging Middleware

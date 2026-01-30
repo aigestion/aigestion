@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
-    "target": "es2021",
-    "module": "commonjs",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "lib": [
       "es2021",
       "dom"

@@ -129,7 +129,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
  */
 export const updateTask = async (req: Request, res: Response): Promise<void> => {
   try {
-    const taskId = parseInt(req.params.id);
+    const taskId = parseInt((req.params as any).id);
     if (isNaN(taskId)) {
       res.status(400).json({ message: 'Invalid task ID' });
       return;
@@ -173,7 +173,7 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
  */
 export const deleteTask = async (req: Request, res: Response): Promise<void> => {
   try {
-    const taskId = parseInt(req.params.id);
+    const taskId = parseInt((req.params as any).id);
     if (isNaN(taskId)) {
       res.status(400).json({ message: 'Invalid task ID' });
       return;

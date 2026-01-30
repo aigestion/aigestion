@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express';
-import { NewsService } from '../services/news.service';
+import { buildError, buildResponse } from '../common/response-builder';
 import { container } from '../config/inversify.config';
+import { NewsService } from '../services/news.service';
 import { TYPES } from '../types';
-import { buildResponse, buildError } from '../common/response-builder';
 import { logger } from '../utils/logger';
 
 const newsRouter = Router();
@@ -57,7 +57,7 @@ newsRouter.post('/ingest', async (req: Request, res: Response) => {
  */
 newsRouter.patch('/:id', async (req: Request, res: Response) => {
   const requestId = (req as any).requestId;
-  const { id } = req.params;
+  const { id } = req.params as any;
   const updates = req.body;
 
   try {
@@ -80,7 +80,7 @@ newsRouter.patch('/:id', async (req: Request, res: Response) => {
  */
 newsRouter.delete('/:id', async (req: Request, res: Response) => {
   const requestId = (req as any).requestId;
-  const { id } = req.params;
+  const { id } = req.params as any;
 
   try {
     const deleted = await getNewsService().deleteNews(id);

@@ -1,5 +1,5 @@
 // Tests for error utilities and catchAsync
-import { Request, Response, NextFunction } from 'express-serve-static-core';
+import { Request, Response, NextFunction } from 'express';
 import { AppError, BadRequestError, UnauthorizedError, ForbiddenError, NotFoundError, ConflictError, ValidationError, HttpStatusCode, catchAsync } from '../../utils/errors';
 
 describe('Error Classes', () => {

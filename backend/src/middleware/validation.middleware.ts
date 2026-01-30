@@ -5,7 +5,7 @@
  * bodies, query strings, and URL parameters. Errors are forwarded to the
  * global `errorHandler` middleware.
  */
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express';
 import { z, type AnyZodObject } from 'zod';
 
 export interface ValidationSchema {

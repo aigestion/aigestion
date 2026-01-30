@@ -1,5 +1,5 @@
+import type { Request, Response } from 'express';
 import { Router } from 'express';
-import type { Request, Response } from 'express-serve-static-core';
 
 import { buildResponse } from '../common/response-builder';
 import { getTemplates, renderTemplate } from '../services/exit-email.service';
@@ -44,7 +44,7 @@ router.get('/', (req: Request, res: Response) => {
  *         description: Template not found
  */
 router.get('/:name', (req: Request, res: Response) => {
-  const { name } = req.params;
+  const { name } = req.params as any;
   try {
     const content = renderTemplate(name, {}); // no data replacement
     const requestId = (req as any).requestId;

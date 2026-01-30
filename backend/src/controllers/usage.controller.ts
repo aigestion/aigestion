@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express';
 import { injectable } from 'inversify';
 import { AppError } from '../utils/errors';
 import { UsageRecord } from '../models/UsageRecord';

@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express-serve-static-core';
+import type { Request, Response } from 'express';
 import os from 'os';
 
 import { User } from '../models/User';

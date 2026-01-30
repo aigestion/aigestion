@@ -1,5 +1,5 @@
-﻿// src/docs/swagger.ts
-import type { Express } from 'express-serve-static-core';
+// src/docs/swagger.ts
+import type { Express } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
@@ -28,7 +28,7 @@ const specs = swaggerJsdoc(options);
  */
 export function setupSwagger(app: Express): void {
   // Serve Swagger UI at /api-docs
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
+  app.use('/api-docs', swaggerUi.serve as any, swaggerUi.setup(specs, { explorer: true }) as any);
 
   // Provide raw OpenAPI JSON at /api-docs.json
   app.get('/api-docs.json', (_req: any, res: any) => {

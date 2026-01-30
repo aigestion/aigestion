@@ -1,5 +1,5 @@
 import rateLimit from 'express-rate-limit';
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express';
 import RedisStore from 'rate-limit-redis';
 
 import { getRedisClient } from '../cache/redis';

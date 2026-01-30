@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express-serve-static-core';
+import type { Request, Response } from 'express';
 import { inject } from 'inversify';
 import { controller, httpPost, request, response } from 'inversify-express-utils';
 import Stripe from 'stripe';

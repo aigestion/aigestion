@@ -1,6 +1,6 @@
 // src/__tests__/middleware/validation.middleware.test.ts
 import { validate, validateBody, validateQuery, validateParams, schemas } from '../../../src/middleware/validation.middleware';
-import type { Request, Response, NextFunction } from 'express-serve-static-core';
+import type { Request, Response, NextFunction } from 'express';
 
 describe('validation.middleware', () => {
     const makeReq = (overrides: Partial<Request> = {}): Request => {

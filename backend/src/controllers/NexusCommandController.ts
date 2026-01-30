@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express-serve-static-core';
+import type { Request, Response } from 'express';
 import { logger } from '../utils/logger';
 import { neuralHealthService } from '../services/NeuralHealthService';
 import { predictiveHealingService } from '../services/PredictiveHealingService';
