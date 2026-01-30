@@ -52,6 +52,7 @@ jobs:
           cp deploy_dist/index.html deploy_dist/404.html
 
           echo "aigestion.net" > deploy_dist/CNAME
+          touch deploy_dist/.nojekyll
 
       - name: Debug Deployment Artifact
         run: |
