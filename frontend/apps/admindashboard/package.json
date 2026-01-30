@@ -14,7 +14,7 @@
   "dependencies": {
     "@capacitor/android": "^8.0.1",
     "@capacitor/cli": "^8.0.1",
-    "@capacitor/core": "^8.0.1",
+    "@capacitor/core": "^8.0.2",
     "@supabase/supabase-js": "^2.90.1",
     "framer-motion": "^12.26.2",
     "howler": "^2.2.4",

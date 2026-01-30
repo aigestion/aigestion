@@ -29,7 +29,7 @@
   "dependencies": {
     "@capacitor/android": "^6.1.1",
     "@capacitor/cli": "^6.1.1",
-    "@capacitor/core": "^6.1.1",
+    "@capacitor/core": "^8.0.2",
     "canvas-confetti": "^1.9.3",
     "react-window": "^1.8.11"
   },
