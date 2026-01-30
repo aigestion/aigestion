@@ -1,0 +1,209 @@
+name: Deploy Website Epic to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: "npm"
+          cache-dependency-path: frontend/apps/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend/apps/website-epic
+        run: npm ci
+
+      - name: Build application
+        working-directory: frontend/apps/website-epic
+        run: npm run build
+        env:
+          VITE_API_URL: https://api.aigestion.net
+          VITE_SUPABASE_URL: https://jhvtjyfmgncrrbzqpbkt.supabase.co
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/apps/dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Performance and Security Checks
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: "npm"
+          cache-dependency-path: frontend/apps/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend/apps/website-epic
+        run: npm ci
+
+      - name: Security audit
+        working-directory: frontend/apps/website-epic
+        run: npm audit --audit-level=moderate
+
+      - name: Run tests
+        working-directory: frontend/apps/website-epic
+        run: npm test
+
+      - name: Build and analyze bundle
+        working-directory: frontend/apps/website-epic
+        run: |
+          npm run build
+          npx bundle-analyzer dist/static/js/*.js
+
+  # Lighthouse Performance Audit
+  lighthouse:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: frontend/apps/website-epic/dist
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          configPath: "./lighthouserc.json"
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+
+  # Visual Regression Testing
+  visual-regression:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: "npm"
+          cache-dependency-path: frontend/apps/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend/apps/website-epic
+        run: npm ci
+
+      - name: Run visual regression tests
+        working-directory: frontend/apps/website-epic
+        run: npm run test:visual
+
+      - name: Upload visual regression results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-regression-results
+          path: tests/visual/diff/
+
+  # E2E Testing
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: "npm"
+          cache-dependency-path: frontend/apps/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend/apps/website-epic
+        run: npm ci
+
+      - name: Install Playwright
+        working-directory: frontend/apps/website-epic
+        run: npx playwright install
+
+      - name: Run E2E tests
+        working-directory: frontend/apps/website-epic
+        run: npm run test:e2e
+
+      - name: Upload E2E test results
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-test-results
+          path: playwright-report/
+
+  # Performance Monitoring
+  performance:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Performance check
+        run: |
+          curl -f https://aigestion.net || exit 1
+          curl -f https://www.aigestion.net || exit 1
+
+      - name: Core Web Vitals check
+        run: |
+          npx lighthouse https://aigestion.net \
+            --output=json \
+            --output-path=lighthouse-results.json \
+            --chrome-flags="--headless --no-sandbox"
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: lighthouse-results.json

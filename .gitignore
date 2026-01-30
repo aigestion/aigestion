@@ -245,3 +245,7 @@ config/secrets.local.json
 
 # Token Optimization
 linters/
+
+# Local Netlify folder
+.netlify
+n8n_data/
