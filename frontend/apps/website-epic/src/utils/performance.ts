@@ -1,4 +1,6 @@
 // Performance monitoring utilities
+declare const gtag: any;
+
 export interface PerformanceMetrics {
   fcp: number; // First Contentful Paint
   lcp: number; // Largest Contentful Paint

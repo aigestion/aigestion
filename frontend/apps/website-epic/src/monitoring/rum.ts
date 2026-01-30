@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface RUMMetric {
   readonly name: string;
@@ -12,7 +12,7 @@ export interface RUMMetric {
 }
 
 export interface RUMConfig {
-  readonly sampleRate: number;
+  readonly sampleRate?: number;
   readonly beaconEndpoint?: string;
   readonly apiKey?: string;
   readonly trackResources?: boolean;
@@ -53,12 +53,12 @@ export interface RUMReport {
 }
 
 export interface WebVitals {
-  readonly fcp: number; // First Contentful Paint
-  readonly lcp: number; // Largest Contentful Paint
-  readonly cls: number; // Cumulative Layout Shift
-  readonly fid: number; // First Input Delay
-  readonly inp: number; // Interaction to Next Paint
-  readonly ttfb: number; // Time to First Byte
+  fcp: number; // First Contentful Paint
+  lcp: number; // Largest Contentful Paint
+  cls: number; // Cumulative Layout Shift
+  fid: number; // First Input Delay
+  inp: number; // Interaction to Next Paint
+  ttfb: number; // Time to First Byte
 }
 
 export function useRUM(config: RUMConfig = {}) {
@@ -77,12 +77,12 @@ export function useRUM(config: RUMConfig = {}) {
     trackFID = true,
     trackINP = true,
     trackTTFB = 100,
-    ...config,
+    ...restConfig
   } = config;
 
   // Check if Performance Observer API is supported
   useEffect(() => {
-    const supported = 
+    const supported =
       'PerformanceObserver' in globalThis &&
       'PerformanceNavigationTiming' in globalThis &&
       'PerformancePaintTiming' in globalThis &&
@@ -100,7 +100,7 @@ export function useRUM(config: RUMConfig = {}) {
     return new Promise((resolve, reject) => {
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        
+
         const vitals: WebVitals = {
           fcp: 0,
           lcp: 0,
@@ -110,7 +110,7 @@ export function useRUM(config: RUMConfig = {}) {
           ttfb: 0,
         };
 
-        entries.forEach((entry) => {
+        entries.forEach((entry: any) => {
           switch (entry.name) {
             case 'first-contentful-paint':
               vitals.fcp = entry.startTime;
@@ -126,7 +126,7 @@ export function useRUM(config: RUMConfig = {}) {
               vitals.inp = entry.startTime + entry.duration;
               break;
             case 'time-to-first-byte':
-              vitals.ttfb = entry.responseStart - requestStart;
+              vitals.ttfb = entry.responseStart - (entry.requestStart || 0);
               break;
           }
         });
@@ -199,6 +199,13 @@ export function useRUM(config: RUMConfig = {}) {
     userTimings: PerformanceEntry[];
     longTasks: PerformanceEntry[];
     vitals: WebVitals;
+    performance: {
+      navigationStart: number;
+      loadEventEnd: number;
+      domContentLoaded: number;
+      firstPaint: number;
+      firstContentfulPaint: number;
+    };
   }> => {
     const [navigation, resources, userTimings, longTasks, vitals] = await Promise.all([
       collectNavigationTiming(),
@@ -213,10 +220,11 @@ export function useRUM(config: RUMConfig = {}) {
       resources,
       userTimings,
       longTasks,
+      vitals,
       // Combine with performance timing
       performance: {
         navigationStart: navigation.fetchStart,
-        loadEventEnd: performance.loadEventEnd,
+        loadEventEnd: navigation.loadEventEnd,
         domContentLoaded: navigation.domContentLoadedEventEnd,
         firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0,
         firstContentfulPaint: performance.getEntriesByType('paint')[1]?.startTime || 0,
@@ -343,7 +351,7 @@ export function useRUM(config: RUMConfig = {}) {
       const blob = new Blob([JSON.stringify(payload)], {
         type: 'application/json',
       });
-      
+
       navigator.sendBeacon(config.beaconEndpoint, blob);
     } else {
       // Fallback to fetch
@@ -377,7 +385,7 @@ export function useRUM(config: RUMConfig = {}) {
         processedMetrics.push({
           name,
           value,
-          rating: getRating(calculateScores({ [name]: value }[`${name}`]),
+          rating: getRating((calculateScores({ [name]: value } as any) as any)[`${name}`]),
           timestamp: Date.now(),
           url: globalThis.location.href,
           userAgent: navigator.userAgent,
@@ -435,8 +443,8 @@ export function useRUM(config: RUMConfig = {}) {
       }
 
       // Apply sampling
-      const sampledMetrics = sampleRate >= 1 
-        ? processedMetrics 
+      const sampledMetrics = sampleRate >= 1
+        ? processedMetrics
         : processedMetrics.filter(() => Math.random() < sampleRate);
 
       setMetrics(sampledMetrics);
@@ -451,7 +459,7 @@ export function useRUM(config: RUMConfig = {}) {
         vitals,
         performance: {
           navigationStart: navigation.fetchStart,
-          loadEventEnd: performance.loadEventEnd,
+          loadEventEnd: navigation.loadEventEnd,
           domContentLoaded: navigation.domContentLoadedEventEnd,
           firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0,
           firstContentfulPaint: performance.getEntriesByType('paint')[1]?.startTime || 0,
@@ -504,7 +512,7 @@ export function useRUM(config: RUMConfig = {}) {
 // Utility functions
 function getDeviceType(): string {
   const ua = navigator.userAgent;
-  
+
   if (/tablet|iPad|Android(?!.*Mobile)|Safari/i.test(ua)) {
     return 'tablet';
   }
@@ -574,25 +582,18 @@ export function useLCP() {
 }
 
 export function useCLS() {
-  const { collectWebVitals, isSupported } = useRUM();
+  const { isSupported } = useRUM();
   const [cls, setCLS] = useState<number | null>(null);
 
   useEffect(() => {
     if (!isSupported) return;
 
-    const updateCLS = () => {
-      try {
-        const vitals = await collectWebVitals();
-        setCLS(vitals.cls);
-      } catch (error) {
-        console.error('CLS collection failed:', error);
-      }
-    };
+    // Removed unused updateCLS function
 
     // Monitor CLS continuously
     const observer = new PerformanceObserver((list) => {
       const entries = list.getEntries();
-      const clsValue = entries.reduce((sum, entry) => sum + (entry.value || 0), 0);
+      const clsValue = entries.reduce((sum, entry: any) => sum + (entry.value || 0), 0);
       setCLS(clsValue);
     });
 
@@ -611,7 +612,7 @@ export function useFID() {
   useEffect(() => {
     if (!isSupported) return;
 
-    const updateFID = () => {
+    const updateFID = async () => {
       try {
         const vitals = await collectWebVitals();
         setFID(vitals.fid);
@@ -621,7 +622,7 @@ export function useFID() {
     };
 
     // Collect FID on first interaction
-    globalThis.addEventListener('pointerdown', updateFID, { once: true });
+    globalThis.addEventListener('pointerdown', () => { updateFID(); }, { once: true });
   }, [isSupported, collectWebVitals]);
 
   return { fid, isSupported };
@@ -634,7 +635,7 @@ export function useINP() {
   useEffect(() => {
     if (!isSupported) return;
 
-    const updateINP = () => {
+    const updateINP = async () => {
       try {
         const vitals = await collectWebVitals();
         setINP(vitals.inp);
@@ -644,7 +645,7 @@ export function useINP() {
     };
 
     // Collect INP on interaction
-    globalThis.addEventListener('pointerdown', updateINP, { once: true });
+    globalThis.addEventListener('pointerdown', () => { updateINP(); }, { once: true });
   }, [isSupported, collectWebVitals]);
 
   return { inp, isSupported };
@@ -657,7 +658,7 @@ export function useTTFB() {
   useEffect(() => {
     if (!isSupported) return;
 
-    const updateTTFB = () => {
+    const updateTTFB = async () => {
       try {
         const vitals = await collectWebVitals();
         setTTFB(vitals.ttfb);

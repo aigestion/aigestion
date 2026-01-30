@@ -12,6 +12,7 @@ interface GenerationOptions {
 }
 
 export class CORSImageService {
+    private static readonly CORS_PROXY = 'https://corsfix.com/';
     private static readonly FALLBACK_STRATEGIES = [
         'cors-proxy',
         'direct-fetch',
@@ -58,7 +59,7 @@ export class CORSImageService {
     ): Promise<string> {
         switch (strategy) {
             case 'cors-proxy':
-                return this.tryCORSProxy(prompt, model, settings);
+                return this.tryCorsProxy(prompt, model, settings);
             case 'direct-fetch':
                 return this.tryDirectFetch(prompt, model, settings);
             case 'jsonp':
@@ -71,11 +72,11 @@ export class CORSImageService {
     }
 
     /**
-     * Strategy 1: CORS Proxy (if available)
+     * Strategy 1: CORS Proxy for Pollinations.ai
      */
-    private static async tryCORSProxy(prompt: string, model: FluxModel, settings: any): Promise<string> {
-        // Use local proxy for CORS fix
-        const proxyUrl = `/api/pollinations/p/${encodeURIComponent(prompt)}?model=${model === 'flux-pro' ? 'flux-realism' : 'flux'}&width=${settings.width}&height=${settings.height}&seed=${settings.seed}&nologo=true`;
+    private static async tryCorsProxy(prompt: string, model: FluxModel, settings: any): Promise<string> {
+        const pollinationsUrl = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?model=${model === 'flux-pro' ? 'flux-realism' : 'flux'}&width=${settings.width}&height=${settings.height}&seed=${settings.seed}&nologo=true`;
+        const proxyUrl = `${this.CORS_PROXY}${pollinationsUrl}`;
 
         const response = await fetch(proxyUrl, {
             headers: {

@@ -22,6 +22,7 @@ export interface CSPViolation {
   readonly sourceFile?: string;
   readonly statusCode?: number;
   readonly violatedDirective: string;
+  readonly timestamp?: string;
 }
 
 // Default CSP configuration for AIGestion
@@ -32,85 +33,85 @@ export const defaultCSPConfig: CSPConfig = {
       name: 'default-src',
       value: "'self' https://jhvtjyfmgncrrbzqpbkt.supabase.co https://*.supabase.co",
     },
-    
+
     // Script-src: Allow scripts from same origin and trusted CDNs
     {
       name: 'script-src',
       value: "'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.googletagmanager.com https://*.google-analytics.com https://vercel.live https://*.vercel.live",
     },
-    
+
     // Style-src: Allow inline styles and external stylesheets
     {
       name: 'style-src',
       value: "'self' 'unsafe-inline' https://fonts.googleapis.com https://*.googleapis.com",
     },
-    
+
     // Img-src: Allow images from same origin and trusted sources
     {
       name: 'img-src',
       value: "'self' data: blob: https://*.supabase.co https://*.githubusercontent.com https://*.unsplash.com https://*.images.unsplash.com https://*.googleusercontent.com https://vercel.live https://*.vercel.live",
     },
-    
+
     // Font-src: Allow fonts from Google Fonts
     {
       name: 'font-src',
       value: "'self' https://fonts.gstatic.com https://*.gstatic.com data:",
     },
-    
+
     // Connect-src: Allow API connections to trusted domains
     {
       name: 'connect-src',
       value: "'self' https://api.github.com https://api.openai.com https://*.supabase.co https://*.supabase.co wss://*.supabase.co",
     },
-    
+
     // Media-src: Allow media from same origin and trusted sources
     {
       name: 'media-src',
       value: "'self' blob: https://*.supabase.co https://*.githubusercontent.com",
     },
-    
+
     // Object-src: Disallow objects (plugins, etc.)
     {
       name: 'object-src',
       value: "'none'",
     },
-    
+
     // Base-uri: Restrict base URI to same origin
     {
       name: 'base-uri',
       value: "'self'",
     },
-    
+
     // Form-action: Allow forms to submit to same origin and trusted domains
     {
       name: 'form-action',
       value: "'self' https://*.supabase.co",
     },
-    
+
     // Frame-ancestors: Allow iframes from trusted domains
     {
       name: 'frame-ancestors',
       value: "'self' https://www.youtube.com https://player.vimeo.com https://*.supabase.co",
     },
-    
+
     // Frame-src: Allow iframes from trusted domains
     {
       name: 'frame-src',
       value: "'self' https://www.youtube.com https://player.vimeo.com https://*.supabase.co",
     },
-    
+
     // Worker-src: Allow workers from same origin
     {
       name: 'worker-src',
       value: "'self' blob:",
     },
-    
+
     // Manifest-src: Allow manifest from same origin
     {
       name: 'manifest-src',
       value: "'self'",
     },
-    
+
     // Upgrade-insecure-requests: Upgrade HTTP to HTTPS
     {
       name: 'upgrade-insecure-requests',
@@ -192,15 +193,15 @@ export function generateCSPHeader(config: CSPConfig): string {
   const directives = config.directives
     .map(directive => `${directive.name} ${directive.value}`)
     .join('; ');
-  
+
   let header = directives;
-  
+
   if (config.reportOnly) {
     header += '; report-uri /api/csp-report';
   } else if (config.reportURI) {
     header += `; report-uri ${config.reportURI}`;
   }
-  
+
   return header;
 }
 
@@ -270,8 +271,8 @@ export class CSPViolationReporter {
 
   getRecentViolations(minutes: number = 60): CSPViolation[] {
     const cutoff = new Date(Date.now() - minutes * 60 * 1000);
-    return this.violations.filter(v => 
-      new Date(v.timestamp) >= cutoff
+    return this.violations.filter(v =>
+      new Date(v.timestamp || Date.now()) >= cutoff
     );
   }
 
@@ -285,9 +286,9 @@ export class CSPViolationReporter {
     recent: number;
   } {
     const byDirective: Record<string, number> = {};
-    
+
     this.violations.forEach(violation => {
-      byDirective[violation.violatedDirective] = 
+      byDirective[violation.violatedDirective] =
         (byDirective[violation.violatedDirective] || 0) + 1;
     });
 
@@ -302,7 +303,7 @@ export class CSPViolationReporter {
 // CSP middleware for Express.js
 export function cspMiddleware(config: CSPConfig = defaultCSPConfig) {
   const cspHeader = generateCSPHeader(config);
-  
+
   return (req: any, res: any, next: any) => {
     res.setHeader('Content-Security-Policy', cspHeader);
     next();
@@ -359,7 +360,7 @@ export const cspUtils = {
   // Validate CSP configuration
   validateConfig: (config: CSPConfig): boolean => {
     const requiredDirectives = ['default-src', 'script-src', 'style-src'];
-    
+
     return requiredDirectives.every(directive =>
       config.directives.some(d => d.name === directive)
     );

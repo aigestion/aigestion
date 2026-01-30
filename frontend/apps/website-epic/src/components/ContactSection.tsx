@@ -1,4 +1,6 @@
 import { useSoundEffects } from '../hooks/useSoundEffects';
+import { motion } from 'framer-motion';
+import { ContactForm } from './ContactForm';
 import { GlitchText } from './GlitchText';
 
 export const ContactSection: React.FC = () => {

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Brain, Cpu, Globe, Shield, Sparkles, Zap } from 'lucide-react';
 import React, { useState } from 'react';
+import { DanielaWebsite } from '../components/DanielaWebsite';
 
 export const DanielaDemo: React.FC = () => {
   const [demoMode, setDemoMode] = useState<'conversation' | 'features' | 'analytics'>(

@@ -1,9 +1,9 @@
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { useMemo } from 'react';
-import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
 
 export interface SpringConfig {
-  readonly tension?: number;
-  readonly friction?: number;
+  readonly stiffness?: number;
+  readonly damping?: number;
   readonly mass?: number;
   readonly velocity?: number;
   readonly clamp?: boolean;
@@ -22,8 +22,8 @@ export interface MicroInteractionOptions {
 }
 
 const DEFAULT_SPRING_CONFIG: SpringConfig = {
-  tension: 300,
-  friction: 30,
+  stiffness: 300,
+  damping: 30,
   mass: 1,
   clamp: false,
 };
@@ -78,7 +78,7 @@ export function useSpringPhysics(options: MicroInteractionOptions = {}) {
       brightnessValue.set(brightness);
       hueValue.set(hue);
     },
-    
+
     onHoverEnd: () => {
       scaleX.set(1);
       scaleY.set(1);
@@ -87,19 +87,19 @@ export function useSpringPhysics(options: MicroInteractionOptions = {}) {
       brightnessValue.set(1);
       hueValue.set(0);
     },
-    
+
     onTapStart: () => {
       scaleX.set(scale * 0.95);
       scaleY.set(scale * 0.95);
       blurValue.set(blur);
     },
-    
+
     onTap: () => {
       scaleX.set(scale * 1.1);
       scaleY.set(scale * 1.1);
       rotateX.set(rotate);
       rotateY.set(rotate);
-      
+
       // Reset after a short delay
       setTimeout(() => {
         scaleX.set(1);
@@ -109,7 +109,7 @@ export function useSpringPhysics(options: MicroInteractionOptions = {}) {
         blurValue.set(0);
       }, 200);
     },
-    
+
     onTapEnd: () => {
       blurValue.set(0);
     },
@@ -121,14 +121,15 @@ export function useSpringPhysics(options: MicroInteractionOptions = {}) {
 
   // Combined style object
   const style = useMemo(() => ({
-    scale: [scaleXSpring, scaleYSpring],
+    scaleX: scaleXSpring,
+    scaleY: scaleYSpring,
     rotateX: rotateXSpring,
     rotateY: rotateYSpring,
     rotateZ: rotateZSpring,
     opacity: opacitySpring,
     filter: useTransform(
       [blurSpring, brightnessSpring, hueSpring],
-      ([blur, brightness, hue]) => 
+      ([blur, brightness, hue]) =>
         `blur(${blur}px) brightness(${brightness}) hue-rotate(${hue}deg)`
     ),
   }), [
@@ -143,23 +144,23 @@ export function useSpringPhysics(options: MicroInteractionOptions = {}) {
 export function useMagneticEffect(strength = 0.3) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  
+
   const rotateX = useTransform(y, [-0.5, 0.5], [strength * -10, strength * 10]);
   const rotateY = useTransform(x, [-0.5, 0.5], [strength * -10, strength * 10]);
-  
+
   const handlers = useMemo(() => ({
     onMouseMove: (event: React.MouseEvent<HTMLDivElement>) => {
       const rect = event.currentTarget.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      
+
       const deltaX = (event.clientX - centerX) / rect.width;
       const deltaY = (event.clientY - centerY) / rect.height;
-      
+
       x.set(deltaX);
       y.set(deltaY);
     },
-    
+
     onMouseLeave: () => {
       x.set(0);
       y.set(0);
@@ -179,18 +180,18 @@ export function useMagneticEffect(strength = 0.3) {
 export function useParallaxEffect(intensity = 0.5) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  
+
   const translateX = useTransform(x, [-1, 1], [-intensity * 20, intensity * 20]);
   const translateY = useTransform(y, [-1, 1], [-intensity * 20, intensity * 20]);
-  
+
   const handlers = useMemo(() => ({
     onGlobalMouseMove: (event: MouseEvent) => {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
-      
+
       const deltaX = (event.clientX - centerX) / centerX;
       const deltaY = (event.clientY - centerY) / centerY;
-      
+
       x.set(deltaX);
       y.set(deltaY);
     },
@@ -207,23 +208,23 @@ export function useParallaxEffect(intensity = 0.5) {
 // Hook for elastic button effect
 export function useElasticButton(options: { readonly scale?: number; readonly config?: SpringConfig } = {}) {
   const { scale = 1.2, config } = options;
-  
+
   const buttonScale = useMotionValue(1);
   const buttonScaleSpring = useSpring(buttonScale, config || DEFAULT_SPRING_CONFIG);
-  
+
   const handlers = useMemo(() => ({
     onHoverStart: () => {
       buttonScale.set(scale);
     },
-    
+
     onHoverEnd: () => {
       buttonScale.set(1);
     },
-    
+
     onTapStart: () => {
       buttonScale.set(0.95);
     },
-    
+
     onTapEnd: () => {
       buttonScale.set(1);
     },
@@ -243,13 +244,13 @@ export function useFloatingAnimation(options: {
   readonly phase?: number;
 } = {}) {
   const { amplitude = 10, frequency = 2, phase = 0 } = options;
-  
+
   const y = useMotionValue(0);
   const ySpring = useSpring(y, {
-    tension: 100,
-    friction: 20,
+    stiffness: 100,
+    damping: 20,
   });
-  
+
   // Start floating animation
   const startFloating = useMemo(() => () => {
     const animate = () => {
@@ -270,7 +271,7 @@ export function useFloatingAnimation(options: {
 
 // Hook for staggered animations
 export function useStaggerAnimation(items: any[], delay = 0.1) {
-  return useMemo(() => 
+  return useMemo(() =>
     items.map((_, index) => ({
       initial: { opacity: 0, y: 20 },
       animate: { opacity: 1, y: 0 },
@@ -287,7 +288,7 @@ export function useStaggerAnimation(items: any[], delay = 0.1) {
 export function useMorphShape() {
   const pathLength = useMotionValue(0);
   const pathLengthSpring = useSpring(pathLength, DEFAULT_SPRING_CONFIG);
-  
+
   const handlers = useMemo(() => ({
     morphTo: (targetLength: number) => {
       pathLength.set(targetLength);
@@ -306,22 +307,22 @@ export function useLiquidEffect() {
   const scaleX = useMotionValue(1);
   const scaleY = useMotionValue(1);
   const rotate = useMotionValue(0);
-  
-  const scaleXSpring = useSpring(scaleX, { tension: 200, friction: 25 });
-  const scaleYSpring = useSpring(scaleY, { tension: 200, friction: 25 });
-  const rotateSpring = useSpring(rotate, { tension: 200, friction: 25 });
-  
+
+  const scaleXSpring = useSpring(scaleX, { stiffness: 200, damping: 25 });
+  const scaleYSpring = useSpring(scaleY, { stiffness: 200, damping: 25 });
+  const rotateSpring = useSpring(rotate, { stiffness: 200, damping: 25 });
+
   const handlers = useMemo(() => ({
     onLiquidMove: (event: React.MouseEvent<HTMLDivElement>) => {
       const rect = event.currentTarget.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width;
       const y = (event.clientY - rect.top) / rect.height;
-      
+
       scaleX.set(1 + (x - 0.5) * 0.2);
       scaleY.set(1 + (y - 0.5) * 0.2);
       rotate.set((x - 0.5) * 10);
     },
-    
+
     onLiquidEnd: () => {
       scaleX.set(1);
       scaleY.set(1);
@@ -330,7 +331,8 @@ export function useLiquidEffect() {
   }), [scaleX, scaleY, rotate]);
 
   const style = useMemo(() => ({
-    scale: [scaleXSpring, scaleYSpring],
+    scaleX: scaleXSpring,
+    scaleY: scaleYSpring,
     rotate: rotateSpring,
     transformOrigin: 'center',
   }), [scaleXSpring, scaleYSpring, rotateSpring]);

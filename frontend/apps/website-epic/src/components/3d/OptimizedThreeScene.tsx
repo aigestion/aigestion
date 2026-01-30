@@ -1,13 +1,10 @@
-import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { 
-  InstancedMesh, 
-  DynamicDrawUsage, 
-  StaticDrawUsage,
-  Sphere, 
-  Box, 
-  Plane 
+import {
+    Box,
+    Plane,
+    Sphere
 } from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 // LOD Manager for level of detail optimization
@@ -42,10 +39,10 @@ function useLOD(levels: LODLevel[], camera: THREE.Camera) {
 }
 
 // Instanced geometry for performance
-function InstancedObjects({ 
-  count, 
-  positions, 
-  colors 
+function InstancedObjects({
+  count,
+  positions,
+  colors
 }: {
   readonly count: number;
   readonly positions: Float32Array;
@@ -83,10 +80,10 @@ function InstancedObjects({
 }
 
 // Frustum culling component
-function FrustumCulledObject({ 
-  children, 
-  position 
-}: { 
+function FrustumCulledObject({
+  children,
+  position
+}: {
   readonly children: React.ReactNode;
   readonly position: [number, number, number];
 }) {
@@ -189,7 +186,7 @@ export function OptimizedThreeScene({
     if (onPerformanceUpdate) {
       const renderer = state.gl;
       const memory = (renderer as any).info.memory;
-      
+
       const newStats: PerformanceStats = {
         fps: Math.round(1000 / state.clock.getDelta()),
         drawCalls: (renderer as any).info.render.calls,
@@ -235,7 +232,7 @@ export function OptimizedThreeScene({
       >
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
-        
+
         {/* Optimized particles */}
         <OptimizedParticles count={particleCount} />
 
@@ -256,7 +253,7 @@ export function OptimizedThreeScene({
                 <meshStandardMaterial color="orange" />
               </Box>
             </FrustumCulledObject>
-            
+
             <FrustumCulledObject position={[-5, 0, 0]}>
               <Sphere args={[0.5, 16, 16]}>
                 <meshStandardMaterial color="blue" />
@@ -275,9 +272,9 @@ export function OptimizedThreeScene({
         )}
 
         {/* Ground plane with optimization */}
-        <Plane 
-          args={[100, 100]} 
-          rotation={[-Math.PI / 2, 0, 0]} 
+        <Plane
+          args={[100, 100]}
+          rotation={[-Math.PI / 2, 0, 0]}
           position={[0, -5, 0]}
         >
           <meshBasicMaterial color="#1a1a1a" />
@@ -329,7 +326,7 @@ export function useThreeOptimization() {
   const enableShadowOptimizations = useCallback(() => {
     gl.shadowMap.enabled = true;
     gl.shadowMap.type = THREE.PCFSoftShadowMap;
-    
+
     // Optimize shadow camera
     scene.traverse((object) => {
       if (object instanceof THREE.Light && object.castShadow) {

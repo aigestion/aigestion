@@ -160,7 +160,8 @@
     "cloudcode.showDebugInfo": false,
     "cloudcode.showWelcomeOnStartup": false,
     "gemini.enabled": false,
-    "gemini.showWelcome": false
+    "gemini.showWelcome": false,
+    "java.configuration.updateBuildConfiguration": "interactive"
   },
   "extensions": {
     "recommendations": [

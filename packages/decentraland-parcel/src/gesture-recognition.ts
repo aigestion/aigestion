@@ -1,4 +1,3 @@
-```
 // Gesture Recognition System for Hands-Free Control
 import { engine, InputAction, Material, MeshRenderer, pointerEventsSystem, Transform } from '@dcl/sdk/ecs'
 import { setTimeout, setInterval } from './utils/timers'

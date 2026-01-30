@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { audioService, type SoundType } from '../services/audio-silent';
+import { audioService, type SoundType } from '../services/audio-service';
 
 export const useSound = () => {
   const play = useCallback((type: SoundType) => {

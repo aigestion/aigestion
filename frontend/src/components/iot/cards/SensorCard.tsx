@@ -47,15 +47,15 @@ const SensorCard: React.FC<SensorCardProps> = ({ device }) => {
 
         {/* Simple SVG Sparkline */}
         <div className="w-24 h-12">
-           <svg className="w-full h-full overflow-visible">
-             <polyline
-               fill="none"
-               stroke="currentColor"
-               strokeWidth="2"
-               className="text-blue-500 opacity-50"
-               points={mockHistory.map((val, i) => \`\${i * (96 / (mockHistory.length - 1))},\${48 - ((val - min) / (max - min)) * 48}\`).join(' ')}
-             />
-           </svg>
+            <svg className="w-full h-full overflow-visible">
+              <polyline
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="text-blue-500 opacity-50"
+                points={mockHistory.map((val, i) => `${i * (96 / (mockHistory.length - 1))},${48 - ((val - min) / (max - min)) * 48}`).join(' ')}
+              />
+            </svg>
         </div>
       </div>
 

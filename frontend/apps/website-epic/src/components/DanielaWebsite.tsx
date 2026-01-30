@@ -38,7 +38,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
         {
           id: 'welcome',
           text: '🧠 ¡Hola! Soy Daniela, tu asistente inteligente de AIGestion. Estoy aquí para ayudarte a entender cómo podemos transformar tu negocio.',
-          sender: 'daniela',
+          sender: 'daniela' as const,
           timestamp: new Date(),
           suggestions: ['¿Qué servicios ofrecen?', '¿Cómo funciona la IA?', '¿Cuál es el ROI?'],
         },
@@ -47,7 +47,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
         {
           id: 'contact',
           text: '🤝 ¡Hola! Soy Daniela, tu consultora de IA de AIGestion. Estoy aquí para conectar contigo y encontrar la solución perfecta para tus necesidades.',
-          sender: 'daniela',
+          sender: 'daniela' as const,
           timestamp: new Date(),
           suggestions: ['Agendar una llamada', 'Ver casos de éxito', 'Solicitar demostración'],
         },
@@ -56,7 +56,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
         {
           id: 'pricing',
           text: '💰 ¡Hola! Soy Daniela, tu asesora financiera de AIGestion. Estoy aquí para ayudarte a encontrar el plan perfecto que se ajuste a tu presupuesto y objetivos.',
-          sender: 'daniela',
+          sender: 'daniela' as const,
           timestamp: new Date(),
           suggestions: ['Ver planes disponibles', 'Calcular ROI', 'Obtener cotización'],
         },
@@ -65,14 +65,14 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
         {
           id: 'about',
           text: '🏢 ¡Hola! Soy Daniela, tu guía de AIGestion. Estoy aquí para mostrarte cómo nuestra tecnología revoluciona la gestión empresarial.',
-          sender: 'daniela',
+          sender: 'daniela' as const,
           timestamp: new Date(),
           suggestions: ['Nuestra misión', 'Tecnología usada', 'Casos de éxito'],
         },
       ],
     };
 
-    setMessages([initialMessages[context]]);
+    setMessages(initialMessages[context]);
   }, [context]);
 
   // Verificar conexión con el backend
@@ -107,7 +107,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
     const userMessage = {
       id: `user-${Date.now()}`,
       text: inputText,
-      sender: 'user',
+      sender: 'user' as const,
       timestamp: new Date(),
     };
 
@@ -121,7 +121,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
       const danielaMessage = {
         id: `daniela-${Date.now()}`,
         text: response.response,
-        sender: 'daniela',
+        sender: 'daniela' as const,
         timestamp: new Date(),
         suggestions: generateSuggestions(inputText, context),
       };
@@ -133,7 +133,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
       const danielaMessage = {
         id: `daniela-${Date.now()}`,
         text: fallbackResponse,
-        sender: 'daniela',
+        sender: 'daniela' as const,
         timestamp: new Date(),
         suggestions: generateSuggestions(inputText, context),
       };

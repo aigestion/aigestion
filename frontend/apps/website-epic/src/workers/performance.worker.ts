@@ -16,7 +16,7 @@ export interface CalculationResult {
 // Analytics calculations
 function calculateAnalytics(data: any[]): any {
   const startTime = performance.now();
-  
+
   // Complex analytics calculations
   const metrics = {
     total: data.length,
@@ -34,16 +34,16 @@ function calculateAnalytics(data: any[]): any {
 // 3D rendering optimizations
 function optimizeRendering(sceneData: any): any {
   const startTime = performance.now();
-  
+
   // LOD calculations
   const lodLevels = calculateLOD(sceneData.objects);
-  
+
   // Frustum culling
   const visibleObjects = performFrustumCulling(sceneData.objects, sceneData.camera);
-  
+
   // Instancing optimization
   const instancedObjects = optimizeInstancing(visibleObjects);
-  
+
   const executionTime = performance.now() - startTime;
   return {
     lodLevels,
@@ -56,7 +56,7 @@ function optimizeRendering(sceneData: any): any {
 // Data processing
 function processData(data: any[]): any {
   const startTime = performance.now();
-  
+
   // Complex data transformations
   const processed = data.map(item => ({
     ...item,
@@ -64,7 +64,7 @@ function processData(data: any[]): any {
     enriched: enrichData(item),
     indexed: createIndexes(item),
   }));
-  
+
   const executionTime = performance.now() - startTime;
   return { processed, executionTime };
 }
@@ -73,8 +73,8 @@ function processData(data: any[]): any {
 function calculateMedian(values: number[]): number {
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 === 0 
-    ? (sorted[mid - 1] + sorted[mid]) / 2 
+  return sorted.length % 2 === 0
+    ? (sorted[mid - 1] + sorted[mid]) / 2
     : sorted[mid];
 }
 
@@ -89,15 +89,15 @@ function calculateTrends(data: any[]): any {
   const values = data.map(item => item.value || 0);
   const trend = values[values.length - 1] - values[0];
   const direction = trend > 0 ? 'up' : trend < 0 ? 'down' : 'stable';
-  
+
   return { trend, direction, magnitude: Math.abs(trend) };
 }
 
 function calculateCorrelations(data: any[]): any {
   // Simplified correlation calculation
-  const correlations = {};
+  const correlations: Record<string, number> = {};
   const keys = Object.keys(data[0] || {}).filter(key => typeof data[0][key] === 'number');
-  
+
   for (let i = 0; i < keys.length; i++) {
     for (let j = i + 1; j < keys.length; j++) {
       const key1 = keys[i];
@@ -109,7 +109,7 @@ function calculateCorrelations(data: any[]): any {
       correlations[`${key1}-${key2}`] = correlation;
     }
   }
-  
+
   return correlations;
 }
 
@@ -120,10 +120,10 @@ function calculatePearsonCorrelation(x: number[], y: number[]): number {
   const sumXY = x.slice(0, n).reduce((sum, xi, i) => sum + xi * y[i], 0);
   const sumX2 = x.slice(0, n).reduce((sum, xi) => sum + xi * xi, 0);
   const sumY2 = y.slice(0, n).reduce((sum, yi) => sum + yi * yi, 0);
-  
+
   const numerator = n * sumXY - sumX * sumY;
   const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
-  
+
   return denominator === 0 ? 0 : numerator / denominator;
 }
 
@@ -162,7 +162,7 @@ function isInFrustum(object: any, frustum: any): boolean {
 function optimizeInstancing(objects: any[]): any[] {
   // Group similar objects for instancing
   const groups = new Map();
-  
+
   objects.forEach(obj => {
     const key = obj.type || 'default';
     if (!groups.has(key)) {
@@ -170,7 +170,7 @@ function optimizeInstancing(objects: any[]): any[] {
     }
     groups.get(key).push(obj);
   });
-  
+
   // Convert groups to instanced objects
   const instanced = [];
   for (const [type, group] of groups) {
@@ -178,15 +178,15 @@ function optimizeInstancing(objects: any[]): any[] {
       instanced.push({
         type,
         instanceCount: group.length,
-        positions: group.map(obj => obj.position),
-        rotations: group.map(obj => obj.rotation),
-        scales: group.map(obj => obj.scale),
+        positions: group.map((obj: any) => obj.position),
+        rotations: group.map((obj: any) => obj.rotation),
+        scales: group.map((obj: any) => obj.scale),
       });
     } else {
       instanced.push(group[0]);
     }
   }
-  
+
   return instanced;
 }
 
@@ -250,7 +250,7 @@ self.addEventListener('message', (event: MessageEvent<CalculationTask>) => {
           executionTime: 0,
         };
         break;
-        
+
       case 'optimization':
         result = {
           id: task.id,
@@ -258,7 +258,7 @@ self.addEventListener('message', (event: MessageEvent<CalculationTask>) => {
           executionTime: 0,
         };
         break;
-        
+
       case 'data-processing':
         result = {
           id: task.id,
@@ -266,11 +266,11 @@ self.addEventListener('message', (event: MessageEvent<CalculationTask>) => {
           executionTime: 0,
         };
         break;
-        
+
       default:
         throw new Error(`Unknown task type: ${task.type}`);
     }
-    
+
     self.postMessage(result);
   } catch (error) {
     self.postMessage({
@@ -285,5 +285,5 @@ self.addEventListener('message', (event: MessageEvent<CalculationTask>) => {
 export {
   calculateAnalytics,
   optimizeRendering,
-  processData,
+  processData
 };
