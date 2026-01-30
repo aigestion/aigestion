@@ -90,7 +90,7 @@
     "editor.defaultFormatter": "redhat.vscode-yaml"
   },
   "[yaml]": {
-    "editor.defaultFormatter": "googlecloudtools.cloudcode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
