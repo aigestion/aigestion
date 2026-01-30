@@ -65,7 +65,7 @@ class AudioService {
             volume: asset.volume,
             loop: asset.loop,
             preload: true,
-            onloaderror: (_id, _err) => {
+            onloaderror: (_id: number, _err: any) => {
                 // Suppress errors for missing placeholder files
                 // console.warn(`Failed to load sound: ${type}`, err);
             }
@@ -125,4 +125,3 @@ class AudioService {
 }
 
 export const audioService = AudioService.getInstance();
-

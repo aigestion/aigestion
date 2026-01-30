@@ -1,4 +1,3 @@
-```typescript
 // Holographic Data Visualization Walls for AIGestion Virtual Office
 import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
 import { setTimeout, setInterval } from './utils/timers'

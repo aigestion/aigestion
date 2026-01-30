@@ -48,20 +48,16 @@ if (!rootElement) {
   }
 }
 
-// Register Service Worker with mobile considerations
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then((registration) => {
-        console.log('SW registered: ', registration);
-      })
-      .catch((registrationError) => {
-        console.log('SW registration failed: ', registrationError);
-        // Don't fail the app if SW fails on mobile
-        if (isMobile) {
-          console.warn('Service Worker registration failed on mobile - continuing without SW');
-        }
-      });
-  });
-}
+// Service Worker DISABLED - CORS issues blocking
+// if ('serviceWorker' in navigator) {
+//   window.addEventListener('load', () => {
+//     navigator.serviceWorker
+//       .register('/sw.js')
+//       .then((registration) => {
+//         console.log('SW registered: ', registration);
+//       })
+//       .catch((error) => {
+//         console.log('SW registration failed: ', error);
+//       });
+//   });
+// }

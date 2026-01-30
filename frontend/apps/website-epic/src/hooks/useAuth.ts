@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
 import type { Session, User } from '@supabase/supabase-js';
+import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../services/supabase';
 
 export interface AuthUser {
@@ -63,7 +63,7 @@ export function useAuth(): UseAuthReturn {
     (user: AuthUser): boolean => {
       const isAdminUser = ADMIN_EMAILS.includes(user.email) || user.role === 'admin';
       const isMobile = checkMobileApp();
-      
+
       if (isAdminUser && !isMobile) {
         window.location.href = ADMIN_REDIRECT_URL;
         return true;
@@ -80,7 +80,7 @@ export function useAuth(): UseAuthReturn {
       try {
         if (session?.user) {
           const authUser = createAuthUser(session.user);
-          
+
           // Check for admin redirect
           if (checkAdminRedirect(authUser)) {
             return; // Will redirect, don't update state
@@ -121,6 +121,25 @@ export function useAuth(): UseAuthReturn {
   const login = useCallback(async (email: string, password: string) => {
     setState(prev => ({ ...prev, loading: true }));
 
+    if (!supabase) {
+      console.warn('Supabase not configured. Login simulation.');
+      setTimeout(() => {
+        setState(prev => ({
+          ...prev,
+          loading: false,
+          isAuthenticated: true,
+          user: {
+            email,
+            name: email.split('@')[0],
+            subscription: 'free',
+            role: 'client',
+          },
+          session: {} as any, // Mock session
+        }));
+      }, 1000);
+      return;
+    }
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -143,6 +162,18 @@ export function useAuth(): UseAuthReturn {
   const logout = useCallback(async () => {
     setState(prev => ({ ...prev, loading: true }));
 
+    if (!supabase) {
+      setState({
+        session: null,
+        user: null,
+        loading: false,
+        isAuthenticated: false,
+        isAdmin: false,
+        isMobileApp: checkMobileApp(),
+      });
+      return;
+    }
+
     try {
       await supabase.auth.signOut();
       await handleSessionChange(null);
@@ -161,9 +192,11 @@ export function useAuth(): UseAuthReturn {
   }, [handleSessionChange, checkMobileApp]);
 
   const refreshSession = useCallback(async () => {
+    if (!supabase) return;
+
     try {
       const { data, error } = await supabase.auth.refreshSession();
-      
+
       if (error) {
         throw error;
       }
@@ -178,6 +211,11 @@ export function useAuth(): UseAuthReturn {
   const updateUser = useCallback(async (updates: Partial<AuthUser>) => {
     if (!state.user || !state.session) {
       throw new Error('No authenticated user');
+    }
+
+    if (!supabase) {
+      console.warn('Supabase not configured. User update simulated.');
+      return;
     }
 
     setState(prev => ({ ...prev, loading: true }));

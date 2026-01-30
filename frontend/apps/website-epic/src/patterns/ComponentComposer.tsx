@@ -1,4 +1,4 @@
-import { React, ComponentType, ReactNode, useMemo } from 'react';
+import { ComponentType, ReactNode, useEffect, useMemo, useState } from 'react';
 
 // Component composition utilities
 export interface ComponentProps {
@@ -175,7 +175,7 @@ export function LazyComponent({
   fallback,
 }: {
   readonly name: string;
-  readonly loader: () => Promise<ComponentType<any>>;
+    readonly loader: () => Promise<{ default: ComponentType<any> }>;
   readonly fallback?: ReactNode;
 }) {
   const [Component, setComponent] = useState<ComponentType<any> | null>(null);
@@ -363,4 +363,4 @@ export function useComponentComposition() {
 }
 
 // Export registries for external access
-export { ComponentRegistry, HookRegistry, ProviderRegistry, compositionContext };
+export { compositionContext };

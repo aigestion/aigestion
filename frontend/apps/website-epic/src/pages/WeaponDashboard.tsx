@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // import SpatialPresentation from '../components/SpatialPresentation'; // Temporarily disabled for debugging
-import { motion } from 'framer-motion';
 // Using only verified icons or simple text fallback
-import { Activity, Cpu, Shield, Wifi } from 'lucide-react';
-import { supabase } from '../services/supabase';
+import { Activity } from 'lucide-react';
 
 const WeaponDashboard: React.FC = () => {
   const [spatialMode, setSpatialMode] = useState(false);
@@ -12,20 +10,20 @@ const WeaponDashboard: React.FC = () => {
 
   useEffect(() => {
     try {
-        const interval = setInterval(() => {
-            setSysStatus(prev => ({
-                cpu: Math.floor(Math.random() * 30) + 10,
-                memory: Math.floor(Math.random() * 20) + 40
-            }));
-        }, 2000);
-        return () => clearInterval(interval);
+      const interval = setInterval(() => {
+        setSysStatus(prev => ({
+          cpu: Math.floor(Math.random() * 30) + 10,
+          memory: Math.floor(Math.random() * 20) + 40
+        }));
+      }, 2000);
+      return () => clearInterval(interval);
     } catch (e: any) {
-        setError(e.message);
+      setError(e.message);
     }
   }, []);
 
   if (error) {
-     return <div className="p-10 bg-black text-red-500">Error Crítico: {error}</div>;
+    return <div className="p-10 bg-black text-red-500">Error Crítico: {error}</div>;
   }
 
   return (
@@ -40,36 +38,36 @@ const WeaponDashboard: React.FC = () => {
       <div className="grid grid-cols-1 gap-4">
         {/* Simple Status Card */}
         <div className="bg-white/10 p-6 rounded-xl border border-white/10">
-            <h2 className="text-xl mb-4 flex items-center gap-2">
-                <Activity className="w-6 h-6 text-green-400" />
-                SYSTEM STATUS
-            </h2>
-            <div className="flex justify-around">
-                <div className="text-center">
-                    <div className="text-2xl font-bold text-nexus-cyan">{sysStatus.cpu}%</div>
-                    <div className="text-[10px] uppercase">CPU Load</div>
-                </div>
-                 <div className="text-center">
-                    <div className="text-2xl font-bold text-nexus-violet">{sysStatus.memory}GB</div>
-                    <div className="text-[10px] uppercase">Memory</div>
-                </div>
+          <h2 className="text-xl mb-4 flex items-center gap-2">
+            <Activity className="w-6 h-6 text-green-400" />
+            SYSTEM STATUS
+          </h2>
+          <div className="flex justify-around">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-nexus-cyan">{sysStatus.cpu}%</div>
+              <div className="text-[10px] uppercase">CPU Load</div>
             </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-nexus-violet">{sysStatus.memory}GB</div>
+              <div className="text-[10px] uppercase">Memory</div>
+            </div>
+          </div>
         </div>
 
         {/* Action Buttons */}
         <button className="bg-nexus-cyan/20 text-nexus-cyan border border-nexus-cyan p-4 rounded-xl font-bold tracking-widest hover:bg-nexus-cyan hover:text-black transition-all">
-            DANIELA CORE
-        </button>
-        
-         <button className="bg-nexus-violet/20 text-nexus-violet border border-nexus-violet p-4 rounded-xl font-bold tracking-widest hover:bg-nexus-violet hover:text-black transition-all">
-            ADMIN ACCESS
+          DANIELA CORE
         </button>
 
-         <button 
-            onClick={() => window.location.reload()}
-            className="mt-8 text-xs text-gray-500 underline"
+        <button className="bg-nexus-violet/20 text-nexus-violet border border-nexus-violet p-4 rounded-xl font-bold tracking-widest hover:bg-nexus-violet hover:text-black transition-all">
+          ADMIN ACCESS
+        </button>
+
+        <button
+          onClick={() => window.location.reload()}
+          className="mt-8 text-xs text-gray-500 underline"
         >
-            Reload Shell
+          Reload Shell
         </button>
       </div>
     </div>

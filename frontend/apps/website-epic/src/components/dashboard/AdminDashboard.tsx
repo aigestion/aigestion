@@ -1,8 +1,7 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { Badge } from '../ui/badge';
-import { Activity, Users, Settings, Shield } from 'lucide-react';
+import { Activity, Settings, Shield, Users } from 'lucide-react';
+import { Badge } from '../ui/Badge';
+import { Button } from '../ui/Button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
 
 export function AdminDashboard() {
   return (

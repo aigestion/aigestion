@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef } from 'react';
 import { Howl } from 'howler';
+import { useCallback, useEffect, useRef } from 'react';
 import { useSoundContext } from '../contexts/SoundContext';
 
 const SOUND_URLS = {
@@ -68,4 +68,3 @@ export const useSoundEffects = () => {
     playToggle,
   };
 };
-

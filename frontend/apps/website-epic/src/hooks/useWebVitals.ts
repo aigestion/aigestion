@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface WebVitalsMetrics {
   lcp: number | null;
@@ -25,10 +25,10 @@ export const useWebVitals = (): WebVitalsHookReturn => {
 
   useEffect(() => {
     // Check if Web Vitals are supported
-    const supported = 
+    const supported =
       'PerformanceObserver' in window &&
       'PerformanceNavigationTiming' in window;
-    
+
     setIsSupported(supported);
 
     if (!supported) return;
@@ -44,8 +44,10 @@ export const useWebVitals = (): WebVitalsHookReturn => {
     // First Input Delay (FID)
     const observeFID = new PerformanceObserver((entryList) => {
       const entries = entryList.getEntries();
-      const firstEntry = entries[0];
-      setMetrics(prev => ({ ...prev, fid: firstEntry.processingStart - firstEntry.startTime }));
+      const firstEntry = entries[0] as any;
+      if (firstEntry) {
+        setMetrics(prev => ({ ...prev, fid: firstEntry.processingStart - firstEntry.startTime }));
+      }
     });
     observeFID.observe({ entryTypes: ['first-input'] });
 
@@ -53,8 +55,9 @@ export const useWebVitals = (): WebVitalsHookReturn => {
     let clsValue = 0;
     const observeCLS = new PerformanceObserver((entryList) => {
       for (const entry of entryList.getEntries()) {
-        if (!entry.hadRecentInput) {
-          clsValue += entry.value;
+        const layoutShiftEntry = entry as any;
+        if (!layoutShiftEntry.hadRecentInput) {
+          clsValue += layoutShiftEntry.value;
           setMetrics(prev => ({ ...prev, cls: clsValue }));
         }
       }

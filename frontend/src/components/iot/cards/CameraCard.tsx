@@ -13,7 +13,7 @@ const CameraCard: React.FC<CameraCardProps> = ({ device, onControl }) => {
   // Use entity picture (snapshot) or stream URL if available
   // In a real app we would fetch the stream URL from HA via API
   const snapshotUrl = device.attributes.entity_picture
-    ? \`${localStorage.getItem('ha_url')}\${device.attributes.entity_picture}&token=\${localStorage.getItem('ha_token')}\`
+    ? `${localStorage.getItem('ha_url')}${device.attributes.entity_picture}&token=${localStorage.getItem('ha_token')}`
     : 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f';
 
   return (

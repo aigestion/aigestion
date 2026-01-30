@@ -22,11 +22,11 @@ import VirtualOfficePreview from './pages/VirtualOfficePreview';
 import WeaponDashboard from './pages/WeaponDashboard';
 
 // Lazy load heavy components
-const CinematicPresentation = lazy(() => import('./components/CinematicPresentation'));
-const NexusAndroid = lazy(() => import('./components/NexusAndroid'));
-const EnhancedROI = lazy(() => import('./components/EnhancedROI'));
-const DecentralandOffice = lazy(() => import('./components/DecentralandOffice'));
-const VitureXRExperience = lazy(() => import('./components/VitureXRExperience'));
+const CinematicPresentation = lazy(() => import('./components/CinematicPresentation').then(module => ({ default: module.CinematicPresentation })));
+const NexusAndroid = lazy(() => import('./components/NexusAndroid').then(module => ({ default: module.NexusAndroid })));
+const EnhancedROI = lazy(() => import('./components/EnhancedROI').then(module => ({ default: module.EnhancedROI })));
+const DecentralandOffice = lazy(() => import('./components/DecentralandOffice').then(module => ({ default: module.DecentralandOffice })));
+const VitureXRExperience = lazy(() => import('./components/VitureXRExperience').then(module => ({ default: module.VitureXRExperience })));
 
 // Loading fallback component
 export const LoadingFallback = () => (
@@ -228,4 +228,3 @@ export const AppContent = ({
     </div>
   );
 };
-

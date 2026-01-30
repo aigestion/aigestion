@@ -244,9 +244,9 @@ export const preloadCriticalResources = () => {
     link.rel = 'preload';
     link.as = 'style';
     link.href = fontUrl;
-    link.onload = function () {
-      this.onload = null;
-      this.rel = 'stylesheet';
+    link.onload = () => {
+      link.onload = null;
+      link.rel = 'stylesheet';
     };
     document.head.appendChild(link);
   });

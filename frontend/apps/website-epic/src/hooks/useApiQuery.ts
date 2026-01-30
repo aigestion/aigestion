@@ -48,6 +48,7 @@ export function useUserProfile(userId: string) {
   return useSupabaseQuery(
     ['user-profile', userId],
     async () => {
+      if (!supabase) throw new Error('Supabase client not initialized');
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -64,6 +65,7 @@ export function useUserProfile(userId: string) {
 export function useUpdateProfile() {
   return useSupabaseMutation(
     async ({ userId, updates }: { userId: string; updates: any }) => {
+      if (!supabase) throw new Error('Supabase client not initialized');
       const { data, error } = await supabase
         .from('profiles')
         .update(updates)
@@ -84,6 +86,7 @@ export function useUserSubscription(userId: string) {
   return useSupabaseQuery(
     ['user-subscription', userId],
     async () => {
+      if (!supabase) throw new Error('Supabase client not initialized');
       const { data, error } = await supabase
         .from('subscriptions')
         .select('*')
@@ -102,6 +105,7 @@ export function useUserSubscription(userId: string) {
 export function useCancelSubscription() {
   return useSupabaseMutation(
     async ({ subscriptionId }: { subscriptionId: string }) => {
+      if (!supabase) throw new Error('Supabase client not initialized');
       const { data, error } = await supabase
         .from('subscriptions')
         .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })

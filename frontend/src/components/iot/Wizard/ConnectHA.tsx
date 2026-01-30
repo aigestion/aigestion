@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { motion } from 'framer-motion';
+import React, { useState } from 'react';
 
 interface ConnectHAPropos {
   onSuccess: () => void;
@@ -84,7 +84,7 @@ const ConnectHA: React.FC<ConnectHAPropos> = ({ onSuccess, onCancel }) => {
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
               />
-              <p className="text-xs text-gray-500 mt-1">Found in HA Profile -> Security</p>
+                <p className="text-xs text-gray-500 mt-1">Found in HA Profile &rarr; Security</p>
             </div>
 
             {status === 'error' && (

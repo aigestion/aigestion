@@ -1,0 +1,118 @@
+frontend/apps/website-epic/src/hooks/usePWA.ts(390,10): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(390,19): error TS1005: ')' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(391,12): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(391,21): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(392,14): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(392,23): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(392,48): error TS1005: ',' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(392,55): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(393,14): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(394,15): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(394,24): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(395,26): error TS1005: ',' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(396,12): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(397,14): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(398,21): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(398,26): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(398,34): error TS1005: '(' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(398,36): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(398,43): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(399,12): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(401,16): error TS1005: ')' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(403,15): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(403,22): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(406,23): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(407,14): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(413,21): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(414,14): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(415,12): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(416,10): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(422,11): error TS1127: Invalid character.
+frontend/apps/website-epic/src/hooks/usePWA.ts(423,10): error TS1110: Type expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(424,8): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(425,6): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(426,3): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(445,10): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(445,19): error TS1005: ')' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(446,12): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(446,21): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(447,14): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(447,23): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(447,34): error TS1127: Invalid character.
+frontend/apps/website-epic/src/hooks/usePWA.ts(447,37): error TS1110: Type expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(448,14): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(449,15): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(449,24): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(449,53): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(449,63): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(450,14): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(451,15): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(451,27): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(451,30): error TS1434: Unexpected keyword or identifier.
+frontend/apps/website-epic/src/hooks/usePWA.ts(451,34): error TS1434: Unexpected keyword or identifier.
+frontend/apps/website-epic/src/hooks/usePWA.ts(451,38): error TS1228: A type predicate is only allowed in return type position for functions and methods.
+frontend/apps/website-epic/src/hooks/usePWA.ts(452,12): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(455,18): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(455,27): error TS1005: ')' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(456,20): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(457,14): error TS1110: Type expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(458,11): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(460,16): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(460,25): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(462,15): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(462,22): error TS1005: ';' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(466,29): error TS1005: ',' expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(467,14): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(474,14): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(475,12): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(476,10): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(482,11): error TS1127: Invalid character.
+frontend/apps/website-epic/src/hooks/usePWA.ts(483,10): error TS1110: Type expected.
+frontend/apps/website-epic/src/hooks/usePWA.ts(484,8): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(485,6): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/usePWA.ts(486,3): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(355,7): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(355,16): error TS1005: ')' expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(357,8): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(358,5): error TS1109: Expression expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(360,6): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(361,3): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(378,7): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(378,16): error TS1005: ')' expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(380,8): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(381,5): error TS1109: Expression expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(383,6): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(384,3): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(403,7): error TS1005: '>' expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(403,16): error TS1005: ')' expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(405,8): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(409,6): error TS1161: Unterminated regular expression literal.
+frontend/apps/website-epic/src/hooks/useSpringPhysics.ts(410,3): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/monitoring/rum.ts(381,20): error TS1005: ',' expected.
+frontend/apps/website-epic/src/monitoring/rum.ts(382,14): error TS1005: ',' expected.
+frontend/apps/website-epic/src/monitoring/rum.ts(383,20): error TS1005: ',' expected.
+frontend/apps/website-epic/src/monitoring/rum.ts(384,25): error TS1005: ',' expected.
+frontend/apps/website-epic/src/monitoring/rum.ts(385,21): error TS1005: ',' expected.
+frontend/apps/website-epic/src/monitoring/rum.ts(386,9): error TS1135: Argument expression expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(132,12): error TS1005: '>' expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(132,15): error TS1005: ')' expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(133,33): error TS1005: '>' expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(133,34): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(133,45): error TS1109: Expression expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(133,47): error TS1109: Expression expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(134,8): error TS1110: Type expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(135,5): error TS1128: Declaration or statement expected.
+frontend/apps/website-epic/src/utils/lazyLoad.ts(137,1): error TS1128: Declaration or statement expected.
+frontend/src/components/iot/cards/CameraCard.tsx(16,7): error TS1127: Invalid character.
+frontend/src/components/iot/cards/CameraCard.tsx(16,8): error TS1134: Variable declaration expected.
+frontend/src/components/iot/cards/CameraCard.tsx(34,26): error TS1005: ';' expected.
+frontend/src/components/iot/cards/CameraCard.tsx(34,31): error TS1005: ';' expected.
+frontend/src/components/iot/cards/CameraCard.tsx(34,38): error TS1005: ';' expected.
+frontend/src/components/iot/cards/CameraCard.tsx(34,54): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+frontend/src/components/iot/cards/CameraCard.tsx(34,58): error TS1005: ';' expected.
+frontend/src/components/iot/cards/CameraCard.tsx(34,68): error TS1005: ';' expected.
+frontend/src/components/iot/cards/CameraCard.tsx(65,1): error TS1160: Unterminated template literal.
+frontend/src/components/iot/cards/SensorCard.tsx(56,52): error TS1127: Invalid character.
+frontend/src/components/iot/cards/SensorCard.tsx(56,148): error TS1381: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+frontend/src/components/iot/cards/SensorCard.tsx(57,15): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?
+frontend/src/components/iot/Wizard/ConnectHA.tsx(87,78): error TS1382: Unexpected token. Did you mean `{'>'}` or `&gt;`?

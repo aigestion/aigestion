@@ -8,7 +8,7 @@ import { useAuth } from './hooks/useAuth';
 import { QueryProvider } from './providers/QueryProvider';
 
 function App() {
-  const { loading, isAuthenticated, currentUser, login, logout } = useAuth();
+  const { loading, isAuthenticated, user, login, logout } = useAuth();
 
   if (loading) {
     return <LoadingFallback />;
@@ -24,7 +24,7 @@ function App() {
                 <AppContent
                   loading={loading}
                   isAuthenticated={isAuthenticated}
-                  currentUser={currentUser}
+                  currentUser={user}
                   handleLogin={login}
                   handleLogout={logout}
                 />

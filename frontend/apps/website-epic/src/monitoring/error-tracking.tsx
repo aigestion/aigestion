@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface ErrorContext {
   readonly url: string;
@@ -85,7 +85,7 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
   const [breadcrumbs, setBreadcrumbs] = useState<ErrorReport['breadcrumbs']>([]);
 
   // Generate unique session ID
-  const sessionId = useState(() => 
+  const sessionId = useState(() =>
     'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
   )[0];
 
@@ -113,7 +113,7 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
   // Get device information
   const getDeviceInfo = useCallback(() => {
     const ua = navigator.userAgent;
-    
+
     let deviceType = 'desktop';
     if (/tablet|iPad|Android(?!.*Mobile)|Safari/i.test(ua)) {
       deviceType = 'tablet';
@@ -333,7 +333,7 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
 
     // Resource errors
     const handleResourceError = (event: Event) => {
-      const target = event.target as HTMLScriptElement | HTMLLinkElement | HTMLImageElement;
+      const target = event.target as any;
       if (target) {
         const url = target.src || target.href;
         captureResourceError(url, 'Failed to load resource');
@@ -345,12 +345,12 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
     globalThis.fetch = async (...args) => {
       try {
         const response = await originalFetch(...args);
-        
+
         if (!response.ok && enableNetworkCapture) {
           const url = args[0] as string;
           captureNetworkError(url, response.status, response.statusText);
         }
-        
+
         return response;
       } catch (error) {
         if (enableNetworkCapture) {
@@ -363,12 +363,12 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
 
     // Console capture
     if (enableConsoleCapture) {
-      const originalConsole = { ...console };
-      
+      const originalConsole = { ...console } as any;
+
       ['error', 'warn', 'info'].forEach(level => {
-        console[level] = (...args: any[]) => {
+        (console as any)[level] = (...args: any[]) => {
           originalConsole[level](...args);
-          
+
           if (args.length > 0 && typeof args[0] === 'string') {
             addBreadcrumb(args[0], 'console', level, { args });
           }
@@ -485,7 +485,7 @@ export function ErrorBoundary({
   const handleCatch = (error: Error, errorInfo: React.ErrorInfo) => {
     setHasError(true);
     setError(error);
-    
+
     captureError(error, 'error', ['error-boundary'], {
       componentStack: errorInfo.componentStack,
     });
@@ -566,7 +566,7 @@ export function ErrorTrackingDashboard() {
             Total Errors
           </div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-red-600 dark:text-red-400">
             {stats.byLevel.error}
@@ -575,7 +575,7 @@ export function ErrorTrackingDashboard() {
             Errors
           </div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
             {stats.byLevel.warning}
@@ -584,7 +584,7 @@ export function ErrorTrackingDashboard() {
             Warnings
           </div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {stats.recent}
@@ -614,11 +614,11 @@ export function ErrorTrackingDashboard() {
                   {new Date(error.context.timestamp).toLocaleString()}
                 </span>
               </div>
-              
+
               <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                 {error.message}
               </div>
-              
+
               <div className="flex gap-2 text-xs">
                 <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
                   {error.type}
@@ -634,7 +634,7 @@ export function ErrorTrackingDashboard() {
               </div>
             </div>
           ))}
-          
+
           {errors.length === 0 && (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               No errors reported

@@ -1,5 +1,4 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { AdminDashboard } from '../components/dashboard/AdminDashboard';
 import { ClientDashboard } from '../components/dashboard/ClientDashboard';
 import { DemoDashboard } from '../components/dashboard/DemoDashboard';
