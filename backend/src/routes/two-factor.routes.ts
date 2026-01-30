@@ -242,7 +242,7 @@ router.post('/disable', async (req: Request, res: Response) => {
 // Check if 2FA is enabled for user
 router.get('/status/:userId', async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.params as any;
 
     if (!userId) {
       return res.status(400).json({
@@ -269,7 +269,7 @@ router.get('/status/:userId', async (req: Request, res: Response) => {
 // Get user's 2FA settings
 router.get('/settings/:userId', async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.params as any;
 
     if (!userId) {
       return res.status(400).json({

@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express-serve-static-core';
+import type { Request, Response, NextFunction } from 'express';
 import { UsageRecord } from '../models/UsageRecord';
 import { buildResponse } from '../common/response-builder';
 import { logger } from '../utils/logger';

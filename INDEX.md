@@ -1,37 +1,27 @@
-# 📚 AIGestion.net - Índice Maestro
+# 🌌 AIGestion - Knowledge Nexus
 
-**Última Actualización:** 2026-01-29  
-**Versión:** 2.0.0  
-**Estado:** 🟢 Activo
+Welcome to the central intelligence hub of **AIGestion**. All documentation has been unified and optimized for maximum performance and clarity.
 
 ---
 
-## 🎯 DOCUMENTACIÓN CRÍTICA CREADA HOY
+## 🚀 Quick Access
 
-### 🔒 Seguridad - Auditoría Completada ✅
+### [📚 Central Documentation Hub](./docs/README.md)
+*Your primary entry point for everything related to AIGestion.*
 
-1. __AUDIT_SUMMARY.md__ - Resumen ejecutivo
-2. __SECURITY_AUDIT_REPORT_2026-01-29.md__ - Reporte completo
-3. __SECURITY_SECRETS_GUIDE.md__ - Guía de gestión
-
-**Conclusión:** 🟢 APROBADO - Secretos en GSM, .env protegidos
-
-### 🏗️ Arquitectura y Código
-
-4. __MODULARIZATION_PLAN.md__ - Plan 6 meses (60+ servicios → 8 módulos)
-5. __TYPESCRIPT_STRICT_MIGRATION.md__ - Plan 12 semanas
-6. __CRITICAL_FIXES_SUMMARY.md__ - Resumen implementaciones
+- **[🏗️ Architecture](./docs/architecture/TECHNICAL_DOCUMENTATION.md)**: Deep dive into the system's design.
+- **[🚀 Deployment](./docs/deployment/)**: CI/CD and production shipping guides.
+- **[🔒 Security](./docs/security/SECURITY.md)**: Policies and auditing reports.
+- **[📊 Status & Reports](./docs/status/)**: Latest achievements and production status.
 
 ---
 
-## 📊 ESTADO ACTUAL
+## 🛠️ Developer Resources
 
-| Métrica | Valor | Estado |
-|---------|-------|--------|
-| Seguridad | 7.4/10 | 🟢 Bueno |
-| Secretos | GSM | ✅ Óptimo |
-| TypeScript Strict | Planificado | 🟡 Pendiente |
+- **[📖 Guides](./docs/guides/)**: Environment setup and how-tos.
+- **[🧩 Reference](./docs/reference/)**: API schemas and error analysis.
+- **[⚖️ Community](./docs/community/)**: Contributing and code of conduct.
 
 ---
 
-*Ver /docs para documentación completa*
+> **Status:** 🟢 OPTIMIZED | **Version:** 3.0.0-ELITE

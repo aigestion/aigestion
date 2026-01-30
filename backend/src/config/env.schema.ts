@@ -127,6 +127,8 @@ const envSchema = z.object({
   OPENAI_API_KEY: z.string().optional().describe('OpenAI API key'),
   ANTHROPIC_API_KEY: z.string().optional().describe('Anthropic API key'),
   PINECONE_API_KEY: z.string().optional().describe('Pinecone API key for vector database'),
+  PINECONE_INDEX_NAME: z.string().default('aigestion-docs').describe('Pinecone index name'),
+  PINECONE_NAMESPACE_DEFAULT: z.string().default('documentation').describe('Default Pinecone namespace'),
 
   // MCP / Antigravity
   MCP_SERVER_URL: z.string().url().optional().describe('Base URL for Antigravity MCP server'),

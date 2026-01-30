@@ -1,9 +1,8 @@
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
-import { container, TYPES } from '../config/inversify.config';
-import { AppError } from '../utils/errors';
-import { validate, schemas, validateParams } from '../middleware/validation.middleware';
-import { UserService } from '../services/user.service';
+import type { NextFunction, Request, Response } from 'express';
 import { buildResponse } from '../common/response-builder';
+import { TYPES, container } from '../config/inversify.config';
+import { UserService } from '../services/user.service';
+import { AppError } from '../utils/errors';
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -38,7 +37,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
 export const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userService = container.get<UserService>(TYPES.UserService);
-    const { id } = req.params;
+    const { id } = req.params as any;
     const user = await userService.findById(id);
     if (!user) {
       return next(new AppError('User not found', 404, 'NOT_FOUND'));
@@ -52,7 +51,7 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userService = container.get<UserService>(TYPES.UserService);
-    const { id } = req.params;
+    const { id } = req.params as any;
     const user = await userService.update(id, req.body);
     if (!user) {
       return next(new AppError('User not found', 404, 'NOT_FOUND'));
@@ -66,7 +65,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userService = container.get<UserService>(TYPES.UserService);
-    const { id } = req.params;
+    const { id } = req.params as any;
     const success = await userService.delete(id);
     if (!success) {
       return next(new AppError('User not found', 404, 'NOT_FOUND'));

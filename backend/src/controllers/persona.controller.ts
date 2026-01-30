@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express'; // using express types directly often simpler, or express-serve-static-core
+import type { NextFunction, Request, Response } from 'express'; // using express types directly often simpler, or express
 import { container } from '../config/inversify.config';
 import { TYPES } from '../types';
 import type { CreatePersonaUseCase } from '../application/usecases/persona/CreatePersonaUseCase';

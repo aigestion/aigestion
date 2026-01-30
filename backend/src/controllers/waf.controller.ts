@@ -55,7 +55,7 @@ export class WAFController {
 
   public enableRule = async (req: Request, res: Response) => {
     try {
-      const { ruleName } = req.params;
+      const { ruleName } = req.params as any;
 
       wafManagement.enableRule(ruleName);
 
@@ -79,7 +79,7 @@ export class WAFController {
 
   public disableRule = async (req: Request, res: Response) => {
     try {
-      const { ruleName } = req.params;
+      const { ruleName } = req.params as any;
 
       wafManagement.disableRule(ruleName);
 
@@ -213,7 +213,7 @@ export class WAFController {
         ip: req.query.ip as string,
         limit: req.query.limit ? parseInt(req.query.limit as string) : 100,
         offset: req.query.offset ? parseInt(req.query.offset as string) : 0,
-      };
+      } as any;
 
       const result = this.wafService.getEvents(filters);
 
@@ -237,7 +237,7 @@ export class WAFController {
 
   public getIPReputation = async (req: Request, res: Response) => {
     try {
-      const { ip } = req.params;
+      const { ip } = req.params as any;
 
       if (!ip) {
         return res.status(400).json({
@@ -263,7 +263,7 @@ export class WAFController {
 
   public blockIP = async (req: Request, res: Response) => {
     try {
-      const { ip } = req.params;
+      const { ip } = req.params as any;
       const { reason, duration } = req.body;
 
       if (!ip) {
@@ -293,7 +293,7 @@ export class WAFController {
 
   public unblockIP = async (req: Request, res: Response) => {
     try {
-      const { ip } = req.params;
+      const { ip } = req.params as any;
       const { reason } = req.body;
 
       if (!ip) {

@@ -12,7 +12,7 @@
   "devDependencies": {
     "@dcl/sdk": "7.17.0",
     "kill-port": "^2.0.1",
-    "typescript": "^5.0.0",
+    "typescript": "^5.9.3",
     "@dcl/js-runtime": "7.17.0"
   }
 }

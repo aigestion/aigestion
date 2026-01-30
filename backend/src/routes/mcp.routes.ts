@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import type { Request, Response } from 'express-serve-static-core';
+import type { Request, Response } from 'express';
 import fetch from 'node-fetch';
 
 import { env } from '../config/env.schema';

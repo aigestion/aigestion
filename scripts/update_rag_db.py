@@ -25,13 +25,26 @@ def main():
     persist_dir = root_dir / 'data' / 'chromadb'
     engine = RAGEngine(persist_directory=str(persist_dir))
 
-    # Docs directory
-    docs_dir = root_dir / 'docs'
+    # Directories to scan
+    scan_dirs = [
+        root_dir / 'docs',
+        root_dir / 'workspace-config'
+    ]
 
-    # Find all .md files
-    md_files = list(docs_dir.rglob('*.md'))
+    md_files = []
+    for d in scan_dirs:
+        if d.exists():
+            md_files.extend(list(d.rglob('*.md')))
+        else:
+            print(f"Warning: Directory {d} does not exist.")
 
-    print(f"Found {len(md_files)} markdown files in {docs_dir}")
+    # Also look for loose .md files in root (ignoring node_modules, etc)
+    root_md = list(root_dir.glob('*.md'))
+    for f in root_md:
+        if f.name.lower() not in ['readme.md', 'license.md']:
+            md_files.append(f)
+
+    print(f"Found {len(md_files)} markdown files to process.")
 
     count = 0
     total_chunks = 0

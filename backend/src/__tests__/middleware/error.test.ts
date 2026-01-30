@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express-serve-static-core';
+import { Request, Response, NextFunction } from 'express';
 import { errorHandler } from '../../middleware/errorHandler';
 import { AppError, HttpStatusCode, NotFoundError } from '../../utils/errors';
 import { logger } from '../../utils/logger';

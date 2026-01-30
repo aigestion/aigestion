@@ -1,21 +1,32 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { Suspense, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Suspense, lazy, useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatedMeshGradient } from './components/AnimatedMeshGradient';
+import { CommandPalette } from './components/CommandPalette';
 import { CommandTerminal } from './components/CommandTerminal';
+import { ContactSection } from './components/ContactSection';
+import { CursorGlow } from './components/CursorGlow';
 import { CyberpunkGrid } from './components/CyberpunkGrid';
+import { DanielaOmniWidget } from './components/DanielaOmniWidget';
+import { DanielaShowcase } from './components/DanielaShowcase';
+import { MeshGradientBG } from './components/MeshGradientBG';
 import { Navigation } from './components/Navigation';
 import { NeuralParticles } from './components/NeuralParticles';
 import { NexusCursor } from './components/NexusCursor';
 import { ScrollProgress } from './components/ScrollProgress';
-import { VitureXRExperience } from './components/VitureXRExperience';
 import { WorkbenchLayout } from './components/workbench/WorkbenchLayout';
-import { CursorGlow } from './components/CursorGlow';
-import { MeshGradientBG } from './components/MeshGradientBG';
 import { useNotification } from './contexts/NotificationContext';
+import { DanielaDemo } from './pages/DanielaDemo';
 import { Login } from './pages/Login';
 import VirtualOfficePreview from './pages/VirtualOfficePreview';
 import WeaponDashboard from './pages/WeaponDashboard';
+
+// Lazy load heavy components
+const CinematicPresentation = lazy(() => import('./components/CinematicPresentation'));
+const NexusAndroid = lazy(() => import('./components/NexusAndroid'));
+const EnhancedROI = lazy(() => import('./components/EnhancedROI'));
+const DecentralandOffice = lazy(() => import('./components/DecentralandOffice'));
+const VitureXRExperience = lazy(() => import('./components/VitureXRExperience'));
 
 // Loading fallback component
 export const LoadingFallback = () => (
@@ -143,24 +154,10 @@ export const AppContent = ({
           element={
             !isAuthenticated ? (
               <main>
-                {/* HeroSection - New Organism */}
-                <HeroSection
-                  title={
-                    <>
-                      AIGESTION<span className="text-nexus-cyan font-light">.NET</span>
-                    </>
-                  }
-                  subtitle="Arquitectura de Inteligencia Soberana"
-                  description="El núcleo neuronal para las empresas del mañana. Sincronización absoluta entre inteligencia artificial, IoT y logística global."
-                  videoSrc="/videos/cinematic/space-intro.mp4"
-                  ctas={[
-                    {
-                      label: 'AUTORIZAR ACCESO',
-                      onClick: () => (window.location.href = '#contact'),
-                    },
-                    { label: 'VER ECOSISTEMA', onClick: () => {}, variant: 'outline' },
-                  ]}
-                />
+                {/* HeroSection - Cinematic Presentation */}
+                <Suspense fallback={<LoadingFallback />}>
+                  <CinematicPresentation />
+                </Suspense>
 
                 {/* synthetic Consciousness - Daniela AI */}
                 <Suspense fallback={<LoadingFallback />}>
@@ -188,7 +185,9 @@ export const AppContent = ({
                 </Suspense>
 
                 {/* VITURE XR Experience */}
-                <VitureXRExperience />
+                <Suspense fallback={<LoadingFallback />}>
+                  <VitureXRExperience />
+                </Suspense>
               </main>
             ) : (
               <Navigate to="/dashboard" />

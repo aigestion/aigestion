@@ -59,7 +59,7 @@ router.get('/containers', async (_req: Request, res: Response) => {
  */
 // GET /docker/containers/:id/stats - get stats for a container
 router.get('/containers/:id/stats', async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as any;
   try {
     const stats = await dockerService.getContainerStats(id);
     res.json({ data: stats });
@@ -89,7 +89,7 @@ router.get('/containers/:id/stats', async (req: Request, res: Response) => {
  */
 // POST /docker/containers/:id/start - start a container
 router.post('/containers/:id/start', async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as any;
   try {
     await dockerService.startContainer(id);
     res.json({ message: `Container ${id} started` });
@@ -119,7 +119,7 @@ router.post('/containers/:id/start', async (req: Request, res: Response) => {
  */
 // POST /docker/containers/:id/stop - stop a container
 router.post('/containers/:id/stop', async (req: Request, res: Response) => {
-  const { id } = req.params;
+  const { id } = req.params as any;
   try {
     await dockerService.stopContainer(id);
     res.json({ message: `Container ${id} stopped` });

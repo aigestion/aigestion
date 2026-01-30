@@ -1,15 +1,6 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { env } from '../config/env.schema';
-import winston from 'winston';
-
-const logger = winston.createLogger({
-  level: env.LOG_LEVEL || 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
-  transports: [new winston.transports.Console()],
-});
+import { logger } from '../utils/logger';
 
 /**
  * 🌌 [GOD MODE] SupabaseService

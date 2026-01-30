@@ -1,6 +1,4 @@
-import { ContactForm } from '@aigestion/ui';
 import { useSoundEffects } from '../hooks/useSoundEffects';
-import { MagneticWrapper } from './MagneticWrapper';
 import { GlitchText } from './GlitchText';
 
 export const ContactSection: React.FC = () => {
@@ -89,7 +87,7 @@ export const ContactSection: React.FC = () => {
             viewport={{ once: true }}
           >
             {/* Quick Contact */}
-            <Card variant="neon" className="p-8">
+            <div className="p-8 bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl">
               <h3 className="text-2xl font-orbitron font-bold text-white mb-6">Contacto Rápido</h3>
 
               <div className="space-y-6">
@@ -138,7 +136,7 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Office Hours */}
-            <Card variant="glass" className="p-8 border-nexus-cyan/30">
+            <div className="p-8 bg-white/5 border border-nexus-cyan/30 backdrop-blur-sm rounded-2xl">
               <h3 className="text-2xl font-orbitron font-bold text-white mb-6">
                 Horario de Atención
               </h3>
@@ -160,7 +158,7 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Social Links */}
-            <Card variant="glass" className="p-8">
+            <div className="p-8 bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl">
               <h3 className="text-2xl font-orbitron font-bold text-white mb-6">
                 Conecta con Nosotros
               </h3>

@@ -1,14 +1,27 @@
 import { NextFunction, Request, Response } from 'express';
+import { Socket } from 'net';
 import { UserBehaviorService } from '../services/user-behavior.service';
 import { logger } from '../utils/logger';
 
+interface BehaviorUser {
+  id: string;
+  email: string;
+  role: string;
+}
+
 interface BehaviorRequest extends Request {
-  user?: {
-    id: string;
-    email: string;
-    role: string;
-  };
+  user?: BehaviorUser;
   sessionId?: string;
+  file?: Express.Multer.File;
+  res?: Response;
+}
+
+interface EventMetadata {
+  path: string;
+  method: string;
+  query: any;
+  timestamp: string;
+  [key: string]: any;
 }
 
 /**
@@ -209,12 +222,13 @@ export class UserBehaviorMiddleware {
   /**
    * Get client IP address
    */
-  private getClientIP(req: Request): string {
+  private getClientIP(req: BehaviorRequest): string {
+    const socket = (req.connection as any)?.socket as Socket | undefined;
     return (
       req.ip ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
-      (req.connection as any)?.socket?.remoteAddress ||
+      socket?.remoteAddress ||
       'unknown'
     );
   }
@@ -222,8 +236,8 @@ export class UserBehaviorMiddleware {
   /**
    * Extract metadata from request
    */
-  private extractMetadata(req: BehaviorRequest, eventType: string): { [key: string]: any } {
-    const metadata: { [key: string]: any } = {
+  private extractMetadata(req: BehaviorRequest, eventType: string): EventMetadata {
+    const metadata: EventMetadata = {
       path: req.path,
       method: req.method,
       query: req.query,
@@ -238,17 +252,17 @@ export class UserBehaviorMiddleware {
         break;
 
       case 'file_upload':
-        if ((req as any).file) {
-          metadata.fileSize = (req as any).file.size;
-          metadata.fileType = (req as any).file.mimetype;
-          metadata.fileName = (req as any).file.originalname;
+        if (req.file) {
+          metadata.fileSize = req.file.size;
+          metadata.fileType = req.file.mimetype;
+          metadata.fileName = req.file.originalname;
         }
         break;
 
       case 'api_call':
         metadata.endpoint = req.path;
         metadata.responseTime = req.get('X-Response-Time');
-        metadata.statusCode = (req as any)?.res?.statusCode;
+        metadata.statusCode = req.res?.statusCode;
         break;
 
       case 'error':
@@ -264,7 +278,7 @@ export class UserBehaviorMiddleware {
         break;
 
       case 'data_access':
-        metadata.resource = req.body?.resource || req.params?.resource || req.query?.resource;
+        metadata.resource = req.body?.resource || (req.params as any)?.resource || (req.query as any)?.resource;
         metadata.action = req.body?.action || req.method?.toLowerCase();
         metadata.dataType = req.body?.dataType || 'unknown';
         break;
@@ -289,7 +303,7 @@ export class UserBehaviorMiddleware {
   /**
    * Get behavior statistics
    */
-  public getStats = async (req: Request, res: Response) => {
+  public getStats = async (_req: Request, res: Response) => {
     try {
       const stats = await this.behaviorService.getStats();
 
@@ -320,7 +334,7 @@ export class UserBehaviorMiddleware {
         });
       }
 
-      const profile = await this.behaviorService.getUserProfile(userId);
+      const profile = await this.behaviorService.getUserProfile(userId as string);
 
       if (!profile) {
         return res.status(404).json({
@@ -357,7 +371,7 @@ export class UserBehaviorMiddleware {
         });
       }
 
-      const anomalies = await this.behaviorService.getUserAnomalies(userId, limit);
+      const anomalies = await this.behaviorService.getUserAnomalies(userId as string, limit);
 
       res.json({
         success: true,
@@ -407,7 +421,7 @@ export class UserBehaviorMiddleware {
         });
       }
 
-      const success = await this.behaviorService.resolveAnomaly(anomalyId);
+      const success = await this.behaviorService.resolveAnomaly(anomalyId as string);
 
       res.json({
         success: true,

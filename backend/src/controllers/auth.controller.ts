@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
 import { buildResponse } from '../common/response-builder';

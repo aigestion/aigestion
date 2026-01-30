@@ -1,5 +1,5 @@
 // Feature Flag middleware
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express';
 
 import { buildFeatureFlags, FeatureFlags } from '../utils/featureFlags';
 

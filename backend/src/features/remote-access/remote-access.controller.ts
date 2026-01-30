@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import type { Request, Response } from 'express-serve-static-core';
+import type { Request, Response } from 'express';
 
 import { logger } from '../../utils/logger';
 import { RemoteAccessRequest, RemoteSession } from './types';
@@ -62,7 +62,7 @@ export class RemoteAccessController {
   // Responder a una solicitud de acceso
   async respondToRequest(req: Request, res: Response): Promise<void> {
     try {
-      const { requestId } = req.params;
+      const { requestId } = req.params as any;
       const { approve, userId } = req.body;
 
       const request = this.pendingRequests.get(requestId);
@@ -128,7 +128,7 @@ export class RemoteAccessController {
   // Obtener sesiones activas
   async getActiveSessions(req: Request, res: Response): Promise<void> {
     try {
-      const { userId } = req.params;
+      const { userId } = req.params as any;
 
       const sessions = Array.from(this.activeSessions.values()).filter(
         session => session.fromUserId === userId || session.toUserId === userId,
@@ -150,7 +150,7 @@ export class RemoteAccessController {
   // Finalizar una sesión
   async endSession(req: Request, res: Response): Promise<void> {
     try {
-      const { sessionId } = req.params;
+      const { sessionId } = req.params as any;
       const { userId } = req.body;
 
       const session = this.activeSessions.get(sessionId);

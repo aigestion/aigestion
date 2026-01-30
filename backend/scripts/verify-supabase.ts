@@ -1,11 +1,5 @@
 import { supabaseService } from '../src/services/supabase.service';
-import winston from 'winston';
-
-const logger = winston.createLogger({
-  level: 'info',
-  format: winston.format.simple(),
-  transports: [new winston.transports.Console()],
-});
+import { logger } from '../src/utils/logger';
 
 async function verify() {
   logger.info('Testing Supabase Connection...');

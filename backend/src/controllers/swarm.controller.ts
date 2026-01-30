@@ -82,7 +82,7 @@ export class SwarmController {
   private async getMission(req: Request, res: Response) {
     const requestId = (req as any).requestId || 'unknown';
     try {
-      const { id } = req.params;
+      const { id } = req.params as any;
       const mission = await this.swarmService.getMission(id);
       return res.json(buildResponse(mission, 200, requestId));
     } catch (error) {

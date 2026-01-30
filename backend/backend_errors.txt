@@ -1,0 +1,25 @@
+
+> nexus-v1-dashboard-backend@1.0.0 build
+> tsc
+
+src/middleware/user-behavior.middleware.ts(12,11): error TS2430: Interface 'BehaviorRequest' incorrectly extends interface 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+  Types of property 'file' are incompatible.
+    Type '{ size: number; mimetype: string; originalname: string; } | undefined' is not assignable to type 'File | undefined'.
+      Type '{ size: number; mimetype: string; originalname: string; }' is missing the following properties from type 'File': fieldname, encoding, stream, destination, and 3 more.
+src/middleware/user-behavior.middleware.ts(75,62): error TS2345: Argument of type 'BehaviorRequest' is not assignable to parameter of type 'Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>'.
+  Types of property 'file' are incompatible.
+    Type '{ size: number; mimetype: string; originalname: string; } | undefined' is not assignable to type 'File | undefined'.
+      Type '{ size: number; mimetype: string; originalname: string; }' is missing the following properties from type 'File': fieldname, encoding, stream, destination, and 3 more.
+src/middleware/user-behavior.middleware.ts(341,65): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/middleware/user-behavior.middleware.ts(378,69): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+src/middleware/user-behavior.middleware.ts(428,65): error TS2345: Argument of type 'string | string[]' is not assignable to parameter of type 'string'.
+  Type 'string[]' is not assignable to type 'string'.
+npm error Lifecycle script `build` failed with error:
+npm error code 2
+npm error path C:\Users\Alejandro\AIGestion\backend
+npm error workspace nexus-v1-dashboard-backend@1.0.0
+npm error location C:\Users\Alejandro\AIGestion\backend
+npm error command failed
+npm error command C:\WINDOWS\system32\cmd.exe /d /s /c tsc

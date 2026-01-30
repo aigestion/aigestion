@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express-serve-static-core';
+import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import { buildResponse } from '../common/response-builder';
 import { container } from '../config/inversify.config';

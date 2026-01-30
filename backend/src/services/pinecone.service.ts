@@ -38,7 +38,10 @@ export class PineconeService {
   /**
    * Upserts a batch of documents into Pinecone
    */
-  async upsertDocBatch(documents: { id: string; text: string; metadata: any }[]): Promise<void> {
+  async upsertDocBatch(
+    documents: { id: string; text: string; metadata: any }[],
+    namespace: string = 'default'
+  ): Promise<void> {
     if (!this.client) {
       logger.warn('[PineconeService] Client not initialized. Skipping batch upsert.');
       return;
@@ -46,36 +49,37 @@ export class PineconeService {
 
     try {
       const index = this.client.index(this.indexName);
-      const records: PineconeRecord[] = [];
+      const ns = index.namespace(namespace);
 
-      for (const doc of documents) {
-        // Generate Embeddings using Vertex AI
-        const embedding = await vertexAIService.generateEmbeddings(doc.text);
-
-        if (embedding.length === 0) {
-          logger.error(`[PineconeService] Failed to generate embeddings for document ${doc.id}`);
-          continue;
-        }
-
-        records.push({
-          id: doc.id,
-          values: embedding,
-          metadata: {
-            ...doc.metadata,
-            text: doc.text.substring(0, 2000), // Store more text for context
-            timestamp: new Date().toISOString(),
-          },
-        });
-      }
+      // Generate Embeddings in parallel
+      const records: PineconeRecord[] = await Promise.all(
+        documents.map(async (doc) => {
+          const embedding = await vertexAIService.generateEmbeddings(doc.text);
+          if (embedding.length === 0) {
+            throw new Error(`Failed to generate embeddings for document ${doc.id}`);
+          }
+          return {
+            id: doc.id,
+            values: embedding,
+            metadata: {
+              ...doc.metadata,
+              text: doc.text.substring(0, 3000), // Increased context length
+              timestamp: new Date().toISOString(),
+            },
+          } as PineconeRecord;
+        })
+      );
 
       if (records.length > 0) {
         // Pinecone recommends batches of ~100
         const batchSize = 100;
         for (let i = 0; i < records.length; i += batchSize) {
           const batch = records.slice(i, i + batchSize);
-          await index.upsert(batch);
+          await ns.upsert(batch);
         }
-        logger.info(`[PineconeService] Successfully upserted batch of ${records.length} documents`);
+        logger.info(
+          `[PineconeService] Successfully upserted ${records.length} documents into namespace: ${namespace}`
+        );
       }
     } catch (error) {
       logger.error('[PineconeService] Error in batch upsert to Pinecone:', error);
@@ -86,7 +90,12 @@ export class PineconeService {
   /**
    * Searches for similar documents
    */
-  async search(queryText: string, topK: number = 5): Promise<any[]> {
+  async search(
+    queryText: string,
+    topK: number = 5,
+    namespace: string = 'default',
+    filter?: object
+  ): Promise<any[]> {
     if (!this.client) {
       logger.warn('[PineconeService] Client not initialized. Returning empty results.');
       return [];
@@ -95,10 +104,12 @@ export class PineconeService {
     try {
       const embedding = await vertexAIService.generateEmbeddings(queryText);
       const index = this.client.index(this.indexName);
+      const ns = index.namespace(namespace);
 
-      const queryResponse = await index.query({
+      const queryResponse = await ns.query({
         vector: embedding,
         topK,
+        filter,
         includeMetadata: true,
       });
 

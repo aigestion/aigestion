@@ -1,5 +1,5 @@
 ﻿{
-  "name": "@NEXUS V1/opentelemetry-config",
+  "name": "@nexus-v1/opentelemetry-config",
   "version": "1.0.0",
   "description": "OpenTelemetry dependencies for NEXUS V1 observability",
   "dependencies": {
@@ -19,4 +19,3 @@
     "@types/node": "^20.10.0"
   }
 }
-

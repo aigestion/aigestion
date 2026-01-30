@@ -3,8 +3,9 @@
 param([switch]$NoCache, [switch]$Verbose)
 $ErrorActionPreference = "Stop"
 
-$DocsRoot = Join-Path (Split-Path -Parent $PSScriptRoot) "docs"
-$CacheDir = Join-Path (Split-Path -Parent $DocsRoot) ".cache"
+$Root = Split-Path -Parent $PSScriptRoot
+$CacheDir = Join-Path $Root ".cache"
+$DocsFolders = @("docs", "workspace-config")
 $CacheFile = Join-Path $CacheDir "docs-index.cache"
 $sw = [System.Diagnostics.Stopwatch]::StartNew()
 
@@ -29,47 +30,53 @@ $index = "# NEXUS V1 Documentation Index`n`nUpdated: $(Get-Date -Format 'yyyy-MM
 $metadata = @{}
 $categoryCount = 0
 
-Get-ChildItem -Path $DocsRoot -Directory | Sort-Object Name | ForEach-Object {
-    $cat = $_
-    $catName = $cat.Name
-    $index += "## $catName`n`n"
-    $categoryCount++
+foreach ($folder in $DocsFolders) {
+    $DocsRoot = Join-Path $Root $folder
+    if (-not (Test-Path $DocsRoot)) { continue }
 
-    Get-ChildItem -Path $cat.FullName -Filter "*.md" -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
-        $docName = $_.BaseName
-        $docPath = $_.FullName.Replace('\', '/')
-        $docKey = "$catName/$docName"
+    $index += "### $folder`n`n"
 
-        # Verificar si está en caché
-        if ($cache.ContainsKey($docKey)) {
-            $metadata[$docKey] = $cache[$docKey]
-        }
-        else {
-            # Extraer metadata
-            $firstLine = (Get-Content -Path $_.FullName -TotalCount 5 -ErrorAction SilentlyContinue | Where-Object { $_ -match "^#" }) | Select-Object -First 1
-            $desc = if ($firstLine) { $firstLine.Replace("# ", "").Replace("## ", "") } else { "" }
+    Get-ChildItem -Path $DocsRoot -Directory | Sort-Object Name | ForEach-Object {
+        $cat = $_
+        $catName = $cat.Name
+        $index += "#### $catName`n`n"
+        $categoryCount++
 
-            $metadata[$docKey] = @{
-                name        = $docName
-                path        = $docPath
-                description = $desc
-                size        = $_.Length
-                modified    = $_.LastWriteTime.ToString("yyyy-MM-dd")
+        Get-ChildItem -Path $cat.FullName -Filter "*.md" -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object {
+            $docName = $_.BaseName
+            $docPath = $_.FullName.Replace('\', '/')
+            $docKey = "$folder/$catName/$docName"
+
+            # Verificar si está en caché
+            if ($cache.ContainsKey($docKey)) {
+                $metadata[$docKey] = $cache[$docKey]
             }
-        }
+            else {
+                # Extraer metadata
+                $firstLine = (Get-Content -Path $_.FullName -TotalCount 5 -ErrorAction SilentlyContinue | Where-Object { $_ -match "^#" }) | Select-Object -First 1
+                $desc = if ($firstLine) { $firstLine.Replace("# ", "").Replace("## ", "") } else { "" }
 
-        $entry = $metadata[$docKey]
-        $index += "- **[$($entry.name)]($($entry.path))** - $($entry.description) *($($entry.modified))*`n"
+                $metadata[$docKey] = @{
+                    name        = $docName
+                    path        = $docPath
+                    description = $desc
+                    size        = $_.Length
+                    modified    = $_.LastWriteTime.ToString("yyyy-MM-dd")
+                }
+            }
+
+            $entry = $metadata[$docKey]
+            $index += "- **[$($entry.name)]($($entry.path))** - $($entry.description) *($($entry.modified))*`n"
+        }
+        $index += "`n"
     }
-    $index += "`n"
 }
 
 # Guardar índice
-$index | Set-Content (Join-Path $DocsRoot "INDEX.md")
+$index | Set-Content (Join-Path $Root "docs\INDEX.md")
 
 # Guardar caché
 $metadata | ConvertTo-Json | Set-Content $CacheFile
 
 $sw.Stop()
 Write-Host "✅ Index generated: $categoryCount categories | $(($metadata.Keys).Count) docs | $($sw.Elapsed.TotalSeconds)ms" -ForegroundColor Green
-

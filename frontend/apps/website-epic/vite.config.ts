@@ -35,6 +35,7 @@ export default defineConfig({
           lucide: ['lucide-react'],
           supabase: ['@supabase/supabase-js'],
           utils: ['clsx', 'tailwind-merge'],
+          modelViewer: ['@google/model-viewer'],
         },
       },
       onwarn(warning, warn) {

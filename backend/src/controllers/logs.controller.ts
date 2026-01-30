@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express-serve-static-core';
+import type { Request, Response } from 'express';
 
 import { buildError, buildResponse } from '../common/response-builder';
 import Log from '../models/Log';

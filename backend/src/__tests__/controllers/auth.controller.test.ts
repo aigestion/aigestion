@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { Request, Response } from 'express-serve-static-core';
+import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { mockRequest as createMockRequest, mockResponse as createMockResponse } from '../../../../tests/__mocks__/express';
 
