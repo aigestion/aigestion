@@ -10,10 +10,10 @@ export function AdminDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">
-            🏆 Admin Dashboard
+            🏆 Panel Administrativo
           </h1>
           <p className="text-purple-200">
-            AIGestion Administration Panel - NEXUS Control Center
+            Panel de Administración AIGestion - Centro de Control NEXUS
           </p>
         </div>
 
@@ -22,52 +22,52 @@ export function AdminDashboard() {
           <Card className="bg-white/10 backdrop-blur-md border-purple-500/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-purple-200">
-                Active Users
+                Usuarios Activos
               </CardTitle>
               <Users className="h-4 w-4 text-purple-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">1,234</div>
-              <p className="text-xs text-purple-300">+12% from last month</p>
+              <p className="text-xs text-purple-300">+12% desde el mes pasado</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-md border-purple-500/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-purple-200">
-                System Status
+                Estado del Sistema
               </CardTitle>
               <Activity className="h-4 w-4 text-green-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-400">Online</div>
-              <p className="text-xs text-purple-300">99.9% uptime</p>
+              <p className="text-xs text-purple-300">99.9% tiempo activo</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-md border-purple-500/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-purple-200">
-                AI Requests
+                Solicitudes de IA
               </CardTitle>
               <Shield className="h-4 w-4 text-blue-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-white">45.2K</div>
-              <p className="text-xs text-purple-300">Today</p>
+              <p className="text-xs text-purple-300">Hoy</p>
             </CardContent>
           </Card>
 
           <Card className="bg-white/10 backdrop-blur-md border-purple-500/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-purple-200">
-                Performance
+                Rendimiento
               </CardTitle>
               <Settings className="h-4 w-4 text-yellow-400" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-yellow-400">98ms</div>
-              <p className="text-xs text-purple-300">Avg response</p>
+              <p className="text-xs text-purple-300">Respuesta promedio</p>
             </CardContent>
           </Card>
         </div>
@@ -77,20 +77,20 @@ export function AdminDashboard() {
           {/* Quick Actions */}
           <Card className="bg-white/10 backdrop-blur-md border-purple-500/20 lg:col-span-1">
             <CardHeader>
-              <CardTitle className="text-white">Quick Actions</CardTitle>
+              <CardTitle className="text-white">Acciones Rápidas</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                🎭 Manage Daniela AI
+                🎭 Gestionar Daniela IA
               </Button>
               <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                👥 User Management
+                👥 Gestión de Usuarios
               </Button>
               <Button className="w-full bg-green-600 hover:bg-green-700">
-                📊 Analytics Dashboard
+                📊 Panel de Análisis
               </Button>
               <Button className="w-full bg-orange-600 hover:bg-orange-700">
-                🔧 System Settings
+                🔧 Configuración del Sistema
               </Button>
             </CardContent>
           </Card>
@@ -98,15 +98,15 @@ export function AdminDashboard() {
           {/* Recent Activity */}
           <Card className="bg-white/10 backdrop-blur-md border-purple-500/20 lg:col-span-2">
             <CardHeader>
-              <CardTitle className="text-white">Recent Activity</CardTitle>
+              <CardTitle className="text-white">Actividad Reciente</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { user: 'Admin User', action: 'Updated AI model', time: '2 min ago', status: 'success' },
-                  { user: 'System', action: 'Backup completed', time: '15 min ago', status: 'info' },
-                  { user: 'Daniela AI', action: 'Processed 1.2K requests', time: '1 hour ago', status: 'success' },
-                  { user: 'Security', action: 'SSL certificate renewed', time: '2 hours ago', status: 'warning' },
+                  { user: 'Usuario Admin', action: 'Modelo IA actualizado', time: 'hace 2 min', status: 'success' },
+                  { user: 'Sistema', action: 'Respaldo completado', time: 'hace 15 min', status: 'info' },
+                  { user: 'Daniela IA', action: 'Procesó 1.2K solicitudes', time: 'hace 1 hora', status: 'success' },
+                  { user: 'Seguridad', action: 'Certificado SSL renovado', time: 'hace 2 horas', status: 'warning' },
                 ].map((activity, index) => (
                   <div key={index} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                     <div>
@@ -116,7 +116,7 @@ export function AdminDashboard() {
                     <div className="text-right">
                       <Badge variant={
                         activity.status === 'success' ? 'default' :
-                        activity.status === 'warning' ? 'secondary' : 'outline'
+                          activity.status === 'warning' ? 'secondary' : 'outline'
                       }>
                         {activity.time}
                       </Badge>

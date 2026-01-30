@@ -9,7 +9,9 @@ export default defineConfig({
     }),
   ],
   base: '/',
-  resolve: {},
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+  },
   server: {
     port: 5173,
     strictPort: false,

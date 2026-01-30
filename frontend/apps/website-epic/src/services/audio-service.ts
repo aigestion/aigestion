@@ -108,9 +108,8 @@ class AudioService {
         });
       };
 
-      // Try .wav first, then .mp3
-      tryLoad(`/sounds/${type}.wav`)
-        .catch(() => tryLoad(`/sounds/${type}.mp3`))
+      // Load .mp3 only
+      tryLoad(`/sounds/${type}.mp3`)
         .then((audio) => {
           this.loadingPromises.delete(type);
           resolve(audio);

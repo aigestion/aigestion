@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X, ChevronRight, Lock } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import { ChevronRight, Lock, Menu, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { MagneticWrapper } from './MagneticWrapper';
@@ -21,10 +21,14 @@ export const Navigation: React.FC = () => {
   }, []);
 
   const navItems = [
-    { label: 'Hablar con Daniela', path: '/daniela' },
-    { label: 'Ver en 3D', path: '#viture-xr', isHash: true },
-    { label: 'Ver mi Oficina', path: '/virtual-office' },
-    { label: 'Probar el Panel', path: '/demo' },
+    { label: 'Servicios', path: '#services', isHash: true },
+    { label: 'Casos', path: '#cases', isHash: true },
+    { label: 'Precios', path: '#pricing', isHash: true },
+    { label: 'Plan', path: '#plan', isHash: true },
+    { label: 'Tutoriales', path: '#tutoriales', isHash: true },
+    { label: 'Contacto', path: '#contact', isHash: true },
+    { label: 'Daniela AI', path: '/daniela' },
+    { label: 'Dashboard', path: '/dashboard' },
   ];
 
   const handleLinkClick = (path: string, isHash?: boolean) => {
@@ -41,11 +45,10 @@ export const Navigation: React.FC = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        isScrolled
-          ? 'bg-black/80 backdrop-blur-xl border-b border-white/5 py-3'
-          : 'bg-transparent py-6'
-      }`}
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled
+        ? 'bg-black/80 backdrop-blur-xl border-b border-white/5 py-3'
+        : 'bg-transparent py-6'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         {/* Fused Logo Section */}
@@ -90,9 +93,8 @@ export const Navigation: React.FC = () => {
                 }
               }}
               onMouseEnter={playHover}
-              className={`relative font-orbitron text-[11px] font-bold tracking-[0.15em] uppercase transition-colors duration-300 hover:text-white ${
-                location.pathname === item.path ? 'text-nexus-cyan' : 'text-nexus-silver/70'
-              }`}
+              className={`relative font-orbitron text-[11px] font-bold tracking-[0.15em] uppercase transition-all duration-300 hover:text-white hover:scale-105 ${location.pathname === item.path ? 'text-nexus-cyan' : 'text-nexus-silver/70'
+                }`}
             >
               {item.label}
               <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-nexus-cyan transition-all duration-300 group-hover:w-full" />
@@ -181,4 +183,3 @@ export const Navigation: React.FC = () => {
     </motion.nav>
   );
 };
-
