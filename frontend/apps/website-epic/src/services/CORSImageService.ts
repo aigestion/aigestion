@@ -74,17 +74,17 @@ export class CORSImageService {
      * Strategy 1: CORS Proxy (if available)
      */
     private static async tryCORSProxy(prompt: string, model: FluxModel, settings: any): Promise<string> {
-        // Try to use a CORS proxy service
-        const proxyUrl = `https://cors-anywhere.herokuapp.com/https://pollinations.ai/p/${encodeURIComponent(prompt)}?model=${model === 'flux-pro' ? 'flux-realism' : 'flux'}&width=${settings.width}&height=${settings.height}&seed=${settings.seed}&nologo=true`;
-        
+        // Use local proxy for CORS fix
+        const proxyUrl = `/api/pollinations/p/${encodeURIComponent(prompt)}?model=${model === 'flux-pro' ? 'flux-realism' : 'flux'}&width=${settings.width}&height=${settings.height}&seed=${settings.seed}&nologo=true`;
+
         const response = await fetch(proxyUrl, {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         });
-        
+
         if (!response.ok) throw new Error('CORS proxy failed');
-        
+
         const blob = await response.blob();
         return URL.createObjectURL(blob);
     }
@@ -93,15 +93,15 @@ export class CORSImageService {
      * Strategy 2: Direct fetch with CORS headers
      */
     private static async tryDirectFetch(prompt: string, model: FluxModel, settings: any): Promise<string> {
-        const url = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?model=${model === 'flux-pro' ? 'flux-realism' : 'flux'}&width=${settings.width}&height=${settings.height}&seed=${settings.seed}&nologo=true`;
-        
+        const url = `/api/pollinations/p/${encodeURIComponent(prompt)}?model=${model === 'flux-pro' ? 'flux-realism' : 'flux'}&width=${settings.width}&height=${settings.height}&seed=${settings.seed}&nologo=true`;
+
         const response = await fetch(url, {
             mode: 'cors',
             credentials: 'omit'
         });
-        
+
         if (!response.ok) throw new Error('Direct fetch failed');
-        
+
         const blob = await response.blob();
         return URL.createObjectURL(blob);
     }
@@ -113,7 +113,7 @@ export class CORSImageService {
         return new Promise((resolve, reject) => {
             const callbackName = `jsonp_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
             const url = `https://pollinations.ai/p/${encodeURIComponent(prompt)}?model=${model === 'flux-pro' ? 'flux-realism' : 'flux'}&width=${settings.width}&height=${settings.height}&seed=${settings.seed}&nologo=true&callback=${callbackName}`;
-            
+
             // Create script element
             const script = document.createElement('script');
             script.src = url;
@@ -121,14 +121,14 @@ export class CORSImageService {
                 cleanup();
                 reject(new Error('JSONP failed'));
             };
-            
+
             // Set up callback
             (window as any)[callbackName] = (data: any) => {
                 cleanup();
                 // JSONP doesn't work for image data, so fallback to placeholder
                 resolve(this.getPlaceholderImage(prompt, model));
             };
-            
+
             // Cleanup function
             const cleanup = () => {
                 delete (window as any)[callbackName];
@@ -136,9 +136,9 @@ export class CORSImageService {
                     script.parentNode.removeChild(script);
                 }
             };
-            
+
             document.head.appendChild(script);
-            
+
             // Timeout after 10 seconds
             setTimeout(() => {
                 cleanup();
