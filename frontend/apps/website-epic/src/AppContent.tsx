@@ -10,6 +10,7 @@ import { CyberpunkGrid } from './components/CyberpunkGrid';
 import { DanielaOmniWidget } from './components/DanielaOmniWidget';
 import { DanielaShowcase } from './components/DanielaShowcase';
 import { FAQSection } from './components/FAQSection';
+import HeartMuLaShowcase from './components/HeartMuLaShowcase';
 import { IngeniousPlan } from './components/IngeniousPlan';
 import { MeshGradientBG } from './components/MeshGradientBG';
 import { Navigation } from './components/Navigation';
@@ -264,14 +265,14 @@ export const AppContent = ({
           }
         />
 
-        <Route
-          path="/lab"
-          element={
+        <Route path="/lab" element={
             <div className="pt-32 pb-20 px-6">
               <h1 className="text-4xl font-orbitron text-white text-center">Lab Section</h1>
             </div>
           }
         />
+
+        <Route path="/heartmula" element={<HeartMuLaShowcase />} />
 
         <Route path="/weapon" element={<WeaponDashboard />} />
 
