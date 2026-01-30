@@ -13,7 +13,7 @@ interface GenerationOptions {
 
 export class ImageService {
     // Pollinations.ai doesn't need an API key for base usage
-    private static POLLINATIONS_BASE_URL = 'https://pollinations.ai/p';
+    private static POLLINATIONS_BASE_URL = '/api/pollinations/p'; // Use proxy for CORS fix
 
     /**
      * 🌌 GOD MODE: Generates an image using Flux AI with maximum optimization

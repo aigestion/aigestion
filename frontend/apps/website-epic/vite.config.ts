@@ -10,6 +10,18 @@ export default defineConfig({
   ],
   base: '/',
   resolve: {},
+  server: {
+    port: 5173,
+    strictPort: false,
+    proxy: {
+      '/api/pollinations': {
+        target: 'https://pollinations.ai',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/pollinations/, ''),
+        secure: false,
+      }
+    }
+  },
   build: {
     outDir: 'dist',
     // Enable optimizations for GitHub Pages
@@ -55,11 +67,6 @@ export default defineConfig({
     modulePreload: {
       polyfill: true,
     },
-  },
-  // Environment variables
-  server: {
-    port: 5173,
-    strictPort: false,
   },
   // Build optimizations
   optimizeDeps: {
