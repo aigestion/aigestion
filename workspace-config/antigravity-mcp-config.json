@@ -210,6 +210,25 @@
         "priority": "high",
         "realTime": true
       }
+      "supabase_mcp": {
+        "type": "http",
+        "url": "https://mcp.supabase.com/mcp?project_ref=${SUPABASE_PROJECT_REF}&read_only=true&features=database,docs,debugging,development",
+        "env": {
+          "SUPABASE_PROJECT_REF": "${SUPABASE_PROJECT_REF}",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "capabilities": [
+          "supabase_docs",
+          "supabase_database",
+          "supabase_debugging",
+          "supabase_development",
+          "real_time_insights"
+        ],
+        "priority": "critical",
+        "realTime": true
+      },
     }
   },
   "antigravity": {
