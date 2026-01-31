@@ -189,6 +189,20 @@
         ],
         "priority": "normal"
       },
+      "supabase_mcp": {
+        "type": "http",
+        "url": "https://mcp.supabase.com/mcp?project_ref=${SUPABASE_PROJECT_REF}&read_only=true&features=database,docs,debugging,development",
+        "env": {
+          "SUPABASE_PROJECT_REF": "${SUPABASE_PROJECT_REF}"
+        },
+        "capabilities": [
+          "supabase_docs",
+          "supabase_database",
+          "supabase_debugging",
+          "supabase_development"
+        ],
+        "priority": "critical"
+      },
       "file_manager": {
         "command": "node",
         "args": ["./scripts/file-manager-server.js"],
