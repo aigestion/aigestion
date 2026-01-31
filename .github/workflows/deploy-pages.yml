@@ -27,7 +27,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v4
-      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -39,7 +38,6 @@ jobs:
       - name: Build with Vite
         working-directory: frontend/apps/website-epic
         run: npm run build
-        env:
           VITE_API_URL: https://api.aigestion.net
           VITE_SUPABASE_URL: https://jhvtjyfmgncrrbzqpbkt.supabase.co
           VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
