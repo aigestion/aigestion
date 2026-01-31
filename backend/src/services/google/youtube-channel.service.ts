@@ -20,12 +20,12 @@ export class YouTubeChannelService {
    * Inicializa la configuración de ambos canales
    */
   private initializeChannels(): void {
-    // Canal Personal (nemisanalex) - Para documentación técnica
+    // Canal Personal (noemisanalex) - Para documentación técnica
     const personalChannel: YouTubeChannel = {
       id: env.YOUTUBE_PERSONAL_CHANNEL_ID || '',
       type: 'personal',
-      email: env.YOUTUBE_PERSONAL_EMAIL,
-      name: 'nemisanalex',
+      email: env.YOUTUBE_PERSONAL_EMAIL || 'noemisanalex@gmail.com',
+      name: 'noemisanalex',
       description: 'Canal personal para documentación técnica y desarrollo',
       purpose: 'Documentar procesos, tutoriales técnicos, y aprendizaje personal',
       credentials: {
@@ -40,7 +40,7 @@ export class YouTubeChannelService {
     const businessChannel: YouTubeChannel = {
       id: env.YOUTUBE_BUSINESS_CHANNEL_ID || '',
       type: 'business',
-      email: env.YOUTUBE_BUSINESS_EMAIL,
+      email: env.YOUTUBE_BUSINESS_EMAIL || 'admin@aigestion.net',
       name: 'AIGestion',
       description:
         'Gestión inteligente de empresas con Inteligencia Artificial. Canal oficial de AIGestion (NEXUS V1).',

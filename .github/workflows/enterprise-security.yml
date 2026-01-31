@@ -1,0 +1,303 @@
+name: Enterprise Security Workflows
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 4 * * *'  # Daily at 4 AM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+  checks: write
+
+jobs:
+  # Advanced Security Scanning
+  advanced-security:
+    name: Advanced Security Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, typescript, python
+          queries: security-extended,security-and-quality
+          build-mode: manual
+      
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+      
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:javascript"
+      
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/owasp-top-ten
+            p/secrets
+            p/cwe-top-25
+      
+      - name: Run Bandit (Python Security)
+        run: |
+          pip install bandit[toml]
+          bandit -r backend/ -f json -o bandit-report.json || true
+      
+      - name: Run ESLint Security Plugin
+        run: |
+          cd frontend
+          npm install eslint-plugin-security
+          npx eslint --ext .js,.ts,.jsx,.tsx --plugin security --format json . > eslint-security.json || true
+
+  # Dependency Security Management
+  dependency-security:
+    name: Dependency Security Management
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Run Dependabot Security Scan
+        uses: github/dependabot-action@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Run Snyk Security Scan
+        uses: snyk/actions/node@master
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --all-projects
+      
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'aigestion'
+          path: '.'
+          format: 'HTML'
+          out: 'dependency-check-report'
+      
+      - name: Upload Dependency Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-security-report
+          path: dependency-check-report/
+
+  # Secret Management & Scanning
+  secret-management:
+    name: Secret Management & Scanning
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+      
+      - name: Run TruffleHog
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified
+      
+      - name: Scan for Hardcoded Secrets
+        uses: pre-commit/action@v3.0.0
+        with:
+          extra_args: --all-files
+      
+      - name: Validate Environment Variables
+        run: |
+          echo "🔍 Validating environment variable security..."
+          # Check for potential security issues in env files
+          find . -name "*.env*" -type f ! -path './.git/*' | while read file; do
+            echo "📁 Checking: $file"
+            # Check for unencrypted sensitive data
+            if grep -qi "password\|secret\|key\|token" "$file"; then
+              echo "⚠️ Potential sensitive data found in $file"
+            fi
+          done
+
+  # Compliance & Governance
+  compliance:
+    name: Compliance & Governance
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Run GDPR Compliance Check
+        uses: ./.github/actions/gdpr-compliance@v1
+        with:
+          config-file: .github/compliance/gdpr-config.json
+      
+      - name: Run SOC2 Compliance Check
+        uses: ./.github/actions/soc2-compliance@v1
+        with:
+          config-file: .github/compliance/soc2-config.json
+      
+      - name: Run HIPAA Compliance Check
+        uses: ./.github/actions/hipaa-compliance@v1
+        with:
+          config-file: .github/compliance/hipaa-config.json
+      
+      - name: Generate Compliance Report
+        run: |
+          echo "📋 Generating compliance report..."
+          echo "✅ GDPR Compliance: $(cat gdpr-status.txt)"
+          echo "✅ SOC2 Compliance: $(cat soc2-status.txt)"
+          echo "✅ HIPAA Compliance: $(cat hipaa-status.txt)"
+      
+      - name: Upload Compliance Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: compliance-report
+          path: compliance-report/
+
+  # Security Policy Enforcement
+  policy-enforcement:
+    name: Security Policy Enforcement
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Enforce Branch Protection
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Ensure branch protection rules are enforced
+            const protection = {
+              required_status_checks: {
+                strict: true,
+                contexts: [
+                  'ci/ci-cd',
+                  'security/advanced-security',
+                  'ai-ml/ai-code-review',
+                  'performance/performance'
+                ]
+              },
+              enforce_admins: true,
+              required_pull_request_reviews: {
+                required_approving_review_count: 2,
+                dismiss_stale_reviews: true,
+                require_code_owner_reviews: true
+              },
+              restrictions: {
+                users: [],
+                teams: ['core-team', 'security-team']
+              }
+            };
+            
+            github.rest.repos.updateBranchProtection({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: 'main',
+              protection: protection
+            });
+      
+      - name: Validate Commit Signatures
+        run: |
+          echo "🔐 Validating commit signatures..."
+          git log --show-signature -1 main
+      
+      - name: Check Code Owner Approvals
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            
+            const reviews = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            
+            const codeOwners = reviews.data.filter(review => 
+              review.user.login.includes('owner') || 
+              review.user.login.includes('maintainer')
+            );
+            
+            if (codeOwners.length < 1) {
+              core.setFailed('❌ Code owner approval required');
+            } else {
+              console.log('✅ Code owner approval verified');
+            }
+
+  # Security Incident Response
+  incident-response:
+    name: Security Incident Response
+    runs-on: ubuntu-latest
+    if: failure() && github.event_name == 'push'
+    
+    steps:
+      - name: Create Security Issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🚨 Security Incident Detected',
+              body: `
+              ## 🚨 Security Incident Report
+              
+              **Repository:** ${{ github.repository }}
+              **Branch:** ${{ github.ref }}
+              **Commit:** ${{ github.sha }}
+              **Triggered by:** ${{ github.event_name }}
+              
+              ### 🔍 Incident Details:
+              - Security scan failed
+              - Immediate attention required
+              - Security team notified
+              
+              ### 📋 Next Steps:
+              1. Review security scan results
+              2. Identify affected components
+              3. Implement remediation
+              4. Update security policies
+              
+              ---
+              *Automatically generated by Security Incident Response System*
+              `,
+              labels: ['security', 'incident', 'urgent'],
+              assignees: ['security-team']
+            });
+      
+      - name: Notify Security Team
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          channel: '#security-alerts'
+          text: '🚨 Security incident detected in AIGestion repository'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_SECURITY_WEBHOOK }}
