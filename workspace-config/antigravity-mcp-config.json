@@ -1,0 +1,224 @@
+{
+  "mcp": {
+    "priorityMode": "high",
+    "enableRealTime": true,
+    "locationOptimization": true,
+    "professionalMode": true,
+    "servers": {
+      "aigestion_core": {
+        "command": "node",
+        "args": ["./.windsurf/aigestion-mcp-server.js"],
+        "env": {
+          "NODE_ENV": "production",
+          "AIGESTION_API_URL": "https://api.aigestion.net",
+          "GOOGLE_CLOUD_PROJECT_ID": "aigestion-pro-2026",
+          "GOOGLE_CLOUD_LOCATION": "europe-west1",
+          "MONGODB_URI": "${MONGODB_URI}",
+          "REDIS_URL": "${REDIS_URL}",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+        "capabilities": [
+          "database_access",
+          "ai_integration",
+          "file_management",
+          "user_management",
+          "analytics",
+          "monitoring",
+          "real_time_processing"
+        ],
+        "priority": "critical",
+        "realTime": true
+      },
+      "workflow_automation": {
+        "command": "node",
+        "args": ["./.windsurf/workflow-server.js"],
+        "env": {
+          "NODE_ENV": "production",
+          "N8N_JWT_TOKEN": "${N8N_JWT_TOKEN}",
+          "WEBHOOK_URL": "${WEBHOOK_URL}",
+          "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_APPLICATION_CREDENTIALS}",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+        "capabilities": [
+          "workflow_execution",
+          "task_automation",
+          "webhook_handling",
+          "n8n_integration",
+          "github_actions",
+          "ci_cd_pipelines",
+          "real_time_automation"
+        ],
+        "priority": "critical",
+        "realTime": true
+      },
+      "infrastructure_monitor": {
+        "command": "node",
+        "args": ["./.windsurf/monitor-dns.js"],
+        "env": {
+          "NODE_ENV": "production",
+          "DOMAIN": "aigestion.net",
+          "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_API_TOKEN}",
+          "GOOGLE_PROJECT_ID": "aigestion-pro-2026",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+        "capabilities": [
+          "dns_monitoring",
+          "ssl_management",
+          "domain_health",
+          "performance_tracking",
+          "uptime_monitoring",
+          "alert_management",
+          "24_7_monitoring"
+        ],
+        "priority": "critical",
+        "realTime": true
+      },
+      "deployment_manager": {
+        "command": "node",
+        "args": ["./.windsurf/trigger-build.js"],
+        "env": {
+          "NODE_ENV": "production",
+          "GITHUB_TOKEN": "${GITHUB_TOKEN}",
+          "REPO_OWNER": "aigestion",
+          "REPO_NAME": "aigestion-pro-2026",
+          "DEPLOY_WEBHOOK": "${DEPLOY_WEBHOOK}",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+        "capabilities": [
+          "github_deployment",
+          "build_triggering",
+          "rollback_management",
+          "version_control",
+          "release_automation",
+          "environment_sync",
+          "instant_deployment"
+        ],
+        "priority": "critical",
+        "realTime": true
+      },
+      "ai_services_hub": {
+        "command": "node",
+        "args": ["./scripts/ai-hub-server.js"],
+        "env": {
+          "NODE_ENV": "production",
+          "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+          "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+          "GOOGLE_AI_API_KEY": "${GOOGLE_AI_API_KEY}",
+          "VERTEX_AI_LOCATION": "europe-west1",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+        "capabilities": [
+          "text_generation",
+          "code_completion",
+          "ai_analysis",
+          "model_switching",
+          "prompt_engineering",
+          "ai_orchestration",
+          "professional_ai"
+        ],
+        "priority": "critical",
+        "realTime": true
+      },
+      "security_center": {
+        "command": "node",
+        "args": ["./scripts/security-server.js"],
+        "env": {
+          "NODE_ENV": "production",
+          "SECURITY_API_KEY": "${SECURITY_API_KEY}",
+          "SCAN_INTERVAL": "300000",
+          "ALERT_WEBHOOK": "${SECURITY_WEBHOOK}",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+        "capabilities": [
+          "vulnerability_scanning",
+          "security_monitoring",
+          "threat_detection",
+          "compliance_checks",
+          "audit_logging",
+          "incident_response",
+          "professional_security"
+        ],
+        "priority": "critical",
+        "realTime": true
+      },
+      "data_analytics": {
+        "command": "node",
+        "args": ["./scripts/analytics-server.js"],
+        "env": {
+          "NODE_ENV": "production",
+          "BIGQUERY_PROJECT_ID": "aigestion-pro-2026",
+          "ANALYTICS_DATASET": "aigestion_analytics",
+          "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_APPLICATION_CREDENTIALS}",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+        "capabilities": [
+          "data_analysis",
+          "report_generation",
+          "metrics_tracking",
+          "business_intelligence",
+          "predictive_analytics",
+          "data_visualization",
+          "real_time_analytics"
+        ],
+        "priority": "high",
+        "realTime": true
+      },
+      "communication_hub": {
+        "command": "node",
+        "args": ["./scripts/communication-server.js"],
+        "env": {
+          "NODE_ENV": "production",
+          "SLACK_WEBHOOK": "${SLACK_WEBHOOK}",
+          "DISCORD_WEBHOOK": "${DISCORD_WEBHOOK}",
+          "TELEGRAM_BOT_TOKEN": "${TELEGRAM_BOT_TOKEN}",
+          "EMAIL_SERVICE_KEY": "${EMAIL_SERVICE_KEY}",
+          "ANTIGRAVITY_MODE": "true",
+          "PROFESSIONAL_ACCOUNT": "true",
+          "LOCATION_OPTIMIZATION": "europe-west1"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+        "capabilities": [
+          "slack_integration",
+          "discord_notifications",
+          "telegram_bot",
+          "email_automation",
+          "team_collaboration",
+          "alert_routing",
+          "professional_communication"
+        ],
+        "priority": "high",
+        "realTime": true
+      }
+    }
+  },
+  "antigravity": {
+    "account": "admin@aigestion.net",
+    "location": "europe-west1",
+    "optimization": "maximum",
+    "monitoring": "24/7",
+    "backup": "automatic",
+    "professional_mode": true,
+    "divine_level": true
+  }
+}

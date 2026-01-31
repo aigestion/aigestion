@@ -1,15 +1,104 @@
 {
+  "mcp.serverTimeout": 30000,
+  "mcp.autoRestart": true,
+  "mcp.logLevel": "info",
+  "mcp.enableTelemetry": true,
+  "mcp.servers": {
+    "aigestion_core": {
+      "command": "node",
+      "args": [
+        "./.windsurf/aigestion-mcp-server.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "AIGESTION_API_URL": "https://api.aigestion.net",
+        "GOOGLE_CLOUD_PROJECT_ID": "aigestion-pro-2026",
+        "GOOGLE_CLOUD_LOCATION": "europe-west1"
+      },
+      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "timeout": 30000,
+      "restart": true
+    },
+    "workflow_automation": {
+      "command": "node",
+      "args": [
+        "./.windsurf/workflow-server.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "N8N_JWT_TOKEN": "${N8N_JWT_TOKEN}",
+        "WEBHOOK_URL": "${WEBHOOK_URL}"
+      },
+      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "timeout": 30000,
+      "restart": true
+    },
+    "custom_rules_engine": {
+      "command": "node",
+      "args": [
+        "./.windsurf/custom-rules-server.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "RULES_CONFIG_PATH": "./config/rules.json"
+      },
+      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "timeout": 30000,
+      "restart": true
+    },
+    "ai_services_hub": {
+      "command": "node",
+      "args": [
+        "./scripts/ai-hub-server.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "GOOGLE_AI_API_KEY": "${GOOGLE_AI_API_KEY}"
+      },
+      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "timeout": 30000,
+      "restart": true
+    },
+    "security_center": {
+      "command": "node",
+      "args": [
+        "./scripts/security-server.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "SECURITY_API_KEY": "${SECURITY_API_KEY}"
+      },
+      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "timeout": 30000,
+      "restart": true
+    },
+    "infrastructure_monitor": {
+      "command": "node",
+      "args": [
+        "./.windsurf/monitor-dns.js"
+      ],
+      "env": {
+        "NODE_ENV": "production",
+        "DOMAIN": "aigestion.net",
+        "GOOGLE_PROJECT_ID": "aigestion-pro-2026"
+      },
+      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "timeout": 30000,
+      "restart": true
+    }
+  },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+  "typescript.tsserver.maxTsServerMemory": 8192,
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": true,
+    "markdown": true
   },
-  "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "typescript.tsserver.maxTsServerMemory": 4096,
-  "eslint.validate": ["typescript", "typescriptreact"]
+  "github.copilot.chat.enable": true,
+  "google.geminicodeassist.enable": true,
+  "ms-azuretools.vscode-azure-mcp-server.enable": true
 }

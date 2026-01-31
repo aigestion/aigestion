@@ -16,7 +16,7 @@ export class DocumentProcessorService {
    */
   async processDocument(fileBuffer: Buffer, mimeType: string, processorId: string): Promise<any> {
     const projectId = env.GOOGLE_CLOUD_PROJECT_ID;
-    const location = env.GOOGLE_CLOUD_LOCATION || 'us';
+    const location = env.GOOGLE_CLOUD_LOCATION || 'europe-west1';
 
     const name = `projects/${projectId}/locations/${location}/processors/${processorId}`;
 

@@ -86,7 +86,7 @@ export class VertexAIService {
     }
 
     try {
-      const location = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
+      const location = process.env.GOOGLE_CLOUD_LOCATION || 'europe-west1';
       const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID;
 
       // Using vertexAI instance to get the embedding model
