@@ -39,7 +39,7 @@ jobs:
           mkdir -p deploy_dist
           cp -r frontend/apps/website-epic/dist/* deploy_dist/
           cp deploy_dist/index.html deploy_dist/404.html
-          echo "www.aigestion.net" > deploy_dist/CNAME
+          echo "aigestion.net" > deploy_dist/CNAME
           touch deploy_dist/.nojekyll
 
       - name: Setup Pages
