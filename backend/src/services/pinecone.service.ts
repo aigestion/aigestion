@@ -6,7 +6,7 @@ import { vertexAIService } from './google/vertex-ai.service';
 
 @injectable()
 export class PineconeService {
-  private client: Pinecone | null = null;
+  private client: any | null = null;
   private indexName = 'aigestion-docs';
 
   constructor() {
@@ -40,7 +40,7 @@ export class PineconeService {
    */
   async upsertDocBatch(
     documents: { id: string; text: string; metadata: any }[],
-    namespace: string = 'default'
+    namespace: string = 'default',
   ): Promise<void> {
     if (!this.client) {
       logger.warn('[PineconeService] Client not initialized. Skipping batch upsert.');
@@ -52,8 +52,8 @@ export class PineconeService {
       const ns = index.namespace(namespace);
 
       // Generate Embeddings in parallel
-      const records: PineconeRecord[] = await Promise.all(
-        documents.map(async (doc) => {
+      const records: any[] = await Promise.all(
+        documents.map(async doc => {
           const embedding = await vertexAIService.generateEmbeddings(doc.text);
           if (embedding.length === 0) {
             throw new Error(`Failed to generate embeddings for document ${doc.id}`);
@@ -66,8 +66,8 @@ export class PineconeService {
               text: doc.text.substring(0, 3000), // Increased context length
               timestamp: new Date().toISOString(),
             },
-          } as PineconeRecord;
-        })
+          } as any;
+        }),
       );
 
       if (records.length > 0) {
@@ -78,7 +78,7 @@ export class PineconeService {
           await ns.upsert(batch);
         }
         logger.info(
-          `[PineconeService] Successfully upserted ${records.length} documents into namespace: ${namespace}`
+          `[PineconeService] Successfully upserted ${records.length} documents into namespace: ${namespace}`,
         );
       }
     } catch (error) {
@@ -94,7 +94,7 @@ export class PineconeService {
     queryText: string,
     topK: number = 5,
     namespace: string = 'default',
-    filter?: object
+    filter?: object,
   ): Promise<any[]> {
     if (!this.client) {
       logger.warn('[PineconeService] Client not initialized. Returning empty results.');

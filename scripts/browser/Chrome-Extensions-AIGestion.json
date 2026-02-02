@@ -1,0 +1,291 @@
+{
+  "name": "AIGestion Chrome Extensions - Nivel Dios",
+  "version": "1.0.0",
+  "description": "Configuración completa de extensions para desarrollo AIGestion",
+  "extensions": {
+    "development": [
+      {
+        "id": "fmkadmapgofadopljbjfkapdkoienihi",
+        "name": "React Developer Tools",
+        "description": "Herramientas de desarrollo para React",
+        "category": "development",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "lmhkpmbekcpmknklioeibfkpmmfibljd",
+        "name": "Redux DevTools",
+        "description": "Herramientas de desarrollo para Redux",
+        "category": "development",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "nhdogjmejiglipccpnnnanhbledajbpd",
+        "name": "Vue.js devtools",
+        "description": "Herramientas de desarrollo para Vue.js",
+        "category": "development",
+        "priority": "medium",
+        "enabled": true
+      },
+      {
+        "id": "gighmmpiobklfepjocnamgkkbiglidom",
+        "name": "React Perf",
+        "description": "Herramientas de rendimiento para React",
+        "category": "development",
+        "priority": "medium",
+        "enabled": true
+      },
+      {
+        "id": "padekgcemlokbadohgkifijomclgjgif",
+        "name": "Postman",
+        "description": "Cliente API para testing",
+        "category": "development",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "fimkadakjafbnjdkbklmklbfoocfnpnb",
+        "name": "JSON Viewer",
+        "description": "Visualizador JSON mejorado",
+        "category": "development",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "hnmpcagpplmpfojmgmnngilcnanddlhb",
+        "name": "Wappalyzer",
+        "description": "Identificador de tecnologías web",
+        "category": "development",
+        "priority": "medium",
+        "enabled": true
+      },
+      {
+        "id": "jboaghagokjngndnnemdjbmfnkaegdog",
+        "name": "Window Resizer",
+        "description": "Redimensionador de ventana para responsive design",
+        "category": "development",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "bfbmjmiodbnnljcfcfjloiibkifhgkeo",
+        "name": "ColorZilla",
+        "description": "Selector de colores avanzado",
+        "category": "development",
+        "priority": "medium",
+        "enabled": true
+      },
+      {
+        "id": "ifpbpohdgggmlfocdjjmnibdcbnjmmkc",
+        "name": "Web Developer",
+        "description": "Herramientas completas de desarrollo web",
+        "category": "development",
+        "priority": "high",
+        "enabled": true
+      }
+    ],
+    "productivity": [
+      {
+        "id": "elgohgojghkldbcfaefjgblgmpjkohmc",
+        "name": "Google Docs Offline",
+        "description": "Acceso offline a Google Docs",
+        "category": "productivity",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "ghbmnnjooekpmoecnnnilnnbdlolhkhi",
+        "name": "Google Keep",
+        "description": "Notas y recordatorios",
+        "category": "productivity",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "blpcfgokakmgnkcojhhkbfbldkabnjo",
+        "name": "Google Hangouts",
+        "description": "Mensajería y videoconferencias",
+        "category": "productivity",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "pjkljhegncpnkpknbcohdijeoejaedia",
+        "name": "Google Calendar",
+        "description": "Calendario integrado",
+        "category": "productivity",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "apngnlkebkbhpopmcofkmpoikecgidcn",
+        "name": "Google Slides",
+        "description": "Presentaciones online",
+        "category": "productivity",
+        "priority": "medium",
+        "enabled": true
+      },
+      {
+        "id": "felcaaldnbdncclmgdcncolpebgiejap",
+        "name": "Google Sheets",
+        "description": "Hojas de cálculo online",
+        "category": "productivity",
+        "priority": "medium",
+        "enabled": true
+      },
+      {
+        "id": "aapocclcgogkmnckokdopfmhonfmigcm",
+        "name": "Google Drive",
+        "description": "Almacenamiento en la nube",
+        "category": "productivity",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "eemcgdkfndhiofomikejiohflblbdjfp",
+        "name": "Google Docs",
+        "description": "Procesador de textos online",
+        "category": "productivity",
+        "priority": "high",
+        "enabled": true
+      }
+    ],
+    "security": [
+      {
+        "id": "cfhdojbkjhnklbpkdaibdccddilifddb",
+        "name": "Adblock Plus",
+        "description": "Bloqueador de anuncios",
+        "category": "security",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "bgnkhhhhamicfomdeacfejdgjhpnmehn",
+        "name": "Google Input Tools",
+        "description": "Herramientas de entrada multilingüe",
+        "category": "security",
+        "priority": "medium",
+        "enabled": true
+      },
+      {
+        "id": "cjpalhdlnbpafiamejdnhcphjbkeiagm",
+        "name": "uBlock Origin",
+        "description": "Bloqueador de contenido avanzado",
+        "category": "security",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "iobfpdpehpjndhmgfaokdmobkkfdehgm",
+        "name": "HTTPS Everywhere",
+        "description": "Forzar HTTPS en todos los sitios",
+        "category": "security",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "gcbommkclmclpchllfjekcdonpmejbdp",
+        "name": "Privacy Badger",
+        "description": "Protección de privacidad",
+        "category": "security",
+        "priority": "high",
+        "enabled": true
+      },
+      {
+        "id": "nngceckbapebfimnlnmciahkandajnjb",
+        "name": "Bitwarden",
+        "description": "Gestor de contraseñas",
+        "category": "security",
+        "priority": "high",
+        "enabled": true
+      }
+    ],
+    "aigestion_specific": [
+      {
+        "id": "custom_aigestion_dev",
+        "name": "AIGestion Dev Tools",
+        "description": "Herramientas personalizadas para desarrollo AIGestion",
+        "category": "aigestion",
+        "priority": "high",
+        "enabled": true,
+        "custom": true,
+        "manifest": {
+          "name": "AIGestion Dev Tools",
+          "version": "1.0.0",
+          "manifest_version": 3,
+          "description": "Herramientas de desarrollo específicas para AIGestion",
+          "permissions": [
+            "activeTab",
+            "storage",
+            "scripting"
+          ],
+          "background": {
+            "service_worker": "background.js"
+          },
+          "content_scripts": [
+            {
+              "matches": ["*://*.aigestion.net/*", "http://localhost:*/*"],
+              "js": ["content.js"]
+            }
+          ],
+          "action": {
+            "default_popup": "popup.html",
+            "default_title": "AIGestion Dev Tools"
+          }
+        }
+      }
+    ]
+  },
+  "profiles": {
+    "development": {
+      "name": "AIGestion Development",
+      "extensions": ["development", "aigestion_specific"],
+      "flags": [
+        "enable-gpu-rasterization",
+        "enable-zero-copy",
+        "enable-oop-rasterization",
+        "enable-skia-renderer",
+        "enable-quic",
+        "disable-web-security",
+        "ignore-certificate-errors"
+      ]
+    },
+    "admin": {
+      "name": "AIGestion Admin",
+      "extensions": ["development", "productivity", "security", "aigestion_specific"],
+      "flags": [
+        "enable-gpu-rasterization",
+        "enable-zero-copy",
+        "enable-quic",
+        "disable-web-security",
+        "ignore-certificate-errors",
+        "disable-features=IsolateOrigins,site-per-process"
+      ]
+    },
+    "production": {
+      "name": "AIGestion Production",
+      "extensions": ["security", "productivity"],
+      "flags": [
+        "enable-gpu-rasterization",
+        "enable-zero-copy",
+        "enable-quic"
+      ]
+    }
+  },
+  "installation": {
+    "auto_install": true,
+    "skip_permissions": false,
+    "enable_developer_mode": true,
+    "load_unpacked": true
+  },
+  "configuration": {
+    "sync_enabled": false,
+    "auto_update": true,
+    "notifications": {
+      "extension_updates": true,
+      "security_alerts": true,
+      "performance_warnings": true
+    }
+  }
+}

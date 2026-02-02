@@ -1,0 +1,10 @@
+[install]
+cache = true
+frozen-lockfile = true
+
+[build]
+target = "browser"
+minify = true
+
+[test]
+coverage = true

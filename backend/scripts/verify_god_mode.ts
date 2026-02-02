@@ -5,6 +5,7 @@ import { AIService } from '../src/services/ai.service';
 const mockAnalytics = {} as any;
 const mockRag = {} as any;
 const mockUsage = { trackUsage: () => { } } as any;
+const mockSemanticCache = { get: () => null, set: () => undefined } as any;
 
 async function runProof() {
   console.log('🔮 STARTING GOD MODE VERIFICATION PROTOCOL...\n');
@@ -13,7 +14,7 @@ async function runProof() {
   console.log('🛡️  VERIFYING RATE LIMIT BYPASS...');
   const mockReqGod = {
     user: { id: 'god1', role: 'god', subscriptionPlan: 'free' },
-    ip: '127.0.0.1'
+    ip: '127.0.0.1',
   } as unknown as any;
 
   try {
@@ -21,7 +22,7 @@ async function runProof() {
     // if (user.role === 'god' || user.role === 'admin') return 0;
 
     const user = mockReqGod.user;
-    const isGodBypassed = (user.role === 'god' || user.role === 'admin');
+    const isGodBypassed = user.role === 'god' || user.role === 'admin';
 
     if (isGodBypassed) {
       console.log('✅ God/Admin Role detected -> Global Rate Limit: DISABLED (0)');
@@ -32,12 +33,11 @@ async function runProof() {
     console.error('Error in rate limit check:', e);
   }
 
-
   // 2. Verify AI Service Logic (Premium Enforcement)
   console.log('\n🧠 VERIFYING PREMIUM MODEL ENFORCEMENT...');
 
   // Instantiate Service with mocks
-  const aiService = new AIService(mockAnalytics, mockRag, mockUsage);
+  const aiService = new AIService(mockAnalytics, mockRag, mockUsage, mockSemanticCache);
 
   // Mock the internal methods by attaching to instance (using any cast)
   let capturedConfig: any = null;
@@ -45,7 +45,7 @@ async function runProof() {
     capturedConfig = config;
     // Mock return with a dummy object structure corresponding to Gemini/Anthropic/OpenAI SDKs
     return {
-      generateContent: async () => ({ response: { text: () => 'Mock Response' } })
+      generateContent: async () => ({ response: { text: () => 'Mock Response' } }),
     };
   };
 
@@ -53,8 +53,13 @@ async function runProof() {
   console.log('   Test A: Simple Prompt ("hi") + Role "god"');
   await aiService.generateContent('hi', 'god-id', 'god');
 
-  if (capturedConfig && (capturedConfig.modelId.includes('sonnet') || capturedConfig.modelId.includes('premium'))) {
-    console.log(`   ✅ SUCCESS: Routed to PREMIUM model (${capturedConfig.modelId}) despite simple prompt.`);
+  if (
+    capturedConfig &&
+    (capturedConfig.modelId.includes('sonnet') || capturedConfig.modelId.includes('premium'))
+  ) {
+    console.log(
+      `   ✅ SUCCESS: Routed to PREMIUM model (${capturedConfig.modelId}) despite simple prompt.`,
+    );
     console.log('      (Proof: Logic bypassed heuristics and forced Premium)');
   } else {
     console.log(`   ❌ FAILURE: Routed to ${capturedConfig?.modelId}`);
@@ -65,8 +70,13 @@ async function runProof() {
   await aiService.generateContent('hi', 'user-id', 'user');
 
   // Standard for 'hi' is Economy or Standard (Gemini Flash)
-  if (capturedConfig && (capturedConfig.provider === 'gemini' || capturedConfig.modelId.includes('flash'))) {
-    console.log(`   ✅ SUCCESS: Routed to STANDARD/ECONOMY model (${capturedConfig.modelId}) for normal user.`);
+  if (
+    capturedConfig &&
+    (capturedConfig.provider === 'gemini' || capturedConfig.modelId.includes('flash'))
+  ) {
+    console.log(
+      `   ✅ SUCCESS: Routed to STANDARD/ECONOMY model (${capturedConfig.modelId}) for normal user.`,
+    );
   } else {
     console.log(`   ❌ FAILURE: Routed to ${capturedConfig?.modelId} (Expected Economy/Standard)`);
   }

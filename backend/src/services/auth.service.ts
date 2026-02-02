@@ -4,8 +4,8 @@ import crypto from 'crypto';
 import { RegisterUserUseCase } from '../application/usecases/RegisterUserUseCase';
 import { Verify2FALoginUseCase } from '../application/usecases/Verify2FALoginUseCase';
 import { LoginUserUseCase } from '../application/usecases/LoginUserUseCase';
-import { IUserRepository } from '../infrastructure/repository/UserRepository';
-import { IUser } from '../models/User';
+import type { IUserRepository } from '../infrastructure/repository/UserRepository';
+import type { IUser } from '../models/User';
 import { TYPES } from '../types';
 import { config } from '../config';
 

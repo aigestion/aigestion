@@ -1,0 +1,91 @@
+# 🚀 CHROME FLAGS NIVEL DIOS - AIGESTION
+# Copiar y pegar en chrome://flags
+
+# RENDIMIENTO EXTREMO
+chrome://flags/#enable-quic
+chrome://flags/#enable-gpu-rasterization
+chrome://flags/#enable-zero-copy
+chrome://flags/#enable-oop-rasterization
+chrome://flags/#enable-raw-draw
+chrome://flags/#enable-vulkan
+chrome://flags/#enable-skia-renderer
+chrome://flags/#enable-features=UseSkiaRenderer
+chrome://flags/#enable-features=CanvasOopRasterization
+chrome://flags/#enable-features=VaapiVideoDecoder
+chrome://flags/#ignore-gpu-blacklist
+chrome://flags/#enable-hardware-overlays
+
+# MEMORIA Y CACHE
+chrome://flags/#memory-pressure-off
+chrome://flags/#enable-aggressive-domstorage-flushing
+chrome://flags/#aggressive-cache-discard
+chrome://flags/#enable-low-end-device-mode
+chrome://flags/#enable-low-res-tiling
+chrome://flags/#disable-partial-raster
+chrome://flags/#enable-surface-synchronization
+chrome://flags/#enable-per-tile-painting
+
+# NETWORK OPTIMIZATION
+chrome://flags/#enable-quic
+chrome://flags/#enable-features=NetworkService
+chrome://flags/#enable-features=NetworkServiceInProcess
+chrome://flags/#disable-features=NetworkPrediction
+chrome://flags/#disable-background-networking
+chrome://flags/#force-fieldtrials=*BackgroundTracing/default/
+
+# DESARROLLO AIGESTION
+chrome://flags/#disable-web-security
+chrome://flags/#allow-running-insecure-content
+chrome://flags/#disable-features=VizDisplayCompositor
+chrome://flags/#enable-unsafe-swiftshader
+chrome://flags/#ignore-certificate-errors
+chrome://flags/#allow-insecure-localhost
+chrome://flags/#disable-features=IsolateOrigins
+chrome://flags/#disable-features=site-per-process
+
+# EXPERIMENTAL
+chrome://flags/#enable-experimental-web-platform-features
+chrome://flags/#enable-experimental-canvas-features
+chrome://flags/#enable-experimental-webassembly-features
+chrome://flags/#enable-webassembly-simd
+chrome://flags/#enable-webassembly-threads
+chrome://flags/#enable-webassembly-bulk-memory
+chrome://flags/#enable-webassembly-extended-constant-expressions
+
+# UI Y EXPERIENCIA
+chrome://flags/#enable-refresh-button-in-toolbar
+chrome://flags/#enable-reader-mode
+chrome://flags/#enable-touch-drag-drop
+chrome://flags/#enable-pointer-events
+chrome://flags/#enable-pinch-scale
+chrome://flags/#enable-smooth-scrolling
+chrome://flags/#enable-parallax-scrolling
+
+# SEGURIDAD (PARA DESARROLLO)
+chrome://flags/#disable-features=SSLVersionFallback
+chrome://flags/#disable-features=CertificateTransparency
+chrome://flags/#disable-features=MarkHttpAs
+chrome://flags/#disable-features=HttpsFirstModeV2
+
+# DEBUGGING
+chrome://flags/#enable-devtools-experiments
+chrome://flags/#enable-devtools-protocol
+chrome://flags/#enable-devtools-inspector-extensions
+chrome://flags/#enable-devtools-command-line-api
+chrome://flags/#enable-devtools-remote-debugging
+chrome://flags/#enable-devtools-heap-snapshot
+chrome://flags/#enable-devtools-profiler
+chrome://flags/#enable-devtools-timeline
+chrome://flags/#enable-devtools-memory
+chrome://flags/#enable-devtools-network
+chrome://flags/#enable-devtools-console
+chrome://flags/#enable-devtools-elements
+chrome://flags/#enable-devtools-sources
+chrome://flags/#enable-devtools-application
+
+# AIGESTION SPECIFIC
+chrome://flags/#enable-features=ImprovedCookieControls
+chrome://flags/#enable-features=PrivacySandboxFirstPartySets
+chrome://flags/#enable-features=PrivacySandboxAdsAPIs
+chrome://flags/#enable-features=PrivacySandboxTopicsAPI
+chrome://flags/#enable-features=PrivacySandboxFledgeAPI

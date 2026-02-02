@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom' xmlns:apps='http://schemas.google.com/apps/2006'>
+    <title>Mail Filters</title>
+    <id>tag:mail.google.com,2008:filters:</id>
+    <updated>2024-02-02T12:00:00Z</updated>
+    <author>
+        <name>AIGestion God Mode</name>
+        <email>admin@aigestion.net</email>
+    </author>
+    
+    <!-- AIGestion Work Filter -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='aigestion.net|admin@aigestion.net'/>
+        <apps:property name='subject' value='aigestion|nexus|vertex|api'/>
+        <apps:property name='label' value='🔧 TRABAJO'/>
+        <apps:property name='label' value='🤖 AI_ALERTS'/>
+        <apps:property name='shouldStar' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='false'/>
+        <apps:property name='shouldNeverSpam' value='true'/>
+    </entry>
+    
+    <!-- GitHub Notifications -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='github.com|notifications@github.com'/>
+        <apps:property name='label' value='🔧 TRABAJO'/>
+        <apps:property name='label' value='📊 ANALYTICS'/>
+        <apps:property name='shouldArchive' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='true'/>
+    </entry>
+    
+    <!-- Google Cloud/AWS -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='google.com|aws.amazon.com|cloud.google.com'/>
+        <apps:property name='subject' value='invoice|billing|usage'/>
+        <apps:property name='label' value='🔧 TRABAJO'/>
+        <apps:property name='label' value='💰 FINANZAS'/>
+        <apps:property name='shouldStar' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='false'/>
+    </entry>
+    
+    <!-- Security Alerts -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='subject' value='security alert|verification|2fa|login'/>
+        <apps:property name='from' value='noreply@'/>
+        <apps:property name='label' value='🔐 SEGURIDAD'/>
+        <apps:property name='shouldStar' value='true'/>
+        <apps:property name='shouldAlwaysMarkAsImportant' value='true'/>
+        <apps:property name='shouldNeverSpam' value='true'/>
+    </entry>
+    
+    <!-- Family & Friends -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='family|friends'/>
+        <apps:property name='subject' value='personal|birthday'/>
+        <apps:property name='label' value='📱 PERSONAL'/>
+        <apps:property name='label' value='🏠 FAMILIA'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='false'/>
+    </entry>
+    
+    <!-- Shopping & E-commerce -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='amazon.com|ebay.com|shopify'/>
+        <apps:property name='subject' value='order|shipment|delivery'/>
+        <apps:property name='label' value='📱 PERSONAL'/>
+        <apps:property name='label' value='🛒 COMPRAS'/>
+        <apps:property name='shouldArchive' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='true'/>
+    </entry>
+    
+    <!-- Entertainment -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='netflix.com|spotify.com|steam.com'/>
+        <apps:property name='subject' value='subscription'/>
+        <apps:property name='label' value='📱 PERSONAL'/>
+        <apps:property name='label' value='🎮 ENTRETENIMIENTO'/>
+        <apps:property name='shouldArchive' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='true'/>
+    </entry>
+    
+    <!-- Newsletters -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='subject' value='newsletter|digest|weekly'/>
+        <apps:property name='from' value='substack.com|medium.com'/>
+        <apps:property name='label' value='📰 NEWSLETTERS'/>
+        <apps:property name='shouldArchive' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='true'/>
+        <apps:property name='shouldNeverSpam' value='false'/>
+    </entry>
+    
+    <!-- Banking/Finance -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='bank|paypal|stripe'/>
+        <apps:property name='subject' value='statement|transaction|payment'/>
+        <apps:property name='label' value='💰 FINANZAS'/>
+        <apps:property name='shouldStar' value='true'/>
+        <apps:property name='shouldAlwaysMarkAsImportant' value='true'/>
+    </entry>
+    
+    <!-- Social Media Notifications -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='facebook.com|twitter.com|linkedin.com|instagram.com'/>
+        <apps:property name='label' value='📱 PERSONAL'/>
+        <apps:property name='label' value='🎮 ENTRETENIMIENTO'/>
+        <apps:property name='shouldArchive' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='true'/>
+    </entry>
+    
+    <!-- Travel -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='from' value='airline|hotel|booking.com|expedia'/>
+        <apps:property name='subject' value='reservation|booking|flight'/>
+        <apps:property name='label' value='📱 PERSONAL'/>
+        <apps:property name='shouldStar' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='false'/>
+    </entry>
+    
+    <!-- AI/Tech News -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='subject' value='AI|machine learning|artificial intelligence|tech news'/>
+        <apps:property name='label' value='🤖 AI_ALERTS'/>
+        <apps:property name='label' value='📰 NEWSLETTERS'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='false'/>
+    </entry>
+    
+    <!-- Client Communications -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='subject' value='proposal|contract|invoice|client'/>
+        <apps:property name='label' value='🔧 TRABAJO'/>
+        <apps:property name='label' value='💰 FINANZAS'/>
+        <apps:property name='shouldStar' value='true'/>
+        <apps:property name='shouldAlwaysMarkAsImportant' value='true'/>
+    </entry>
+    
+    <!-- System/Server Alerts -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='subject' value='server alert|downtime|error|exception'/>
+        <apps:property name='label' value='🔐 SEGURIDAD'/>
+        <apps:property name='label' value='🤖 AI_ALERTS'/>
+        <apps:property name='shouldStar' value='true'/>
+        <apps:property name='shouldAlwaysMarkAsImportant' value='true'/>
+    </entry>
+    
+    <!-- Marketing/Promotions -->
+    <entry>
+        <category term='filter'></category>
+        <title>Mail Filter</title>
+        <content></content>
+        <apps:property name='subject' value='sale|discount|promotion|offer|deal'/>
+        <apps:property name='label' value='📰 NEWSLETTERS'/>
+        <apps:property name='shouldArchive' value='true'/>
+        <apps:property name='shouldNeverMarkAsImportant' value='true'/>
+    </entry>
+</feed>

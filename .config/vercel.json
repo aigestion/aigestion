@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "buildCommand": "cd frontend/apps/website-epic && bun run build",
+  "outputDirectory": "frontend/apps/website-epic/dist",
+  "installCommand": "cd frontend/apps/website-epic && bun install",
+  "framework": "vite",
+  "build": {
+    "env": {
+      "BUN_INSTALL_SKIP_SCOPED": "true"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    }
+  ]
+}

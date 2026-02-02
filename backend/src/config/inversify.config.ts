@@ -31,6 +31,7 @@ import { BackupSchedulerService } from '../services/backup-scheduler.service';
 import { BackupService } from '../services/backup.service';
 import { CloudFailoverService } from '../services/cloud-failover.service';
 import { CredentialManagerService } from '../services/credential-manager.service';
+import { DanielaAIService } from '../services/daniela-ai.service';
 import { DeFiStrategistService } from '../services/defi-strategist.service';
 import { DoraMetricsService } from '../services/dora-metrics.service';
 import { EmailService } from '../services/email.service';
@@ -57,6 +58,8 @@ import { SocketService } from '../services/socket.service';
 import { StripeService } from '../services/stripe.service';
 import { SwarmService } from '../services/swarm.service';
 import { SystemMetricsService } from '../services/system-metrics.service';
+import { TelegramBotHandlerGodMode } from '../services/telegram-bot-godmode';
+import { TelegramBotHandler } from '../services/telegram-bot.handler';
 import { TelegramService } from '../services/telegram.service';
 import { TikTokService } from '../services/tiktok.service';
 import { TwoFactorService } from '../services/two-factor.service';
@@ -70,6 +73,9 @@ const container = new Container();
 
 container.bind<HistoryService>(TYPES.HistoryService).to(HistoryService).inSingletonScope();
 container.bind<TelegramService>(TYPES.TelegramService).to(TelegramService).inSingletonScope();
+container.bind<TelegramBotHandler>(TelegramBotHandler).toSelf().inSingletonScope();
+container.bind<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode).toSelf().inSingletonScope();
+container.bind<DanielaAIService>(DanielaAIService).toSelf().inSingletonScope();
 container
   .bind<SystemMetricsService>(TYPES.SystemMetricsService)
   .to(SystemMetricsService)
@@ -182,5 +188,16 @@ container.bind<FeatureFlagService>(TYPES.FeatureFlagService).to(FeatureFlagServi
 container.bind<DoraMetricsService>(TYPES.DoraMetricsService).to(DoraMetricsService).inSingletonScope();
 container.bind<QwenTTSService>(TYPES.QwenTTSService).to(QwenTTSService).inSingletonScope();
 
-export { TYPES, container };
+// ========================================
+// GOOGLE ECOSYSTEM INTEGRATION
+// ========================================
+import { GmailService } from '../services/gmail.service';
+import { SheetsService } from '../services/sheets.service';
+import { Gemini2Service } from '../services/gemini-2.service';
+
+container.bind<GmailService>(GmailService).toSelf().inSingletonScope();
+container.bind<SheetsService>(SheetsService).toSelf().inSingletonScope();
+container.bind<Gemini2Service>(Gemini2Service).toSelf().inSingletonScope();
+
+export { container, TYPES };
 

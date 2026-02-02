@@ -1,4 +1,4 @@
-﻿import chalk from 'chalk';
+import chalk from 'chalk';
 import { execSync } from 'child_process';
 import crypto from 'crypto';
 import fs from 'fs';
@@ -13,11 +13,11 @@ interface EnvVarConfig {
   description: string;
   type: EnvType;
   required: boolean;
-  default?: string | (() => string);
+  default?: string | ((answers: Record<string, any>) => string);
   sensitive?: boolean;
-  validate?: (value: string) => boolean | string;
+  validate?: (value: string, answers?: Record<string, any>) => boolean | string;
   choices?: string[];
-  when?: (answers: Record<string, any>) => boolean;
+  when?: boolean | ((answers: Record<string, any>) => boolean);
   autoGenerate?: boolean;
   minLength?: number;
   maxLength?: number;
@@ -27,7 +27,8 @@ interface EnvVarConfig {
 
 // Generar una cadena aleatoria segura
 const generateSecureString = (length = 64): string => {
-  return crypto.randomBytes(Math.ceil(length / 2))
+  return crypto
+    .randomBytes(Math.ceil(length / 2))
     .toString('hex')
     .slice(0, length);
 };
@@ -60,8 +61,12 @@ const envConfig: Record<string, EnvVarConfig> = {
     default: '5000',
     validate: (value: string) => {
       const port = parseInt(value, 10);
-      if (isNaN(port)) {return 'Debe ser un número';}
-      if (port < 1 || port > 65535) {return 'El puerto debe estar entre 1 y 65535';}
+      if (isNaN(port)) {
+        return 'Debe ser un número';
+      }
+      if (port < 1 || port > 65535) {
+        return 'El puerto debe estar entre 1 y 65535';
+      }
       return true;
     },
   },
@@ -84,8 +89,7 @@ const envConfig: Record<string, EnvVarConfig> = {
     description: 'URL de conexión a MongoDB',
     type: 'url',
     required: true,
-    default: (answers: any) =>
-      `mongodb://${answers?.DB_USER || 'user'}:${answers?.DB_PASSWORD || 'password'}@localhost:27017/${answers?.DB_NAME || 'NEXUS V1-dashboard'}?authSource=admin`,
+    default: 'mongodb://user:password@localhost:27017/NEXUS-V1-dashboard?authSource=admin',
     validate: (value: string) => {
       if (!value.startsWith('mongodb://') && !value.startsWith('mongodb+srv://')) {
         return 'La URL debe comenzar con mongodb:// o mongodb+srv://';
@@ -125,7 +129,8 @@ const envConfig: Record<string, EnvVarConfig> = {
     required: true,
     sensitive: true,
     pattern: /^AIza[\w-]{35,}$/,
-    patternDescription: 'Debe ser una clave de API de Google Gemini válida (comienza con AIza y tiene al menos 39 caracteres)',
+    patternDescription:
+      'Debe ser una clave de API de Google Gemini válida (comienza con AIza y tiene al menos 39 caracteres)',
   },
 
   // CORS
@@ -133,12 +138,7 @@ const envConfig: Record<string, EnvVarConfig> = {
     description: 'Orígenes permitidos para CORS (separados por comas)',
     type: 'string',
     required: false,
-    default: (answers: any) => {
-      const env = answers?.NODE_ENV || 'development';
-      return env === 'production'
-        ? 'https://tudominio.com'
-        : 'http://localhost:3000,http://localhost:5000';
-    },
+    default: 'http://localhost:3000,http://localhost:5000',
   },
 
   // Límites de tasa
@@ -167,41 +167,39 @@ const envConfig: Record<string, EnvVarConfig> = {
   SMTP_HOST: {
     description: 'Servidor SMTP para envío de correos',
     type: 'string',
-    required: (answers: any) => answers.EMAIL_ENABLED === 'true',
-    when: (answers: any) => answers.EMAIL_ENABLED === 'true',
+    required: false,
     default: 'smtp.gmail.com',
   },
 
   SMTP_PORT: {
     description: 'Puerto del servidor SMTP',
     type: 'number',
-    required: (answers: any) => answers.EMAIL_ENABLED === 'true',
-    when: (answers: any) => answers.EMAIL_ENABLED === 'true',
+    required: false,
     default: '587',
   },
 
   SMTP_USER: {
     description: 'Usuario SMTP',
     type: 'email',
-    required: (answers: any) => answers.EMAIL_ENABLED === 'true',
-    when: (answers: any) => answers.EMAIL_ENABLED === 'true',
+    required: false,
   },
 
   SMTP_PASSWORD: {
     description: 'Contraseña SMTP',
     type: 'password',
-    required: (answers: any) => answers.EMAIL_ENABLED === 'true',
-    when: (answers: any) => answers.EMAIL_ENABLED === 'true',
+    required: false,
     sensitive: true,
   },
 };
 
 // Validadores por tipo
-const validators: Record<string, (value: string) => boolean | string> = {
-  string: (value) => (typeof value === 'string' && value.length > 0) || 'Valor requerido',
-  number: (value) => !isNaN(Number(value)) || 'Debe ser un número válido',
-  boolean: (value) => ['true', 'false', '0', '1'].includes(value.toLowerCase()) || 'Debe ser verdadero o falso',
-  url: (value) => {
+const validators: Record<string, (value: string, config?: EnvVarConfig) => boolean | string> = {
+  string: (value: string, _config?: EnvVarConfig) =>
+    (typeof value === 'string' && value.length > 0) || 'Valor requerido',
+  number: (value: string, _config?: EnvVarConfig) => !isNaN(Number(value)) || 'Debe ser un número válido',
+  boolean: (value: string, _config?: EnvVarConfig) =>
+    ['true', 'false', '0', '1'].includes(value.toLowerCase()) || 'Debe ser verdadero o falso',
+  url: (value: string, _config?: EnvVarConfig) => {
     try {
       new URL(value);
       return true;
@@ -209,21 +207,22 @@ const validators: Record<string, (value: string) => boolean | string> = {
       return 'URL inválida';
     }
   },
-  email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || 'Correo electrónico inválido',
-  'api-key': (value, config: EnvVarConfig) => {
-    if (config.pattern && !config.pattern.test(value)) {
+  email: (value: string, _config?: EnvVarConfig) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || 'Correo electrónico inválido',
+  'api-key': (value: string, config?: EnvVarConfig) => {
+    if (config?.pattern && !config.pattern.test(value)) {
       return config.patternDescription || 'Formato de clave API inválido';
     }
     return true;
   },
-  jwt: (value, config: EnvVarConfig) => {
-    if (config.minLength && value.length < config.minLength) {
+  jwt: (value: string, config?: EnvVarConfig) => {
+    if (config?.minLength && value.length < config.minLength) {
       return `La longitud mínima es ${config.minLength} caracteres`;
     }
     return true;
   },
-  password: (value, config: EnvVarConfig) => {
-    if (config.minLength && value.length < config.minLength) {
+  password: (value: string, config?: EnvVarConfig) => {
+    if (config?.minLength && value.length < config.minLength) {
       return `La contraseña debe tener al menos ${config.minLength} caracteres`;
     }
     return true;
@@ -234,7 +233,11 @@ const validators: Record<string, (value: string) => boolean | string> = {
 async function setupEnvironment() {
   console.clear();
   console.log(chalk.blue.bold('🚀 Asistente de Configuración - NEXUS V1 Dashboard\n'));
-  console.log(chalk.gray('Este asistente te guiará en la configuración de las variables de entorno necesarias.\n'));
+  console.log(
+    chalk.gray(
+      'Este asistente te guiará en la configuración de las variables de entorno necesarias.\n',
+    ),
+  );
 
   // Cargar variables existentes
   const envPath = path.join(process.cwd(), '.env');
@@ -250,7 +253,11 @@ async function setupEnvironment() {
       }
     });
 
-    console.log(chalk.yellow('🔍 Se detectó un archivo .env existente. Se preservarán los valores actuales.\n'));
+    console.log(
+      chalk.yellow(
+        '🔍 Se detectó un archivo .env existente. Se preservarán los valores actuales.\n',
+      ),
+    );
   }
 
   // Preparar preguntas
@@ -261,17 +268,26 @@ async function setupEnvironment() {
         return false;
       }
       // Ejecutar condición when si existe
-      return !config.when || config.when({ ...existingEnv });
+      if (typeof config.when === 'function') {
+        return config.when({ ...existingEnv });
+      }
+
+      if (typeof config.when === 'boolean') {
+        return config.when;
+      }
+
+      return true;
     })
     .map(([key, config]) => {
-      const defaultValue = typeof config.default === 'function'
-        ? config.default({ ...existingEnv })
-        : config.default;
+      const defaultValue =
+        typeof config.default === 'function' ? config.default({ ...existingEnv }) : config.default;
 
       return {
         type: config.sensitive ? 'password' : 'input',
         name: key,
-        message: `${chalk.cyan(key)}: ${config.description}${config.required ? chalk.red('*') : ''}`,
+        message: `${chalk.cyan(key)}: ${config.description}${
+          config.required ? chalk.red('*') : ''
+        }`,
         default: existingEnv[key] ?? defaultValue,
         validate: (value: string) => {
           if (config.required && !value) {
@@ -305,7 +321,9 @@ async function setupEnvironment() {
 
   // Si no hay preguntas, mostrar mensaje y salir
   if (questions.length === 0) {
-    console.log(chalk.green('✅ Todas las variables de entorno ya están configuradas correctamente.\n'));
+    console.log(
+      chalk.green('✅ Todas las variables de entorno ya están configuradas correctamente.\n'),
+    );
     console.log(chalk.blue('📄 Archivo .env encontrado en:'), envPath);
     process.exit(0);
   }
@@ -314,17 +332,23 @@ async function setupEnvironment() {
   console.log(chalk.blue('📋 Se configurarán las siguientes variables de entorno:'));
   questions.forEach(q => {
     const isNew = !existingEnv[q.name];
-    console.log(`  ${isNew ? chalk.green('+') : chalk.yellow('~')} ${chalk.cyan(q.name)}: ${chalk.gray(q.message.split(': ')[1])}`);
+    console.log(
+      `  ${isNew ? chalk.green('+') : chalk.yellow('~')} ${chalk.cyan(q.name)}: ${chalk.gray(
+        q.message.split(': ')[1],
+      )}`,
+    );
   });
   console.log('');
 
   // Confirmar antes de continuar
-  const { confirm } = await inquirer.prompt([{
-    type: 'confirm',
-    name: 'confirm',
-    message: '¿Deseas continuar con la configuración?',
-    default: true,
-  }]);
+  const { confirm } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'confirm',
+      message: '¿Deseas continuar con la configuración?',
+      default: true,
+    },
+  ]);
 
   if (!confirm) {
     console.log(chalk.yellow('\n❌ Configuración cancelada por el usuario.\n'));
@@ -340,30 +364,30 @@ async function setupEnvironment() {
   // Generar claves automáticamente si es necesario
   for (const [key, config] of Object.entries(envConfig)) {
     if (config.autoGenerate && !updatedEnv[key]) {
-      updatedEnv[key] = typeof config.default === 'function'
-        ? config.default(updatedEnv)
-        : generateSecureString(32);
+      updatedEnv[key] =
+        typeof config.default === 'function'
+          ? config.default(updatedEnv)
+          : generateSecureString(32);
     }
   }
 
   // Generar contenido del archivo .env
-  const envContent = Object.entries(updatedEnv)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => {
-      // Escapar caracteres especiales
-      const escapedValue = String(value)
-        .replace(/\\/g, '\\\\')
-        .replace(/"/g, '\\"')
-        .replace(/\n/g, '\\n');
+  const envContent =
+    Object.entries(updatedEnv)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, value]) => {
+        // Escapar caracteres especiales
+        const escapedValue = String(value)
+          .replace(/\\/g, '\\\\')
+          .replace(/"/g, '\\"')
+          .replace(/\n/g, '\\n');
 
-      // Usar comillas si contiene espacios o caracteres especiales
-      const formattedValue = /[\s#"']/.test(escapedValue)
-        ? `"${escapedValue}"`
-        : escapedValue;
+        // Usar comillas si contiene espacios o caracteres especiales
+        const formattedValue = /[\s#"']/.test(escapedValue) ? `"${escapedValue}"` : escapedValue;
 
-      return `${key}=${formattedValue}`;
-    })
-    .join('\n') + '\n'; // Asegurar salto de línea final
+        return `${key}=${formattedValue}`;
+      })
+      .join('\n') + '\n'; // Asegurar salto de línea final
 
   // Crear directorio .env si no existe
   const envDir = path.dirname(envPath);
@@ -392,7 +416,9 @@ async function setupEnvironment() {
   });
 
   // Mostrar próximos pasos
-  console.log('\n🚀 ' + chalk.green.bold('¡Listo para comenzar!') + ' Ejecuta los siguientes comandos:');
+  console.log(
+    '\n🚀 ' + chalk.green.bold('¡Listo para comenzar!') + ' Ejecuta los siguientes comandos:',
+  );
   console.log(chalk.blue('   npm install') + '         - Instalar dependencias');
   console.log(chalk.blue('   npm run dev') + '           - Iniciar servidor en modo desarrollo');
   console.log(chalk.blue('   npm run build') + '         - Compilar para producción');

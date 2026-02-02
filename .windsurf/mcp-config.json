@@ -222,6 +222,29 @@
           "version_control"
         ],
         "priority": "normal"
+      },
+      "notebooklm": {
+        "command": "C:\\Users\\Alejandro\\AIGestion\\.venv-notebooklm\\Scripts\\python.exe",
+        "args": [
+          "-m",
+          "notebooklm_mcp_server"
+        ],
+        "env": {
+          "PYTHONPATH": "C:\\Users\\Alejandro\\AIGestion\\.venv-notebooklm\\Lib\\site-packages",
+          "NOTEBOOKLM_AUTH_PATH": "${USERPROFILE}\\.notebooklm\\credentials.json"
+        },
+        "cwd": "c:\\Users\\Alejandro\\AIGestion",
+        "capabilities": [
+          "notebook_creation",
+          "notebook_management",
+          "document_analysis",
+          "ai_summarization",
+          "podcast_generation",
+          "interactive_learning",
+          "study_guide_creation",
+          "quiz_generation"
+        ],
+        "priority": "high"
       }
     }
   }

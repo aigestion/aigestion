@@ -4,13 +4,9 @@ import { Readable } from 'stream';
 import { env } from '../config/env.schema';
 import { CircuitBreakerFactory } from '../infrastructure/resilience/CircuitBreakerFactory';
 import { StripeTool } from '../tools/stripe.tool';
-// import { SearchService } from './search.service';
 import { SearchWebTool } from '../tools/web-search.tool';
 import { TYPES } from '../types';
 import { logger } from '../utils/logger';
-// import { StripeService } from './stripe.service';
-import Anthropic from '@anthropic-ai/sdk';
-import OpenAI from 'openai';
 import { AIModelRouter, AIModelTier, ModelConfig } from '../utils/aiRouter';
 import { AnalyticsService } from './analytics.service';
 import { RagService } from './rag.service';
@@ -25,7 +21,6 @@ export interface AIStreamParams {
   userId: string;
   userRole?: string;
 }
-
 
 @injectable()
 export class AIService {
@@ -60,10 +55,6 @@ export class AIService {
       const { GoogleGenerativeAI } = await import('@google/generative-ai');
       const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY || '');
       return genAI.getGenerativeModel({ model: config.modelId });
-    } else if (config.provider === 'openai') {
-      return new OpenAI({ apiKey: env.OPENAI_API_KEY });
-    } else if (config.provider === 'anthropic') {
-      return new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
     }
     throw new Error(`Unsupported provider: ${config.provider}`);
   }
@@ -146,99 +137,62 @@ export class AIService {
   }
 
   public async streamChat(params: AIStreamParams): Promise<Readable> {
-    const stream = new Readable({ read() { } });
+    const stream = new Readable({ read() {} });
 
     // Map roles for history
     const history = (params.history || []).map(msg => ({
       role: msg.role === 'assistant' ? 'model' : 'user',
       content: msg.content,
-      parts: [{ text: msg.content }] // For Gemini
+      parts: [{ text: msg.content }], // For Gemini
     }));
 
     // God Mode: Force PREMIUM tier for admin/god
-    const tier = (params.userRole === 'god' || params.userRole === 'admin')
-      ? AIModelTier.PREMIUM
-      : AIModelRouter.route(params.prompt);
+    const tier =
+      params.userRole === 'god' || params.userRole === 'admin'
+        ? AIModelTier.PREMIUM
+        : AIModelRouter.route(params.prompt);
 
     const config = AIModelRouter.getModelConfig(tier);
-
-    logger.info(`[AIService] Streaming with Tier: ${tier} (${config.provider}/${config.modelId})`);
 
     const runner = async () => {
       let fullResponse = '';
       try {
-        if (config.provider === 'openai') {
-          const openai = (await this.getProviderModel(config)) as OpenAI;
-          const completion = await openai.chat.completions.create({
-            model: config.modelId,
-            messages: [
-              { role: 'system', content: 'You are Nexus AI. Be concise.' },
-              ...params.history?.map(h => ({ role: h.role as any, content: h.content })) || [],
-              { role: 'user', content: params.prompt }
-            ],
-            stream: true,
-          });
+        // Default / Gemini implementation
+        const modelTier = AIModelRouter.getModelConfig(AIModelTier.STANDARD);
+        const model = await this.getProviderModel(modelTier);
 
-          for await (const chunk of completion) {
-            const content = chunk.choices[0]?.delta?.content || '';
-            if (content) {
-              fullResponse += content;
-              stream.push(`data: ${JSON.stringify({ type: 'text', content })}\n\n`);
-            }
+        const systemInstruction = `You are Nexus AI, an advanced agent.
+                When asked about revenue or users, use the provided tools.
+                Current User ID: ${params.userId}.
+                Use the 'search_web' tool for current info.`;
+
+        const chat = model.startChat({
+          history: history.map(h => ({ role: h.role, parts: h.parts })),
+          generationConfig: { maxOutputTokens: 2048 },
+          systemInstruction: { parts: [{ text: systemInstruction }] },
+          tools: [{ functionDeclarations: this.getTools() }],
+        });
+
+        const result = await this.chatStreamBreaker.fire(params.prompt, chat);
+
+        for await (const chunk of result.stream) {
+          const chunkText = chunk.text();
+          if (chunkText) {
+            fullResponse += chunkText;
+            stream.push(`data: ${JSON.stringify({ type: 'text', content: chunkText })}\n\n`);
           }
-        } else if (config.provider === 'anthropic') {
-          const anthropic = (await this.getProviderModel(config)) as Anthropic;
-          // Anthropic streaming implementation
-          const streamEvents = anthropic.messages.stream({
-            model: config.modelId,
-            max_tokens: 1024,
-            messages: [
-              ...params.history?.map(h => ({ role: h.role as any, content: h.content })) || [],
-              { role: 'user', content: params.prompt }
-            ],
-          });
 
-          for await (const event of streamEvents) {
-            if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-              const content = event.delta.text;
-              fullResponse += content;
-              stream.push(`data: ${JSON.stringify({ type: 'text', content })}\n\n`);
-            }
-          }
-        } else {
-          // Default / Gemini implementation
-          // We use the "STANDARD" config for Gemini tools support if the routed implementation is also Gemini
-          // OR if we fallback.
-          const modelTier = config.provider === 'gemini' ? config : AIModelRouter.getModelConfig(AIModelTier.STANDARD);
-          const model = await this.getProviderModel(modelTier);
-
-          const systemInstruction = `You are Nexus AI, an advanced agent.
-                  When asked about revenue or users, use the provided tools.
-                  Current User ID: ${params.userId}.
-                  Use the 'search_web' tool for current info.`;
-
-          const chat = model.startChat({
-            history: history.map(h => ({ role: h.role, parts: h.parts })),
-            generationConfig: { maxOutputTokens: 2048 },
-            systemInstruction: { parts: [{ text: systemInstruction }] },
-            tools: [{ functionDeclarations: this.getTools() }],
-          });
-
-          const result = await this.chatStreamBreaker.fire(params.prompt, chat);
-
-          for await (const chunk of result.stream) {
-            const chunkText = chunk.text();
-            if (chunkText) {
-              fullResponse += chunkText;
-              stream.push(`data: ${JSON.stringify({ type: 'text', content: chunkText })}\n\n`);
-            }
-
-            // Tool calls handling (Gemini specific for now)
-            const functionCalls = chunk.functionCalls();
-            if (functionCalls && functionCalls.length > 0) {
-              for (const call of functionCalls) {
-                await this.handleToolCall(call, stream, params, this.ragService, this.analyticsService);
-              }
+          // Tool calls handling (Gemini specific for now)
+          const functionCalls = chunk.functionCalls();
+          if (functionCalls && functionCalls.length > 0) {
+            for (const call of functionCalls) {
+              await this.handleToolCall(
+                call,
+                stream,
+                params,
+                this.ragService,
+                this.analyticsService,
+              );
             }
           }
         }
@@ -249,12 +203,11 @@ export class AIService {
         // Track usage (Simplified for stream)
         this.usageService.trackUsage({
           userId: params.userId,
-          provider: config.provider,
-          modelId: config.modelId,
+          provider: 'gemini',
+          modelId: modelTier.modelId,
           prompt: params.prompt,
           completion: fullResponse || 'Streamed response',
         });
-
       } catch (error) {
         logger.error(error, '[AIService] Error in streamChat');
         stream.emit('error', error);
@@ -269,12 +222,17 @@ export class AIService {
   /**
    * Generate content (Single-shot) with Semantic Routing
    */
-  public async generateContent(prompt: string, userId: string = 'anonymous', userRole: string = 'user'): Promise<string> {
+  public async generateContent(
+    prompt: string,
+    userId: string = 'anonymous',
+    userRole: string = 'user',
+  ): Promise<string> {
     try {
       // God Mode: Force PREMIUM tier for admin/god
-      const tier = (userRole === 'god' || userRole === 'admin')
-        ? AIModelTier.PREMIUM
-        : AIModelRouter.route(prompt);
+      const tier =
+        userRole === 'god' || userRole === 'admin'
+          ? AIModelTier.PREMIUM
+          : AIModelRouter.route(prompt);
 
       // [GOD MODE] Semantic Cache Check
       const cached = await this.semanticCache.getSemantic(prompt);
@@ -296,45 +254,6 @@ export class AIService {
         this.usageService.trackUsage({
           userId,
           provider: 'gemini',
-          modelId: config.modelId,
-          prompt: prompt,
-          completion: text,
-        });
-
-        await this.semanticCache.setSemantic(prompt, text);
-
-        return text;
-      } else if (config.provider === 'anthropic') {
-        const anthropic = (await this.getProviderModel(config)) as Anthropic;
-        const msg = await anthropic.messages.create({
-          model: config.modelId,
-          max_tokens: 1024,
-          messages: [{ role: 'user', content: prompt }],
-        });
-        const text = (msg.content[0] as any).text;
-
-        this.usageService.trackUsage({
-          userId,
-          provider: 'anthropic',
-          modelId: config.modelId,
-          prompt: prompt,
-          completion: text,
-        });
-
-        await this.semanticCache.setSemantic(prompt, text);
-
-        return text;
-      } else if (config.provider === 'openai') {
-        const openai = (await this.getProviderModel(config)) as OpenAI;
-        const completion = await openai.chat.completions.create({
-          model: config.modelId,
-          messages: [{ role: 'user', content: prompt }],
-        });
-        const text = completion.choices[0].message.content || '';
-
-        this.usageService.trackUsage({
-          userId,
-          provider: 'openai',
           modelId: config.modelId,
           prompt: prompt,
           completion: text,
@@ -372,7 +291,13 @@ export class AIService {
     }
   }
 
-  private async handleToolCall(call: any, stream: Readable, params: AIStreamParams, ragService: RagService, analyticsService: AnalyticsService) {
+  private async handleToolCall(
+    call: any,
+    stream: Readable,
+    params: AIStreamParams,
+    ragService: RagService,
+    analyticsService: AnalyticsService,
+  ) {
     const name = call.name;
     const args = call.args;
 
@@ -383,31 +308,48 @@ export class AIService {
       const data = await analyticsService.getDashboardData();
       toolResult = JSON.stringify(data.revenue);
       stream.push(
-        `data: ${JSON.stringify({ type: 'a2ui', component: 'chart', props: { title: 'Revenue Overview', type: 'area', data: data.revenue } })}\n\n`,
+        `data: ${JSON.stringify({
+          type: 'a2ui',
+          component: 'chart',
+          props: { title: 'Revenue Overview', type: 'area', data: data.revenue },
+        })}\n\n`,
       );
     } else if (name === 'get_user_growth') {
       const data = await analyticsService.getDashboardData();
       toolResult = JSON.stringify(data.users);
       stream.push(
-        `data: ${JSON.stringify({ type: 'a2ui', component: 'chart', props: { title: 'User Growth', type: 'bar', data: data.users } })}\n\n`,
+        `data: ${JSON.stringify({
+          type: 'a2ui',
+          component: 'chart',
+          props: { title: 'User Growth', type: 'bar', data: data.users },
+        })}\n\n`,
       );
     } else if (name === 'search_web') {
       const query = args.query;
       stream.push(
-        `data: ${JSON.stringify({ type: 'text', content: `\n\nSearching web for: "${query}"...\n\n` })}\n\n`,
+        `data: ${JSON.stringify({
+          type: 'text',
+          content: `\n\nSearching web for: "${query}"...\n\n`,
+        })}\n\n`,
       );
       const searchTool = new SearchWebTool();
       const results = await searchTool.execute({ query });
       toolResult = JSON.stringify(results);
     } else if (name === 'get_codebase_context') {
       stream.push(
-        `data: ${JSON.stringify({ type: 'text', content: `\n\nReading codebase context for: "${args.query}"...\n\n` })}\n\n`,
+        `data: ${JSON.stringify({
+          type: 'text',
+          content: `\n\nReading codebase context for: "${args.query}"...\n\n`,
+        })}\n\n`,
       );
       const context = await ragService.getProjectContext(args.query);
       toolResult = context;
     } else if (name === 'manage_subscription') {
       stream.push(
-        `data: ${JSON.stringify({ type: 'text', content: `\n\nAccessing subscription data...\n\n` })}\n\n`,
+        `data: ${JSON.stringify({
+          type: 'text',
+          content: `\n\nAccessing subscription data...\n\n`,
+        })}\n\n`,
       );
       const stripeTool = new StripeTool();
       const toolInput = { ...args, userId: params.userId };
