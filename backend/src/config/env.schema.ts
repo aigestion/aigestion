@@ -1,4 +1,4 @@
-﻿import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import path from 'path';
 import { z } from 'zod';
 
@@ -124,11 +124,12 @@ const envSchema = z.object({
     .string()
     .optional()
     .describe('Google Gemini API key (optional for development)'),
-  OPENAI_API_KEY: z.string().optional().describe('OpenAI API key'),
-  ANTHROPIC_API_KEY: z.string().optional().describe('Anthropic API key'),
   PINECONE_API_KEY: z.string().optional().describe('Pinecone API key for vector database'),
   PINECONE_INDEX_NAME: z.string().default('aigestion-docs').describe('Pinecone index name'),
-  PINECONE_NAMESPACE_DEFAULT: z.string().default('documentation').describe('Default Pinecone namespace'),
+  PINECONE_NAMESPACE_DEFAULT: z
+    .string()
+    .default('documentation')
+    .describe('Default Pinecone namespace'),
 
   // MCP / Antigravity
   MCP_SERVER_URL: z.string().url().optional().describe('Base URL for Antigravity MCP server'),
@@ -379,7 +380,10 @@ const envSchema = z.object({
   X_BEARER_TOKEN: z.string().optional(),
 
   // Voice AI - Daniela
-  DANIELA_SYSTEM_PROMPT: z.string().optional().default('Eres Daniela, una asistente de voz experta en gestión empresarial.'),
+  DANIELA_SYSTEM_PROMPT: z
+    .string()
+    .optional()
+    .default('Eres Daniela, una asistente de voz experta en gestión empresarial.'),
   ELEVENLABS_VOICE_ID: z.string().optional().default('eleven_monica'),
   ELEVENLABS_API_KEY: z.string().optional().describe('ElevenLabs API Key'),
 
@@ -390,15 +394,18 @@ const envSchema = z.object({
   // Finance / AlphaVantage
   ALPHAVANTAGE_KEY: z.string().optional().describe('AlphaVantage API Key'),
 
-
-
   // Google Document AI
   INVOICE_PROCESSOR_ID: z.string().optional(),
   CONTRACT_PROCESSOR_ID: z.string().optional(),
 
   // Messaging - Telegram
   TELEGRAM_BOT_TOKEN: z.string().optional(),
+  TELEGRAM_BOT_TOKEN_DEV: z.string().optional().describe('Telegram bot token for dev/admin bot'),
+  TELEGRAM_BOT_TOKEN_PUBLIC: z.string().optional().describe('Telegram bot token for public bot'),
   TELEGRAM_CHAT_ID: z.string().optional(),
+  TELEGRAM_CHAT_ID_DEV: z.string().optional().describe('Default chat id for dev/admin bot'),
+  TELEGRAM_CHAT_ID_PUBLIC: z.string().optional().describe('Default chat id for public bot'),
+  TELEGRAM_ADMIN_IDS: z.string().optional().describe('Comma-separated Telegram admin chat IDs'),
 
   // Stripe Configuration
   STRIPE_SECRET_KEY: z.string().optional().describe('Stripe Secret Key'),
@@ -407,7 +414,10 @@ const envSchema = z.object({
   TAVILY_API_KEY: z.string().optional().describe('Tavily API key for web search'),
 
   // Browserless Configuration
-  BROWSERLESS_HOST: z.string().default('ws://localhost:3001').describe('Browserless WebSocket host'),
+  BROWSERLESS_HOST: z
+    .string()
+    .default('ws://localhost:3001')
+    .describe('Browserless WebSocket host'),
   BROWSERLESS_API_KEY: z.string().optional().describe('Browserless API key (token)'),
 });
 

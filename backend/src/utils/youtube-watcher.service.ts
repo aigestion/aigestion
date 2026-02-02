@@ -230,11 +230,12 @@ export class YoutubeWatcherService {
     logger.info(`Email de destino: ${this.recipientEmail}`);
 
     this.watcher = chokidar.watch(this.watchPath, {
-      ignored: [
-        /(^|[\/\\])\../, // Archivos ocultos
-        /processed/, // Carpeta processed
-        /README\.md/, // README
-      ],
+      ignored: path =>
+        [
+          /(^|[\/\\])\../, // Archivos ocultos
+          /processed/, // Carpeta processed
+          /README\.md/, // README
+        ].some(pattern => pattern.test(path)),
       persistent: true,
       ignoreInitial: true, // No procesar archivos existentes al iniciar
       awaitWriteFinish: {

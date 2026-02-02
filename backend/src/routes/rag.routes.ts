@@ -13,7 +13,7 @@ const upload = multer();
  *     summary: Query the hybrid knowledge base (Cloud + Local + Code)
  *     tags: [RAG]
  */
-router.post('/query', (req, res, next) => {
+router.post('/query', (req: any, res: any, next: any) => {
   (async () => {
     const { query } = (req as any).body;
     if (!query) {
@@ -24,7 +24,8 @@ router.post('/query', (req, res, next) => {
       const result = await ragService.queryKnowledgeBase(query);
       res.json({ success: true, data: result });
     } catch (error: any) {
-      logger.error(`[RagRoute] Query failed: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      logger.error(`[RagRoute] Query failed: ${message}`);
       res.status(500).json({ error: 'Search operation failed' });
     }
   })().catch(next);
@@ -60,7 +61,7 @@ router.post('/query', (req, res, next) => {
 // });
 
 // Legacy support: GET /rag?query=...
-router.get('/', (req, res, next) => {
+router.get('/', (req: any, res: any, next: any) => {
   (async () => {
     const query = (req as any).query.query as string;
     if (!query) {

@@ -9,11 +9,20 @@ export class Enable2FAUseCase {
   constructor(@inject(TYPES.TwoFactorService) private twoFactorService: TwoFactorService) {}
 
   async execute(userId: string): Promise<{ secret: string; qrCode: string }> {
-    const user = await User.findById(userId);
+    const user = await(User as any)
+      .findById(userId)
+      .exec();
     if (!user) {
       throw new AppError('User not found', 404, 'USER_NOT_FOUND');
     }
-    const { secret, qrCode } = await this.twoFactorService.generateTOTPSecret(user.id as string, user.email);
+    if (!user.email) {
+      throw new AppError('User email not found', 400, 'USER_EMAIL_MISSING');
+    }
+
+    const { secret, qrCode } = await this.twoFactorService.generateTOTPSecret(
+      user.id as string,
+      user.email,
+    );
     user.twoFactorSecret = secret;
     user.isMfaEnabled = false; // will be true after verification
     await user.save();

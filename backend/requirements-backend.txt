@@ -1,0 +1,28 @@
+# ============================================================================
+# AIGestion.net - Backend Legacy Python Dependencies
+# ============================================================================
+# Uso: Scripts legacy de backend (legacy-python-core)
+# Instalación: python -m pip install -r backend/requirements-backend.txt
+# Entorno: .venv (mismo que raíz)
+# ============================================================================
+
+# === Dependencias compartidas con requirements.txt raíz ===
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.6.0
+python-dotenv>=1.0.0
+
+# === Específico Backend ===
+sqlalchemy>=2.0.0
+alembic>=1.12.0
+
+# === Google Cloud (heredado de raíz) ===
+google-cloud-aiplatform>=1.38.0
+google-generativeai>=0.3.0
+
+# === Telegram ===
+python-telegram-bot>=20.0
+
+# === Utilities ===
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4

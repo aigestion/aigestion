@@ -49,7 +49,7 @@ export class TwoFactorService {
       const otpauthUrl = authenticator.keyuri(email, 'AIGestion NEXUS V1', secret);
 
       // Generate QR code
-      const qrCodeUrl = await qrcode.toDataURL(otpauthUrl);
+      const qrCodeUrl = await this.generateQrCode(otpauthUrl);
 
       // Generate backup codes
       const backupCodes = this.generateBackupCodes();
@@ -80,6 +80,13 @@ export class TwoFactorService {
       logger.error('Error generating TOTP secret:', { userId, error });
       throw new Error('Failed to generate TOTP secret');
     }
+  }
+
+  /**
+   * Generate QR code from an otpauth URL
+   */
+  public async generateQrCode(otpauthUrl: string): Promise<string> {
+    return qrcode.toDataURL(otpauthUrl);
   }
 
   /**

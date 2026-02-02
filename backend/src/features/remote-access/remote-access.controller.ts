@@ -62,10 +62,11 @@ export class RemoteAccessController {
   // Responder a una solicitud de acceso
   async respondToRequest(req: Request, res: Response): Promise<void> {
     try {
-      const { requestId } = req.params as any;
+      const { requestId } = req.params;
+      const requestIdStr = Array.isArray(requestId) ? requestId[0] : requestId;
       const { approve, userId } = req.body;
 
-      const request = this.pendingRequests.get(requestId);
+      const request = this.pendingRequests.get(requestIdStr);
       if (!request) {
         (res as any).status(404).json({
           success: false,
@@ -128,10 +129,11 @@ export class RemoteAccessController {
   // Obtener sesiones activas
   async getActiveSessions(req: Request, res: Response): Promise<void> {
     try {
-      const { userId } = req.params as any;
+      const { userId } = req.params;
+      const userIdStr = Array.isArray(userId) ? userId[0] : userId;
 
       const sessions = Array.from(this.activeSessions.values()).filter(
-        session => session.fromUserId === userId || session.toUserId === userId,
+        session => session.fromUserId === userIdStr || session.toUserId === userIdStr,
       );
 
       (res as any).status(200).json({
@@ -150,10 +152,11 @@ export class RemoteAccessController {
   // Finalizar una sesión
   async endSession(req: Request, res: Response): Promise<void> {
     try {
-      const { sessionId } = req.params as any;
+      const { sessionId } = req.params;
+      const sessionIdStr = Array.isArray(sessionId) ? sessionId[0] : sessionId;
       const { userId } = req.body;
 
-      const session = this.activeSessions.get(sessionId);
+      const session = this.activeSessions.get(sessionIdStr);
       if (!session) {
         (res as any).status(404).json({
           success: false,
@@ -174,9 +177,9 @@ export class RemoteAccessController {
       // Actualizar estado de la sesión
       session.status = 'ended';
       session.endedAt = new Date();
-      this.activeSessions.delete(sessionId);
+      this.activeSessions.delete(sessionIdStr);
 
-      logger.info(`Sesión de acceso remoto finalizada: ${sessionId}`);
+      logger.info(`Sesión de acceso remoto finalizada: ${sessionIdStr}`);
 
       (res as any).status(200).json({
         success: true,

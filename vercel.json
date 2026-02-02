@@ -1,24 +1,17 @@
-{
+﻿{
   "version": 2,
-  "installCommand": "npm --prefix frontend/apps/website-epic install",
-  "buildCommand": "npm --prefix frontend/apps/website-epic run build",
-  "outputDirectory": "frontend/apps/website-epic/dist",
-  "framework": "vite",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
+      "src": "/admin",
+      "dest": "/admin/index.html"
+    },
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
-      ]
+      "src": "/client",
+      "dest": "/client/index.html"
+    },
+    {
+      "src": "/demo",
+      "dest": "/demo/index.html"
     }
   ]
 }

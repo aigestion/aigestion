@@ -1,5 +1,6 @@
 import { injectable } from 'inversify';
-import { IEvent, IEventHandler } from '../../domain/events';
+import type { IEvent } from '../../domain/events/DomainEvent';
+import type { IEventHandler } from '../../domain/events/IEventHandler';
 
 @injectable()
 export class EventBus {

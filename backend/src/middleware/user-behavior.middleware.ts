@@ -12,7 +12,7 @@ interface BehaviorUser {
 interface BehaviorRequest extends Request {
   user?: BehaviorUser;
   sessionId?: string;
-  file?: Express.Multer.File;
+  file?: { size: number; mimetype: string; originalname: string } | any;
   res?: Response;
 }
 
@@ -326,15 +326,16 @@ export class UserBehaviorMiddleware {
   public getUserProfile = async (req: BehaviorRequest, res: Response) => {
     try {
       const { userId } = req.params;
+      const userIdStr = Array.isArray(userId) ? userId[0] : userId;
 
-      if (!userId) {
+      if (!userIdStr) {
         return res.status(400).json({
           success: false,
           error: 'userId is required',
         });
       }
 
-      const profile = await this.behaviorService.getUserProfile(userId as string);
+      const profile = await this.behaviorService.getUserProfile(userIdStr);
 
       if (!profile) {
         return res.status(404).json({
@@ -362,16 +363,19 @@ export class UserBehaviorMiddleware {
   public getUserAnomalies = async (req: BehaviorRequest, res: Response) => {
     try {
       const { userId } = req.params;
-      const limit = parseInt(req.query.limit as string) || 50;
+      const limitParam = req.query.limit;
+      const limitStr = Array.isArray(limitParam) ? limitParam[0] : limitParam;
+      const limit = limitStr ? parseInt(limitStr) : 50;
+      const userIdStr = Array.isArray(userId) ? userId[0] : userId;
 
-      if (!userId) {
+      if (!userIdStr) {
         return res.status(400).json({
           success: false,
           error: 'userId is required',
         });
       }
 
-      const anomalies = await this.behaviorService.getUserAnomalies(userId as string, limit);
+      const anomalies = await this.behaviorService.getUserAnomalies(userIdStr, limit);
 
       res.json({
         success: true,
@@ -391,7 +395,9 @@ export class UserBehaviorMiddleware {
    */
   public getRecentAnomalies = async (req: Request, res: Response) => {
     try {
-      const limit = parseInt(req.query.limit as string) || 100;
+      const limitParam = req.query.limit;
+      const limitStr = Array.isArray(limitParam) ? limitParam[0] : limitParam;
+      const limit = limitStr ? parseInt(limitStr) : 100;
       const anomalies = await this.behaviorService.getRecentAnomalies(limit);
 
       res.json({
@@ -413,15 +419,16 @@ export class UserBehaviorMiddleware {
   public resolveAnomaly = async (req: Request, res: Response) => {
     try {
       const { anomalyId } = req.params;
+      const anomalyIdStr = Array.isArray(anomalyId) ? anomalyId[0] : anomalyId;
 
-      if (!anomalyId) {
+      if (!anomalyIdStr) {
         return res.status(400).json({
           success: false,
           error: 'anomalyId is required',
         });
       }
 
-      const success = await this.behaviorService.resolveAnomaly(anomalyId as string);
+      const success = await this.behaviorService.resolveAnomaly(anomalyIdStr);
 
       res.json({
         success: true,

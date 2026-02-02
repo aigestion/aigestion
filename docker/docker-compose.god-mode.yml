@@ -1,0 +1,245 @@
+version: '3.9'
+
+services:
+  # Frontend + Backend Application - GOD MODE OPTIMIZED
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: NEXUS-GOD-app
+    ports:
+      - '5173:5173' # Vite dev server
+      - '3000:3000' # Backend API
+    volumes:
+      - ..:/app
+      - /app/node_modules
+      - /app/server/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_API_URL=http://localhost:3000
+      - DATABASE_URL=mongodb://mongodb:27017/NEXUS_GOD_dashboard
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - REDIS_URL=redis://redis:6379
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JWT_SECRET=${JWT_SECRET:-god_mode_secret_key_2026}
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}
+      - GOOGLE_DRIVE_CREDENTIALS_PATH=./credentials/credentials.json
+      # Performance optimizations
+      - NODE_OPTIONS=--max-old-space-size=4096
+      - UV_THREADPOOL_SIZE=16
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - nexus-god-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+    privileged: true
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+  # MongoDB Database - GOD MODE
+  mongodb:
+    image: mongo:7-jammy
+    container_name: NEXUS-GOD-mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb-god-data:/data/db
+      - mongodb-god-config:/data/configdb
+      - ../.docker/mongo-init:/docker-entrypoint-initdb.d
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER:-god_admin}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-god_admin_2026}
+      - MONGO_INITDB_DATABASE=NEXUS_GOD_dashboard
+    command: mongod --wiredTigerCacheSizeGB 2 --maxConns 1000
+    networks:
+      - nexus-god-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: '3.0'
+          memory: 3G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  # Redis Cache - GOD MODE
+  redis:
+    image: redis:7-alpine
+    container_name: NEXUS-GOD-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-god-data:/data
+      - ../.docker/redis/redis-god.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf --maxmemory 1gb --maxmemory-policy allkeys-lru
+    networks:
+      - nexus-god-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  # Nginx Reverse Proxy - GOD MODE
+  nginx:
+    image: nginx:alpine
+    container_name: NEXUS-GOD-nginx
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ../.docker/nginx/nginx-god.conf:/etc/nginx/nginx.conf:ro
+      - ../.docker/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ../.docker/ssl:/etc/nginx/ssl:ro
+      - ../dist:/usr/share/nginx/html:ro
+    depends_on:
+      - app
+    networks:
+      - nexus-god-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  # Browser Service - GOD MODE
+  browser-service:
+    image: ghcr.io/browserless/chromium:latest
+    container_name: NEXUS-GOD-browser-service
+    ports:
+      - "3001:3000"
+    environment:
+      - MAX_CONCURRENT_SESSIONS=20
+      - TOKEN=${BROWSERLESS_API_KEY}
+      - CONCURRENT_PAGES=10
+      - MAX_QUEUE_LENGTH=50
+    networks:
+      - nexus-god-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+  # Monitoring Stack - GOD MODE
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: NEXUS-GOD-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - prometheus-god-data:/prometheus
+      - ../.docker/prometheus/prometheus-god.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    networks:
+      - nexus-god-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: NEXUS-GOD-grafana
+    ports:
+      - "3002:3000"
+    volumes:
+      - grafana-god-data:/var/lib/grafana
+      - ../.docker/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=god_admin
+      - GF_SECURITY_ADMIN_PASSWORD=god_admin_2026
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    networks:
+      - nexus-god-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+networks:
+  nexus-god-network:
+    driver: bridge
+    name: nexus-god-network
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  mongodb-god-data:
+    name: NEXUS-GOD-mongodb-data
+  mongodb-god-config:
+    name: NEXUS-GOD-mongodb-config
+  redis-god-data:
+    name: NEXUS-GOD-redis-data
+  prometheus-god-data:
+    name: NEXUS-GOD-prometheus-data
+  grafana-god-data:
+    name: NEXUS-GOD-grafana-data

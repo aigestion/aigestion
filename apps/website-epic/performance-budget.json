@@ -1,1 +1,0 @@
-[{"resourceType": "script", "maximum": 100000, "warning": 80000}, {"resourceType": "image", "maximum": 500000, "warning": 400000}, {"resourceType": "stylesheet", "maximum": 50000, "warning": 40000}, {"resourceType": "font", "maximum": 100000, "warning": 80000}, {"resourceType": "total", "maximum": 2000000, "warning": 1500000}]

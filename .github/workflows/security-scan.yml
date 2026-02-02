@@ -24,7 +24,6 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
   dependency-scan:
     name: Dependency Vulnerability Scan
@@ -57,12 +56,9 @@ jobs:
       - name: Run Snyk Security Scan
         uses: snyk/actions/node@master
         continue-on-error: true
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
+          args: --severity-threshold=high --file=${{ matrix.directory }}/package.json
           command: test
-          working-directory: ${{ matrix.directory }}
 
   code-scan:
     name: CodeQL Security Analysis

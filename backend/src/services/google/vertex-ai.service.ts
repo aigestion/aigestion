@@ -1,13 +1,14 @@
 // Importing as any to avoid TS2709 errors
-import { GenerativeModel, VertexAI } from '@google-cloud/vertexai';
+import { VertexAI } from '@google-cloud/vertexai';
 
 import { logger } from '../../utils/logger';
-type VertexAI = any;
-type GenerativeModel = any;
+
+type VertexAIType = any;
+type GenerativeModelType = any;
 
 export class VertexAIService {
-  private vertexAI: VertexAI | null = null;
-  private model: GenerativeModel | null = null;
+  private vertexAI: VertexAIType | null = null;
+  private model: GenerativeModelType | null = null;
   private isInitialized = false;
 
   constructor() {

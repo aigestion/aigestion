@@ -1,5 +1,5 @@
 // src/routes/docker.routes.ts
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { container } from '../config/inversify.config';
 import { TYPES } from '../types';
 import { DockerService } from '../infrastructure/docker/DockerService';
@@ -29,12 +29,13 @@ const dockerService = container.get<DockerService>(TYPES.DockerService);
  *         description: Docker error
  */
 // GET /docker/containers - list all containers
-router.get('/containers', async (_req: Request, res: Response) => {
+router.get('/containers', async (_req: any, res: any) => {
   try {
     const containers = await dockerService.getContainers();
     res.json({ data: containers });
   } catch (err) {
-    res.status(500).json({ error: err.message ?? 'Docker error' });
+    const message = err instanceof Error ? err.message : 'Docker error';
+    res.status(500).json({ error: message });
   }
 });
 
@@ -58,13 +59,14 @@ router.get('/containers', async (_req: Request, res: Response) => {
  *         description: Docker error
  */
 // GET /docker/containers/:id/stats - get stats for a container
-router.get('/containers/:id/stats', async (req: Request, res: Response) => {
-  const { id } = req.params as any;
+router.get('/containers/:id/stats', async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
   try {
     const stats = await dockerService.getContainerStats(id);
     res.json({ data: stats });
   } catch (err) {
-    res.status(500).json({ error: err.message ?? 'Docker error' });
+    const message = err instanceof Error ? err.message : 'Docker error';
+    res.status(500).json({ error: message });
   }
 });
 
@@ -88,13 +90,14 @@ router.get('/containers/:id/stats', async (req: Request, res: Response) => {
  *         description: Docker error
  */
 // POST /docker/containers/:id/start - start a container
-router.post('/containers/:id/start', async (req: Request, res: Response) => {
-  const { id } = req.params as any;
+router.post('/containers/:id/start', async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
   try {
     await dockerService.startContainer(id);
     res.json({ message: `Container ${id} started` });
   } catch (err) {
-    res.status(500).json({ error: err.message ?? 'Docker error' });
+    const message = err instanceof Error ? err.message : 'Docker error';
+    res.status(500).json({ error: message });
   }
 });
 
@@ -118,13 +121,14 @@ router.post('/containers/:id/start', async (req: Request, res: Response) => {
  *         description: Docker error
  */
 // POST /docker/containers/:id/stop - stop a container
-router.post('/containers/:id/stop', async (req: Request, res: Response) => {
-  const { id } = req.params as any;
+router.post('/containers/:id/stop', async (req: any, res: any) => {
+  const { id } = req.params as { id: string };
   try {
     await dockerService.stopContainer(id);
     res.json({ message: `Container ${id} stopped` });
   } catch (err) {
-    res.status(500).json({ error: err.message ?? 'Docker error' });
+    const message = err instanceof Error ? err.message : 'Docker error';
+    res.status(500).json({ error: message });
   }
 });
 

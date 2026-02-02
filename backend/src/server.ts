@@ -1,4 +1,4 @@
-﻿import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 // import fs from 'fs';
 import { createServer } from 'http';
 import path from 'path';
@@ -18,6 +18,8 @@ import { HistoryService } from './services/history.service';
 import { neuralHealthService } from './services/NeuralHealthService';
 import { SocketService } from './services/socket.service';
 import { SystemMetricsService } from './services/system-metrics.service';
+import { TelegramBotHandlerGodMode } from './services/telegram-bot-godmode';
+import { TelegramBotHandler } from './services/telegram-bot.handler';
 import { TelegramService } from './services/telegram.service';
 import { logger } from './utils/logger';
 import { stats } from './utils/stats';
@@ -169,7 +171,7 @@ setInterval(async () => {
 const startServer = async () => {
   try {
     const port = config.port || 5000;
-    const server = httpServer.listen(port, () => {
+    const server = httpServer.listen(port, async () => {
       logger.info(`
     ################################################
     🛡️  Server listening on port: ${port} 🛡️
@@ -186,7 +188,9 @@ const startServer = async () => {
         .then(async (report: any[]) => {
           const failures = report.filter((r: any) => r.status !== 'valid');
           if (failures.length > 0) {
-            const message = `🚨 *Credential Audit Failed*:\n${failures.map((f: any) => `• ${f.provider}: ${f.status} (${f.message || 'No details'})`).join('\n')}`;
+            const message = `🚨 *Credential Audit Failed*:\n${failures
+              .map((f: any) => `• ${f.provider}: ${f.status} (${f.message || 'No details'})`)
+              .join('\n')}`;
             await telegramService.sendMessage(message);
             logger.error('Credential audit failed, alert sent.');
           } else {
@@ -217,6 +221,24 @@ const startServer = async () => {
           logger.warn({ error: err.message }, 'YouTube services failed');
         }
       });
+
+      // Launch Telegram Bot Handler
+      try {
+        const publicBot = container.get<TelegramBotHandler>(TelegramBotHandler);
+        await publicBot.launch();
+        logger.info('✅ Telegram Public Bot launched');
+      } catch (err: any) {
+        logger.warn({ error: err.message }, 'Telegram Public Bot failed to launch');
+      }
+
+      // Launch Telegram God Mode Bot (Dev)
+      try {
+        const devBot = container.get<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode);
+        await devBot.launch();
+        logger.info('✅ Telegram Dev Bot (God Mode) launched');
+      } catch (err: any) {
+        logger.warn({ error: err.message }, 'Telegram Dev Bot failed to launch');
+      }
 
       // Graceful Shutdown
       const gracefullyShutdown = async (signal: string) => {

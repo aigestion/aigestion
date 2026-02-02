@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIGestion Dev Tools</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <span class="icon">🔥</span>
+                <h1>AIGestion</h1>
+            </div>
+            <div class="version">v1.0.0</div>
+        </header>
+
+        <main class="main">
+            <!-- God Mode Section -->
+            <section class="section">
+                <h2>🏆 God Mode</h2>
+                <div class="button-group">
+                    <button id="enableGodMode" class="btn btn-primary">
+                        <span class="icon">⚡</span>
+                        Activar God Mode
+                    </button>
+                    <button id="adminAccess" class="btn btn-secondary">
+                        <span class="icon">🔑</span>
+                        Acceso Admin
+                    </button>
+                </div>
+            </section>
+
+            <!-- Performance Section -->
+            <section class="section">
+                <h2>⚡ Rendimiento</h2>
+                <div class="button-group">
+                    <button id="optimizePerformance" class="btn btn-success">
+                        <span class="icon">🚀</span>
+                        Optimizar
+                    </button>
+                    <button id="getMetrics" class="btn btn-info">
+                        <span class="icon">📊</span>
+                        Métricas
+                    </button>
+                </div>
+                <div class="metrics" id="metricsDisplay" style="display: none;">
+                    <div class="metric">
+                        <span class="label">FPS:</span>
+                        <span class="value" id="fpsValue">60</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Memoria:</span>
+                        <span class="value" id="memoryValue">0MB</span>
+                    </div>
+                    <div class="metric">
+                        <span class="label">Tiempo:</span>
+                        <span class="value" id="timeValue">0ms</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Debug Section -->
+            <section class="section">
+                <h2>🐛 Debug</h2>
+                <div class="button-group">
+                    <button id="debugReact" class="btn btn-warning">
+                        <span class="icon">⚛️</span>
+                        Debug React
+                    </button>
+                    <button id="debugThree" class="btn btn-warning">
+                        <span class="icon">🎮</span>
+                        Debug Three.js
+                    </button>
+                </div>
+            </section>
+
+            <!-- Supabase Section -->
+            <section class="section">
+                <h2>🗄️ Supabase</h2>
+                <div class="config-form">
+                    <div class="form-group">
+                        <label for="supabaseUrl">URL:</label>
+                        <input type="text" id="supabaseUrl" placeholder="https://your-project.supabase.co">
+                    </div>
+                    <div class="form-group">
+                        <label for="supabaseKey">Anon Key:</label>
+                        <input type="password" id="supabaseKey" placeholder="your-anon-key">
+                    </div>
+                    <button id="saveSupabaseConfig" class="btn btn-primary">
+                        <span class="icon">💾</span>
+                        Guardar
+                    </button>
+                </div>
+            </section>
+
+            <!-- Quick Links -->
+            <section class="section">
+                <h2>🔗 Accesos Rápidos</h2>
+                <div class="links">
+                    <a href="https://admin.aigestion.net" target="_blank" class="link">
+                        <span class="icon">🏢</span>
+                        Admin Panel
+                    </a>
+                    <a href="https://supabase.com/dashboard" target="_blank" class="link">
+                        <span class="icon">🗄️</span>
+                        Supabase
+                    </a>
+                    <a href="https://console.cloud.google.com" target="_blank" class="link">
+                        <span class="icon">☁️</span>
+                        Google Cloud
+                    </a>
+                    <a href="https://github.com/aigestion" target="_blank" class="link">
+                        <span class="icon">📦</span>
+                        GitHub
+                    </a>
+                </div>
+            </section>
+
+            <!-- Status -->
+            <section class="section">
+                <h2>📈 Estado</h2>
+                <div class="status">
+                    <div class="status-item">
+                        <span class="status-label">God Mode:</span>
+                        <span class="status-value" id="godModeStatus">Inactivo</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Dominio:</span>
+                        <span class="status-value" id="domainStatus">No detectado</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Supabase:</span>
+                        <span class="status-value" id="supabaseStatus">No configurado</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-text">
+                © 2024 AIGestion - Nivel Dios
+            </div>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

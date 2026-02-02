@@ -249,3 +249,4 @@ linters/
 # Local Netlify folder
 .netlify
 n8n_data/
+.vercel

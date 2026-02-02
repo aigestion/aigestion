@@ -6,8 +6,8 @@ import 'ts-node/register';
 import 'tsconfig-paths/register';
 import { TextEncoder, TextDecoder } from 'util';
 
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder as any;
+global.TextEncoder = TextEncoder as unknown as typeof globalThis.TextEncoder;
+global.TextDecoder = TextDecoder as unknown as typeof globalThis.TextDecoder;
 
 process.env.JWT_SECRET = 'test-jwt-secret';
 process.env.REFRESH_TOKEN_SECRET = 'test-refresh-secret';

@@ -17,21 +17,20 @@ async function verify() {
     await pineconeService.upsertDocBatch(mockDocs, 'test-verification');
     logger.info('✅ Parallel upsert logic executed.');
   } catch (error) {
-    logger.warn('⚠️ Batch upsert failed (likely missing API keys):', error.message);
+    const message = error instanceof Error ? error.message : String(error);
+    logger.warn('⚠️ Batch upsert failed (likely missing API keys):', message);
   }
 
   // 2. Test Search with Namespace and Filter
   logger.info('Testing search with namespace and metadata filter...');
   try {
-    const results = await pineconeService.search(
-      'vector database',
-      3,
-      'test-verification',
-      { category: 'database' }
-    );
+    const results = await pineconeService.search('vector database', 3, 'test-verification', {
+      category: 'database',
+    });
     logger.info(`✅ Search logic executed. Found ${results.length} matches.`);
   } catch (error) {
-    logger.warn('⚠️ Search failed (likely missing API keys):', error.message);
+    const message = error instanceof Error ? error.message : String(error);
+    logger.warn('⚠️ Search failed (likely missing API keys):', message);
   }
 
   logger.info('🏁 Verification complete!');
