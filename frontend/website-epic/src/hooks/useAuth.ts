@@ -8,6 +8,11 @@ export interface AuthUser {
   subscription: 'free' | 'premium' | 'enterprise';
   role: 'client' | 'admin' | 'superadmin';
   avatar?: string;
+  phone?: string;
+  phoneVerified?: boolean;
+  emailVerified?: boolean;
+  lastLogin?: Date;
+  createdAt?: Date;
 }
 
 export interface AuthState {
@@ -24,6 +29,9 @@ export interface UseAuthReturn extends AuthState {
   logout: () => Promise<void>;
   refreshSession: () => Promise<void>;
   updateUser: (updates: Partial<AuthUser>) => Promise<void>;
+  verifyPhone: (phone: string, code: string) => Promise<void>;
+  sendPhoneVerificationCode: (phone: string) => Promise<void>;
+  checkPhoneVerification: () => boolean;
 }
 
 const ADMIN_EMAILS = ['admin@aigestion.net', 'nemisanalex@gmail.com'];
@@ -56,6 +64,11 @@ export function useAuth(): UseAuthReturn {
       subscription: metadata.subscription || 'free',
       role: metadata.role || 'client',
       avatar: metadata.avatar,
+      phone: metadata.phone,
+      phoneVerified: metadata.phoneVerified || false,
+      emailVerified: user.email_confirmed_at != null,
+      lastLogin: new Date(),
+      createdAt: user.created_at ? new Date(user.created_at) : new Date(),
     };
   }, []);
 
@@ -118,46 +131,49 @@ export function useAuth(): UseAuthReturn {
     [createAuthUser, checkAdminRedirect, checkMobileApp]
   );
 
-  const login = useCallback(async (email: string, password: string) => {
-    setState(prev => ({ ...prev, loading: true }));
+  const login = useCallback(
+    async (email: string, password: string) => {
+      setState(prev => ({ ...prev, loading: true }));
 
-    if (!supabase) {
-      console.warn('Supabase not configured. Login simulation.');
-      setTimeout(() => {
-        setState(prev => ({
-          ...prev,
-          loading: false,
-          isAuthenticated: true,
-          user: {
-            email,
-            name: email.split('@')[0],
-            subscription: 'free',
-            role: 'client',
-          },
-          session: {} as any, // Mock session
-        }));
-      }, 1000);
-      return;
-    }
+      if (!supabase) {
+        console.warn('Supabase not configured. Login simulation.');
+        setTimeout(() => {
+          setState(prev => ({
+            ...prev,
+            loading: false,
+            isAuthenticated: true,
+            user: {
+              email,
+              name: email.split('@')[0],
+              subscription: 'free',
+              role: 'client',
+            },
+            session: {} as any, // Mock session
+          }));
+        }, 1000);
+        return;
+      }
 
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-      if (error) {
+        if (error) {
+          throw error;
+        }
+
+        if (data.session?.user) {
+          await handleSessionChange(data.session);
+        }
+      } catch (error) {
+        setState(prev => ({ ...prev, loading: false }));
         throw error;
       }
-
-      if (data.session?.user) {
-        await handleSessionChange(data.session);
-      }
-    } catch (error) {
-      setState(prev => ({ ...prev, loading: false }));
-      throw error;
-    }
-  }, [handleSessionChange]);
+    },
+    [handleSessionChange]
+  );
 
   const logout = useCallback(async () => {
     setState(prev => ({ ...prev, loading: true }));
@@ -208,34 +224,97 @@ export function useAuth(): UseAuthReturn {
     }
   }, [handleSessionChange]);
 
-  const updateUser = useCallback(async (updates: Partial<AuthUser>) => {
-    if (!state.user || !state.session) {
-      throw new Error('No authenticated user');
-    }
+  const updateUser = useCallback(
+    async (updates: Partial<AuthUser>) => {
+      if (!state.user || !state.session) {
+        throw new Error('No authenticated user');
+      }
 
+      if (!supabase) {
+        console.warn('Supabase not configured. User update simulated.');
+        return;
+      }
+
+      setState(prev => ({ ...prev, loading: true }));
+
+      try {
+        const { error } = await supabase.auth.updateUser({
+          data: updates,
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        // Refresh session to get updated metadata
+        await refreshSession();
+      } catch (error) {
+        setState(prev => ({ ...prev, loading: false }));
+        throw error;
+      }
+    },
+    [state.user, state.session, refreshSession]
+  );
+
+  const sendPhoneVerificationCode = useCallback(async (phone: string) => {
     if (!supabase) {
-      console.warn('Supabase not configured. User update simulated.');
+      // Demo mode - simulate sending code
+      console.log('Demo: Sending verification code to', phone);
       return;
     }
 
-    setState(prev => ({ ...prev, loading: true }));
-
     try {
-      const { error } = await supabase.auth.updateUser({
-        data: updates,
+      // In a real implementation, you would:
+      // 1. Generate a 6-digit code
+      // 2. Store it in the database with expiration
+      // 3. Send SMS via Twilio or similar service
+      const { error } = await supabase.functions.invoke('send-phone-verification', {
+        body: { phone }
       });
 
       if (error) {
-        throw error;
+        throw new Error('Error al enviar código de verificación');
       }
-
-      // Refresh session to get updated metadata
-      await refreshSession();
     } catch (error) {
-      setState(prev => ({ ...prev, loading: false }));
+      console.error('Phone verification error:', error);
       throw error;
     }
-  }, [state.user, state.session, refreshSession]);
+  }, []);
+
+  const verifyPhone = useCallback(async (phone: string, code: string) => {
+    if (!supabase) {
+      // Demo mode - simulate verification
+      if (code === '123456') {
+        await updateUser({ phone, phoneVerified: true });
+        return;
+      }
+      throw new Error('Código inválido. En modo demo usa: 123456');
+    }
+
+    try {
+      // In a real implementation, you would:
+      // 1. Verify the code against the stored one
+      // 2. Check expiration time
+      // 3. Mark phone as verified
+      const { error } = await supabase.functions.invoke('verify-phone-code', {
+        body: { phone, code }
+      });
+
+      if (error) {
+        throw new Error('Código de verificación inválido');
+      }
+
+      // Update user metadata to reflect phone verification
+      await updateUser({ phone, phoneVerified: true });
+    } catch (error) {
+      console.error('Phone verification error:', error);
+      throw error;
+    }
+  }, [updateUser]);
+
+  const checkPhoneVerification = useCallback((): boolean => {
+    return state.user?.phoneVerified || false;
+  }, [state.user]);
 
   useEffect(() => {
     // Check if Supabase is available
@@ -270,5 +349,8 @@ export function useAuth(): UseAuthReturn {
     logout,
     refreshSession,
     updateUser,
+    verifyPhone,
+    sendPhoneVerificationCode,
+    checkPhoneVerification,
   };
 }

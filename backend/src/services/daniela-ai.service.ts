@@ -46,7 +46,12 @@ export class DanielaAIService {
   /**
    * Obtener contexto del usuario
    */
-  private getOrCreateContext(chatId: number, userName: string, userId: string, userRole: string): DanielaContext {
+  private getOrCreateContext(
+    chatId: number,
+    userName: string,
+    userId: string,
+    userRole: string,
+  ): DanielaContext {
     if (!this.contexts.has(chatId)) {
       this.contexts.set(chatId, {
         userId,
@@ -114,7 +119,11 @@ export class DanielaAIService {
   /**
    * Generar respuesta inteligente
    */
-  private async generateResponse(context: DanielaContext, message: string, userContext: any): Promise<string> {
+  private async generateResponse(
+    context: DanielaContext,
+    message: string,
+    userContext: any,
+  ): Promise<string> {
     const systemPrompt = this.buildSystemPrompt(context, userContext);
     const conversationContext = this.buildConversationContext(context);
 
@@ -234,7 +243,11 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
   /**
    * Manejar solicitudes de analytics
    */
-  private async handleAnalyticsRequest(context: DanielaContext, message: string, userContext: any): Promise<string> {
+  private async handleAnalyticsRequest(
+    context: DanielaContext,
+    message: string,
+    userContext: any,
+  ): Promise<string> {
     const emoji = '📊';
     return (
       `${emoji} *Análisis para ${context.userName}*\n\n` +
@@ -254,7 +267,11 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
   /**
    * Manejar solicitudes de consejo
    */
-  private async handleAdviceRequest(context: DanielaContext, message: string, userContext: any): Promise<string> {
+  private async handleAdviceRequest(
+    context: DanielaContext,
+    message: string,
+    userContext: any,
+  ): Promise<string> {
     const emoji = '💡';
     return (
       `${emoji} *Consejo estratégico para ${context.userName}*\n\n` +
@@ -272,7 +289,11 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
   /**
    * Manejar solicitudes de tareas
    */
-  private async handleTaskRequest(context: DanielaContext, message: string, userContext: any): Promise<string> {
+  private async handleTaskRequest(
+    context: DanielaContext,
+    message: string,
+    userContext: any,
+  ): Promise<string> {
     return (
       `✅ *Gestión de Tareas*\n\n` +
       `📋 *Tus tareas pendientes:*\n` +
@@ -293,7 +314,11 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
   /**
    * Manejar solicitudes de insights
    */
-  private async handleInsightRequest(context: DanielaContext, message: string, userContext: any): Promise<string> {
+  private async handleInsightRequest(
+    context: DanielaContext,
+    message: string,
+    userContext: any,
+  ): Promise<string> {
     return (
       `🔍 *Insights Estratégicos*\n\n` +
       `📊 *Descubrimientos clave:*\n` +
@@ -385,7 +410,11 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
   /**
    * Registrar interacción
    */
-  private async logInteraction(userId: string, userMessage: string, danielaResponse: string): Promise<void> {
+  private async logInteraction(
+    userId: string,
+    userMessage: string,
+    danielaResponse: string,
+  ): Promise<void> {
     try {
       logger.info(
         `[DANIELA] User: ${userMessage.substring(0, 50)}... | Response: ${danielaResponse.substring(0, 50)}...`,
@@ -407,6 +436,45 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
         this.contexts.delete(chatId);
       }
     }
+  }
+
+  /**
+   * Obtener insights estratégicos para el dashboard
+   */
+  public async getInsights(userId: string): Promise<any[]> {
+    const userContext = await this.getUserContext(userId);
+
+    // Generar insights basados en el contexto real (o simulado por ahora pero estructurado)
+    return [
+      {
+        insight: `🚀 Detecté una forma de optimizar tu productividad en un ${userContext.efficiency || '87%'}`,
+        impact: '🔥 Impacto Alto',
+        action: 'Bloquea ventanas de enfoque por la mañana',
+        color: 'text-yellow-400',
+        bg: 'bg-yellow-500/10',
+      },
+      {
+        insight: `🤖 Tienes ${userContext.pendingTasks || 12} tareas que pueden automatizarse`,
+        impact: '⚡ Impacto Medio',
+        action: 'Usa herramientas de flujo de trabajo',
+        color: 'text-blue-400',
+        bg: 'bg-blue-500/10',
+      },
+      {
+        insight: '📈 Tu tasa de finalización ha subido un 5%',
+        impact: '✅ Impacto Positivo',
+        action: 'Sigue con el ritmo actual',
+        color: 'text-green-400',
+        bg: 'bg-green-500/10',
+      },
+      {
+        insight: '👥 El equipo rinde mejor en sprints cortos',
+        impact: '📚 Impacto Bajo',
+        action: 'Prueba ciclos de 1 semana',
+        color: 'text-purple-400',
+        bg: 'bg-purple-500/10',
+      },
+    ];
   }
 
   /**

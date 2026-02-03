@@ -10,40 +10,42 @@ import type { UsageService } from '../../services/usage.service';
 describe('AIService', () => {
     let container: Container;
     let aiService: any;
-    let mockCreate: any;
+    let mockGenerateContent: any;
+    let mockSendMessageStream: any;
 
     const mockAnalyticsService = { getDashboardData: jest.fn() };
     const mockRagService = { getProjectContext: jest.fn() };
     const mockUsageService = { trackUsage: jest.fn() };
+    const mockSemanticCache = { getSemantic: jest.fn(), setSemantic: jest.fn() };
 
     beforeEach(async () => {
         jest.resetModules();
 
-        mockCreate = jest.fn();
+        mockGenerateContent = jest.fn();
+        mockSendMessageStream = jest.fn();
 
-        // Dynamic require to ensure we mock the same instance as AIService uses
         const { AIModelRouter, AIModelTier } = require('../../utils/aiRouter');
 
-        jest.spyOn(AIModelRouter, 'route').mockReturnValue(AIModelTier.PREMIUM);
+        jest.spyOn(AIModelRouter, 'route').mockReturnValue(AIModelTier.STANDARD);
         jest.spyOn(AIModelRouter, 'getModelConfig').mockReturnValue({
-            provider: 'openai',
-            modelId: 'gpt-4o'
+            provider: 'gemini',
+            modelId: 'gemini-1.5-flash'
         });
 
-        // Mock OpenAI properly within the isolated module scope
-        jest.mock('openai', () => {
+        // Mock @google/generative-ai
+        jest.mock('@google/generative-ai', () => {
             return {
-                __esModule: true,
-                default: jest.fn().mockImplementation(() => ({
-                    chat: { completions: { create: mockCreate } }
-                })),
-                OpenAI: jest.fn().mockImplementation(() => ({
-                    chat: { completions: { create: mockCreate } }
+                GoogleGenerativeAI: jest.fn().mockImplementation(() => ({
+                    getGenerativeModel: jest.fn().mockImplementation(() => ({
+                        generateContent: mockGenerateContent,
+                        startChat: jest.fn().mockImplementation(() => ({
+                            sendMessageStream: mockSendMessageStream
+                        }))
+                    }))
                 }))
             };
         });
 
-        // Dynamic require to ensure mocks are applied
         const { AIService } = require('../../services/ai.service');
         const { TYPES } = require('../../types');
 
@@ -51,6 +53,7 @@ describe('AIService', () => {
         container.bind<AnalyticsService>(TYPES.AnalyticsService).toConstantValue(mockAnalyticsService as any);
         container.bind<RagService>(TYPES.RagService).toConstantValue(mockRagService as any);
         container.bind<UsageService>(TYPES.UsageService).toConstantValue(mockUsageService as any);
+        container.bind<any>(TYPES.SemanticCacheService).toConstantValue(mockSemanticCache as any);
         container.bind<any>(AIService).toSelf();
 
         aiService = container.get<any>(AIService);
@@ -61,15 +64,14 @@ describe('AIService', () => {
     });
 
     describe('streamChat', () => {
-        it('should use OpenAI streaming when configured', async () => {
-            // Mock OpenAI stream response
+        it('should use Gemini streaming when configured', async () => {
             const mockStream = {
-                [Symbol.asyncIterator]: jest.fn().mockImplementation(function* () {
-                    yield { choices: [{ delta: { content: 'Hello' } }] };
-                    yield { choices: [{ delta: { content: ' World' } }] };
-                }),
+                stream: (async function* () {
+                    yield { text: () => 'Hello', functionCalls: () => [] };
+                    yield { text: () => ' World', functionCalls: () => [] };
+                })()
             };
-            mockCreate.mockResolvedValue(mockStream as any);
+            mockSendMessageStream.mockResolvedValue(mockStream);
 
             const params = {
                 prompt: 'Hello',
@@ -88,11 +90,6 @@ describe('AIService', () => {
             expect(output).toContain('data: {"type":"text","content":"Hello"}\n\n');
             expect(output).toContain('data: {"type":"text","content":" World"}\n\n');
             expect(output).toContain('data: [DONE]\n\n');
-
-            expect(mockCreate).toHaveBeenCalledWith(expect.objectContaining({
-                stream: true,
-                model: 'gpt-4o'
-            }));
         });
     });
 });

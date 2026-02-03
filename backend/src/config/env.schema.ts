@@ -409,6 +409,7 @@ const envSchema = z.object({
 
   // Stripe Configuration
   STRIPE_SECRET_KEY: z.string().optional().describe('Stripe Secret Key'),
+  STRIPE_PUBLISHABLE_KEY: z.string().optional().describe('Stripe Publishable Key'),
   STRIPE_WEBHOOK_SECRET: z.string().optional().describe('Stripe Webhook Signing Secret'),
   STRIPE_CURRENCY: z.string().default('usd').describe('Default currency for payments'),
   TAVILY_API_KEY: z.string().optional().describe('Tavily API key for web search'),

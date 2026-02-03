@@ -30,7 +30,7 @@ export class StateMachine {
     this.config = config;
     this.currentState = config.initialState;
     this.history.push(this.currentState);
-    
+
     // Call initial state's onEnter
     const initialState = this.config.states.get(this.currentState);
     initialState?.onEnter?.();
@@ -47,18 +47,18 @@ export class StateMachine {
   canTransition(event: string): boolean {
     const currentState = this.config.states.get(this.currentState);
     if (!currentState) return false;
-    
+
     return currentState.transitions.has(event);
   }
 
   getAvailableTransitions(): readonly string[] {
     const currentState = this.config.states.get(this.currentState);
     if (!currentState) return [];
-    
+
     return Array.from(currentState.transitions.keys());
   }
 
-  transition(event: string, payload?: any): boolean {
+  transition(event: string, _payload?: any): boolean {
     const currentState = this.config.states.get(this.currentState);
     if (!currentState) return false;
 
@@ -127,7 +127,7 @@ export function useStateMachine(config: StateMachineConfig) {
 
   // Recreate machine if config changes
   const machine = useRef(new StateMachine(machineConfig));
-  
+
   useEffect(() => {
     machine.current = new StateMachine(machineConfig);
     setCurrentState(machine.current.getCurrentState());
@@ -359,7 +359,7 @@ export function StateMachineVisualizer({
   const availableTransitions = machine.getAvailableTransitions();
 
   return (
-    <div 
+    <div
       className="border border-gray-300 rounded-lg p-4 bg-white"
       style={{ width, height }}
     >
@@ -372,7 +372,7 @@ export function StateMachineVisualizer({
         <span className="font-semibold">Available Transitions: </span>
         <div className="flex flex-wrap gap-1 mt-1">
           {availableTransitions.map(transition => (
-            <span 
+            <span
               key={transition}
               className="px-2 py-1 bg-green-100 text-green-800 rounded text-xs"
             >
@@ -401,7 +401,7 @@ export function StateMachineDebugger({
 
   useEffect(() => {
     const originalTransition = machine.transition.bind(machine);
-    
+
     machine.transition = (event: string, payload?: any) => {
       const result = originalTransition(event, payload);
       const log = `Transition: ${machine.getCurrentState()} (${event})`;

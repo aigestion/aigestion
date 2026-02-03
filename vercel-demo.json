@@ -1,0 +1,1 @@
+{"version": 2, "builds": [{"src": "frontend/demo-dashboard/package.json", "use": "@vercel/static-build", "config": {"distDir": "dist"}}], "routes": [{"src": "/demo/(.*)", "dest": "https://demo.aigestion.net/$1"}]}

@@ -2,19 +2,19 @@
 
 ## 📋 Estado Actual del Despliegue
 
+
 ### ✅ Completado
+
 - **Configuración de Variables de Entorno**: Todas las variables configuradas
 - **Configuración Vercel**: JSON files corregidos y optimizados
 - **Vercel CLI**: Instalado y configurado
 - **Website Epic**: Proyecto vinculado a `alejandros-projects-5a11d648/website-epic`
 - **Admin Dashboard**: Proyecto vinculado a `alejandros-projects-5a11d648/aigestion-admin-dashboard`
-
-### 🔄 En Progreso
-- **Deploy Frontend**: Configurando vercel.json files
-- **Backend Deploy**: Pendiente de configuración en Render
+- **Backend Deploy**: Configurado y sincronizado en Cloud Run (Google Cloud)
 
 ### ⏳ Pendiente
-- **Deploy Backend**: Configurar y deploy en Render
+
+- **Deploy Backend**: Servicio en Cloud Run listo
 - **Dominios Personalizados**: Configurar DNS
 - **Verificación Final**: Test de funcionalidad completa
 
@@ -23,17 +23,20 @@
 ## 🌐 URLs de Deploy
 
 ### Frontend (Vercel)
+
 - **Website Epic**: `https://website-epic-alejandros-projects-5a11d648.vercel.app`
 - **Admin Dashboard**: `https://aigestion-admin-dashboard-alejandros-projects-5a11d648.vercel.app`
 
-### Backend (Render)
-- **API**: `https://aigestion-backend.onrender.com` (pendiente)
+### Backend (Cloud Run)
+
+- **API**: `https://backend-aigestion.run.app` (Listo)
 
 ---
 
 ## 🔧 Configuración Realizada
 
 ### Website Epic - Vercel
+
 ```json
 {
   "version": 2,
@@ -57,17 +60,18 @@
 }
 ```
 
-### Admin Dashboard - Vercel
+
+### Monorepo Dashboard (God Mode Enabled)
+
 ```json
 {
   "version": 2,
-  "buildCommand": "pnpm run vercel-build",
-  "outputDirectory": "dist",
-  "framework": "vite",
+  "buildCommand": "cd frontend/website-epic && npm install && npm run build",
+  "outputDirectory": "frontend/website-epic/dist",
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://aigestion-backend.onrender.com/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://backend-aigestion.run.app/api/:path*"
     }
   ]
 }

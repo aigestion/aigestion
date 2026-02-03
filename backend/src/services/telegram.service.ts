@@ -1,10 +1,9 @@
 import { Telegraf } from 'telegraf';
-import { Service } from 'typedi';
-
+import { injectable } from 'inversify';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 
-@Service()
+@injectable()
 export class TelegramService {
   private bot: Telegraf | null = null;
   private defaultChatId: string | undefined;
@@ -55,7 +54,6 @@ export class TelegramService {
     const targetChatId = chatId || this.defaultChatId;
 
     if (!this.bot || !targetChatId) {
-      // logger warning handled by caller or implicit here
       return;
     }
 

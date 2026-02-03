@@ -2,8 +2,7 @@
   "extends": "./.config/tsconfig.json",
   "compilerOptions": {
     "module": "ESNext",
-    "moduleResolution": "bundler",
-    "ignoreDeprecations": "6.0"
+    "moduleResolution": "bundler"
   },
   "include": [
     "backend/**/*",

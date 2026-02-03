@@ -41,26 +41,51 @@ const useHowl = (src: string, options: { volume: number; soundEnabled: boolean }
   const howlRef = useRef<Howl | null>(null);
 
   useEffect(() => {
-    howlRef.current = new Howl({
-      src: [src],
-      preload: true,
-      volume: options.volume,
-    });
+    if (typeof window !== 'undefined' && options.soundEnabled) {
+      try {
+        howlRef.current = new Howl({
+          src: [src],
+          preload: true,
+          volume: options.volume,
+        });
+      } catch (error) {
+        console.warn('🔇 Howl not available, using mock:', error);
+        howlRef.current = new MockHowl({
+          src: [src],
+          preload: true,
+          volume: options.volume,
+        });
+      }
+    }
 
     return () => {
-      howlRef.current?.unload();
+      if (howlRef.current) {
+        try {
+          howlRef.current.unload();
+        } catch (error) {
+          console.warn('🔇 Error unloading Howl:', error);
+        }
+      }
     };
-  }, [src]);
+  }, [src, options.soundEnabled]);
 
   useEffect(() => {
-    if (howlRef.current) {
-      howlRef.current.volume(options.volume);
+    if (howlRef.current && howlRef.current.volume !== undefined) {
+      try {
+        howlRef.current.volume = options.volume;
+      } catch (error) {
+        console.warn('🔇 Error setting Howl volume:', error);
+      }
     }
   }, [options.volume]);
 
   const play = useCallback(() => {
     if (options.soundEnabled && howlRef.current) {
-      howlRef.current.play();
+      try {
+        howlRef.current.play();
+      } catch (error) {
+        console.warn('🔇 Error playing sound:', error);
+      }
     }
   }, [options.soundEnabled]);
 

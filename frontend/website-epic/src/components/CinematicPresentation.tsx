@@ -1,4 +1,5 @@
 import { AnimatePresence, motion, useSpring } from 'framer-motion';
+import { Pause, Play, Rocket, SkipBack, SkipForward, Sparkles, Star, Zap } from 'lucide-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSentimentUI } from '../hooks/useSentimentUI';
 import { useSound } from '../hooks/useSound';
@@ -395,17 +396,17 @@ export const CinematicPresentation: React.FC = () => {
               transition={{ delay: 0.8, type: 'spring' }}
               className="flex flex-wrap gap-4 justify-center items-center mt-8"
             >
-              <button
-                onClick={() => (window.location.href = '/dashboard')}
+              <motion.button
+                onClick={() => (globalThis.location.href = '/dashboard')}
                 className="px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-bold text-white shadow-lg hover:scale-105 transition-all flex items-center gap-2 border-2 border-white/30"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <Rocket className="w-5 h-5" />
                 <span>🎮 ¡Jugar Ahora!</span>
-              </button>
+              </motion.button>
 
-              <button
+              <motion.button
                 onClick={togglePause}
                 className="px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full font-bold text-white shadow-lg hover:scale-105 transition-all flex items-center gap-2 border-2 border-white/30"
                 whileHover={{ scale: 1.05 }}
@@ -422,9 +423,9 @@ export const CinematicPresentation: React.FC = () => {
                     <span>⏸️ Pausa</span>
                   </>
                 )}
-              </button>
+              </motion.button>
 
-              <button
+              <motion.button
                 onClick={nextSlide}
                 className="px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-bold text-white shadow-lg hover:scale-105 transition-all flex items-center gap-2 border-2 border-white/30"
                 whileHover={{ scale: 1.05 }}
@@ -432,9 +433,9 @@ export const CinematicPresentation: React.FC = () => {
               >
                 <SkipForward className="w-5 h-5" />
                 <span>⏭️ Siguiente</span>
-              </button>
+              </motion.button>
 
-              <button
+              <motion.button
                 onClick={prevSlide}
                 className="px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 rounded-full font-bold text-white shadow-lg hover:scale-105 transition-all flex items-center gap-2 border-2 border-white/30"
                 whileHover={{ scale: 1.05 }}
@@ -442,7 +443,7 @@ export const CinematicPresentation: React.FC = () => {
               >
                 <SkipBack className="w-5 h-5" />
                 <span>⏮️ Anterior</span>
-              </button>
+              </motion.button>
             </motion.div>
           </motion.div>
         </AnimatePresence>

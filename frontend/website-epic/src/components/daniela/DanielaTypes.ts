@@ -49,4 +49,5 @@ export interface DanielaContextType {
   updateConfig: (config: Partial<DanielaConfig>) => void;
   setTyping: (typing: boolean) => void;
   setSpeaking: (speaking: boolean, volume?: number) => void;
+  getInsights: () => Promise<any[]>;
 }

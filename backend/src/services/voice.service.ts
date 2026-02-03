@@ -5,6 +5,7 @@ import { AnalyticsService } from './analytics.service';
 import { MetaverseService } from './metaverse.service';
 import { logger } from '../utils/logger';
 import { env } from '../config/env.schema';
+import { DANIELA_SYSTEM_PROMPT } from '../config/prompts/daniela.persona';
 
 @injectable()
 export class VoiceService {
@@ -28,7 +29,9 @@ export class VoiceService {
           model: {
             provider: 'openai',
             model: 'gpt-4o',
-            systemPrompt: env.DANIELA_SYSTEM_PROMPT,
+            systemPrompt: `${DANIELA_SYSTEM_PROMPT}\n\n[CONTEXTO ACTUAL]\nFecha: ${new Date().toLocaleDateString()}\nHora: ${new Date().toLocaleTimeString()}\nEntorno: ${
+              env.NODE_ENV
+            }`,
           },
           voice: {
             provider: 'eleven_labs',
@@ -47,7 +50,8 @@ export class VoiceService {
               type: 'function',
               function: {
                 name: 'get_metaverse_office_status',
-                description: 'Get the coordinates and status of our Decentraland virtual headquarters.',
+                description:
+                  'Get the coordinates and status of our Decentraland virtual headquarters.',
                 parameters: { type: 'object', properties: {} },
               },
             },

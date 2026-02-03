@@ -80,6 +80,8 @@ const WorkbenchLayout = lazy(() =>
   }))
 );
 
+const BillingDashboard = lazy(() => import('./pages/BillingDashboard').then(module => ({ default: module.BillingDashboard })));
+
 // Lazy load pages
 const DanielaDemo = lazy(() =>
   import('./pages/DanielaDemo').then(module => ({ default: module.DanielaDemo }))
@@ -269,6 +271,7 @@ export const AppContent = ({
         <Route path="/dashboard/admin" element={<AdminDashboard />} />
         <Route path="/dashboard/client" element={<ClientDashboard />} />
         <Route path="/dashboard/demo" element={<DemoDashboard />} />
+        <Route path="/dashboard/billing" element={<BillingDashboard />} />
         <Route
           path="/"
           element={

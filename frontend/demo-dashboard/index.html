@@ -1,34 +1,14 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AIGestion Demo Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    </style>
-</head>
-<body class="min-h-screen text-white">
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-4xl font-bold text-center mb-8">ðŸŽ® Experience Demo</h1>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white/10 backdrop-blur-md rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-4">Demos</h2>
-                <p className="text-3xl font-bold">24</p>
-                <p className="text-sm opacity-75">Interactivas</p>
-            </div>
-            <div class="bg-white/10 backdrop-blur-md rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-4">Vistas</h2>
-                <p className="text-3xl font-bold">125K</p>
-                <p className="text-sm opacity-75">Totales</p>
-            </div>
-            <div class="bg-white/10 backdrop-blur-md rounded-lg p-6">
-                <h2 className="text-xl font-bold mb-4">Rating</h2>
-                <p className="text-3xl font-bold text-yellow-400">4.8â­</p>
-                <p className="text-sm opacity-75">Promedio</p>
-            </div>
-        </div>
-    </div>
-</body>
+    <meta name="description" content="Panel de control demo de AIGestion" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

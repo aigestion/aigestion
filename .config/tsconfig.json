@@ -13,8 +13,7 @@
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "traceResolution": false,
-    "ignoreDeprecations": "6.0"
+    "traceResolution": false
   },
   "ts-node": {
     "require": [

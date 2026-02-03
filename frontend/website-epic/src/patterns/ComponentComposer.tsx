@@ -227,15 +227,11 @@ export function createComponentFactory<P = ComponentProps>(
     const Component = composeComponent(name, props);
     if (!Component) return null;
 
-    const composedHooks = defaultConfig.hooks?.map(hookName =>
-      composeHook(hookName)
-    );
-
     let content = <Component {...(props as P)}>{children}</Component>;
 
     // Apply providers
     if (defaultConfig.providers) {
-      content = composeProviders(defaultConfig.providers, content);
+      content = composeProviders(defaultConfig.providers, content) as React.ReactElement;
     }
 
     // Apply wrapper
@@ -311,7 +307,7 @@ export function PipelineComposer({
 }
 
 // Higher-order component composer
-export function withComposition<P = ComponentProps>(
+export function withComposition<P extends ComponentProps>(
   Component: ComponentType<P>,
   composition: {
     readonly providers?: Array<{ name: string; props?: ComponentProps }>;
@@ -333,7 +329,7 @@ export function withComposition<P = ComponentProps>(
 
     // Apply providers
     if (composition.providers) {
-      content = composeProviders(composition.providers, content);
+      content = composeProviders(composition.providers, content) as React.ReactElement;
     }
 
     // Apply wrapper

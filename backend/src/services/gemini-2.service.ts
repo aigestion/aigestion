@@ -94,7 +94,7 @@ export class Gemini2Service {
         model: 'gemini-2.0-pro-multimodal'
       });
 
-      const content = [];
+      const content: any[] = [];
 
       if (inputs.text) {
         content.push({ text: inputs.text });
@@ -107,7 +107,7 @@ export class Gemini2Service {
             mimeType: 'image/jpeg',
             data: imageData
           }
-        });
+        } as any);
       }
 
       const response = await model.generateContent(content);

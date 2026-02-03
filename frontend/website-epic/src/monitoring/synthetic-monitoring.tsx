@@ -138,7 +138,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     location: string = 'default'
   ): Promise<SyntheticResult> => {
     const startTime = Date.now();
-    
+
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), check.timeout);
@@ -226,7 +226,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     for (let attempt = 1; attempt <= check.retries; attempt++) {
       try {
         const result = await executeCheck(check, location);
-        
+
         if (result.status === 'success') {
           return result;
         }
@@ -242,7 +242,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
         if (attempt === check.retries) {
           throw error;
         }
-        
+
         // Exponential backoff
         const delay = Math.pow(2, attempt - 1) * 1000;
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -283,7 +283,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
       }
 
       setResults(prev => [...prev, ...allResults]);
-      
+
       // Send results to server
       if (endpoint) {
         await sendResults(allResults);
@@ -332,7 +332,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
   // Check for alerts
   const checkForAlerts = useCallback((results: SyntheticResult[]) => {
     const failedResults = results.filter(r => r.status === 'failure');
-    
+
     if (failedResults.length >= alertThreshold) {
       // Send notification
       if ('Notification' in globalThis && Notification.permission === 'granted') {
@@ -389,7 +389,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
 
   // Update check
   const updateCheck = useCallback((checkId: string, updates: Partial<SyntheticCheck>) => {
-    setChecks(prev => prev.map(c => 
+    setChecks(prev => prev.map(c =>
       c.id === checkId ? { ...c, ...updates } : c
     ));
   }, []);
@@ -442,7 +442,6 @@ export function SyntheticMonitoringDashboard() {
     switch (status) {
       case 'success': return 'text-green-600 dark:text-green-400';
       case 'failure': return 'text-red-600 dark:text-red-400';
-      case 'timeout': return 'text-yellow-600 dark:text-yellow-400';
       default: return 'text-gray-600 dark:text-gray-400';
     }
   };
@@ -451,7 +450,6 @@ export function SyntheticMonitoringDashboard() {
     switch (status) {
       case 'success': return 'bg-green-100 dark:bg-green-900';
       case 'failure': return 'bg-red-100 dark:bg-red-900';
-      case 'timeout': return 'bg-yellow-100 dark:bg-yellow-900';
       default: return 'bg-gray-100 dark:bg-gray-900';
     }
   };
@@ -487,7 +485,7 @@ export function SyntheticMonitoringDashboard() {
             Total Checks
           </div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-green-600 dark:text-green-400">
             {stats.successfulChecks}
@@ -496,7 +494,7 @@ export function SyntheticMonitoringDashboard() {
             Successful
           </div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-red-600 dark:text-red-400">
             {stats.failedChecks}
@@ -505,7 +503,7 @@ export function SyntheticMonitoringDashboard() {
             Failed
           </div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {stats.uptime.toFixed(1)}%
@@ -514,7 +512,7 @@ export function SyntheticMonitoringDashboard() {
             Uptime
           </div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
             {stats.averageResponseTime.toFixed(0)}ms
@@ -559,7 +557,7 @@ export function SyntheticMonitoringDashboard() {
                     ))}
                   </div>
                 </div>
-                
+
                 <div className="text-right">
                   {latestResult ? (
                     <>
@@ -604,7 +602,7 @@ export function SyntheticMonitoringDashboard() {
                   {result.location} • {result.metadata?.url}
                 </div>
               </div>
-              
+
               <div className="text-right">
                 <div className={`font-medium ${getStatusColor(result.status)}`}>
                   {result.status.toUpperCase()}
@@ -618,7 +616,7 @@ export function SyntheticMonitoringDashboard() {
               </div>
             </div>
           ))}
-          
+
           {results.length === 0 && (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               No results yet

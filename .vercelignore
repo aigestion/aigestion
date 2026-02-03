@@ -1,0 +1,86 @@
+# 🌌 Vercel Ignore - Monorepo Optimization
+
+# Backend (Deployed separately on Cloud Run)
+backend/
+backend-nestjs/
+supabase/
+
+# Mobile Apps
+android/
+ios/
+mobile/
+
+# Local Drive & Archives
+AIGestion-Final/
+AIGestion_Master_Drive/
+archive/
+aigestion-deploy/
+aigestion-static/
+aig-ia-engine/
+AIGestion_Master_Drive/
+AIGestion-Final/
+Media/
+media/
+Sounds/
+sounds/
+images/
+media/
+evaluation/
+cypress/
+tests/
+__mocks__/
+scripts/
+infra/
+Colab-notebooks/
+colab-notebooks/
+audit/
+n8n/
+n8n_data/
+monitoring/
+vpn/
+vscode/
+deployment/
+build-logs/
+AIGestion_Master_Drive/
+AIGestion-Final/
+aigestion-deploy/
+workspace-config/
+repo-tools/
+optimization-plan/
+runtimes/
+tmp_rag/
+task/
+credentials/
+cloud/
+dist/
+build/
+node_modules/
+.venv/
+.venv-notebooklm/
+.venv/
+
+# Documentation & Guidelines
+docs/
+VERCEL_DEPLOYMENT_GUIDE.md
+SUPABASE_GOD_MODE_PLAN.md
+
+# Build Artifacts & Cache
+node_modules/
+dist/
+.turbo/
+.trunk/
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+!.env.production
+
+# Antigravity / Gemini Brain
+.gemini/
+brain/
+artifacts/
+
+# System Files
+.DS_Store
+Thumbs.db

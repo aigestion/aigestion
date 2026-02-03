@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { Service } from 'typedi';
+import { injectable } from 'inversify';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 
-@Service()
+@injectable()
 export class WhatsAppService {
   private readonly baseUrl = env.WHATSAPP_API_URL || 'https://graph.facebook.com/v19.0';
 
@@ -32,7 +32,7 @@ export class WhatsAppService {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-        }
+        },
       );
 
       logger.info(`WhatsApp message sent to ${to}: ${response.data.messages[0].id}`);
@@ -40,7 +40,7 @@ export class WhatsAppService {
     } catch (error: any) {
       logger.error(
         { error: error.response?.data || error.message },
-        'Error sending WhatsApp message'
+        'Error sending WhatsApp message',
       );
       throw error;
     }
@@ -74,7 +74,7 @@ export class WhatsAppService {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-        }
+        },
       );
 
       logger.info(`WhatsApp template sent to ${to}: ${response.data.messages[0].id}`);
@@ -82,7 +82,7 @@ export class WhatsAppService {
     } catch (error: any) {
       logger.error(
         { error: error.response?.data || error.message },
-        'Error sending WhatsApp template'
+        'Error sending WhatsApp template',
       );
       throw error;
     }

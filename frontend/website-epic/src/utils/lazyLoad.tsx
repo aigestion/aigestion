@@ -3,7 +3,6 @@ import React, { lazy } from 'react';
 // Enhanced lazy loading with error handling and loading states
 export function createLazyComponent<T extends React.ComponentType<any>>(
   importFunc: () => Promise<{ default: T }>,
-  fallback?: React.ComponentType
 ) {
   return lazy(() => {
     return importFunc().catch(error => {

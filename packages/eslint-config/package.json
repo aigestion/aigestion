@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "main": "index.mjs",
+  "scripts": {
+    "build": "echo 'No build required for eslint-config'"
+  },
   "peerDependencies": {
     "eslint": "^9.39.2",
     "typescript": "^5.9.3"

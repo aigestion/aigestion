@@ -3,6 +3,9 @@ import { Howl, Howler } from 'howler';
 // Sound definition types
 export type SoundType = 'hover_glass' | 'click_activate' | 'menu_open' | 'success_chime' | 'error_buzzer' | 'nexus_hum' | 'wuaw_subtle' | 'data_pulse';
 
+// Type alias for Howl instance
+type HowlInstance = InstanceType<typeof Howl>;
+
 interface SoundAsset {
     src: string;
     volume: number;
@@ -30,7 +33,7 @@ const SOUND_ASSETS: Record<SoundType, SoundAsset> = {
 
 class AudioService {
     private static instance: AudioService;
-    private sounds = new Map<SoundType, Howl>();
+    private sounds = new Map<SoundType, HowlInstance>();
     private isMuted = false;
     private ambienceId: number | null = null;
 
@@ -54,7 +57,7 @@ class AudioService {
         return AudioService.instance;
     }
 
-    private loadSound(type: SoundType): Howl {
+    private loadSound(type: SoundType): HowlInstance {
         if (this.sounds.has(type)) {
             return this.sounds.get(type)!;
         }

@@ -4,9 +4,9 @@
 # ---------- Builder Stage ----------
 FROM node:20-alpine AS builder
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY package.json ./
 # Install all dependencies for build
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 COPY . .
 # Build the application
 RUN npm run build
@@ -24,10 +24,10 @@ WORKDIR /app
 # RUN apk add --no-cache clamav yara
 
 # Copy package files
-COPY package.json package-lock.json ./
+COPY package.json ./
 
 # Install only production dependencies
-RUN npm ci --only=production --legacy-peer-deps
+RUN npm install --only=production --legacy-peer-deps
 
 # Create non-root user for security
 RUN addgroup -S nodejs && adduser -S nodejs -G nodejs

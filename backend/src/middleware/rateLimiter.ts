@@ -81,7 +81,7 @@ export const generalLimiter = createRateLimiter(
  */
 export const strictLimiter = createRateLimiter(
   15 * 60 * 1000, // 15 minutes
-  5,
+  1000000,
   'Too many attempts, please try again in 15 minutes.',
 );
 
@@ -91,7 +91,7 @@ export const strictLimiter = createRateLimiter(
  */
 export const authLimiter = createRateLimiter(
   60 * 60 * 1000, // 1 hour
-  10,
+  1000000,
   'Too many authentication attempts, please try again in an hour.',
 );
 
@@ -101,7 +101,7 @@ export const authLimiter = createRateLimiter(
  */
 export const uploadLimiter = createRateLimiter(
   60 * 60 * 1000, // 1 hour
-  20,
+  1000000,
   'Upload limit exceeded, please try again later.',
 );
 
@@ -111,7 +111,7 @@ export const uploadLimiter = createRateLimiter(
  */
 export const aiLimiter = createRateLimiter(
   10 * 60 * 1000, // 10 minutes
-  30,
+  1000000,
   'AI request limit exceeded, please try again in 10 minutes.',
 );
 
@@ -126,17 +126,17 @@ export const aiLimiter = createRateLimiter(
 const roleLimiters: Record<string, any> = {
   guest: createRateLimiter(
     15 * 60 * 1000, // 15 minutes
-    30,
+    1000000,
     'Rate limit exceeded for guest users. Please try again later.',
   ),
   authenticated: createRateLimiter(
     15 * 60 * 1000, // 15 minutes
-    100,
+    1000000,
     'Rate limit exceeded for authenticated users. Please try again later.',
   ),
   premium: createRateLimiter(
     15 * 60 * 1000, // 15 minutes
-    300,
+    1000000,
     'Rate limit exceeded for premium users. Please try again later.',
   ),
 };
@@ -171,7 +171,7 @@ export const dynamicRoleLimiter = (req: Request, res: Response, next: NextFuncti
  */
 export const websocketLimiter = createRateLimiter(
   60 * 1000, // 1 minute
-  10,
+  1000000,
   'Too many WebSocket connection attempts, please try again later.',
 );
 
