@@ -1,17 +1,97 @@
-﻿{
+{
   "version": 2,
-  "routes": [
+  "buildCommand": "cd frontend/website-epic && npm install && npm run vercel:build",
+  "outputDirectory": "frontend/website-epic/dist",
+  "installCommand": "npm install --prefix frontend/website-epic",
+  "framework": "vite",
+  "regions": ["iad1"],
+  "headers": [
     {
-      "src": "/admin",
-      "dest": "/admin/index.html"
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-DNS-Prefetch-Control",
+          "value": "on"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(self), microphone=(self), geolocation=(), interest-cohort=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; connect-src 'self' https: wss:;"
+        }
+      ]
     },
     {
-      "src": "/client",
-      "dest": "/client/index.html"
-    },
-    {
-      "src": "/demo",
-      "dest": "/demo/index.html"
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "X-Requested-With, Content-Type, Authorization, X-Request-ID"
+        }
+      ]
     }
-  ]
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://backend-aigestion.run.app/api/:path*"
+    },
+    {
+      "source": "/socket.io/:path*",
+      "destination": "https://backend-aigestion.run.app/socket.io/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/admin",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/client",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/demo",
+      "destination": "/",
+      "permanent": false
+    }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
 }
