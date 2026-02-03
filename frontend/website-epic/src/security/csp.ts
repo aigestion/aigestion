@@ -37,7 +37,8 @@ export const defaultCSPConfig: CSPConfig = {
     // Script-src: Allow scripts from same origin and trusted CDNs
     {
       name: 'script-src',
-      value: "'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.googletagmanager.com https://*.google-analytics.com https://vercel.live https://*.vercel.live",
+      value:
+        "'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://*.googletagmanager.com https://*.google-analytics.com https://vercel.live https://*.vercel.live",
     },
 
     // Style-src: Allow inline styles and external stylesheets
@@ -49,7 +50,8 @@ export const defaultCSPConfig: CSPConfig = {
     // Img-src: Allow images from same origin and trusted sources
     {
       name: 'img-src',
-      value: "'self' data: blob: https://*.supabase.co https://*.githubusercontent.com https://*.unsplash.com https://*.images.unsplash.com https://*.googleusercontent.com https://vercel.live https://*.vercel.live",
+      value:
+        "'self' data: blob: https://*.supabase.co https://*.githubusercontent.com https://*.unsplash.com https://*.images.unsplash.com https://*.googleusercontent.com https://vercel.live https://*.vercel.live",
     },
 
     // Font-src: Allow fonts from Google Fonts
@@ -61,7 +63,8 @@ export const defaultCSPConfig: CSPConfig = {
     // Connect-src: Allow API connections to trusted domains
     {
       name: 'connect-src',
-      value: "'self' https://api.github.com https://api.openai.com https://*.supabase.co https://*.supabase.co wss://*.supabase.co",
+      value:
+        "'self' https://api.github.com https://api.openai.com https://*.supabase.co https://*.supabase.co wss://*.supabase.co",
     },
 
     // Media-src: Allow media from same origin and trusted sources
@@ -126,7 +129,8 @@ export const developmentCSPConfig: CSPConfig = {
   directives: [
     {
       name: 'default-src',
-      value: "'self' https://jhvtjyfmgncrrbzqpbkt.supabase.co https://*.supabase.co ws://localhost:* ws://127.0.0.1:*",
+      value:
+        "'self' https://jhvtjyfmgncrrbzqpbkt.supabase.co https://*.supabase.co ws://localhost:* ws://127.0.0.1:*",
     },
     {
       name: 'script-src',
@@ -138,7 +142,8 @@ export const developmentCSPConfig: CSPConfig = {
     },
     {
       name: 'img-src',
-      value: "'self' data: blob: https://*.supabase.co https://*.githubusercontent.com https://*.unsplash.com https://*.images.unsplash.com https://*.googleusercontent.com",
+      value:
+        "'self' data: blob: https://*.supabase.co https://*.githubusercontent.com https://*.unsplash.com https://*.images.unsplash.com https://*.googleusercontent.com",
     },
     {
       name: 'font-src',
@@ -146,7 +151,8 @@ export const developmentCSPConfig: CSPConfig = {
     },
     {
       name: 'connect-src',
-      value: "'self' https://api.github.com https://api.openai.com https://*.supabase.co https://*.supabase.co wss://*.supabase.co ws://localhost:* ws://127.0.0.1:*",
+      value:
+        "'self' https://api.github.com https://api.openai.com https://*.supabase.co https://*.supabase.co wss://*.supabase.co ws://localhost:* ws://127.0.0.1:*",
     },
     {
       name: 'media-src',
@@ -213,7 +219,7 @@ export class CSPViolationReporter {
 
   constructor(maxViolations: number = 100, reportEndpoint?: string) {
     this.maxViolations = maxViolations;
-    this.reportEndpoint = reportEndpoint;
+    this.reportEndpoint = reportEndpoint || undefined;
   }
 
   reportViolation(violation: CSPViolation): void {
@@ -271,9 +277,7 @@ export class CSPViolationReporter {
 
   getRecentViolations(minutes: number = 60): CSPViolation[] {
     const cutoff = new Date(Date.now() - minutes * 60 * 1000);
-    return this.violations.filter(v =>
-      new Date(v.timestamp || Date.now()) >= cutoff
-    );
+    return this.violations.filter(v => new Date(v.timestamp || Date.now()) >= cutoff);
   }
 
   clearViolations(): void {
@@ -304,7 +308,7 @@ export class CSPViolationReporter {
 export function cspMiddleware(config: CSPConfig = defaultCSPConfig) {
   const cspHeader = generateCSPHeader(config);
 
-  return (req: any, res: any, next: any) => {
+  return (_req: any, res: any, next: any) => {
     res.setHeader('Content-Security-Policy', cspHeader);
     next();
   };
@@ -326,7 +330,7 @@ export function validateNonce(nonce: string, expectedNonce?: string): boolean {
 // CSP utilities
 export const cspUtils = {
   // Check if a URL is allowed by CSP
-  isAllowedURL: (url: string, config: CSPConfig): boolean => {
+  isAllowedURL: (url: string, _config: CSPConfig): boolean => {
     try {
       const urlObj = new URL(url, globalThis.location.origin);
       return urlObj.origin === globalThis.location.origin;
@@ -361,14 +365,9 @@ export const cspUtils = {
   validateConfig: (config: CSPConfig): boolean => {
     const requiredDirectives = ['default-src', 'script-src', 'style-src'];
 
-    return requiredDirectives.every(directive =>
-      config.directives.some(d => d.name === directive)
-    );
+    return requiredDirectives.every(directive => config.directives.some(d => d.name === directive));
   },
 };
 
 // Default CSP violation reporter instance
-export const defaultCSPReporter = new CSPViolationReporter(
-  100,
-  '/api/csp-report'
-);
+export const defaultCSPReporter = new CSPViolationReporter(100, '/api/csp-report');

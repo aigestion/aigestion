@@ -1,4 +1,4 @@
-﻿version: '3.9'
+version: '3.9'
 
 services:
   # Frontend + Backend Application
@@ -6,7 +6,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.dev
-    container_name: NEXUS V1-app-dev
+    container_name: aigestion-app-dev
     ports:
       - '5173:5173' # Vite dev server
       - '3000:3000' # Backend API
@@ -17,7 +17,7 @@ services:
     environment:
       - NODE_ENV=development
       - VITE_API_URL=http://localhost:3000
-      - DATABASE_URL=mongodb://mongodb:27017/NEXUS V1_dashboard
+      - DATABASE_URL=mongodb://mongodb:27017/aigestion_dashboard
       - RABBITMQ_URL=amqp://rabbitmq:5672
       - REDIS_URL=redis://redis:6379
       - GEMINI_API_KEY=${GEMINI_API_KEY}
@@ -27,10 +27,10 @@ services:
       - EMAIL_PORT=${EMAIL_PORT:-587}
       - EMAIL_USERNAME=${EMAIL_USERNAME}
       - EMAIL_PASSWORD=${EMAIL_PASSWORD}
-      - EMAIL_FROM=${EMAIL_FROM:-noreply@www.NEXUS V1.net}
+      - EMAIL_FROM=${EMAIL_FROM:-noreply@aigestion.net}
       - YOUTUBE_TRANSCRIPTION_EMAIL=${YOUTUBE_TRANSCRIPTION_EMAIL:-${EMAIL_USERNAME}}
       # OpenTelemetry Configuration
-      - OTEL_SERVICE_NAME=NEXUS V1-backend
+      - OTEL_SERVICE_NAME=aigestion-backend
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318
       - OTEL_NODE_RESOURCE_DETECTORS=env,host,os
     depends_on:
@@ -41,7 +41,7 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:3000/health']
@@ -61,19 +61,19 @@ services:
   # MongoDB Database
   mongodb:
     image: mongo:7-jammy
-    container_name: NEXUS V1-mongodb
+    container_name: aigestion-mongodb
     ports:
       - '27017:27017'
     volumes:
-      - mongodb-data:/data/db
-      - mongodb-config:/data/configdb
+      - aigestion-mongodb-data:/data/db
+      - aigestion-mongodb-config:/data/configdb
       - ../.docker/mongo-init:/docker-entrypoint-initdb.d
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER:-admin}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-admin123}
-      - MONGO_INITDB_DATABASE=NEXUS V1_dashboard
+      - MONGO_INITDB_DATABASE=aigestion_dashboard
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
     healthcheck:
       test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
@@ -93,19 +93,19 @@ services:
   # RabbitMQ Message Broker
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: NEXUS V1-rabbitmq
+    container_name: aigestion-rabbitmq
     ports:
       - '5672:5672' # AMQP port
       - '15672:15672' # Management UI
     volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
+      - aigestion-rabbitmq-data:/var/lib/rabbitmq
       - ../.docker/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-admin}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS:-admin123}
       - RABBITMQ_DEFAULT_VHOST=/
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
     healthcheck:
       test: ['CMD', 'rabbitmq-diagnostics', 'ping']
@@ -125,15 +125,15 @@ services:
   # Redis Cache
   redis:
     image: redis:7-alpine
-    container_name: NEXUS V1-redis
+    container_name: aigestion-redis
     ports:
       - '6379:6379'
     volumes:
-      - redis-data:/data
+      - aigestion-redis-data:/data
       - ../.docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
@@ -153,7 +153,7 @@ services:
   # Jaeger - Distributed Tracing (OpenTelemetry)
   jaeger:
     image: jaegertracing/all-in-one:1.53
-    container_name: NEXUS V1-jaeger
+    container_name: aigestion-jaeger
     environment:
       - COLLECTOR_OTLP_ENABLED=true
     ports:
@@ -161,7 +161,7 @@ services:
       - '4317:4317' # OTLP gRPC
       - '4318:4318' # OTLP HTTP
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
     healthcheck:
       test: ['CMD', 'wget', '--spider', 'http://localhost:14269/']
@@ -181,7 +181,7 @@ services:
   # Nginx Reverse Proxy (Optional for production-like setup)
   nginx:
     image: nginx:alpine
-    container_name: NEXUS V1-nginx
+    container_name: aigestion-nginx
     ports:
       - '80:80'
       - '443:443'
@@ -193,7 +193,7 @@ services:
     depends_on:
       - app
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
     deploy:
       resources:
@@ -211,16 +211,16 @@ services:
     build:
       context: ..
       dockerfile: .docker/Dockerfile.evaluation
-    container_name: NEXUS V1-evaluation
+    container_name: aigestion-evaluation
     volumes:
       - ../evaluation:/app/evaluation
-      - evaluation-results:/app/evaluation/results
+      - aigestion-evaluation-results:/app/evaluation/results
     environment:
       - PYTHONUNBUFFERED=1
       - WINDSURF_API_TOKEN=${WINDSURF_API_TOKEN}
       - WINDSURF_API_URL=${WINDSURF_API_URL}
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
     profiles:
       - evaluation
@@ -228,14 +228,14 @@ services:
   # Browser Service for Secure Navigator
   browser-service:
     image: ghcr.io/browserless/chromium:latest
-    container_name: NEXUS V1-browser-service
+    container_name: aigestion-browser-service
     ports:
       - "3001:3000"
     environment:
       - MAX_CONCURRENT_SESSIONS=10
       - TOKEN=${BROWSERLESS_API_KEY}
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--spider", "http://localhost:3000/"]
@@ -248,7 +248,7 @@ services:
     build:
       context: ../aig-ia-engine
       dockerfile: Dockerfile
-    container_name: NEXUS V1-aig-engine
+    container_name: aigestion-aig-engine
     ports:
       - "8000:8000"
     volumes:
@@ -263,22 +263,22 @@ services:
     depends_on:
       - redis
     networks:
-      - NEXUS V1-network
+      - aigestion-network
     restart: unless-stopped
 
 networks:
-  NEXUS V1-network:
+  aigestion-network:
     driver: bridge
-    name: NEXUS V1-network
+    name: aigestion-network
 
 volumes:
-  mongodb-data:
-    name: NEXUS V1-mongodb-data
-  mongodb-config:
-    name: NEXUS V1-mongodb-config
-  rabbitmq-data:
-    name: NEXUS V1-rabbitmq-data
-  redis-data:
-    name: NEXUS V1-redis-data
-  evaluation-results:
-    name: NEXUS V1-evaluation-results
+  aigestion-mongodb-data:
+    name: aigestion-mongodb-data
+  aigestion-mongodb-config:
+    name: aigestion-mongodb-config
+  aigestion-rabbitmq-data:
+    name: aigestion-rabbitmq-data
+  aigestion-redis-data:
+    name: aigestion-redis-data
+  aigestion-evaluation-results:
+    name: aigestion-evaluation-results

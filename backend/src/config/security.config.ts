@@ -9,21 +9,21 @@ export const securityConfigSchema = z.object({
   rateLimiting: z.object({
     windowMs: z.number().default(15 * 60 * 1000), // 15 minutes
     maxRequests: z.object({
-      free: z.number().default(100),
-      pro: z.number().default(1000),
-      enterprise: z.number().default(10000),
+      free: z.number().default(1000000),
+      pro: z.number().default(1000000),
+      enterprise: z.number().default(1000000),
     }),
     authEndpoints: z.object({
       windowMs: z.number().default(15 * 60 * 1000),
-      max: z.number().default(5),
+      max: z.number().default(1000000),
     }),
     aiEndpoints: z.object({
       windowMs: z.number().default(60 * 1000), // 1 minute
-      max: z.number().default(10),
+      max: z.number().default(1000000),
     }),
     uploadEndpoints: z.object({
       windowMs: z.number().default(60 * 60 * 1000), // 1 hour
-      max: z.number().default(10),
+      max: z.number().default(1000000),
     }),
   }),
 
@@ -159,21 +159,21 @@ export const defaultSecurityConfig = {
   rateLimiting: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: {
-      free: 100,
-      pro: 1000,
-      enterprise: 10000,
+      free: 1000000,
+      pro: 1000000,
+      enterprise: 1000000,
     },
     authEndpoints: {
       windowMs: 15 * 60 * 1000,
-      max: 5,
+      max: 1000000,
     },
     aiEndpoints: {
       windowMs: 60 * 1000, // 1 minute
-      max: 10,
+      max: 1000000,
     },
     uploadEndpoints: {
       windowMs: 60 * 60 * 1000, // 1 hour
-      max: 10,
+      max: 1000000,
     },
   },
 

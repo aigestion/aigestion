@@ -9,8 +9,11 @@ import {
   Shield,
   TrendingUp,
   User,
-  X
+  X,
+  Activity,
+  AlertCircle
 } from 'lucide-react';
+import { api, SystemHealth } from '../services/api';
 import React, { useState } from 'react';
 import { useEnhancedVoiceAssistant } from '../hooks/useEnhancedVoiceAssistant';
 import { DanielaConversationPanel } from './DanielaConversationPanel';
@@ -27,6 +30,23 @@ interface DashboardProps {
 export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState<'daniela' | 'analytics' | 'settings'>('daniela');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [health, setHealth] = useState<SystemHealth | null>(null);
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking');
+
+  React.useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const data = await api.getSystemHealth();
+        setHealth(data);
+        setConnectionStatus('connected');
+      } catch (error) {
+        setConnectionStatus('error');
+      }
+    };
+    checkConnection();
+    const interval = setInterval(checkConnection, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const {
     status,
@@ -220,6 +240,23 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                       status === 'error' ? 'Error' :
                         'Inactivo'}
                 </span>
+              </div>
+
+              {/* System Connectivity Indicator */}
+              <div className="flex items-center gap-2 border-l border-white/10 pl-4">
+                <div className={`w-2 h-2 rounded-full ${
+                  connectionStatus === 'connected' ? 'bg-emerald-400' :
+                  connectionStatus === 'error' ? 'bg-red-400' :
+                  'bg-blue-400 animate-pulse'
+                }`} />
+                <span className="text-sm text-nexus-silver hidden sm:block">
+                  {connectionStatus === 'connected' ? 'System Online' :
+                   connectionStatus === 'error' ? 'Offline' :
+                   'Syncing...'}
+                </span>
+                {health?.data?.version && (
+                   <span className="text-[10px] text-white/20">v{health.data.version}</span>
+                )}
               </div>
 
               {/* User Menu */}

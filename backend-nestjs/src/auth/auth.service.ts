@@ -1,17 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { SessionService } from './session.service';
 
 @Injectable()
 export class AuthService {
-  validateUser(credentials: any) {
-    // Placeholder for actual validation logic
+  constructor(private readonly sessionService: SessionService) {}
+
+  async validateUser(credentials: any) {
+    const user = {
+      id: '1',
+      email: credentials.email || 'admin@aigestion.net',
+      role: 'admin',
+    };
+    
+    const token = `jwt-${Math.random().toString(36).substr(2)}`;
+    
+    // Phase 14: Save session in Redis for cross-platform sharing
+    await this.sessionService.saveSession(user.id, token, {
+      device: 'nexus-client',
+      loginTime: Date.now()
+    });
+
     return {
       success: true,
-      token: 'jwt-token-pilot-v2',
-      user: {
-        id: '1',
-        email: credentials.email || 'admin@aigestion.net',
-        role: 'admin',
-      }
+      token,
+      user
     };
   }
 

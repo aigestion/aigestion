@@ -1,0 +1,41 @@
+# AIGestion Dashboards - Deployment Configuration
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "frontend/admin-dashboard/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "frontend/client-dashboard/package.json", 
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "frontend/demo-dashboard/package.json",
+      "use": "@vercel/static-build", 
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/admin/(.*)",
+      "dest": "https://admin.aigestion.net/$1"
+    },
+    {
+      "src": "/client/(.*)", 
+      "dest": "https://client.aigestion.net/$1"
+    },
+    {
+      "src": "/demo/(.*)",
+      "dest": "https://demo.aigestion.net/$1"
+    }
+  ]
+}

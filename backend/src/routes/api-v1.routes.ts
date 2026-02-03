@@ -18,11 +18,16 @@ import ragRoutes from './rag.routes';
 // import jwt from 'jsonwebtoken';
 // import { env } from '../config/env.schema';
 // import { dashboardAuth } from '../middleware/dashboardAuth';
-import { getBillingSnapshot } from '../controllers/billing.controller';
+import {
+  createCheckoutSession,
+  createPortalSession,
+  getBillingSnapshot,
+} from '../controllers/billing.controller';
 import { getCurrentUsage } from '../controllers/usage.controller';
 import { requireAuth } from '../middleware/auth.middleware';
 import analyticsRouter from './analytics.routes';
 import authRouter from './auth.routes';
+import danielaRouter from './daniela.routes';
 import dockerRouter from './docker.routes';
 import enhancedVoiceRouter from './enhanced-voice.routes';
 import personaRouter from './persona.routes';
@@ -30,6 +35,7 @@ import stripeRouter from './stripe.routes';
 import swarmRouter from './swarm.routes';
 import usersRouter from './users.routes';
 import youtubeRouter from './youtube.routes';
+import godmodeRoutes from './godmode.routes';
 
 // ... (existing imports)
 
@@ -175,6 +181,8 @@ apiV1Router.use('/youtube', youtubeRouter);
 
 apiV1Router.get('/usage/current', redisCache(60), getCurrentUsage);
 apiV1Router.get('/billing/snapshot', requireAuth, redisCache(300), getBillingSnapshot);
+apiV1Router.post('/billing/checkout', requireAuth, createCheckoutSession);
+apiV1Router.post('/billing/portal', requireAuth, createPortalSession);
 apiV1Router.use('/analytics', redisCache(30), analyticsRouter);
 
 // Enhanced Voice Service (Daniela)
@@ -189,6 +197,7 @@ apiV1Router.use('/analytics', redisCache(30), analyticsRouter);
  *         description: Enhanced Voice Service endpoints
  */
 apiV1Router.use('/enhanced-voice', enhancedVoiceRouter);
+apiV1Router.use('/daniela', danielaRouter);
 
 // AI and RAG Routes
 
@@ -231,5 +240,6 @@ apiV1Router.use('/threat-intelligence', threatIntelRouter);
 apiV1Router.use('/behavior', behaviorRouter);
 apiV1Router.use('/device-posture', devicePostureRouter);
 apiV1Router.use('/nexus', nexusRouter);
+apiV1Router.use('/god-mode', godmodeRoutes);
 
 export default apiV1Router;

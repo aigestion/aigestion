@@ -77,4 +77,9 @@ export const TYPES = {
   FeatureFlagService: Symbol.for('FeatureFlagService'),
   DoraMetricsService: Symbol.for('DoraMetricsService'),
   QwenTTSService: Symbol.for('QwenTTSService'),
+  WhatsAppService: Symbol.for('WhatsAppService'),
+  GodNotificationService: Symbol.for('GodNotificationService'),
+  GodModeController: Symbol.for('GodModeController'),
+  DanielaAIService: Symbol.for('DanielaAIService'),
+  DanielaController: Symbol.for('DanielaController'),
 };

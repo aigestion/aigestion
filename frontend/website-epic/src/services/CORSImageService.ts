@@ -124,7 +124,7 @@ export class CORSImageService {
             };
 
             // Set up callback
-            (window as any)[callbackName] = (data: any) => {
+            (window as any)[callbackName] = (_data: any) => {
                 cleanup();
                 // JSONP doesn't work for image data, so fallback to placeholder
                 resolve(this.getPlaceholderImage(prompt, model));

@@ -1,16 +1,28 @@
-﻿{
-  "name": "aigestion-dashboard",
-  "version": "1.0.0",
-  "description": "AIGestion Dashboard",
-  "main": "index.js",
+{
+  "name": "aigestion-admin-dashboard",
+  "version": "2.0.0",
+  "description": "AIGestion Admin Dashboard - Web Application",
+  "type": "module",
   "scripts": {
-    "start": "react-native start",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios"
+    "dev": "vite",
+    "build": "vite build",
+    "vercel-build": "vite build",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix"
   },
   "dependencies": {
-    "react": "18.2.0",
-    "react-native": "0.72.0",
-    "lucide-react": "^0.263.1"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.2",
+    "framer-motion": "^12.26.2",
+    "lucide-react": "^0.468.0",
+    "@supabase/supabase-js": "^2.93.1",
+    "zustand": "^5.0.2",
+    "@tanstack/react-query": "^5.90.20",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.4",
+    "recharts": "^2.12.7"
   }
 }

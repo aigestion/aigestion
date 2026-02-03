@@ -7,6 +7,8 @@ import { RegisterUserUseCase } from '../application/usecases/RegisterUserUseCase
 import { CreatePersonaUseCase } from '../application/usecases/persona/CreatePersonaUseCase';
 import { GetMarketplacePersonasUseCase } from '../application/usecases/persona/GetMarketplacePersonasUseCase';
 import { SwarmController } from '../controllers/swarm.controller';
+import { GodModeController } from '../controllers/godmode.controller';
+import { DanielaController } from '../controllers/daniela.controller';
 import { DockerService } from '../infrastructure/docker/DockerService';
 import {
     IMissionRepository,
@@ -35,6 +37,7 @@ import { DanielaAIService } from '../services/daniela-ai.service';
 import { DeFiStrategistService } from '../services/defi-strategist.service';
 import { DoraMetricsService } from '../services/dora-metrics.service';
 import { EmailService } from '../services/email.service';
+import { GodNotificationService } from '../services/god-notification.service';
 import { EnhancedVoiceService } from '../services/enhanced-voice.service';
 import { FeatureFlagService } from '../services/feature-flag.service';
 import { ErrorReportingService } from '../services/google/error-reporting.service';
@@ -66,6 +69,7 @@ import { TwoFactorService } from '../services/two-factor.service';
 import { UsageService } from '../services/usage.service';
 import { UserService } from '../services/user.service';
 import { XService } from '../services/x.service';
+import { WhatsAppService } from '../services/whatsapp.service';
 import { ZeroTrustService } from '../services/zero-trust.service';
 import { TYPES } from '../types';
 
@@ -75,7 +79,7 @@ container.bind<HistoryService>(TYPES.HistoryService).to(HistoryService).inSingle
 container.bind<TelegramService>(TYPES.TelegramService).to(TelegramService).inSingletonScope();
 container.bind<TelegramBotHandler>(TelegramBotHandler).toSelf().inSingletonScope();
 container.bind<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode).toSelf().inSingletonScope();
-container.bind<DanielaAIService>(DanielaAIService).toSelf().inSingletonScope();
+container.bind<DanielaAIService>(TYPES.DanielaAIService).to(DanielaAIService).inSingletonScope();
 container
   .bind<SystemMetricsService>(TYPES.SystemMetricsService)
   .to(SystemMetricsService)
@@ -104,7 +108,12 @@ container.bind<DeFiStrategistService>(TYPES.DeFiStrategistService).to(DeFiStrate
 container.bind<InfraOptimizerService>(TYPES.InfraOptimizerService).to(InfraOptimizerService).inSingletonScope();
 container.bind<SocketService>(TYPES.SocketService).to(SocketService).inSingletonScope();
 container.bind<INotificationRepository>(TYPES.NotificationRepository).to(NotificationRepository).inSingletonScope();
-container.bind<NotificationService>(TYPES.NotificationService).to(NotificationService).inSingletonScope();
+container
+  .bind<GodNotificationService>(TYPES.GodNotificationService)
+  .to(GodNotificationService)
+  .inSingletonScope();
+container.bind<GodModeController>(TYPES.GodModeController).to(GodModeController).inSingletonScope();
+container.bind<DanielaController>(TYPES.DanielaController).to(DanielaController).inSingletonScope();
 container.bind<SwarmService>(TYPES.SwarmService).to(SwarmService).inSingletonScope();
 container.bind<TwoFactorService>(TYPES.TwoFactorService).to(TwoFactorService).inSingletonScope();
 container.bind<Enable2FAUseCase>(TYPES.Enable2FAUseCase).to(Enable2FAUseCase).inSingletonScope();
@@ -187,7 +196,7 @@ container.bind<AutoDocumentationService>(TYPES.AutoDocumentationService).to(Auto
 container.bind<FeatureFlagService>(TYPES.FeatureFlagService).to(FeatureFlagService).inSingletonScope();
 container.bind<DoraMetricsService>(TYPES.DoraMetricsService).to(DoraMetricsService).inSingletonScope();
 container.bind<QwenTTSService>(TYPES.QwenTTSService).to(QwenTTSService).inSingletonScope();
-
+container.bind<WhatsAppService>(TYPES.WhatsAppService).to(WhatsAppService).inSingletonScope();
 // ========================================
 // GOOGLE ECOSYSTEM INTEGRATION
 // ========================================

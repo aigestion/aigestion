@@ -1,0 +1,265 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "frontend/website-epic/dist",
+  "installCommand": "npm ci",
+  "framework": "vite",
+  "regions": ["iad1", "sfo1", "hnd1"],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/backend/api/$1",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Authorization, Cache-Control"
+      }
+    },
+    {
+      "src": "/admin",
+      "dest": "/admin/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "X-XSS-Protection": "1; mode=block",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+      }
+    },
+    {
+      "src": "/client",
+      "dest": "/client/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "X-XSS-Protection": "1; mode=block",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+      }
+    },
+    {
+      "src": "/demo",
+      "dest": "/demo/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "X-XSS-Protection": "1; mode=block",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+      }
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot))",
+      "dest": "/frontend/website-epic/dist/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "X-Content-Type-Options": "nosniff"
+      }
+    },
+    {
+      "src": "/sw.js",
+      "dest": "/frontend/website-epic/dist/sw.js",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "Service-Worker-Allowed": "/"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/website-epic/dist/index.html",
+      "headers": {
+        "Cache-Control": "public, max-age=0, must-revalidate",
+        "X-Frame-Options": "DENY",
+        "X-Content-Type-Options": "nosniff",
+        "X-XSS-Protection": "1; mode=block",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+        "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+      }
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-DNS-Prefetch-Control",
+          "value": "on"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "X-Requested-With, Content-Type, Authorization, Cache-Control"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/admin",
+      "permanent": true
+    },
+    {
+      "source": "/app",
+      "destination": "/client",
+      "permanent": true
+    },
+    {
+      "source": "/try",
+      "destination": "/demo",
+      "permanent": true
+    },
+    {
+      "source": "/docs",
+      "destination": "https://docs.aigestion.net",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "https://blog.aigestion.net",
+      "permanent": true
+    },
+    {
+      "source": "/support",
+      "destination": "https://help.aigestion.net",
+      "permanent": true
+    },
+    {
+      "source": "/api/v1/(.*)",
+      "destination": "/api/$1",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/analytics/(.*)",
+      "destination": "/backend/api/v2/analytics/$1"
+    },
+    {
+      "source": "/api/auth/(.*)",
+      "destination": "/backend/api/v2/auth/$1"
+    },
+    {
+      "source": "/api/ai/(.*)",
+      "destination": "/backend/api/v2/ai/$1"
+    },
+    {
+      "source": "/api/voice/(.*)",
+      "destination": "/backend/api/v2/voice/$1"
+    },
+    {
+      "source": "/api/crm/(.*)",
+      "destination": "/backend/api/v2/crm/$1"
+    },
+    {
+      "source": "/api/email/(.*)",
+      "destination": "/backend/api/v2/email/$1"
+    },
+    {
+      "source": "/api/calendar/(.*)",
+      "destination": "/backend/api/v2/calendar/$1"
+    },
+    {
+      "source": "/api/alexa/(.*)",
+      "destination": "/backend/api/v2/alexa/$1"
+    },
+    {
+        "source": "/api/system/(.*)",
+        "destination": "/backend/api/v2/system/$1"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "NEXT_PUBLIC_APP_URL": "https://aigestion.net",
+    "NEXT_PUBLIC_API_URL": "https://aigestion.net/api",
+    "NEXT_PUBLIC_WS_URL": "wss://aigestion.net"
+  },
+  "build": {
+    "env": {
+      "NODE_OPTIONS": "--max-old-space-size=4096",
+      "NEXT_TELEMETRY_DISABLED": "1"
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/cleanup/sessions",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/analytics/daily",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/backup/database",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/health/check",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cache/clear",
+      "schedule": "0 1 * * 0"
+    }
+  ],
+  "analytics": {
+    "enabled": true
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "develop": true,
+      "staging": false,
+      "production": false
+    }
+  },
+  "autoAssignCustomDomains": true,
+  "github": {
+    "silent": true
+  }
+}

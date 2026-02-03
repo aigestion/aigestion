@@ -1,8 +1,18 @@
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useWorkbench } from './WorkbenchContext';
 import { DanielaPanel } from './DanielaPanel';
 
 export const SideBar = () => {
   const { activeActivity } = useWorkbench();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const mainViews = [
+    { label: 'Overview', path: '/dashboard' },
+    { label: 'Analytics', path: '/dashboard/admin' },
+    { label: 'Client View', path: '/dashboard/client' },
+    { label: 'Billing', path: '/dashboard/billing' },
+  ];
 
   return (
     <div className="h-full flex flex-col font-sans">
@@ -17,15 +27,25 @@ export const SideBar = () => {
               Main Views
             </div>
             <ul className="space-y-1 px-2">
-              {['Overview', 'Analytics', 'Real-time', 'System Health'].map((item) => (
-                <li
-                  key={item}
-                  className="cursor-pointer hover:bg-cyan-500/10 hover:text-cyan-300 text-gray-400 p-2 rounded-md transition-all duration-200 flex items-center gap-3 group border border-transparent hover:border-cyan-500/20"
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/20 group-hover:bg-cyan-400 transition-colors shadow-[0_0_5px_rgba(6,182,212,0)] group-hover:shadow-[0_0_8px_rgba(6,182,212,0.5)]" />
-                  {item}
-                </li>
-              ))}
+              {mainViews.map((item) => {
+                const isActive = location.pathname === item.path;
+                return (
+                  <li
+                    key={item.label}
+                    onClick={() => navigate(item.path)}
+                    className={`cursor-pointer p-2 rounded-md transition-all duration-200 flex items-center gap-3 group border border-transparent 
+                      ${isActive 
+                        ? 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20' 
+                        : 'text-gray-400 hover:bg-cyan-500/5 hover:text-cyan-200'
+                      }`}
+                  >
+                    <div className={`w-1.5 h-1.5 rounded-full transition-colors shadow-[0_0_5px_rgba(6,182,212,0)] group-hover:shadow-[0_0_8px_rgba(6,182,212,0.5)]
+                      ${isActive ? 'bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.5)]' : 'bg-cyan-500/20 group-hover:bg-cyan-400'}`} 
+                    />
+                    {item.label}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}

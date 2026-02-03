@@ -25,9 +25,9 @@ class ErrorLoggerService {
     this.endpoint = import.meta.env.VITE_ERROR_LOGGING_ENDPOINT || null;
 
     // Listen for unhandled errors
-    if (typeof window !== 'undefined') {
-      window.addEventListener('error', this.handleGlobalError.bind(this));
-      window.addEventListener('unhandledrejection', this.handleUnhandledRejection.bind(this));
+    if (typeof globalThis !== 'undefined') {
+      globalThis.addEventListener('error', this.handleGlobalError.bind(this));
+      globalThis.addEventListener('unhandledrejection', this.handleUnhandledRejection.bind(this));
     }
   }
 
@@ -41,13 +41,13 @@ class ErrorLoggerService {
   ): void {
     const errorLog: ErrorLog = {
       message: error.message,
-      stack: error.stack,
+      stack: error.stack || undefined,
       timestamp: Date.now(),
-      url: window.location.href,
+      url: globalThis.location.href,
       userAgent: navigator.userAgent,
       level,
       context,
-    };
+    } as ErrorLog;
 
     // Store locally
     this.addToLocalLogs(errorLog);
@@ -71,17 +71,17 @@ class ErrorLoggerService {
   logComponentError(error: Error, componentStack?: string, context?: Record<string, unknown>): void {
     const errorLog: ErrorLog = {
       message: error.message,
-      stack: error.stack,
+      stack: error.stack || undefined,
       componentStack,
       timestamp: Date.now(),
-      url: window.location.href,
+      url: globalThis.location.href,
       userAgent: navigator.userAgent,
       level: 'error',
       context: {
         ...context,
         type: 'react-component-error',
       },
-    };
+    } as ErrorLog;
 
     this.addToLocalLogs(errorLog);
 
@@ -135,7 +135,7 @@ class ErrorLoggerService {
 
     // Store in localStorage for debugging
     try {
-      localStorage.setItem('error-logs', JSON.stringify(this.logs.slice(-10)));
+      globalThis.localStorage.setItem('error-logs', JSON.stringify(this.logs.slice(-10)));
     } catch (e) {
       // Storage quota exceeded or disabled
     }
@@ -176,7 +176,7 @@ class ErrorLoggerService {
   clearLogs(): void {
     this.logs = [];
     try {
-      localStorage.removeItem('error-logs');
+      globalThis.localStorage.removeItem('error-logs');
     } catch (e) {
       // Ignore
     }
