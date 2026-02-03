@@ -1,13 +1,17 @@
 {
-  "name": "aigestion-net",
+  "name": "aigestion-pro-2026",
   "displayName": "AIGestion.net",
   "description": "Arquitectura de Inteligencia Soberana - Development Environment",
   "private": true,
   "version": "2.0.0",
+  "packageManager": "npm@10.2.4",
   "workspaces": [
-    "backend",
-    "frontend",
-    "packages/*"
+    "packages/design-system-v2",
+    "packages/eslint-config",
+    "frontend/website-epic",
+    "frontend/client-dashboard",
+    "frontend/admin-dashboard",
+    "frontend/demo-dashboard"
   ],
   "homepage": "https://aigestion.net",
   "repository": {
@@ -21,7 +25,7 @@
   "scripts": {
     "parse": "ts-node tests/parse/index.ts",
     "test": "jest --config .config/jest.config.cjs",
-    "build": "npm run build --workspaces",
+    "build": "turbo build --filter=aigestion-website-epic... --filter=aigestion-client-dashboard... --filter=aigestion-admin-dashboard... --filter=aigestion-demo-dashboard...",
     "trunk": "trunk",
     "lint": "eslint . --config .config/eslint.config.cjs",
     "format": "prettier --write . --config .config/.prettierrc",
@@ -119,6 +123,9 @@
     "node": ">=22"
   },
   "dependencies": {
+    "@capacitor/android": "^8.0.2",
+    "@capacitor/cli": "^8.0.2",
+    "@capacitor/core": "^8.0.2",
     "@supabase/supabase-js": "^2.93.1",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"

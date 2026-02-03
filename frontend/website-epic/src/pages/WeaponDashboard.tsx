@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react';
 import { Activity } from 'lucide-react';
 
 const WeaponDashboard: React.FC = () => {
-  const [spatialMode, setSpatialMode] = useState(false);
+  const [_spatialMode, _setSpatialMode] = useState(false);
   const [sysStatus, setSysStatus] = useState({ cpu: 12, memory: 45 });
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     try {
       const interval = setInterval(() => {
-        setSysStatus(prev => ({
+        setSysStatus(_prev => ({
           cpu: Math.floor(Math.random() * 30) + 10,
           memory: Math.floor(Math.random() * 20) + 40
         }));
@@ -20,6 +20,7 @@ const WeaponDashboard: React.FC = () => {
     } catch (e: any) {
       setError(e.message);
     }
+    return undefined;
   }, []);
 
   if (error) {
@@ -64,7 +65,7 @@ const WeaponDashboard: React.FC = () => {
         </button>
 
         <button
-          onClick={() => window.location.reload()}
+          onClick={() => globalThis.location.reload()}
           className="mt-8 text-xs text-gray-500 underline"
         >
           Reload Shell

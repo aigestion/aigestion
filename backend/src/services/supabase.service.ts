@@ -9,27 +9,23 @@ import { logger } from '../utils/logger';
  */
 export class SupabaseService {
   private static instance: SupabaseService;
-  private client: SupabaseClient;
+  private readonly client: SupabaseClient;
 
   private constructor() {
     this.validateConfig();
 
-    this.client = createClient(
-      env.SUPABASE_URL || '',
-      env.SUPABASE_KEY || '',
-      {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false,
-        },
-        global: {
-          headers: { 'x-application-name': 'aigestion-backend' },
-        },
-        db: {
-          schema: 'public',
-        },
-      }
-    );
+    this.client = createClient(env.SUPABASE_URL || '', env.SUPABASE_KEY || '', {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+      global: {
+        headers: { 'x-application-name': 'aigestion-backend' },
+      },
+      db: {
+        schema: 'public',
+      },
+    });
 
     logger.info('[SupabaseService] 🚀 Sovereign Client initialized');
   }
@@ -55,24 +51,105 @@ export class SupabaseService {
   }
 
   /**
-   * Test connection and schema health
-   * Performs an optimized health check against the Supabase edge.
+   * Test connection and schema health (GOD MODE)
+   * Performs an optimized health check against the new Sovereign Schema.
    */
   public async testConnection(): Promise<boolean> {
     try {
-      const { error } = await this.client.from('users').select('id').limit(1).maybeSingle();
+      // Check for profiles table
+      const { error: profileError } = await this.client
+        .from('profiles')
+        .select('id')
+        .limit(1)
+        .maybeSingle();
 
-      if (error) {
-        logger.error(`[SupabaseService] ❌ Health check failed: ${error.message}`);
+      if (profileError) {
+        logger.error(`[SupabaseService] ❌ Profiles check failed: ${profileError.message}`);
         return false;
       }
 
-      logger.info('[SupabaseService] ✅ Health check successful');
+      // Check for documents table (RAG Support)
+      const { error: docError } = await this.client
+        .from('documents')
+        .select('id')
+        .limit(1)
+        .maybeSingle();
+      if (docError) {
+        logger.warn(`[SupabaseService] ⚠️ Documents table (RAG) check failed: ${docError.message}`);
+      }
+
+      logger.info('[SupabaseService] ✅ Sovereign Schema health check successful');
       return true;
     } catch (err: any) {
-      logger.error(`[SupabaseService] 💥 Catastrophic failure during health check: ${err.message}`);
+      logger.error(
+        `[SupabaseService] 💥 Catastrophic failure during God Mode health check: ${err.message}`,
+      );
       return false;
     }
+  }
+
+  /**
+   * 🌌 Hybrid Search (Vector + Full Text)
+   * Advanced RAG capability for backend operations.
+   */
+  public async hybridSearch(
+    projectId: string | undefined,
+    queryText: string,
+    embedding: number[],
+    threshold: number = 0.5,
+    count: number = 5,
+  ) {
+    const { data, error } = await this.client.rpc('hybrid_search', {
+      query_text: queryText,
+      query_embedding: embedding,
+      match_threshold: threshold,
+      match_count: count,
+      p_project_id: projectId,
+    });
+
+    if (error) {
+      logger.error(`[SupabaseService] ❌ Hybrid search failed: ${error.message}`);
+      throw error;
+    }
+    return data;
+  }
+
+  /**
+   * 📜 Prompt Template Management
+   * Retrieve versioned system prompts.
+   */
+  public async getPromptTemplate(name: string) {
+    const { data, error } = await this.client
+      .from('prompt_templates')
+      .select('*')
+      .eq('name', name)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    if (error) {
+      logger.error(
+        `[SupabaseService] ❌ Failed to fetch prompt template [${name}]: ${error.message}`,
+      );
+      throw error;
+    }
+    return data;
+  }
+
+  /**
+   * 📂 Knowledge Base Operations
+   */
+  public async upsertDocument(document: any) {
+    const { data, error } = await this.client
+      .from('documents')
+      .upsert(document, { onConflict: 'id' })
+      .select()
+      .single();
+
+    if (error) {
+      logger.error(`[SupabaseService] ❌ Failed to upsert document: ${error.message}`);
+      throw error;
+    }
+    return data;
   }
 }
 

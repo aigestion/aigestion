@@ -86,7 +86,7 @@ const apiLimiter = rateLimit({
         sendCommand: (...args) => redisClient.sendCommand(args),
       }),
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: config.rateLimit.max,
   standardHeaders: true,
   legacyHeaders: false,
 });

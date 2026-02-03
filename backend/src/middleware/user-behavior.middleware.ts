@@ -365,7 +365,7 @@ export class UserBehaviorMiddleware {
       const { userId } = req.params;
       const limitParam = req.query.limit;
       const limitStr = Array.isArray(limitParam) ? limitParam[0] : limitParam;
-      const limit = limitStr ? parseInt(limitStr) : 50;
+      const limit = limitStr ? parseInt(limitStr as string) : 50;
       const userIdStr = Array.isArray(userId) ? userId[0] : userId;
 
       if (!userIdStr) {
@@ -397,7 +397,7 @@ export class UserBehaviorMiddleware {
     try {
       const limitParam = req.query.limit;
       const limitStr = Array.isArray(limitParam) ? limitParam[0] : limitParam;
-      const limit = limitStr ? parseInt(limitStr) : 100;
+      const limit = limitStr ? parseInt(limitStr as string) : 100;
       const anomalies = await this.behaviorService.getRecentAnomalies(limit);
 
       res.json({

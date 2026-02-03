@@ -24,19 +24,19 @@ export const config = {
     },
     plans: {
       free: {
-        max: 100, // 100 requests per window
+        max: 1000000, // Effectively unlimited for development
         windowMs: 15 * 60 * 1000, // 15 minutes
       },
       pro: {
-        max: 1000,
+        max: 1000000,
         windowMs: 15 * 60 * 1000,
       },
       god: {
-        max: 10000,
+        max: 1000000,
         windowMs: 15 * 60 * 1000,
       },
       default: {
-        max: 100,
+        max: 1000000,
         windowMs: 15 * 60 * 1000,
       },
     },

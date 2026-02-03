@@ -83,12 +83,12 @@ export class TelegramBotHandlerGodMode {
           userId: userId.toString(),
           chatId,
           isAdmin: this.adminIds.includes(chatId.toString()),
-          lastCommand: ctx.message?.text || 'unknown',
+          lastCommand: ctx.message && ('text' in ctx.message) ? ctx.message.text : 'unknown',
           lastActivity: new Date(),
           language: 'es',
         });
 
-        logger.info(`[TELEGRAM] ${username} (${userId}): ${ctx.message?.text || 'interaction'}`);
+        logger.info(`[TELEGRAM] ${username} (${userId}): ${ctx.message && ('text' in ctx.message) ? ctx.message.text : 'interaction'}`);
       }
 
       return next();
@@ -177,7 +177,7 @@ export class TelegramBotHandlerGodMode {
             `📊 CPU: ${metrics?.cpu || '0'}%\n` +
             `💾 RAM: ${metrics?.memory || '0'}MB\n` +
             `📈 Uptime: ${Math.floor(
-              (Date.now() - (metrics?.startTime || 0)) / 1000 / 3600,
+              (Date.now() - (metrics?.uptime || 0)) / 1000 / 3600,
             )}h\n\n` +
             `🕐 Última actualización: ${new Date().toLocaleString('es-ES')}`,
           { parse_mode: 'Markdown' },
@@ -369,7 +369,7 @@ export class TelegramBotHandlerGodMode {
         return;
       }
 
-      const message = ctx.message?.text?.replace('/daniela', '').trim() || '';
+      const message = ctx.message && ('text' in ctx.message) ? ctx.message.text.replace('/daniela', '').trim() : '';
 
       if (!message) {
         await ctx.reply(this.daniela.getDanielaInfo(), {
@@ -393,7 +393,7 @@ export class TelegramBotHandlerGodMode {
 
     // Manejo de mensajes para Daniela en conversaciones
     this.bot.on('text', async (ctx: Context) => {
-      const message = ctx.message?.text || '';
+      const message = ctx.message && ('text' in ctx.message) ? ctx.message.text : '';
 
       // Si el mensaje menciona a Daniela o es una respuesta directa
       if (message.toLowerCase().includes('daniela') || message.startsWith('/daniela')) {

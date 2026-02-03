@@ -84,7 +84,7 @@ export class SheetsService {
       const analysis = {
         totalRows: rows.length,
         totalColumns: headers.length,
-        insights: await this.daniela.analyzeContent(JSON.stringify(records)),
+        insights: await this.daniela.processMessage(0, JSON.stringify(records), 'sheet-analysis', 'system', 'user'),
         summary: {
           dataPoints: rows.length,
           timestamp: new Date()

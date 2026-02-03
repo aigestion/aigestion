@@ -7,6 +7,7 @@ Defines all REST API endpoints for inference, training, and job management.
 import logging
 from typing import Optional
 
+from app.api import daniela_routes
 from app.config import get_settings
 from app.models.schemas import (
     BrowserRequest,
@@ -34,6 +35,9 @@ from fastapi import APIRouter, File, HTTPException, Query, UploadFile
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+# Include Daniela Routes
+router.include_router(daniela_routes.router)
 settings = get_settings()
 
 

@@ -3,8 +3,32 @@ import { DanielaCore } from '../daniela';
 import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { danielaApi } from '../../services/daniela-api.service';
+import { useEffect, useState } from 'react';
 
 export function AdminDashboard() {
+  const [systemStatus, setSystemStatus] = useState<any>(null);
+  const [insights, setInsights] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [status, insightsData] = await Promise.all([
+          danielaApi.getSystemStatus(),
+          danielaApi.getInsights(),
+        ]);
+        setSystemStatus(status);
+        setInsights(insightsData);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      }
+    };
+
+    fetchData();
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   // 🎮 Panel Súper Fácil de Entender - Como un Videojuego de Administración
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-6">
@@ -117,6 +141,48 @@ export function AdminDashboard() {
           </Card>
         </div>
 
+        {/* 🧠 Insights Estratégicos de Daniela */}
+        {insights.length > 0 && (
+          <div className="mb-8">
+            <Card className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-md border-blue-500/30">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  ✨ Insights Estratégicos de Daniela
+                </CardTitle>
+                <p className="text-blue-200 text-sm">
+                  Consejos tácticos generados en tiempo real para tu negocio
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {insights.map((insight, index) => (
+                    <div
+                      key={index}
+                      className="p-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-colors"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xl">{insight.icon || '🚀'}</span>
+                        <h4 className="text-white font-bold">{insight.title}</h4>
+                      </div>
+                      <p className="text-blue-100 text-sm mb-3">{insight.description}</p>
+                      <div className="flex justify-between items-center">
+                        <Badge variant="outline" className="text-[10px] uppercase tracking-wider">
+                          {insight.category}
+                        </Badge>
+                        <span
+                          className={`text-xs font-bold ${insight.impact === 'High' ? 'text-green-400' : 'text-blue-400'}`}
+                        >
+                          Impacto: {insight.impact}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {/* 🎮 Centro de Control - Como los Botones de un Mando */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* 🕹️ Acciones Rápidas - Botones Mágicos */}
@@ -220,12 +286,16 @@ export function AdminDashboard() {
               {[
                 {
                   service: '🧠 Cerebro de Daniela IA',
-                  status: '🟢 Súper Saludable',
+                  status:
+                    systemStatus?.status === 'operational' ? '🟢 Súper Saludable' : '🟡 Analizando',
                   color: 'text-green-400',
                 },
                 {
                   service: '💾 Base de Datos',
-                  status: '🟢 Funcionando Perfecto',
+                  status:
+                    systemStatus?.status === 'operational'
+                      ? '🟢 Funcionando Perfecto'
+                      : '🟡 Conectando',
                   color: 'text-green-400',
                 },
                 {

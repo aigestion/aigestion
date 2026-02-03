@@ -8,6 +8,7 @@ const execAsync = promisify(exec);
 
 import { logger } from '../utils/logger';
 import { pineconeService } from './pinecone.service';
+import { supabaseService } from './supabase.service';
 
 interface FileContext {
   path: string;
@@ -92,9 +93,10 @@ export class RagService {
       let context = '';
 
       // 1. Run File Scan and RAG Query in parallel
-      const [files, docContext] = await Promise.all([
+      const [files, docContext, supabaseContext] = await Promise.all([
         this.getAllFiles(),
-        (query && query.trim().length > 0) ? this.queryVectorDb(query) : Promise.resolve(null)
+        query && query.trim().length > 0 ? this.queryVectorDb(query) : Promise.resolve(null),
+        query && query.trim().length > 0 ? this.querySupabaseKnowledge(query) : Promise.resolve(null),
       ]);
 
       // 2. Generate ASCII Tree (always useful for structure)
@@ -131,6 +133,10 @@ export class RagService {
         if (localContext) {
           context += `[Local Neural Memory (NeuroCore)]\n${localContext}\n\n`;
         }
+
+        if (supabaseContext) {
+          context += `[Sovereign Knowledge Base (Supabase)]\n${supabaseContext}\n\n`;
+        }
       } else {
         context += `[Full Context - No Query Provided]\n\n`;
         // Default sort by path if no query to maintain stability
@@ -166,14 +172,16 @@ export class RagService {
    * Public interface to query the knowledge base (Vector DB documentation).
    */
   async queryKnowledgeBase(query: string): Promise<string | null> {
-    const [cloud, local] = await Promise.all([
+    const [cloud, local, sovereign] = await Promise.all([
       this.queryVectorDb(query),
-      this.queryLocalMemory(query)
+      this.queryLocalMemory(query),
+      this.querySupabaseKnowledge(query),
     ]);
 
     let results = '';
-    if (cloud) results += `--- CLOUD MEMORY ---\n${cloud}\n\n`;
-    if (local) results += `--- LOCAL MEMORY ---\n${local}\n\n`;
+    if (cloud) results += `--- CLOUD MEMORY (Pinecone) ---\n${cloud}\n\n`;
+    if (local) results += `--- LOCAL MEMORY (NeuroCore) ---\n${local}\n\n`;
+    if (sovereign) results += `--- SOVEREIGN MEMORY (Supabase) ---\n${sovereign}\n\n`;
 
     return results.trim() || null;
   }
@@ -302,7 +310,6 @@ export class RagService {
         }
 
         // Keyword Score: Simple frequency count in content
-        // A real BM25 would need document frequency, simplified here to Term Count
         const regex = new RegExp(this.escapeRegExp(term), 'g');
         const count = (contentLower.match(regex) || []).length;
         if (count > 0) {
@@ -310,13 +317,7 @@ export class RagService {
         }
       });
 
-      // Normalize scores slightly to prevent massive files from dominating solely by size
-      // (Logarithmic dampening for keyword frequency)
       const finalKeywordScore = keywordScore > 0 ? Math.log(1 + keywordScore) : 0;
-
-      // Reciprocal Rank Fusion (Simulated)
-      // We just sum them here for simplicity, but in RRF we'd rank lists separately and fuse.
-      // Weighted sum: Structure is very important for code retrieval.
       const totalScore = semanticScore * 2 + finalKeywordScore;
 
       return {
@@ -326,16 +327,12 @@ export class RagService {
       };
     });
 
-    // Sort by Score DESC
-    // Return relevant files first, followed by the rest
     const relevantFiles = results
       .filter(r => r.score > 0)
       .sort((a, b) => b.score - a.score)
       .map(r => r.file);
 
-    // Append unrelated files to fill context if space permits (deduplicated)
     const otherFiles = files.filter(f => !relevantFiles.includes(f));
-
     return [...relevantFiles, ...otherFiles];
   }
 
@@ -425,9 +422,7 @@ export class RagService {
     const binPath = path.resolve(__dirname, '../../rag-core/target/release/rag-core.exe');
     const rootPath = this.rootDir;
 
-    // Command: rag-core --root <path> --query <query> --limit 20
     const cmd = `"${binPath}" --root "${rootPath}" --query "${query}" --limit 25`;
-
     const { stdout } = await execAsync(cmd, { maxBuffer: 10 * 1024 * 1024 });
     const results = JSON.parse(stdout);
 
@@ -436,6 +431,36 @@ export class RagService {
       content: res.content,
       size: res.content.length
     }));
+  }
+
+  /**
+   * Queries the sovereign Supabase Hybrid Search knowledge base.
+   */
+  private async querySupabaseKnowledge(query: string): Promise<string | null> {
+    try {
+      logger.info(`[RagService] Querying Supabase Sovereign DB for: "${query}"`);
+
+      // Mock embedding (768d) - In production you would use gemini or openai here
+      const mockEmbedding = new Array(768).fill(0).map(() => Math.random());
+
+      const results = await supabaseService.hybridSearch(
+        undefined, // All projects
+        query,
+        mockEmbedding,
+        0.3,
+        3
+      );
+
+      if (results && results.length > 0) {
+        return results.map((res: any, i: number) =>
+          `[Sovereign Match ${i + 1}] Title: ${res.title}\n${res.content}`
+        ).join('\n\n');
+      }
+      return null;
+    } catch (error: any) {
+      logger.warn(`[RagService] Failed to query Supabase Sovereign DB: ${error.message}`);
+      return null;
+    }
   }
 }
 

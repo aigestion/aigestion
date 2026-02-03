@@ -40,8 +40,19 @@ export interface AIDocument {
   content: string;
   metadata: Record<string, any>;
   token_count?: number;
+  folder_id?: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface AIPromptTemplate {
+  id: string;
+  name: string;
+  description?: string;
+  system_prompt: string;
+  user_prompt_template?: string;
+  parameters: any[];
+  version: number;
 }
 
 export interface AISession {
@@ -67,9 +78,11 @@ export interface AIMessage {
  * 🌌 Supabase God Service - Maximum Performance AI Operations
  */
 export class SupabaseGodService {
-
   // AI IMAGE CACHE OPERATIONS
-  static async getCachedImage(prompt: string, model: string = 'flux-schnell'): Promise<AIImageCache | null> {
+  static async getCachedImage(
+    prompt: string,
+    model: string = 'flux-schnell'
+  ): Promise<AIImageCache | null> {
     const hash = this.generatePromptHash(prompt, model);
 
     const { data, error } = await getSupabase()
@@ -77,11 +90,9 @@ export class SupabaseGodService {
       .select('*')
       .eq('hash', hash)
       .eq('model', model)
-      .single();
+      .maybeSingle();
 
     if (data && !error) {
-      // Update access count
-      await getSupabase().rpc('update_ai_image_cache_access', { image_id: data.id });
       return data;
     }
 
@@ -108,7 +119,7 @@ export class SupabaseGodService {
         },
         {
           onConflict: 'hash,model',
-        },
+        }
       )
       .select()
       .single();
@@ -117,25 +128,12 @@ export class SupabaseGodService {
     return data;
   }
 
-  static async getPopularImages(limit: number = 10): Promise<AIImageCache[]> {
-    const { data, error } = await getSupabase()
-      .from('ai_image_cache')
-      .select('*')
-      .order('access_count', { ascending: false })
-      .limit(limit);
-
-    if (error) throw error;
-    return data || [];
-  }
-
   // PROJECT OPERATIONS
   static async createProject(project: Partial<AIProject>): Promise<AIProject> {
     const { data, error } = await getSupabase()
       .from('projects')
       .insert({
         ...project,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
       })
       .select()
       .single();
@@ -144,11 +142,10 @@ export class SupabaseGodService {
     return data;
   }
 
-  static async getProjects(userId: string): Promise<AIProject[]> {
+  static async getProjects(): Promise<AIProject[]> {
     const { data, error } = await getSupabase()
       .from('projects')
       .select('*')
-      .eq('user_id', userId)
       .eq('status', 'active')
       .order('updated_at', { ascending: false });
 
@@ -156,30 +153,11 @@ export class SupabaseGodService {
     return data || [];
   }
 
-  static async updateProject(id: string, updates: Partial<AIProject>): Promise<AIProject> {
-    const { data, error } = await getSupabase()
-      .from('projects')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  }
-
-  // DOCUMENT OPERATIONS
+  // DOCUMENT OPERATIONS & RAG
   static async createDocument(document: Partial<AIDocument>): Promise<AIDocument> {
     const { data, error } = await getSupabase()
       .from('documents')
-      .insert({
-        ...document,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
+      .insert(document)
       .select()
       .single();
 
@@ -187,26 +165,60 @@ export class SupabaseGodService {
     return data;
   }
 
-  static async getProjectDocuments(projectId: string): Promise<AIDocument[]> {
-    const { data, error } = await getSupabase()
-      .from('documents')
-      .select('*')
-      .eq('project_id', projectId)
-      .order('created_at', { ascending: false });
+  static async searchSimilarDocuments(
+    projectId: string,
+    embedding: number[],
+    threshold: number = 0.7,
+    count: number = 5
+  ): Promise<any[]> {
+    const { data, error } = await getSupabase().rpc('match_documents', {
+      query_embedding: embedding,
+      match_threshold: threshold,
+      match_count: count,
+      p_project_id: projectId,
+    });
 
     if (error) throw error;
     return data || [];
+  }
+
+  static async searchHybrid(
+    projectId: string,
+    queryText: string,
+    embedding: number[],
+    threshold: number = 0.5,
+    count: number = 5
+  ): Promise<any[]> {
+    const { data, error } = await getSupabase().rpc('hybrid_search', {
+      query_text: queryText,
+      query_embedding: embedding,
+      match_threshold: threshold,
+      match_count: count,
+      p_project_id: projectId,
+    });
+
+    if (error) throw error;
+    return data || [];
+  }
+
+  // PROMPT TEMPLATES
+  static async getPromptTemplate(name: string): Promise<AIPromptTemplate | null> {
+    const { data, error } = await getSupabase()
+      .from('prompt_templates')
+      .select('*')
+      .eq('name', name)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data;
   }
 
   // AI SESSION OPERATIONS
   static async createSession(session: Partial<AISession>): Promise<AISession> {
     const { data, error } = await getSupabase()
       .from('ai_sessions')
-      .insert({
-        ...session,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
+      .insert(session)
       .select()
       .single();
 
@@ -214,11 +226,10 @@ export class SupabaseGodService {
     return data;
   }
 
-  static async getUserSessions(userId: string, limit: number = 20): Promise<AISession[]> {
+  static async getUserSessions(limit: number = 20): Promise<AISession[]> {
     const { data, error } = await getSupabase()
       .from('ai_sessions')
       .select('*')
-      .eq('user_id', userId)
       .order('updated_at', { ascending: false })
       .limit(limit);
 
@@ -230,171 +241,77 @@ export class SupabaseGodService {
   static async addMessage(message: Partial<AIMessage>): Promise<AIMessage> {
     const { data, error } = await getSupabase()
       .from('ai_messages')
-      .insert({
-        ...message,
-        created_at: new Date().toISOString(),
-      })
+      .insert(message)
       .select()
       .single();
 
     if (error) throw error;
     return data;
-  }
-
-  static async getSessionMessages(sessionId: string): Promise<AIMessage[]> {
-    const { data, error } = await getSupabase()
-      .from('ai_messages')
-      .select('*')
-      .eq('session_id', sessionId)
-      .order('created_at', { ascending: true });
-
-    if (error) throw error;
-    return data || [];
   }
 
   // USAGE TRACKING
   static async trackUsage(
-    userId: string,
-    feature: 'image_generation' | 'text_generation' | 'embedding' | 'vector_search',
+    feature: string,
     amount: number,
-    metadata: Record<string, any> = {}
+    cost: number = 0,
+    details: Record<string, any> = {}
   ): Promise<void> {
-    const { error } = await getSupabase().from('usage_records').insert({
-      user_id: userId,
+    const { data: userData } = await getSupabase().auth.getUser();
+    if (!userData.user) return;
+
+    const { error } = await getSupabase().from('usage_metrics').insert({
+      user_id: userData.user.id,
       feature,
       amount,
-      metadata,
-      created_at: new Date().toISOString(),
+      cost,
+      details,
     });
 
     if (error) throw error;
   }
 
-  static async getUserUsage(userId: string, days: number = 30): Promise<any[]> {
-    const startDate = new Date();
-    startDate.setDate(startDate.getDate() - days);
-
-    const { data, error } = await getSupabase()
-      .from('usage_records')
-      .select('*')
-      .eq('user_id', userId)
-      .gte('created_at', startDate.toISOString())
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-    return data || [];
-  }
-
-  // REAL-TIME SUBSCRIPTIONS
-  static subscribeToSessions(
-    userId: string,
-    callback: (payload: any) => void
-  ): () => void {
-    const subscription = getSupabase()
-      .channel('ai_sessions')
+  // REAL-TIME HELPERS
+  static subscribeToMessages(sessionId: string, callback: (payload: any) => void): () => void {
+    const channel = getSupabase()
+      .channel(`session-${sessionId}`)
       .on(
         'postgres_changes',
         {
-          event: '*',
-          schema: 'public',
-          table: 'ai_sessions',
-          filter: `user_id=eq.${userId}`,
-        },
-        callback,
-      )
-      .subscribe();
-
-    return () => subscription.unsubscribe();
-  }
-
-  static subscribeToMessages(
-    sessionId: string,
-    callback: (payload: any) => void
-  ): () => void {
-    const subscription = getSupabase()
-      .channel('ai_messages')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
+          event: 'INSERT',
           schema: 'public',
           table: 'ai_messages',
           filter: `session_id=eq.${sessionId}`,
         },
-        callback,
+        payload => callback(payload)
       )
       .subscribe();
 
-    return () => subscription.unsubscribe();
+    return () => {
+      void channel.unsubscribe();
+    };
   }
 
-  // UTILITY FUNCTIONS
-  private static generatePromptHash(prompt: string, model: string): string {
-    // Simple hash generation - in production use crypto
-    return btoa(prompt + model).replace(/[^a-zA-Z0-9]/g, '').substring(0, 32);
-  }
+  // PROFILE OPERATIONS
+  static async getMyProfile(): Promise<any> {
+    const {
+      data: { user },
+    } = await getSupabase().auth.getUser();
+    if (!user) return null;
 
-  // VECTOR SEARCH (when embeddings are available)
-  static async searchSimilarDocuments(
-    queryEmbedding: number[],
-    limit: number = 5
-  ): Promise<any[]> {
-    const { data, error } = await getSupabase().rpc('get_similar_documents', {
-      query_embedding: queryEmbedding,
-      limit_count: limit,
-    });
-
-    if (error) throw error;
-    return data || [];
-  }
-
-  // STORAGE OPERATIONS
-  static async uploadAIImage(
-    file: File,
-    path: string
-  ): Promise<{ data: any; error: any }> {
-    return await getSupabase().storage.from('ai-images').upload(path, file, {
-      contentType: file.type,
-      upsert: true,
-    });
-  }
-
-  static async getPublicImageUrl(path: string): Promise<string> {
-    const { data } = getSupabase().storage
-      .from('ai-images')
-      .getPublicUrl(path);
-
-    return data.publicUrl;
-  }
-
-  // USER OPERATIONS
-  static async getUserProfile(userId: string): Promise<any> {
     const { data, error } = await getSupabase()
-      .from('users')
+      .from('profiles')
       .select('*')
-      .eq('id', userId)
+      .eq('id', user.id)
       .single();
 
     if (error) throw error;
     return data;
   }
-
-  static async updateUserProfile(
-    userId: string,
-    updates: Record<string, any>
-  ): Promise<any> {
-    const { data, error } = await getSupabase()
-      .from('users')
-      .update({
-        ...updates,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', userId)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
+  // UTILITIES
+  private static generatePromptHash(prompt: string, model: string): string {
+    return btoa(prompt + model)
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .substring(0, 32);
   }
 }
 

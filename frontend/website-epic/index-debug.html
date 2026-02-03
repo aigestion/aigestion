@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIGestion Nexus | The Sovereign Intelligence Platform</title>
+    <meta name="description" content="Experience the future of Sovereign AI. Real-time voice agents, neural memory, and decentralized intelligence orchestration. Built for the God Mode era." />
+    <meta name="keywords" content="AI, Sovereign Intelligence, Voice AI, Neural Network, Web3, Future Tech, AIGestion" />
+    <meta name="theme-color" content="#7c3aed" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // GOD MODE POLYFILLS - Fixes "exports is not defined" & "global is not defined"
+      window.global = window;
+      window.process = { env: {} };
+      window.exports = {};
+    </script>
+    <style>
+      body { 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+        min-height: 100vh;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .fade-in {
+        animation: fadeIn 0.6s ease-out;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+        50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
+      }
+      .pulse-glow {
+        animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .text-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .glow {
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+      }
+      .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+      .loading-dots {
+        display: inline-block;
+      }
+      .loading-dots::after {
+        content: '...';
+        animation: dots 1.5s steps(4, end) infinite;
+      }
+      @keyframes dots {
+        0%, 20% { content: '.'; }
+        40% { content: '..'; }
+        60%, 100% { content: '...'; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main-debug.tsx"></script>
+  </body>
+</html>

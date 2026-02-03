@@ -5,3 +5,6 @@ export * from './atoms/Card';
 export * from './atoms/Input';
 export * from './molecules/StatsCard';
 export * from './molecules/UserMenu';
+export * from './molecules/ChatBubble';
+export * from './molecules/FeedbackWidget';
+export * from './organisms/AIOnboarding';

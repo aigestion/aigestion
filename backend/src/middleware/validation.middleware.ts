@@ -29,8 +29,10 @@ export interface ValidationSchema {
  */
 export const validate = (schema: ValidationSchema) => {
   return async (req: Request, _res: Response, next: NextFunction) => {
+    console.log(`[DEBUG] validate middleware called for ${req.method} ${req.originalUrl}`);
     try {
       if (schema.body) {
+        console.log('[DEBUG] Validating body...');
         req.body = await schema.body.parseAsync(req.body);
       }
       if (schema.query) {
@@ -39,8 +41,10 @@ export const validate = (schema: ValidationSchema) => {
       if (schema.params) {
         req.params = (await schema.params.parseAsync(req.params)) as any;
       }
+      console.log('[DEBUG] Validation successful');
       next();
     } catch (error: any) {
+      console.log('[DEBUG] Validation failed:', error.message);
       next(error);
     }
   };

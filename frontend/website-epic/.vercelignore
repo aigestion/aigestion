@@ -1,0 +1,309 @@
+# Vercel God Mode Ignore File - Nivel Dios Supremo
+# Optimización de deployment para máxima velocidad y eficiencia
+
+# 🚫 Development files
+node_modules/
+.git/
+.gitignore
+README.md
+.env*
+.envrc
+.DS_Store
+Thumbs.db
+
+# 🚫 Testing files
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+test-results.xml
+
+# 🚫 Build artifacts (except production)
+dist/
+build/
+.next/
+out/
+
+# 🚫 Source maps (optional - comment out if needed for debugging)
+*.map
+source-map.js
+
+# 🚫 Documentation (deployed separately)
+docs/
+*.md
+!README.md
+
+# 🚫 Configuration files
+.eslintrc*
+.prettierrc*
+.stylelintrc*
+.editorconfig
+.nvmrc
+
+# 🚫 Cache directories
+.cache/
+.parcel-cache/
+.vite/
+.turbo/
+
+# 🚫 IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 🚫 Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# 🚫 Temporary files
+.tmp/
+temp/
+*.tmp
+*.temp
+
+# 🚫 Large assets (handled by CDN)
+assets/videos/
+assets/large-images/
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+
+# 🚫 Development dependencies
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 🚫 Storybook (deployed separately)
+storybook-static/
+.storybook/
+
+# 🚫 Performance monitoring (optional)
+.webpack-bundle-analyzer/
+bundle-analyzer-report.html
+
+# 🚫 Local development
+.local/
+local/
+
+# 🚫 Backup files
+*.bak
+*.backup
+*.old
+
+# 🚫 OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# 🚫 Database files
+*.sqlite
+*.db
+*.sqlite3
+
+# 🚫 Certificate files
+*.pem
+*.key
+*.crt
+*.csr
+
+# 🚫 Docker files (if not used)
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# 🚫 Kubernetes files (if not used)
+k8s/
+*.yaml
+*.yml
+!vercel.json
+
+# 🚫 CI/CD files (except Vercel)
+.github/workflows/!vercel-*.yml
+.github/workflows/!github-*.yml
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+
+# 🚫 Monitoring and analytics
+.sentryclirc
+.datadog-ci.yml
+
+# 🚫 Security files
+*.p12
+*.pfx
+.jks
+
+# 🚫 Large dependencies (handled by CDN)
+node_modules/@types/
+node_modules/typescript/
+node_modules/eslint/
+node_modules/prettier/
+
+# 🚫 Documentation generators
+typedoc/
+api-docs/
+
+# 🚫 Benchmark files
+benchmark/
+benchmarks/
+
+# 🚫 Profiling files
+*.cpuprofile
+*.heapprofile
+
+# 🚫 Memory dumps
+*.hprof
+*.dmp
+
+# 🚫 Crash reports
+crash-reports/
+*.crash
+
+# 🚫 System files
+*.pid
+*.seed
+*.pid.lock
+
+# 🚫 Coverage reports
+coverage/
+lcov.info
+*.lcov
+
+# 🚫 Test outputs
+test-results/
+junit.xml
+testem.log
+
+# 🚫 Linting outputs
+.eslintcache
+.stylelintcache
+
+# 🚫 Type checking outputs
+*.tsbuildinfo
+
+# 🚫 Dependency lock files (keep package.json)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 🚫 Local configuration
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 🚫 Runtime files
+*.pid
+*.seed
+*.pid.lock
+
+# 🚫 Optional npm cache directory
+.npm
+
+# 🚫 Optional eslint cache
+.eslintcache
+
+# 🚫 Optional REPL history
+.node_repl_history
+
+# 🚫 Output of 'npm pack'
+*.tgz
+
+# 🚫 Yarn Integrity file
+.yarn-integrity
+
+# 🚫 parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# 🚫 next.js build output
+.next
+
+# 🚫 nuxt.js build output
+.nuxt
+
+# 🚫 vuepress build output
+.vuepress/dist
+
+# 🚡 Serverless directories
+.serverless/
+
+# 🚡 FuseBox cache
+.fusebox/
+
+# 🚡 DynamoDB Local files
+.dynamodb/
+
+# 🚡 TernJS port file
+.tern-port
+
+# 🚡 Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# 🚡 Electron
+release/
+dist-electron/
+
+# 🚡 Optional stylelint cache
+.stylelintcache
+
+# 🚡 Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# 🚡 Optional REPL history
+.node_repl_history
+
+# 🚡 Output of 'npm pack'
+*.tgz
+
+# 🚡 Yarn Integrity file
+.yarn-integrity
+
+# 🚡 parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# 🚡 next.js build output
+.next
+
+# 🚡 nuxt.js build output
+.nuxt
+
+# 🚡 vuepress build output
+.vuepress/dist
+
+# 🚡 Serverless directories
+.serverless/
+
+# 🚡 FuseBox cache
+.fusebox/
+
+# 🚡 DynamoDB Local files
+.dynamodb/
+
+# 🚡 TernJS port file
+.tern-port
+
+# 🚡 Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# 🚡 Electron
+release/
+dist-electron/
+
+# 🚡 God Mode: Keep only essential files for production
+# This ensures maximum deployment speed and efficiency
