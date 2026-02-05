@@ -1,19 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIGestion - Página No Encontrada</title>
-  <script>
-    // Redirect to index.html for SPA routing
-    sessionStorage.setItem('redirect', location.pathname);
-    location.href = '/';
-  </script>
-</head>
-<body>
-  <div>
-    <h1>Redirigiendo...</h1>
-    <p>Si no eres redirigido automáticamente, <a href="/">haz clic aquí</a>.</p>
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AIGestion - Página No Encontrada</title>
+    <script>
+      // Check if this is a JavaScript file request
+      if (location.pathname.includes('.js')) {
+        // For JS files, show error instead of redirecting
+        document.addEventListener('DOMContentLoaded', function () {
+          document.body.innerHTML = `
+          <div style="font-family: Arial, sans-serif; text-align: center; padding: 50px; background: #f44336; color: white; margin: 50px; border-radius: 10px;">
+            <h1>❌ JavaScript File Not Found</h1>
+            <p>Requested: ${location.pathname}</p>
+            <p>This file should be available after GitHub Pages deployment.</p>
+            <p><a href="/" style="color: white;">Go to Homepage</a></p>
+            <details style="margin-top: 20px; text-align: left;">
+              <summary>Debug Info</summary>
+              <pre style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px; overflow-x: auto;">
+Path: ${location.pathname}
+Referrer: ${document.referrer}
+User Agent: ${navigator.userAgent}
+Time: ${new Date().toISOString()}
+              </pre>
+            </details>
+          </div>
+        `;
+        });
+      } else {
+        // Redirect to index.html for SPA routing
+        sessionStorage.setItem('redirect', location.pathname);
+        location.href = '/';
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <h1>Redirigiendo...</h1>
+      <p>Si no eres redirigido automáticamente, <a href="/">haz clic aquí</a>.</p>
+    </div>
+  </body>
 </html>
