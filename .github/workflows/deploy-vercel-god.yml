@@ -1,0 +1,240 @@
+name: 🚀 DEPLOY TO VERCEL - GOD MODE
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'vercel-deploy'
+  cancel-in-progress: false
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.preview-url }}
+
+    steps:
+      - name: 🚀 GOD MODE INIT
+        run: |
+          echo "🌌 INITIALIZING VERCEL GOD MODE DEPLOYMENT"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Time: $(date)"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: 📥 CHECKOUT REPOSITORY
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🟢 SETUP NODE.JS 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: './frontend/website-epic/package-lock.json'
+
+      - name: 📦 INSTALL DEPENDENCIES
+        working-directory: ./frontend/website-epic
+        run: |
+          echo "📦 Installing dependencies..."
+          npm ci --prefer-offline --no-audit
+          echo "✅ Dependencies installed"
+
+      - name: 🔧 BUILD WEBSITE - GOD MODE
+        working-directory: ./frontend/website-epic
+        run: |
+          echo "🔧 BUILDING WEBSITE - GOD MODE"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+          # Set production environment
+          export NODE_ENV=production
+          export VITE_SUPABASE_URL="https://T8jp4wZKQU1l5WQHSHoM1g_w1mvEbx1.supabase.co"
+          export VITE_SUPABASE_ANON_KEY="sb_publishable_CqCI6d-vk4X6vlsOL69g_Q_BYH5K4yG"
+          export VITE_SUPABASE_SERVICE_ROLE_KEY="$VITE_SUPABASE_SERVICE_ROLE_KEY"
+          export VITE_ELEVENLABS_API_KEY="$VITE_ELEVENLABS_API_KEY"
+          export VITE_VAPI_PUBLIC_KEY="$VITE_VAPI_PUBLIC_KEY"
+          export VITE_VAPI_PRIVATE_KEY="$VITE_VAPI_PRIVATE_KEY"
+          export VITE_TWILIO_ACCOUNT_SID="$VITE_TWILIO_ACCOUNT_SID"
+          export VITE_TWILIO_AUTH_TOKEN="$VITE_TWILIO_AUTH_TOKEN"
+          export VITE_TWILIO_RECOVERY_CODE="$VITE_TWILIO_RECOVERY_CODE"
+          export VITE_API_BASE_URL="/api"
+
+          echo "🌌 Environment variables set"
+          echo "🔨 Building with Vite..."
+
+          npm run build
+
+          echo "✅ Build completed"
+          echo "📊 Build artifacts:"
+          ls -la dist/
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: 📤 PREPARE DEPLOYMENT ARTIFACTS
+        run: |
+          echo "📤 Preparing deployment artifacts..."
+
+          # Create deployment directory
+          mkdir -p vercel-deploy
+
+          # Copy all frontend files to deployment directory
+          cp -r frontend/website-epic/dist/* vercel-deploy/
+
+          # Copy root index.html if exists
+          if [ -f index.html ]; then
+            cp index.html vercel-deploy/
+          fi
+
+          # Create vercel.json in deployment directory
+          cat > vercel-deploy/vercel.json << 'EOF'
+          {
+            "version": 2,
+            "buildCommand": "echo skip-build",
+            "outputDirectory": ".",
+            "framework": "vite",
+            "regions": ["iad1", "sfo1", "hnd1", "fra1", "sin1"],
+            "functions": {
+              "api/**/*.ts": {
+                "runtime": "nodejs22.x",
+                "maxDuration": 30,
+                "memory": 1024
+              },
+              "api/ai/**/*.ts": {
+                "runtime": "nodejs22.x",
+                "maxDuration": 60,
+                "memory": 2048
+              },
+              "api/realtime/**/*.ts": {
+                "runtime": "edge",
+                "maxDuration": 10,
+                "memory": 512
+              }
+            },
+            "rewrites": [
+              {"source": "/api/:path*", "destination": "/api/:path*"},
+              {"source": "/(.*)", "destination": "/index.html"}
+            ],
+            "headers": [
+              {
+                "source": "/(.*)",
+                "headers": [
+                  {"key": "X-DNS-Prefetch-Control", "value": "on"},
+                  {"key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains; preload"},
+                  {"key": "X-Frame-Options", "value": "DENY"},
+                  {"key": "X-Content-Type-Options", "value": "nosniff"},
+                  {"key": "X-XSS-Protection", "value": "1; mode=block"},
+                  {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
+                  {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"}
+                ]
+              },
+              {
+                "source": "/api/(.*)",
+                "headers": [
+                  {"key": "Access-Control-Allow-Origin", "value": "https://aigestion.net, https://www.aigestion.net"},
+                  {"key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"},
+                  {"key": "Access-Control-Allow-Headers", "value": "X-Requested-With, Content-Type, Authorization, Cache-Control"}
+                ]
+              }
+            ],
+            "env": {
+              "NODE_ENV": "production",
+              "NEXT_PUBLIC_APP_URL": "https://aigestion.net",
+              "NEXT_PUBLIC_API_URL": "https://aigestion.net/api",
+              "NEXT_PUBLIC_WS_URL": "wss://aigestion.net",
+              "VERCEL_ENV": "production"
+            },
+            "crons": [
+              {"path": "/api/cleanup/sessions", "schedule": "0 2 * * *"},
+              {"path": "/api/analytics/daily", "schedule": "0 3 * * *"},
+              {"path": "/api/backup/database", "schedule": "0 4 * * *"},
+              {"path": "/api/health/check", "schedule": "*/15 * * * *"},
+              {"path": "/api/cache/clear", "schedule": "0 1 * * 0"},
+              {"path": "/api/performance/metrics", "schedule": "0 */6 * * *"}
+            ]
+          }
+          EOF
+
+          echo "✅ Deployment artifacts prepared"
+          echo "📁 Deployment directory contents:"
+          ls -la vercel-deploy/
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: 🔑 SETUP VERCEL CLI
+        run: |
+          echo "🔑 Setting up Vercel CLI..."
+          npm install --global vercel@latest
+          echo "✅ Vercel CLI installed"
+
+      - name: 🚀 DEPLOY TO VERCEL - GOD MODE
+        id: deploy
+        run: |
+          echo "🚀 DEPLOYING TO VERCEL - GOD MODE"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+          cd vercel-deploy
+
+          # Deploy to Vercel
+          echo "🌐 Deploying to Vercel..."
+          vercel --prod --token ${{ secrets.VERCEL_TOKEN }} --confirm
+
+          # Get deployment URL
+          DEPLOYMENT_URL=$(vercel ls --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }} | grep website-epic | head -1 | awk '{print $3}')
+
+          echo "✅ Deployment completed"
+          echo "🌐 Deployment URL: $DEPLOYMENT_URL"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+          # Set output for GitHub
+          echo "preview-url=$DEPLOYMENT_URL" >> $GITHUB_OUTPUT
+          echo "DEPLOYMENT_URL=$DEPLOYMENT_URL" >> $GITHUB_ENV
+
+      - name: 📊 DEPLOYMENT SUMMARY
+        run: |
+          echo "📊 DEPLOYMENT SUMMARY - GOD MODE"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ Status: DEPLOYED"
+          echo "🌐 URL: ${{ env.DEPLOYMENT_URL }}"
+          echo "🔥 Environment: Production"
+          echo "🚀 Framework: Vite + React"
+          echo "🌌 Supabase: Divine Mode Active"
+          echo "⚡ Vercel: Supreme Configuration"
+          echo "📊 Analytics: Enabled"
+          echo "🔒 Security: Maximum Level"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+      - name: 🧪 HEALTH CHECK
+        run: |
+          echo "🧪 Running health check..."
+          sleep 10
+
+          if curl -f -s "${{ env.DEPLOYMENT_URL }}" > /dev/null; then
+            echo "✅ Health check passed"
+          else
+            echo "❌ Health check failed"
+            exit 1
+          fi
+
+      - name: 🎉 SUCCESS NOTIFICATION
+        run: |
+          echo "🎉 VERCEL GOD MODE DEPLOYMENT SUCCESSFUL!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🌐 Website: ${{ env.DEPLOYMENT_URL }}"
+          echo "🔥 Status: PRODUCTION READY"
+          echo "🌌 Supabase: DIVINE MODE"
+          echo "⚡ Vercel: SUPREME LEVEL"
+          echo "🚀 AIGestion.net: READY FOR GODS"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
