@@ -2,6 +2,8 @@ import { EnhancedVoiceService } from '../../services/enhanced-voice.service';
 import { AIService } from '../../services/ai.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { MetaverseService } from '../../services/metaverse.service';
+import { ElevenLabsService } from '../../services/elevenlabs.service';
+import { QwenTTSService } from '../../services/qwen-tts.service';
 import { container } from '../../config/inversify.config';
 import { TYPES } from '../../types';
 
@@ -9,12 +11,16 @@ import { TYPES } from '../../types';
 jest.mock('../../services/ai.service');
 jest.mock('../../services/analytics.service');
 jest.mock('../../services/metaverse.service');
+jest.mock('../../services/elevenlabs.service');
+jest.mock('../../services/qwen-tts.service');
 
 describe('EnhancedVoiceService', () => {
   let enhancedVoiceService: EnhancedVoiceService;
   let mockAIService: jest.Mocked<AIService>;
   let mockAnalyticsService: jest.Mocked<AnalyticsService>;
   let mockMetaverseService: jest.Mocked<MetaverseService>;
+  let mockElevenLabsService: jest.Mocked<ElevenLabsService>;
+  let mockQwenTTSService: jest.Mocked<QwenTTSService>;
 
   beforeEach(() => {
     // Reset all mocks
@@ -35,11 +41,23 @@ describe('EnhancedVoiceService', () => {
       getStatus: jest.fn(),
     } as any;
 
+    mockElevenLabsService = {
+      synthesizeText: jest.fn(),
+      textToSpeech: jest.fn(),
+    } as any;
+
+    mockQwenTTSService = {
+      synthesizeText: jest.fn(),
+      textToSpeech: jest.fn(),
+    } as any;
+
     // Create service instance with mocked dependencies
     enhancedVoiceService = new EnhancedVoiceService(
       mockAIService,
       mockAnalyticsService,
-      mockMetaverseService
+      mockMetaverseService,
+      mockElevenLabsService,
+      mockQwenTTSService,
     );
   });
 

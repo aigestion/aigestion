@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import os from 'os';
 
 import { getRedisClient } from '../cache/redis';
