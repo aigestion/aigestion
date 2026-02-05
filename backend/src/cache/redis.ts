@@ -4,13 +4,16 @@ import * as redis from 'redis';
 import { logger } from '../utils/logger';
 
 export const resetRedisClient = () => {
+  if (redisClient && redisClient.isOpen) {
+    redisClient.quit();
+  }
   redisClient = null;
 };
 let redisClient: RedisClientType | null = null;
 
 export const getRedisClient = (): RedisClientType => {
   if (process.env.ENABLE_REDIS === 'false') {
-    // Return a mock that satisfies the basic needs of rate-limit-redis and other consumers
+    // Return a mock that satisfies basic needs of rate-limit-redis and other consumers
     if (!redisClient) {
       redisClient = {
         on: () => {},
@@ -19,6 +22,7 @@ export const getRedisClient = (): RedisClientType => {
         isOpen: true,
         get: async () => null,
         set: async () => 'OK',
+        setEx: async () => 'OK',
         sendCommand: async () => ({}), // Satisfies rate-limit-redis
         del: async () => 1,
         hGet: async () => null,
@@ -29,6 +33,9 @@ export const getRedisClient = (): RedisClientType => {
         ttl: async () => -1,
         incr: async () => 1,
         decr: async () => 0,
+        lPush: async () => 1,
+        lTrim: async () => 'OK',
+        lRange: async () => [],
         // Add others as needed
       } as any;
       logger.info('Redis is disabled: Using God Mode Mock');

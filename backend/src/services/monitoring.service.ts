@@ -84,13 +84,13 @@ export class MonitoringService {
   /**
    * Record a metric
    */
-  public recordMetric(
+  public async recordMetric(
     name: string,
     value: number,
     tags: { [key: string]: string } = {},
-    unit: string = '',
+    unit = '',
     type: Metric['type'] = 'gauge',
-  ): void {
+  ): Promise<void> {
     try {
       const metric: Metric = {
         name,
@@ -114,13 +114,20 @@ export class MonitoringService {
         metricList.splice(0, metricList.length - this.maxMetricsPerKey);
       }
 
-      // Store in Redis
-      const redisKey = `metric:${name}:${Date.now()}`;
-      this.redis.setEx(redisKey, this.metricsRetention / 1000, JSON.stringify(metric));
+      // Check Redis connection before using it
+      if (this.redis && this.redis.isOpen) {
+        try {
+          // Store in Redis
+          const redisKey = `metric:${name}:${Date.now()}`;
+          await this.redis.setEx(redisKey, this.metricsRetention / 1000, JSON.stringify(metric));
 
-      // Add to time series
-      this.redis.lPush(`metrics:${name}:timeseries`, JSON.stringify(metric));
-      this.redis.lTrim(`metrics:${name}:timeseries`, 0, this.maxMetricsPerKey - 1);
+          // Add to time series
+          await this.redis.lPush(`metrics:${name}:timeseries`, JSON.stringify(metric));
+          await this.redis.lTrim(`metrics:${name}:timeseries`, 0, this.maxMetricsPerKey - 1);
+        } catch (redisError) {
+          logger.warn('Redis operation failed, continuing without Redis:', redisError);
+        }
+      }
 
       // Check for alerts
       this.checkMetricAlerts(metric);
@@ -322,6 +329,16 @@ export class MonitoringService {
     endTime: number,
   ): Promise<Metric[]> {
     try {
+      // Check Redis connection before using it
+      if (!this.redis || !this.redis.isOpen) {
+        // Fallback to memory metrics if Redis is not available
+        const memoryMetrics = this.metrics.get(name) || [];
+        return memoryMetrics.filter(metric => {
+          const metricTime = new Date(metric.timestamp).getTime();
+          return metricTime >= startTime && metricTime <= endTime;
+        });
+      }
+
       const key = `metrics:${name}:timeseries`;
       const metricData = await this.redis.lRange(key, 0, -1);
 
@@ -333,7 +350,12 @@ export class MonitoringService {
         });
     } catch (error) {
       logger.error('Failed to get metrics in range:', error);
-      return [];
+      // Fallback to memory metrics
+      const memoryMetrics = this.metrics.get(name) || [];
+      return memoryMetrics.filter(metric => {
+        const metricTime = new Date(metric.timestamp).getTime();
+        return metricTime >= startTime && metricTime <= endTime;
+      });
     }
   }
 
@@ -535,12 +557,19 @@ export class MonitoringService {
         this.alerts.splice(0, this.alerts.length - this.maxAlerts);
       }
 
-      // Store in Redis
-      this.redis.setEx(`alert:${alert.id}`, this.alertRetention / 1000, JSON.stringify(alert));
+      // Check Redis connection before using it
+      if (this.redis && this.redis.isOpen) {
+        try {
+          // Store in Redis
+          this.redis.setEx(`alert:${alert.id}`, this.alertRetention / 1000, JSON.stringify(alert));
 
-      // Add to recent alerts
-      this.redis.lPush('alerts:recent', JSON.stringify(alert));
-      this.redis.lTrim('alerts:recent', 0, 999);
+          // Add to recent alerts
+          this.redis.lPush('alerts:recent', JSON.stringify(alert));
+          this.redis.lTrim('alerts:recent', 0, 999);
+        } catch (redisError) {
+          logger.warn('Redis operation failed for alert, continuing without Redis:', redisError);
+        }
+      }
 
       logger.warn('Alert created', {
         id: alert.id,
