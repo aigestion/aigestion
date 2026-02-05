@@ -46,10 +46,13 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn'],
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn', 'console.error'],
       },
       mangle: {
         safari10: true,
+      },
+      format: {
+        ascii_only: true,
       },
     },
     reportCompressedSize: false,

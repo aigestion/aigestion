@@ -2,24 +2,92 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AIGestion Nexus | The Sovereign Intelligence Platform</title>
     <meta name="description" content="Experience the future of Sovereign AI. Real-time voice agents, neural memory, and decentralized intelligence orchestration. Built for the God Mode era." />
     <meta name="keywords" content="AI, Sovereign Intelligence, Voice AI, Neural Network, Web3, Future Tech, AIGestion" />
     <meta name="theme-color" content="#7c3aed" />
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
       // GOD MODE POLYFILLS - Fixes "exports is not defined" & "global is not defined"
       window.global = window;
       window.process = { env: {} };
       window.exports = {};
     </script>
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .fade-in {
+        animation: fadeIn 0.6s ease-out;
+      }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+      }
+      .float {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
+        50% { box-shadow: 0 0 40px rgba(139, 92, 246, 0.8); }
+      }
+      .pulse-glow {
+        animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .text-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .glow {
+        box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+      }
+      .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+      .loading-dots {
+        display: inline-block;
+      }
+      .loading-dots::after {
+        content: '...';
+        animation: dots 1.5s steps(4, end) infinite;
+      }
+      @keyframes dots {
+        0%, 20% { content: '.'; }
+        40% { content: '..'; }
+        60%, 100% { content: '...'; }
+      }
+    </style>
+    <link rel="modulepreload" crossorigin href="/vendor.SlK7pBj5.C5R3Q-e7.js">
+    <link rel="modulepreload" crossorigin href="/ui.DGIYQTaI.ChDC4nxS.js">
+    <link rel="modulepreload" crossorigin href="/index.B0oAwSPm.BOUEWkzb.js">
+    <link rel="modulepreload" crossorigin href="data:text/javascript;base64,aW1wb3J0e2IgYXMgZX1mcm9tIi4vdmVuZG9yLlNsSzdwQmo1LmpzIjtpbXBvcnQiLi91aS5ER0lZUVRhSS5qcyI7dmFyIHQscj17fSxuPWU7dD1yLmNyZWF0ZVJvb3Q9bi5jcmVhdGVSb290LHIuaHlkcmF0ZVJvb3Q9bi5oeWRyYXRlUm9vdDtjb25zdCBvPXt9LHM9ZnVuY3Rpb24oZSx0LHIpe2xldCBuPVByb21pc2UucmVzb2x2ZSgpO2lmKHQmJnQubGVuZ3RoPjApe2RvY3VtZW50LmdldEVsZW1lbnRzQnlUYWdOYW1lKCJsaW5rIik7Y29uc3QgZT1kb2N1bWVudC5xdWVyeVNlbGVjdG9yKCJtZXRhW3Byb3BlcnR5PWNzcC1ub25jZV0iKSxyPWU/Lm5vbmNlfHxlPy5nZXRBdHRyaWJ1dGUoIm5vbmNlIik7bj1Qcm9taXNlLmFsbFNldHRsZWQodC5tYXAoZT0+e2lmKChlPWZ1bmN0aW9uKGUpe3JldHVybiIvIitlfShlKSlpbiBvKXJldHVybjtvW2VdPSEwO2NvbnN0IHQ9ZS5lbmRzV2l0aCgiLmNzcyIpLG49dD8nW3JlbD0ic3R5bGVzaGVldCJdJzoiIjtpZihkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBsaW5rW2hyZWY9IiR7ZX0iXSR7bn1gKSlyZXR1cm47Y29uc3Qgcz1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCJsaW5rIik7cmV0dXJuIHMucmVsPXQ/InN0eWxlc2hlZXQiOiJtb2R1bGVwcmVsb2FkIix0fHwocy5hcz0ic2NyaXB0Iikscy5jcm9zc09yaWdpbj0iIixzLmhyZWY9ZSxyJiZzLnNldEF0dHJpYnV0ZSgibm9uY2UiLHIpLGRvY3VtZW50LmhlYWQuYXBwZW5kQ2hpbGQocyksdD9uZXcgUHJvbWlzZSgodCxyKT0+e3MuYWRkRXZlbnRMaXN0ZW5lcigibG9hZCIsdCkscy5hZGRFdmVudExpc3RlbmVyKCJlcnJvciIsKCk9PnIobmV3IEVycm9yKGBVbmFibGUgdG8gcHJlbG9hZCBDU1MgZm9yICR7ZX1gKSkpfSk6dm9pZCAwfSkpfWZ1bmN0aW9uIHMoZSl7Y29uc3QgdD1uZXcgRXZlbnQoInZpdGU6cHJlbG9hZEVycm9yIix7Y2FuY2VsYWJsZTohMH0pO2lmKHQucGF5bG9hZD1lLHdpbmRvdy5kaXNwYXRjaEV2ZW50KHQpLCF0LmRlZmF1bHRQcmV2ZW50ZWQpdGhyb3cgZX1yZXR1cm4gbi50aGVuKHQ9Pntmb3IoY29uc3QgZSBvZiB0fHxbXSkicmVqZWN0ZWQiPT09ZS5zdGF0dXMmJnMoZS5yZWFzb24pO3JldHVybiBlKCkuY2F0Y2gocyl9KX07ZXhwb3J0e3MgYXMgXyx0IGFzIGEsciBhcyBjfTsK">
+    <link rel="modulepreload" crossorigin href="/router.Cw_hgdxC.DD3XAIG9.js">
+    <link rel="modulepreload" crossorigin href="/charts.DvdfUCxK.DviAFsqj.js">
+    <script type="module" crossorigin src="/main.BkaFGy-H.js"></script>
+    <link rel="modulepreload" crossorigin href="/index.QYzeauO3.CyjFagMG.js">
+    <link rel="modulepreload" crossorigin href="/three.oqmhCI76.js">
+    <link rel="modulepreload" crossorigin href="/charts.DvdfUCxK.B_3l4XPS.js">
+    <link rel="stylesheet" crossorigin href="/index.QYzeauO3.css">
   </head>
   <body>
-    <div id="root" style="min-height: 100vh; margin: 0; padding: 0;"></div>
-    <script type="module" src="/index.CZmCfcIb.js"></script>
+    <div id="root"></div>
   </body>
 </html>
