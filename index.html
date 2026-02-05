@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <script>
+      // GOD MODE POLYFILLS - Fixes "exports is not defined" & "global is not defined"
+      window.global = window;
+      window.process = { env: {} };
+      window.exports = {};
+    </script>
+    
+    <!-- Primary Meta Tags -->
+    <title>AIGestion Nexus | The Sovereign Intelligence Platform</title>
+    <meta name="title" content="AIGestion Nexus | The Sovereign Intelligence Platform" />
+    <meta name="description"
+      content="Experience the future of Sovereign AI. Real-time voice agents, neural memory, and decentralized intelligence orchestration. Built for the God Mode era." />
+    <meta name="keywords"
+      content="AI, Sovereign Intelligence, Voice AI, Neural Network, Decentralized, Web3, Future Tech, AIGestion" />
+    <meta name="theme-color" content="#7c3aed" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://aigestion.net/" />
+    <meta property="og:title" content="AIGestion Nexus | The Sovereign Intelligence Platform" />
+    <meta property="og:description"
+      content="Experience the future of Sovereign AI. Real-time voice agents, neural memory, and decentralized intelligence orchestration." />
+    <meta property="og:image" content="https://aigestion.net/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://aigestion.net/" />
+    <meta property="twitter:title" content="AIGestion Nexus | The Sovereign Intelligence Platform" />
+    <meta property="twitter:description"
+      content="Experience the future of Sovereign AI. Real-time voice agents, neural memory, and decentralized intelligence orchestration." />
+    <meta property="twitter:image" content="https://aigestion.net/og-image.png" />
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 12px;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .fade-in {
+        animation: fadeIn 0.6s ease-out;
+      }
+      .game-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+      }
+      .loading-dots {
+        display: inline-block;
+      }
+      .loading-dots::after {
+        content: '...';
+        animation: dots 1.5s steps(4, end) infinite;
+      }
+      @keyframes dots {
+        0%, 20% { content: '.'; }
+        40% { content: '..'; }
+        60%, 100% { content: '...'; }
+      }
+    </style>
+
+    <!-- JavaScript Files - CORRECTED PATHS -->
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/vendor.SlK7pBj5.C5R3Q-e7.js">
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/ui.DGIYQTaI.ChDC4nxS.js">
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/index.B0oAwSPm.BOUEWkzb.js">
+    <link rel="modulepreload" crossorigin href="data:text/javascript;base64,aW1wb3J0e2IgYXMgZX1mcm9tIi4vdmVuZG9yLlNsSzdwQmo1LmpzIjtpbXBvcnQiLi91aS5ER0lZUVRhSS5qcyI7dmFyIHQscj17fSxuPWU7dD1yLmNyZWF0ZVJvb3Q9bi5jcmVhdGVSb290LHIuaHlkcmF0ZVJvb3Q9bi5oeWRyYXRlUm9vdDtjb25zdCBvPXt9LHM9ZnVuY3Rpb24oZSx0LHIpe2xldCBuPVByb21pc2UucmVzb2x2ZSgpO2lmKHQmJnQubGVuZ3RoPjApe2RvY3VtZW50LmdldEVsZW1lbnRzQnlUYWdOYW1lKCJsaW5rIik7Y29uc3QgZT1kb2N1bWVudC5xdWVyeVNlbGVjdG9yKCJtZXRhW3Byb3BlcnR5PWNzcC1ub25jZV0iKSxyPWU/Lm5vbmNlfHxlPy5nZXRBdHRyaWJ1dGUoIm5vbmNlIik7bj1Qcm9taXNlLmFsbFNldHRsZWQodC5tYXAoZT0+e2lmKChlPWZ1bmN0aW9uKGUpe3JldHVybiIvIitlfShlKSlpbiBvKXJldHVybjtvW2VdPSEwO2NvbnN0IHQ9ZS5lbmRzV2l0aCgiLmNzcyIpLG49dD8nW3JlbD0ic3R5bGVzaGVldCJdJzoiIjtpZihkb2N1bWVudC5xdWVyeVNlbGVjdG9yKGBsaW5rW2hyZWY9IiR7ZX0iXSR7bn1gKSlyZXR1cm47Y29uc3Qgcz1kb2N1bWVudC5jcmVhdGVFbGVtZW50KCJsaW5rIik7cmV0dXJuIHMucmVsPXQ/InN0eWxlc2hlZXQiOiJtb2R1bGVwcmVsb2FkIix0fHwocy5hcz0ic2NyaXB0Iikscy5jcm9zc09yaWdpbj0iIixzLmhyZWY9ZSxyJiZzLnNldEF0dHJpYnV0ZSgibm9uY2UiLHIpLGRvY3VtZW50LmhlYWQuYXBwZW5kQ2hpbGQocyksdD9uZXcgUHJvbWlzZSgodCxyKT0+e3MuYWRkRXZlbnRMaXN0ZW5lcigibG9hZCIsdCkscy5hZGRFdmVudExpc3RlbmVyKCJlcnJvciIsKCk9PnIobmV3IEVycm9yKGBVbmFibGUgdG8gcHJlbG9hZCBDU1MgZm9yICR7ZX1gKSkpfSk6dm9pZCAwfSkpfWZ1bmN0aW9uIHMoZSl7Y29uc3QgdD1uZXcgRXZlbnQoInZpdGU6cHJlbG9hZEVycm9yIix7Y2FuY2VsYWJsZTohMH0pO2lmKHQucGF5bG9hZD1lLHdpbmRvdy5kaXNwYXRjaEV2ZW50KHQpLCF0LmRlZmF1bHRQcmV2ZW50ZWQpdGhyb3cgZX1yZXR1cm4gbi50aGVuKHQ9Pntmb3IoY29uc3QgZSBvZiB0fHxbXSkicmVqZWN0ZWQiPT09ZS5zdGF0dXMmJnMoZS5yZWFzb24pO3JldHVybiBlKCkuY2F0Y2gocyl9KX07ZXhwb3J0e3MgYXMgXyx0IGFzIGEsciBhcyBjfTsK">
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/router.Cw_hgdxC.DD3XAIG9.js">
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/charts.DvdfUCxK.DviAFsqj.js">
+    <script type="module" crossorigin src="/frontend/website-epic/dist/main.HP31QMQh.js"></script>
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/vendor.CE0h8kDB.js">
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/ui.fI6rzHSe.js">
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/three.B0eVHyOU.js">
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/router.DxJtPde0.js">
+    <link rel="modulepreload" crossorigin href="/frontend/website-epic/dist/charts.CZ4oNC-u.js">
+    <link rel="stylesheet" crossorigin href="/frontend/website-epic/dist/main.QYzeauO3.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
