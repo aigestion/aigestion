@@ -1,0 +1,28 @@
+# Render manifest for AIGestion
+# Connect this repository in Render and it will auto-create the services below.
+
+services:
+  - type: static
+    name: aigestion-frontend
+    env: static
+    branch: main
+    buildCommand: "cd frontend/website-epic && npm ci && npm run build"
+    staticPublishPath: "frontend/website-epic/dist"
+    plan: free
+
+  - type: web
+    name: aigestion-backend
+    env: node
+    branch: main
+    buildCommand: "cd backend && npm ci && npm run build"
+    startCommand: "node backend/dist/server.js"
+    plan: free
+
+# Notes:
+# - After pushing this file to GitHub, go to https://render.com and
+#   create a new service by connecting the repository. Render will detect
+#   this render.yaml and provision the two services automatically.
+# - Set required environment variables in Render Dashboard (Project Settings)
+#   for both services (Supabase keys, DB URI, JWT secrets, etc.).
+# - Once deployed, add the custom domain in Render for the frontend service
+#   and follow Render's DNS instructions (they will show exact CNAME/A records).
