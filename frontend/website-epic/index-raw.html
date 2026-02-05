@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIGestion - Raw GitHub Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(0,0,0,0.3);
+            padding: 30px;
+            border-radius: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #4CAF50; }
+        .error { background: #f44336; }
+        .loading { background: #ff9800; }
+        #root {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 5px;
+            min-height: 200px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #45a049; }
+        pre {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 AIGestion Raw GitHub Test</h1>
+        <p>Testing direct GitHub Raw URLs vs GitHub Pages</p>
+        
+        <div id="status"></div>
+        
+        <button onclick="testRawGitHub()">Test Raw GitHub URLs</button>
+        <button onclick="testGitHubPages()">Test GitHub Pages</button>
+        <button onclick="testDirectLoad()">Try Direct Load</button>
+        
+        <div id="results"></div>
+        
+        <div id="root">
+            <h2>React Mount Point</h2>
+            <p>If React loads, this content will be replaced.</p>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(message, type = 'loading') {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        async function testRawGitHub() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h3>🔍 Testing Raw GitHub URLs</h3>';
+            
+            const files = [
+                'main.HP31QMQh.js',
+                'vendor.CE0h8kDB.js',
+                'ui.DGIYQTaI.ChDC4nxS.js'
+            ];
+            
+            for (const file of files) {
+                const rawUrl = `https://raw.githubusercontent.com/aigestion/aigestion/main/frontend/website-epic/dist/${file}`;
+                try {
+                    const response = await fetch(rawUrl);
+                    const status = response.status;
+                    const statusText = status === 200 ? '✅ OK' : '❌ ERROR';
+                    const color = status === 200 ? '#4CAF50' : '#f44336';
+                    
+                    results.innerHTML += `<p style="color: ${color}">Raw GitHub ${file}: ${status} ${statusText}</p>`;
+                } catch (error) {
+                    results.innerHTML += `<p style="color: #f44336">Raw GitHub ${file}: ❌ FAILED - ${error.message}</p>`;
+                }
+            }
+        }
+        
+        async function testGitHubPages() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h3>🔍 Testing GitHub Pages URLs</h3>';
+            
+            const files = [
+                'main.HP31QMQh.js',
+                'vendor.CE0h8kDB.js',
+                'ui.DGIYQTaI.ChDC4nxS.js'
+            ];
+            
+            for (const file of files) {
+                const pagesUrl = `https://www.aigestion.net/${file}`;
+                try {
+                    const response = await fetch(pagesUrl);
+                    const status = response.status;
+                    const statusText = status === 200 ? '✅ OK' : '❌ ERROR';
+                    const color = status === 200 ? '#4CAF50' : '#f44336';
+                    
+                    results.innerHTML += `<p style="color: ${color}">GitHub Pages ${file}: ${status} ${statusText}</p>`;
+                } catch (error) {
+                    results.innerHTML += `<p style="color: #f44336">GitHub Pages ${file}: ❌ FAILED - ${error.message}</p>`;
+                }
+            }
+        }
+        
+        async function testDirectLoad() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<h3>🚀 Attempting Direct React Load</h3>';
+            
+            try {
+                // Try to load React directly from GitHub Raw
+                const script = document.createElement('script');
+                script.src = 'https://raw.githubusercontent.com/aigestion/aigestion/main/frontend/website-epic/dist/main.HP31QMQh.js';
+                script.type = 'module';
+                script.crossOrigin = 'anonymous';
+                
+                script.onload = () => {
+                    results.innerHTML += '<p style="color: #4CAF50">✅ React app loaded from GitHub Raw!</p>';
+                    updateStatus('✅ React app loaded successfully!', 'success');
+                };
+                
+                script.onerror = (error) => {
+                    results.innerHTML += `<p style="color: #f44336">❌ Failed to load React from GitHub Raw: ${error.message}</p>`;
+                    updateStatus('❌ Failed to load React app', 'error');
+                };
+                
+                document.head.appendChild(script);
+                results.innerHTML += '<p style="color: #ff9800">🔄 Loading React from GitHub Raw...</p>';
+                
+            } catch (error) {
+                results.innerHTML += `<p style="color: #f44336">❌ Error: ${error.message}</p>`;
+                updateStatus(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+        
+        // Auto-start with Raw GitHub test
+        updateStatus('🔍 Starting Raw GitHub test...', 'loading');
+        setTimeout(testRawGitHub, 1000);
+    </script>
+</body>
+</html>
