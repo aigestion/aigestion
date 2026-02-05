@@ -1,36 +1,23 @@
 #!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
-# =============================================================================
-# Pre-commit Security & Quality Checks
-# =============================================================================
+# Lightweight pre-commit: quick checks + lint-staged (quiet)
 
-echo "🔍 Running pre-commit security checks..."
-
-# Check 1: Prevent .env files from being committed
-echo "📝 Checking for .env files..."
-if git diff --cached --name-only | grep -qE "\.env$" | grep -v "\.env\.example"; then
-    echo "❌ ERROR: Attempted to commit .env file(s)"
-    echo "💡 Use .env.example instead for templates"
-    git diff --cached --name-only | grep "\.env$" | grep -v "\.env\.example"
+# Fail fast on accidental .env commits
+if git diff --cached --name-only --relative | grep -qE "\.env$" && ! git diff --cached --name-only --relative | grep -q "\.env.example"; then
+    echo "ERROR: Attempted to commit .env file(s). Use .env.example instead."
+    git diff --cached --name-only --relative | grep "\.env$" | grep -v "\.env.example"
     exit 1
 fi
 
-# Check 2: Scan for potential secrets in staged files
-echo "🔐 Scanning for potential secrets..."
-# Exclude minified files, dist folders, and known safe patterns
-if git diff --cached --name-only | grep -vE "\.(min\.js|bundle\.js)$" | grep -vE "^(dist|build|node_modules)/" | xargs -r git diff --cached | grep -iE "(api[_-]?key|secret|password|token)\s*[:=]\s*['\"]?[a-zA-Z0-9_-]{30,}" | grep -vE "(getChildKey|resolveKeyframes|startsWithToken|startsAsVariableToken)"; then
-    echo "⚠️  WARNING: Potential secret detected in staged files!"
-    echo "Please review your commit carefully."
-    read -p "Continue anyway? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo "❌ Commit aborted"
+# Secrets heuristic: only scan likely file types and require longer tokens to reduce false positives
+staged_files=$(git diff --cached --name-only --relative | grep -E "\.(env|json|ya?ml|js|ts|py|pem|key)$" || true)
+if [ -n "$staged_files" ]; then
+    if git diff --cached -- $staged_files | grep -iEn "(api[_-]?key|secret|password|token)\s*[:=]\s*['\"]?[a-zA-Z0-9_-]{40,}" >/dev/null; then
+        echo "ERROR: potential secret detected in staged files. Commit aborted."
+        git diff --cached --name-only --relative | grep -E "\.(env|json|ya?ml|js|ts|py|pem|key)$"
         exit 1
     fi
 fi
 
-echo "✅ Security checks passed"
-
-# Run lint-staged
-npx lint-staged
+# Run lint-staged (quiet + fast cached linters configured in package.json)
+npx lint-staged --quiet

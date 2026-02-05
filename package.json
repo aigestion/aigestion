@@ -29,7 +29,8 @@
     "trunk": "trunk",
     "lint": "eslint . --config .config/eslint.config.cjs",
     "format": "prettier --write . --config .config/.prettierrc",
-    "prepare": "husky",
+    "prepare": "husky install",
+    "lint:staged": "lint-staged --quiet",
     "push:hourly": "ts-node ./scripts/push_repo.ts --hourly",
     "dev:backend": "cd backend && npm install && npm run dev",
     "dev:frontend": "cd frontend && npm install && npm run dev:all",
@@ -129,5 +130,19 @@
     "@supabase/supabase-js": "^2.93.1",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --cache --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ],
+    "*.{css,scss,less}": [
+      "stylelint --cache --fix",
+      "prettier --write"
+    ],
+    "*": "git add"
   }
 }

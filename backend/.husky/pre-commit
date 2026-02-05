@@ -1,4 +1,23 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+#!/usr/bin/env sh
 
-npx lint-staged
+# Lightweight backend pre-commit: quick checks + lint-staged (quiet)
+
+# Fail fast on accidental .env commits
+if git diff --cached --name-only --relative | grep -qE "\.env$" && ! git diff --cached --name-only --relative | grep -q "\.env.example"; then
+	echo "ERROR: Attempted to commit .env file(s). Use .env.example instead."
+	git diff --cached --name-only --relative | grep "\.env$" | grep -v "\.env.example"
+	exit 1
+fi
+
+# Secrets heuristic: only scan likely file types and require longer tokens to reduce false positives
+staged_files=$(git diff --cached --name-only --relative | grep -E "\.(env|json|ya?ml|js|ts|py|pem|key)$" || true)
+if [ -n "$staged_files" ]; then
+	if git diff --cached -- $staged_files | grep -iEn "(api[_-]?key|secret|password|token)\s*[:=]\s*['\"]?[a-zA-Z0-9_-]{40,}" >/dev/null; then
+		echo "ERROR: potential secret detected in staged files. Commit aborted."
+		git diff --cached --name-only --relative | grep -E "\.(env|json|ya?ml|js|ts|py|pem|key)$"
+		exit 1
+	fi
+fi
+
+# Run lint-staged (quiet + fast cached linters configured in package.json)
+npx lint-staged --quiet
