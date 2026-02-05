@@ -32,12 +32,13 @@ export default defineConfig({
         entryFileNames: '[name].[hash].js',
         chunkFileNames: '[name].[hash].js',
         assetFileNames: '[name].[hash].[ext]',
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          ui: ['framer-motion', 'lucide-react'],
-          charts: ['recharts'],
-          three: ['three', '@react-three/fiber', '@react-three/drei'],
+        manualChunks: (id) => {
+          if (id.includes('vendor')) return 'vendor';
+          if (id.includes('router')) return 'router';
+          if (id.includes('ui') || id.includes('framer') || id.includes('lucide')) return 'ui';
+          if (id.includes('charts') || id.includes('recharts')) return 'charts';
+          if (id.includes('three') || id.includes('@react-three')) return 'three';
+          return 'main';
         },
       },
     },
