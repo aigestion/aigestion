@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIGestion Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(0,0,0,0.3);
+            padding: 30px;
+            border-radius: 10px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: #4CAF50; }
+        .error { background: #f44336; }
+        .loading { background: #ff9800; }
+        #root {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 5px;
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 AIGestion Test Page</h1>
+        <p>Testing basic functionality without external dependencies</p>
+        
+        <div id="status"></div>
+        
+        <div id="root">
+            <h2>React Mount Point</h2>
+            <p>If React loads, this content will be replaced.</p>
+        </div>
+        
+        <div class="status loading">
+            <h3>🔍 Testing JavaScript Files...</h3>
+            <div id="js-test-results"></div>
+        </div>
+    </div>
+
+    <script>
+        // Basic JavaScript test
+        console.log('🚀 AIGestion Test Page Loaded');
+        
+        function updateStatus(message, type = 'loading') {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        async function testJSFiles() {
+            const files = [
+                'main.HP31QMQh.js',
+                'vendor.CE0h8kDB.js',
+                'ui.DGIYQTaI.ChDC4nxS.js',
+                'charts.DvdfUCxK.DviAFsqj.js'
+            ];
+            
+            const results = document.getElementById('js-test-results');
+            let allOk = true;
+            
+            for (const file of files) {
+                try {
+                    const response = await fetch(file);
+                    const status = response.status;
+                    const statusText = status === 200 ? '✅ OK' : '❌ ERROR';
+                    const color = status === 200 ? '#4CAF50' : '#f44336';
+                    
+                    results.innerHTML += `<p style="color: ${color}">${file}: ${status} ${statusText}</p>`;
+                    if (status !== 200) allOk = false;
+                } catch (error) {
+                    results.innerHTML += `<p style="color: #f44336">${file}: ❌ FAILED - ${error.message}</p>`;
+                    allOk = false;
+                }
+            }
+            
+            if (allOk) {
+                updateStatus('✅ All JavaScript files accessible!', 'success');
+                loadReactApp();
+            } else {
+                updateStatus('❌ Some JavaScript files are missing', 'error');
+            }
+        }
+        
+        function loadReactApp() {
+            try {
+                // Try to load the main React app
+                const script = document.createElement('script');
+                script.src = 'main.HP31QMQh.js';
+                script.type = 'module';
+                script.onload = () => {
+                    updateStatus('✅ React app loaded successfully!', 'success');
+                };
+                script.onerror = () => {
+                    updateStatus('❌ Failed to load React app', 'error');
+                };
+                document.head.appendChild(script);
+            } catch (error) {
+                updateStatus(`❌ Error loading React: ${error.message}`, 'error');
+            }
+        }
+        
+        // Start tests
+        updateStatus('🔍 Starting tests...', 'loading');
+        testJSFiles();
+    </script>
+</body>
+</html>
