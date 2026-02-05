@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IPersona extends Document {
+  _id: string;
   id: string;
   ownerId: mongoose.Types.ObjectId;
   name: string;
