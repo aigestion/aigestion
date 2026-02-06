@@ -251,3 +251,4 @@ linters/
 n8n_data/
 .vercel
 .env*.local
+.env.gemini
