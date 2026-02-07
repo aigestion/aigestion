@@ -24,15 +24,12 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        admin: resolve(__dirname, 'public/admin.html'),
-        client: resolve(__dirname, 'public/client.html'),
-        demo: resolve(__dirname, 'public/demo.html'),
       },
       output: {
         entryFileNames: '[name].[hash].js',
         chunkFileNames: '[name].[hash].js',
         assetFileNames: '[name].[hash].[ext]',
-        manualChunks: (id) => {
+        manualChunks: id => {
           if (id.includes('vendor')) return 'vendor';
           if (id.includes('router')) return 'router';
           if (id.includes('ui') || id.includes('framer') || id.includes('lucide')) return 'ui';
@@ -47,7 +44,13 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn', 'console.error'],
+        pure_funcs: [
+          'console.log',
+          'console.info',
+          'console.debug',
+          'console.warn',
+          'console.error',
+        ],
       },
       mangle: {
         safari10: true,
