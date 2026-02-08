@@ -46,12 +46,7 @@ export class AuthService {
   /**
    * Verify 2FA and complete login
    */
-  async verifyLogin2FA(data: {
-    userId: string;
-    token: string;
-    ip?: string;
-    userAgent?: string;
-  }) {
+  async verifyLogin2FA(data: { userId: string; token: string; ip?: string; userAgent?: string }) {
     return this.verify2FALoginUseCase.execute(data);
   }
 
@@ -88,7 +83,9 @@ export class AuthService {
             const newRefreshTokens = compromisedUser.refreshTokens.filter(
               t => t.familyId !== decoded.familyId,
             );
-            await this.userRepository.update(compromisedUser.id, { refreshTokens: newRefreshTokens });
+            await this.userRepository.update(compromisedUser.id, {
+              refreshTokens: newRefreshTokens,
+            });
             throw new Error('REFRESH_TOKEN_REUSE_DETECTED');
           }
         }

@@ -11,17 +11,15 @@ export class SheetsService {
   private sheets: any;
   private auth: any;
 
-  constructor(
-    @inject(DanielaAIService) private daniela: DanielaAIService
-  ) {}
+  constructor(@inject(DanielaAIService) private daniela: DanielaAIService) {}
 
   async initialize() {
     this.auth = new google.auth.GoogleAuth({
       keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS,
       scopes: [
         'https://www.googleapis.com/auth/spreadsheets',
-        'https://www.googleapis.com/auth/drive.readonly'
-      ]
+        'https://www.googleapis.com/auth/drive.readonly',
+      ],
     });
     this.sheets = google.sheets({ version: 'v4', auth: this.auth });
   }
@@ -30,7 +28,7 @@ export class SheetsService {
     try {
       const response = await this.sheets.spreadsheets.values.get({
         spreadsheetId,
-        range
+        range,
       });
       return response.data.values || [];
     } catch (error) {
@@ -45,7 +43,7 @@ export class SheetsService {
         spreadsheetId,
         range,
         valueInputOption: 'USER_ENTERED',
-        requestBody: { values }
+        requestBody: { values },
       });
       return response.data;
     } catch (error) {
@@ -60,7 +58,7 @@ export class SheetsService {
         spreadsheetId,
         range,
         valueInputOption: 'USER_ENTERED',
-        requestBody: { values }
+        requestBody: { values },
       });
       return response.data;
     } catch (error) {
@@ -77,18 +75,24 @@ export class SheetsService {
       const headers = data[0];
       const rows = data.slice(1);
       const records = rows.map((row: any[]) =>
-        Object.fromEntries(headers.map((h, i) => [h, row[i]]))
+        Object.fromEntries(headers.map((h, i) => [h, row[i]])),
       );
 
       // Usar Daniela AI para análisis
       const analysis = {
         totalRows: rows.length,
         totalColumns: headers.length,
-        insights: await this.daniela.processMessage(0, JSON.stringify(records), 'sheet-analysis', 'system', 'user'),
+        insights: await this.daniela.processMessage(
+          0,
+          JSON.stringify(records),
+          'sheet-analysis',
+          'system',
+          'user',
+        ),
         summary: {
           dataPoints: rows.length,
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       };
 
       return analysis;
@@ -110,19 +114,15 @@ export class SheetsService {
         ['Total Columns', analysis.totalColumns],
         [''],
         ['Analysis', analysis.insights],
-        ['']
+        [''],
       ];
 
-      await this.appendData(
-        spreadsheetId,
-        'Sheet1!A100:B110',
-        report
-      );
+      await this.appendData(spreadsheetId, 'Sheet1!A100:B110', report);
 
       return {
         status: 'success',
         report: analysis,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     } catch (error) {
       console.error('Error creating report:', error);
@@ -144,14 +144,14 @@ export class SheetsService {
                     basicChart: {
                       chartType: chartData.type,
                       series: chartData.series,
-                      axis: chartData.axis
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        }
+                      axis: chartData.axis,
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
       };
 
       return await this.sheets.spreadsheets.batchUpdate(request);
@@ -171,12 +171,12 @@ export class SheetsService {
               autoResizeDimensions: {
                 dimensions: {
                   sheetId: 0,
-                  dimension: 'COLUMNS'
-                }
-              }
-            }
-          ]
-        }
+                  dimension: 'COLUMNS',
+                },
+              },
+            },
+          ],
+        },
       };
 
       return await this.sheets.spreadsheets.batchUpdate(request);

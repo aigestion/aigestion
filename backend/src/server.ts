@@ -50,11 +50,11 @@ if (!io) {
 }
 
 // Neural Heartbeat: Bridge service events to WebSockets
-neuralHealthService.on('healthUpdate', (metrics) => {
+neuralHealthService.on('healthUpdate', metrics => {
   (io as any).emit('nexus:neural_heartbeat', metrics);
 });
 
-neuralHealthService.on('healthWarning', (metrics) => {
+neuralHealthService.on('healthWarning', metrics => {
   (io as any).emit('nexus:neural_warning', metrics);
 });
 
@@ -340,4 +340,3 @@ const initializeAndStart = async () => {
 initializeAndStart();
 
 export { app, io };
-

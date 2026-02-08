@@ -92,16 +92,24 @@ async function warmCache() {
   try {
     // Example: Warm with frequently accessed data
     // Note: cache.warm method doesn't exist, using set instead
-    await cache.set('config:app', {
-      name: 'NEXUS V1',
-      version: '3.0.0',
-      environment: process.env.NODE_ENV || 'development',
-    }, { ttl: 3600, tags: ['config'] });
+    await cache.set(
+      'config:app',
+      {
+        name: 'NEXUS V1',
+        version: '3.0.0',
+        environment: process.env.NODE_ENV || 'development',
+      },
+      { ttl: 3600, tags: ['config'] },
+    );
 
-    await cache.set('stats:initialized', {
-      timestamp: new Date().toISOString(),
-      status: 'ready',
-    }, { ttl: 300, tags: ['stats'] });
+    await cache.set(
+      'stats:initialized',
+      {
+        timestamp: new Date().toISOString(),
+        status: 'ready',
+      },
+      { ttl: 300, tags: ['stats'] },
+    );
     console.log(chalk.green('  ✅ Cache warmed successfully'));
 
     return true;

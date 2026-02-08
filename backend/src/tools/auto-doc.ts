@@ -11,7 +11,8 @@ async function autoDocument() {
   const rootDir = path.resolve(__dirname, '../../');
   const servicesDir = path.join(rootDir, 'src/services');
   const routesDir = path.join(rootDir, 'src/routes');
-  const artifactPath = 'C:\\Users\\Alejandro\\.gemini\\antigravity\\brain\\c28c1882-fd44-4bf0-9109-65d5b6a4217c\\auto_architecture.md';
+  const artifactPath =
+    'C:\\Users\\Alejandro\\.gemini\\antigravity\\brain\\c28c1882-fd44-4bf0-9109-65d5b6a4217c\\auto_architecture.md';
 
   try {
     logger.info('[AutoDoc] Starting self-documentation scan...');
@@ -33,7 +34,10 @@ async function autoDocument() {
 
     const documentation = await vertexAIService.generateText(prompt);
 
-    await fs.writeFile(artifactPath, `# 🏛️ Auto-Generated System Architecture\n\n> Last updated: ${new Date().toLocaleString()}\n\n${documentation}`);
+    await fs.writeFile(
+      artifactPath,
+      `# 🏛️ Auto-Generated System Architecture\n\n> Last updated: ${new Date().toLocaleString()}\n\n${documentation}`,
+    );
 
     logger.info(`[AutoDoc] Documentation successfully written to ${artifactPath}`);
   } catch (error) {

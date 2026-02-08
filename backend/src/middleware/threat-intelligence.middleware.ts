@@ -210,9 +210,9 @@ export class ThreatIntelligenceMiddleware {
 
       // Run all threat checks in parallel
       await Promise.all([
-        this.checkIPThreat(req, res, () => { }),
-        this.checkDomainThreat(req, res, () => { }),
-        this.checkURLThreat(req, res, () => { }),
+        this.checkIPThreat(req, res, () => {}),
+        this.checkDomainThreat(req, res, () => {}),
+        this.checkURLThreat(req, res, () => {}),
       ]);
 
       // Add overall threat score header
@@ -241,24 +241,24 @@ export class ThreatIntelligenceMiddleware {
             threats: {
               ip: req.threatCheck.ipThreat
                 ? {
-                  severity: req.threatCheck.ipThreat.severity,
-                  description: req.threatCheck.ipThreat.description,
-                  source: req.threatCheck.ipThreat.source,
-                }
+                    severity: req.threatCheck.ipThreat.severity,
+                    description: req.threatCheck.ipThreat.description,
+                    source: req.threatCheck.ipThreat.source,
+                  }
                 : null,
               domain: req.threatCheck.domainThreat
                 ? {
-                  severity: req.threatCheck.domainThreat.severity,
-                  description: req.threatCheck.domainThreat.description,
-                  source: req.threatCheck.domainThreat.source,
-                }
+                    severity: req.threatCheck.domainThreat.severity,
+                    description: req.threatCheck.domainThreat.description,
+                    source: req.threatCheck.domainThreat.source,
+                  }
                 : null,
               url: req.threatCheck.urlThreat
                 ? {
-                  severity: req.threatCheck.urlThreat.severity,
-                  description: req.threatCheck.urlThreat.description,
-                  source: req.threatCheck.urlThreat.source,
-                }
+                    severity: req.threatCheck.urlThreat.severity,
+                    description: req.threatCheck.urlThreat.description,
+                    source: req.threatCheck.urlThreat.source,
+                  }
                 : null,
             },
           },

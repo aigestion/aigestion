@@ -8,7 +8,6 @@ global.setImmediate = setTimeout;
 
 // Mock redis module to avoid real connection in tests
 
-
 // Mock Redis client to avoid real connections in tests
 jest.mock('../cache/redis');
 
@@ -48,7 +47,7 @@ const mockMongoose = {
     set() {}
     get() {}
     virtual() {}
-    index() { }
+    index() {}
   },
   model: jest.fn(),
   disconnect: jest.fn(),

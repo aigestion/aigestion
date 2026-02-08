@@ -25,7 +25,9 @@ describe('YoutubeTranscriptionService', () => {
   it('should get Spanish transcription successfully', async () => {
     (YoutubeTranscript.fetchTranscript as jest.Mock).mockResolvedValue(mockTranscript);
 
-    const result = await youtubeTranscriptionService.getTranscription('https://www.youtube.com/watch?v=123456');
+    const result = await youtubeTranscriptionService.getTranscription(
+      'https://www.youtube.com/watch?v=123456',
+    );
 
     expect(YoutubeTranscript.fetchTranscript).toHaveBeenCalledWith('123456', { lang: 'es' });
     expect(result.videoId).toBe('123456');
@@ -39,7 +41,9 @@ describe('YoutubeTranscriptionService', () => {
       .mockRejectedValueOnce(new Error('No captions'))
       .mockResolvedValueOnce(mockTranscript);
 
-    const result = await youtubeTranscriptionService.getTranscription('https://www.youtube.com/watch?v=123456');
+    const result = await youtubeTranscriptionService.getTranscription(
+      'https://www.youtube.com/watch?v=123456',
+    );
 
     // Expected: First call with es, Second call without options
     expect(YoutubeTranscript.fetchTranscript).toHaveBeenNthCalledWith(1, '123456', { lang: 'es' });
@@ -49,10 +53,13 @@ describe('YoutubeTranscriptionService', () => {
   });
 
   it('should throw error if both attempts fail', async () => {
-    (YoutubeTranscript.fetchTranscript as jest.Mock).mockRejectedValue(new Error('No captions available'));
+    (YoutubeTranscript.fetchTranscript as jest.Mock).mockRejectedValue(
+      new Error('No captions available'),
+    );
 
-    await expect(youtubeTranscriptionService.getTranscription('https://www.youtube.com/watch?v=123456'))
-      .rejects.toThrow('No se pudo obtener la transcripción');
+    await expect(
+      youtubeTranscriptionService.getTranscription('https://www.youtube.com/watch?v=123456'),
+    ).rejects.toThrow('No se pudo obtener la transcripción');
 
     expect(YoutubeTranscript.fetchTranscript).toHaveBeenCalledTimes(2);
   });

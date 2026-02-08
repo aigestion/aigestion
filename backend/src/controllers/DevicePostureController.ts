@@ -10,7 +10,7 @@ import { User } from '../models/User';
 export class DevicePostureController {
   constructor(
     @inject(TYPES.DevicePostureService)
-    private devicePostureService: DevicePostureService
+    private devicePostureService: DevicePostureService,
   ) {}
 
   /**
@@ -32,7 +32,11 @@ export class DevicePostureController {
   /**
    * Register a new device as trusted
    */
-  public registerDevice = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public registerDevice = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
       if (!req.user) throw new AppError('Unauthorized', 401);
 
@@ -42,10 +46,14 @@ export class DevicePostureController {
       await this.devicePostureService.registerDevice(req.user.id, {
         deviceId,
         name: name || 'New Device',
-        deviceInfo: deviceInfo || {}
+        deviceInfo: deviceInfo || {},
       });
 
-      res.status(201).json(buildResponse({ message: 'Device registered successfully' }, 201, (req as any).requestId));
+      res
+        .status(201)
+        .json(
+          buildResponse({ message: 'Device registered successfully' }, 201, (req as any).requestId),
+        );
     } catch (error) {
       next(error);
     }
@@ -54,7 +62,11 @@ export class DevicePostureController {
   /**
    * Manual posture check for a device
    */
-  public verifyCurrentDevice = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  public verifyCurrentDevice = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
       if (!req.user) throw new AppError('Unauthorized', 401);
 
@@ -63,8 +75,8 @@ export class DevicePostureController {
 
       const check = await this.devicePostureService.verifyDevice(req.user.id, {
         deviceId,
-        os: req.headers['x-os'] as string || 'unknown',
-        browser: req.headers['user-agent'] || 'unknown'
+        os: (req.headers['x-os'] as string) || 'unknown',
+        browser: req.headers['user-agent'] || 'unknown',
       });
 
       res.status(200).json(buildResponse(check, 200, (req as any).requestId));
@@ -82,10 +94,12 @@ export class DevicePostureController {
 
       const { deviceId } = req.params;
       await User.findByIdAndUpdate(req.user.id, {
-        $pull: { trustedDevices: { deviceId } }
+        $pull: { trustedDevices: { deviceId } },
       });
 
-      res.status(200).json(buildResponse({ message: 'Device revoked' }, 200, (req as any).requestId));
+      res
+        .status(200)
+        .json(buildResponse({ message: 'Device revoked' }, 200, (req as any).requestId));
     } catch (error) {
       next(error);
     }

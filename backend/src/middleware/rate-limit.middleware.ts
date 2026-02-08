@@ -9,19 +9,19 @@ import { logger } from '../utils/logger';
  * Applies different rate limits based on user plan/role.
  * Requires user to be authenticated (prop req.user populated).
  * Falls back to IP-based limiting if not authenticated (should be used on protected routes).
+ * God/Admin roles bypass rate limiting entirely via the `skip` option.
  */
 export const dynamicRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // Default 15 minutes
+  skip: (req: Request | any) => {
+    const user = req.user;
+    // God and Admin roles bypass rate limiting entirely
+    return user && (user.role === 'god' || user.role === 'admin');
+  },
   max: (req: Request | any) => {
     const user = req.user;
     if (!user) {
       return config.rateLimit.plans.default.max;
-    }
-    if (user.role === 'god' || user.role === 'admin') {
-      if (user.role === 'god' || user.role === 'admin') {
-        // Return 0 to disable rate limiting for God/Admin users
-        return 0;
-      }
     }
     const plan = user.subscriptionPlan?.toLowerCase();
     switch (plan) {

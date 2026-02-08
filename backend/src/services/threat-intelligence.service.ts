@@ -537,8 +537,6 @@ export class ThreatIntelligenceService {
     return [];
   }
 
-
-
   /**
    * Check CSV-based feed
    */

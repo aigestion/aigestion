@@ -15,10 +15,10 @@ export const cspMiddleware = helmet.contentSecurityPolicy({
       config.nodeEnv === 'production'
         ? ["'self'"]
         : [
-          "'self'",
-          "'unsafe-eval'", // Required for React/Vite development
-          "'unsafe-inline'", // Temporary for development
-        ],
+            "'self'",
+            "'unsafe-eval'", // Required for React/Vite development
+            "'unsafe-inline'", // Temporary for development
+          ],
 
     // Style sources
     styleSrc: [

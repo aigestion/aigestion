@@ -366,10 +366,16 @@ export class CentralizedLoggingService {
 
       const logLines = logsToFlush.map(
         log =>
-          `${log.timestamp.toISOString()} [${log.level.toUpperCase()}] ${log.service}: ${log.message} ` +
-          `${log.userId ? `[user:${log.userId}]` : ''} ${log.ipAddress ? `[ip:${log.ipAddress}]` : ''} ` +
+          `${log.timestamp.toISOString()} [${log.level.toUpperCase()}] ${log.service}: ${
+            log.message
+          } ` +
+          `${log.userId ? `[user:${log.userId}]` : ''} ${
+            log.ipAddress ? `[ip:${log.ipAddress}]` : ''
+          } ` +
           `${log.duration ? `[duration:${log.duration}ms]` : ''} ` +
-          `${Object.keys(log.metadata).length > 0 ? `[metadata:${JSON.stringify(log.metadata)}]` : ''}`,
+          `${
+            Object.keys(log.metadata).length > 0 ? `[metadata:${JSON.stringify(log.metadata)}]` : ''
+          }`,
       );
 
       await fs.appendFile(logFile, logLines.join('\n') + '\n');

@@ -19,17 +19,23 @@ export class SemanticRouterService {
    */
   private classifyQuery(query: string): ModelComplexity {
     const complexKeywords = [
-      'analyze', 'architect', 'performance', 'optimize', 
-      'debug', 'explain deeply', 'security audit', 'refactor'
+      'analyze',
+      'architect',
+      'performance',
+      'optimize',
+      'debug',
+      'explain deeply',
+      'security audit',
+      'refactor',
     ];
-    
+
     const wordCount = query.split(' ').length;
     const hasComplexKeyword = complexKeywords.some(kw => query.toLowerCase().includes(kw));
-    
+
     if (wordCount > 30 || hasComplexKeyword) {
       return ModelComplexity.COMPLEX;
     }
-    
+
     return ModelComplexity.SIMPLE;
   }
 
@@ -38,13 +44,16 @@ export class SemanticRouterService {
    */
   async getOptimalRoute(query: string): Promise<AIRoute> {
     const complexity = this.classifyQuery(query);
-    
+
     // Phase 14: Enhanced Context Awareness
     const memoryContext = await vectorService.search(query, 1);
     const hasLongTermContext = memoryContext.length > 0;
 
     if (complexity === ModelComplexity.COMPLEX || hasLongTermContext) {
-      logger.debug({ complexity, hasLongTermContext }, 'Routing to high-intelligence model (GPT-4/Claude-3)');
+      logger.debug(
+        { complexity, hasLongTermContext },
+        'Routing to high-intelligence model (GPT-4/Claude-3)',
+      );
       return {
         model: process.env.AI_MODEL_COMPLEX || 'gpt-4-turbo-preview',
         provider: 'openai',

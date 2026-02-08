@@ -50,7 +50,7 @@ echo ""
 echo -e "${BLUE}2. Verificando Variables de Entorno${NC}"
 
 check ".env file exists" "test -f .env"
-check "GOOGLE_CLOUD_PROJECT_ID set" "grep -q 'GOOGLE_CLOUD_PROJECT_ID=aigestion-net' .env"
+check "GOOGLE_CLOUD_PROJECT_ID set" "grep -q 'GOOGLE_CLOUD_PROJECT_ID=aigestion-sovereign-2026' .env"
 check "VERTEX_AI_LOCATION set" "grep -q 'VERTEX_AI_LOCATION=europe-west1' .env"
 check "GCS_BUCKET_BACKUPS set" "grep -q 'GCS_BUCKET_BACKUPS=' .env"
 check "SECRET_MANAGER_ENABLED set" "grep -q 'SECRET_MANAGER_ENABLED=true' .env"
@@ -65,7 +65,7 @@ echo ""
 echo -e "${BLUE}3. Verificando Google Cloud CLI${NC}"
 
 check "gcloud installed" "command -v gcloud"
-check "gcloud project set" "gcloud config get-value project | grep -q 'aigestion-net'"
+check "gcloud project set" "gcloud config get-value project | grep -q 'aigestion-sovereign-2026'"
 check "gcloud auth configured" "gcloud auth list | grep -q aigestion-master"
 
 echo ""
@@ -75,11 +75,11 @@ echo ""
 # ========================================
 echo -e "${BLUE}4. Verificando APIs Habilitadas${NC}"
 
-check "Vertex AI API enabled" "gcloud services list --enabled --project aigestion-net | grep -q 'aiplatform.googleapis.com'"
-check "Cloud Storage API enabled" "gcloud services list --enabled --project aigestion-net | grep -q 'storage-api.googleapis.com'"
-check "Secret Manager API enabled" "gcloud services list --enabled --project aigestion-net | grep -q 'secretmanager.googleapis.com'"
-check "Cloud Logging API enabled" "gcloud services list --enabled --project aigestion-net | grep -q 'logging.googleapis.com'"
-check "Cloud Monitoring API enabled" "gcloud services list --enabled --project aigestion-net | grep -q 'monitoring.googleapis.com'"
+check "Vertex AI API enabled" "gcloud services list --enabled --project aigestion-sovereign-2026 | grep -q 'aiplatform.googleapis.com'"
+check "Cloud Storage API enabled" "gcloud services list --enabled --project aigestion-sovereign-2026 | grep -q 'storage-api.googleapis.com'"
+check "Secret Manager API enabled" "gcloud services list --enabled --project aigestion-sovereign-2026 | grep -q 'secretmanager.googleapis.com'"
+check "Cloud Logging API enabled" "gcloud services list --enabled --project aigestion-sovereign-2026 | grep -q 'logging.googleapis.com'"
+check "Cloud Monitoring API enabled" "gcloud services list --enabled --project aigestion-sovereign-2026 | grep -q 'monitoring.googleapis.com'"
 
 echo ""
 
@@ -91,7 +91,7 @@ echo -e "${BLUE}5. Verificando Recursos de Google Cloud${NC}"
 check "GCS Bucket: backups exists" "gsutil ls -b gs://aigestion-backups 2>/dev/null"
 check "GCS Bucket: uploads exists" "gsutil ls -b gs://aigestion-uploads 2>/dev/null"
 check "GCS Bucket: models exists" "gsutil ls -b gs://aigestion-models 2>/dev/null"
-check "Service Account exists" "gcloud iam service-accounts describe aigestion-master@aigestion-net.iam.gserviceaccount.com --project aigestion-net 2>/dev/null"
+check "Service Account exists" "gcloud iam service-accounts describe aigestion-master@aigestion-sovereign-2026.iam.gserviceaccount.com --project aigestion-sovereign-2026 2>/dev/null"
 
 echo ""
 
@@ -100,9 +100,9 @@ echo ""
 # ========================================
 echo -e "${BLUE}6. Verificando Secret Manager${NC}"
 
-check "Secret: gemini-api-key exists" "gcloud secrets describe aigestion/gemini-api-key --project aigestion-net 2>/dev/null"
-check "Secret: mongodb-uri exists" "gcloud secrets describe aigestion/mongodb-uri --project aigestion-net 2>/dev/null"
-check "Secret: telegram tokens exists" "gcloud secrets describe aigestion/telegram-bot-token-dev --project aigestion-net 2>/dev/null"
+check "Secret: gemini-api-key exists" "gcloud secrets describe aigestion/gemini-api-key --project aigestion-sovereign-2026 2>/dev/null"
+check "Secret: mongodb-uri exists" "gcloud secrets describe aigestion/mongodb-uri --project aigestion-sovereign-2026 2>/dev/null"
+check "Secret: telegram tokens exists" "gcloud secrets describe aigestion/telegram-bot-token-dev --project aigestion-sovereign-2026 2>/dev/null"
 
 echo ""
 

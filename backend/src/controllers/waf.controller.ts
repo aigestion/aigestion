@@ -6,7 +6,7 @@ import { logger } from '../utils/logger';
 
 @injectable()
 export class WAFController {
-  constructor(private wafService: WAFService) { }
+  constructor(private wafService: WAFService) {}
 
   public getStats = async (req: Request, res: Response) => {
     try {

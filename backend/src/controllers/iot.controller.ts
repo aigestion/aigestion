@@ -7,7 +7,7 @@ import { logger } from '../utils/logger';
 
 @controller('/api/iot')
 export class IoTController {
-  constructor(@inject(HomeAssistantService) private haService: HomeAssistantService) { }
+  constructor(@inject(HomeAssistantService) private haService: HomeAssistantService) {}
 
   @httpPost('/connect')
   async connect(req: Request, res: Response) {
@@ -31,9 +31,14 @@ export class IoTController {
           await user.save();
         }
       }
-      return res.json({ success: true, message: 'Successfully connected and saved Home Assistant credentials' });
+      return res.json({
+        success: true,
+        message: 'Successfully connected and saved Home Assistant credentials',
+      });
     } else {
-      return res.status(401).json({ success: false, message: 'Could not connect. Check credentials.' });
+      return res
+        .status(401)
+        .json({ success: false, message: 'Could not connect. Check credentials.' });
     }
   }
 
@@ -53,7 +58,9 @@ export class IoTController {
     }
 
     if (!haUrl || !haToken) {
-      return res.status(400).json({ success: false, message: 'Home Assistant not configured for this user' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Home Assistant not configured for this user' });
     }
 
     const config = { baseUrl: haUrl, accessToken: haToken };
@@ -88,7 +95,12 @@ export class IoTController {
     }
 
     try {
-      await this.haService.callService({ baseUrl: haUrl, accessToken: haToken }, domain, service, serviceData);
+      await this.haService.callService(
+        { baseUrl: haUrl, accessToken: haToken },
+        domain,
+        service,
+        serviceData,
+      );
       return res.json({ success: true, message: 'Command executed' });
     } catch (error: any) {
       return res.status(500).json({ success: false, message: error.message });

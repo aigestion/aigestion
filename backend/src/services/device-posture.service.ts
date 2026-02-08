@@ -14,14 +14,15 @@ export interface DevicePostureData {
 
 @injectable()
 export class DevicePostureService {
-  constructor(
-    @inject(TYPES.UserRepository) private userRepository: IUserRepository
-  ) { }
+  constructor(@inject(TYPES.UserRepository) private userRepository: IUserRepository) {}
 
   /**
    * Verify if a device is trusted and compliant
    */
-  async verifyDevice(userId: string, postureData: DevicePostureData): Promise<{
+  async verifyDevice(
+    userId: string,
+    postureData: DevicePostureData,
+  ): Promise<{
     isTrusted: boolean;
     isCompliant: boolean;
     reason?: string;
@@ -49,30 +50,37 @@ export class DevicePostureService {
     // Update last check
     // Since BaseRepository.update is simple, we might need a custom method in UserRepository for array filters,
     // or use User model directly for now to unblock.
-    await User.findByIdAndUpdate(userId, {
-      $set: {
-        'trustedDevices.$[elem].lastPostureCheck': new Date(),
-        'trustedDevices.$[elem].isCompliant': isCompliant,
-      }
-    }, {
-      arrayFilters: [{ 'elem.deviceId': postureData.deviceId }]
-    });
+    await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          'trustedDevices.$[elem].lastPostureCheck': new Date(),
+          'trustedDevices.$[elem].isCompliant': isCompliant,
+        },
+      },
+      {
+        arrayFilters: [{ 'elem.deviceId': postureData.deviceId }],
+      },
+    );
 
     return {
       isTrusted: true,
       isCompliant,
-      reason: reasons.join(', ')
+      reason: reasons.join(', '),
     };
   }
 
   /**
    * Register a new trusted device for a user
    */
-  async registerDevice(userId: string, deviceData: {
-    deviceId: string;
-    name: string;
-    deviceInfo: any;
-  }): Promise<void> {
+  async registerDevice(
+    userId: string,
+    deviceData: {
+      deviceId: string;
+      name: string;
+      deviceInfo: any;
+    },
+  ): Promise<void> {
     const user = await this.userRepository.findById(userId);
     if (!user) throw new Error('User not found');
 
@@ -84,11 +92,11 @@ export class DevicePostureService {
       name: deviceData.name,
       lastPostureCheck: new Date(),
       isCompliant: true,
-      deviceInfo: deviceData.deviceInfo
+      deviceInfo: deviceData.deviceInfo,
     };
 
     await this.userRepository.update(userId, {
-      $push: { trustedDevices: newDevice }
+      $push: { trustedDevices: newDevice },
     } as any);
 
     logger.info(`New device registered for user ${userId}: ${deviceData.name}`);

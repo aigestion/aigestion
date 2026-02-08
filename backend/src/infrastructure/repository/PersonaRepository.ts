@@ -34,8 +34,11 @@ export class PersonaRepository extends BaseRepository<IPersona> implements IPers
     return await Persona.findById(id).exec();
   }
 
-  override async create(idOrItem: string | Partial<IPersona>, maybeItem?: Partial<IPersona>): Promise<IPersona> {
-    const data = typeof idOrItem === 'string' ? (maybeItem ?? {}) : idOrItem;
+  override async create(
+    idOrItem: string | Partial<IPersona>,
+    maybeItem?: Partial<IPersona>,
+  ): Promise<IPersona> {
+    const data = typeof idOrItem === 'string' ? maybeItem ?? {} : idOrItem;
     if (typeof idOrItem === 'string') {
       (data as any)._id = idOrItem;
     }

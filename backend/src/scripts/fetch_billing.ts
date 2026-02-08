@@ -14,16 +14,16 @@ async function aggregateCosts() {
   console.log('🚀 Iniciando agregación mensual de costos (God-Mode)...');
 
   // Simulated data from GitHub (Actions + Codespaces)
-  const githubActionsBase = 0.00; // Free tier included in org plan
+  const githubActionsBase = 0.0; // Free tier included in org plan
   const githubActionsUsage = 8.75; // Excess minutes & storage
   const githubActionsSubtotalUSD = githubActionsBase + githubActionsUsage;
 
   // Simulated data from Google Cloud (Vertex AI + storage)
-  const gcpVertexAI = 45.30;
-  const gcpStorage = 5.20;
+  const gcpVertexAI = 45.3;
+  const gcpStorage = 5.2;
   const gcpSubtotalUSD = gcpVertexAI + gcpStorage;
 
-  const othersUSD = 12.00; // Domain, etc.
+  const othersUSD = 12.0; // Domain, etc.
 
   const subtotalUSD = githubActionsSubtotalUSD + gcpSubtotalUSD + othersUSD;
 
@@ -40,25 +40,25 @@ async function aggregateCosts() {
         base: githubActionsBase,
         usage: githubActionsUsage,
         totalUSD: githubActionsSubtotalUSD,
-        totalEUR: githubActionsSubtotalUSD / EUR_USD_RATE
+        totalEUR: githubActionsSubtotalUSD / EUR_USD_RATE,
       },
       googleCloud: {
         vertexAI: gcpVertexAI,
         storage: gcpStorage,
         totalUSD: gcpSubtotalUSD,
-        totalEUR: gcpSubtotalUSD / EUR_USD_RATE
-      }
+        totalEUR: gcpSubtotalUSD / EUR_USD_RATE,
+      },
     },
     metricsUSD: {
       subtotal: subtotalUSD,
       iva: subtotalUSD * IVA_RATE,
-      total: totalUSD
+      total: totalUSD,
     },
     metricsEUR: {
       subtotal: subtotalUSD / EUR_USD_RATE,
       iva: (subtotalUSD * IVA_RATE) / EUR_USD_RATE,
-      total: totalUSD / EUR_USD_RATE
-    }
+      total: totalUSD / EUR_USD_RATE,
+    },
   };
 
   const dataDir = path.resolve(__dirname, '../../data');

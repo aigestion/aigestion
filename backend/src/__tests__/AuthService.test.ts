@@ -40,14 +40,14 @@ jest.mock('../config/config', () => ({
     jwt: {
       secret: 'test-secret',
       expiresIn: '1h',
-      cookieExpiresIn: '7d'
+      cookieExpiresIn: '7d',
     },
     rateLimit: {
       auth: {
         windowMs: 15 * 60 * 1000,
-        max: 5
-      }
-    }
+        max: 5,
+      },
+    },
   },
 }));
 
@@ -60,7 +60,7 @@ describe('AuthService', () => {
       mockUserRepository as any,
       mockRegisterUseCase as any,
       mockLoginUseCase as any,
-      mockVerify2FAUseCase as any
+      mockVerify2FAUseCase as any,
     );
   });
 
@@ -130,16 +130,19 @@ describe('AuthService', () => {
           token: validToken,
           familyId: familyId,
           expires: new Date(Date.now() + 10000), // Valid future date
-        }
-      ]
+        },
+      ],
     };
 
     it('should throw INVALID_REFRESH_TOKEN if user not found and token is not valid JWT', async () => {
       mockUserRepository.findOne.mockResolvedValue(null);
-      (jwt.verify as jest.Mock).mockImplementation(() => { throw new Error('invalid'); });
+      (jwt.verify as jest.Mock).mockImplementation(() => {
+        throw new Error('invalid');
+      });
 
-      await expect(authService.refreshToken('invalid-string', 'ip', 'agent'))
-        .rejects.toThrow('INVALID_REFRESH_TOKEN');
+      await expect(authService.refreshToken('invalid-string', 'ip', 'agent')).rejects.toThrow(
+        'INVALID_REFRESH_TOKEN',
+      );
     });
 
     it('should detect token reuse and invalidate family', async () => {
@@ -156,18 +159,19 @@ describe('AuthService', () => {
         id: userId,
         refreshTokens: [
           { familyId, token: 'some-new-token' },
-          { familyId: 'other-family', token: 'other' }
-        ]
+          { familyId: 'other-family', token: 'other' },
+        ],
       });
 
       mockUserRepository.update.mockResolvedValue({});
 
-      await expect(authService.refreshToken(validToken, 'ip', 'agent'))
-        .rejects.toThrow('REFRESH_TOKEN_REUSE_DETECTED');
+      await expect(authService.refreshToken(validToken, 'ip', 'agent')).rejects.toThrow(
+        'REFRESH_TOKEN_REUSE_DETECTED',
+      );
 
       // Expect invalidation
       expect(mockUserRepository.update).toHaveBeenCalledWith(userId, {
-        refreshTokens: expect.arrayContaining([{ familyId: 'other-family', token: 'other' }])
+        refreshTokens: expect.arrayContaining([{ familyId: 'other-family', token: 'other' }]),
       });
 
       const updateCall = mockUserRepository.update.mock.calls[0];
@@ -180,24 +184,30 @@ describe('AuthService', () => {
       const expiredToken = 'expired-token';
       const expiredUser = {
         ...mockUser,
-        refreshTokens: [{
-          token: expiredToken,
-          familyId: 'fam',
-          expires: new Date(Date.now() - 1000), // Past date
-        }]
+        refreshTokens: [
+          {
+            token: expiredToken,
+            familyId: 'fam',
+            expires: new Date(Date.now() - 1000), // Past date
+          },
+        ],
       };
 
       mockUserRepository.findOne.mockResolvedValue(expiredUser);
       mockUserRepository.removeRefreshToken.mockResolvedValue({});
 
-      await expect(authService.refreshToken(expiredToken, 'ip', 'agent'))
-        .rejects.toThrow('REFRESH_TOKEN_EXPIRED');
+      await expect(authService.refreshToken(expiredToken, 'ip', 'agent')).rejects.toThrow(
+        'REFRESH_TOKEN_EXPIRED',
+      );
 
       expect(mockUserRepository.removeRefreshToken).toHaveBeenCalledWith(expiredToken);
     });
 
     it('should refresh token correctly', async () => {
-      mockUserRepository.findOne.mockResolvedValue({ ...mockUser, refreshTokens: [...mockUser.refreshTokens] });
+      mockUserRepository.findOne.mockResolvedValue({
+        ...mockUser,
+        refreshTokens: [...mockUser.refreshTokens],
+      });
       mockUserRepository.update.mockResolvedValue({});
       (jwt.sign as jest.Mock).mockReturnValue('new-token-string');
 

@@ -54,8 +54,7 @@ export const logger = {
   warn: wrap('warn'),
   debug: wrap('debug'),
   verbose: wrap('trace'), // Map verbose to trace
-  silly: wrap('trace'),   // Map silly to trace
+  silly: wrap('trace'), // Map silly to trace
 };
 
 export default logger;
-

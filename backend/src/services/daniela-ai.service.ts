@@ -3,6 +3,7 @@ import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
 import { AIService } from './ai.service';
 import { AnalyticsService } from './analytics.service';
+import { EconomyService } from './economy.service';
 import { RagService } from './rag.service';
 import { UserBehaviorService } from './user-behavior.service';
 import { UserService } from './user.service';
@@ -29,6 +30,7 @@ export class DanielaAIService {
   private userService: UserService | null = null;
   private behaviorService: UserBehaviorService | null = null;
   private ragService: RagService | null = null;
+  private economyService: EconomyService | null = null;
 
   constructor() {
     this.initialize();
@@ -133,6 +135,8 @@ export class DanielaAIService {
     switch (intent) {
       case 'analytics':
         return await this.handleAnalyticsRequest(context, message, userContext);
+      case 'economy':
+        return await this.handleEconomyRequest(context, message, userContext);
       case 'advice':
         return await this.handleAdviceRequest(context, message, userContext);
       case 'task':
@@ -172,7 +176,11 @@ Directivas:
 6. Ofrece sugerencias proactivas
 7. Respeta el contexto de la conversación
 
-Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el historial' : 'forma breve y efectiva'}.`;
+Responde en ${
+      context.conversationHistory.length > 0
+        ? 'continuidad con el historial'
+        : 'forma breve y efectiva'
+    }.`;
   }
 
   /**
@@ -200,6 +208,19 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
       lowerMessage.includes('estadísticas')
     ) {
       return 'analytics';
+    }
+
+    if (
+      lowerMessage.includes('oro') ||
+      lowerMessage.includes('xrp') ||
+      lowerMessage.includes('nvidia') ||
+      lowerMessage.includes('google') ||
+      lowerMessage.includes('palantir') ||
+      lowerMessage.includes('economía') ||
+      lowerMessage.includes('precio') ||
+      lowerMessage.includes('mercado')
+    ) {
+      return 'economy';
     }
 
     if (
@@ -265,8 +286,28 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
   }
 
   /**
-   * Manejar solicitudes de consejo
+   * Manejar solicitudes de economía
    */
+  private async handleEconomyRequest(
+    context: DanielaContext,
+    message: string,
+    userContext: any,
+  ): Promise<string> {
+    const report = this.economyService
+      ? await this.economyService.generateFormattedReport()
+      : '📊 Actualmente no tengo acceso a los datos del mercado en tiempo real.';
+
+    const advice = this.economyService
+      ? (await this.economyService.getInvestmentAdvice()).advice
+      : 'Estrategia God Mode: Diversificación y paciencia son clave.';
+
+    return (
+      `💜 *Análisis de Mercado para ${context.userName}*\n\n` +
+      report +
+      `\n\n${advice}\n\n` +
+      `¿Quieres que profundice en algún activo específico?`
+    );
+  }
   private async handleAdviceRequest(
     context: DanielaContext,
     message: string,
@@ -417,7 +458,10 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
   ): Promise<void> {
     try {
       logger.info(
-        `[DANIELA] User: ${userMessage.substring(0, 50)}... | Response: ${danielaResponse.substring(0, 50)}...`,
+        `[DANIELA] User: ${userMessage.substring(0, 50)}... | Response: ${danielaResponse.substring(
+          0,
+          50,
+        )}...`,
       );
     } catch (error) {
       logger.warn('Error logging interaction:', error);
@@ -447,7 +491,9 @@ Responde en ${context.conversationHistory.length > 0 ? 'continuidad con el histo
     // Generar insights basados en el contexto real (o simulado por ahora pero estructurado)
     return [
       {
-        insight: `🚀 Detecté una forma de optimizar tu productividad en un ${userContext.efficiency || '87%'}`,
+        insight: `🚀 Detecté una forma de optimizar tu productividad en un ${
+          userContext.efficiency || '87%'
+        }`,
         impact: '🔥 Impacto Alto',
         action: 'Bloquea ventanas de enfoque por la mañana',
         color: 'text-yellow-400',

@@ -414,12 +414,15 @@ const envSchema = z.object({
   STRIPE_CURRENCY: z.string().default('usd').describe('Default currency for payments'),
   TAVILY_API_KEY: z.string().optional().describe('Tavily API key for web search'),
 
-  // Browserless Configuration
-  BROWSERLESS_HOST: z
+  // Voice Configuration (DashScope/Qwen)
+  DASHSCOPE_API_KEY: z.string().optional().describe('Alibaba Cloud DashScope API Key for Qwen TTS'),
+  QWEN_TTS_VOICE_ID: z
     .string()
-    .default('ws://localhost:3001')
-    .describe('Browserless WebSocket host'),
-  BROWSERLESS_API_KEY: z.string().optional().describe('Browserless API key (token)'),
+    .optional()
+    .default('longxiaomiao')
+    .describe('Voice ID for Qwen TTS'),
+  ELEVENLABS_API_KEY: z.string().optional().describe('ElevenLabs API Key'),
+  ELEVENLABS_VOICE_ID: z.string().optional().describe('ElevenLabs Voice ID'),
 });
 
 /**

@@ -7,7 +7,6 @@ import { predictiveHealingService } from '../services/PredictiveHealingService';
  * Nexus Command Controller: The unified brain for processing high-level commands.
  */
 export class NexusCommandController {
-
   /**
    * Execute a "God Mode" system command
    */
@@ -31,12 +30,14 @@ export class NexusCommandController {
         default:
           res.status(400).json({
             success: false,
-            error: 'Comando no reconocido o fuera de los límites de autoridad.'
+            error: 'Comando no reconocido o fuera de los límites de autoridad.',
           });
       }
     } catch (error) {
       logger.error({ error, requestId }, 'Error ejecutando comando Nexus');
-      res.status(500).json({ success: false, error: 'Fallo catastrófico en la ejecución del comando.' });
+      res
+        .status(500)
+        .json({ success: false, error: 'Fallo catastrófico en la ejecución del comando.' });
     }
   }
 
@@ -48,7 +49,7 @@ export class NexusCommandController {
       memoryUsage: 95,
       cpuUsage: 95,
       status: 'CRITICAL',
-      uptime: process.uptime()
+      uptime: process.uptime(),
     });
 
     res.json({ success: true, message: 'Purga del sistema completada y caches optimizados.' });

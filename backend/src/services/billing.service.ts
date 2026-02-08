@@ -13,7 +13,7 @@ export class BillingService {
   async reportUsage(customerId: string, subscriptionItemId: string, quantity: number = 1) {
     try {
       const timestamp = Math.floor(Date.now() / 1000);
-      
+
       // 1. Log to Redis for real-time analytics
       const analyticsKey = `billing:usage:${customerId}:${new Date().toISOString().split('T')[0]}`;
       await cache.set(analyticsKey, { lastUpdate: timestamp, quantity }, { ttl: 86400 });

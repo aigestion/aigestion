@@ -33,17 +33,10 @@ export class CoquiTTSService {
    * @param voiceModel Optional voice model (default: Spanish)
    * @returns Path to generated audio file
    */
-  async textToSpeech(
-    text: string,
-    outputPath?: string,
-    voiceModel?: string
-  ): Promise<string> {
+  async textToSpeech(text: string, outputPath?: string, voiceModel?: string): Promise<string> {
     try {
       const model = voiceModel || this.defaultModel;
-      const finalOutputPath = outputPath || path.join(
-        this.outputDir,
-        `tts_${Date.now()}.wav`
-      );
+      const finalOutputPath = outputPath || path.join(this.outputDir, `tts_${Date.now()}.wav`);
 
       logger.info(`[CoquiTTS] Generating speech for: "${text.substring(0, 50)}..."`);
 
@@ -61,7 +54,6 @@ export class CoquiTTSService {
 
       logger.info(`[CoquiTTS] Audio generated successfully: ${finalOutputPath}`);
       return finalOutputPath;
-
     } catch (error: any) {
       logger.error('[CoquiTTS] Error generating speech:', error.message);
       throw new Error(`Failed to generate speech: ${error.message}`);

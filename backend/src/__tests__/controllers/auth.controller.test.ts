@@ -1,7 +1,10 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { mockRequest as createMockRequest, mockResponse as createMockResponse } from '../../../../tests/__mocks__/express';
+import {
+  mockRequest as createMockRequest,
+  mockResponse as createMockResponse,
+} from '../../../../tests/__mocks__/express';
 
 import { getMe, login, register, refresh, logout } from '../../controllers/auth.controller';
 import { User } from '../../models/User';
@@ -30,8 +33,8 @@ jest.mock('../../utils/logger', () => ({
 const mockRandomUUID = jest.fn().mockReturnValue('mock-uuid');
 Object.defineProperty(global, 'crypto', {
   value: {
-    randomUUID: mockRandomUUID
-  }
+    randomUUID: mockRandomUUID,
+  },
 });
 
 describe('Auth Controller', () => {
@@ -64,7 +67,7 @@ describe('Auth Controller', () => {
       status: statusMock,
       json: jsonMock,
       cookie: cookieMock,
-      clearCookie: clearCookieMock
+      clearCookie: clearCookieMock,
     });
 
     mockUserRepo.create.mockReset();
@@ -82,76 +85,92 @@ describe('Auth Controller', () => {
 
   afterEach(() => {
     container.restore();
-    });
+  });
 
   describe('register', () => {
     const registerHandler = Array.isArray(register) ? register[register.length - 1] : register;
 
     it('should return 400 if user already exists', async () => {
-      mockRequest = createMockRequest({ body: { email: 'exists@example.com', password: 'AIGestion123!', name: 'Test' } });
-
-        // Repo finds user
-        mockUserRepo.findByEmail.mockResolvedValue({ email: 'exists@example.com' });
-
-        const next = jest.fn();
-        await registerHandler(mockRequest as Request, mockResponse as Response, next);
-
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({
-          message: 'El correo electrónico ya está registrado',
-          statusCode: 400
-        }));
+      mockRequest = createMockRequest({
+        body: { email: 'exists@example.com', password: 'AIGestion123!', name: 'Test' },
       });
+
+      // Repo finds user
+      mockUserRepo.findByEmail.mockResolvedValue({ email: 'exists@example.com' });
+
+      const next = jest.fn();
+      await registerHandler(mockRequest as Request, mockResponse as Response, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'El correo electrónico ya está registrado',
+          statusCode: 400,
+        }),
+      );
+    });
 
     it('should register a new user successfully', async () => {
       const userData = { email: 'new@example.com', password: 'AIGestion123!', name: 'New User' };
-        mockRequest = createMockRequest({ body: userData, requestId: 'req_123' } as any);
+      mockRequest = createMockRequest({ body: userData, requestId: 'req_123' } as any);
 
-        // Repo does not find user
-        mockUserRepo.findByEmail.mockResolvedValue(null);
+      // Repo does not find user
+      mockUserRepo.findByEmail.mockResolvedValue(null);
 
-        (bcrypt.genSalt as jest.Mock).mockResolvedValue('salt');
-        (bcrypt.hash as jest.Mock).mockResolvedValue('hashed_password');
-        (jwt.sign as jest.Mock).mockReturnValue('fake_token');
+      (bcrypt.genSalt as jest.Mock).mockResolvedValue('salt');
+      (bcrypt.hash as jest.Mock).mockResolvedValue('hashed_password');
+      (jwt.sign as jest.Mock).mockReturnValue('fake_token');
 
-        const mockUserInstance = {
-          _id: 'user_id',
-          email: userData.email,
-          name: userData.name,
-          role: 'user',
-          save: jest.fn().mockResolvedValue(true),
-            toObject: jest.fn().mockReturnValue({ _id: 'user_id', email: userData.email, name: userData.name, role: 'user', password: 'hashed_password' }),
-            refreshTokens: []
-          };
+      const mockUserInstance = {
+        _id: 'user_id',
+        email: userData.email,
+        name: userData.name,
+        role: 'user',
+        save: jest.fn().mockResolvedValue(true),
+        toObject: jest
+          .fn()
+          .mockReturnValue({
+            _id: 'user_id',
+            email: userData.email,
+            name: userData.name,
+            role: 'user',
+            password: 'hashed_password',
+          }),
+        refreshTokens: [],
+      };
 
-        // Mock User constructor to return our instance (AuthService does new User)
-        (User as unknown as jest.Mock).mockImplementation(() => mockUserInstance);
+      // Mock User constructor to return our instance (AuthService does new User)
+      (User as unknown as jest.Mock).mockImplementation(() => mockUserInstance);
 
-        // Repo create returns user (AuthService logic currently assumes create returns void or user but relies on user instance created before)
-        // AuthService calls repo.create(user)
-        mockUserRepo.create.mockResolvedValue(mockUserInstance);
+      // Repo create returns user (AuthService logic currently assumes create returns void or user but relies on user instance created before)
+      // AuthService calls repo.create(user)
+      mockUserRepo.create.mockResolvedValue(mockUserInstance);
 
-        const next = jest.fn();
-        await registerHandler(mockRequest as Request, mockResponse as Response, next);
+      const next = jest.fn();
+      await registerHandler(mockRequest as Request, mockResponse as Response, next);
 
-        // Expect successful response
-        expect(statusMock).toHaveBeenCalledWith(201);
-        expect(jsonMock).toHaveBeenCalledWith(expect.objectContaining({
-            data: expect.objectContaining({
-              token: 'fake_token'
-            })
-          }));
+      // Expect successful response
+      expect(statusMock).toHaveBeenCalledWith(201);
+      expect(jsonMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            token: 'fake_token',
+          }),
+        }),
+      );
 
-        // Verify repo usage
-        expect(mockUserRepo.findByEmail).toHaveBeenCalledWith(userData.email);
-        expect(mockUserRepo.create).toHaveBeenCalled();
-      });
+      // Verify repo usage
+      expect(mockUserRepo.findByEmail).toHaveBeenCalledWith(userData.email);
+      expect(mockUserRepo.create).toHaveBeenCalled();
+    });
   });
 
   describe('login', () => {
     const loginHandler = Array.isArray(login) ? login[login.length - 1] : login;
 
     it('should return 401 for invalid credentials (user not found)', async () => {
-      mockRequest = createMockRequest({ body: { email: 'wrong@example.com', password: 'AIGestion123!' } });
+      mockRequest = createMockRequest({
+        body: { email: 'wrong@example.com', password: 'AIGestion123!' },
+      });
 
       // Repo returns null
       mockUserRepo.findByEmail.mockResolvedValue(null);
@@ -159,11 +178,13 @@ describe('Auth Controller', () => {
       const next = jest.fn();
       await loginHandler(mockRequest as Request, mockResponse as Response, next);
 
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({
           message: 'Credenciales inválidas',
-          statusCode: 401
-        }));
-      });
+          statusCode: 401,
+        }),
+      );
+    });
 
     it('should lock account after 5 failed attempts', async () => {
       const mockUser = {
@@ -172,30 +193,37 @@ describe('Auth Controller', () => {
         password: 'hashed_password',
         loginAttempts: 4,
         lockUntil: undefined,
-        refreshTokens: []
+        refreshTokens: [],
       };
 
-      mockRequest = createMockRequest({ body: { email: 'test@example.com', password: 'wrongPassword123!' } });
-
-        // Repo returns user
-        mockUserRepo.findByEmail.mockResolvedValue(mockUser);
-
-        // Bcrypt compare fails
-        (bcrypt.compare as jest.Mock).mockResolvedValue(false);
-
-        const next = jest.fn();
-        await loginHandler(mockRequest as Request, mockResponse as Response, next);
-
-        // Verify logic
-      expect(mockUserRepo.update).toHaveBeenCalledWith('user_id', expect.objectContaining({
-        loginAttempts: 0,
-        lockUntil: expect.any(Date)
-      }));
-        expect(next).toHaveBeenCalledWith(expect.objectContaining({
-          message: 'Credenciales inválidas',
-          statusCode: 401
-        }));
+      mockRequest = createMockRequest({
+        body: { email: 'test@example.com', password: 'wrongPassword123!' },
       });
+
+      // Repo returns user
+      mockUserRepo.findByEmail.mockResolvedValue(mockUser);
+
+      // Bcrypt compare fails
+      (bcrypt.compare as jest.Mock).mockResolvedValue(false);
+
+      const next = jest.fn();
+      await loginHandler(mockRequest as Request, mockResponse as Response, next);
+
+      // Verify logic
+      expect(mockUserRepo.update).toHaveBeenCalledWith(
+        'user_id',
+        expect.objectContaining({
+          loginAttempts: 0,
+          lockUntil: expect.any(Date),
+        }),
+      );
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'Credenciales inválidas',
+          statusCode: 401,
+        }),
+      );
+    });
 
     it('should login successfully and reset attempts', async () => {
       const mockUser = {
@@ -205,29 +233,41 @@ describe('Auth Controller', () => {
         password: 'hashed_password',
         role: 'user',
         loginAttempts: 2,
-        toObject: jest.fn().mockReturnValue({ _id: 'user_id', email: 'test@example.com', role: 'user' }),
-        refreshTokens: []
+        toObject: jest
+          .fn()
+          .mockReturnValue({ _id: 'user_id', email: 'test@example.com', role: 'user' }),
+        refreshTokens: [],
       };
 
-      mockRequest = createMockRequest({ body: { email: 'test@example.com', password: 'AIGestion123!' }, ip: '1.2.3.4', headers: {}, requestId: 'req_123' } as any);
+      mockRequest = createMockRequest({
+        body: { email: 'test@example.com', password: 'AIGestion123!' },
+        ip: '1.2.3.4',
+        headers: {},
+        requestId: 'req_123',
+      } as any);
 
-        mockUserRepo.findByEmail.mockResolvedValue(mockUser);
+      mockUserRepo.findByEmail.mockResolvedValue(mockUser);
 
-        (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-        (jwt.sign as jest.Mock).mockReturnValue('auth_token');
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      (jwt.sign as jest.Mock).mockReturnValue('auth_token');
 
-        const next = jest.fn();
-        await loginHandler(mockRequest as Request, mockResponse as Response, next);
+      const next = jest.fn();
+      await loginHandler(mockRequest as Request, mockResponse as Response, next);
 
-      expect(mockUserRepo.update).toHaveBeenCalledWith('user_id', expect.objectContaining({
-        loginAttempts: 0,
-        lockUntil: undefined,
-        lastLogin: expect.any(Date)
-      }));
-        expect(statusMock).toHaveBeenCalledWith(200);
-        expect(jsonMock).toHaveBeenCalledWith(expect.objectContaining({
-            data: expect.objectContaining({ token: 'auth_token' })
-          }));
-      });
+      expect(mockUserRepo.update).toHaveBeenCalledWith(
+        'user_id',
+        expect.objectContaining({
+          loginAttempts: 0,
+          lockUntil: undefined,
+          lastLogin: expect.any(Date),
+        }),
+      );
+      expect(statusMock).toHaveBeenCalledWith(200);
+      expect(jsonMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ token: 'auth_token' }),
+        }),
+      );
+    });
   });
 });

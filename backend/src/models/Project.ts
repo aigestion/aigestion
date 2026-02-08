@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IProject extends Document {
-  _id: string;
   name: string;
   path: string;
   description?: string;

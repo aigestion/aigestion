@@ -61,17 +61,21 @@ export class NewsService {
           summary: data.summary || 'No summary available',
           category: data.category || 'General',
           tags: data.tags || [],
-          status: 'completed'
+          status: 'completed',
         });
       } catch (parseError) {
-        logger.warn(`[NewsService] AI response was not valid JSON, raw text: ${responseText.substring(0, 100)}...`);
+        logger.warn(
+          `[NewsService] AI response was not valid JSON, raw text: ${responseText.substring(
+            0,
+            100,
+          )}...`,
+        );
         this.updateNewsItem(id, {
           title: 'Processed News',
           summary: responseText.substring(0, 500) + '...',
-          status: 'completed'
+          status: 'completed',
         });
       }
-
     } catch (error) {
       throw error;
     }

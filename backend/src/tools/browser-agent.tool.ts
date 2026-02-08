@@ -41,7 +41,9 @@ export class BrowserAgentTool {
       browserWSEndpoint += `${separator}stealth=true&--disable-web-security=true`;
     }
 
-    logger.debug(`[BrowserAgentTool] Connecting to browser at ${browserWSEndpoint.split('?')[0]}...`);
+    logger.debug(
+      `[BrowserAgentTool] Connecting to browser at ${browserWSEndpoint.split('?')[0]}...`,
+    );
 
     try {
       return await puppeteer.connect({
@@ -70,7 +72,7 @@ export class BrowserAgentTool {
 
       // Set some comprehensive headers/settings for better stealth
       await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
       );
 
       for (let i = 0; i < actions.length; i++) {
@@ -82,7 +84,7 @@ export class BrowserAgentTool {
             if (!step.url) throw new Error('URL required for navigate action');
             await page.goto(step.url, {
               waitUntil: 'networkidle2',
-              timeout: step.timeout || 30000
+              timeout: step.timeout || 30000,
             });
             break;
 
@@ -120,14 +122,16 @@ export class BrowserAgentTool {
                 attributes: Array.from(el.attributes).reduce((acc: any, attr: any) => {
                   acc[attr.name] = attr.value;
                   return acc;
-                }, {})
+                }, {}),
               }));
             } else {
               // Detailed extraction strategy (Metadata, OG, Content)
               results.metadata = await page.evaluate(() => {
                 const doc = document as any;
                 const getMeta = (name: string) =>
-                  doc.querySelector(`meta[name="${name}"], meta[property="${name}"]`)?.getAttribute('content');
+                  doc
+                    .querySelector(`meta[name="${name}"], meta[property="${name}"]`)
+                    ?.getAttribute('content');
 
                 return {
                   title: doc.title,
@@ -135,7 +139,7 @@ export class BrowserAgentTool {
                   ogTitle: getMeta('og:title'),
                   ogDescription: getMeta('og:description'),
                   ogImage: getMeta('og:image'),
-                  canonical: doc.querySelector('link[rel="canonical"]')?.getAttribute('href')
+                  canonical: doc.querySelector('link[rel="canonical"]')?.getAttribute('href'),
                 };
               });
               results.text = await page.$eval('body', (el: any) => el.innerText);
@@ -150,7 +154,6 @@ export class BrowserAgentTool {
         data: results,
         summary: `Successfully executed ${actions.length} browser actions.`,
       };
-
     } catch (error: any) {
       logger.error('[BrowserAgentTool] Browser task failed:', error.message);
       let errorScreenshot;
@@ -158,7 +161,9 @@ export class BrowserAgentTool {
         try {
           const sc = await page.screenshot();
           errorScreenshot = Buffer.from(sc).toString('base64');
-        } catch (e) { /* ignore */ }
+        } catch (e) {
+          /* ignore */
+        }
       }
 
       return {
@@ -175,9 +180,8 @@ export class BrowserAgentTool {
    * One-off screenshot helper
    */
   async screenshot(url: string, outputPath?: string): Promise<string> {
-    return this.executeTask([
-      { action: 'navigate', url },
-      { action: 'screenshot' }
-    ]).then(res => res.success ? 'Screenshot captured' : 'Screenshot failed');
+    return this.executeTask([{ action: 'navigate', url }, { action: 'screenshot' }]).then(res =>
+      res.success ? 'Screenshot captured' : 'Screenshot failed',
+    );
   }
 }

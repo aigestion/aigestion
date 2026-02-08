@@ -9,7 +9,9 @@ describe('Exit Email API', () => {
     expect(res.body).toHaveProperty('data');
     expect(res.body.data).toHaveProperty('templates');
     expect(Array.isArray(res.body.data.templates)).toBe(true);
-    expect(res.body.data.templates).toEqual(expect.arrayContaining(['formal', 'friendly', 'brief', 'creative']));
+    expect(res.body.data.templates).toEqual(
+      expect.arrayContaining(['formal', 'friendly', 'brief', 'creative']),
+    );
   });
 
   test('GET /api/exit-templates/:name returns template content', async () => {

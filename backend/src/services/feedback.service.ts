@@ -15,22 +15,32 @@ export class FeedbackService {
   async submitFeedback(data: UIFeedback) {
     try {
       const feedbackKey = `feedback:ai:${data.messageId}`;
-      
+
       // 1. Log to Redis for aggregation
       // We store it with a score (1 for positive, -1 for negative)
       const score = data.isPositive ? 1 : -1;
-      
-      // In a real scenario, we'd use SADD or HSET
-      await cache.set(feedbackKey, {
-        ...data,
-        processed: false
-      }, { ttl: 604800 }); // Store for 7 days
 
-      logger.info({ messageId: data.messageId, isPositive: data.isPositive }, 'AI Feedback collected successfully');
-      
+      // In a real scenario, we'd use SADD or HSET
+      await cache.set(
+        feedbackKey,
+        {
+          ...data,
+          processed: false,
+        },
+        { ttl: 604800 },
+      ); // Store for 7 days
+
+      logger.info(
+        { messageId: data.messageId, isPositive: data.isPositive },
+        'AI Feedback collected successfully',
+      );
+
       // 2. Proactive Alerting if negative
       if (!data.isPositive) {
-        logger.warn({ messageId: data.messageId }, 'NEGATIVE AI Feedback received - Flagged for review');
+        logger.warn(
+          { messageId: data.messageId },
+          'NEGATIVE AI Feedback received - Flagged for review',
+        );
       }
 
       return true;

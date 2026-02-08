@@ -278,7 +278,8 @@ export class UserBehaviorMiddleware {
         break;
 
       case 'data_access':
-        metadata.resource = req.body?.resource || (req.params as any)?.resource || (req.query as any)?.resource;
+        metadata.resource =
+          req.body?.resource || (req.params as any)?.resource || (req.query as any)?.resource;
         metadata.action = req.body?.action || req.method?.toLowerCase();
         metadata.dataType = req.body?.dataType || 'unknown';
         break;

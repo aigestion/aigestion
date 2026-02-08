@@ -5,7 +5,7 @@ import { IQuery } from '../../../shared/cqrs/messages';
 import { IQueryHandler } from '../../../shared/cqrs/handlers';
 
 class TestQuery implements IQuery {
-  constructor(public readonly id: string) { }
+  constructor(public readonly id: string) {}
 }
 
 class TestQueryHandler implements IQueryHandler<TestQuery, string> {

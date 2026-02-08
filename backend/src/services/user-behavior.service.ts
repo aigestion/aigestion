@@ -6,15 +6,15 @@ import { logger } from '../utils/logger';
 interface UserBehaviorEvent {
   userId: string;
   eventType:
-  | 'login'
-  | 'logout'
-  | 'file_upload'
-  | 'api_call'
-  | 'page_view'
-  | 'error'
-  | 'permission_denied'
-  | 'data_access'
-  | 'malware_detected';
+    | 'login'
+    | 'logout'
+    | 'file_upload'
+    | 'api_call'
+    | 'page_view'
+    | 'error'
+    | 'permission_denied'
+    | 'data_access'
+    | 'malware_detected';
   timestamp: Date;
   ipAddress: string;
   userAgent: string;
@@ -53,13 +53,13 @@ interface BehaviorAnomaly {
   id: string;
   userId: string;
   type:
-  | 'new_ip'
-  | 'new_user_agent'
-  | 'unusual_time'
-  | 'high_error_rate'
-  | 'excessive_api_calls'
-  | 'unusual_data_access'
-  | 'session_anomaly';
+    | 'new_ip'
+    | 'new_user_agent'
+    | 'unusual_time'
+    | 'high_error_rate'
+    | 'excessive_api_calls'
+    | 'unusual_data_access'
+    | 'session_anomaly';
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   detectedAt: Date;
@@ -148,7 +148,12 @@ export class UserBehaviorService {
   /**
    * Specifically track malware detection events
    */
-  public async trackThreat(userId: string, filename: string, threats: string[], ipAddress: string): Promise<void> {
+  public async trackThreat(
+    userId: string,
+    filename: string,
+    threats: string[],
+    ipAddress: string,
+  ): Promise<void> {
     const event: UserBehaviorEvent = {
       userId,
       eventType: 'malware_detected',
@@ -159,8 +164,8 @@ export class UserBehaviorService {
       metadata: {
         filename,
         threats,
-        priority: 'critical'
-      }
+        priority: 'critical',
+      },
     };
     await this.trackEvent(event);
   }

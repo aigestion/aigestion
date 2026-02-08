@@ -82,4 +82,6 @@ export const TYPES = {
   GodModeController: Symbol.for('GodModeController'),
   DanielaAIService: Symbol.for('DanielaAIService'),
   DanielaController: Symbol.for('DanielaController'),
+  SovereignVaultService: Symbol.for('SovereignVaultService'),
+  EconomyService: Symbol.for('EconomyService'),
 };

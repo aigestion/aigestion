@@ -41,11 +41,13 @@ export class DocumentProcessor {
         type,
         filename: originalname,
         ...extracted.extractedData,
-        requestId
+        requestId,
       });
 
       // 4. Cleanup temporary file
-      await fs.unlink(filePath).catch(err => logger.error(`Failed to delete temp file ${filePath}`, err));
+      await fs
+        .unlink(filePath)
+        .catch(err => logger.error(`Failed to delete temp file ${filePath}`, err));
 
       logger.info(`[DocumentProcessor] Job [${job.id}] completed successfully: ${docId}`);
 

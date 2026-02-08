@@ -26,7 +26,7 @@ export const idempotencyMiddleware = async (req: Request, res: Response, next: N
 
   try {
     // 1. Intentar recuperar respuesta previa del caché (L1 o L2)
-    const cachedResponse = await cache.get(cacheKey) as CachedResponse;
+    const cachedResponse = (await cache.get(cacheKey)) as CachedResponse;
 
     if (cachedResponse) {
       logger.info({ cacheKey, path: req.path }, 'Idempotency HIT: Retornando respuesta cacheada');

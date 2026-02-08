@@ -298,20 +298,27 @@ export class EnhancedVoiceService {
   /**
    * Convert text to speech using ElevenLabs or Qwen3
    */
-  private async textToSpeech(text: string, provider: 'elevenlabs' | 'qwen' = 'qwen'): Promise<Buffer> {
+  public async textToSpeech(
+    text: string,
+    provider: 'elevenlabs' | 'qwen' = 'qwen',
+  ): Promise<Buffer> {
     try {
       const tempPath = path.join(process.cwd(), 'uploads', 'voice', `${Date.now()}.mp3`);
-      
+
       let audioPath: string;
       if (provider === 'qwen') {
         audioPath = await this.qwenTTSService.textToSpeech(text, tempPath);
       } else {
         // Fallback to ElevenLabs if needed
-        audioPath = await this.elevenLabsService.textToSpeech(text, env.ELEVENLABS_VOICE_ID || '', tempPath);
+        audioPath = await this.elevenLabsService.textToSpeech(
+          text,
+          env.ELEVENLABS_VOICE_ID || '',
+          tempPath,
+        );
       }
 
       const audioBuffer = await fs.readFile(audioPath);
-      
+
       // Cleanup temp file (optional, depends on if we want to stream or cache)
       // await fs.unlink(audioPath);
 
