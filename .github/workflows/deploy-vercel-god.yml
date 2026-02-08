@@ -99,74 +99,17 @@ jobs:
             cp index.html vercel-deploy/
           fi
 
-          # Create vercel.json in deployment directory
-          cat > vercel-deploy/vercel.json << 'EOF'
-          {
-            "version": 2,
-            "buildCommand": "echo skip-build",
-            "outputDirectory": ".",
-            "framework": "vite",
-            "regions": ["iad1", "sfo1", "hnd1", "fra1", "sin1"],
-            "functions": {
-              "api/**/*.ts": {
-                "runtime": "nodejs22.x",
-                "maxDuration": 30,
-                "memory": 1024
-              },
-              "api/ai/**/*.ts": {
-                "runtime": "nodejs22.x",
-                "maxDuration": 60,
-                "memory": 2048
-              },
-              "api/realtime/**/*.ts": {
-                "runtime": "edge",
-                "maxDuration": 10,
-                "memory": 512
-              }
-            },
-            "rewrites": [
-              {"source": "/api/:path*", "destination": "/api/:path*"},
-              {"source": "/(.*)", "destination": "/index.html"}
-            ],
-            "headers": [
-              {
-                "source": "/(.*)",
-                "headers": [
-                  {"key": "X-DNS-Prefetch-Control", "value": "on"},
-                  {"key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains; preload"},
-                  {"key": "X-Frame-Options", "value": "DENY"},
-                  {"key": "X-Content-Type-Options", "value": "nosniff"},
-                  {"key": "X-XSS-Protection", "value": "1; mode=block"},
-                  {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
-                  {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"}
-                ]
-              },
-              {
-                "source": "/api/(.*)",
-                "headers": [
-                  {"key": "Access-Control-Allow-Origin", "value": "https://aigestion.net, https://www.aigestion.net"},
-                  {"key": "Access-Control-Allow-Methods", "value": "GET, POST, PUT, DELETE, PATCH, OPTIONS"},
-                  {"key": "Access-Control-Allow-Headers", "value": "X-Requested-With, Content-Type, Authorization, Cache-Control"}
-                ]
-              }
-            ],
-            "env": {
-              "NODE_ENV": "production",
-              "NEXT_PUBLIC_APP_URL": "https://aigestion.net",
-              "NEXT_PUBLIC_API_URL": "https://aigestion.net/api",
-              "NEXT_PUBLIC_WS_URL": "wss://aigestion.net",
-              "VERCEL_ENV": "production"
-            },
-            "crons": [
-              {"path": "/api/cleanup/sessions", "schedule": "0 2 * * *"},
-              {"path": "/api/analytics/daily", "schedule": "0 3 * * *"},
-              {"path": "/api/backup/database", "schedule": "0 4 * * *"},
-              {"path": "/api/health/check", "schedule": "*/15 * * * *"},
-              {"path": "/api/cache/clear", "schedule": "0 1 * * 0"},
-              {"path": "/api/performance/metrics", "schedule": "0 */6 * * *"}
-            ]
-          }
-          EOF
+          # Copy root vercel.json if exists
+          if [ -f vercel.json ]; then
+            echo "📄 Using repository vercel.json"
+            cp vercel.json vercel-deploy/
+          else
+            echo "❌ vercel.json not found in root!"
+            ls -la
+            exit 1
+          fi
+
+          echo "✅ Deployment artifacts prepared"
 
           echo "✅ Deployment artifacts prepared"
           echo "📁 Deployment directory contents:"
