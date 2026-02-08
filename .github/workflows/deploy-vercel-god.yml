@@ -71,9 +71,9 @@ jobs:
           export VITE_API_BASE_URL="/api"
 
           echo "🌌 Environment variables set"
-          echo "🔨 Building Dependencies..."
+          echo "🔨 Building Dependencies (Force Mode)..."
           cd packages/design-system-v2
-          npm run build
+          npx --yes tsup src/index.ts --format cjs,esm --no-dts
           cd ../..
 
           echo "🔨 Building Website..."
