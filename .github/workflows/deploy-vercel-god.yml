@@ -94,10 +94,7 @@ jobs:
           # Copy all frontend files to the expected directory
           cp -r frontend/website-epic/dist/* vercel-deploy/frontend/website-epic/dist/
 
-          # Copy root index.html if exists
-          if [ -f index.html ]; then
-            cp index.html vercel-deploy/
-          fi
+
 
           # Copy root vercel.json if exists
           if [ -f vercel.json ]; then
