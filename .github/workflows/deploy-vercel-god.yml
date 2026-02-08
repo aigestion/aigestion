@@ -88,11 +88,11 @@ jobs:
         run: |
           echo "📤 Preparing deployment artifacts..."
 
-          # Create deployment directory
-          mkdir -p vercel-deploy
+          # Create nested directory structure to match vercel.json outputDirectory
+          mkdir -p vercel-deploy/frontend/website-epic/dist
 
-          # Copy all frontend files to deployment directory
-          cp -r frontend/website-epic/dist/* vercel-deploy/
+          # Copy all frontend files to the expected directory
+          cp -r frontend/website-epic/dist/* vercel-deploy/frontend/website-epic/dist/
 
           # Copy root index.html if exists
           if [ -f index.html ]; then
