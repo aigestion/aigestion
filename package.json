@@ -25,7 +25,7 @@
   "scripts": {
     "parse": "ts-node tests/parse/index.ts",
     "test": "jest --config .config/jest.config.cjs",
-    "build": "turbo build --filter=aigestion-website-epic... --filter=aigestion-client-dashboard... --filter=aigestion-admin-dashboard... --filter=aigestion-demo-dashboard...",
+    "build": "npx --yes turbo build --filter=aigestion-website-epic... --filter=aigestion-client-dashboard... --filter=aigestion-admin-dashboard... --filter=aigestion-demo-dashboard...",
     "trunk": "trunk",
     "lint": "eslint . --config .config/eslint.config.cjs",
     "format": "prettier --write . --config .config/.prettierrc",
