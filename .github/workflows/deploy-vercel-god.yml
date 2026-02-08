@@ -79,8 +79,18 @@ jobs:
           export VITE_API_BASE_URL="/api"
 
           echo "🔨 Building Website..."
-          npm run build
+          npm run build > ../../website_build.log 2>&1 || { echo "❌ Website Build Failed" ; cat ../../website_build.log ; exit 1; }
           cd ../..
+
+      - name: 🚨 DEBUG - COMMIT LOGS ON FAILURE
+        if: failure()
+        run: |
+          echo "🚨 Workflow Failed! Committing logs..."
+          git config --global user.name "God Mode Debugger"
+          git config --global user.email "debugger@aigestion.net"
+          git add website_build.log || true
+          git commit -m "chore(debug): upload build logs for analysis" || true
+          git push origin main || true
 
           echo "✅ Build completed"
           echo "📊 Build artifacts:"
