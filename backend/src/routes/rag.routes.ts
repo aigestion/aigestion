@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { ragService } from '../services/rag.service';
+import { container, TYPES } from '../config/inversify.config';
+import { RagService } from '../services/rag.service';
 import { logger } from '../utils/logger';
 
 const router = Router();
@@ -21,6 +22,7 @@ router.post('/query', (req: any, res: any, next: any) => {
     }
 
     try {
+      const ragService = container.get<RagService>(TYPES.RagService);
       const result = await ragService.queryKnowledgeBase(query);
       res.json({ success: true, data: result });
     } catch (error: any) {
@@ -50,6 +52,7 @@ router.post('/query', (req: any, res: any, next: any) => {
 //       const content = file.buffer.toString('utf-8');
 //       const tags = (req as any).body.tags ? String((req as any).body.tags).split(',') : [];
 
+//       const ragService = container.get<RagService>(TYPES.RagService);
 //       await ragService.ingestDocument(file.originalname, content, tags);
 
 //       res.json({ success: true, message: 'Document ingested successfully' });
@@ -68,6 +71,7 @@ router.get('/', (req: any, res: any, next: any) => {
       return res.status(400).json({ error: 'Missing query parameter' });
     }
     try {
+      const ragService = container.get<RagService>(TYPES.RagService);
       const result = await ragService.queryKnowledgeBase(query);
       res.json({ results: [{ content: result }] }); // Match previous format roughly
     } catch (error: any) {

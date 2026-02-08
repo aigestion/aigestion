@@ -74,7 +74,9 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
 
       // Device Posture Check
       if (decoded.fingerprint.deviceId) {
-        const devicePostureService = container.get<DevicePostureService>(TYPES.DevicePostureService);
+        const devicePostureService = container.get<DevicePostureService>(
+          TYPES.DevicePostureService,
+        );
         const postureCheck = await devicePostureService.verifyDevice(decoded.id, {
           deviceId: decoded.fingerprint.deviceId,
           os: 'unknown', // Would extract from UA or other headers
@@ -135,8 +137,16 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
     };
 
     next();
-  } catch (error) {
-    logger.error(error, 'Auth Middleware Error');
+  } catch (error: any) {
+    logger.error(
+      {
+        error: error.message,
+        name: error.name,
+        stack: error.stack,
+        token: token?.substring(0, 10) + '...', // Log only start of token for security
+      },
+      'Auth Middleware Error',
+    );
     (res as any).status(401).json({
       success: false,
       message: 'Sesión inválida o expirada.',

@@ -1,4 +1,3 @@
-
 import 'reflect-metadata';
 import { Verify2FALoginUseCase } from '../Verify2FALoginUseCase';
 import { TwoFactorService } from '../../../services/two-factor.service';
@@ -32,14 +31,14 @@ jest.mock('../../../config', () => ({
     jwt: {
       secret: 'test-secret',
       expiresIn: '1h',
-      cookieExpiresIn: '7d'
+      cookieExpiresIn: '7d',
     },
     rateLimit: {
       auth: {
         windowMs: 15 * 60 * 1000,
-        max: 5
-      }
-    }
+        max: 5,
+      },
+    },
   },
 }));
 
@@ -51,7 +50,7 @@ describe('Verify2FALoginUseCase', () => {
     verify2FALoginUseCase = new Verify2FALoginUseCase(
       mockTwoFactorService as any,
       mockRateLimitService as any,
-      mockUserRepository as any
+      mockUserRepository as any,
     );
   });
 
@@ -66,8 +65,9 @@ describe('Verify2FALoginUseCase', () => {
   it('should throw error if user not found', async () => {
     mockUserRepository.findById.mockResolvedValue(null);
 
-    await expect(verify2FALoginUseCase.execute(validPayload))
-      .rejects.toThrow(new AppError('User not found', 404, 'USER_NOT_FOUND'));
+    await expect(verify2FALoginUseCase.execute(validPayload)).rejects.toThrow(
+      new AppError('User not found', 404, 'USER_NOT_FOUND'),
+    );
   });
 
   it('should throw error if 2FA is not enabled for user', async () => {
@@ -76,8 +76,9 @@ describe('Verify2FALoginUseCase', () => {
       isTwoFactorEnabled: false,
     });
 
-    await expect(verify2FALoginUseCase.execute(validPayload))
-      .rejects.toThrow('2FA not enabled for user');
+    await expect(verify2FALoginUseCase.execute(validPayload)).rejects.toThrow(
+      '2FA not enabled for user',
+    );
   });
 
   it('should verify TOTP successfully and return tokens', async () => {
@@ -101,7 +102,11 @@ describe('Verify2FALoginUseCase', () => {
     expect(result).toHaveProperty('token');
     expect(result).toHaveProperty('refreshToken');
     expect(mockUserRepository.update).toHaveBeenCalled();
-    expect(mockRateLimitService.incrementAndCheck).toHaveBeenCalledWith(`login_2fa:${userId}`, 5, 900);
+    expect(mockRateLimitService.incrementAndCheck).toHaveBeenCalledWith(
+      `login_2fa:${userId}`,
+      5,
+      900,
+    );
     expect(mockRateLimitService.reset).toHaveBeenCalledWith(`login_2fa:${userId}`);
   });
 
@@ -142,13 +147,18 @@ describe('Verify2FALoginUseCase', () => {
 
     // Use a token long enough to trigger backup code check attempt, otherwise it throws 'Invalid 2FA code' without checking backup
     const longToken = '1234567';
-    await expect(verify2FALoginUseCase.execute({ ...validPayload, token: longToken }))
-      .rejects.toThrow(new AppError('Invalid 2FA code', 401, 'INVALID_2FA_CODE'));
+    await expect(
+      verify2FALoginUseCase.execute({ ...validPayload, token: longToken }),
+    ).rejects.toThrow(new AppError('Invalid 2FA code', 401, 'INVALID_2FA_CODE'));
   });
 
   it('should verify rate limit is checked', async () => {
-    mockRateLimitService.incrementAndCheck.mockRejectedValue(new AppError('Rate limit exceeded', 429, 'RATE_LIMIT_EXCEEDED'));
-    await expect(verify2FALoginUseCase.execute(validPayload)).rejects.toThrow('Rate limit exceeded');
+    mockRateLimitService.incrementAndCheck.mockRejectedValue(
+      new AppError('Rate limit exceeded', 429, 'RATE_LIMIT_EXCEEDED'),
+    );
+    await expect(verify2FALoginUseCase.execute(validPayload)).rejects.toThrow(
+      'Rate limit exceeded',
+    );
     expect(mockUserRepository.findById).not.toHaveBeenCalled();
   });
 });

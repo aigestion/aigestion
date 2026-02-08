@@ -167,4 +167,3 @@ process.on('SIGTERM', async () => {
 });
 
 export { app };
-

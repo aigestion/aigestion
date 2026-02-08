@@ -25,7 +25,7 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
       pagination: {
         page: Number(page),
         limit: Number(limit),
-        total
+        total,
       },
     };
     res.json(buildResponse(response, 200, (req as any).requestId));

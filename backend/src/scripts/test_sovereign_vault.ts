@@ -9,15 +9,15 @@ async function testVault() {
 
   try {
     const vault = container.get<SovereignVaultService>(TYPES.SovereignVaultService);
-    
+
     // Test Query
     const query = 'NEXUS Sovereign Architecture';
     logger.info(`🔍 Querying vault: "${query}"`);
-    
+
     const results = await vault.query(query, 2);
-    
+
     logger.info(`✅ Received ${results.length} results from the vault.`);
-    
+
     results.forEach((res, i) => {
       console.log(`[Result ${i + 1}] Source: ${res.source} | Score: ${res.score}`);
       console.log(`Content: ${res.content.substring(0, 100)}...`);

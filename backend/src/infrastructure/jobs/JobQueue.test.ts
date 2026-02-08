@@ -1,4 +1,3 @@
-
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import 'reflect-metadata';
 import { JobQueue } from './JobQueue';
@@ -49,9 +48,9 @@ describe('JobQueue', () => {
       {
         to: 'test@example.com',
         subject: 'Test',
-        body: 'Body'
+        body: 'Body',
       },
-      undefined
+      undefined,
     );
   });
 });

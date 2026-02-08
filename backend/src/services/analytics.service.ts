@@ -84,7 +84,20 @@ export class AnalyticsService {
       { $sort: { _id: 1 } },
     ]);
 
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthNames = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     const revenue = revenueData.map(d => ({
       name: monthNames[d._id - 1],
       value: parseFloat((d.total * 2).toFixed(2)), // Assume 2x margin over raw cost

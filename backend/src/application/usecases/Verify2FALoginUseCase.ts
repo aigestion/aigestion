@@ -15,8 +15,8 @@ export class Verify2FALoginUseCase {
   constructor(
     @inject(TYPES.TwoFactorService) private twoFactorService: TwoFactorService,
     @inject(TYPES.RateLimitService) private rateLimitService: RateLimitService,
-    @inject(TYPES.UserRepository) private userRepository: IUserRepository
-  ) { }
+    @inject(TYPES.UserRepository) private userRepository: IUserRepository,
+  ) {}
 
   async execute(data: { userId: string; token: string; ip?: string; userAgent?: string }) {
     const { userId, token, ip, userAgent } = data;
@@ -59,27 +59,28 @@ export class Verify2FALoginUseCase {
 
     // Generate tokens (Duplicated from LoginUserUseCase)
     const refreshToken = this.generateRefreshTokenString(user);
-    const newRefreshTokens = [...(user.refreshTokens ?? []), {
-      token: refreshToken,
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      familyId: crypto.randomUUID(),
-      ip: ip ?? 'unknown',
-      userAgent: userAgent ?? 'unknown',
-      createdAt: new Date(),
-    }];
+    const newRefreshTokens = [
+      ...(user.refreshTokens ?? []),
+      {
+        token: refreshToken,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        familyId: crypto.randomUUID(),
+        ip: ip ?? 'unknown',
+        userAgent: userAgent ?? 'unknown',
+        createdAt: new Date(),
+      },
+    ];
 
     const updates: Partial<IUser> = {
       loginAttempts: 0,
       lockUntil: undefined,
       lastLogin: new Date(),
-      refreshTokens: newRefreshTokens.length > 10 ? newRefreshTokens.slice(-10) : newRefreshTokens
+      refreshTokens: newRefreshTokens.length > 10 ? newRefreshTokens.slice(-10) : newRefreshTokens,
     };
 
     const updatedUser = await this.userRepository.update(user.id, updates);
 
     const accessToken = this.generateToken(user, { ip, userAgent });
-
-
 
     // Clear rate limit on success
     await this.rateLimitService.reset(`login_2fa:${userId}`);

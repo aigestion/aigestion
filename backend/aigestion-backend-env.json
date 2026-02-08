@@ -100,9 +100,9 @@ RUNWAY_API_KEY=key_66b6e7564ea5b2e9352a4b89b8bdf59a331662fa5e5a78ecfde9547e98ae3
 # -----------------------------------------------------------------------------
 # 7️⃣ GOOGLE CLOUD PLATFORM (GCP)
 # -----------------------------------------------------------------------------
-GOOGLE_CLOUD_PROJECT=aigestion-v2
-GOOGLE_CLOUD_PROJECT_ID=aigestion-v2
-CLOUDRUN_PROJECT_ID=aigestion-v2
+GOOGLE_CLOUD_PROJECT=aigestion-sovereign-2026
+GOOGLE_CLOUD_PROJECT_ID=aigestion-sovereign-2026
+CLOUDRUN_PROJECT_ID=aigestion-sovereign-2026
 CLOUDRUN_SERVICE_NAME=aigestion-app
 CLOUDRUN_REGION=europe-west1
 GOOGLE_APPLICATION_CREDENTIALS=C:/Users/Alejandro/AIGestion/infra/keys/gcp_service_account.json
@@ -183,7 +183,7 @@ FIGMA_FILE_KEY=Uk9m5Gr8vWbprhAa3L1VTS # AIGestion Landing Page
 FIGMA_DASHBOARDS_FILE_KEY=42Ak9FkdubnLAYjfT0pqBx # AIGestion Dashboards
 
 # YouTube / Google Social
-YOUTUBE_API_KEY=AIzaSyCnvJeSYO9ELp1kPy6qbYKCEEZEeHkz6P4 # Auto-generated via gcloud (aigestion-v2)
+YOUTUBE_API_KEY=AIzaSyCnvJeSYO9ELp1kPy6qbYKCEEZEeHkz6P4 # Auto-generated via gcloud (aigestion-sovereign-2026)
 YOUTUBE_PERSONAL_CHANNEL_ID=UCfkU-9IY9xQC2q2y56L2SPw # Found via API (noemisanalex)
 YOUTUBE_PERSONAL_EMAIL=noemisanalex@gmail.com
 YOUTUBE_PERSONAL_CLIENT_ID=742472155410-ntgl3tkb6b3egpfe60fg5vfto9f0vn1r.apps.googleusercontent.com

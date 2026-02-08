@@ -512,7 +512,9 @@ export class MonitoringService {
         this.createAlert({
           name: `${metric.name} critical`,
           severity: 'critical',
-          message: `${metric.name} is ${metric.value.toFixed(2)}${metric.unit} (critical threshold: ${rule.critical}${metric.unit})`,
+          message: `${metric.name} is ${metric.value.toFixed(2)}${
+            metric.unit
+          } (critical threshold: ${rule.critical}${metric.unit})`,
           metadata: {
             metric: metric.name,
             value: metric.value,
@@ -524,7 +526,9 @@ export class MonitoringService {
         this.createAlert({
           name: `${metric.name} warning`,
           severity: 'warning',
-          message: `${metric.name} is ${metric.value.toFixed(2)}${metric.unit} (warning threshold: ${rule.warning}${metric.unit})`,
+          message: `${metric.name} is ${metric.value.toFixed(2)}${
+            metric.unit
+          } (warning threshold: ${rule.warning}${metric.unit})`,
           metadata: {
             metric: metric.name,
             value: metric.value,

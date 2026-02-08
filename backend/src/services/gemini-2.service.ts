@@ -9,9 +9,7 @@ import { DanielaAIService } from './daniela-ai.service';
 export class Gemini2Service {
   private client: any;
 
-  constructor(
-    @inject(DanielaAIService) private daniela: DanielaAIService
-  ) {}
+  constructor(@inject(DanielaAIService) private daniela: DanielaAIService) {}
 
   async initialize() {
     try {
@@ -20,7 +18,7 @@ export class Gemini2Service {
 
       this.client = new VertexAI({
         project: process.env.GOOGLE_CLOUD_PROJECT_ID,
-        location: process.env.VERTEX_AI_LOCATION
+        location: process.env.VERTEX_AI_LOCATION,
       });
 
       console.log('✅ Gemini 2.0 Service initialized');
@@ -33,22 +31,22 @@ export class Gemini2Service {
   async generateText(prompt: string, options: any = {}) {
     try {
       const model = this.client.getGenerativeModel({
-        model: process.env.GEMINI_2_MODEL || 'gemini-2.0-pro'
+        model: process.env.GEMINI_2_MODEL || 'gemini-2.0-pro',
       });
 
       const request = {
         contents: [
           {
             role: 'user',
-            parts: [{ text: prompt }]
-          }
+            parts: [{ text: prompt }],
+          },
         ],
         generationConfig: {
           temperature: options.temperature || 0.7,
           maxOutputTokens: options.maxTokens || 4096,
           topP: 0.95,
-          topK: 40
-        }
+          topK: 40,
+        },
       };
 
       const response = await model.generateContent(request);
@@ -62,7 +60,7 @@ export class Gemini2Service {
   async analyzeImage(imageUrl: string, prompt: string) {
     try {
       const model = this.client.getGenerativeModel({
-        model: 'gemini-2.0-pro-vision'
+        model: 'gemini-2.0-pro-vision',
       });
 
       const imageData = await this.urlToBase64(imageUrl);
@@ -71,10 +69,10 @@ export class Gemini2Service {
         {
           inlineData: {
             mimeType: 'image/jpeg',
-            data: imageData
-          }
+            data: imageData,
+          },
         },
-        { text: prompt }
+        { text: prompt },
       ]);
 
       return response.response.text();
@@ -84,14 +82,10 @@ export class Gemini2Service {
     }
   }
 
-  async multimodalAnalysis(inputs: {
-    text?: string;
-    imageUrl?: string;
-    audioUrl?: string;
-  }) {
+  async multimodalAnalysis(inputs: { text?: string; imageUrl?: string; audioUrl?: string }) {
     try {
       const model = this.client.getGenerativeModel({
-        model: 'gemini-2.0-pro-multimodal'
+        model: 'gemini-2.0-pro-multimodal',
       });
 
       const content: any[] = [];
@@ -105,8 +99,8 @@ export class Gemini2Service {
         content.push({
           inlineData: {
             mimeType: 'image/jpeg',
-            data: imageData
-          }
+            data: imageData,
+          },
         } as any);
       }
 
@@ -121,16 +115,16 @@ export class Gemini2Service {
   async streamResponse(prompt: string) {
     try {
       const model = this.client.getGenerativeModel({
-        model: 'gemini-2.0-flash'
+        model: 'gemini-2.0-flash',
       });
 
       const response = await model.generateContentStream({
         contents: [
           {
             role: 'user',
-            parts: [{ text: prompt }]
-          }
-        ]
+            parts: [{ text: prompt }],
+          },
+        ],
       });
 
       return response;
@@ -146,25 +140,25 @@ export class Gemini2Service {
       name: string;
       description: string;
       parameters: any;
-    }>
+    }>,
   ) {
     try {
       const model = this.client.getGenerativeModel({
-        model: 'gemini-2.0-pro'
+        model: 'gemini-2.0-pro',
       });
 
       const tools = {
-        functionDeclarations: functions
+        functionDeclarations: functions,
       };
 
       const response = await model.generateContent({
         contents: [
           {
             role: 'user',
-            parts: [{ text: prompt }]
-          }
+            parts: [{ text: prompt }],
+          },
         ],
-        tools: [tools]
+        tools: [tools],
       });
 
       return response;
@@ -179,13 +173,13 @@ export class Gemini2Service {
       const lengthMap = {
         short: '1-2 sentences',
         medium: '3-5 sentences',
-        long: '1 paragraph'
+        long: '1 paragraph',
       };
 
       const prompt = `Summarize the following text in ${lengthMap[length]}:\n\n${text}`;
 
       return await this.generateText(prompt, {
-        maxTokens: length === 'short' ? 100 : length === 'medium' ? 200 : 500
+        maxTokens: length === 'short' ? 100 : length === 'medium' ? 200 : 500,
       });
     } catch (error) {
       console.error('Error summarizing text:', error);
@@ -206,7 +200,9 @@ export class Gemini2Service {
 
   async classifyContent(text: string, categories: string[]) {
     try {
-      const prompt = `Classify the following text into one of these categories: ${categories.join(', ')}\n\nText: ${text}`;
+      const prompt = `Classify the following text into one of these categories: ${categories.join(
+        ', ',
+      )}\n\nText: ${text}`;
 
       return await this.generateText(prompt);
     } catch (error) {

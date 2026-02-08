@@ -66,7 +66,6 @@ export class DanielaEnhancedService {
         // Initialize ElevenLabs client here
         logger.info('✅ ElevenLabs client initialized');
       }
-
     } catch (error) {
       logger.error('❌ Error initializing Daniela services:', error);
     }
@@ -124,7 +123,8 @@ export class DanielaEnhancedService {
           temperature: 0.7,
         });
 
-        const response = completion.choices[0]?.message?.content || 
+        const response =
+          completion.choices[0]?.message?.content ||
           'Lo siento, no pude procesar tu mensaje en este momento.';
 
         // Add response to history
@@ -139,7 +139,7 @@ export class DanielaEnhancedService {
           await this.redisClient.setEx(
             `daniela:conversation:${userId}`,
             3600, // 1 hour
-            JSON.stringify(this.messages)
+            JSON.stringify(this.messages),
           );
         }
 
@@ -147,7 +147,6 @@ export class DanielaEnhancedService {
       }
 
       return '🧠 Daniela está en modo básico actualmente. El servicio completo estará disponible pronto.';
-
     } catch (error) {
       logger.error('Error processing message:', error);
       return '❌ Ocurrió un error al procesar tu mensaje. Por favor intenta nuevamente.';
@@ -157,7 +156,7 @@ export class DanielaEnhancedService {
   private getConversationContext(): string {
     // Get last 6 messages for context
     const recentMessages = this.messages.slice(-6);
-    
+
     const contextParts = recentMessages.map(msg => {
       const role = msg.role === 'user' ? '👤 Usuario' : '🧠 Daniela';
       return `${role}: ${msg.content}`;
@@ -178,7 +177,6 @@ export class DanielaEnhancedService {
 
       // Return in-memory history
       return this.messages;
-
     } catch (error) {
       logger.error('Error getting conversation history:', error);
       return this.messages;
@@ -196,7 +194,6 @@ export class DanielaEnhancedService {
       this.messages = [];
 
       logger.info('Conversation history cleared');
-
     } catch (error) {
       logger.error('Error clearing conversation history:', error);
     }

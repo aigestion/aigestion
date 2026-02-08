@@ -18,7 +18,7 @@ function Show-SetupGuide {
     Write-Host "1. Ve a: https://console.cloud.google.com/" -ForegroundColor White
     Write-Host "2. Selector de proyectos → NUEVO PROYECTO" -ForegroundColor White
     Write-Host "3. Nombre: 'AIGestion Sovereign'" -ForegroundColor White
-    Write-Host "4. ID: 'aigestion-sovereign'" -ForegroundColor White
+    Write-Host "4. ID: 'aigestion-sovereign-2026'" -ForegroundColor White
     Write-Host "5. CREAR y esperar 2-3 minutos" -ForegroundColor White
     
     Write-Host "`n🔑 PASO 2: Habilitar API" -ForegroundColor Yellow
@@ -58,7 +58,7 @@ function Check-CurrentConfig {
 # ⚠️ NEVER commit this file to version control
 
 # Google Cloud Configuration
-GEMINI_PROJECT_ID=aigestion-sovereign
+GEMINI_PROJECT_ID=aigestion-sovereign-2026
 GEMINI_PROJECT_NUMBER=  # Reemplazar con tu número de proyecto
 
 # Google AI Gemini Pro API Key
@@ -98,7 +98,7 @@ GEMINI_RESPONSE_FORMAT=json
     
     # Verificar si falta configuración
     $missing = @()
-    if (-not $env:GEMINI_PROJECT_ID -or $env:GEMINI_PROJECT_ID -eq 'aigestion-sovereign') { $missing += "Project ID" }
+    if (-not $env:GEMINI_PROJECT_ID -or $env:GEMINI_PROJECT_ID -eq 'aigestion-sovereign-2026') { $missing += "Project ID" }
     if (-not $env:GEMINI_PROJECT_NUMBER) { $missing += "Project Number" }
     if (-not $env:GEMINI_API_KEY -or $env:GEMINI_API_KEY -eq 'your_gemini_api_key_here') { $missing += "API Key" }
     
@@ -106,7 +106,8 @@ GEMINI_RESPONSE_FORMAT=json
         Write-Host "`n⚠️ Configuración incompleta:" -ForegroundColor Yellow
         $missing | ForEach-Object { Write-Host "   ❌ $_" -ForegroundColor Red }
         Write-Host "`n📝 Sigue la guía para completar la configuración" -ForegroundColor Yellow
-    } else {
+    }
+    else {
         Write-Host "`n✅ Configuración completa" -ForegroundColor Green
     }
 }
@@ -137,7 +138,7 @@ function Test-GeminiConnection {
         return
     }
     
-    if (-not $projectId -or $projectId -eq 'aigestion-sovereign') {
+    if (-not $projectId -or $projectId -eq 'aigestion-sovereign-2026') {
         Write-Host "⚠️ Project ID no actualizado" -ForegroundColor Yellow
         Write-Host "📝 Verifica tu Project ID en Google Cloud Console" -ForegroundColor Yellow
     }

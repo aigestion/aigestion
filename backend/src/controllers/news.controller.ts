@@ -37,7 +37,9 @@ newsRouter.post('/ingest', async (req: Request, res: Response) => {
   const { urls } = req.body;
 
   if (!urls || !Array.isArray(urls)) {
-    return res.status(400).json(buildError('Invalid URLs provided', 'INVALID_INPUT', 400, requestId));
+    return res
+      .status(400)
+      .json(buildError('Invalid URLs provided', 'INVALID_INPUT', 400, requestId));
   }
 
   try {

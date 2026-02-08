@@ -41,7 +41,7 @@ export class HomeAssistantService {
   async getStates(config: HAConfig): Promise<HAEntity[]> {
     try {
       const response = await axios.get(`${config.baseUrl}/api/states`, {
-         headers: {
+        headers: {
           Authorization: `Bearer ${config.accessToken}`,
           'Content-Type': 'application/json',
         },
@@ -56,7 +56,12 @@ export class HomeAssistantService {
   /**
    * Calls a service in Home Assistant (e.g., turn light on)
    */
-  async callService(config: HAConfig, domain: string, service: string, serviceData: any = {}): Promise<any> {
+  async callService(
+    config: HAConfig,
+    domain: string,
+    service: string,
+    serviceData: any = {},
+  ): Promise<any> {
     try {
       const response = await axios.post(
         `${config.baseUrl}/api/services/${domain}/${service}`,
@@ -66,7 +71,7 @@ export class HomeAssistantService {
             Authorization: `Bearer ${config.accessToken}`,
             'Content-Type': 'application/json',
           },
-        }
+        },
       );
       return response.data;
     } catch (error: any) {

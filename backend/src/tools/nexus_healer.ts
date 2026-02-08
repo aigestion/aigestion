@@ -28,7 +28,7 @@ async function checkDatabase() {
 async function checkRedis() {
   const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
     maxRetriesPerRequest: 1,
-    retryStrategy: () => null // Fail fast for check
+    retryStrategy: () => null, // Fail fast for check
   });
 
   try {
@@ -68,7 +68,9 @@ async function runHealer() {
   if (dbOk && redisOk && apiOk) {
     logger.info('✅ Nexus Healer: System Healthy');
   } else {
-    logger.error(`❌ Nexus Healer: System Issues Detected. DB: ${dbOk}, Redis: ${redisOk}, API: ${apiOk}`);
+    logger.error(
+      `❌ Nexus Healer: System Issues Detected. DB: ${dbOk}, Redis: ${redisOk}, API: ${apiOk}`,
+    );
     // In a real V2, we would trigger self-healing actions here
     // e.g., restart docker containers, flush redis, etc.
     // For now, we just log critical alerts which would be picked up by external monitoring
@@ -77,13 +79,15 @@ async function runHealer() {
 
 if (require.main === module) {
   // If run directly
-  runHealer().then(() => {
-    // If we want it to run once and exit:
-    process.exit(0);
-    // If we want it to verify continuously:
-    // setInterval(runHealer, CHECK_INTERVAL);
-  }).catch(err => {
-    console.error(err);
-    process.exit(1);
-  });
+  runHealer()
+    .then(() => {
+      // If we want it to run once and exit:
+      process.exit(0);
+      // If we want it to verify continuously:
+      // setInterval(runHealer, CHECK_INTERVAL);
+    })
+    .catch(err => {
+      console.error(err);
+      process.exit(1);
+    });
 }

@@ -9,15 +9,13 @@ import { MalwareScannerService } from './malware-scanner.service';
 
 @injectable()
 export class HealthService {
-  constructor(
-    @inject(TYPES.PineconeService) private pineconeService: PineconeService
-  ) { }
+  constructor(@inject(TYPES.PineconeService) private pineconeService: PineconeService) {}
 
   public async getDetailedHealth() {
     const results: any = {
       timestamp: new Date().toISOString(),
       status: 'healthy',
-      checks: []
+      checks: [],
     };
 
     // 1. MongoDB Check
@@ -52,7 +50,7 @@ export class HealthService {
       results.checks.push({
         name: 'neurocore',
         status: mlResp.status === 200 ? 'up' : 'down',
-        version: mlResp.data?.version || 'unknown'
+        version: mlResp.data?.version || 'unknown',
       });
     } catch (err) {
       results.checks.push({ name: 'neurocore', status: 'down', error: (err as any).message });
@@ -67,8 +65,8 @@ export class HealthService {
         status: 'up',
         engines: {
           clamav: (scanner as any).isClamAVAvailable ? 'active' : 'inactive',
-          yara: (scanner as any).isYARAAvailable ? 'active' : 'inactive'
-        }
+          yara: (scanner as any).isYARAAvailable ? 'active' : 'inactive',
+        },
       });
     } catch (err) {
       results.checks.push({ name: 'malware-scanner', status: 'down' });

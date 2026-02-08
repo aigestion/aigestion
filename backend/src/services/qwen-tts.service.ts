@@ -36,14 +36,16 @@ export class QwenTTSService {
   async textToSpeech(
     text: string,
     outputPath: string,
-    options: QwenTTSOptions = {}
+    options: QwenTTSOptions = {},
   ): Promise<string> {
     try {
       if (!this.apiKey) {
         throw new Error('DASHSCOPE_API_KEY is not configured.');
       }
 
-      logger.info(`[QwenTTSService] Synthesizing voice (Qwen3-TTS) for: "${text.substring(0, 30)}..."`);
+      logger.info(
+        `[QwenTTSService] Synthesizing voice (Qwen3-TTS) for: "${text.substring(0, 30)}..."`,
+      );
 
       const model = options.model || 'qwen3-tts-1.7b';
       const voice = options.voice || env.QWEN_TTS_VOICE_ID || 'longxiaomiao';
@@ -67,12 +69,12 @@ export class QwenTTSService {
         },
         {
           headers: {
-            'Authorization': `Bearer ${this.apiKey}`,
+            Authorization: `Bearer ${this.apiKey}`,
             'Content-Type': 'application/json',
             'X-DashScope-SSE': 'disable',
           },
           responseType: 'arraybuffer',
-        }
+        },
       );
 
       const buffer = Buffer.from(response.data);
@@ -86,17 +88,17 @@ export class QwenTTSService {
       logger.info(`[QwenTTSService] Audio saved to: ${outputPath}`);
       return outputPath;
     } catch (error: any) {
-      const errorMessage = error.response?.data 
-        ? Buffer.from(error.response.data).toString() 
+      const errorMessage = error.response?.data
+        ? Buffer.from(error.response.data).toString()
         : error.message;
-        
+
       logger.error('[QwenTTSService] Synthesis failed:', errorMessage);
       throw new Error(`Qwen3 TTS failed: ${error.message}`);
     }
   }
 
   /**
-   * List available voices (Note: DashScope might not have a direct endpoint for this via public API, 
+   * List available voices (Note: DashScope might not have a direct endpoint for this via public API,
    * usually it's documented in their console. This is a placeholder for future extension.)
    */
   async getVoices(): Promise<string[]> {

@@ -37,7 +37,7 @@ export class WhisperSTTService {
       const command = `whisper "${audioPath}" --model ${this.modelSize} --language ${lang} --output_format txt --output_dir /tmp`;
 
       const { stdout, stderr } = await execAsync(command, {
-        maxBuffer: 1024 * 1024 * 10 // 10MB buffer
+        maxBuffer: 1024 * 1024 * 10, // 10MB buffer
       });
 
       if (stderr && !stderr.includes('Detecting language')) {
@@ -56,7 +56,6 @@ export class WhisperSTTService {
       logger.info(`[WhisperSTT] Transcription complete: "${transcription.substring(0, 50)}..."`);
 
       return transcription.trim();
-
     } catch (error: any) {
       logger.error('[WhisperSTT] Error transcribing audio:', error.message);
       throw new Error(`Failed to transcribe audio: ${error.message}`);
@@ -79,7 +78,6 @@ print(result["text"])
 
       const { stdout } = await execAsync(`python -c '${pythonScript}'`);
       return stdout.trim();
-
     } catch (error: any) {
       logger.error('[WhisperSTT] Python transcription error:', error.message);
       throw error;

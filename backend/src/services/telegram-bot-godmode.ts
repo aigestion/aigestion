@@ -4,6 +4,8 @@ import { Context, Telegraf } from 'telegraf';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 import { DanielaAIService } from './daniela-ai.service';
+import { EconomyService } from './economy.service';
+import { EnhancedVoiceService } from './enhanced-voice.service';
 import { SystemMetricsService } from './system-metrics.service';
 
 interface UserSession {
@@ -32,6 +34,8 @@ export class TelegramBotHandlerGodMode {
 
   constructor(
     @inject(DanielaAIService) daniela: DanielaAIService,
+    @inject(EconomyService) private economyService: EconomyService,
+    @inject(EnhancedVoiceService) private voiceService: EnhancedVoiceService,
     @inject(SystemMetricsService) private metricsService?: SystemMetricsService,
   ) {
     this.daniela = daniela;
@@ -83,12 +87,16 @@ export class TelegramBotHandlerGodMode {
           userId: userId.toString(),
           chatId,
           isAdmin: this.adminIds.includes(chatId.toString()),
-          lastCommand: ctx.message && ('text' in ctx.message) ? ctx.message.text : 'unknown',
+          lastCommand: ctx.message && 'text' in ctx.message ? ctx.message.text : 'unknown',
           lastActivity: new Date(),
           language: 'es',
         });
 
-        logger.info(`[TELEGRAM] ${username} (${userId}): ${ctx.message && ('text' in ctx.message) ? ctx.message.text : 'interaction'}`);
+        logger.info(
+          `[TELEGRAM] ${username} (${userId}): ${
+            ctx.message && 'text' in ctx.message ? ctx.message.text : 'interaction'
+          }`,
+        );
       }
 
       return next();
@@ -119,6 +127,7 @@ export class TelegramBotHandlerGodMode {
           `/team - Equipo\n` +
           `/tasks - Mis tareas\n` +
           `/reports - Reportes\n` +
+          `/economy - Resumen económico\n` +
           `/settings - Configuración\n\n` +
           `${isAdmin ? `/admin - Panel de administración\n` : ''}` +
           `¿Cómo puedo ayudarte?`,
@@ -176,9 +185,7 @@ export class TelegramBotHandlerGodMode {
             `*Recursos:*\n` +
             `📊 CPU: ${metrics?.cpu || '0'}%\n` +
             `💾 RAM: ${metrics?.memory || '0'}MB\n` +
-            `📈 Uptime: ${Math.floor(
-              (Date.now() - (metrics?.uptime || 0)) / 1000 / 3600,
-            )}h\n\n` +
+            `📈 Uptime: ${Math.floor((Date.now() - (metrics?.uptime || 0)) / 1000 / 3600)}h\n\n` +
             `🕐 Última actualización: ${new Date().toLocaleString('es-ES')}`,
           { parse_mode: 'Markdown' },
         );
@@ -198,6 +205,45 @@ export class TelegramBotHandlerGodMode {
           `✅ Todo está funcionando perfectamente`,
         { parse_mode: 'Markdown' },
       );
+    });
+
+    // ===== ECONOMY =====
+
+    this.bot.command('economy', async (ctx: Context) => {
+      try {
+        await ctx.reply('⏳ Obteniendo datos del mercado...');
+        const report = await this.economyService.generateFormattedReport();
+        await ctx.reply(report, { parse_mode: 'Markdown' });
+      } catch (error) {
+        logger.error('Error in /economy', error);
+        await ctx.reply('❌ Error obteniendo datos económicos');
+      }
+    });
+
+    this.bot.command('invest_advice', async (ctx: Context) => {
+      try {
+        await ctx.reply('🧠 Analizando mercado y tendencias...');
+        const adviceData = await this.economyService.getInvestmentAdvice();
+        await ctx.reply(adviceData.advice, { parse_mode: 'Markdown' });
+      } catch (error) {
+        logger.error('Error in /invest_advice', error);
+      }
+    });
+
+    this.bot.command('economy_voice', async (ctx: Context) => {
+      try {
+        await ctx.reply('🎙️ Generando informe de voz God Mode (Qwen-TTS)...');
+
+        const script = await this.economyService.generateVoiceScript();
+        const audioBuffer = await this.voiceService.textToSpeech(script, 'qwen'); // Prefer Qwen
+
+        await ctx.replyWithVoice({ source: audioBuffer });
+      } catch (error) {
+        logger.error('Error in /economy_voice', error);
+        await ctx.reply(
+          '❌ Error generando audio. Verifica que DASHSCOPE_API_KEY esté configurada.',
+        );
+      }
     });
 
     // ===== ANALYTICS =====
@@ -369,7 +415,8 @@ export class TelegramBotHandlerGodMode {
         return;
       }
 
-      const message = ctx.message && ('text' in ctx.message) ? ctx.message.text.replace('/daniela', '').trim() : '';
+      const message =
+        ctx.message && 'text' in ctx.message ? ctx.message.text.replace('/daniela', '').trim() : '';
 
       if (!message) {
         await ctx.reply(this.daniela.getDanielaInfo(), {
@@ -393,7 +440,7 @@ export class TelegramBotHandlerGodMode {
 
     // Manejo de mensajes para Daniela en conversaciones
     this.bot.on('text', async (ctx: Context) => {
-      const message = ctx.message && ('text' in ctx.message) ? ctx.message.text : '';
+      const message = ctx.message && 'text' in ctx.message ? ctx.message.text : '';
 
       // Si el mensaje menciona a Daniela o es una respuesta directa
       if (message.toLowerCase().includes('daniela') || message.startsWith('/daniela')) {
@@ -575,6 +622,34 @@ export class TelegramBotHandlerGodMode {
       },
       6 * 60 * 60 * 1000,
     ); // 6 horas
+
+    // Economía - Cada 4 horas si hay un canal configurado
+    setInterval(
+      async () => {
+        const economyChannelId = env.TELEGRAM_CHAT_ID_DEV; // Usar el configurado
+        if (economyChannelId) {
+          try {
+            const report = await this.economyService.generateFormattedReport();
+            const adviceData = await this.economyService.getInvestmentAdvice();
+
+            await this.bot?.telegram.sendMessage(economyChannelId, report, {
+              parse_mode: 'Markdown',
+            });
+
+            await this.bot?.telegram.sendMessage(economyChannelId, adviceData.advice, {
+              parse_mode: 'Markdown',
+            });
+
+            logger.info(
+              `[TELEGRAM] Periodic economy report and advice sent to ${economyChannelId}`,
+            );
+          } catch (error) {
+            logger.warn(`Failed to send economy report to ${economyChannelId}`, error);
+          }
+        }
+      },
+      4 * 60 * 60 * 1000,
+    );
   }
 
   /**
@@ -752,5 +827,3 @@ export class TelegramBotHandlerGodMode {
     };
   }
 }
-
-

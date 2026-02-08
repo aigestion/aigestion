@@ -34,7 +34,7 @@ export class NeuralHealthService extends EventEmitter {
       uptime: process.uptime(),
       sanityScore: 100,
       status: 'OPTIMAL',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -53,7 +53,7 @@ export class NeuralHealthService extends EventEmitter {
     // Simulación de carga de CPU (basada en el número de procesos activos en el sistema)
     const cpuUsage = Math.random() * 20; // En un entorno real usaríamos librerías como 'node-os-utils'
 
-    let sanityScore = 100 - (cpuUsage * 0.5) - (memUsage * 0.3);
+    let sanityScore = 100 - cpuUsage * 0.5 - memUsage * 0.3;
     sanityScore = Math.max(0, Math.min(100, sanityScore));
 
     let status: 'OPTIMAL' | 'DEGRADED' | 'CRITICAL' = 'OPTIMAL';
@@ -66,7 +66,7 @@ export class NeuralHealthService extends EventEmitter {
       uptime: process.uptime(),
       sanityScore,
       status,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     if (status !== 'OPTIMAL') {

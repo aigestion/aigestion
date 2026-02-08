@@ -23,7 +23,7 @@ describe('cdnCache Middleware', () => {
 
     expect(mockResponse.set).toHaveBeenCalledWith(
       'Cache-Control',
-      `public, max-age=${ttl}, s-maxage=${ttl}`
+      `public, max-age=${ttl}, s-maxage=${ttl}`,
     );
     expect(mockResponse.set).toHaveBeenCalledWith('Vary', 'Accept-Encoding');
     expect(nextFunction).toHaveBeenCalled();

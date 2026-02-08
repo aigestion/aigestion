@@ -44,6 +44,7 @@
     "test:performance": "bash scripts/test-complete.sh performance",
     "test:security": "bash scripts/test-complete.sh security",
     "test:ai": "bash scripts/test-complete.sh ai",
+    "test:full:seq": "npm run test -- --runInBand && npm run test --prefix backend -- --runInBand",
     "sonar": "sonar-scanner --config .config/sonar-project.properties",
     "deploy": "echo 'Deployment handled by GitHub Actions CI/CD pipeline'",
     "deploy:github-pages": "echo 'GitHub Pages deployment triggered via GitHub Actions'",
@@ -62,6 +63,7 @@
     "clean": "npm run clean:frontend && npm run clean:backend",
     "clean:frontend": "cd frontend && rm -rf node_modules dist && npm install",
     "clean:backend": "cd backend && rm -rf node_modules dist && npm install",
+    "clean:processes": "powershell \"Get-Process | Where-Object { $_.Name -match 'node|jest|mongod' } | Stop-Process -Force -ErrorAction SilentlyContinue\"",
     "git:sync": "git add . && git commit -m 'Auto-sync AIGestion.net' && git push origin main",
     "docker:build": "docker build -t aigestion-net .",
     "docker:run": "docker run -p 3000:3000 aigestion-net"

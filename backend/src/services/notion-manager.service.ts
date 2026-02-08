@@ -32,8 +32,8 @@ export class NotionManagerService {
       properties: {
         Name: { title: [{ text: { content: name } }] },
         Status: { select: { name: status } },
-        Priority: { select: { name: priority } }
-      }
+        Priority: { select: { name: priority } },
+      },
     });
   }
 
@@ -57,7 +57,7 @@ export class NotionManagerService {
       return {
         totalTasks: tasks.results.length,
         totalContent: content.results.length,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error: any) {
       logger.error(`[NotionManager] Failed to fetch metrics: ${error.message}`);

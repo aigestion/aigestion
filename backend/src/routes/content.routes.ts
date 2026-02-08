@@ -47,7 +47,9 @@ contentRouter.post('/generate', async (req: any, res: any) => {
     return res.json(buildResponse(result, 200, requestId));
   } catch (error: any) {
     console.error('Content Generation Failed:', error);
-    return res.status(500).json(buildError('Failed to generate content', 'GENERATION_ERROR', 500, requestId));
+    return res
+      .status(500)
+      .json(buildError('Failed to generate content', 'GENERATION_ERROR', 500, requestId));
   }
 });
 

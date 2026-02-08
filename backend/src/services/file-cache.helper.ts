@@ -49,13 +49,24 @@ export class FileCacheHelper {
       '.idea',
     ]);
     const ignoredExtensions = new Set([
-      '.lock', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.pdf', '.zip', '.map', '.mp4', '.mp3',
+      '.lock',
+      '.png',
+      '.jpg',
+      '.jpeg',
+      '.gif',
+      '.svg',
+      '.ico',
+      '.pdf',
+      '.zip',
+      '.map',
+      '.mp4',
+      '.mp3',
     ]);
 
     let results: FileContext[] = [];
     try {
       const entries = await fs.readdir(dir, { withFileTypes: true });
-      const promises = entries.map(async (entry) => {
+      const promises = entries.map(async entry => {
         const fullPath = path.join(dir, entry.name);
         const relativePath = path.relative(this.rootDir, fullPath);
         if (entry.isDirectory()) {

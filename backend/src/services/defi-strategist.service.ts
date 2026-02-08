@@ -53,7 +53,9 @@ export class DeFiStrategistService {
 
     try {
       // Real AlphaVantage endpoint for Sentiment
-      const res = await axios.get(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${this.alphaVantageKey}`);
+      const res = await axios.get(
+        `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${this.alphaVantageKey}`,
+      );
       const overallSentiment = res.data.feed?.[0]?.overall_sentiment_label || 'NEUTRAL';
       return overallSentiment.toUpperCase();
     } catch {

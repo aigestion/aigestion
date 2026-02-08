@@ -26,7 +26,7 @@ jest.mock('fs', () => {
     readdirSync: jest.fn(),
     createReadStream: jest.fn(() => {
       const { Readable } = require('stream');
-      const stream = new Readable({ read() { } });
+      const stream = new Readable({ read() {} });
       process.nextTick(() => {
         stream.emit('data', Buffer.from('test'));
         stream.emit('close');
@@ -35,7 +35,7 @@ jest.mock('fs', () => {
     }),
     createWriteStream: jest.fn(() => {
       const { Writable } = require('stream');
-      const ws = new Writable({ write() { } });
+      const ws = new Writable({ write() {} });
       ws.on = jest.fn();
       return ws;
     }),
@@ -95,18 +95,27 @@ describe('BackupService', () => {
 
       // Verify mkdir calls
       expect(fsPromises.mkdir).toHaveBeenCalledWith(targetDir, { recursive: true });
-      expect(fsPromises.mkdir).toHaveBeenCalledWith(path.join(targetDir, 'subfolder'), { recursive: true });
+      expect(fsPromises.mkdir).toHaveBeenCalledWith(path.join(targetDir, 'subfolder'), {
+        recursive: true,
+      });
 
       // Verify file downloads
-      expect(mockDriveService.downloadFile).toHaveBeenCalledWith('file1-id', path.join(targetDir, 'file1.txt'));
-      expect(mockDriveService.downloadFile).toHaveBeenCalledWith('file2-id', path.join(targetDir, 'subfolder', 'file2.txt'));
+      expect(mockDriveService.downloadFile).toHaveBeenCalledWith(
+        'file1-id',
+        path.join(targetDir, 'file1.txt'),
+      );
+      expect(mockDriveService.downloadFile).toHaveBeenCalledWith(
+        'file2-id',
+        path.join(targetDir, 'subfolder', 'file2.txt'),
+      );
     });
 
     it('should throw error if remote folder not found', async () => {
       mockDriveService.findFolder.mockResolvedValue(null);
 
-      await expect(backupService.restoreDirectory(targetDir, sourceFolder))
-        .rejects.toThrow(`Remote backup folder not found: ${sourceFolder}`);
+      await expect(backupService.restoreDirectory(targetDir, sourceFolder)).rejects.toThrow(
+        `Remote backup folder not found: ${sourceFolder}`,
+      );
     });
 
     it('should skip file if local hash matches', async () => {
@@ -142,7 +151,10 @@ describe('BackupService', () => {
 
       await backupService.restoreDirectory(targetDir, sourceFolder);
 
-      expect(mockDriveService.downloadFile).toHaveBeenCalledWith('file1-id', path.join(targetDir, 'file1.txt'));
+      expect(mockDriveService.downloadFile).toHaveBeenCalledWith(
+        'file1-id',
+        path.join(targetDir, 'file1.txt'),
+      );
     });
   });
 });

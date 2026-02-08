@@ -21,9 +21,7 @@ export interface CreatePersonaDto {
 
 @injectable()
 export class CreatePersonaUseCase {
-  constructor(
-    @inject(TYPES.PersonaRepository) private personaRepository: IPersonaRepository
-  ) { }
+  constructor(@inject(TYPES.PersonaRepository) private personaRepository: IPersonaRepository) {}
 
   async execute(data: CreatePersonaDto): Promise<IPersona> {
     // Basic validation

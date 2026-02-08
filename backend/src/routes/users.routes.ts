@@ -1,7 +1,12 @@
 // src/routes/users.routes.ts
 import { Router } from 'express';
 
-import { validate, validateParams, validateBody, schemas } from '../middleware/validation.middleware';
+import {
+  validate,
+  validateParams,
+  validateBody,
+  schemas,
+} from '../middleware/validation.middleware';
 import {
   createUser,
   deleteUser,
@@ -86,7 +91,12 @@ router.get('/:id', validateParams(schemas.common.id), getUserById);
  *       404:
  *         description: User not found
  */
-router.put('/:id', validateParams(schemas.common.id), validateBody(schemas.user.update), updateUser);
+router.put(
+  '/:id',
+  validateParams(schemas.common.id),
+  validateBody(schemas.user.update),
+  updateUser,
+);
 /**
  * @openapi
  * /users/{id}:

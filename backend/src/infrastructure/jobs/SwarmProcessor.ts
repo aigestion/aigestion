@@ -15,7 +15,9 @@ export class SwarmProcessor {
    */
   public static async process(job: Job): Promise<void> {
     const { objective, userId, missionId, context } = job.data;
-    logger.info(`[SwarmProcessor] Starting mission [${job.id} / ${missionId}] for user ${userId}: ${objective}`);
+    logger.info(
+      `[SwarmProcessor] Starting mission [${job.id} / ${missionId}] for user ${userId}: ${objective}`,
+    );
 
     try {
       // Resolve services from the container
@@ -30,7 +32,8 @@ export class SwarmProcessor {
 
       // 1. Initial Research & Analysis
       logger.info(`[SwarmProcessor] [${job.id}] Phase 1: Planning mission strategy...`);
-      const plan = await aiService.generateContent(`
+      const plan = await aiService.generateContent(
+        `
                 You are the Orchestrator for an autonomous AI agent swarm.
                 A user has launched a mission with the following objective: "${objective}".
 
@@ -39,12 +42,14 @@ export class SwarmProcessor {
                 The God Mode dashboard is active.
 
                 Respond only with the technical plan.
-            `, userId);
+            `,
+        userId,
+      );
 
       // 1.5 Save Plan to DB & update status
       await missionRepo.update(missionId, {
         plan,
-        status: MissionStatus.EXECUTING
+        status: MissionStatus.EXECUTING,
       });
       socketService.emitMissionUpdate(missionId, { plan, status: MissionStatus.EXECUTING });
 
@@ -55,20 +60,26 @@ export class SwarmProcessor {
 
       // 3. Final Report
       logger.info(`[SwarmProcessor] [${job.id}] Phase 3: Compiling final mission report...`);
-      const report = await aiService.generateContent(`
+      const report = await aiService.generateContent(
+        `
                 The mission objective was: "${objective}".
                 The plan was executed.
 
                 Generate a final summary of results and recommendations for the user.
-            `, userId);
+            `,
+        userId,
+      );
 
       // 4. Update Final Status
       await missionRepo.update(missionId, {
         result: report,
         status: MissionStatus.COMPLETED,
-        completedAt: new Date()
+        completedAt: new Date(),
       });
-      socketService.emitMissionUpdate(missionId, { result: report, status: MissionStatus.COMPLETED });
+      socketService.emitMissionUpdate(missionId, {
+        result: report,
+        status: MissionStatus.COMPLETED,
+      });
 
       // 5. Create Notification
       await notificationService.createNotification(
@@ -76,7 +87,7 @@ export class SwarmProcessor {
         NotificationType.MISSION_COMPLETED,
         'Mission Completed',
         `Mission "${objective}" completed successfully.`,
-        { missionId, resultPreview: report.substring(0, 100) }
+        { missionId, resultPreview: report.substring(0, 100) },
       );
 
       logger.info(`[SwarmProcessor] Mission [${job.id}] completed successfully.`);
@@ -93,23 +104,28 @@ export class SwarmProcessor {
         await missionRepo.update(missionId, {
           status: MissionStatus.FAILED,
           error: error instanceof Error ? error.message : 'Unknown error',
-          completedAt: new Date()
+          completedAt: new Date(),
         });
 
         socketService.emitMissionUpdate(missionId, {
           status: MissionStatus.FAILED,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : 'Unknown error',
         });
 
         await notificationService.createNotification(
           userId,
           NotificationType.MISSION_FAILED,
           'Mission Failed',
-          `Mission "${objective}" failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          { missionId, error: error instanceof Error ? error.message : 'Unknown error' }
+          `Mission "${objective}" failed: ${
+            error instanceof Error ? error.message : 'Unknown error'
+          }`,
+          { missionId, error: error instanceof Error ? error.message : 'Unknown error' },
         );
       } catch (repoError) {
-        logger.error('[SwarmProcessor] Failed to update mission failure status/notification:', repoError);
+        logger.error(
+          '[SwarmProcessor] Failed to update mission failure status/notification:',
+          repoError,
+        );
       }
 
       throw error;
