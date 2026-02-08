@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "aigestion-dashboard",
   "version": "1.0.0",
   "description": "AIGestion Dashboard",
@@ -14,3 +14,4 @@
     "lucide-react": "^0.263.1"
   }
 }
+

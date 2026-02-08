@@ -13,7 +13,7 @@ export class VoiceService {
     @inject(TYPES.AIService) private aiService: AIService,
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.MetaverseService) private metaverseService: MetaverseService,
-  ) { }
+  ) {}
 
   /**
    * Processes a message from Vapi and returns the response for the voice assistant
@@ -76,14 +76,23 @@ export class VoiceService {
       if (name === 'get_business_summary') {
         const data = await this.analyticsService.getDashboardData();
         return {
-          result: `The current monthly revenue is $${data.revenue.reduce((acc: number, curr: any) => acc + curr.value, 0)}. User growth is steady with ${data.users.length} new signups recently.`
+          result: `The current monthly revenue is $${data.revenue.reduce(
+            (acc: number, curr: any) => acc + curr.value,
+            0,
+          )}. User growth is steady with ${data.users.length} new signups recently.`,
         };
       }
 
       if (name === 'get_metaverse_office_status') {
         const status = await this.metaverseService.getStatus();
         return {
-          result: `Our virtual headquarters is located at coordinates ${status.coordinates} in Decentraland. ${status.activeEvents.length > 0 ? `We have an active event: ${status.activeEvents[0].title}.` : 'No events are currently scheduled.'} You can visit it at ${status.visitUrl}`
+          result: `Our virtual headquarters is located at coordinates ${
+            status.coordinates
+          } in Decentraland. ${
+            status.activeEvents.length > 0
+              ? `We have an active event: ${status.activeEvents[0].title}.`
+              : 'No events are currently scheduled.'
+          } You can visit it at ${status.visitUrl}`,
         };
       }
 

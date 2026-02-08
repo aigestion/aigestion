@@ -1,10 +1,5 @@
 import { Router } from 'express';
-import {
-  getTasks,
-  createTask,
-  updateTask,
-  deleteTask,
-} from '../controllers/task.controller';
+import { getTasks, createTask, updateTask, deleteTask } from '../controllers/task.controller';
 import { protect, authorize } from '../middleware/auth.middleware';
 
 const router = Router();

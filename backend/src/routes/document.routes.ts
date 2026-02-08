@@ -38,7 +38,9 @@ documentRouter.post('/process', malwareScanner.uploadSingle('file'), async (req:
 
   const file = req.file;
   if (!file) {
-    return res.status(400).json(buildError('No file provided', 'INVALID_REQUEST', 400, requestId as string));
+    return res
+      .status(400)
+      .json(buildError('No file provided', 'INVALID_REQUEST', 400, requestId as string));
   }
 
   const type = (req.body && req.body.type) || 'invoice';
@@ -78,18 +80,25 @@ documentRouter.post('/process', malwareScanner.uploadSingle('file'), async (req:
     await pineconeService.upsertDocument(docId, embeddingText, {
       type,
       filename: file.originalname,
-      ...extractedResult.extractedData
+      ...extractedResult.extractedData,
     });
 
-    return res.json(buildResponse({
-      docId,
-      extractedData: extractedResult.extractedData,
-      status: 'indexed'
-    }, 200, requestId));
-
+    return res.json(
+      buildResponse(
+        {
+          docId,
+          extractedData: extractedResult.extractedData,
+          status: 'indexed',
+        },
+        200,
+        requestId,
+      ),
+    );
   } catch (error) {
     console.error('Document Processing Failed:', error);
-    return res.status(500).json(buildError('Failed to process document', 'PROCESSING_ERROR', 500, requestId as string));
+    return res
+      .status(500)
+      .json(buildError('Failed to process document', 'PROCESSING_ERROR', 500, requestId as string));
   }
 });
 
@@ -117,42 +126,63 @@ documentRouter.post('/process', malwareScanner.uploadSingle('file'), async (req:
  *       200:
  *         description: All documents processed
  */
-documentRouter.post('/process-bulk', malwareScanner.uploadMultiple('files', 10), async (req: any, res: any) => {
-  const requestId = req.requestId;
-  const files = req.files as any[]; // Type workaround for Multer files
+documentRouter.post(
+  '/process-bulk',
+  malwareScanner.uploadMultiple('files', 10),
+  async (req: any, res: any) => {
+    const requestId = req.requestId;
+    const files = req.files as any[]; // Type workaround for Multer files
 
-  if (!files || files.length === 0) {
-    return res.status(400).json(buildError('No files provided', 'INVALID_REQUEST', 400, requestId as string));
-  }
+    if (!files || files.length === 0) {
+      return res
+        .status(400)
+        .json(buildError('No files provided', 'INVALID_REQUEST', 400, requestId as string));
+    }
 
-  const type = (req.body && req.body.type) || 'invoice';
-  const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
+    const type = (req.body && req.body.type) || 'invoice';
+    const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
 
-  try {
-    const jobIds = await Promise.all(files.map(async (file) => {
-      // Add background job
-      const jobId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-      await jobQueue.addJob(JobName.DATA_PROCESSING, {
-        filePath: file.path, // Multer disk path
-        originalname: file.originalname,
-        type,
-        requestId
-      }, { jobId });
+    try {
+      const jobIds = await Promise.all(
+        files.map(async file => {
+          // Add background job
+          const jobId = `doc_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+          await jobQueue.addJob(
+            JobName.DATA_PROCESSING,
+            {
+              filePath: file.path, // Multer disk path
+              originalname: file.originalname,
+              type,
+              requestId,
+            },
+            { jobId },
+          );
 
-      return jobId;
-    }));
+          return jobId;
+        }),
+      );
 
-    return res.json(buildResponse({
-      status: 'queued',
-      total: files.length,
-      jobIds
-    }, 200, requestId));
-
-  } catch (error) {
-    console.error('Failed to queue bulk processing jobs:', error);
-    return res.status(500).json(buildError('Failed to queue processing jobs', 'QUEUE_ERROR', 500, requestId as string));
-  }
-});
+      return res.json(
+        buildResponse(
+          {
+            status: 'queued',
+            total: files.length,
+            jobIds,
+          },
+          200,
+          requestId,
+        ),
+      );
+    } catch (error) {
+      console.error('Failed to queue bulk processing jobs:', error);
+      return res
+        .status(500)
+        .json(
+          buildError('Failed to queue processing jobs', 'QUEUE_ERROR', 500, requestId as string),
+        );
+    }
+  },
+);
 
 /**
  * @openapi
@@ -176,7 +206,9 @@ documentRouter.get('/search', async (req: any, res: any) => {
   const query = req.query.q as string;
 
   if (!query) {
-    return res.status(400).json(buildError('Query required', 'INVALID_REQUEST', 400, requestId as string));
+    return res
+      .status(400)
+      .json(buildError('Query required', 'INVALID_REQUEST', 400, requestId as string));
   }
 
   try {
@@ -186,7 +218,9 @@ documentRouter.get('/search', async (req: any, res: any) => {
     return res.json(buildResponse(results, 200, requestId as string));
   } catch (error) {
     console.error('Document Search Failed:', error);
-    return res.status(500).json(buildError('Search failed', 'SEARCH_ERROR', 500, requestId as string));
+    return res
+      .status(500)
+      .json(buildError('Search failed', 'SEARCH_ERROR', 500, requestId as string));
   }
 });
 

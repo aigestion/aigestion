@@ -1,6 +1,15 @@
 import 'reflect-metadata';
 import { Request, Response, NextFunction } from 'express';
-import { register, login, refresh, logout, getMe, verifyLogin2FA, enable2FA, verify2FA } from '../controllers/auth.controller';
+import {
+  register,
+  login,
+  refresh,
+  logout,
+  getMe,
+  verifyLogin2FA,
+  enable2FA,
+  verify2FA,
+} from '../controllers/auth.controller';
 import { container } from '../config/inversify.config';
 import { AuthService } from '../services/auth.service';
 import { TYPES } from '../types';
@@ -58,7 +67,7 @@ describe('Auth Controller', () => {
     mockEnable2FAUseCase = { execute: jest.fn() };
     mockVerify2FAUseCase = { execute: jest.fn() };
 
-    (container.get as jest.Mock).mockImplementation((type) => {
+    (container.get as jest.Mock).mockImplementation(type => {
       if (type === TYPES.AuthService) return mockAuthService;
       if (type === TYPES.Enable2FAUseCase) return mockEnable2FAUseCase;
       if (type === TYPES.Verify2FAUseCase) return mockVerify2FAUseCase;
@@ -80,7 +89,7 @@ describe('Auth Controller', () => {
       mockAuthService.register.mockResolvedValue({
         user: mockUser,
         token: 'access-token',
-        refreshToken: 'refresh-token'
+        refreshToken: 'refresh-token',
       });
 
       await register(req as Request, res as Response, next);
@@ -88,10 +97,12 @@ describe('Auth Controller', () => {
       expect(mockAuthService.register).toHaveBeenCalledWith(req.body);
       expect(res.cookie).toHaveBeenCalledWith('refresh_token', 'refresh-token', expect.any(Object));
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: expect.objectContaining({ token: 'access-token' }),
-        status: 201
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ token: 'access-token' }),
+          status: 201,
+        }),
+      );
     });
 
     it('should call next with error if register fails', async () => {
@@ -109,10 +120,12 @@ describe('Auth Controller', () => {
       await login(req as Request, res as Response, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: { mfaRequired: true, userId: 'user-id' },
-        status: 200
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: { mfaRequired: true, userId: 'user-id' },
+          status: 200,
+        }),
+      );
       expect(res.cookie).not.toHaveBeenCalled();
     });
 
@@ -121,17 +134,19 @@ describe('Auth Controller', () => {
       mockAuthService.login.mockResolvedValue({
         user: mockUser,
         token: 'access-token',
-        refreshToken: 'refresh-token'
+        refreshToken: 'refresh-token',
       });
 
       await login(req as Request, res as Response, next);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.cookie).toHaveBeenCalledWith('refresh_token', 'refresh-token', expect.any(Object));
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: expect.objectContaining({ token: 'access-token' }),
-        status: 200
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ token: 'access-token' }),
+          status: 200,
+        }),
+      );
     });
 
     it('should call next with error if login fails', async () => {
@@ -150,20 +165,24 @@ describe('Auth Controller', () => {
       mockAuthService.verifyLogin2FA.mockResolvedValue({
         user: mockUser,
         token: 'access-token',
-        refreshToken: 'refresh-token'
+        refreshToken: 'refresh-token',
       });
 
       await verifyLogin2FA(req as Request, res as Response, next);
 
-      expect(mockAuthService.verifyLogin2FA).toHaveBeenCalledWith(expect.objectContaining({
-        userId: 'user-id',
-        token: '123456'
-      }));
+      expect(mockAuthService.verifyLogin2FA).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: 'user-id',
+          token: '123456',
+        }),
+      );
       expect(res.cookie).toHaveBeenCalledWith('refresh_token', 'refresh-token', expect.any(Object));
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: expect.objectContaining({ token: 'access-token' }),
-        status: 200
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ token: 'access-token' }),
+          status: 200,
+        }),
+      );
     });
 
     it('should call next with error if verifyLogin2FA fails', async () => {
@@ -188,10 +207,12 @@ describe('Auth Controller', () => {
 
       expect(mockEnable2FAUseCase.execute).toHaveBeenCalledWith('user-id');
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: result,
-        status: 200
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: result,
+          status: 200,
+        }),
+      );
     });
 
     it('should call next with error if enable2FA fails', async () => {
@@ -215,10 +236,12 @@ describe('Auth Controller', () => {
 
       expect(mockVerify2FAUseCase.execute).toHaveBeenCalledWith('user-id', '123');
       expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: { success: true },
-        status: 200
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: { success: true },
+          status: 200,
+        }),
+      );
     });
 
     it('should call next with error if verify2FA fails', async () => {
@@ -238,17 +261,19 @@ describe('Auth Controller', () => {
       mockAuthService.refreshToken.mockResolvedValue({
         user: mockUser,
         accessToken: 'new-at',
-        refreshToken: 'new-rt'
+        refreshToken: 'new-rt',
       });
 
       await refresh(req as Request, res as Response, next);
 
       expect(mockAuthService.refreshToken).toHaveBeenCalled();
       expect(res.cookie).toHaveBeenCalledWith('refresh_token', 'new-rt', expect.any(Object));
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: { accessToken: 'new-at' },
-        status: 200
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: { accessToken: 'new-at' },
+          status: 200,
+        }),
+      );
     });
 
     it('should throw error if no refresh token', async () => {
@@ -265,10 +290,12 @@ describe('Auth Controller', () => {
 
       expect(mockAuthService.logout).toHaveBeenCalledWith('rt');
       expect(res.clearCookie).toHaveBeenCalledWith('refresh_token');
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: { message: 'Logged out successfully' },
-        status: 200
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: { message: 'Logged out successfully' },
+          status: 200,
+        }),
+      );
     });
   });
 
@@ -279,10 +306,12 @@ describe('Auth Controller', () => {
       await getMe(req as Request, res as Response, next);
 
       expect(mockAuthService.getUserProfile).toHaveBeenCalledWith('user-id');
-      expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
-        data: mockUser,
-        status: 200
-      }));
+      expect(res.json).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: mockUser,
+          status: 200,
+        }),
+      );
     });
 
     it('should return 404 if user not found', async () => {

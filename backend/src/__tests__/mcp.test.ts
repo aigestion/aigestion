@@ -20,7 +20,7 @@ describe('MCP health route', () => {
 
   it('should return ok when MCP server responds', async () => {
     (fetch as jest.MockedFunction<typeof fetch>).mockResolvedValue(
-      new Response(JSON.stringify({ status: 'ok' }), { status: 200 })
+      new Response(JSON.stringify({ status: 'ok' }), { status: 200 }),
     );
     const response = await request(app).get('/mcp/health');
     expect(response.status).toBe(200);

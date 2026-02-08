@@ -38,20 +38,23 @@ export class LoginUserUseCase {
 
     // success reset attempts
     const refreshToken = this.generateRefreshTokenString(user);
-    const newRefreshTokens = [...(user.refreshTokens ?? []), {
-      token: refreshToken,
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-      familyId: crypto.randomUUID(),
-      ip: ip ?? 'unknown',
-      userAgent: userAgent ?? 'unknown',
-      createdAt: new Date(),
-    }];
+    const newRefreshTokens = [
+      ...(user.refreshTokens ?? []),
+      {
+        token: refreshToken,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        familyId: crypto.randomUUID(),
+        ip: ip ?? 'unknown',
+        userAgent: userAgent ?? 'unknown',
+        createdAt: new Date(),
+      },
+    ];
 
     const updates: Partial<IUser> = {
       loginAttempts: 0,
       lockUntil: undefined,
       lastLogin: new Date(),
-      refreshTokens: newRefreshTokens.length > 10 ? newRefreshTokens.slice(-10) : newRefreshTokens
+      refreshTokens: newRefreshTokens.length > 10 ? newRefreshTokens.slice(-10) : newRefreshTokens,
     };
 
     const updatedUser = await this.userRepository.update(user.id, updates);
@@ -60,7 +63,7 @@ export class LoginUserUseCase {
     if (user.isMfaEnabled || user.isTwoFactorEnabled) {
       return {
         user: { _id: user.id, email: user.email } as any,
-        mfaRequired: true
+        mfaRequired: true,
       };
     }
 

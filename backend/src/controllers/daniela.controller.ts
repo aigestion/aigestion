@@ -12,9 +12,13 @@ import { TYPES } from '../types';
  */
 @injectable()
 export class DanielaController {
-  constructor(
-    @inject(TYPES.DanielaAIService) private danielaService: DanielaAIService,
-  ) {}
+  constructor(@inject(TYPES.DanielaAIService) private danielaService: DanielaAIService) {
+    // Bind methods for use as route handlers
+    this.chat = this.chat.bind(this);
+    this.getStatus = this.getStatus.bind(this);
+    this.getInsights = this.getInsights.bind(this);
+    this.getSystemStatus = this.getSystemStatus.bind(this);
+  }
 
   /**
    * Chat with Daniela
@@ -34,7 +38,7 @@ export class DanielaController {
         message,
         userName,
         userId,
-        userRole
+        userRole,
       );
 
       res.json(buildResponse({ response }, 200, (req as any).requestId));
@@ -50,11 +54,17 @@ export class DanielaController {
   public async getStatus(req: Request, res: Response, next: NextFunction) {
     try {
       const info = this.danielaService.getDanielaInfo();
-      res.json(buildResponse({
-        status: 'operational',
-        info,
-        version: '1.0.0-PRO'
-      }, 200, (req as any).requestId));
+      res.json(
+        buildResponse(
+          {
+            status: 'operational',
+            info,
+            version: '1.0.0-PRO',
+          },
+          200,
+          (req as any).requestId,
+        ),
+      );
     } catch (error) {
       next(error);
     }
@@ -80,15 +90,21 @@ export class DanielaController {
   public async getSystemStatus(req: Request, res: Response, next: NextFunction) {
     try {
       // For now, return the simulated/real metrics info
-      res.json(buildResponse({
-        status: 'operational',
-        version: 'v2.4.0',
-        statistics: {
-          totalUsers: 12450,
-          activeConversations: 45,
-          messagesProcessed: 1500000,
-        },
-      }, 200, (req as any).requestId));
+      res.json(
+        buildResponse(
+          {
+            status: 'operational',
+            version: 'v2.4.0',
+            statistics: {
+              totalUsers: 12450,
+              activeConversations: 45,
+              messagesProcessed: 1500000,
+            },
+          },
+          200,
+          (req as any).requestId,
+        ),
+      );
     } catch (error) {
       next(error);
     }

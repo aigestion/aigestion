@@ -26,7 +26,7 @@ export const redisCache = (ttlSeconds: number) => {
       const originalJson = res.json.bind(res);
       res.json = (body: any) => {
         setCache(key, body, ttlSeconds).catch(err =>
-          logger.warn({ err, key }, 'Failed to set Redis cache')
+          logger.warn({ err, key }, 'Failed to set Redis cache'),
         );
         return originalJson(body);
       };

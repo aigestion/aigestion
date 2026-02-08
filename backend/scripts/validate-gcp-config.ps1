@@ -56,7 +56,7 @@ Write-Host "2. Verificando Variables de Entorno" -ForegroundColor Blue
 
 Test-Check ".env file exists" { Test-Path ".\.env" }
 Test-Check "GOOGLE_CLOUD_PROJECT_ID set" { 
-    (Get-Content ".\.env") -match "GOOGLE_CLOUD_PROJECT_ID=aigestion-net"
+    (Get-Content ".\.env") -match "GOOGLE_CLOUD_PROJECT_ID=aigestion-sovereign-2026"
 }
 Test-Check "VERTEX_AI_LOCATION set" { 
     (Get-Content ".\.env") -match "VERTEX_AI_LOCATION=europe-west1"
@@ -88,7 +88,7 @@ Test-Check "gcloud installed" {
 
 Test-Check "gcloud project configured" { 
     $project = & gcloud config get-value project 2>$null
-    $project -eq "aigestion-net"
+    $project -eq "aigestion-sovereign-2026"
 }
 
 # ========================================
@@ -97,22 +97,22 @@ Test-Check "gcloud project configured" {
 Write-Host "4. Verificando APIs Habilitadas" -ForegroundColor Blue
 
 Test-Check "Vertex AI API enabled" { 
-    $services = & gcloud services list --enabled --project aigestion-net 2>$null
+    $services = & gcloud services list --enabled --project aigestion-sovereign-2026 2>$null
     $services -match "aiplatform.googleapis.com"
 }
 
 Test-Check "Cloud Storage API enabled" { 
-    $services = & gcloud services list --enabled --project aigestion-net 2>$null
+    $services = & gcloud services list --enabled --project aigestion-sovereign-2026 2>$null
     $services -match "storage-api.googleapis.com"
 }
 
 Test-Check "Secret Manager API enabled" { 
-    $services = & gcloud services list --enabled --project aigestion-net 2>$null
+    $services = & gcloud services list --enabled --project aigestion-sovereign-2026 2>$null
     $services -match "secretmanager.googleapis.com"
 }
 
 Test-Check "Cloud Logging API enabled" { 
-    $services = & gcloud services list --enabled --project aigestion-net 2>$null
+    $services = & gcloud services list --enabled --project aigestion-sovereign-2026 2>$null
     $services -match "logging.googleapis.com"
 }
 
@@ -124,7 +124,7 @@ Write-Host ""
 Write-Host "5. Verificando Recursos de Google Cloud" -ForegroundColor Blue
 
 Test-Check "Service Account exists" { 
-    $sa = & gcloud iam service-accounts describe aigestion-master@aigestion-net.iam.gserviceaccount.com --project aigestion-net 2>$null
+    $sa = & gcloud iam service-accounts describe aigestion-master@aigestion-sovereign-2026.iam.gserviceaccount.com --project aigestion-sovereign-2026 2>$null
     $sa -match "aigestion-master"
 }
 
@@ -151,7 +151,7 @@ Write-Host ""
 Write-Host "6. Verificando Secret Manager" -ForegroundColor Blue
 
 Test-Check "Secret Manager accessible" { 
-    $secrets = & gcloud secrets list --project aigestion-net 2>$null
+    $secrets = & gcloud secrets list --project aigestion-sovereign-2026 2>$null
     $secrets.Length -gt 0
 }
 

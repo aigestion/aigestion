@@ -5,6 +5,7 @@ import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 import { pineconeService } from './pinecone.service';
 import { supabaseService } from './supabase.service';
+import { vertexAIService } from './google/vertex-ai.service';
 
 export interface VaultResult {
   content: string;
@@ -29,15 +30,18 @@ export class SovereignVaultService {
     logger.info({ query: text }, '[SovereignVault] Unified recall triggered');
 
     try {
+      // Generate embeddings ONCE for all queries
+      const embedding = await vertexAIService.generateEmbeddings(text);
+
       const [local, cloud, sovereign] = await Promise.all([
-        this.queryLocal(text, limit),
-        this.queryCloud(text, limit),
-        this.querySovereign(text, limit)
+        this.queryLocal(text, embedding, limit),
+        this.queryCloud(text, embedding, limit),
+        this.querySovereign(text, embedding, limit),
       ]);
 
       const allResults = [...local, ...cloud, ...sovereign];
-      
-      // Basic Reranking by Score
+
+      // Multi-source Reranking by Score
       return allResults.sort((a, b) => b.score - a.score).slice(0, limit * 2);
     } catch (error: any) {
       logger.error({ error: error.message }, '[SovereignVault] Query failed');
@@ -45,15 +49,17 @@ export class SovereignVaultService {
     }
   }
 
-  private async queryLocal(text: string, limit: number): Promise<VaultResult[]> {
+  private async queryLocal(
+    text: string,
+    embedding: number[],
+    limit: number,
+  ): Promise<VaultResult[]> {
     try {
       // Direct call to ChromaDB Port 8000
-      // Note: In a real implementation we would generate embeddings first, 
-      // but here we check if Chroma is healthy.
       const response = await axios.get(`${this.chromaUrl}/api/v1/heartbeat`);
       if (response.status === 200) {
-        logger.info('[SovereignVault] Local ChromaDB is healthy');
-        // Placeholder for real chroma query
+        // Placeholder: ChromaDB implementation would use the embedding vector here
+        // For now, we return empty but log the health status
         return [];
       }
       return [];
@@ -63,14 +69,21 @@ export class SovereignVaultService {
     }
   }
 
-  private async queryCloud(text: string, limit: number): Promise<VaultResult[]> {
+  private async queryCloud(
+    text: string,
+    embedding: number[],
+    limit: number,
+  ): Promise<VaultResult[]> {
     try {
+      // Pinecone search using pre-generated embeddings could be optimized,
+      // but current pineconeService.search re-ranks/generates.
+      // We use the text for now as search accepts string, but ideally would accept vector.
       const results = await pineconeService.search(text, limit);
       return results.map(res => ({
         content: res.metadata?.text || '',
         source: 'cloud',
         score: res.score || 0,
-        metadata: res.metadata || {}
+        metadata: res.metadata || {},
       }));
     } catch (err) {
       logger.warn('[SovereignVault] Cloud retrieval failed');
@@ -78,17 +91,20 @@ export class SovereignVaultService {
     }
   }
 
-  private async querySovereign(text: string, limit: number): Promise<VaultResult[]> {
+  private async querySovereign(
+    text: string,
+    embedding: number[],
+    limit: number,
+  ): Promise<VaultResult[]> {
     try {
-      // Supabase Hybrid Search
-      const mockEmbedding = new Array(768).fill(0).map(() => Math.random());
-      const results = await supabaseService.hybridSearch(undefined, text, mockEmbedding, 0.4, limit);
-      
+      // Supabase Hybrid Search using real embeddings
+      const results = await supabaseService.hybridSearch(undefined, text, embedding, 0.3, limit);
+
       return results.map((res: any) => ({
         content: res.content || '',
         source: 'sovereign',
         score: res.rank || 0.5,
-        metadata: { title: res.title, ...res.metadata }
+        metadata: { title: res.title, ...res.metadata },
       }));
     } catch (err) {
       logger.warn('[SovereignVault] Sovereign retrieval failed');
@@ -101,14 +117,14 @@ export class SovereignVaultService {
    */
   async ingest(filename: string, content: string, tags: string[] = []): Promise<void> {
     logger.info({ filename }, '[SovereignVault] Synchronized ingestion started');
-    
+
     await Promise.all([
       pineconeService.upsertDocument(filename, content, { filename, tags }),
       supabaseService.upsertDocument({
         title: filename,
         content,
-        metadata: { tags }
-      })
+        metadata: { tags },
+      }),
       // Local Chroma ingestion would go here
     ]);
   }

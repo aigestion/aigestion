@@ -3,7 +3,10 @@ import type { RedisClientType } from 'redis';
 import { getRedisClient } from '../cache/redis';
 import { logger } from '../utils/logger';
 import { BackupRestoreService } from './backup-restore.service';
-import { CENTRAL_LOGGING_SERVICE_NAME, CentralizedLoggingService } from './centralized-logging.service';
+import {
+  CENTRAL_LOGGING_SERVICE_NAME,
+  CentralizedLoggingService,
+} from './centralized-logging.service';
 import { MalwareScannerService } from './malware-scanner.service';
 import { container, TYPES } from '../config/inversify.config';
 import { HealthService } from './health.service';
@@ -118,7 +121,9 @@ export class SecurityDashboardService {
     this.wafService = container.get<WAFService>(TYPES.WAFService);
     this.malwareScanner = container.get<MalwareScannerService>(TYPES.MalwareScannerService);
     this.twoFactorService = container.get<TwoFactorService>(TYPES.TwoFactorService);
-    this.threatIntelService = container.get<ThreatIntelligenceService>(TYPES.ThreatIntelligenceService);
+    this.threatIntelService = container.get<ThreatIntelligenceService>(
+      TYPES.ThreatIntelligenceService,
+    );
     this.behaviorService = container.get<UserBehaviorService>(UserBehaviorService);
     this.loggingService = container.get<CentralizedLoggingService>(CENTRAL_LOGGING_SERVICE_NAME);
     this.monitoringService = container.get<MonitoringService>(TYPES.MonitoringService);
@@ -885,7 +890,9 @@ export class SecurityDashboardService {
       [
         'Backup',
         'Success Rate',
-        `${((data.backup.stats.successfulBackups / data.backup.stats.totalBackups) * 100).toFixed(1)}%`,
+        `${((data.backup.stats.successfulBackups / data.backup.stats.totalBackups) * 100).toFixed(
+          1,
+        )}%`,
         new Date().toISOString(),
         '',
       ],

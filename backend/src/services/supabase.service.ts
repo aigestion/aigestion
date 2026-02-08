@@ -33,9 +33,9 @@ export class SupabaseService {
   private validateConfig() {
     if (!env.SUPABASE_URL || !env.SUPABASE_KEY) {
       logger.error('❌ Critical: SUPABASE_URL or SUPABASE_KEY missing from environment.');
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error('Supabase configuration is required in production');
-      }
+      logger.warn(
+        '⚠️ [SupabaseService] Running without valid credentials. Some features will be disabled.',
+      );
     }
   }
 

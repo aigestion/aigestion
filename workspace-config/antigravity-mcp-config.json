@@ -11,7 +11,7 @@
         "env": {
           "NODE_ENV": "production",
           "AIGESTION_API_URL": "https://api.aigestion.net",
-          "GOOGLE_CLOUD_PROJECT_ID": "aigestion-pro-2026",
+          "GOOGLE_CLOUD_PROJECT_ID": "aigestion-sovereign-2026",
           "GOOGLE_CLOUD_LOCATION": "europe-west1",
           "MONGODB_URI": "${MONGODB_URI}",
           "REDIS_URL": "${REDIS_URL}",
@@ -64,7 +64,7 @@
           "NODE_ENV": "production",
           "DOMAIN": "aigestion.net",
           "CLOUDFLARE_API_TOKEN": "${CLOUDFLARE_API_TOKEN}",
-          "GOOGLE_PROJECT_ID": "aigestion-pro-2026",
+          "GOOGLE_PROJECT_ID": "aigestion-sovereign-2026",
           "ANTIGRAVITY_MODE": "true",
           "PROFESSIONAL_ACCOUNT": "true",
           "LOCATION_OPTIMIZATION": "europe-west1"
@@ -89,7 +89,7 @@
           "NODE_ENV": "production",
           "GITHUB_TOKEN": "${GITHUB_TOKEN}",
           "REPO_OWNER": "aigestion",
-          "REPO_NAME": "aigestion-pro-2026",
+          "REPO_NAME": "aigestion-sovereign-2026",
           "DEPLOY_WEBHOOK": "${DEPLOY_WEBHOOK}",
           "ANTIGRAVITY_MODE": "true",
           "PROFESSIONAL_ACCOUNT": "true",
@@ -164,7 +164,7 @@
         "args": ["./scripts/analytics-server.js"],
         "env": {
           "NODE_ENV": "production",
-          "BIGQUERY_PROJECT_ID": "aigestion-pro-2026",
+          "BIGQUERY_PROJECT_ID": "aigestion-sovereign-2026",
           "ANALYTICS_DATASET": "aigestion_analytics",
           "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_APPLICATION_CREDENTIALS}",
           "ANTIGRAVITY_MODE": "true",
@@ -209,7 +209,7 @@
         ],
         "priority": "high",
         "realTime": true
-      }
+      },
       "supabase_mcp": {
         "type": "http",
         "url": "https://mcp.supabase.com/mcp?project_ref=${SUPABASE_PROJECT_REF}&read_only=true&features=database,docs,debugging,development",
@@ -228,7 +228,7 @@
         ],
         "priority": "critical",
         "realTime": true
-      },
+      }
     }
   },
   "antigravity": {

@@ -56,7 +56,7 @@ router.post('/track', async (req: any, res: any) => {
 
     // Create mock response
     const mockRes = {
-      setHeader: () => { },
+      setHeader: () => {},
     } as any;
 
     // Apply behavior tracking

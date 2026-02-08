@@ -35,7 +35,7 @@ export class InfraOptimizerService {
           issue: 'Cold Starts detected',
           action: 'Enable min-instances: 1',
           estimatedImprovement: '30% Latency reduction',
-        }
+        },
       ];
 
       return {
@@ -48,7 +48,6 @@ export class InfraOptimizerService {
       throw error;
     }
   }
-
 
   /**
    * Optimizes infrastructure resources based on target.

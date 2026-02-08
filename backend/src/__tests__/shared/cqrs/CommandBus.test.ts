@@ -5,7 +5,7 @@ import { ICommand } from '../../../shared/cqrs/messages';
 import { ICommandHandler } from '../../../shared/cqrs/handlers';
 
 class TestCommand implements ICommand {
-  constructor(public readonly payload: string) { }
+  constructor(public readonly payload: string) {}
 }
 
 class TestCommandHandler implements ICommandHandler<TestCommand> {

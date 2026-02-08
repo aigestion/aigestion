@@ -16,8 +16,8 @@ export class GmailService {
       scopes: [
         'https://www.googleapis.com/auth/gmail.readonly',
         'https://www.googleapis.com/auth/gmail.modify',
-        'https://www.googleapis.com/auth/gmail.send'
-      ]
+        'https://www.googleapis.com/auth/gmail.send',
+      ],
     });
     this.gmail = google.gmail({ version: 'v1', auth: this.auth });
   }
@@ -27,7 +27,7 @@ export class GmailService {
       const response = await this.gmail.users.messages.list({
         userId: 'me',
         q: 'is:unread',
-        maxResults
+        maxResults,
       });
       return response.data.messages || [];
     } catch (error) {
@@ -41,7 +41,7 @@ export class GmailService {
       const response = await this.gmail.users.messages.get({
         userId: 'me',
         id: messageId,
-        format: 'full'
+        format: 'full',
       });
       return response.data;
     } catch (error) {
@@ -62,7 +62,7 @@ export class GmailService {
         from,
         subject,
         body,
-        timestamp: new Date(parseInt(message.internalDate))
+        timestamp: new Date(parseInt(message.internalDate)),
       };
     } catch (error) {
       console.error('Error parsing email:', error);
@@ -75,7 +75,7 @@ export class GmailService {
       const message = this.createMessage(to, subject, body);
       const response = await this.gmail.users.messages.send({
         userId: 'me',
-        requestBody: { raw: message }
+        requestBody: { raw: message },
       });
       return response.data;
     } catch (error) {
@@ -90,8 +90,8 @@ export class GmailService {
         userId: 'me',
         id: messageId,
         requestBody: {
-          addLabelIds: [labelId]
-        }
+          addLabelIds: [labelId],
+        },
       });
     } catch (error) {
       console.error('Error labeling email:', error);
@@ -105,8 +105,8 @@ export class GmailService {
         userId: 'me',
         id: messageId,
         requestBody: {
-          removeLabelIds: ['INBOX']
-        }
+          removeLabelIds: ['INBOX'],
+        },
       });
     } catch (error) {
       console.error('Error archiving email:', error);
@@ -117,13 +117,9 @@ export class GmailService {
   private decodeBody(payload: any): string {
     try {
       if (payload.parts) {
-        return payload.parts
-          .map((part: any) => this.decodeBody(part))
-          .join('\n');
+        return payload.parts.map((part: any) => this.decodeBody(part)).join('\n');
       } else if (payload.body?.data) {
-        const data = payload.body.data
-          .replace(/-/g, '+')
-          .replace(/_/g, '/');
+        const data = payload.body.data.replace(/-/g, '+').replace(/_/g, '/');
         return Buffer.from(data, 'base64').toString('utf-8');
       }
       return '';
@@ -140,7 +136,7 @@ export class GmailService {
       'Content-Type: text/plain; charset="UTF-8"',
       'MIME-Version: 1.0',
       '',
-      body
+      body,
     ].join('\n');
 
     return Buffer.from(email)

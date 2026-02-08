@@ -671,7 +671,10 @@ export class AutoPatchService {
    */
   private isWithinAllowedTime(policy: PatchPolicy): boolean {
     const now = new Date();
-    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')}`;
 
     return currentTime >= policy.allowedTimes.start && currentTime <= policy.allowedTimes.end;
   }
@@ -748,9 +751,9 @@ export class AutoPatchService {
       const averagePatchTime =
         completedJobs.length > 0
           ? completedJobs.reduce(
-            (sum, job) => sum + (job.endTime!.getTime() - job.startTime.getTime()),
-            0,
-          ) / completedJobs.length
+              (sum, job) => sum + (job.endTime!.getTime() - job.startTime.getTime()),
+              0,
+            ) / completedJobs.length
           : 0;
 
       const packagesPatched = new Set(this.patchJobs.map(job => job.packageName)).size;

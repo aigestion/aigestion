@@ -64,7 +64,9 @@ async function writeTasksData(data: TaskData): Promise<void> {
     data.metadata.lastUpdated = new Date().toISOString();
     data.metadata.totalTasks = data.tasks.length;
     data.metadata.completedTasks = data.tasks.filter(t => t.status === 'done').length;
-    data.metadata.activeTasks = data.tasks.filter(t => t.status !== 'done' && t.status !== 'cancelled').length;
+    data.metadata.activeTasks = data.tasks.filter(
+      t => t.status !== 'done' && t.status !== 'cancelled',
+    ).length;
 
     await fs.writeFile(TASKS_FILE_PATH, JSON.stringify(data, null, 2), 'utf-8');
   } catch (error) {
@@ -111,7 +113,7 @@ export const createTask = async (req: Request, res: Response): Promise<void> => 
       progress: 0,
       assignee: req.body.assignee || 'Alejandro',
       dependencies: req.body.dependencies || [],
-      notes: []
+      notes: [],
     };
 
     data.tasks.push(newTask);
@@ -147,15 +149,15 @@ export const updateTask = async (req: Request, res: Response): Promise<void> => 
       ...data.tasks[taskIndex],
       ...req.body,
       id: taskId, // Ensure ID doesn't change
-      updated: new Date().toISOString()
+      updated: new Date().toISOString(),
     };
 
     // Check if status changed to done
     if (req.body.status === 'done' && data.tasks[taskIndex].status !== 'done') {
-        updatedTask.completed = new Date().toISOString();
-        updatedTask.progress = 100;
+      updatedTask.completed = new Date().toISOString();
+      updatedTask.progress = 100;
     } else if (req.body.status && req.body.status !== 'done') {
-        updatedTask.completed = null;
+      updatedTask.completed = null;
     }
 
     data.tasks[taskIndex] = updatedTask;

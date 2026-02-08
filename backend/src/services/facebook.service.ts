@@ -25,7 +25,7 @@ export class FacebookService {
         },
         {
           params: { access_token: token },
-        }
+        },
       );
 
       logger.info(`Posted to Facebook Page ${pageId}: ${response.data.id}`);
@@ -33,7 +33,7 @@ export class FacebookService {
     } catch (error: any) {
       logger.error(
         { error: error.response?.data || error.message },
-        'Error posting to Facebook Page'
+        'Error posting to Facebook Page',
       );
       throw error;
     }
@@ -42,7 +42,10 @@ export class FacebookService {
   /**
    * Get Page insights (e.g., page_impressions, page_engagement)
    */
-  async getPageInsights(pageId: string, metrics: string = 'page_impressions,page_engaged_users'): Promise<any> {
+  async getPageInsights(
+    pageId: string,
+    metrics: string = 'page_impressions,page_engaged_users',
+  ): Promise<any> {
     const token = env.FACEBOOK_PAGE_ACCESS_TOKEN;
 
     if (!token) {
@@ -60,7 +63,7 @@ export class FacebookService {
     } catch (error: any) {
       logger.error(
         { error: error.response?.data || error.message },
-        'Error fetching Facebook Page insights'
+        'Error fetching Facebook Page insights',
       );
       return null;
     }
@@ -86,7 +89,7 @@ export class FacebookService {
     } catch (error: any) {
       logger.error(
         { error: error.response?.data || error.message },
-        'Error fetching Facebook post comments'
+        'Error fetching Facebook post comments',
       );
       return null;
     }

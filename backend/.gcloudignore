@@ -8,9 +8,8 @@ scripts/
 .env*
 .vscode/
 .mongodb-binaries/
-legacy-python-core/
+# premium_management/
 rag-core/
-premium_management/
 backups/
 coverage/
 logs/

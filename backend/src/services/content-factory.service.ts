@@ -13,9 +13,7 @@ export interface ContentRequest {
 
 @injectable()
 export class ContentFactoryService {
-  constructor(
-    @inject(TYPES.ElevenLabsService) private elevenLabs: ElevenLabsService,
-  ) {}
+  constructor(@inject(TYPES.ElevenLabsService) private elevenLabs: ElevenLabsService) {}
 
   /**
    * Generates a complete content piece: Script + Voice
@@ -59,7 +57,6 @@ export class ContentFactoryService {
           voiceId,
         },
       };
-
     } catch (error: any) {
       logger.error('[ContentFactory] Content creation failed:', error.message);
       throw error;

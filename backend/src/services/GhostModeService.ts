@@ -36,16 +36,26 @@ export class GhostModeService {
   public getStatus() {
     return {
       isActive: this.isActive,
-      identity: this.isActive ? this.currentIdentity : null
+      identity: this.isActive ? this.currentIdentity : null,
     };
   }
 
   public rotateIdentity() {
     const identities: GhostIdentity[] = [
-      { id: 'phantom-01', alias: 'Spectre', origin: 'AS13335 (Cloudflare)', signature: '0x88...FF01' },
+      {
+        id: 'phantom-01',
+        alias: 'Spectre',
+        origin: 'AS13335 (Cloudflare)',
+        signature: '0x88...FF01',
+      },
       { id: 'phantom-02', alias: 'Shadow', origin: 'AS16509 (Amazon)', signature: '0x12...BC34' },
       { id: 'phantom-03', alias: 'Wraith', origin: 'AS15169 (Google)', signature: '0xDE...AD00' },
-      { id: 'phantom-04', alias: 'Eidolon', origin: 'AS8075 (Microsoft)', signature: '0xFE...ED21' },
+      {
+        id: 'phantom-04',
+        alias: 'Eidolon',
+        origin: 'AS8075 (Microsoft)',
+        signature: '0xFE...ED21',
+      },
     ];
 
     this.currentIdentity = identities[Math.floor(Math.random() * identities.length)];

@@ -7,31 +7,31 @@ import { MissionStatus } from '../../models/Mission';
 
 // Mock dependencies
 const mockAIService = {
-  generateContent: jest.fn()
+  generateContent: jest.fn(),
 };
 const mockMissionRepo = {
-  update: jest.fn()
+  update: jest.fn(),
 };
 const mockSocketService = {
-  emitMissionUpdate: jest.fn()
+  emitMissionUpdate: jest.fn(),
 };
 const mockNotificationService = {
-  createNotification: jest.fn()
+  createNotification: jest.fn(),
 };
 
 // Mock container
 jest.mock('../../config/inversify.config', () => ({
   container: {
-    get: jest.fn()
-  }
+    get: jest.fn(),
+  },
 }));
 
 // Mock logger
 jest.mock('../../utils/logger', () => ({
   logger: {
     info: jest.fn(),
-    error: jest.fn()
-  }
+    error: jest.fn(),
+  },
 }));
 
 describe('SwarmProcessor', () => {
@@ -46,11 +46,11 @@ describe('SwarmProcessor', () => {
         objective: 'Test Mission',
         userId: 'user-1',
         missionId: 'mission-1',
-        context: {}
-      }
+        context: {},
+      },
     };
 
-    (container.get as jest.Mock).mockImplementation((type) => {
+    (container.get as jest.Mock).mockImplementation(type => {
       if (type === TYPES.AIService) return mockAIService;
       if (type === TYPES.MissionRepository) return mockMissionRepo;
       if (type === TYPES.SocketService) return mockSocketService;
@@ -69,33 +69,52 @@ describe('SwarmProcessor', () => {
     await SwarmProcessor.process(mockJob as Job);
 
     // Verify Planning Phase
-    expect(mockMissionRepo.update).toHaveBeenCalledWith('mission-1', { status: MissionStatus.PLANNING });
-    expect(mockSocketService.emitMissionUpdate).toHaveBeenCalledWith('mission-1', { status: MissionStatus.PLANNING });
+    expect(mockMissionRepo.update).toHaveBeenCalledWith('mission-1', {
+      status: MissionStatus.PLANNING,
+    });
+    expect(mockSocketService.emitMissionUpdate).toHaveBeenCalledWith('mission-1', {
+      status: MissionStatus.PLANNING,
+    });
 
     // Verify AI Planning
-    expect(mockAIService.generateContent).toHaveBeenNthCalledWith(1, expect.stringContaining('Develop a concise step-by-step strategy'), 'user-1');
+    expect(mockAIService.generateContent).toHaveBeenNthCalledWith(
+      1,
+      expect.stringContaining('Develop a concise step-by-step strategy'),
+      'user-1',
+    );
 
     // Verify Executing Phase
     expect(mockMissionRepo.update).toHaveBeenCalledWith('mission-1', {
       plan: 'Step 1: Plan',
-      status: MissionStatus.EXECUTING
+      status: MissionStatus.EXECUTING,
     });
 
     // Verify Final Reporting
-    expect(mockAIService.generateContent).toHaveBeenNthCalledWith(2, expect.stringContaining('Generate a final summary'), 'user-1');
+    expect(mockAIService.generateContent).toHaveBeenNthCalledWith(
+      2,
+      expect.stringContaining('Generate a final summary'),
+      'user-1',
+    );
 
     // Verify Completion
-    expect(mockMissionRepo.update).toHaveBeenCalledWith('mission-1', expect.objectContaining({
-      result: 'Mission Success Report',
-      status: MissionStatus.COMPLETED,
-      completedAt: expect.any(Date)
-    }));
+    expect(mockMissionRepo.update).toHaveBeenCalledWith(
+      'mission-1',
+      expect.objectContaining({
+        result: 'Mission Success Report',
+        status: MissionStatus.COMPLETED,
+        completedAt: expect.any(Date),
+      }),
+    );
 
-    // Verify Notification
-    expect(mockNotificationService.createNotification).toHaveBeenCalledWith(expect.objectContaining({
-      userId: 'user-1',
-      type: 'MISSION_COMPLETED'
-    }));
+    // Verify Notification — uses positional args:
+    // createNotification(userId, type, title, message, metadata)
+    expect(mockNotificationService.createNotification).toHaveBeenCalledWith(
+      'user-1',
+      expect.anything(), // NotificationType.MISSION_COMPLETED enum value
+      expect.any(String), // title
+      expect.stringContaining('Test Mission'), // message
+      expect.objectContaining({ missionId: 'mission-1' }), // metadata
+    );
   });
 
   it('should handle failures and update status to FAILED', async () => {
@@ -105,23 +124,33 @@ describe('SwarmProcessor', () => {
     await expect(SwarmProcessor.process(mockJob as Job)).rejects.toThrow('AI Service Down');
 
     // Verify Failure Update
-    expect(mockMissionRepo.update).toHaveBeenCalledWith('mission-1', expect.objectContaining({
-      status: MissionStatus.FAILED,
-      error: 'AI Service Down',
-      completedAt: expect.any(Date)
-    }));
+    expect(mockMissionRepo.update).toHaveBeenCalledWith(
+      'mission-1',
+      expect.objectContaining({
+        status: MissionStatus.FAILED,
+        error: 'AI Service Down',
+        completedAt: expect.any(Date),
+      }),
+    );
 
     // Verify Socket Error Emit
-    expect(mockSocketService.emitMissionUpdate).toHaveBeenCalledWith('mission-1', expect.objectContaining({
-      status: MissionStatus.FAILED,
-      error: 'AI Service Down'
-    }));
+    expect(mockSocketService.emitMissionUpdate).toHaveBeenCalledWith(
+      'mission-1',
+      expect.objectContaining({
+        status: MissionStatus.FAILED,
+        error: 'AI Service Down',
+      }),
+    );
 
-    // Verify Failure Notification
-    expect(mockNotificationService.createNotification).toHaveBeenCalledWith(expect.objectContaining({
-      userId: 'user-1',
-      type: 'MISSION_FAILED'
-    }));
+    // Verify Failure Notification — uses positional args:
+    // createNotification(userId, type, title, message, metadata)
+    expect(mockNotificationService.createNotification).toHaveBeenCalledWith(
+      'user-1',
+      expect.anything(), // NotificationType.MISSION_FAILED enum value
+      expect.any(String), // title
+      expect.stringContaining('AI Service Down'), // message
+      expect.objectContaining({ missionId: 'mission-1' }), // metadata
+    );
   });
 
   it('should log error when updating failure status fails', async () => {
@@ -161,7 +190,7 @@ describe('SwarmProcessor', () => {
     const { logger } = require('../../utils/logger');
     expect(logger.error).toHaveBeenCalledWith(
       expect.stringContaining('Failed to update mission failure status'),
-      secondaryError
+      secondaryError,
     );
   });
 });

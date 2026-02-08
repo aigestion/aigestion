@@ -66,7 +66,9 @@ export class YoutubeTranscriptionService {
       } catch (error) {
         // Si no hay subtítulos en español, intentar con autogenerados
         logger.warn(
-          `No se encontraron subtítulos en español para ${videoId}, intentando con autogenerados: ${error instanceof Error ? error.message : 'Unknown error'}`,
+          `No se encontraron subtítulos en español para ${videoId}, intentando con autogenerados: ${
+            error instanceof Error ? error.message : 'Unknown error'
+          }`,
         );
         transcriptItems = (await YoutubeTranscript.fetchTranscript(videoId)) as TranscriptItem[];
       }
@@ -77,7 +79,7 @@ export class YoutubeTranscriptionService {
 
       // Combinar todos los segmentos de texto
       const fullTranscript = transcriptItems
-        .map((item) => item.text)
+        .map(item => item.text)
         .join(' ')
         .replace(/\s+/g, ' ')
         .trim();

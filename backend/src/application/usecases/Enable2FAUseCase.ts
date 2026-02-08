@@ -9,9 +9,7 @@ export class Enable2FAUseCase {
   constructor(@inject(TYPES.TwoFactorService) private twoFactorService: TwoFactorService) {}
 
   async execute(userId: string): Promise<{ secret: string; qrCode: string }> {
-    const user = await(User as any)
-      .findById(userId)
-      .exec();
+    const user = await (User as any).findById(userId).exec();
     if (!user) {
       throw new AppError('User not found', 404, 'USER_NOT_FOUND');
     }

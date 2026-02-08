@@ -28,7 +28,9 @@ describe('SearchWebTool', () => {
   it('throws an error when API key is missing', async () => {
     delete process.env.TAVILY_API_KEY;
     const tool = new SearchWebTool();
-    await expect(tool.execute({ query: 'test' })).rejects.toThrow('TAVILY_API_KEY environment variable is not set.');
+    await expect(tool.execute({ query: 'test' })).rejects.toThrow(
+      'TAVILY_API_KEY environment variable is not set.',
+    );
   });
 
   it('returns answer and results on successful search', async () => {

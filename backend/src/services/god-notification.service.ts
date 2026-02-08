@@ -18,7 +18,11 @@ export class GodNotificationService {
   /**
    * Sends a high-priority alert through all enabled sovereign channels.
    */
-  async broadcastGodAlert(title: string, message: string, urgency: 'low' | 'medium' | 'high' = 'medium') {
+  async broadcastGodAlert(
+    title: string,
+    message: string,
+    urgency: 'low' | 'medium' | 'high' = 'medium',
+  ) {
     const formattedMessage = this.formatMessage(title, message, urgency);
 
     logger.info(`[GodNotificationService] Broadcasting alert: ${title} (${urgency})`);

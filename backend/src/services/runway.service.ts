@@ -22,7 +22,7 @@ export class RunwayService {
       duration?: number;
       aspect_ratio?: string;
       model?: string;
-    } = {}
+    } = {},
   ): Promise<any> {
     if (!env.RUNWAY_API_KEY) {
       throw new Error('RUNWAY_API_KEY is missing');
@@ -42,11 +42,11 @@ export class RunwayService {
         },
         {
           headers: {
-            'Authorization': `Bearer ${env.RUNWAY_API_KEY}`,
+            Authorization: `Bearer ${env.RUNWAY_API_KEY}`,
             'Content-Type': 'application/json',
             'X-Runway-Version': '2024-09-26',
           },
-        }
+        },
       );
 
       return response.data;
@@ -60,10 +60,17 @@ export class RunwayService {
         logger.error('Full Error Details:', JSON.stringify(errorData, null, 2));
       }
 
-      if (error.response?.status === 402 || (error.response?.status === 400 && errorMsg.includes('credits'))) {
-         logger.warn('This error likely indicates insufficient credits or a billing issue on your Runway account.');
+      if (
+        error.response?.status === 402 ||
+        (error.response?.status === 400 && errorMsg.includes('credits'))
+      ) {
+        logger.warn(
+          'This error likely indicates insufficient credits or a billing issue on your Runway account.',
+        );
       } else if (error.response?.status === 400) {
-         logger.warn('This error might be due to credits, or possibly invalid parameters (e.g. image format). The image size confirms it should be valid for Data URI.');
+        logger.warn(
+          'This error might be due to credits, or possibly invalid parameters (e.g. image format). The image size confirms it should be valid for Data URI.',
+        );
       }
 
       throw error;
@@ -79,15 +86,12 @@ export class RunwayService {
     }
 
     try {
-      const response = await axios.get(
-        `${RunwayService.API_URL}/tasks/${taskId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${env.RUNWAY_API_KEY}`,
-            'X-Runway-Version': '2024-09-26',
-          },
-        }
-      );
+      const response = await axios.get(`${RunwayService.API_URL}/tasks/${taskId}`, {
+        headers: {
+          Authorization: `Bearer ${env.RUNWAY_API_KEY}`,
+          'X-Runway-Version': '2024-09-26',
+        },
+      });
       return response.data;
     } catch (error: any) {
       logger.error('Runway Status Check Error:', error.response?.data || error.message);

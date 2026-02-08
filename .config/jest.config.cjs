@@ -9,7 +9,7 @@ module.exports = {
     '\\.(png|jpg|jpeg|gif|svg)$': '<rootDir>/__mocks__/fileMock.js',
     '^tests/(.*)$': '<rootDir>/tests/$1',
     '^tests$': '<rootDir>/tests/index.ts',
-    '^@/(.*)$': '<rootDir>/backend/src/$1',
+    '^@/(.*)$': '<rootDir>/../backend/src/$1',
   },
   transform: {
     '^.+\\.[tj]sx?$': 'ts-jest',

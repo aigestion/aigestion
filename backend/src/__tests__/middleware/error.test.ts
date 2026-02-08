@@ -11,7 +11,7 @@ jest.mock('../../utils/logger', () => ({
     debug: jest.fn(),
     verbose: jest.fn(),
     silly: jest.fn(),
-  }
+  },
 }));
 
 describe('ErrorHandler Middleware', () => {
@@ -36,14 +36,16 @@ describe('ErrorHandler Middleware', () => {
     errorHandler(error, mockRequest as Request, mockResponse as Response, nextFunction);
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.BAD_REQUEST);
-    expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining({
-      status: HttpStatusCode.BAD_REQUEST,
-      error: expect.objectContaining({
-        code: 'TEST_CODE',
-        message: 'Test Error',
-        requestId: 'test-request-id'
-      })
-    }));
+    expect(mockResponse.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        status: HttpStatusCode.BAD_REQUEST,
+        error: expect.objectContaining({
+          code: 'TEST_CODE',
+          message: 'Test Error',
+          requestId: 'test-request-id',
+        }),
+      }),
+    );
   });
 
   it('should handle NotFoundError correctly', () => {
@@ -52,11 +54,13 @@ describe('ErrorHandler Middleware', () => {
     errorHandler(error, mockRequest as Request, mockResponse as Response, nextFunction);
 
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCode.NOT_FOUND);
-    expect(mockResponse.json).toHaveBeenCalledWith(expect.objectContaining({
-      error: expect.objectContaining({
-        code: 'NOT_FOUND'
-      })
-    }));
+    expect(mockResponse.json).toHaveBeenCalledWith(
+      expect.objectContaining({
+        error: expect.objectContaining({
+          code: 'NOT_FOUND',
+        }),
+      }),
+    );
   });
 
   it('should handle ZodError and format details', () => {
@@ -64,8 +68,8 @@ describe('ErrorHandler Middleware', () => {
       name: 'ZodError',
       issues: [
         { path: ['email'], message: 'Invalid email' },
-        { path: ['password'], message: 'Too short' }
-      ]
+        { path: ['password'], message: 'Too short' },
+      ],
     };
 
     errorHandler(zodError, mockRequest as Request, mockResponse as Response, nextFunction);
@@ -81,7 +85,7 @@ describe('ErrorHandler Middleware', () => {
     const castError = {
       name: 'CastError',
       path: '_id',
-      value: 'invalid-id'
+      value: 'invalid-id',
     };
 
     errorHandler(castError, mockRequest as Request, mockResponse as Response, nextFunction);
@@ -95,7 +99,8 @@ describe('ErrorHandler Middleware', () => {
   it('should handle Mongoose Duplicate Key Error', () => {
     const duplicateError = {
       code: 11000,
-      errmsg: 'E11000 duplicate key error collection: db.users index: email_1 dup key: { email: "test@example.com" }'
+      errmsg:
+        'E11000 duplicate key error collection: db.users index: email_1 dup key: { email: "test@example.com" }',
     };
 
     errorHandler(duplicateError, mockRequest as Request, mockResponse as Response, nextFunction);
@@ -111,8 +116,8 @@ describe('ErrorHandler Middleware', () => {
       name: 'ValidationError',
       errors: {
         email: { message: 'Email is invalid' },
-        password: { message: 'Password is too weak' }
-      }
+        password: { message: 'Password is too weak' },
+      },
     };
 
     errorHandler(validationError, mockRequest as Request, mockResponse as Response, nextFunction);
@@ -125,7 +130,7 @@ describe('ErrorHandler Middleware', () => {
 
   it('should handle JsonWebTokenError', () => {
     const jwtError = {
-      name: 'JsonWebTokenError'
+      name: 'JsonWebTokenError',
     };
 
     errorHandler(jwtError, mockRequest as Request, mockResponse as Response, nextFunction);
@@ -137,7 +142,7 @@ describe('ErrorHandler Middleware', () => {
 
   it('should handle TokenExpiredError', () => {
     const expiredError = {
-      name: 'TokenExpiredError'
+      name: 'TokenExpiredError',
     };
 
     errorHandler(expiredError, mockRequest as Request, mockResponse as Response, nextFunction);

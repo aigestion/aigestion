@@ -35,9 +35,7 @@ export const register = async (req: Request, res: Response, next: NextFunction):
 
     setRefreshTokenCookie(res, refreshToken);
 
-    res
-      .status(201)
-      .json(buildResponse({ user: userResponse, token }, 201, (req as any).requestId));
+    res.status(201).json(buildResponse({ user: userResponse, token }, 201, (req as any).requestId));
   } catch (error) {
     next(error);
   }
@@ -58,10 +56,16 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     });
 
     if (mfaRequired) {
-      res.status(200).json(buildResponse({
-        mfaRequired: true,
-        userId: user._id
-      }, 200, (req as any).requestId));
+      res.status(200).json(
+        buildResponse(
+          {
+            mfaRequired: true,
+            userId: user._id,
+          },
+          200,
+          (req as any).requestId,
+        ),
+      );
       return;
     }
 
@@ -178,18 +182,26 @@ export const verify2FA = [
 ];
 
 // Verify Login 2FA (Step 2 of Login)
-export const verifyLogin2FA = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const verifyLogin2FA = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
   try {
     const authService = container.get<AuthService>(TYPES.AuthService);
     const { userId, token } = req.body;
     const ip = req.ip;
     const userAgent = req.headers['user-agent'];
 
-    const { user, token: accessToken, refreshToken } = await authService.verifyLogin2FA({
+    const {
+      user,
+      token: accessToken,
+      refreshToken,
+    } = await authService.verifyLogin2FA({
       userId,
       token,
       ip,
-      userAgent
+      userAgent,
     });
 
     const userResponse: any = user.toObject();

@@ -9,8 +9,8 @@ import { AppError } from '../../utils/errors';
 export class Verify2FAUseCase {
   constructor(
     @inject(TYPES.TwoFactorService) private twoFactorService: TwoFactorService,
-    @inject(TYPES.RateLimitService) private rateLimitService: RateLimitService
-  ) { }
+    @inject(TYPES.RateLimitService) private rateLimitService: RateLimitService,
+  ) {}
 
   async execute(userId: string, token: string): Promise<void> {
     // Rate Limit: 5 attempts per 15 minutes

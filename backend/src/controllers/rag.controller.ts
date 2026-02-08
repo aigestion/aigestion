@@ -12,7 +12,7 @@ import { malwareScanner } from '../middleware/malware-scanner.middleware';
 
 @controller('/rag')
 export class RagController implements interfaces.Controller {
-  constructor(@inject(TYPES.RagService) private ragService: RagService) { }
+  constructor(@inject(TYPES.RagService) private ragService: RagService) {}
 
   @httpPost('/ingest', malwareScanner.uploadSingle('file'))
   async ingestDocument(@request() req: Request, @response() res: Response) {

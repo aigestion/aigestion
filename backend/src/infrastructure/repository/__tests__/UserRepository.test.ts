@@ -73,7 +73,11 @@ describe('UserRepository', () => {
 
     const updated = await repo.update('custom-id', { name: 'Updated Name' });
     expect(updated?.name).toBe('Updated Name');
-    expect(User.findByIdAndUpdate).toHaveBeenCalledWith('custom-id', { name: 'Updated Name' }, { new: true });
+    expect(User.findByIdAndUpdate).toHaveBeenCalledWith(
+      'custom-id',
+      { name: 'Updated Name' },
+      { new: true },
+    );
   });
 
   it('should delete a user', async () => {

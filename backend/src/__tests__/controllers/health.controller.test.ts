@@ -6,7 +6,11 @@ import { logger } from '../../utils/logger';
 
 jest.mock('../../cache/redis', () => ({
   getRedisClient: jest.fn().mockReturnValue({
-    info: jest.fn().mockResolvedValue('redis_version:6.0.0\r\nused_memory_human:100MB\r\nconnected_clients:1\r\nblocked_clients:0'),
+    info: jest
+      .fn()
+      .mockResolvedValue(
+        'redis_version:6.0.0\r\nused_memory_human:100MB\r\nconnected_clients:1\r\nblocked_clients:0',
+      ),
     ping: jest.fn().mockResolvedValue('PONG'),
     isOpen: true,
   }),

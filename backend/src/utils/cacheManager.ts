@@ -15,7 +15,7 @@ export const cache = {
    */
   get: async <T>(key: string): Promise<T | null> => {
     const now = Date.now();
-    
+
     // 1. L1 Check
     const l1Item = l1Cache.get(key);
     if (l1Item && l1Item.expires > now) {
@@ -35,7 +35,7 @@ export const cache = {
       try {
         // 3. L2 Check (Redis)
         const value = await getCache(key);
-        
+
         if (value !== null) {
           logger.debug({ key }, 'Cache L2 HIT');
           l1Cache.set(key, {

@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import { Telegraf } from 'telegraf';
 
 // import { TYPES } from '../types';
-import { loadPremiumCredentials } from '../premium_management';
+import { loadPremiumCredentials } from '@/premium_management';
 import { logger } from '../utils/logger';
 
 export interface CredentialStatus {
@@ -115,7 +115,7 @@ export class CredentialManagerService {
   async verifyProfessionalAccount(): Promise<CredentialStatus> {
     try {
       const creds = loadPremiumCredentials();
-      const proAccount = creds.find((c) => c.type === 'professional');
+      const proAccount = creds.find(c => c.type === 'professional');
 
       if (!proAccount) {
         return this.report('Professional Account', 'missing', 'No professional account configured');

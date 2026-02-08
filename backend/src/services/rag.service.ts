@@ -3,12 +3,15 @@ import { exec } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
 import { promisify } from 'util';
+import { injectable, inject } from 'inversify';
 
 const execAsync = promisify(exec);
 
 import { logger } from '../utils/logger';
 import { pineconeService } from './pinecone.service';
 import { supabaseService } from './supabase.service';
+import { TYPES } from '../types';
+import { SovereignVaultService } from './SovereignVaultService';
 
 interface FileContext {
   path: string;
@@ -41,6 +44,7 @@ interface RagSearchResult {
   }>;
 }
 
+@injectable()
 export class RagService {
   private readonly rootDir: string;
   private readonly maxContextSize: number = 100000; // ~25k tokens (safe limit)
@@ -76,7 +80,7 @@ export class RagService {
     '.mp3',
   ]);
 
-  constructor() {
+  constructor(@inject(TYPES.SovereignVaultService) private readonly vault: SovereignVaultService) {
     this.rootDir = path.resolve(__dirname, '../../../');
   }
 
@@ -84,7 +88,7 @@ export class RagService {
    * Scans the codebase and returns a formatted string of the context.
    * Uses in-memory caching and prepends an ASCII tree of the project structure.
    * If query is provided, performs a Hybrid Search simulation to prioritize relevant files.
-   * ALSO queries the Python RAG service for documentation context.
+   * ALSO queries the Sovereign Vault service for documentation context.
    */
   async getProjectContext(query?: string): Promise<string> {
     try {
@@ -92,11 +96,10 @@ export class RagService {
 
       let context = '';
 
-      // 1. Run File Scan and RAG Query in parallel
-      const [files, docContext, supabaseContext] = await Promise.all([
+      // 1. Run File Scan and Database Query in parallel
+      const [files, vaultResults] = await Promise.all([
         this.getAllFiles(),
-        query && query.trim().length > 0 ? this.queryVectorDb(query) : Promise.resolve(null),
-        query && query.trim().length > 0 ? this.querySupabaseKnowledge(query) : Promise.resolve(null),
+        query && query.trim().length > 0 ? this.vault.query(query) : Promise.resolve(null),
       ]);
 
       // 2. Generate ASCII Tree (always useful for structure)
@@ -114,7 +117,9 @@ export class RagService {
         try {
           const rustResults = await this.queryRustCore(query);
           if (rustResults && rustResults.length > 0) {
-            logger.info(`[RagService] Rust RagCore provided ${rustResults.length} optimized results.`);
+            logger.info(
+              `[RagService] Rust RagCore provided ${rustResults.length} optimized results.`,
+            );
             sortedFiles = rustResults;
           } else {
             sortedFiles = this.rankFiles(files, query!);
@@ -124,18 +129,19 @@ export class RagService {
           sortedFiles = this.rankFiles(files, query!);
         }
 
-        // Append Documentation Context (Cloud + Local)
-        if (docContext) {
-          context += `[Cloud Knowledge Memory (Pinecone)]\n${docContext}\n\n`;
+        // Append Sovereign Vault Context (Unified Memory)
+        if (vaultResults && vaultResults.length > 0) {
+          context += `[Sovereign Vault - Unified Memory Banks]\n`;
+          vaultResults.forEach((res, i) => {
+            context += `--- Memory Item ${i + 1} [Source: ${res.source.toUpperCase()}] ---\n${
+              res.content
+            }\n\n`;
+          });
         }
 
         const localContext = await this.queryLocalMemory(query!);
         if (localContext) {
           context += `[Local Neural Memory (NeuroCore)]\n${localContext}\n\n`;
-        }
-
-        if (supabaseContext) {
-          context += `[Sovereign Knowledge Base (Supabase)]\n${supabaseContext}\n\n`;
         }
       } else {
         context += `[Full Context - No Query Provided]\n\n`;
@@ -170,50 +176,43 @@ export class RagService {
 
   /**
    * Public interface to query the knowledge base (Vector DB documentation).
+   * Migrated to SovereignVaultService for unified discovery.
    */
   async queryKnowledgeBase(query: string): Promise<string | null> {
-    const [cloud, local, sovereign] = await Promise.all([
-      this.queryVectorDb(query),
-      this.queryLocalMemory(query),
-      this.querySupabaseKnowledge(query),
-    ]);
+    const results = await this.vault.query(query);
 
-    let results = '';
-    if (cloud) results += `--- CLOUD MEMORY (Pinecone) ---\n${cloud}\n\n`;
-    if (local) results += `--- LOCAL MEMORY (NeuroCore) ---\n${local}\n\n`;
-    if (sovereign) results += `--- SOVEREIGN MEMORY (Supabase) ---\n${sovereign}\n\n`;
+    if (!results || results.length === 0) return null;
 
-    return results.trim() || null;
+    return results
+      .map(
+        (res, i) =>
+          `[Source: ${res.source.toUpperCase()} | Score: ${res.score.toFixed(2)}]\n${res.content}`,
+      )
+      .join('\n\n');
   }
 
   /**
-   * Ingests a new document into both cloud (Pinecone) and local (NeuroCore) memory.
+   * Ingests a new document into the Sovereign Vault.
    */
   async ingestDocument(filename: string, content: string, tags: string[] = []): Promise<void> {
-    logger.info(`[RagService] Ingesting document: ${filename}`);
-
-    // Parallel ingestion
-    await Promise.all([
-      pineconeService.upsertDocument(filename, content, {
-        filename,
-        source: 'upload',
-        type: 'document',
-        tags: tags.join(',')
-      }),
-      this.archiveToLocalMemory(content, filename, tags)
-    ]);
+    logger.info(`[RagService] Forwarding ingestion to SovereignVault: ${filename}`);
+    await this.vault.ingest(filename, content, tags);
   }
 
   /**
    * Specifically archives data to the local NeuroCore ML service.
    */
-  private async archiveToLocalMemory(content: string, filename: string, tags: string[] = []): Promise<void> {
+  private async archiveToLocalMemory(
+    content: string,
+    filename: string,
+    tags: string[] = [],
+  ): Promise<void> {
     try {
       const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://ml-service:5000';
       await axios.post(`${mlServiceUrl}/archive`, {
         content,
         source: filename,
-        tags
+        tags,
       });
       logger.info(`[RagService] Document archived to local NeuroCore: ${filename}`);
     } catch (error: any) {
@@ -231,9 +230,12 @@ export class RagService {
 
       const results = response.data.results;
       if (results && results.length > 0) {
-        return results.map((res: any, i: number) =>
-          `[Local Match ${i + 1}] Source: ${res.metadata.source}\n${res.content}`
-        ).join('\n\n');
+        return results
+          .map(
+            (res: any, i: number) =>
+              `[Local Match ${i + 1}] Source: ${res.metadata.source}\n${res.content}`,
+          )
+          .join('\n\n');
       }
       return null;
     } catch (error: any) {
@@ -267,7 +269,6 @@ export class RagService {
       return `<!-- Failed to retrieve documentation context from Pinecone: ${error.message} -->`;
     }
   }
-
 
   private async getAllFiles(): Promise<FileContext[]> {
     if (this.fileCache && Date.now() - this.fileCache.timestamp < this.cacheTTL) {
@@ -429,7 +430,7 @@ export class RagService {
     return results.map((res: any) => ({
       path: res.path,
       content: res.content,
-      size: res.content.length
+      size: res.content.length,
     }));
   }
 
@@ -448,13 +449,16 @@ export class RagService {
         query,
         mockEmbedding,
         0.3,
-        3
+        3,
       );
 
       if (results && results.length > 0) {
-        return results.map((res: any, i: number) =>
-          `[Sovereign Match ${i + 1}] Title: ${res.title}\n${res.content}`
-        ).join('\n\n');
+        return results
+          .map(
+            (res: any, i: number) =>
+              `[Sovereign Match ${i + 1}] Title: ${res.title}\n${res.content}`,
+          )
+          .join('\n\n');
       }
       return null;
     } catch (error: any) {
@@ -464,4 +468,5 @@ export class RagService {
   }
 }
 
-export const ragService = new RagService();
+// REMOVED manual instantiation to break circular dependency and support constructor injection via Inversify
+// export const ragService = new RagService();

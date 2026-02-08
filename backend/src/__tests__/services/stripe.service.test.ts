@@ -65,7 +65,7 @@ describe('StripeService', () => {
         'cus_123',
         'price_123',
         'http://success',
-        'http://cancel'
+        'http://cancel',
       );
 
       expect(mockStripeInstance.checkout.sessions.create).toHaveBeenCalledWith(
@@ -73,7 +73,7 @@ describe('StripeService', () => {
           customer: 'cus_123',
           mode: 'subscription',
           success_url: 'http://success',
-        })
+        }),
       );
       expect(result).toEqual(mockSession);
     });

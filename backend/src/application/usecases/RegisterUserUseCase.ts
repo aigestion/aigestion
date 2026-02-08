@@ -25,7 +25,7 @@ export class RegisterUserUseCase {
       name,
       email,
       password: hashedPassword,
-      role: 'user'
+      role: 'user',
     });
 
     const token = this.generateToken(user);

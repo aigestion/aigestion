@@ -289,8 +289,8 @@ export class YouTubeChannelService {
   async findPlaylistByName(channelType: ChannelType, name: string): Promise<string | null> {
     try {
       const playlists = await this.listPlaylists(channelType);
-      const found = playlists.find(p =>
-        p.snippet?.title.toLowerCase().includes(name.toLowerCase()),
+      const found = playlists.find(
+        p => p.snippet?.title.toLowerCase().includes(name.toLowerCase()),
       );
       return found?.id || null;
     } catch (error) {

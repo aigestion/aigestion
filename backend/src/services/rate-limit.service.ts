@@ -34,9 +34,9 @@ export class RateLimitService {
       if (current > limit) {
         const ttl = await redis.ttl(key);
         throw new AppError(
-            `Too many attempts. Please try again in ${Math.ceil(ttl / 60)} minutes.`,
-            429,
-            'RATE_LIMIT_EXCEEDED'
+          `Too many attempts. Please try again in ${Math.ceil(ttl / 60)} minutes.`,
+          429,
+          'RATE_LIMIT_EXCEEDED',
         );
       }
     } catch (error: any) {

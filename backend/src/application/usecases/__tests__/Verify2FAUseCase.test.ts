@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import { Verify2FAUseCase } from '../Verify2FAUseCase';
 import { TwoFactorService } from '../../../services/two-factor.service';
-import { TwoFactorService } from '../../../services/two-factor.service';
 import { RateLimitService } from '../../../services/rate-limit.service';
 import { User } from '../../../models/User';
 import { AppError } from '../../../utils/errors';
@@ -51,7 +50,11 @@ describe('Verify2FAUseCase', () => {
     const useCase = new Verify2FAUseCase(mockServiceInstance, mockRateLimitServiceInstance);
     await useCase.execute(userId, token);
 
-    expect(mockRateLimitServiceInstance.incrementAndCheck).toHaveBeenCalledWith(`2fa_verify:${userId}`, 5, 900);
+    expect(mockRateLimitServiceInstance.incrementAndCheck).toHaveBeenCalledWith(
+      `2fa_verify:${userId}`,
+      5,
+      900,
+    );
     expect(mockServiceInstance.verifyToken).toHaveBeenCalledWith(secret, token);
     expect(userMock.isMfaEnabled).toBe(true);
     expect(saveMock).toHaveBeenCalled();
@@ -60,7 +63,9 @@ describe('Verify2FAUseCase', () => {
 
   it('should throw if rate limit exceeded by service', async () => {
     const mockRateLimitServiceInstance = new MockRateLimitService();
-    mockRateLimitServiceInstance.incrementAndCheck = jest.fn().mockRejectedValue(new AppError('Rate limit exceeded', 429, 'RATE_LIMIT_EXCEEDED'));
+    mockRateLimitServiceInstance.incrementAndCheck = jest
+      .fn()
+      .mockRejectedValue(new AppError('Rate limit exceeded', 429, 'RATE_LIMIT_EXCEEDED'));
 
     const useCase = new Verify2FAUseCase(new MockTwoFactorService(), mockRateLimitServiceInstance);
 
