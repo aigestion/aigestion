@@ -74,7 +74,7 @@ jobs:
           echo "🔨 Building with Turbo..."
 
           # Build website-epic and its dependencies
-          npx turbo build --filter=aigestion-website-epic...
+          npx --yes turbo build --filter=aigestion-website-epic...
 
           echo "✅ Build completed"
           echo "📊 Build artifacts:"
