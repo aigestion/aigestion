@@ -71,10 +71,15 @@ jobs:
           export VITE_API_BASE_URL="/api"
 
           echo "🌌 Environment variables set"
-          echo "🔨 Building with Turbo..."
+          echo "🔨 Building Dependencies..."
+          cd packages/design-system-v2
+          npm run build
+          cd ../..
 
-          # Build website-epic and its dependencies
-          npx --yes turbo build --filter=aigestion-website-epic...
+          echo "🔨 Building Website..."
+          cd frontend/website-epic
+          npm run build
+          cd ../..
 
           echo "✅ Build completed"
           echo "📊 Build artifacts:"
