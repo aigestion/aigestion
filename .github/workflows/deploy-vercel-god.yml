@@ -46,17 +46,13 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: './frontend/website-epic/package-lock.json'
-
-      - name: 📦 INSTALL DEPENDENCIES
-        working-directory: ./frontend/website-epic
+      - name: 📦 INSTALL DEPENDENCIES (ROOT)
         run: |
-          echo "📦 Installing dependencies..."
-          npm ci --prefer-offline --no-audit
+          echo "📦 Installing root dependencies..."
+          npm install
           echo "✅ Dependencies installed"
 
       - name: 🔧 BUILD WEBSITE - GOD MODE
-        working-directory: ./frontend/website-epic
         run: |
           echo "🔧 BUILDING WEBSITE - GOD MODE"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -75,13 +71,14 @@ jobs:
           export VITE_API_BASE_URL="/api"
 
           echo "🌌 Environment variables set"
-          echo "🔨 Building with Vite..."
+          echo "🔨 Building with Turbo..."
 
-          npm run build
+          # Build website-epic and its dependencies
+          npx turbo build --filter=aigestion-website-epic...
 
           echo "✅ Build completed"
           echo "📊 Build artifacts:"
-          ls -la dist/
+          ls -la frontend/website-epic/dist/
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
       - name: 📤 PREPARE DEPLOYMENT ARTIFACTS
