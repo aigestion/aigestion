@@ -1,0 +1,43 @@
+name: 🚀 GOD MODE DEPLOY (ECONOMY)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔍 CHECKOUT CODE
+        uses: actions/checkout@v4
+
+      - name: 🟢 SETUP NODE.JS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📦 INSTALL VERCEL CLI
+        run: npm install --global vercel
+
+      - name: 🔧 PULL VERCEL ENVIRONMENT
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: 🛠️ BUILD PROJECT (CLI)
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VITE_SUPABASE_URL: 'https://T8jp4wZKQU1l5WQHSHoM1g_w1mvEbx1.supabase.co'
+          VITE_SUPABASE_ANON_KEY: 'sb_publishable_CqCI6d-vk4X6vlsOL69g_Q_BYH5K4yG'
+
+      - name: 📤 DEPLOY TO VERCEL (PREBUILT)
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
