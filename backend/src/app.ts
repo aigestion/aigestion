@@ -136,16 +136,7 @@ app.use(cookieParser());
 // Mount Routes
 setupSwagger(app);
 
-app.get('/api/v1/health', cdnCache(60), (req: Request, res: Response) => {
-  const requestId = ((req as any).requestId as string) || 'unknown';
-  const response = buildResponse(
-    { status: 'healthy', uptime: process.uptime(), version: '1.0.0' },
-    200,
-    requestId,
-  );
-  console.log('DEBUG: App.ts /health response:', JSON.stringify(response, null, 2));
-  res.json(response);
-});
+// Health checks are now handled in api-v1.routes.ts
 app.use('/api/v1', routes);
 app.use('/mcp', mcpRouter);
 app.use('/graphql', createGraphQLRouter());
