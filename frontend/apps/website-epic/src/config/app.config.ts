@@ -55,11 +55,12 @@ const defaultConfig: AppConfig = {
     name: 'AIGestion Website',
     version: '2.0.0',
     description: 'AI-powered management platform',
-    environment: (process.env.NODE_ENV as 'development' | 'staging' | 'production') || 'development',
+    environment:
+      (process.env.NODE_ENV as 'development' | 'staging' | 'production') || 'development',
   },
   auth: {
-    supabaseUrl: process.env.VITE_SUPABASE_URL || 'https://jhvtjyfmgncrrbzqpbkt.supabase.co',
-    supabaseAnonKey: process.env.VITE_SUPABASE_ANON_KEY || '',
+    supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'https://jhvtjyfmgncrrbzqpbkt.supabase.co',
+    supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
     adminEmails: ['admin@aigestion.net', 'nemisanalex@gmail.com'],
     redirectUrls: {
       admin: 'https://admin.aigestion.net',
@@ -91,14 +92,14 @@ const defaultConfig: AppConfig = {
     },
   },
   api: {
-    baseUrl: process.env.VITE_API_BASE_URL || '/api',
+    baseUrl: import.meta.env.VITE_API_BASE_URL || '/api',
     timeout: 10000,
     retryAttempts: 3,
   },
   monitoring: {
     enableErrorReporting: process.env.NODE_ENV === 'production',
     enablePerformanceMonitoring: process.env.NODE_ENV === 'production',
-    sentryDsn: process.env.VITE_SENTRY_DSN,
+    sentryDsn: import.meta.env.VITE_SENTRY_DSN,
   },
 };
 
@@ -144,7 +145,7 @@ const environmentConfigs: Record<string, Partial<AppConfig>> = {
 function createConfig(): AppConfig {
   const env = defaultConfig.app.environment;
   const envConfig = environmentConfigs[env] || {};
-  
+
   return {
     app: { ...defaultConfig.app, ...envConfig.app },
     auth: { ...defaultConfig.auth, ...envConfig.auth },
@@ -160,9 +161,9 @@ export const config = createConfig();
 // Type guards for runtime configuration validation
 export function validateConfig(config: unknown): config is AppConfig {
   if (!config || typeof config !== 'object') return false;
-  
+
   const cfg = config as any;
-  
+
   return (
     cfg.app?.name &&
     cfg.app?.version &&
