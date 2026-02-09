@@ -11,7 +11,7 @@ COPY package*.json ./
 
 # Install ALL dependencies including devDependencies for tsc
 # Use --legacy-peer-deps to handle peer dependency conflicts
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 
 # Copy source code and config
 # .dockerignore/gcloudignore should exclude dist to ensure fresh build

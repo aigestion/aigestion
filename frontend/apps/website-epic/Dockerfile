@@ -24,6 +24,8 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
 # Build the app
+# Build the app with fixed permissions
+RUN chmod +x node_modules/.bin/vite
 RUN npm run build
 
 # ---------- Runtime Stage ----------

@@ -74,7 +74,7 @@ module.exports = {
   // 🏗️ Build Configuration
   buildCommand: 'npm run build',
   outputDirectory: 'dist',
-  installCommand: 'npm ci',
+  installCommand: 'pnpm install',
   framework: 'vite',
   
   // 🌍 Edge Functions Configuration
