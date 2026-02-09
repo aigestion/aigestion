@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { buildResponse } from '../common/response-builder';
+import { config } from '../config/config';
 import { container, TYPES } from '../config/inversify.config';
 import { HealthService } from '../services/health.service';
 
@@ -7,7 +8,7 @@ const healthRouter = Router();
 
 /**
  * @openapi
- * /health:
+ * /api/v1/health:
  *   get:
  *     summary: Basic health check
  *     tags: [System]
@@ -16,13 +17,23 @@ const healthRouter = Router();
  *         description: System is up
  */
 healthRouter.get('/', (req: Request, res: Response) => {
-  const requestId = (req as any).requestId ?? 'unknown';
-  return res.json(buildResponse({ status: 'healthy', uptime: process.uptime() }, 200, requestId));
+  const requestId = (req as any).requestId || 'unknown';
+  return res.json(
+    buildResponse(
+      {
+        status: 'healthy',
+        uptime: process.uptime(),
+        version: config.apiDocs.version || '1.0.0',
+      },
+      200,
+      requestId,
+    ),
+  );
 });
 
 /**
  * @openapi
- * /health/detailed:
+ * /api/v1/health/detailed:
  *   get:
  *     summary: Get detailed system health diagnostics
  *     tags: [System]

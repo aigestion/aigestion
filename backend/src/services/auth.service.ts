@@ -9,6 +9,10 @@ import type { IUser } from '../models/User';
 import { TYPES } from '../types';
 import { config } from '../config';
 
+import { VerifyEmailUseCase } from '../application/usecases/VerifyEmailUseCase';
+import { UpdateUserRoleUseCase } from '../application/usecases/UpdateUserRoleUseCase';
+import { UpdateSubscriptionUseCase } from '../application/usecases/UpdateSubscriptionUseCase';
+
 @injectable()
 export class AuthService {
   constructor(
@@ -16,6 +20,10 @@ export class AuthService {
     @inject(TYPES.RegisterUserUseCase) private registerUseCase: RegisterUserUseCase,
     @inject(TYPES.LoginUserUseCase) private loginUseCase: LoginUserUseCase,
     @inject(TYPES.Verify2FALoginUseCase) private verify2FALoginUseCase: Verify2FALoginUseCase,
+    @inject(TYPES.VerifyEmailUseCase) private verifyEmailUseCase: VerifyEmailUseCase,
+    @inject(TYPES.UpdateUserRoleUseCase) private updateUserRoleUseCase: UpdateUserRoleUseCase,
+    @inject(TYPES.UpdateSubscriptionUseCase)
+    private updateSubscriptionUseCase: UpdateSubscriptionUseCase,
   ) {}
 
   /**
@@ -41,6 +49,27 @@ export class AuthService {
   }): Promise<{ user: IUser; token?: string; refreshToken?: string; mfaRequired?: boolean }> {
     // Delegate to LoginUserUseCase
     return this.loginUseCase.execute(data);
+  }
+
+  /**
+   * Verify email with code
+   */
+  async verifyEmail(userId: string, code: string) {
+    return this.verifyEmailUseCase.execute(userId, code);
+  }
+
+  /**
+   * Update user role (Family/Professional)
+   */
+  async updateUserRole(userId: string, role: 'family' | 'professional') {
+    return this.updateUserRoleUseCase.execute(userId, role);
+  }
+
+  /**
+   * Update user subscription plan
+   */
+  async updateSubscription(userId: string, plan: string) {
+    return this.updateSubscriptionUseCase.execute(userId, plan);
   }
 
   /**

@@ -5,6 +5,7 @@ import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 import { DanielaAIService } from './daniela-ai.service';
 import { EconomyService } from './economy.service';
+import { EconomyChartService } from './economy-chart.service';
 import { EnhancedVoiceService } from './enhanced-voice.service';
 import { SystemMetricsService } from './system-metrics.service';
 
@@ -35,6 +36,7 @@ export class TelegramBotHandlerGodMode {
   constructor(
     @inject(DanielaAIService) daniela: DanielaAIService,
     @inject(EconomyService) private economyService: EconomyService,
+    @inject(EconomyChartService) private chartService: EconomyChartService,
     @inject(EnhancedVoiceService) private voiceService: EnhancedVoiceService,
     @inject(SystemMetricsService) private metricsService?: SystemMetricsService,
   ) {
@@ -243,6 +245,124 @@ export class TelegramBotHandlerGodMode {
         await ctx.reply(
           '❌ Error generando audio. Verifica que DASHSCOPE_API_KEY esté configurada.',
         );
+      }
+    });
+
+    this.bot.command('alert', async (ctx: Context) => {
+      try {
+        const text = (ctx as any).message?.text || '';
+        const parts = text.split(' ');
+        if (parts.length < 3) {
+          return ctx.reply('📖 Uso: `/alert <SÍMBOLO> <PRECIO>`\nEjemplo: `/alert NVDA 900`', {
+            parse_mode: 'Markdown',
+          });
+        }
+
+        const symbol = parts[1].toUpperCase();
+        const targetPrice = parseFloat(parts[2]);
+
+        if (isNaN(targetPrice)) return ctx.reply('❌ Precio inválido');
+
+        const alert = await this.economyService.addPriceAlert({
+          symbol,
+          targetPrice,
+          chatId: ctx.chat?.id || 0,
+          userId: 'god_mode', // Using a fixed ID for the prototype
+        });
+
+        await ctx.reply(
+          `✅ Alerta configurada: Te avisaré cuando *${symbol}* esté ${
+            alert.condition === 'above' ? 'por encima de' : 'por debajo de'
+          } *$${targetPrice}*`,
+          { parse_mode: 'Markdown' },
+        );
+      } catch (error) {
+        logger.error('Error in /alert', error);
+        await ctx.reply('❌ Error configurando alerta');
+      }
+    });
+
+    this.bot.command('portfolio', async (ctx: Context) => {
+      try {
+        await ctx.reply('💼 Calculando P&L de tu cartera...');
+        const stats = await this.economyService.getPortfolioStats('god_mode');
+
+        if (stats.length === 0) {
+          return ctx.reply(
+            '📭 Tu cartera está vacía. Usa `/portfolio_add <SIMBOLO> <CANTIDAD> <PRECIO_ENTRADA>`',
+            { parse_mode: 'Markdown' },
+          );
+        }
+
+        let msg = `📊 *Tu Portafolio AIGestión*\n\n`;
+        let totalPnl = 0;
+
+        stats.forEach(s => {
+          const icon = s.pnl >= 0 ? '🟢' : '🔴';
+          msg += `${icon} *${s.symbol}*: ${s.amount} @ $${s.entryPrice}\n`;
+          msg += `   Valor: *$${(s.currentPrice * s.amount).toLocaleString()}* | P&L: *${
+            s.pnl >= 0 ? '+' : ''
+          }$${s.pnl.toLocaleString()}* (${s.pnlPercent})\n\n`;
+          totalPnl += s.pnl;
+        });
+
+        msg += `💰 *PNL Total:* ${totalPnl >= 0 ? '🟢' : '🔴'} *${
+          totalPnl >= 0 ? '+' : ''
+        }$${totalPnl.toLocaleString()}*`;
+        await ctx.reply(msg, { parse_mode: 'Markdown' });
+      } catch (error) {
+        logger.error('Error in /portfolio', error);
+        await ctx.reply('❌ Error consultando el portafolio');
+      }
+    });
+
+    this.bot.command('portfolio_add', async (ctx: Context) => {
+      try {
+        const text = (ctx as any).message?.text || '';
+        const parts = text.split(' ');
+        if (parts.length < 4) {
+          return ctx.reply(
+            '📖 Uso: `/portfolio_add <SIMBOLO> <CANTIDAD> <PRECIO>`\nEjemplo: `/portfolio_add NVDA 10 850`',
+            { parse_mode: 'Markdown' },
+          );
+        }
+
+        const symbol = parts[1].toUpperCase();
+        const amount = parseFloat(parts[2]);
+        const entryPrice = parseFloat(parts[3]);
+
+        if (isNaN(amount) || isNaN(entryPrice)) return ctx.reply('❌ Valores numéricos inválidos');
+
+        await this.economyService.addPortfolioPosition('god_mode', symbol, amount, entryPrice);
+        await ctx.reply(`✅ Posición añadida: *${amount} ${symbol}* a *$${entryPrice}*`, {
+          parse_mode: 'Markdown',
+        });
+      } catch (error) {
+        logger.error('Error in /portfolio_add', error);
+        await ctx.reply('❌ Error guardando posición');
+      }
+    });
+
+    this.bot.command('chart', async (ctx: Context) => {
+      try {
+        const text = (ctx as any).message?.text || '';
+        const parts = text.split(' ');
+        if (parts.length < 2) {
+          return ctx.reply('📖 Uso: `/chart <SÍMBOLO>`\nEjemplo: `/chart NVDA`', {
+            parse_mode: 'Markdown',
+          });
+        }
+
+        const symbol = parts[1].toUpperCase();
+        await ctx.reply(`📉 Generando tendencia para ${symbol}...`);
+
+        const prices = await this.economyService.getHistoricalPrices(symbol);
+        const report = await this.chartService.generateTrendReport(symbol, prices);
+
+        await ctx.reply(report, { parse_mode: 'Markdown' });
+      } catch (error) {
+        logger.error('Error in /chart', error);
+        await ctx.reply('❌ Error generando el gráfico de tendencia');
       }
     });
 
@@ -650,6 +770,54 @@ export class TelegramBotHandlerGodMode {
       },
       4 * 60 * 60 * 1000,
     );
+
+    // Alertas de Precio - Cada 15 minutos
+    setInterval(
+      async () => {
+        try {
+          const triggered = await this.economyService.checkPriceAlerts();
+          for (const alert of triggered) {
+            const msg = `🔔 *ALERTA DE PRECIO: ${
+              alert.symbol
+            }*\nEl precio ha alcanzado tu objetivo de *$${alert.targetPrice}* (${
+              alert.condition === 'above' ? '↑' : '↓'
+            })`;
+            await this.bot?.telegram.sendMessage(alert.chatId, msg, { parse_mode: 'Markdown' });
+          }
+        } catch (error) {
+          logger.error('Error checking price alerts in background', error);
+        }
+      },
+      15 * 60 * 1000,
+    );
+
+    // Morning Briefing God Mode - Diariamente a las 8:00 AM
+    setInterval(
+      async () => {
+        const now = new Date();
+        // Check if it's 8:00 AM (within a 15 min window to match the interval)
+        if (now.getHours() === 8 && now.getMinutes() < 15) {
+          const economyChannelId = env.TELEGRAM_CHAT_ID_DEV;
+          if (economyChannelId) {
+            try {
+              logger.info('[SCHEDULER] Triggering Morning Briefing...');
+              const script = await this.economyService.generateVoiceScript();
+              const audioBuffer = await this.voiceService.textToSpeech(script, 'qwen');
+
+              await this.bot?.telegram.sendMessage(
+                economyChannelId,
+                '🌅 *Morning Briefing God Mode*',
+                { parse_mode: 'Markdown' },
+              );
+              await this.bot?.telegram.sendVoice(economyChannelId, { source: audioBuffer });
+            } catch (error) {
+              logger.error('Error in Morning Briefing Scheduler', error);
+            }
+          }
+        }
+      },
+      15 * 60 * 1000,
+    ); // Check every 15 mins
   }
 
   /**

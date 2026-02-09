@@ -1,0 +1,29 @@
+import 'reflect-metadata';
+import { EconomyService } from '../src/services/economy.service';
+import { logger } from '../backend/src/utils/logger';
+
+async function testAdvice() {
+  console.log('🚀 Iniciando prueba de consejos de inversión...');
+
+  const service = new EconomyService();
+
+  // Force some mock data/behavior if needed for the test to be impressive
+  // For now, we rely on the logic we just wrote
+
+  try {
+    const report = await service.generateFormattedReport();
+    console.log('\n📊 REPORTE DE MERCADO:');
+    console.log(report);
+
+    const advice = await service.getInvestmentAdvice();
+    console.log('\n💡 CONSEJO DE INVERSIÓN:');
+    console.log(advice.advice);
+
+    console.log('\n🔍 OPORTUNIDADES DETECTADAS:');
+    console.log(advice.opportunities);
+  } catch (error) {
+    console.error('❌ Error en la prueba:', error);
+  }
+}
+
+testAdvice();

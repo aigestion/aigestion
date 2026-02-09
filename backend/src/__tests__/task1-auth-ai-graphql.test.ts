@@ -18,7 +18,7 @@ const SKIP = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGRATION_TES
 
     const mutation = `
       mutation {
-        login(email: "test@example.com", password: "password123") {
+        login(email: "test@example.com", password: "AIGestion2026!") {
           token
           user {
             id

@@ -18,7 +18,13 @@ export interface IUser extends Document {
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
 
-  // Stripe fields
+  // Email Verification
+  emailVerificationCode?: string;
+  emailVerificationExpires?: Date;
+  isEmailVerified: boolean;
+
+  // Roles
+  role: 'user' | 'admin' | 'dev' | 'sales' | 'god' | 'family' | 'professional';
   stripeCustomerId?: string;
   subscriptionId?: string;
   stripeSubscriptionItemId?: string; // New: for metered billing items
@@ -74,8 +80,14 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: String,
-      enum: ['user', 'admin', 'dev', 'sales', 'god'],
+      enum: ['user', 'admin', 'dev', 'sales', 'god', 'family', 'professional'],
       default: 'user',
+    },
+    emailVerificationCode: { type: String, select: false },
+    emailVerificationExpires: { type: Date, select: false },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
     },
     refreshTokens: [
       {

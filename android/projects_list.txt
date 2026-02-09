@@ -1,0 +1,65 @@
+
+C:\Users\Alejandro\AIGestion\android>if "Windows_NT" == "Windows_NT" setlocal
+
+C:\Users\Alejandro\AIGestion\android>set DIRNAME=C:\Users\Alejandro\AIGestion\android\ 
+
+C:\Users\Alejandro\AIGestion\android>if "C:\Users\Alejandro\AIGestion\android\" == "" set DIRNAME=. 
+
+C:\Users\Alejandro\AIGestion\android>set APP_BASE_NAME=gradlew 
+
+C:\Users\Alejandro\AIGestion\android>set APP_HOME=C:\Users\Alejandro\AIGestion\android\ 
+
+C:\Users\Alejandro\AIGestion\android>for %i in ("C:\Users\Alejandro\AIGestion\android\") do set APP_HOME=%~fi 
+
+C:\Users\Alejandro\AIGestion\android>set APP_HOME=C:\Users\Alejandro\AIGestion\android\ 
+
+C:\Users\Alejandro\AIGestion\android>set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m" 
+
+C:\Users\Alejandro\AIGestion\android>if defined JAVA_HOME goto findJavaFromJavaHome 
+
+C:\Users\Alejandro\AIGestion\android>set JAVA_EXE=java.exe 
+
+C:\Users\Alejandro\AIGestion\android>java.exe -version  1>NUL 2>&1 
+
+C:\Users\Alejandro\AIGestion\android>if 0 EQU 0 goto execute 
+
+C:\Users\Alejandro\AIGestion\android>set CLASSPATH= 
+
+C:\Users\Alejandro\AIGestion\android>"java.exe" "-Xmx64m" "-Xms64m"   "-Dorg.gradle.appname=gradlew" -classpath "" -jar "C:\Users\Alejandro\AIGestion\android\\gradle\wrapper\gradle-wrapper.jar" projects 
+
+> Configure project :app
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+> Configure project :capacitor-cordova-android-plugins
+WARNING: Using flatDir should be avoided because it doesn't support any meta-data formats.
+
+> Task :projects
+
+Projects:
+
+------------------------------------------------------------
+Root project 'android'
+------------------------------------------------------------
+
+Root project 'android'
++--- Project ':app'
++--- Project ':capacitor-android'
+\--- Project ':capacitor-cordova-android-plugins'
+
+To see a list of the tasks of a project, run gradlew <project-path>:tasks
+For example, try running gradlew :app:tasks
+
+[Incubating] Problems report is available at: file:///C:/Users/Alejandro/AIGestion/android/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14.3/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 11s
+1 actionable task: 1 executed
+
+C:\Users\Alejandro\AIGestion\android>if 0 EQU 0 goto mainEnd 
+
+C:\Users\Alejandro\AIGestion\android>if "Windows_NT" == "Windows_NT" endlocal

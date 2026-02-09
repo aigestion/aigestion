@@ -7,10 +7,10 @@ describe('Swagger routes presence', () => {
     const response = await request(app).get('/api-docs.json');
     expect(response.status).toBe(200);
     const paths = response.body.paths;
-    expect(paths).toHaveProperty('/stripe');
-    expect(paths).toHaveProperty('/youtube');
-    expect(paths).toHaveProperty('/users');
-    expect(paths).toHaveProperty('/ai');
-    expect(paths).toHaveProperty('/exit-templates');
+    expect(paths).toHaveProperty('/api/v1/stripe');
+    expect(paths).toHaveProperty('/api/v1/youtube');
+    expect(paths).toHaveProperty('/api/v1/users');
+    expect(paths).toHaveProperty('/api/v1/ai');
+    expect(paths).toHaveProperty('/api/v1/exit-templates');
   });
 });

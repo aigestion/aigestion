@@ -1,0 +1,90 @@
+a54b1bf92fdc59ac75aea8b7e5ec1cb1
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.youtubeTranscriptionQueue = exports.YoutubeTranscriptionQueue = void 0;
+// YouTube Transcription Queue implementation using RabbitMQ (or mock)
+const amqplib_1 = __importDefault(require("amqplib"));
+const typedi_1 = require("typedi");
+const logger_1 = require("../utils/logger");
+/**
+ * Queue service responsible for publishing transcription jobs and starting a consumer.
+ * In test environments the `amqplib` import is mocked (see src/__tests__/mocks/rabbitmq.ts).
+ */
+let YoutubeTranscriptionQueue = class YoutubeTranscriptionQueue {
+    connection;
+    channel;
+    queueName = 'youtube-transcription';
+    /** Connects to RabbitMQ (or mock) and asserts the queue. */
+    async ensureConnection() {
+        if (this.channel && this.connection) {
+            return;
+        }
+        try {
+            this.connection = (await amqplib_1.default.connect(process.env.RABBITMQ_URL || 'amqp://localhost'));
+            this.channel = await this.connection.createChannel();
+            await this.channel.assertQueue(this.queueName, { durable: true });
+            logger_1.logger.info('YoutubeTranscriptionQueue connected and queue asserted');
+        }
+        catch (err) {
+            logger_1.logger.warn('Failed to connect to RabbitMQ (Docker down?). Transcription features disabled.');
+            // throw err; // DISABLE THROW to allow server start
+        }
+    }
+    /** Publishes a transcription job to the queue. */
+    async publishTranscriptionJob(job) {
+        try {
+            await this.ensureConnection();
+            if (!this.channel) {
+                logger_1.logger.warn('Job skipped (RabbitMQ not available)');
+                return false;
+            }
+            const payload = Buffer.from(JSON.stringify(job));
+            const ok = this.channel.sendToQueue(this.queueName, payload, { persistent: true });
+            logger_1.logger.info(`Transcription job enqueued for ${job.fileName}`);
+            return ok;
+        }
+        catch (e) {
+            logger_1.logger.error(e, 'Failed to publish transcription job');
+            return false;
+        }
+    }
+    /** Starts a consumer that processes jobs. */
+    async startConsumer(handler) {
+        await this.ensureConnection();
+        if (!this.channel) {
+            logger_1.logger.warn('Consumer did not start (RabbitMQ not available)');
+            return;
+        }
+        await this.channel.consume(this.queueName, async (msg) => {
+            if (!msg) {
+                return;
+            }
+            try {
+                const job = JSON.parse(msg.content.toString());
+                await handler(job);
+                this.channel.ack(msg);
+            }
+            catch (err) {
+                logger_1.logger.error(err, 'Error processing transcription job');
+                this.channel.nack(msg, false, false); // discard bad message
+            }
+        }, { noAck: false });
+        logger_1.logger.info('YoutubeTranscriptionQueue consumer started');
+    }
+};
+exports.YoutubeTranscriptionQueue = YoutubeTranscriptionQueue;
+exports.YoutubeTranscriptionQueue = YoutubeTranscriptionQueue = __decorate([
+    (0, typedi_1.Service)()
+], YoutubeTranscriptionQueue);
+// Export a singleton instance for convenience (used by existing code)
+exports.youtubeTranscriptionQueue = new YoutubeTranscriptionQueue();
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxxdWV1ZVxceW91dHViZS10cmFuc2NyaXB0aW9uLnF1ZXVlLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7OztBQUFBLHNFQUFzRTtBQUN0RSxzREFBa0Q7QUFDbEQsbUNBQWlDO0FBRWpDLDRDQUF5QztBQVl6Qzs7O0dBR0c7QUFFSSxJQUFNLHlCQUF5QixHQUEvQixNQUFNLHlCQUF5QjtJQUM1QixVQUFVLENBQU87SUFDakIsT0FBTyxDQUFPO0lBQ0wsU0FBUyxHQUFHLHVCQUF1QixDQUFDO0lBRXJELDREQUE0RDtJQUNwRCxLQUFLLENBQUMsZ0JBQWdCO1FBQzVCLElBQUksSUFBSSxDQUFDLE9BQU8sSUFBSSxJQUFJLENBQUMsVUFBVSxFQUFFLENBQUM7WUFDcEMsT0FBTztRQUNULENBQUM7UUFDRCxJQUFJLENBQUM7WUFDSCxJQUFJLENBQUMsVUFBVSxHQUFHLENBQUMsTUFBTSxpQkFBTyxDQUFDLE9BQU8sQ0FDdEMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxZQUFZLElBQUksa0JBQWtCLENBQy9DLENBQVEsQ0FBQztZQUNWLElBQUksQ0FBQyxPQUFPLEdBQUcsTUFBTSxJQUFJLENBQUMsVUFBVSxDQUFDLGFBQWEsRUFBRSxDQUFDO1lBQ3JELE1BQU0sSUFBSSxDQUFDLE9BQU8sQ0FBQyxXQUFXLENBQUMsSUFBSSxDQUFDLFNBQVMsRUFBRSxFQUFFLE9BQU8sRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFDO1lBQ2xFLGVBQU0sQ0FBQyxJQUFJLENBQUMsd0RBQXdELENBQUMsQ0FBQztRQUN4RSxDQUFDO1FBQUMsT0FBTyxHQUFHLEVBQUUsQ0FBQztZQUNiLGVBQU0sQ0FBQyxJQUFJLENBQUMsZ0ZBQWdGLENBQUMsQ0FBQztZQUM5RixvREFBb0Q7UUFDdEQsQ0FBQztJQUNILENBQUM7SUFFRCxrREFBa0Q7SUFDbEQsS0FBSyxDQUFDLHVCQUF1QixDQUFDLEdBQXFCO1FBQ2pELElBQUksQ0FBQztZQUNILE1BQU0sSUFBSSxDQUFDLGdCQUFnQixFQUFFLENBQUM7WUFDOUIsSUFBSSxDQUFDLElBQUksQ0FBQyxPQUFPLEVBQUUsQ0FBQztnQkFDbEIsZUFBTSxDQUFDLElBQUksQ0FBQyxzQ0FBc0MsQ0FBQyxDQUFDO2dCQUNwRCxPQUFPLEtBQUssQ0FBQztZQUNmLENBQUM7WUFDRCxNQUFNLE9BQU8sR0FBRyxNQUFNLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxTQUFTLENBQUMsR0FBRyxDQUFDLENBQUMsQ0FBQztZQUNqRCxNQUFNLEVBQUUsR0FBRyxJQUFJLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQyxJQUFJLENBQUMsU0FBUyxFQUFFLE9BQU8sRUFBRSxFQUFFLFVBQVUsRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFDO1lBQ25GLGVBQU0sQ0FBQyxJQUFJLENBQUMsa0NBQWtDLEdBQUcsQ0FBQyxRQUFRLEVBQUUsQ0FBQyxDQUFDO1lBQzlELE9BQU8sRUFBRSxDQUFDO1FBQ1osQ0FBQztRQUFDLE9BQU8sQ0FBQyxFQUFFLENBQUM7WUFDWCxlQUFNLENBQUMsS0FBSyxDQUFDLENBQUMsRUFBRSxxQ0FBcUMsQ0FBQyxDQUFDO1lBQ3ZELE9BQU8sS0FBSyxDQUFDO1FBQ2YsQ0FBQztJQUNILENBQUM7SUFFRCw2Q0FBNkM7SUFDN0MsS0FBSyxDQUFDLGFBQWEsQ0FBQyxPQUFpRDtRQUNuRSxNQUFNLElBQUksQ0FBQyxnQkFBZ0IsRUFBRSxDQUFDO1FBQzlCLElBQUksQ0FBQyxJQUFJLENBQUMsT0FBTyxFQUFFLENBQUM7WUFDbEIsZUFBTSxDQUFDLElBQUksQ0FBQyxpREFBaUQsQ0FBQyxDQUFDO1lBQy9ELE9BQU87UUFDVCxDQUFDO1FBQ0QsTUFBTSxJQUFJLENBQUMsT0FBTyxDQUFDLE9BQU8sQ0FDeEIsSUFBSSxDQUFDLFNBQVMsRUFDZCxLQUFLLEVBQUUsR0FBMEIsRUFBRSxFQUFFO1lBQ25DLElBQUksQ0FBQyxHQUFHLEVBQUUsQ0FBQztnQkFDVCxPQUFPO1lBQ1QsQ0FBQztZQUNELElBQUksQ0FBQztnQkFDSCxNQUFNLEdBQUcsR0FBcUIsSUFBSSxDQUFDLEtBQUssQ0FBQyxHQUFHLENBQUMsT0FBTyxDQUFDLFFBQVEsRUFBRSxDQUFDLENBQUM7Z0JBQ2pFLE1BQU0sT0FBTyxDQUFDLEdBQUcsQ0FBQyxDQUFDO2dCQUNuQixJQUFJLENBQUMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxHQUFHLENBQUMsQ0FBQztZQUN4QixDQUFDO1lBQUMsT0FBTyxHQUFHLEVBQUUsQ0FBQztnQkFDYixlQUFNLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxvQ0FBb0MsQ0FBQyxDQUFDO2dCQUN4RCxJQUFJLENBQUMsT0FBTyxDQUFDLElBQUksQ0FBQyxHQUFHLEVBQUUsS0FBSyxFQUFFLEtBQUssQ0FBQyxDQUFDLENBQUMsc0JBQXNCO1lBQzlELENBQUM7UUFDSCxDQUFDLEVBQ0QsRUFBRSxLQUFLLEVBQUUsS0FBSyxFQUFFLENBQ2pCLENBQUM7UUFDRixlQUFNLENBQUMsSUFBSSxDQUFDLDRDQUE0QyxDQUFDLENBQUM7SUFDNUQsQ0FBQztDQUNGLENBQUE7QUFuRVksOERBQXlCO29DQUF6Qix5QkFBeUI7SUFEckMsSUFBQSxnQkFBTyxHQUFFO0dBQ0cseUJBQXlCLENBbUVyQztBQUVELHNFQUFzRTtBQUN6RCxRQUFBLHlCQUF5QixHQUFHLElBQUkseUJBQXlCLEVBQUUsQ0FBQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJDOlxcVXNlcnNcXEFsZWphbmRyb1xcQUlHZXN0aW9uXFxiYWNrZW5kXFxzcmNcXHF1ZXVlXFx5b3V0dWJlLXRyYW5zY3JpcHRpb24ucXVldWUudHMiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gWW91VHViZSBUcmFuc2NyaXB0aW9uIFF1ZXVlIGltcGxlbWVudGF0aW9uIHVzaW5nIFJhYmJpdE1RIChvciBtb2NrKVxuaW1wb3J0IGFtcXBsaWIsIHsgQ29uc3VtZU1lc3NhZ2UgfSBmcm9tICdhbXFwbGliJztcbmltcG9ydCB7IFNlcnZpY2UgfSBmcm9tICd0eXBlZGknO1xuXG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xuXG4vKipcbiAqIEludGVyZmFjZSBmb3IgYSB0cmFuc2NyaXB0aW9uIGpvYi5cbiAqL1xuZXhwb3J0IGludGVyZmFjZSBUcmFuc2NyaXB0aW9uSm9iIHtcbiAgdmlkZW9Vcmw6IHN0cmluZztcbiAgcmVjaXBpZW50RW1haWw6IHN0cmluZztcbiAgZmlsZU5hbWU6IHN0cmluZztcbiAgdGltZXN0YW1wOiBzdHJpbmc7XG59XG5cbi8qKlxuICogUXVldWUgc2VydmljZSByZXNwb25zaWJsZSBmb3IgcHVibGlzaGluZyB0cmFuc2NyaXB0aW9uIGpvYnMgYW5kIHN0YXJ0aW5nIGEgY29uc3VtZXIuXG4gKiBJbiB0ZXN0IGVudmlyb25tZW50cyB0aGUgYGFtcXBsaWJgIGltcG9ydCBpcyBtb2NrZWQgKHNlZSBzcmMvX190ZXN0c19fL21vY2tzL3JhYmJpdG1xLnRzKS5cbiAqL1xuQFNlcnZpY2UoKVxuZXhwb3J0IGNsYXNzIFlvdXR1YmVUcmFuc2NyaXB0aW9uUXVldWUge1xuICBwcml2YXRlIGNvbm5lY3Rpb24hOiBhbnk7XG4gIHByaXZhdGUgY2hhbm5lbCE6IGFueTtcbiAgcHJpdmF0ZSByZWFkb25seSBxdWV1ZU5hbWUgPSAneW91dHViZS10cmFuc2NyaXB0aW9uJztcblxuICAvKiogQ29ubmVjdHMgdG8gUmFiYml0TVEgKG9yIG1vY2spIGFuZCBhc3NlcnRzIHRoZSBxdWV1ZS4gKi9cbiAgcHJpdmF0ZSBhc3luYyBlbnN1cmVDb25uZWN0aW9uKCk6IFByb21pc2U8dm9pZD4ge1xuICAgIGlmICh0aGlzLmNoYW5uZWwgJiYgdGhpcy5jb25uZWN0aW9uKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIHRyeSB7XG4gICAgICB0aGlzLmNvbm5lY3Rpb24gPSAoYXdhaXQgYW1xcGxpYi5jb25uZWN0KFxuICAgICAgICBwcm9jZXNzLmVudi5SQUJCSVRNUV9VUkwgfHwgJ2FtcXA6Ly9sb2NhbGhvc3QnLFxuICAgICAgKSkgYXMgYW55O1xuICAgICAgdGhpcy5jaGFubmVsID0gYXdhaXQgdGhpcy5jb25uZWN0aW9uLmNyZWF0ZUNoYW5uZWwoKTtcbiAgICAgIGF3YWl0IHRoaXMuY2hhbm5lbC5hc3NlcnRRdWV1ZSh0aGlzLnF1ZXVlTmFtZSwgeyBkdXJhYmxlOiB0cnVlIH0pO1xuICAgICAgbG9nZ2VyLmluZm8oJ1lvdXR1YmVUcmFuc2NyaXB0aW9uUXVldWUgY29ubmVjdGVkIGFuZCBxdWV1ZSBhc3NlcnRlZCcpO1xuICAgIH0gY2F0Y2ggKGVycikge1xuICAgICAgbG9nZ2VyLndhcm4oJ0ZhaWxlZCB0byBjb25uZWN0IHRvIFJhYmJpdE1RIChEb2NrZXIgZG93bj8pLiBUcmFuc2NyaXB0aW9uIGZlYXR1cmVzIGRpc2FibGVkLicpO1xuICAgICAgLy8gdGhyb3cgZXJyOyAvLyBESVNBQkxFIFRIUk9XIHRvIGFsbG93IHNlcnZlciBzdGFydFxuICAgIH1cbiAgfVxuXG4gIC8qKiBQdWJsaXNoZXMgYSB0cmFuc2NyaXB0aW9uIGpvYiB0byB0aGUgcXVldWUuICovXG4gIGFzeW5jIHB1Ymxpc2hUcmFuc2NyaXB0aW9uSm9iKGpvYjogVHJhbnNjcmlwdGlvbkpvYik6IFByb21pc2U8Ym9vbGVhbj4ge1xuICAgIHRyeSB7XG4gICAgICBhd2FpdCB0aGlzLmVuc3VyZUNvbm5lY3Rpb24oKTtcbiAgICAgIGlmICghdGhpcy5jaGFubmVsKSB7XG4gICAgICAgIGxvZ2dlci53YXJuKCdKb2Igc2tpcHBlZCAoUmFiYml0TVEgbm90IGF2YWlsYWJsZSknKTtcbiAgICAgICAgcmV0dXJuIGZhbHNlO1xuICAgICAgfVxuICAgICAgY29uc3QgcGF5bG9hZCA9IEJ1ZmZlci5mcm9tKEpTT04uc3RyaW5naWZ5KGpvYikpO1xuICAgICAgY29uc3Qgb2sgPSB0aGlzLmNoYW5uZWwuc2VuZFRvUXVldWUodGhpcy5xdWV1ZU5hbWUsIHBheWxvYWQsIHsgcGVyc2lzdGVudDogdHJ1ZSB9KTtcbiAgICAgIGxvZ2dlci5pbmZvKGBUcmFuc2NyaXB0aW9uIGpvYiBlbnF1ZXVlZCBmb3IgJHtqb2IuZmlsZU5hbWV9YCk7XG4gICAgICByZXR1cm4gb2s7XG4gICAgfSBjYXRjaCAoZSkge1xuICAgICAgbG9nZ2VyLmVycm9yKGUsICdGYWlsZWQgdG8gcHVibGlzaCB0cmFuc2NyaXB0aW9uIGpvYicpO1xuICAgICAgcmV0dXJuIGZhbHNlO1xuICAgIH1cbiAgfVxuXG4gIC8qKiBTdGFydHMgYSBjb25zdW1lciB0aGF0IHByb2Nlc3NlcyBqb2JzLiAqL1xuICBhc3luYyBzdGFydENvbnN1bWVyKGhhbmRsZXI6IChqb2I6IFRyYW5zY3JpcHRpb25Kb2IpID0+IFByb21pc2U8dm9pZD4pOiBQcm9taXNlPHZvaWQ+IHtcbiAgICBhd2FpdCB0aGlzLmVuc3VyZUNvbm5lY3Rpb24oKTtcbiAgICBpZiAoIXRoaXMuY2hhbm5lbCkge1xuICAgICAgbG9nZ2VyLndhcm4oJ0NvbnN1bWVyIGRpZCBub3Qgc3RhcnQgKFJhYmJpdE1RIG5vdCBhdmFpbGFibGUpJyk7XG4gICAgICByZXR1cm47XG4gICAgfVxuICAgIGF3YWl0IHRoaXMuY2hhbm5lbC5jb25zdW1lKFxuICAgICAgdGhpcy5xdWV1ZU5hbWUsXG4gICAgICBhc3luYyAobXNnOiBDb25zdW1lTWVzc2FnZSB8IG51bGwpID0+IHtcbiAgICAgICAgaWYgKCFtc2cpIHtcbiAgICAgICAgICByZXR1cm47XG4gICAgICAgIH1cbiAgICAgICAgdHJ5IHtcbiAgICAgICAgICBjb25zdCBqb2I6IFRyYW5zY3JpcHRpb25Kb2IgPSBKU09OLnBhcnNlKG1zZy5jb250ZW50LnRvU3RyaW5nKCkpO1xuICAgICAgICAgIGF3YWl0IGhhbmRsZXIoam9iKTtcbiAgICAgICAgICB0aGlzLmNoYW5uZWwuYWNrKG1zZyk7XG4gICAgICAgIH0gY2F0Y2ggKGVycikge1xuICAgICAgICAgIGxvZ2dlci5lcnJvcihlcnIsICdFcnJvciBwcm9jZXNzaW5nIHRyYW5zY3JpcHRpb24gam9iJyk7XG4gICAgICAgICAgdGhpcy5jaGFubmVsLm5hY2sobXNnLCBmYWxzZSwgZmFsc2UpOyAvLyBkaXNjYXJkIGJhZCBtZXNzYWdlXG4gICAgICAgIH1cbiAgICAgIH0sXG4gICAgICB7IG5vQWNrOiBmYWxzZSB9LFxuICAgICk7XG4gICAgbG9nZ2VyLmluZm8oJ1lvdXR1YmVUcmFuc2NyaXB0aW9uUXVldWUgY29uc3VtZXIgc3RhcnRlZCcpO1xuICB9XG59XG5cbi8vIEV4cG9ydCBhIHNpbmdsZXRvbiBpbnN0YW5jZSBmb3IgY29udmVuaWVuY2UgKHVzZWQgYnkgZXhpc3RpbmcgY29kZSlcbmV4cG9ydCBjb25zdCB5b3V0dWJlVHJhbnNjcmlwdGlvblF1ZXVlID0gbmV3IFlvdXR1YmVUcmFuc2NyaXB0aW9uUXVldWUoKTtcbiJdLCJ2ZXJzaW9uIjozfQ==

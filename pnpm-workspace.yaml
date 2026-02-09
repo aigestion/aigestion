@@ -1,0 +1,6 @@
+packages:
+  - 'packages/*'
+  - 'backend'
+  - 'frontend/apps/*'
+  - 'ml-service'
+  - 'aig-ia-engine'

@@ -1,0 +1,83 @@
+{
+  "name": "41-stripe-payment-notification",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "stripe-webhook",
+        "options": {}
+      },
+      "name": "Stripe Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$node[\"Stripe Trigger\"].json[\"body\"][\"type\"]}}",
+              "value2": "charge.succeeded"
+            }
+          ]
+        }
+      },
+      "name": "Is Success",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "channel": "sales",
+        "text": "=💰 Payment Received: {{$node[\"Stripe Trigger\"].json[\"body\"][\"data\"][\"object\"][\"amount\"]/100}} {{$node[\"Stripe Trigger\"].json[\"body\"][\"data\"][\"object\"][\"currency\"]}}",
+        "otherOptions": {}
+      },
+      "name": "Notify Sales",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [650, 200]
+    },
+    {
+      "parameters": {
+        "toEmail": "finance@example.com",
+        "subject": "New Payment",
+        "text": "=Payment ID: {{$node[\"Stripe Trigger\"].json[\"body\"][\"data\"][\"object\"][\"id\"]}}"
+      },
+      "name": "Email Finance",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [650, 400]
+    }
+  ],
+  "connections": {
+    "Stripe Trigger": {
+      "main": [
+        [
+          {
+            "node": "Is Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Success": {
+      "main": [
+        [
+          {
+            "node": "Notify Sales",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email Finance",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -6,9 +6,7 @@
   "mcp.servers": {
     "aigestion_core": {
       "command": "node",
-      "args": [
-        "./.windsurf/aigestion-mcp-server.js"
-      ],
+      "args": ["./.windsurf/aigestion-mcp-server.js"],
       "env": {
         "NODE_ENV": "production",
         "AIGESTION_API_URL": "https://api.aigestion.net",
@@ -21,9 +19,7 @@
     },
     "workflow_automation": {
       "command": "node",
-      "args": [
-        "./.windsurf/workflow-server.js"
-      ],
+      "args": ["./.windsurf/workflow-server.js"],
       "env": {
         "NODE_ENV": "production",
         "N8N_JWT_TOKEN": "${N8N_JWT_TOKEN}",
@@ -35,9 +31,7 @@
     },
     "custom_rules_engine": {
       "command": "node",
-      "args": [
-        "./.windsurf/custom-rules-server.js"
-      ],
+      "args": ["./.windsurf/custom-rules-server.js"],
       "env": {
         "NODE_ENV": "production",
         "RULES_CONFIG_PATH": "./config/rules.json"
@@ -48,9 +42,7 @@
     },
     "ai_services_hub": {
       "command": "node",
-      "args": [
-        "./scripts/ai-hub-server.js"
-      ],
+      "args": ["./scripts/ai-hub-server.js"],
       "env": {
         "NODE_ENV": "production",
         "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
@@ -63,9 +55,7 @@
     },
     "security_center": {
       "command": "node",
-      "args": [
-        "./scripts/security-server.js"
-      ],
+      "args": ["./scripts/security-server.js"],
       "env": {
         "NODE_ENV": "production",
         "SECURITY_API_KEY": "${SECURITY_API_KEY}"
@@ -76,9 +66,7 @@
     },
     "infrastructure_monitor": {
       "command": "node",
-      "args": [
-        "./.windsurf/monitor-dns.js"
-      ],
+      "args": ["./.windsurf/monitor-dns.js"],
       "env": {
         "NODE_ENV": "production",
         "DOMAIN": "aigestion.net",
@@ -100,5 +88,8 @@
   },
   "github.copilot.chat.enable": true,
   "google.geminicodeassist.enable": true,
-  "ms-azuretools.vscode-azure-mcp-server.enable": true
+  "ms-azuretools.vscode-azure-mcp-server.enable": true,
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

@@ -217,3 +217,46 @@ export const verifyLogin2FA = async (
     next(error);
   }
 };
+
+// Verify Email Code
+export const verifyEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const authService = container.get<AuthService>(TYPES.AuthService);
+    const { userId, code } = req.body;
+    await authService.verifyEmail(userId, code);
+    res.status(200).json(buildResponse({ success: true, message: 'Email verificado correctamente' }, 200, (req as any).requestId));
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update User Role
+export const updateUserRole = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const authService = container.get<AuthService>(TYPES.AuthService);
+    const { userId, role } = req.body;
+    // Validate role is 'family' or 'professional' ??
+    // Ideally validate via middleware schema, but here for safety:
+    if (!['family', 'professional'].includes(role)) {
+        throw new AppError('Rol inválido. Debe ser "family" o "professional"', 400, 'INVALID_ROLE');
+    }
+
+    const user = await authService.updateUserRole(userId, role);
+    res.status(200).json(buildResponse({ success: true, user }, 200, (req as any).requestId));
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update Subscription Plan
+export const updateSubscription = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const authService = container.get<AuthService>(TYPES.AuthService);
+    const { userId, plan } = req.body;
+
+    const user = await authService.updateSubscription(userId, plan);
+    res.status(200).json(buildResponse({ success: true, user }, 200, (req as any).requestId));
+  } catch (error) {
+    next(error);
+  }
+};

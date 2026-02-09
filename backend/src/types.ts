@@ -42,6 +42,9 @@ export const TYPES = {
   Enable2FAUseCase: Symbol.for('Enable2FAUseCase'),
   Verify2FAUseCase: Symbol.for('Verify2FAUseCase'),
   Verify2FALoginUseCase: Symbol.for('Verify2FALoginUseCase'),
+  VerifyEmailUseCase: Symbol.for('VerifyEmailUseCase'),
+  UpdateUserRoleUseCase: Symbol.for('UpdateUserRoleUseCase'),
+  UpdateSubscriptionUseCase: Symbol.for('UpdateSubscriptionUseCase'),
   CommandBus: Symbol.for('CommandBus'),
   QueryBus: Symbol.for('QueryBus'),
   EventBus: Symbol.for('EventBus'),
@@ -84,4 +87,5 @@ export const TYPES = {
   DanielaController: Symbol.for('DanielaController'),
   SovereignVaultService: Symbol.for('SovereignVaultService'),
   EconomyService: Symbol.for('EconomyService'),
+  EconomyChartService: Symbol.for('EconomyChartService'),
 };

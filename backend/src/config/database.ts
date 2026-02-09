@@ -9,7 +9,7 @@ const connectOptions: ConnectOptions = {
   serverSelectionTimeoutMS: 5000,
   maxPoolSize: 100, // Increase pool for high concurrency
   minPoolSize: 10, // Keep warm connections
-  connectTimeoutMS: 10000,
+  connectTimeoutMS: 5000,
   socketTimeoutMS: 45000,
   family: 4, // Faster IPv4 lookup
 };

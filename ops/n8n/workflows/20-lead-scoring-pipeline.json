@@ -1,0 +1,62 @@
+{
+  "name": "20-lead-scoring-pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-event",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "code": "const lead = $node[\"Webhook\"].json.body;\nlet score = 0;\nif (lead.email.includes(\".edu\")) score += 10;\nif (lead.role === \"CTO\") score += 50;\nif (lead.company_size > 100) score += 20;\nreturn [{ json: { score, email: lead.email } }];"
+      },
+      "name": "Calculate Score",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "id": "={{$node[\"Webhook\"].json[\"body\"][\"id\"]}}",
+        "updateFields": {
+          "score": "={{$node[\"Calculate Score\"].json[\"score\"]}}"
+        }
+      },
+      "name": "Update CRM",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Calculate Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Score": {
+      "main": [
+        [
+          {
+            "node": "Update CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

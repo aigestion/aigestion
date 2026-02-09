@@ -1,0 +1,66 @@
+{
+  "name": "59-slow-query-alert",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 60
+            }
+          ]
+        }
+      },
+      "name": "Hourly",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT query, calls, total_time, mean_time FROM pg_stat_statements ORDER BY mean_time DESC LIMIT 5"
+      },
+      "name": "Get Slow Queries",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "channel": "db-performance",
+        "text": "=Top 5 Slow Queries:\n{{$node[\"Get Slow Queries\"].json.map(q => q.query + ' (' + q.mean_time + 'ms)').join(\"\\n\")}}",
+        "otherOptions": {}
+      },
+      "name": "Slack Report",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Hourly": {
+      "main": [
+        [
+          {
+            "node": "Get Slow Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Slow Queries": {
+      "main": [
+        [
+          {
+            "node": "Slack Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -86,9 +86,11 @@ export const getRedisClient = (): RedisClientType => {
       }) as RedisClientType;
     }
 
-    redisClient.on('error', (err: Error) => {
-      logger.error(err, 'Redis Client Error:');
-    });
+    if (redisClient) {
+      redisClient.on('error', (err: Error) => {
+        logger.error(err, 'Redis Client Error:');
+      });
+    }
 
     // Connect in the background
     const isTest = process.env.NODE_ENV === 'test' || !!process.env.JEST_WORKER_ID;

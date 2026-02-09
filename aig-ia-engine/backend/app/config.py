@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     API_KEY: Optional[str] = None
     ALLOWED_HOSTS: str = "localhost,127.0.0.1"
 
-    DATABASE_URL: str = "sqlite:///./data/aigestion_ia.db"
+    DATABASE_URL: str = "sqlite:///../../assets/data/aigestion_ia.db"
     REDIS_URL: str = "redis://localhost:6379/0"
 
     MODEL_PATH: str = "./data/trained_models"

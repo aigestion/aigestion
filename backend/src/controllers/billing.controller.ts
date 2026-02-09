@@ -5,6 +5,7 @@ import { buildResponse } from '../common/response-builder';
 import { logger } from '../utils/logger';
 import { container } from '../config/inversify.config';
 import { StripeService } from '../services/stripe.service';
+import { PayPalService } from '../services/paypal.service';
 import { env } from '../config/env.schema';
 
 /**
@@ -110,4 +111,38 @@ export const createPortalSession = async (req: Request, res: Response) => {
     logger.error(error, 'Portal session creation failed');
     res.status(500).json({ error: 'Failed to create portal session' });
   }
+};
+
+/**
+ * Create a PayPal Order
+ */
+export const createPayPalOrder = async (req: Request, res: Response) => {
+    try {
+        const { amount, currency } = req.body;
+        // In a real app, validate amount against a priceId or plan
+        const payPalService = container.get(PayPalService);
+        const order = await payPalService.createOrder(amount, currency || 'USD');
+        res.json(order);
+    } catch (error: any) {
+        logger.error(error, 'PayPal create order failed');
+        res.status(500).json({ error: 'Failed to create PayPal order' });
+    }
+};
+
+/**
+ * Capture a PayPal Order
+ */
+export const capturePayPalOrder = async (req: Request, res: Response) => {
+    try {
+        const { orderId } = req.body;
+        const payPalService = container.get(PayPalService);
+        const capture = await payPalService.captureOrder(orderId);
+
+        // TODO: Update user subscription status here based on successful capture
+
+        res.json(capture);
+    } catch (error: any) {
+        logger.error(error, 'PayPal capture order failed');
+        res.status(500).json({ error: 'Failed to capture PayPal order' });
+    }
 };

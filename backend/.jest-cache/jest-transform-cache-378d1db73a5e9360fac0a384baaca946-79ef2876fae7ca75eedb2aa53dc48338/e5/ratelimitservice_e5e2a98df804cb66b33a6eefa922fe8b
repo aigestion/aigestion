@@ -1,0 +1,76 @@
+2af53d32a2c0fe21888e51833247e212
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RateLimitService = void 0;
+const inversify_1 = require("inversify");
+const redis_1 = require("../cache/redis");
+const errors_1 = require("../utils/errors");
+const logger_1 = require("../utils/logger");
+let RateLimitService = class RateLimitService {
+    /**
+     * Increments a counter for a specific key and checks if it exceeds the limit.
+     * If the key doesn't exist, it sets it with the specified expiration window.
+     *
+     * @param key The unique key to rate limit (e.g., "2fa:userId")
+     * @param limit Maximum allowed attempts
+     * @param windowSeconds Time window in seconds
+     * @throws AppError if limit is exceeded
+     */
+    async incrementAndCheck(key, limit, windowSeconds) {
+        const redis = (0, redis_1.getRedisClient)();
+        if (!redis || !redis.isOpen) {
+            logger_1.logger.warn('Redis not available for rate limiting, skipping check');
+            return;
+        }
+        try {
+            // INCR returns the new value
+            const current = await redis.incr(key);
+            // If this is the first request (current === 1), set expiration
+            if (current === 1) {
+                await redis.expire(key, windowSeconds);
+            }
+            if (current > limit) {
+                const ttl = await redis.ttl(key);
+                throw new errors_1.AppError(`Too many attempts. Please try again in ${Math.ceil(ttl / 60)} minutes.`, 429, 'RATE_LIMIT_EXCEEDED');
+            }
+        }
+        catch (error) {
+            // Re-throw AppErrors (rate limit exceeded)
+            if (error instanceof errors_1.AppError) {
+                throw error;
+            }
+            // Log other Redis errors but don't block the user flow generally,
+            // unless strict sec is required. For now, log and proceed is "safer" for availability,
+            // but "fail open" might be bad for security.
+            // Given this is a security feature, "fail closed" (block) is safer but risky for UX if Redis dies.
+            // Decision: Let's log error and allow access to avoid lockout if Redis blips,
+            // UNLESS it's the specific AppError we threw above.
+            logger_1.logger.error({ error, key }, 'Rate limit service error');
+        }
+    }
+    /**
+     * Resets (deletes) the rate limit key. Useful on successful verification.
+     */
+    async reset(key) {
+        const redis = (0, redis_1.getRedisClient)();
+        if (!redis || !redis.isOpen)
+            return;
+        try {
+            await redis.del(key);
+        }
+        catch (error) {
+            logger_1.logger.error({ error, key }, 'Failed to reset rate limit key');
+        }
+    }
+};
+exports.RateLimitService = RateLimitService;
+exports.RateLimitService = RateLimitService = __decorate([
+    (0, inversify_1.injectable)()
+], RateLimitService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xccmF0ZS1saW1pdC5zZXJ2aWNlLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7OztBQUFBLHlDQUF1QztBQUN2QywwQ0FBZ0Q7QUFDaEQsNENBQTJDO0FBQzNDLDRDQUF5QztBQUdsQyxJQUFNLGdCQUFnQixHQUF0QixNQUFNLGdCQUFnQjtJQUMzQjs7Ozs7Ozs7T0FRRztJQUNILEtBQUssQ0FBQyxpQkFBaUIsQ0FBQyxHQUFXLEVBQUUsS0FBYSxFQUFFLGFBQXFCO1FBQ3ZFLE1BQU0sS0FBSyxHQUFHLElBQUEsc0JBQWMsR0FBRSxDQUFDO1FBRS9CLElBQUksQ0FBQyxLQUFLLElBQUksQ0FBQyxLQUFLLENBQUMsTUFBTSxFQUFFLENBQUM7WUFDNUIsZUFBTSxDQUFDLElBQUksQ0FBQyx1REFBdUQsQ0FBQyxDQUFDO1lBQ3JFLE9BQU87UUFDVCxDQUFDO1FBRUQsSUFBSSxDQUFDO1lBQ0gsNkJBQTZCO1lBQzdCLE1BQU0sT0FBTyxHQUFHLE1BQU0sS0FBSyxDQUFDLElBQUksQ0FBQyxHQUFHLENBQUMsQ0FBQztZQUV0QywrREFBK0Q7WUFDL0QsSUFBSSxPQUFPLEtBQUssQ0FBQyxFQUFFLENBQUM7Z0JBQ2xCLE1BQU0sS0FBSyxDQUFDLE1BQU0sQ0FBQyxHQUFHLEVBQUUsYUFBYSxDQUFDLENBQUM7WUFDekMsQ0FBQztZQUVELElBQUksT0FBTyxHQUFHLEtBQUssRUFBRSxDQUFDO2dCQUNwQixNQUFNLEdBQUcsR0FBRyxNQUFNLEtBQUssQ0FBQyxHQUFHLENBQUMsR0FBRyxDQUFDLENBQUM7Z0JBQ2pDLE1BQU0sSUFBSSxpQkFBUSxDQUNoQiwwQ0FBMEMsSUFBSSxDQUFDLElBQUksQ0FBQyxHQUFHLEdBQUcsRUFBRSxDQUFDLFdBQVcsRUFDeEUsR0FBRyxFQUNILHFCQUFxQixDQUN0QixDQUFDO1lBQ0osQ0FBQztRQUNILENBQUM7UUFBQyxPQUFPLEtBQVUsRUFBRSxDQUFDO1lBQ3BCLDJDQUEyQztZQUMzQyxJQUFJLEtBQUssWUFBWSxpQkFBUSxFQUFFLENBQUM7Z0JBQzlCLE1BQU0sS0FBSyxDQUFDO1lBQ2QsQ0FBQztZQUNELGtFQUFrRTtZQUNsRSx1RkFBdUY7WUFDdkYsNkNBQTZDO1lBQzdDLG1HQUFtRztZQUNuRyw4RUFBOEU7WUFDOUUsb0RBQW9EO1lBQ3BELGVBQU0sQ0FBQyxLQUFLLENBQUMsRUFBRSxLQUFLLEVBQUUsR0FBRyxFQUFFLEVBQUUsMEJBQTBCLENBQUMsQ0FBQztRQUMzRCxDQUFDO0lBQ0gsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLEtBQUssQ0FBQyxHQUFXO1FBQ3JCLE1BQU0sS0FBSyxHQUFHLElBQUEsc0JBQWMsR0FBRSxDQUFDO1FBQy9CLElBQUksQ0FBQyxLQUFLLElBQUksQ0FBQyxLQUFLLENBQUMsTUFBTTtZQUFFLE9BQU87UUFFcEMsSUFBSSxDQUFDO1lBQ0gsTUFBTSxLQUFLLENBQUMsR0FBRyxDQUFDLEdBQUcsQ0FBQyxDQUFDO1FBQ3ZCLENBQUM7UUFBQyxPQUFPLEtBQUssRUFBRSxDQUFDO1lBQ2YsZUFBTSxDQUFDLEtBQUssQ0FBQyxFQUFFLEtBQUssRUFBRSxHQUFHLEVBQUUsRUFBRSxnQ0FBZ0MsQ0FBQyxDQUFDO1FBQ2pFLENBQUM7SUFDSCxDQUFDO0NBQ0YsQ0FBQTtBQS9EWSw0Q0FBZ0I7MkJBQWhCLGdCQUFnQjtJQUQ1QixJQUFBLHNCQUFVLEdBQUU7R0FDQSxnQkFBZ0IsQ0ErRDVCIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXHJhdGUtbGltaXQuc2VydmljZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBpbmplY3RhYmxlIH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB7IGdldFJlZGlzQ2xpZW50IH0gZnJvbSAnLi4vY2FjaGUvcmVkaXMnO1xuaW1wb3J0IHsgQXBwRXJyb3IgfSBmcm9tICcuLi91dGlscy9lcnJvcnMnO1xuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcblxuQGluamVjdGFibGUoKVxuZXhwb3J0IGNsYXNzIFJhdGVMaW1pdFNlcnZpY2Uge1xuICAvKipcbiAgICogSW5jcmVtZW50cyBhIGNvdW50ZXIgZm9yIGEgc3BlY2lmaWMga2V5IGFuZCBjaGVja3MgaWYgaXQgZXhjZWVkcyB0aGUgbGltaXQuXG4gICAqIElmIHRoZSBrZXkgZG9lc24ndCBleGlzdCwgaXQgc2V0cyBpdCB3aXRoIHRoZSBzcGVjaWZpZWQgZXhwaXJhdGlvbiB3aW5kb3cuXG4gICAqXG4gICAqIEBwYXJhbSBrZXkgVGhlIHVuaXF1ZSBrZXkgdG8gcmF0ZSBsaW1pdCAoZS5nLiwgXCIyZmE6dXNlcklkXCIpXG4gICAqIEBwYXJhbSBsaW1pdCBNYXhpbXVtIGFsbG93ZWQgYXR0ZW1wdHNcbiAgICogQHBhcmFtIHdpbmRvd1NlY29uZHMgVGltZSB3aW5kb3cgaW4gc2Vjb25kc1xuICAgKiBAdGhyb3dzIEFwcEVycm9yIGlmIGxpbWl0IGlzIGV4Y2VlZGVkXG4gICAqL1xuICBhc3luYyBpbmNyZW1lbnRBbmRDaGVjayhrZXk6IHN0cmluZywgbGltaXQ6IG51bWJlciwgd2luZG93U2Vjb25kczogbnVtYmVyKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgY29uc3QgcmVkaXMgPSBnZXRSZWRpc0NsaWVudCgpO1xuXG4gICAgaWYgKCFyZWRpcyB8fCAhcmVkaXMuaXNPcGVuKSB7XG4gICAgICBsb2dnZXIud2FybignUmVkaXMgbm90IGF2YWlsYWJsZSBmb3IgcmF0ZSBsaW1pdGluZywgc2tpcHBpbmcgY2hlY2snKTtcbiAgICAgIHJldHVybjtcbiAgICB9XG5cbiAgICB0cnkge1xuICAgICAgLy8gSU5DUiByZXR1cm5zIHRoZSBuZXcgdmFsdWVcbiAgICAgIGNvbnN0IGN1cnJlbnQgPSBhd2FpdCByZWRpcy5pbmNyKGtleSk7XG5cbiAgICAgIC8vIElmIHRoaXMgaXMgdGhlIGZpcnN0IHJlcXVlc3QgKGN1cnJlbnQgPT09IDEpLCBzZXQgZXhwaXJhdGlvblxuICAgICAgaWYgKGN1cnJlbnQgPT09IDEpIHtcbiAgICAgICAgYXdhaXQgcmVkaXMuZXhwaXJlKGtleSwgd2luZG93U2Vjb25kcyk7XG4gICAgICB9XG5cbiAgICAgIGlmIChjdXJyZW50ID4gbGltaXQpIHtcbiAgICAgICAgY29uc3QgdHRsID0gYXdhaXQgcmVkaXMudHRsKGtleSk7XG4gICAgICAgIHRocm93IG5ldyBBcHBFcnJvcihcbiAgICAgICAgICBgVG9vIG1hbnkgYXR0ZW1wdHMuIFBsZWFzZSB0cnkgYWdhaW4gaW4gJHtNYXRoLmNlaWwodHRsIC8gNjApfSBtaW51dGVzLmAsXG4gICAgICAgICAgNDI5LFxuICAgICAgICAgICdSQVRFX0xJTUlUX0VYQ0VFREVEJyxcbiAgICAgICAgKTtcbiAgICAgIH1cbiAgICB9IGNhdGNoIChlcnJvcjogYW55KSB7XG4gICAgICAvLyBSZS10aHJvdyBBcHBFcnJvcnMgKHJhdGUgbGltaXQgZXhjZWVkZWQpXG4gICAgICBpZiAoZXJyb3IgaW5zdGFuY2VvZiBBcHBFcnJvcikge1xuICAgICAgICB0aHJvdyBlcnJvcjtcbiAgICAgIH1cbiAgICAgIC8vIExvZyBvdGhlciBSZWRpcyBlcnJvcnMgYnV0IGRvbid0IGJsb2NrIHRoZSB1c2VyIGZsb3cgZ2VuZXJhbGx5LFxuICAgICAgLy8gdW5sZXNzIHN0cmljdCBzZWMgaXMgcmVxdWlyZWQuIEZvciBub3csIGxvZyBhbmQgcHJvY2VlZCBpcyBcInNhZmVyXCIgZm9yIGF2YWlsYWJpbGl0eSxcbiAgICAgIC8vIGJ1dCBcImZhaWwgb3BlblwiIG1pZ2h0IGJlIGJhZCBmb3Igc2VjdXJpdHkuXG4gICAgICAvLyBHaXZlbiB0aGlzIGlzIGEgc2VjdXJpdHkgZmVhdHVyZSwgXCJmYWlsIGNsb3NlZFwiIChibG9jaykgaXMgc2FmZXIgYnV0IHJpc2t5IGZvciBVWCBpZiBSZWRpcyBkaWVzLlxuICAgICAgLy8gRGVjaXNpb246IExldCdzIGxvZyBlcnJvciBhbmQgYWxsb3cgYWNjZXNzIHRvIGF2b2lkIGxvY2tvdXQgaWYgUmVkaXMgYmxpcHMsXG4gICAgICAvLyBVTkxFU1MgaXQncyB0aGUgc3BlY2lmaWMgQXBwRXJyb3Igd2UgdGhyZXcgYWJvdmUuXG4gICAgICBsb2dnZXIuZXJyb3IoeyBlcnJvciwga2V5IH0sICdSYXRlIGxpbWl0IHNlcnZpY2UgZXJyb3InKTtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogUmVzZXRzIChkZWxldGVzKSB0aGUgcmF0ZSBsaW1pdCBrZXkuIFVzZWZ1bCBvbiBzdWNjZXNzZnVsIHZlcmlmaWNhdGlvbi5cbiAgICovXG4gIGFzeW5jIHJlc2V0KGtleTogc3RyaW5nKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgY29uc3QgcmVkaXMgPSBnZXRSZWRpc0NsaWVudCgpO1xuICAgIGlmICghcmVkaXMgfHwgIXJlZGlzLmlzT3BlbikgcmV0dXJuO1xuXG4gICAgdHJ5IHtcbiAgICAgIGF3YWl0IHJlZGlzLmRlbChrZXkpO1xuICAgIH0gY2F0Y2ggKGVycm9yKSB7XG4gICAgICBsb2dnZXIuZXJyb3IoeyBlcnJvciwga2V5IH0sICdGYWlsZWQgdG8gcmVzZXQgcmF0ZSBsaW1pdCBrZXknKTtcbiAgICB9XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

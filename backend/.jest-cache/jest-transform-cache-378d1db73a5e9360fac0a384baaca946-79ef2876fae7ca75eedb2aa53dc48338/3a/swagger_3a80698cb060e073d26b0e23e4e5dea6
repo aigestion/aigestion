@@ -1,0 +1,40 @@
+57b2f22e7ec519455a0b7c19618ef9d6
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.setupSwagger = setupSwagger;
+const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+// Basic OpenAPI definition
+const swaggerDefinition = {
+    openapi: '3.0.0',
+    info: {
+        title: 'AIGestion API',
+        version: '1.0.0',
+        description: 'Auto‑generated API documentation for AIGestion backend',
+    },
+    servers: [{ url: process.env.API_BASE_URL || 'http://localhost:3000' }],
+};
+// Options for swagger‑jsdoc – reads JSDoc @openapi annotations from route files
+const options = {
+    swaggerDefinition,
+    apis: ['src/routes/**/*.ts'],
+};
+const specs = (0, swagger_jsdoc_1.default)(options);
+/**
+ * Sets up Swagger UI for API documentation.
+ * @param app Express application instance
+ */
+function setupSwagger(app) {
+    // Serve Swagger UI at /api-docs
+    app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs, { explorer: true }));
+    // Provide raw OpenAPI JSON at /api-docs.json
+    app.get('/api-docs.json', (_req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(specs);
+    });
+    console.log('📚 API Documentation available at http://localhost:${process.env.PORT || 3000}/api-docs');
+}
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxkb2NzXFxzd2FnZ2VyLnRzIiwibWFwcGluZ3MiOiI7Ozs7O0FBNEJBLG9DQWFDO0FBdkNELGtFQUF5QztBQUN6Qyw0RUFBMkM7QUFFM0MsMkJBQTJCO0FBQzNCLE1BQU0saUJBQWlCLEdBQUc7SUFDeEIsT0FBTyxFQUFFLE9BQU87SUFDaEIsSUFBSSxFQUFFO1FBQ0osS0FBSyxFQUFFLGVBQWU7UUFDdEIsT0FBTyxFQUFFLE9BQU87UUFDaEIsV0FBVyxFQUFFLHdEQUF3RDtLQUN0RTtJQUNELE9BQU8sRUFBRSxDQUFDLEVBQUUsR0FBRyxFQUFFLE9BQU8sQ0FBQyxHQUFHLENBQUMsWUFBWSxJQUFJLHVCQUF1QixFQUFFLENBQUM7Q0FDeEUsQ0FBQztBQUVGLGdGQUFnRjtBQUNoRixNQUFNLE9BQU8sR0FBRztJQUNkLGlCQUFpQjtJQUNqQixJQUFJLEVBQUUsQ0FBQyxvQkFBb0IsQ0FBQztDQUM3QixDQUFDO0FBRUYsTUFBTSxLQUFLLEdBQUcsSUFBQSx1QkFBWSxFQUFDLE9BQU8sQ0FBQyxDQUFDO0FBRXBDOzs7R0FHRztBQUNILFNBQWdCLFlBQVksQ0FBQyxHQUFZO0lBQ3ZDLGdDQUFnQztJQUNoQyxHQUFHLENBQUMsR0FBRyxDQUFDLFdBQVcsRUFBRSw0QkFBUyxDQUFDLEtBQVksRUFBRSw0QkFBUyxDQUFDLEtBQUssQ0FBQyxLQUFLLEVBQUUsRUFBRSxRQUFRLEVBQUUsSUFBSSxFQUFFLENBQVEsQ0FBQyxDQUFDO0lBRWhHLDZDQUE2QztJQUM3QyxHQUFHLENBQUMsR0FBRyxDQUFDLGdCQUFnQixFQUFFLENBQUMsSUFBUyxFQUFFLEdBQVEsRUFBRSxFQUFFO1FBQ2hELEdBQUcsQ0FBQyxTQUFTLENBQUMsY0FBYyxFQUFFLGtCQUFrQixDQUFDLENBQUM7UUFDbEQsR0FBRyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQztJQUNsQixDQUFDLENBQUMsQ0FBQztJQUVILE9BQU8sQ0FBQyxHQUFHLENBQ1QseUZBQXlGLENBQzFGLENBQUM7QUFDSixDQUFDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcZG9jc1xcc3dhZ2dlci50cyJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBzcmMvZG9jcy9zd2FnZ2VyLnRzXG5pbXBvcnQgdHlwZSB7IEV4cHJlc3MgfSBmcm9tICdleHByZXNzJztcbmltcG9ydCBzd2FnZ2VySnNkb2MgZnJvbSAnc3dhZ2dlci1qc2RvYyc7XG5pbXBvcnQgc3dhZ2dlclVpIGZyb20gJ3N3YWdnZXItdWktZXhwcmVzcyc7XG5cbi8vIEJhc2ljIE9wZW5BUEkgZGVmaW5pdGlvblxuY29uc3Qgc3dhZ2dlckRlZmluaXRpb24gPSB7XG4gIG9wZW5hcGk6ICczLjAuMCcsXG4gIGluZm86IHtcbiAgICB0aXRsZTogJ0FJR2VzdGlvbiBBUEknLFxuICAgIHZlcnNpb246ICcxLjAuMCcsXG4gICAgZGVzY3JpcHRpb246ICdBdXRv4oCRZ2VuZXJhdGVkIEFQSSBkb2N1bWVudGF0aW9uIGZvciBBSUdlc3Rpb24gYmFja2VuZCcsXG4gIH0sXG4gIHNlcnZlcnM6IFt7IHVybDogcHJvY2Vzcy5lbnYuQVBJX0JBU0VfVVJMIHx8ICdodHRwOi8vbG9jYWxob3N0OjMwMDAnIH1dLFxufTtcblxuLy8gT3B0aW9ucyBmb3Igc3dhZ2dlcuKAkWpzZG9jIOKAkyByZWFkcyBKU0RvYyBAb3BlbmFwaSBhbm5vdGF0aW9ucyBmcm9tIHJvdXRlIGZpbGVzXG5jb25zdCBvcHRpb25zID0ge1xuICBzd2FnZ2VyRGVmaW5pdGlvbixcbiAgYXBpczogWydzcmMvcm91dGVzLyoqLyoudHMnXSxcbn07XG5cbmNvbnN0IHNwZWNzID0gc3dhZ2dlckpzZG9jKG9wdGlvbnMpO1xuXG4vKipcbiAqIFNldHMgdXAgU3dhZ2dlciBVSSBmb3IgQVBJIGRvY3VtZW50YXRpb24uXG4gKiBAcGFyYW0gYXBwIEV4cHJlc3MgYXBwbGljYXRpb24gaW5zdGFuY2VcbiAqL1xuZXhwb3J0IGZ1bmN0aW9uIHNldHVwU3dhZ2dlcihhcHA6IEV4cHJlc3MpOiB2b2lkIHtcbiAgLy8gU2VydmUgU3dhZ2dlciBVSSBhdCAvYXBpLWRvY3NcbiAgYXBwLnVzZSgnL2FwaS1kb2NzJywgc3dhZ2dlclVpLnNlcnZlIGFzIGFueSwgc3dhZ2dlclVpLnNldHVwKHNwZWNzLCB7IGV4cGxvcmVyOiB0cnVlIH0pIGFzIGFueSk7XG5cbiAgLy8gUHJvdmlkZSByYXcgT3BlbkFQSSBKU09OIGF0IC9hcGktZG9jcy5qc29uXG4gIGFwcC5nZXQoJy9hcGktZG9jcy5qc29uJywgKF9yZXE6IGFueSwgcmVzOiBhbnkpID0+IHtcbiAgICByZXMuc2V0SGVhZGVyKCdDb250ZW50LVR5cGUnLCAnYXBwbGljYXRpb24vanNvbicpO1xuICAgIHJlcy5zZW5kKHNwZWNzKTtcbiAgfSk7XG5cbiAgY29uc29sZS5sb2coXG4gICAgJ/Cfk5ogQVBJIERvY3VtZW50YXRpb24gYXZhaWxhYmxlIGF0IGh0dHA6Ly9sb2NhbGhvc3Q6JHtwcm9jZXNzLmVudi5QT1JUIHx8IDMwMDB9L2FwaS1kb2NzJyxcbiAgKTtcbn1cbiJdLCJ2ZXJzaW9uIjozfQ==
