@@ -1,0 +1,91 @@
+{
+  "name": "84-task-prioritizer",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 4
+            }
+          ]
+        }
+      },
+      "name": "Daily",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "apiKey",
+        "resource": "task",
+        "operation": "getAll",
+        "returnAll": true
+      },
+      "name": "Get Linear Tasks",
+      "type": "n8n-nodes-base.linear",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "prompt": "=Rate the priority (1-5) of this task based on urgency and impact:\nTitle: {{$node[\"Get Linear Tasks\"].json[\"title\"]}}\nDescription: {{$node[\"Get Linear Tasks\"].json[\"description\"]}}"
+      },
+      "name": "AI Score",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "authentication": "apiKey",
+        "resource": "task",
+        "operation": "update",
+        "id": "={{$node[\"Get Linear Tasks\"].json[\"id\"]}}",
+        "priority": "={{$node[\"AI Score\"].json[\"choices\"][0][\"message\"][\"content\"]}}"
+      },
+      "name": "Update Priority",
+      "type": "n8n-nodes-base.linear",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Daily": {
+      "main": [
+        [
+          {
+            "node": "Get Linear Tasks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Linear Tasks": {
+      "main": [
+        [
+          {
+            "node": "AI Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Score": {
+      "main": [
+        [
+          {
+            "node": "Update Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

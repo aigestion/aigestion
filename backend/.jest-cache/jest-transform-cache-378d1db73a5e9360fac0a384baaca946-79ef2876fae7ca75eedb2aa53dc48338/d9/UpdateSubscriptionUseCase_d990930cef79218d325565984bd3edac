@@ -1,0 +1,45 @@
+2c9fd531ce5ae780c7b1e8fd8789a45c
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdateSubscriptionUseCase = void 0;
+const inversify_1 = require("inversify");
+const types_1 = require("../../types");
+const errors_1 = require("../../utils/errors");
+let UpdateSubscriptionUseCase = class UpdateSubscriptionUseCase {
+    userRepository;
+    constructor(userRepository) {
+        this.userRepository = userRepository;
+    }
+    async execute(userId, plan) {
+        const user = await this.userRepository.findById(userId);
+        if (!user) {
+            throw new errors_1.AppError('Usuario no encontrado', 404, 'NOT_FOUND');
+        }
+        // Update subscription plan
+        // In a real scenario, this might trigger Stripe logic.
+        // For now, we update the DB field.
+        await this.userRepository.update(userId, { subscriptionPlan: plan });
+        // Return updated user
+        const updatedUser = await this.userRepository.findById(userId);
+        return updatedUser;
+    }
+};
+exports.UpdateSubscriptionUseCase = UpdateSubscriptionUseCase;
+exports.UpdateSubscriptionUseCase = UpdateSubscriptionUseCase = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.UserRepository)),
+    __metadata("design:paramtypes", [Object])
+], UpdateSubscriptionUseCase);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxhcHBsaWNhdGlvblxcdXNlY2FzZXNcXFVwZGF0ZVN1YnNjcmlwdGlvblVzZUNhc2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7O0FBQUEseUNBQStDO0FBRS9DLHVDQUFvQztBQUNwQywrQ0FBOEM7QUFHdkMsSUFBTSx5QkFBeUIsR0FBL0IsTUFBTSx5QkFBeUI7SUFDYztJQUFsRCxZQUFrRCxjQUErQjtRQUEvQixtQkFBYyxHQUFkLGNBQWMsQ0FBaUI7SUFBRyxDQUFDO0lBRXJGLEtBQUssQ0FBQyxPQUFPLENBQUMsTUFBYyxFQUFFLElBQVk7UUFDeEMsTUFBTSxJQUFJLEdBQUcsTUFBTSxJQUFJLENBQUMsY0FBYyxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUV4RCxJQUFJLENBQUMsSUFBSSxFQUFFLENBQUM7WUFDVixNQUFNLElBQUksaUJBQVEsQ0FBQyx1QkFBdUIsRUFBRSxHQUFHLEVBQUUsV0FBVyxDQUFDLENBQUM7UUFDaEUsQ0FBQztRQUVELDJCQUEyQjtRQUMzQix1REFBdUQ7UUFDdkQsbUNBQW1DO1FBQ25DLE1BQU0sSUFBSSxDQUFDLGNBQWMsQ0FBQyxNQUFNLENBQUMsTUFBTSxFQUFFLEVBQUUsZ0JBQWdCLEVBQUUsSUFBSSxFQUFFLENBQUMsQ0FBQztRQUVyRSxzQkFBc0I7UUFDdEIsTUFBTSxXQUFXLEdBQUcsTUFBTSxJQUFJLENBQUMsY0FBYyxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUMvRCxPQUFPLFdBQVcsQ0FBQztJQUNyQixDQUFDO0NBQ0YsQ0FBQTtBQW5CWSw4REFBeUI7b0NBQXpCLHlCQUF5QjtJQURyQyxJQUFBLHNCQUFVLEdBQUU7SUFFRSxXQUFBLElBQUEsa0JBQU0sRUFBQyxhQUFLLENBQUMsY0FBYyxDQUFDLENBQUE7O0dBRDlCLHlCQUF5QixDQW1CckMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxhcHBsaWNhdGlvblxcdXNlY2FzZXNcXFVwZGF0ZVN1YnNjcmlwdGlvblVzZUNhc2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaW5qZWN0YWJsZSwgaW5qZWN0IH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB0eXBlIHsgSVVzZXJSZXBvc2l0b3J5IH0gZnJvbSAnLi4vLi4vaW5mcmFzdHJ1Y3R1cmUvcmVwb3NpdG9yeS9Vc2VyUmVwb3NpdG9yeSc7XG5pbXBvcnQgeyBUWVBFUyB9IGZyb20gJy4uLy4uL3R5cGVzJztcbmltcG9ydCB7IEFwcEVycm9yIH0gZnJvbSAnLi4vLi4vdXRpbHMvZXJyb3JzJztcblxuQGluamVjdGFibGUoKVxuZXhwb3J0IGNsYXNzIFVwZGF0ZVN1YnNjcmlwdGlvblVzZUNhc2Uge1xuICBjb25zdHJ1Y3RvcihAaW5qZWN0KFRZUEVTLlVzZXJSZXBvc2l0b3J5KSBwcml2YXRlIHVzZXJSZXBvc2l0b3J5OiBJVXNlclJlcG9zaXRvcnkpIHt9XG5cbiAgYXN5bmMgZXhlY3V0ZSh1c2VySWQ6IHN0cmluZywgcGxhbjogc3RyaW5nKTogUHJvbWlzZTxhbnk+IHtcbiAgICBjb25zdCB1c2VyID0gYXdhaXQgdGhpcy51c2VyUmVwb3NpdG9yeS5maW5kQnlJZCh1c2VySWQpO1xuXG4gICAgaWYgKCF1c2VyKSB7XG4gICAgICB0aHJvdyBuZXcgQXBwRXJyb3IoJ1VzdWFyaW8gbm8gZW5jb250cmFkbycsIDQwNCwgJ05PVF9GT1VORCcpO1xuICAgIH1cblxuICAgIC8vIFVwZGF0ZSBzdWJzY3JpcHRpb24gcGxhblxuICAgIC8vIEluIGEgcmVhbCBzY2VuYXJpbywgdGhpcyBtaWdodCB0cmlnZ2VyIFN0cmlwZSBsb2dpYy5cbiAgICAvLyBGb3Igbm93LCB3ZSB1cGRhdGUgdGhlIERCIGZpZWxkLlxuICAgIGF3YWl0IHRoaXMudXNlclJlcG9zaXRvcnkudXBkYXRlKHVzZXJJZCwgeyBzdWJzY3JpcHRpb25QbGFuOiBwbGFuIH0pO1xuXG4gICAgLy8gUmV0dXJuIHVwZGF0ZWQgdXNlclxuICAgIGNvbnN0IHVwZGF0ZWRVc2VyID0gYXdhaXQgdGhpcy51c2VyUmVwb3NpdG9yeS5maW5kQnlJZCh1c2VySWQpO1xuICAgIHJldHVybiB1cGRhdGVkVXNlcjtcbiAgfVxufVxuIl0sInZlcnNpb24iOjN9

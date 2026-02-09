@@ -1,0 +1,14 @@
+[
+  {
+    "account": "aigestion",
+    "email": "admin@aigestion.net",
+    "status": "failed",
+    "reason": "Connection failed"
+  },
+  {
+    "account": "gmail",
+    "email": "noemisanalex@gmail.com",
+    "status": "failed",
+    "reason": "Connection failed"
+  }
+]

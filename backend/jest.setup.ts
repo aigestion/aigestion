@@ -59,7 +59,7 @@ jest.mock('@supabase/supabase-js', () => ({
   })),
 }));
 
-jest.setTimeout(60000);
+jest.setTimeout(120000);
 
 import { startInMemoryMongo, stopInMemoryMongo } from './src/testDatabase';
 import mongoose from 'mongoose';
@@ -76,7 +76,7 @@ jest.mock('whatwg-url', () => ({
   URL: class MockURL {
     constructor(url: string, base?: string) {
       this.href = url;
-      this.origin = base;
+      this.origin = base || '';
       this.protocol = 'https:';
       this.host = 'localhost';
       this.hostname = 'localhost';

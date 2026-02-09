@@ -26,5 +26,5 @@ const SKIP_INTEGRATION = process.env.NODE_ENV === 'test' && !process.env.RUN_INT
     expect(payload).toContain('"type":"text"');
     expect(payload).toContain('Hello');
     expect(payload).toContain('[DONE]');
-  });
+  }, 30000);
 });

@@ -32,7 +32,7 @@ const SKIP_INTEGRATION = process.env.NODE_ENV === 'test' && !process.env.RUN_INT
       const request = require('supertest');
       const response = await request(server)
         .post('/api/v1/auth/login')
-        .send({ email: 'test@example.com', password: 'testpassword123' });
+        .send({ email: 'test@example.com', password: 'AIGestion2026!' });
 
       expect(response.status).toBe(200);
     });

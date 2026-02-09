@@ -1,0 +1,87 @@
+{
+  "name": "40-monthly-compliance-report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtDayOfMonth": 1,
+              "triggerAtHour": 0
+            }
+          ]
+        }
+      },
+      "name": "Monthly",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "command": "./scripts/generate-compliance-report.sh"
+      },
+      "name": "Gen Report",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "bucketName": "compliance-reports",
+        "fileName": "report-{{$today}}.pdf"
+      },
+      "name": "Archive",
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "toEmail": "compliance@example.com",
+        "subject": "Monthly Compliance Report Ready",
+        "text": "The report has been generated and archived."
+      },
+      "name": "Notify Team",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Monthly": {
+      "main": [
+        [
+          {
+            "node": "Gen Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gen Report": {
+      "main": [
+        [
+          {
+            "node": "Archive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Archive": {
+      "main": [
+        [
+          {
+            "node": "Notify Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

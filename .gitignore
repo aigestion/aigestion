@@ -86,10 +86,10 @@ backups/
 .env.production.local
 **/.env
 **/.env.*
-scripts/credentials.json
-scripts/verify_github_token.js
-scripts/create_notion_os_fallback.js
-scripts/get_database_schema.js
+ops/scripts/credentials.json
+ops/scripts/verify_github_token.js
+ops/scripts/create_notion_os_fallback.js
+ops/scripts/get_database_schema.js
 backend/.env*
 migration-backup/**/tk.txt
 migration-backup/**/token.txt
@@ -249,6 +249,10 @@ linters/
 # Local Netlify folder
 .netlify
 n8n_data/
-.vercel
-.env*.local
-.env.gemini
+# Moving Artifacts
+infra/.vercel
+infra/.env*.local
+infra/email_credentials.json
+infra/.env.gemini
+assets/email_review_data.json
+archive/email_review_report.md

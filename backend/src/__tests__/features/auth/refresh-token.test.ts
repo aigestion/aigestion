@@ -83,12 +83,12 @@ const mockUsers: any[] = [];
     await request(app).post('/api/v1/auth/register').send({
       name: 'Cookie Monster 2',
       email: 'cookie2@test.com',
-      password: 'AIGestion123!',
+      password: 'AIGestion2026!',
     });
 
     const loginResponse = await request(app).post('/api/v1/auth/login').send({
       email: 'cookie2@test.com',
-      password: 'AIGestion123!',
+      password: 'AIGestion2026!',
     });
     const cookie = loginResponse.headers['set-cookie'][0];
 

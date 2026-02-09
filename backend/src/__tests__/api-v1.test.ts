@@ -24,7 +24,7 @@ const SKIP_DB_TESTS = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGR
     const response = await request(app).post('/api/v1/users').send({
       email: 'api-v1-test@example.com',
       name: 'API Test User',
-      password: 'Password123!',
+      password: 'AIGestion2026!',
     });
 
     if (response.status === 201) {

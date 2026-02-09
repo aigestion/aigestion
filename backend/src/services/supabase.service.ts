@@ -14,20 +14,29 @@ export class SupabaseService {
   private constructor() {
     this.validateConfig();
 
-    this.client = createClient(env.SUPABASE_URL || '', env.SUPABASE_KEY || '', {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-      },
-      global: {
-        headers: { 'x-application-name': 'aigestion-backend' },
-      },
-      db: {
-        schema: 'public',
-      },
-    });
+    const url = env.SUPABASE_URL;
+    const key = env.SUPABASE_KEY;
 
-    logger.info('[SupabaseService] 🚀 Sovereign Client initialized');
+    if (url && key) {
+      this.client = createClient(url, key, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+        global: {
+          headers: { 'x-application-name': 'aigestion-backend' },
+        },
+        db: {
+          schema: 'public',
+        },
+      });
+      logger.info('[SupabaseService] 🚀 Sovereign Client initialized');
+    } else {
+      logger.warn(
+        '[SupabaseService] ⚠️ Supabase credentials missing. Client is running in DISABLED mode.',
+      );
+      this.client = null as any;
+    }
   }
 
   private validateConfig() {

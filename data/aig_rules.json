@@ -1,6 +1,0 @@
-{
-  "clima": {
-    "max_temp_range": [10, 40],
-    "valid_conditions": ["soleado", "nublado", "lluvioso", "tormentoso"]
-  }
-}

@@ -1,0 +1,48 @@
+{
+  "name": "90-employee-pulse-survey",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                5
+              ],
+              "triggerAtHour": 14
+            }
+          ]
+        }
+      },
+      "name": "Friday 2PM",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "channel": "general",
+        "text": "Weekly Pulse: How are you feeling about work this week? (1-10)",
+        "otherOptions": {}
+      },
+      "name": "Send Survey",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "Friday 2PM": {
+      "main": [
+        [
+          {
+            "node": "Send Survey",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

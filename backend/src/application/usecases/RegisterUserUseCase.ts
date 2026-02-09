@@ -20,12 +20,21 @@ export class RegisterUserUseCase {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Generate Verification Code
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
+
+    console.log(`[GOD MODE AUTH] Verification Code for ${email}: ${verificationCode}`);
+
     // Create the user via repository
     const user = await this.userRepository.create('', {
       name,
       email,
       password: hashedPassword,
-      role: 'user',
+      role: 'user', // Default role, user selects Family/Pro later
+      emailVerificationCode: verificationCode,
+      emailVerificationExpires: verificationExpires,
+      isEmailVerified: false,
     });
 
     const token = this.generateToken(user);

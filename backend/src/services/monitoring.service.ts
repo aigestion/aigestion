@@ -77,8 +77,11 @@ export class MonitoringService {
   constructor() {
     this.redis = getRedisClient();
 
-    this.startMetricsCollection();
-    this.startMetricsCleanup();
+    // Skip background tasks in test environment to prevent memory leaks
+    if (process.env.NODE_ENV !== 'test') {
+      this.startMetricsCollection();
+      this.startMetricsCleanup();
+    }
   }
 
   /**

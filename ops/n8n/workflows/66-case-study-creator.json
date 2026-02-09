@@ -1,0 +1,61 @@
+{
+  "name": "66-case-study-creator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "case-study-form",
+        "options": {}
+      },
+      "name": "Form Submission",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "prompt": "=Write a case study based on these customer answers:\nProblem: {{$node[\"Form Submission\"].json[\"body\"][\"problem\"]}}\nSolution: {{$node[\"Form Submission\"].json[\"body\"][\"solution\"]}}\nResults: {{$node[\"Form Submission\"].json[\"body\"][\"results\"]}}"
+      },
+      "name": "Draft Case Study",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "channel": "marketing-content",
+        "text": "=New Case Study Draft:\n{{$node[\"Draft Case Study\"].json[\"choices\"][0][\"message\"][\"content\"]}}",
+        "otherOptions": {}
+      },
+      "name": "Notify Team",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Form Submission": {
+      "main": [
+        [
+          {
+            "node": "Draft Case Study",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft Case Study": {
+      "main": [
+        [
+          {
+            "node": "Notify Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

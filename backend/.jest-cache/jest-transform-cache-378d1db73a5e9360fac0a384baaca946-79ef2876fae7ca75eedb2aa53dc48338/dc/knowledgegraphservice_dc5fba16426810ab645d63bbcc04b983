@@ -1,0 +1,86 @@
+a31167fb75c965580aedabb092a271ec
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.KnowledgeGraphService = void 0;
+const inversify_1 = require("inversify");
+const redis_1 = require("../cache/redis");
+const logger_1 = require("../utils/logger");
+let KnowledgeGraphService = class KnowledgeGraphService {
+    GRAPH_KEY_PREFIX = 'kg:';
+    constructor() { }
+    /**
+     * Adds a node to the knowledge graph.
+     */
+    async addNode(node) {
+        const client = (0, redis_1.getRedisClient)();
+        if (!client?.isOpen)
+            return;
+        const key = `${this.GRAPH_KEY_PREFIX}node:${node.id}`;
+        await client.hSet(key, {
+            type: node.type,
+            label: node.label,
+        });
+    }
+    /**
+     * Creates a relationship (edge) between two nodes.
+     */
+    async addEdge(edge) {
+        const client = (0, redis_1.getRedisClient)();
+        if (!client?.isOpen)
+            return;
+        // Adjacency list pattern in Redis Sets
+        const outKey = `${this.GRAPH_KEY_PREFIX}edges:out:${edge.source}`;
+        const inKey = `${this.GRAPH_KEY_PREFIX}edges:in:${edge.target}`;
+        const edgeData = JSON.stringify({
+            target: edge.target,
+            relation: edge.relation,
+            weight: edge.weight,
+        });
+        await Promise.all([
+            client.sAdd(outKey, edgeData),
+            client.sAdd(inKey, edge.source), // Simple back-ref
+        ]);
+        logger_1.logger.info(`[KnowledgeGraph] Linked ${edge.source} -> ${edge.relation} -> ${edge.target}`);
+    }
+    /**
+     * Retrieves related nodes (e.g., finding documents related to a mission).
+     */
+    async getRelated(nodeId, relationType) {
+        const client = (0, redis_1.getRedisClient)();
+        if (!client?.isOpen)
+            return [];
+        const outKey = `${this.GRAPH_KEY_PREFIX}edges:out:${nodeId}`;
+        const edges = await client.sMembers(outKey);
+        const related = edges
+            .map(e => JSON.parse(e))
+            .filter(e => !relationType || e.relation === relationType);
+        return related;
+    }
+    /**
+     * Finds the "Knowledge Path" between two concepts (Basic BFS).
+     * Useful for RAG to explain HOW two things are connected.
+     */
+    async findPath(startId, endId) {
+        // Implementation placeholder for BFS/DFS traversal
+        // In a real graph database (Neo4j) this is native.
+        // For Redis, we simulated it for immediate adjacencies.
+        const direct = await this.getRelated(startId);
+        const match = direct.find(d => d.target === endId);
+        return match ? [startId, match.relation, endId] : [];
+    }
+};
+exports.KnowledgeGraphService = KnowledgeGraphService;
+exports.KnowledgeGraphService = KnowledgeGraphService = __decorate([
+    (0, inversify_1.injectable)(),
+    __metadata("design:paramtypes", [])
+], KnowledgeGraphService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xca25vd2xlZGdlLWdyYXBoLnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7O0FBQUEseUNBQXVDO0FBQ3ZDLDBDQUFnRDtBQUNoRCw0Q0FBeUM7QUFnQmxDLElBQU0scUJBQXFCLEdBQTNCLE1BQU0scUJBQXFCO0lBQ2YsZ0JBQWdCLEdBQUcsS0FBSyxDQUFDO0lBRTFDLGdCQUFlLENBQUM7SUFFaEI7O09BRUc7SUFDSCxLQUFLLENBQUMsT0FBTyxDQUFDLElBQWU7UUFDM0IsTUFBTSxNQUFNLEdBQUcsSUFBQSxzQkFBYyxHQUFFLENBQUM7UUFDaEMsSUFBSSxDQUFDLE1BQU0sRUFBRSxNQUFNO1lBQUUsT0FBTztRQUU1QixNQUFNLEdBQUcsR0FBRyxHQUFHLElBQUksQ0FBQyxnQkFBZ0IsUUFBUSxJQUFJLENBQUMsRUFBRSxFQUFFLENBQUM7UUFDdEQsTUFBTSxNQUFNLENBQUMsSUFBSSxDQUFDLEdBQUcsRUFBRTtZQUNyQixJQUFJLEVBQUUsSUFBSSxDQUFDLElBQUk7WUFDZixLQUFLLEVBQUUsSUFBSSxDQUFDLEtBQUs7U0FDbEIsQ0FBQyxDQUFDO0lBQ0wsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLE9BQU8sQ0FBQyxJQUFlO1FBQzNCLE1BQU0sTUFBTSxHQUFHLElBQUEsc0JBQWMsR0FBRSxDQUFDO1FBQ2hDLElBQUksQ0FBQyxNQUFNLEVBQUUsTUFBTTtZQUFFLE9BQU87UUFFNUIsdUNBQXVDO1FBQ3ZDLE1BQU0sTUFBTSxHQUFHLEdBQUcsSUFBSSxDQUFDLGdCQUFnQixhQUFhLElBQUksQ0FBQyxNQUFNLEVBQUUsQ0FBQztRQUNsRSxNQUFNLEtBQUssR0FBRyxHQUFHLElBQUksQ0FBQyxnQkFBZ0IsWUFBWSxJQUFJLENBQUMsTUFBTSxFQUFFLENBQUM7UUFFaEUsTUFBTSxRQUFRLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQztZQUM5QixNQUFNLEVBQUUsSUFBSSxDQUFDLE1BQU07WUFDbkIsUUFBUSxFQUFFLElBQUksQ0FBQyxRQUFRO1lBQ3ZCLE1BQU0sRUFBRSxJQUFJLENBQUMsTUFBTTtTQUNwQixDQUFDLENBQUM7UUFFSCxNQUFNLE9BQU8sQ0FBQyxHQUFHLENBQUM7WUFDaEIsTUFBTSxDQUFDLElBQUksQ0FBQyxNQUFNLEVBQUUsUUFBUSxDQUFDO1lBQzdCLE1BQU0sQ0FBQyxJQUFJLENBQUMsS0FBSyxFQUFFLElBQUksQ0FBQyxNQUFNLENBQUMsRUFBRSxrQkFBa0I7U0FDcEQsQ0FBQyxDQUFDO1FBRUgsZUFBTSxDQUFDLElBQUksQ0FBQywyQkFBMkIsSUFBSSxDQUFDLE1BQU0sT0FBTyxJQUFJLENBQUMsUUFBUSxPQUFPLElBQUksQ0FBQyxNQUFNLEVBQUUsQ0FBQyxDQUFDO0lBQzlGLENBQUM7SUFFRDs7T0FFRztJQUNILEtBQUssQ0FBQyxVQUFVLENBQUMsTUFBYyxFQUFFLFlBQXFCO1FBQ3BELE1BQU0sTUFBTSxHQUFHLElBQUEsc0JBQWMsR0FBRSxDQUFDO1FBQ2hDLElBQUksQ0FBQyxNQUFNLEVBQUUsTUFBTTtZQUFFLE9BQU8sRUFBRSxDQUFDO1FBRS9CLE1BQU0sTUFBTSxHQUFHLEdBQUcsSUFBSSxDQUFDLGdCQUFnQixhQUFhLE1BQU0sRUFBRSxDQUFDO1FBQzdELE1BQU0sS0FBSyxHQUFHLE1BQU0sTUFBTSxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUU1QyxNQUFNLE9BQU8sR0FBRyxLQUFLO2FBQ2xCLEdBQUcsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsQ0FBQyxDQUFDLENBQUM7YUFDdkIsTUFBTSxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUMsQ0FBQyxZQUFZLElBQUksQ0FBQyxDQUFDLFFBQVEsS0FBSyxZQUFZLENBQUMsQ0FBQztRQUU3RCxPQUFPLE9BQU8sQ0FBQztJQUNqQixDQUFDO0lBRUQ7OztPQUdHO0lBQ0gsS0FBSyxDQUFDLFFBQVEsQ0FBQyxPQUFlLEVBQUUsS0FBYTtRQUMzQyxtREFBbUQ7UUFDbkQsbURBQW1EO1FBQ25ELHdEQUF3RDtRQUN4RCxNQUFNLE1BQU0sR0FBRyxNQUFNLElBQUksQ0FBQyxVQUFVLENBQUMsT0FBTyxDQUFDLENBQUM7UUFDOUMsTUFBTSxLQUFLLEdBQUcsTUFBTSxDQUFDLElBQUksQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDLENBQUMsQ0FBQyxNQUFNLEtBQUssS0FBSyxDQUFDLENBQUM7UUFFbkQsT0FBTyxLQUFLLENBQUMsQ0FBQyxDQUFDLENBQUMsT0FBTyxFQUFFLEtBQUssQ0FBQyxRQUFRLEVBQUUsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDLEVBQUUsQ0FBQztJQUN2RCxDQUFDO0NBQ0YsQ0FBQTtBQTFFWSxzREFBcUI7Z0NBQXJCLHFCQUFxQjtJQURqQyxJQUFBLHNCQUFVLEdBQUU7O0dBQ0EscUJBQXFCLENBMEVqQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJDOlxcVXNlcnNcXEFsZWphbmRyb1xcQUlHZXN0aW9uXFxiYWNrZW5kXFxzcmNcXHNlcnZpY2VzXFxrbm93bGVkZ2UtZ3JhcGguc2VydmljZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBpbmplY3RhYmxlIH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB7IGdldFJlZGlzQ2xpZW50IH0gZnJvbSAnLi4vY2FjaGUvcmVkaXMnO1xuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcblxuZXhwb3J0IGludGVyZmFjZSBHcmFwaE5vZGUge1xuICBpZDogc3RyaW5nO1xuICB0eXBlOiAndXNlcicgfCAnbWlzc2lvbicgfCAnZG9jdW1lbnQnIHwgJ2NvbmNlcHQnO1xuICBsYWJlbDogc3RyaW5nO1xufVxuXG5leHBvcnQgaW50ZXJmYWNlIEdyYXBoRWRnZSB7XG4gIHNvdXJjZTogc3RyaW5nO1xuICB0YXJnZXQ6IHN0cmluZztcbiAgcmVsYXRpb246ICdvd25zJyB8ICdjcmVhdGVkJyB8ICdyZWZlcmVuY2VzJyB8ICdzaW1pbGFyX3RvJztcbiAgd2VpZ2h0OiBudW1iZXI7XG59XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBLbm93bGVkZ2VHcmFwaFNlcnZpY2Uge1xuICBwcml2YXRlIHJlYWRvbmx5IEdSQVBIX0tFWV9QUkVGSVggPSAna2c6JztcblxuICBjb25zdHJ1Y3RvcigpIHt9XG5cbiAgLyoqXG4gICAqIEFkZHMgYSBub2RlIHRvIHRoZSBrbm93bGVkZ2UgZ3JhcGguXG4gICAqL1xuICBhc3luYyBhZGROb2RlKG5vZGU6IEdyYXBoTm9kZSk6IFByb21pc2U8dm9pZD4ge1xuICAgIGNvbnN0IGNsaWVudCA9IGdldFJlZGlzQ2xpZW50KCk7XG4gICAgaWYgKCFjbGllbnQ/LmlzT3BlbikgcmV0dXJuO1xuXG4gICAgY29uc3Qga2V5ID0gYCR7dGhpcy5HUkFQSF9LRVlfUFJFRklYfW5vZGU6JHtub2RlLmlkfWA7XG4gICAgYXdhaXQgY2xpZW50LmhTZXQoa2V5LCB7XG4gICAgICB0eXBlOiBub2RlLnR5cGUsXG4gICAgICBsYWJlbDogbm9kZS5sYWJlbCxcbiAgICB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBDcmVhdGVzIGEgcmVsYXRpb25zaGlwIChlZGdlKSBiZXR3ZWVuIHR3byBub2Rlcy5cbiAgICovXG4gIGFzeW5jIGFkZEVkZ2UoZWRnZTogR3JhcGhFZGdlKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgY29uc3QgY2xpZW50ID0gZ2V0UmVkaXNDbGllbnQoKTtcbiAgICBpZiAoIWNsaWVudD8uaXNPcGVuKSByZXR1cm47XG5cbiAgICAvLyBBZGphY2VuY3kgbGlzdCBwYXR0ZXJuIGluIFJlZGlzIFNldHNcbiAgICBjb25zdCBvdXRLZXkgPSBgJHt0aGlzLkdSQVBIX0tFWV9QUkVGSVh9ZWRnZXM6b3V0OiR7ZWRnZS5zb3VyY2V9YDtcbiAgICBjb25zdCBpbktleSA9IGAke3RoaXMuR1JBUEhfS0VZX1BSRUZJWH1lZGdlczppbjoke2VkZ2UudGFyZ2V0fWA7XG5cbiAgICBjb25zdCBlZGdlRGF0YSA9IEpTT04uc3RyaW5naWZ5KHtcbiAgICAgIHRhcmdldDogZWRnZS50YXJnZXQsXG4gICAgICByZWxhdGlvbjogZWRnZS5yZWxhdGlvbixcbiAgICAgIHdlaWdodDogZWRnZS53ZWlnaHQsXG4gICAgfSk7XG5cbiAgICBhd2FpdCBQcm9taXNlLmFsbChbXG4gICAgICBjbGllbnQuc0FkZChvdXRLZXksIGVkZ2VEYXRhKSxcbiAgICAgIGNsaWVudC5zQWRkKGluS2V5LCBlZGdlLnNvdXJjZSksIC8vIFNpbXBsZSBiYWNrLXJlZlxuICAgIF0pO1xuXG4gICAgbG9nZ2VyLmluZm8oYFtLbm93bGVkZ2VHcmFwaF0gTGlua2VkICR7ZWRnZS5zb3VyY2V9IC0+ICR7ZWRnZS5yZWxhdGlvbn0gLT4gJHtlZGdlLnRhcmdldH1gKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBSZXRyaWV2ZXMgcmVsYXRlZCBub2RlcyAoZS5nLiwgZmluZGluZyBkb2N1bWVudHMgcmVsYXRlZCB0byBhIG1pc3Npb24pLlxuICAgKi9cbiAgYXN5bmMgZ2V0UmVsYXRlZChub2RlSWQ6IHN0cmluZywgcmVsYXRpb25UeXBlPzogc3RyaW5nKTogUHJvbWlzZTxhbnlbXT4ge1xuICAgIGNvbnN0IGNsaWVudCA9IGdldFJlZGlzQ2xpZW50KCk7XG4gICAgaWYgKCFjbGllbnQ/LmlzT3BlbikgcmV0dXJuIFtdO1xuXG4gICAgY29uc3Qgb3V0S2V5ID0gYCR7dGhpcy5HUkFQSF9LRVlfUFJFRklYfWVkZ2VzOm91dDoke25vZGVJZH1gO1xuICAgIGNvbnN0IGVkZ2VzID0gYXdhaXQgY2xpZW50LnNNZW1iZXJzKG91dEtleSk7XG5cbiAgICBjb25zdCByZWxhdGVkID0gZWRnZXNcbiAgICAgIC5tYXAoZSA9PiBKU09OLnBhcnNlKGUpKVxuICAgICAgLmZpbHRlcihlID0+ICFyZWxhdGlvblR5cGUgfHwgZS5yZWxhdGlvbiA9PT0gcmVsYXRpb25UeXBlKTtcblxuICAgIHJldHVybiByZWxhdGVkO1xuICB9XG5cbiAgLyoqXG4gICAqIEZpbmRzIHRoZSBcIktub3dsZWRnZSBQYXRoXCIgYmV0d2VlbiB0d28gY29uY2VwdHMgKEJhc2ljIEJGUykuXG4gICAqIFVzZWZ1bCBmb3IgUkFHIHRvIGV4cGxhaW4gSE9XIHR3byB0aGluZ3MgYXJlIGNvbm5lY3RlZC5cbiAgICovXG4gIGFzeW5jIGZpbmRQYXRoKHN0YXJ0SWQ6IHN0cmluZywgZW5kSWQ6IHN0cmluZyk6IFByb21pc2U8c3RyaW5nW10+IHtcbiAgICAvLyBJbXBsZW1lbnRhdGlvbiBwbGFjZWhvbGRlciBmb3IgQkZTL0RGUyB0cmF2ZXJzYWxcbiAgICAvLyBJbiBhIHJlYWwgZ3JhcGggZGF0YWJhc2UgKE5lbzRqKSB0aGlzIGlzIG5hdGl2ZS5cbiAgICAvLyBGb3IgUmVkaXMsIHdlIHNpbXVsYXRlZCBpdCBmb3IgaW1tZWRpYXRlIGFkamFjZW5jaWVzLlxuICAgIGNvbnN0IGRpcmVjdCA9IGF3YWl0IHRoaXMuZ2V0UmVsYXRlZChzdGFydElkKTtcbiAgICBjb25zdCBtYXRjaCA9IGRpcmVjdC5maW5kKGQgPT4gZC50YXJnZXQgPT09IGVuZElkKTtcblxuICAgIHJldHVybiBtYXRjaCA/IFtzdGFydElkLCBtYXRjaC5yZWxhdGlvbiwgZW5kSWRdIDogW107XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

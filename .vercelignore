@@ -29,7 +29,7 @@ evaluation/
 cypress/
 tests/
 __mocks__/
-scripts/
+# scripts/ (Removed to allow Vercel builds)
 infra/
 Colab-notebooks/
 colab-notebooks/
@@ -57,6 +57,7 @@ build/
 node_modules/
 .venv/
 .venv-notebooklm/
+logs/
 .venv/
 
 # Documentation & Guidelines

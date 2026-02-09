@@ -1,0 +1,61 @@
+{
+  "name": "25-auto-translator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "translate",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "text": "={{$node[\"Webhook\"].json[\"body\"][\"text\"]}}",
+        "targetLang": "ES"
+      },
+      "name": "DeepL",
+      "type": "n8n-nodes-base.deepL",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"translated_text\": \"{{$node[\"DeepL\"].json[\"text\"]}}\"}",
+        "options": {}
+      },
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "DeepL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepL": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

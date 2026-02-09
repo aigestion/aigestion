@@ -1,0 +1,36 @@
+{
+  "name": "50-rss-to-tweet",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://techcrunch.com/feed/"
+      },
+      "name": "RSS Feed",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "text": "=New Article: {{$node[\"RSS Feed\"].json[\"title\"]}} - {{$node[\"RSS Feed\"].json[\"link\"]}}"
+      },
+      "name": "Post to X",
+      "type": "n8n-nodes-base.twitter",
+      "typeVersion": 1,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "RSS Feed": {
+      "main": [
+        [
+          {
+            "node": "Post to X",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

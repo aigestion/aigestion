@@ -7,7 +7,7 @@ for all incoming HTTP requests.
 
 import time
 
-from backend.app.services.metrics_service import metrics_service
+from app.services.metrics_service import metrics_service
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response

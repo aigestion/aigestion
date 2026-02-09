@@ -1,0 +1,87 @@
+{
+  "name": "72-etl-job",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 2
+            }
+          ]
+        }
+      },
+      "name": "Daily",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM users WHERE updated_at > NOW() - INTERVAL '1 day'"
+      },
+      "name": "Extract Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => {\n  item.json.full_name = item.json.first_name + ' ' + item.json.last_name;\n  delete item.json.password;\n  return item;\n});"
+      },
+      "name": "Transform",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "projectId": "my-project",
+        "datasetId": "analytics",
+        "tableId": "users_daily"
+      },
+      "name": "Load BigQuery",
+      "type": "n8n-nodes-base.googleBigQuery",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Daily": {
+      "main": [
+        [
+          {
+            "node": "Extract Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Postgres": {
+      "main": [
+        [
+          {
+            "node": "Transform",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform": {
+      "main": [
+        [
+          {
+            "node": "Load BigQuery",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

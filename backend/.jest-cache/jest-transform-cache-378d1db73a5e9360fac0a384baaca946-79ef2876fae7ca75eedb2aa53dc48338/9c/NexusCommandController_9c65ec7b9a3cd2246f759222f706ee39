@@ -1,0 +1,78 @@
+1504e8097578f049af3d906d4e64a31a
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.nexusCommandController = exports.NexusCommandController = void 0;
+const logger_1 = require("../utils/logger");
+const NeuralHealthService_1 = require("../services/NeuralHealthService");
+const PredictiveHealingService_1 = require("../services/PredictiveHealingService");
+/**
+ * Nexus Command Controller: The unified brain for processing high-level commands.
+ */
+class NexusCommandController {
+    /**
+     * Execute a "God Mode" system command
+     */
+    async executeCommand(req, res) {
+        const { command, params } = req.body;
+        const requestId = req.requestId || 'unknown';
+        logger_1.logger.info({ command, requestId }, 'Recibiendo comando Nexus God Mode');
+        try {
+            switch (command) {
+                case 'SYSTEM_PURGE':
+                    await this.handleSystemPurge(res);
+                    break;
+                case 'SYNC_VR_STATE':
+                    await this.handleVRSync(params, res);
+                    break;
+                case 'OVERRIDE_HEALTH':
+                    await this.handleHealthOverride(params, res);
+                    break;
+                default:
+                    res.status(400).json({
+                        success: false,
+                        error: 'Comando no reconocido o fuera de los límites de autoridad.',
+                    });
+            }
+        }
+        catch (error) {
+            logger_1.logger.error({ error, requestId }, 'Error ejecutando comando Nexus');
+            res
+                .status(500)
+                .json({ success: false, error: 'Fallo catastrófico en la ejecución del comando.' });
+        }
+    }
+    async handleSystemPurge(res) {
+        logger_1.logger.warn('Iniciando PURGA DEL SISTEMA vía Nexus Command');
+        // Invocamos manualmente al servicio de curación predictiva para una limpieza profunda
+        await PredictiveHealingService_1.predictiveHealingService.performEmergencyHealing({
+            sanityScore: 50,
+            memoryUsage: 95,
+            cpuUsage: 95,
+            status: 'CRITICAL',
+            uptime: process.uptime(),
+        });
+        res.json({ success: true, message: 'Purga del sistema completada y caches optimizados.' });
+    }
+    async handleVRSync(params, res) {
+        const { sessionId, state } = params;
+        logger_1.logger.info({ sessionId }, 'Sincronizando estado VR Nexus');
+        // Lógica para persistir o emitir el estado VR a otros clientes
+        res.json({ success: true, message: 'Estado VR sincronizado globalmente.' });
+    }
+    async handleHealthOverride(params, res) {
+        const { targetStatus } = params;
+        logger_1.logger.warn({ targetStatus }, 'Sobrescribiendo estado de salud del núcleo neural');
+        // Esto es una función de "God Mode" puro
+        res.json({ success: true, message: `Estado del sistema forzado a: ${targetStatus}` });
+    }
+    /**
+     * Get real-time neural health metrics
+     */
+    async getNeuralStatus(_req, res) {
+        const metrics = NeuralHealthService_1.neuralHealthService.getMetrics();
+        res.json(metrics);
+    }
+}
+exports.NexusCommandController = NexusCommandController;
+exports.nexusCommandController = new NexusCommandController();
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxjb250cm9sbGVyc1xcTmV4dXNDb21tYW5kQ29udHJvbGxlci50cyIsIm1hcHBpbmdzIjoiOzs7QUFDQSw0Q0FBeUM7QUFDekMseUVBQXNFO0FBQ3RFLG1GQUFnRjtBQUVoRjs7R0FFRztBQUNILE1BQWEsc0JBQXNCO0lBQ2pDOztPQUVHO0lBQ0ksS0FBSyxDQUFDLGNBQWMsQ0FBQyxHQUFZLEVBQUUsR0FBYTtRQUNyRCxNQUFNLEVBQUUsT0FBTyxFQUFFLE1BQU0sRUFBRSxHQUFHLEdBQUcsQ0FBQyxJQUFJLENBQUM7UUFDckMsTUFBTSxTQUFTLEdBQUksR0FBVyxDQUFDLFNBQVMsSUFBSSxTQUFTLENBQUM7UUFFdEQsZUFBTSxDQUFDLElBQUksQ0FBQyxFQUFFLE9BQU8sRUFBRSxTQUFTLEVBQUUsRUFBRSxtQ0FBbUMsQ0FBQyxDQUFDO1FBRXpFLElBQUksQ0FBQztZQUNILFFBQVEsT0FBTyxFQUFFLENBQUM7Z0JBQ2hCLEtBQUssY0FBYztvQkFDakIsTUFBTSxJQUFJLENBQUMsaUJBQWlCLENBQUMsR0FBRyxDQUFDLENBQUM7b0JBQ2xDLE1BQU07Z0JBQ1IsS0FBSyxlQUFlO29CQUNsQixNQUFNLElBQUksQ0FBQyxZQUFZLENBQUMsTUFBTSxFQUFFLEdBQUcsQ0FBQyxDQUFDO29CQUNyQyxNQUFNO2dCQUNSLEtBQUssaUJBQWlCO29CQUNwQixNQUFNLElBQUksQ0FBQyxvQkFBb0IsQ0FBQyxNQUFNLEVBQUUsR0FBRyxDQUFDLENBQUM7b0JBQzdDLE1BQU07Z0JBQ1I7b0JBQ0UsR0FBRyxDQUFDLE1BQU0sQ0FBQyxHQUFHLENBQUMsQ0FBQyxJQUFJLENBQUM7d0JBQ25CLE9BQU8sRUFBRSxLQUFLO3dCQUNkLEtBQUssRUFBRSw0REFBNEQ7cUJBQ3BFLENBQUMsQ0FBQztZQUNQLENBQUM7UUFDSCxDQUFDO1FBQUMsT0FBTyxLQUFLLEVBQUUsQ0FBQztZQUNmLGVBQU0sQ0FBQyxLQUFLLENBQUMsRUFBRSxLQUFLLEVBQUUsU0FBUyxFQUFFLEVBQUUsZ0NBQWdDLENBQUMsQ0FBQztZQUNyRSxHQUFHO2lCQUNBLE1BQU0sQ0FBQyxHQUFHLENBQUM7aUJBQ1gsSUFBSSxDQUFDLEVBQUUsT0FBTyxFQUFFLEtBQUssRUFBRSxLQUFLLEVBQUUsaURBQWlELEVBQUUsQ0FBQyxDQUFDO1FBQ3hGLENBQUM7SUFDSCxDQUFDO0lBRU8sS0FBSyxDQUFDLGlCQUFpQixDQUFDLEdBQWE7UUFDM0MsZUFBTSxDQUFDLElBQUksQ0FBQywrQ0FBK0MsQ0FBQyxDQUFDO1FBQzdELHNGQUFzRjtRQUN0RixNQUFPLG1EQUFnQyxDQUFDLHVCQUF1QixDQUFDO1lBQzlELFdBQVcsRUFBRSxFQUFFO1lBQ2YsV0FBVyxFQUFFLEVBQUU7WUFDZixRQUFRLEVBQUUsRUFBRTtZQUNaLE1BQU0sRUFBRSxVQUFVO1lBQ2xCLE1BQU0sRUFBRSxPQUFPLENBQUMsTUFBTSxFQUFFO1NBQ3pCLENBQUMsQ0FBQztRQUVILEdBQUcsQ0FBQyxJQUFJLENBQUMsRUFBRSxPQUFPLEVBQUUsSUFBSSxFQUFFLE9BQU8sRUFBRSxvREFBb0QsRUFBRSxDQUFDLENBQUM7SUFDN0YsQ0FBQztJQUVPLEtBQUssQ0FBQyxZQUFZLENBQUMsTUFBVyxFQUFFLEdBQWE7UUFDbkQsTUFBTSxFQUFFLFNBQVMsRUFBRSxLQUFLLEVBQUUsR0FBRyxNQUFNLENBQUM7UUFDcEMsZUFBTSxDQUFDLElBQUksQ0FBQyxFQUFFLFNBQVMsRUFBRSxFQUFFLCtCQUErQixDQUFDLENBQUM7UUFDNUQsK0RBQStEO1FBQy9ELEdBQUcsQ0FBQyxJQUFJLENBQUMsRUFBRSxPQUFPLEVBQUUsSUFBSSxFQUFFLE9BQU8sRUFBRSxxQ0FBcUMsRUFBRSxDQUFDLENBQUM7SUFDOUUsQ0FBQztJQUVPLEtBQUssQ0FBQyxvQkFBb0IsQ0FBQyxNQUFXLEVBQUUsR0FBYTtRQUMzRCxNQUFNLEVBQUUsWUFBWSxFQUFFLEdBQUcsTUFBTSxDQUFDO1FBQ2hDLGVBQU0sQ0FBQyxJQUFJLENBQUMsRUFBRSxZQUFZLEVBQUUsRUFBRSxtREFBbUQsQ0FBQyxDQUFDO1FBQ25GLHlDQUF5QztRQUN6QyxHQUFHLENBQUMsSUFBSSxDQUFDLEVBQUUsT0FBTyxFQUFFLElBQUksRUFBRSxPQUFPLEVBQUUsaUNBQWlDLFlBQVksRUFBRSxFQUFFLENBQUMsQ0FBQztJQUN4RixDQUFDO0lBRUQ7O09BRUc7SUFDSSxLQUFLLENBQUMsZUFBZSxDQUFDLElBQWEsRUFBRSxHQUFhO1FBQ3ZELE1BQU0sT0FBTyxHQUFHLHlDQUFtQixDQUFDLFVBQVUsRUFBRSxDQUFDO1FBQ2pELEdBQUcsQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUM7SUFDcEIsQ0FBQztDQUNGO0FBdEVELHdEQXNFQztBQUVZLFFBQUEsc0JBQXNCLEdBQUcsSUFBSSxzQkFBc0IsRUFBRSxDQUFDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcY29udHJvbGxlcnNcXE5leHVzQ29tbWFuZENvbnRyb2xsZXIudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHR5cGUgeyBSZXF1ZXN0LCBSZXNwb25zZSB9IGZyb20gJ2V4cHJlc3MnO1xuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcbmltcG9ydCB7IG5ldXJhbEhlYWx0aFNlcnZpY2UgfSBmcm9tICcuLi9zZXJ2aWNlcy9OZXVyYWxIZWFsdGhTZXJ2aWNlJztcbmltcG9ydCB7IHByZWRpY3RpdmVIZWFsaW5nU2VydmljZSB9IGZyb20gJy4uL3NlcnZpY2VzL1ByZWRpY3RpdmVIZWFsaW5nU2VydmljZSc7XG5cbi8qKlxuICogTmV4dXMgQ29tbWFuZCBDb250cm9sbGVyOiBUaGUgdW5pZmllZCBicmFpbiBmb3IgcHJvY2Vzc2luZyBoaWdoLWxldmVsIGNvbW1hbmRzLlxuICovXG5leHBvcnQgY2xhc3MgTmV4dXNDb21tYW5kQ29udHJvbGxlciB7XG4gIC8qKlxuICAgKiBFeGVjdXRlIGEgXCJHb2QgTW9kZVwiIHN5c3RlbSBjb21tYW5kXG4gICAqL1xuICBwdWJsaWMgYXN5bmMgZXhlY3V0ZUNvbW1hbmQocmVxOiBSZXF1ZXN0LCByZXM6IFJlc3BvbnNlKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgY29uc3QgeyBjb21tYW5kLCBwYXJhbXMgfSA9IHJlcS5ib2R5O1xuICAgIGNvbnN0IHJlcXVlc3RJZCA9IChyZXEgYXMgYW55KS5yZXF1ZXN0SWQgfHwgJ3Vua25vd24nO1xuXG4gICAgbG9nZ2VyLmluZm8oeyBjb21tYW5kLCByZXF1ZXN0SWQgfSwgJ1JlY2liaWVuZG8gY29tYW5kbyBOZXh1cyBHb2QgTW9kZScpO1xuXG4gICAgdHJ5IHtcbiAgICAgIHN3aXRjaCAoY29tbWFuZCkge1xuICAgICAgICBjYXNlICdTWVNURU1fUFVSR0UnOlxuICAgICAgICAgIGF3YWl0IHRoaXMuaGFuZGxlU3lzdGVtUHVyZ2UocmVzKTtcbiAgICAgICAgICBicmVhaztcbiAgICAgICAgY2FzZSAnU1lOQ19WUl9TVEFURSc6XG4gICAgICAgICAgYXdhaXQgdGhpcy5oYW5kbGVWUlN5bmMocGFyYW1zLCByZXMpO1xuICAgICAgICAgIGJyZWFrO1xuICAgICAgICBjYXNlICdPVkVSUklERV9IRUFMVEgnOlxuICAgICAgICAgIGF3YWl0IHRoaXMuaGFuZGxlSGVhbHRoT3ZlcnJpZGUocGFyYW1zLCByZXMpO1xuICAgICAgICAgIGJyZWFrO1xuICAgICAgICBkZWZhdWx0OlxuICAgICAgICAgIHJlcy5zdGF0dXMoNDAwKS5qc29uKHtcbiAgICAgICAgICAgIHN1Y2Nlc3M6IGZhbHNlLFxuICAgICAgICAgICAgZXJyb3I6ICdDb21hbmRvIG5vIHJlY29ub2NpZG8gbyBmdWVyYSBkZSBsb3MgbMOtbWl0ZXMgZGUgYXV0b3JpZGFkLicsXG4gICAgICAgICAgfSk7XG4gICAgICB9XG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIGxvZ2dlci5lcnJvcih7IGVycm9yLCByZXF1ZXN0SWQgfSwgJ0Vycm9yIGVqZWN1dGFuZG8gY29tYW5kbyBOZXh1cycpO1xuICAgICAgcmVzXG4gICAgICAgIC5zdGF0dXMoNTAwKVxuICAgICAgICAuanNvbih7IHN1Y2Nlc3M6IGZhbHNlLCBlcnJvcjogJ0ZhbGxvIGNhdGFzdHLDs2ZpY28gZW4gbGEgZWplY3VjacOzbiBkZWwgY29tYW5kby4nIH0pO1xuICAgIH1cbiAgfVxuXG4gIHByaXZhdGUgYXN5bmMgaGFuZGxlU3lzdGVtUHVyZ2UocmVzOiBSZXNwb25zZSkge1xuICAgIGxvZ2dlci53YXJuKCdJbmljaWFuZG8gUFVSR0EgREVMIFNJU1RFTUEgdsOtYSBOZXh1cyBDb21tYW5kJyk7XG4gICAgLy8gSW52b2NhbW9zIG1hbnVhbG1lbnRlIGFsIHNlcnZpY2lvIGRlIGN1cmFjacOzbiBwcmVkaWN0aXZhIHBhcmEgdW5hIGxpbXBpZXphIHByb2Z1bmRhXG4gICAgYXdhaXQgKHByZWRpY3RpdmVIZWFsaW5nU2VydmljZSBhcyBhbnkpLnBlcmZvcm1FbWVyZ2VuY3lIZWFsaW5nKHtcbiAgICAgIHNhbml0eVNjb3JlOiA1MCxcbiAgICAgIG1lbW9yeVVzYWdlOiA5NSxcbiAgICAgIGNwdVVzYWdlOiA5NSxcbiAgICAgIHN0YXR1czogJ0NSSVRJQ0FMJyxcbiAgICAgIHVwdGltZTogcHJvY2Vzcy51cHRpbWUoKSxcbiAgICB9KTtcblxuICAgIHJlcy5qc29uKHsgc3VjY2VzczogdHJ1ZSwgbWVzc2FnZTogJ1B1cmdhIGRlbCBzaXN0ZW1hIGNvbXBsZXRhZGEgeSBjYWNoZXMgb3B0aW1pemFkb3MuJyB9KTtcbiAgfVxuXG4gIHByaXZhdGUgYXN5bmMgaGFuZGxlVlJTeW5jKHBhcmFtczogYW55LCByZXM6IFJlc3BvbnNlKSB7XG4gICAgY29uc3QgeyBzZXNzaW9uSWQsIHN0YXRlIH0gPSBwYXJhbXM7XG4gICAgbG9nZ2VyLmluZm8oeyBzZXNzaW9uSWQgfSwgJ1NpbmNyb25pemFuZG8gZXN0YWRvIFZSIE5leHVzJyk7XG4gICAgLy8gTMOzZ2ljYSBwYXJhIHBlcnNpc3RpciBvIGVtaXRpciBlbCBlc3RhZG8gVlIgYSBvdHJvcyBjbGllbnRlc1xuICAgIHJlcy5qc29uKHsgc3VjY2VzczogdHJ1ZSwgbWVzc2FnZTogJ0VzdGFkbyBWUiBzaW5jcm9uaXphZG8gZ2xvYmFsbWVudGUuJyB9KTtcbiAgfVxuXG4gIHByaXZhdGUgYXN5bmMgaGFuZGxlSGVhbHRoT3ZlcnJpZGUocGFyYW1zOiBhbnksIHJlczogUmVzcG9uc2UpIHtcbiAgICBjb25zdCB7IHRhcmdldFN0YXR1cyB9ID0gcGFyYW1zO1xuICAgIGxvZ2dlci53YXJuKHsgdGFyZ2V0U3RhdHVzIH0sICdTb2JyZXNjcmliaWVuZG8gZXN0YWRvIGRlIHNhbHVkIGRlbCBuw7pjbGVvIG5ldXJhbCcpO1xuICAgIC8vIEVzdG8gZXMgdW5hIGZ1bmNpw7NuIGRlIFwiR29kIE1vZGVcIiBwdXJvXG4gICAgcmVzLmpzb24oeyBzdWNjZXNzOiB0cnVlLCBtZXNzYWdlOiBgRXN0YWRvIGRlbCBzaXN0ZW1hIGZvcnphZG8gYTogJHt0YXJnZXRTdGF0dXN9YCB9KTtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgcmVhbC10aW1lIG5ldXJhbCBoZWFsdGggbWV0cmljc1xuICAgKi9cbiAgcHVibGljIGFzeW5jIGdldE5ldXJhbFN0YXR1cyhfcmVxOiBSZXF1ZXN0LCByZXM6IFJlc3BvbnNlKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgY29uc3QgbWV0cmljcyA9IG5ldXJhbEhlYWx0aFNlcnZpY2UuZ2V0TWV0cmljcygpO1xuICAgIHJlcy5qc29uKG1ldHJpY3MpO1xuICB9XG59XG5cbmV4cG9ydCBjb25zdCBuZXh1c0NvbW1hbmRDb250cm9sbGVyID0gbmV3IE5leHVzQ29tbWFuZENvbnRyb2xsZXIoKTtcbiJdLCJ2ZXJzaW9uIjozfQ==
