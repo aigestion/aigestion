@@ -109,7 +109,7 @@ const SelectPlan = lazy(() =>
 export const LoadingFallback = () => (
   <div className="min-h-[400px] bg-nexus-obsidian-deep flex items-center justify-center">
     <div className="text-nexus-cyan-glow font-orbitron tracking-[0.5em] text-xs animate-pulse">
-      LOADING...
+      CARGANDO...
     </div>
   </div>
 );
@@ -281,25 +281,27 @@ export const AppContent = ({
             ) : (
               <div className="min-h-screen p-8">
                 <h1 className="text-center text-4xl mb-12 font-orbitron tracking-[0.3em] drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                  AIGESTION CONTROL CENTER
+                  CENTRO DE CONTROL AIGESTION
                 </h1>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
                   <a href="/dashboard/admin" className="nexus-hub-card">
                     <h3 className="font-orbitron text-sm tracking-[0.2em] text-nexus-cyan-glow">
-                      ADMINISTRATION
+                      ADMINISTRACIÓN
                     </h3>
                     <p className="high-contrast-silver text-xs mt-4">
                       Sistemas de control y análisis de infraestructura.
                     </p>
                   </a>
                   <a href="/dashboard/client" className="nexus-hub-card">
-                    <h3 className="font-orbitron text-sm tracking-[0.2em]">CLIENT PORTAL</h3>
+                    <h3 className="font-orbitron text-sm tracking-[0.2em]">PORTAL DE CLIENTE</h3>
                     <p className="high-contrast-silver text-xs mt-4">
                       Gestión de proyectos y servicios de consultoría.
                     </p>
                   </a>
                   <a href="/dashboard/demo" className="nexus-hub-card">
-                    <h3 className="font-orbitron text-sm tracking-[0.2em]">DEMO ENVIRONMENT</h3>
+                    <h3 className="font-orbitron text-sm tracking-[0.2em]">
+                      ENTORNO DE DEMOSTRACIÓN
+                    </h3>
                     <p className="high-contrast-silver text-xs mt-4">
                       Entornos de prueba y visualización técnica.
                     </p>
@@ -384,13 +386,14 @@ export const AppContent = ({
           path="/lab"
           element={
             <div className="pt-32 pb-20 px-6">
-              <h1 className="text-4xl font-orbitron text-white text-center">Lab Section</h1>
+              <h1 className="text-4xl font-orbitron text-white text-center">
+                Sección de Laboratorio
+              </h1>
             </div>
           }
         />
 
         <Route path="/weapon" element={<WeaponDashboard />} />
-
 
         {/* Daniela AI Routes */}
         <Route path="/daniela" element={<DanielaDemo />} />
