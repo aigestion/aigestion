@@ -9,6 +9,7 @@ import { GetMarketplacePersonasUseCase } from '../application/usecases/persona/G
 import { SwarmController } from '../controllers/swarm.controller';
 import { GodModeController } from '../controllers/godmode.controller';
 import { DanielaController } from '../controllers/daniela.controller';
+import { EconomyController } from '../controllers/economy.controller';
 import { DockerService } from '../infrastructure/docker/DockerService';
 import {
   IMissionRepository,
@@ -39,6 +40,7 @@ import { DoraMetricsService } from '../services/dora-metrics.service';
 import { EmailService } from '../services/email.service';
 import { GodNotificationService } from '../services/god-notification.service';
 import { EconomyService } from '../services/economy.service';
+import { EconomyChartService } from '../services/economy-chart.service';
 import { EnhancedVoiceService } from '../services/enhanced-voice.service';
 import { FeatureFlagService } from '../services/feature-flag.service';
 import { ErrorReportingService } from '../services/google/error-reporting.service';
@@ -82,6 +84,7 @@ container.bind<TelegramService>(TYPES.TelegramService).to(TelegramService).inSin
 container.bind<TelegramBotHandler>(TelegramBotHandler).toSelf().inSingletonScope();
 container.bind<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode).toSelf().inSingletonScope();
 container.bind<DanielaAIService>(TYPES.DanielaAIService).to(DanielaAIService).inSingletonScope();
+container.bind<EconomyController>(EconomyController).toSelf().inSingletonScope();
 container
   .bind<SystemMetricsService>(TYPES.SystemMetricsService)
   .to(SystemMetricsService)
@@ -100,6 +103,9 @@ container.bind('Container').toConstantValue(container);
 import { Enable2FAUseCase } from '../application/usecases/Enable2FAUseCase';
 import { Verify2FALoginUseCase } from '../application/usecases/Verify2FALoginUseCase';
 import { Verify2FAUseCase } from '../application/usecases/Verify2FAUseCase';
+import { VerifyEmailUseCase } from '../application/usecases/VerifyEmailUseCase';
+import { UpdateUserRoleUseCase } from '../application/usecases/UpdateUserRoleUseCase';
+import { UpdateSubscriptionUseCase } from '../application/usecases/UpdateSubscriptionUseCase';
 import { EventBus } from '../infrastructure/eventbus/EventBus';
 import { CommandBus } from '../shared/cqrs/CommandBus';
 import { QueryBus } from '../shared/cqrs/QueryBus';
@@ -132,6 +138,18 @@ container.bind<Verify2FAUseCase>(TYPES.Verify2FAUseCase).to(Verify2FAUseCase).in
 container
   .bind<Verify2FALoginUseCase>(TYPES.Verify2FALoginUseCase)
   .to(Verify2FALoginUseCase)
+  .inSingletonScope();
+container
+  .bind<VerifyEmailUseCase>(TYPES.VerifyEmailUseCase)
+  .to(VerifyEmailUseCase)
+  .inSingletonScope();
+container
+  .bind<UpdateUserRoleUseCase>(TYPES.UpdateUserRoleUseCase)
+  .to(UpdateUserRoleUseCase)
+  .inSingletonScope();
+container
+  .bind<UpdateSubscriptionUseCase>(TYPES.UpdateSubscriptionUseCase)
+  .to(UpdateSubscriptionUseCase)
   .inSingletonScope();
 
 container.bind<CommandBus>(TYPES.CommandBus).to(CommandBus).inSingletonScope();
@@ -277,6 +295,10 @@ container.bind<WhatsAppService>(TYPES.WhatsAppService).to(WhatsAppService).inSin
 container
   .bind<EconomyService>(TYPES.EconomyService)
   .to(EconomyService)
+  .inSingletonScope();
+container
+  .bind<EconomyChartService>(TYPES.EconomyChartService)
+  .to(EconomyChartService)
   .inSingletonScope();
 container
   .bind<SovereignVaultService>(TYPES.SovereignVaultService)

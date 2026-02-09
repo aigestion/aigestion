@@ -20,7 +20,7 @@ console.log('[DEBUG] users.routes.ts: Router created');
 
 /**
  * @openapi
- * /users:
+ * /api/v1/users:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
@@ -38,7 +38,7 @@ router.post('/', validate({ body: schemas.user.create }), createUser);
 // router.post('/', createUser);
 /**
  * @openapi
- * /users:
+ * /api/v1/users:
  *   get:
  *     summary: Retrieve all users
  *     tags: [Users]
@@ -50,7 +50,7 @@ import { validatePagination } from '../middleware/pagination.middleware';
 router.get('/', validatePagination, getAllUsers);
 /**
  * @openapi
- * /users/{id}:
+ * /api/v1/users/{id}:
  *   get:
  *     summary: Get user by ID
  *     tags: [Users]
@@ -69,7 +69,7 @@ router.get('/', validatePagination, getAllUsers);
 router.get('/:id', validateParams(schemas.common.id), getUserById);
 /**
  * @openapi
- * /users/{id}:
+ * /api/v1/users/{id}:
  *   put:
  *     summary: Update user by ID
  *     tags: [Users]
@@ -99,7 +99,7 @@ router.put(
 );
 /**
  * @openapi
- * /users/{id}:
+ * /api/v1/users/{id}:
  *   delete:
  *     summary: Delete user by ID
  *     tags: [Users]

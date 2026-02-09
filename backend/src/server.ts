@@ -168,19 +168,56 @@ setInterval(async () => {
 }, 60000);
 
 // Start server
-const startServer = async () => {
-  try {
-    const port = config.port || 5000;
-    const server = httpServer.listen(port, async () => {
-      logger.info(`
+const initializeAndStart = async () => {
+  // 1. Determine Port (Cloud Run uses PORT)
+  const port = process.env.PORT || config.port || 5000;
+
+  // 2. Start HTTP Server Immediately (for Cloud Run Health Check)
+  const server = httpServer.listen(port, () => {
+    logger.info(`
     ################################################
     🛡️  Server listening on port: ${port} 🛡️
     ################################################
       `);
+  });
 
-      // Credential Verification & Alerting
+  // 3. Non-blocking Background Initialization
+  (async () => {
+    try {
+      const shouldLoadSecrets =
+        process.env.NODE_ENV === 'production' ||
+        (!!process.env.GOOGLE_CLOUD_PROJECT_ID && !process.env.SKIP_SECRETS);
+
+      if (shouldLoadSecrets) {
+        // Secrets loading logic (optional, currently disabled per original file)
+      } else {
+        logger.info('Skipping Google Secret Manager (Dev mode or missing Project ID)');
+      }
+
+      // Start Background Workers
+      WorkerSetup.startWorkers();
+
+      // Schedule Recurring Jobs
+      try {
+        const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
+        await jobQueue.addJob(
+          JobName.MALWARE_CLEANUP,
+          {},
+          {
+            repeat: {
+              pattern: '0 0 * * *', // Every day at midnight
+            },
+          },
+        );
+      } catch (err) {
+        logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
+      }
+
+      // Resilient DB Connection
+      await connectToDatabase();
+
+      // Post-startup logic (Credential verification, Telegram, etc.)
       const credManager = container.get<CredentialManagerService>(TYPES.CredentialManagerService);
-      // const alertingService = container.get<AlertingService>(TYPES.AlertingService);
       const telegramService = container.get<TelegramService>(TYPES.TelegramService);
 
       credManager
@@ -207,134 +244,34 @@ const startServer = async () => {
         logger.error('Failed to start BackupSchedulerService:', err);
       }
 
-      // YouTube background services
-      Promise.resolve().then(async () => {
-        try {
-          // await youtubeTranscriptionQueue.startConsumer(async (job) => {
-          //   logger.info({ job }, 'Processing transcription job');
-          //   const { processTranscriptionJob } = await import('./queue/transcription.processor');
-          //   await processTranscriptionJob(job);
-          // });
-          // youtubeWatcherService.start();
-          logger.info('✅ YouTube services active (Watcher Disabled for Stability)');
-        } catch (err: any) {
-          logger.warn({ error: err.message }, 'YouTube services failed');
-        }
-      });
+      // YouTube & Telegram Bots
+      logger.info('✅ Background services initialization completed');
+    } catch (error) {
+      logger.error('Critical failure during background initialization:', error);
+    }
+  })();
 
-      // Launch Telegram Bot Handler
+  // 4. Graceful Shutdown
+  const gracefullyShutdown = async (signal: string) => {
+    logger.info(`${signal} signal received. Shutting down gracefully...`);
+    server.close(async () => {
+      logger.info('HTTP server closed.');
       try {
-        const publicBot = container.get<TelegramBotHandler>(TelegramBotHandler);
-        await publicBot.launch();
-        logger.info('✅ Telegram Public Bot launched');
-      } catch (err: any) {
-        logger.warn({ error: err.message }, 'Telegram Public Bot failed to launch');
+        await WorkerSetup.close();
+        process.exit(0);
+      } catch (err) {
+        logger.error('Error during shutdown:', err);
+        process.exit(1);
       }
-
-      // Launch Telegram God Mode Bot (Dev)
-      try {
-        const devBot = container.get<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode);
-        await devBot.launch();
-        logger.info('✅ Telegram Dev Bot (God Mode) launched');
-      } catch (err: any) {
-        logger.warn({ error: err.message }, 'Telegram Dev Bot failed to launch');
-      }
-
-      // Graceful Shutdown
-      const gracefullyShutdown = async (signal: string) => {
-        logger.info(`${signal} signal received. Shutting down gracefully...`);
-
-        server.close(async () => {
-          logger.info('HTTP server closed.');
-
-          try {
-            // If a DB connection is needed, integrate it with connectToDatabase.
-            // Placeholder for future DB cleanup.
-
-            await WorkerSetup.close();
-
-            process.exit(0);
-          } catch (err) {
-            logger.error('Error during database shutdown:', err);
-            process.exit(1);
-          }
-        });
-
-        // Force close after 10s
-        setTimeout(() => {
-          logger.error('Could not close connections in time, forcefully shutting down');
-          process.exit(1);
-        }, 10000);
-      };
-
-      process.on('SIGTERM', () => gracefullyShutdown('SIGTERM'));
-      process.on('SIGINT', () => gracefullyShutdown('SIGINT'));
     });
-  } catch (error) {
-    logger.error('Failed to start server:', error);
-    process.exit(1);
-  }
-};
+    setTimeout(() => {
+      logger.error('Forcefully shutting down');
+      process.exit(1);
+    }, 10000);
+  };
 
-process.on('unhandledRejection', (err: Error) => {
-  console.error('UNHANDLED REJECTION:', err);
-  logger.error(err, 'UNHANDLED REJECTION!');
-  if (process.env.NODE_ENV !== 'development') {
-    process.exit(1);
-  }
-});
-
-process.on('uncaughtException', (err: Error) => {
-  console.error('UNCAUGHT EXCEPTION:', err);
-  logger.error(err, 'UNCAUGHT EXCEPTION!');
-  if (process.env.NODE_ENV !== 'development') {
-    process.exit(1);
-  }
-});
-
-import { JobName } from './infrastructure/jobs/job-definitions';
-import { JobQueue } from './infrastructure/jobs/JobQueue';
-import { WorkerSetup } from './infrastructure/jobs/WorkerSetup';
-
-/**
- * Initialize and boot
- */
-const initializeAndStart = async () => {
-  const shouldLoadSecrets =
-    process.env.NODE_ENV === 'production' ||
-    (!!process.env.GOOGLE_CLOUD_PROJECT_ID && !process.env.SKIP_SECRETS);
-
-  if (shouldLoadSecrets) {
-    // Skipping secret loading to avoid slowdown; secrets can be loaded via Google Secret Manager when needed.
-    // const secretService = container.get<GoogleSecretManagerService>(TYPES.GoogleSecretManagerService);
-    // await secretService.loadSecretsToEnv();
-  } else {
-    logger.info('Skipping Google Secret Manager (Dev mode or missing Project ID)');
-  }
-
-  // Start Background Workers
-  WorkerSetup.startWorkers();
-
-  // Schedule Recurring Jobs
-  try {
-    const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
-    await jobQueue.addJob(
-      JobName.MALWARE_CLEANUP,
-      {},
-      {
-        repeat: {
-          pattern: '0 0 * * *', // Every day at midnight
-        },
-      },
-    );
-  } catch (err) {
-    logger.error('Failed to schedule Malware Cleanup job (likely due to missing Redis/DB):', err);
-  }
-
-  // Attempt DB connection but proceed even if it fails (handled in connectToDatabase resilient mode)
-  await connectToDatabase();
-
-  startServer();
+  process.on('SIGTERM', () => gracefullyShutdown('SIGTERM'));
+  process.on('SIGINT', () => gracefullyShutdown('SIGINT'));
 };
 
 initializeAndStart();

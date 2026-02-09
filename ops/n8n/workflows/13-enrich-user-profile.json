@@ -1,0 +1,71 @@
+{
+  "name": "13-enrich-user-profile",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "enrich-user",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://person.clearbit.com/v2/people/find?email={{$node[\"Webhook\"].json[\"body\"][\"email\"]}}",
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{$env[\"CLEARBIT_KEY\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Clearbit",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "id": "={{$node[\"Webhook\"].json[\"body\"][\"id\"]}}",
+        "updateFields": {
+          "company": "={{$node[\"Clearbit\"].json[\"employment\"][\"name\"]}}",
+          "role": "={{$node[\"Clearbit\"].json[\"employment\"][\"title\"]}}"
+        }
+      },
+      "name": "Update CRM",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Clearbit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clearbit": {
+      "main": [
+        [
+          {
+            "node": "Update CRM",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

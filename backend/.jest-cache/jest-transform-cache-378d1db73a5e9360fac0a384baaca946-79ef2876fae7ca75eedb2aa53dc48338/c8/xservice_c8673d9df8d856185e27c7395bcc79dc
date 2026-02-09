@@ -1,0 +1,51 @@
+05c1b26465e26d25b86ee3d2789a15e0
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.XService = void 0;
+const axios_1 = __importDefault(require("axios"));
+const typedi_1 = require("typedi");
+const env_schema_1 = require("../config/env.schema");
+const logger_1 = require("../utils/logger");
+let XService = class XService {
+    baseUrl = 'https://api.twitter.com/2';
+    /**
+     * Post a tweet using Twitter API v2
+     */
+    async postTweet(text) {
+        if (!env_schema_1.env.X_ACCESS_TOKEN) {
+            // Note: For v2, typically OAuth 2.0 User Context (Access Token) is needed
+            logger_1.logger.warn('X_ACCESS_TOKEN not configured');
+            return { success: false, error: 'Configuration missing' };
+        }
+        try {
+            const response = await axios_1.default.post(`${this.baseUrl}/tweets`, {
+                text: text,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${env_schema_1.env.X_ACCESS_TOKEN}`, // Assuming OAuth2 Bearer Token for User Context
+                    'Content-Type': 'application/json',
+                },
+            });
+            logger_1.logger.info(`Tweet posted: ${response.data.data?.id}`);
+            return response.data;
+        }
+        catch (error) {
+            logger_1.logger.error({ error: error.response?.data || error.message }, 'Error posting to X');
+            throw error;
+        }
+    }
+};
+exports.XService = XService;
+exports.XService = XService = __decorate([
+    (0, typedi_1.Service)()
+], XService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xceC5zZXJ2aWNlLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7OztBQUFBLGtEQUEwQjtBQUMxQixtQ0FBaUM7QUFFakMscURBQTJDO0FBQzNDLDRDQUF5QztBQUdsQyxJQUFNLFFBQVEsR0FBZCxNQUFNLFFBQVE7SUFDRixPQUFPLEdBQUcsMkJBQTJCLENBQUM7SUFFdkQ7O09BRUc7SUFDSCxLQUFLLENBQUMsU0FBUyxDQUFDLElBQVk7UUFDMUIsSUFBSSxDQUFDLGdCQUFHLENBQUMsY0FBYyxFQUFFLENBQUM7WUFDeEIsMEVBQTBFO1lBQzFFLGVBQU0sQ0FBQyxJQUFJLENBQUMsK0JBQStCLENBQUMsQ0FBQztZQUM3QyxPQUFPLEVBQUUsT0FBTyxFQUFFLEtBQUssRUFBRSxLQUFLLEVBQUUsdUJBQXVCLEVBQUUsQ0FBQztRQUM1RCxDQUFDO1FBRUQsSUFBSSxDQUFDO1lBQ0gsTUFBTSxRQUFRLEdBQUcsTUFBTSxlQUFLLENBQUMsSUFBSSxDQUMvQixHQUFHLElBQUksQ0FBQyxPQUFPLFNBQVMsRUFDeEI7Z0JBQ0UsSUFBSSxFQUFFLElBQUk7YUFDWCxFQUNEO2dCQUNFLE9BQU8sRUFBRTtvQkFDUCxhQUFhLEVBQUUsVUFBVSxnQkFBRyxDQUFDLGNBQWMsRUFBRSxFQUFFLGdEQUFnRDtvQkFDL0YsY0FBYyxFQUFFLGtCQUFrQjtpQkFDbkM7YUFDRixDQUNGLENBQUM7WUFFRixlQUFNLENBQUMsSUFBSSxDQUFDLGlCQUFpQixRQUFRLENBQUMsSUFBSSxDQUFDLElBQUksRUFBRSxFQUFFLEVBQUUsQ0FBQyxDQUFDO1lBQ3ZELE9BQU8sUUFBUSxDQUFDLElBQUksQ0FBQztRQUN2QixDQUFDO1FBQUMsT0FBTyxLQUFVLEVBQUUsQ0FBQztZQUNwQixlQUFNLENBQUMsS0FBSyxDQUFDLEVBQUUsS0FBSyxFQUFFLEtBQUssQ0FBQyxRQUFRLEVBQUUsSUFBSSxJQUFJLEtBQUssQ0FBQyxPQUFPLEVBQUUsRUFBRSxvQkFBb0IsQ0FBQyxDQUFDO1lBQ3JGLE1BQU0sS0FBSyxDQUFDO1FBQ2QsQ0FBQztJQUNILENBQUM7Q0FDRixDQUFBO0FBbENZLDRCQUFRO21CQUFSLFFBQVE7SUFEcEIsSUFBQSxnQkFBTyxHQUFFO0dBQ0csUUFBUSxDQWtDcEIiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xceC5zZXJ2aWNlLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBheGlvcyBmcm9tICdheGlvcyc7XG5pbXBvcnQgeyBTZXJ2aWNlIH0gZnJvbSAndHlwZWRpJztcblxuaW1wb3J0IHsgZW52IH0gZnJvbSAnLi4vY29uZmlnL2Vudi5zY2hlbWEnO1xuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcblxuQFNlcnZpY2UoKVxuZXhwb3J0IGNsYXNzIFhTZXJ2aWNlIHtcbiAgcHJpdmF0ZSByZWFkb25seSBiYXNlVXJsID0gJ2h0dHBzOi8vYXBpLnR3aXR0ZXIuY29tLzInO1xuXG4gIC8qKlxuICAgKiBQb3N0IGEgdHdlZXQgdXNpbmcgVHdpdHRlciBBUEkgdjJcbiAgICovXG4gIGFzeW5jIHBvc3RUd2VldCh0ZXh0OiBzdHJpbmcpOiBQcm9taXNlPGFueT4ge1xuICAgIGlmICghZW52LlhfQUNDRVNTX1RPS0VOKSB7XG4gICAgICAvLyBOb3RlOiBGb3IgdjIsIHR5cGljYWxseSBPQXV0aCAyLjAgVXNlciBDb250ZXh0IChBY2Nlc3MgVG9rZW4pIGlzIG5lZWRlZFxuICAgICAgbG9nZ2VyLndhcm4oJ1hfQUNDRVNTX1RPS0VOIG5vdCBjb25maWd1cmVkJyk7XG4gICAgICByZXR1cm4geyBzdWNjZXNzOiBmYWxzZSwgZXJyb3I6ICdDb25maWd1cmF0aW9uIG1pc3NpbmcnIH07XG4gICAgfVxuXG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgYXhpb3MucG9zdChcbiAgICAgICAgYCR7dGhpcy5iYXNlVXJsfS90d2VldHNgLFxuICAgICAgICB7XG4gICAgICAgICAgdGV4dDogdGV4dCxcbiAgICAgICAgfSxcbiAgICAgICAge1xuICAgICAgICAgIGhlYWRlcnM6IHtcbiAgICAgICAgICAgIEF1dGhvcml6YXRpb246IGBCZWFyZXIgJHtlbnYuWF9BQ0NFU1NfVE9LRU59YCwgLy8gQXNzdW1pbmcgT0F1dGgyIEJlYXJlciBUb2tlbiBmb3IgVXNlciBDb250ZXh0XG4gICAgICAgICAgICAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nLFxuICAgICAgICAgIH0sXG4gICAgICAgIH0sXG4gICAgICApO1xuXG4gICAgICBsb2dnZXIuaW5mbyhgVHdlZXQgcG9zdGVkOiAke3Jlc3BvbnNlLmRhdGEuZGF0YT8uaWR9YCk7XG4gICAgICByZXR1cm4gcmVzcG9uc2UuZGF0YTtcbiAgICB9IGNhdGNoIChlcnJvcjogYW55KSB7XG4gICAgICBsb2dnZXIuZXJyb3IoeyBlcnJvcjogZXJyb3IucmVzcG9uc2U/LmRhdGEgfHwgZXJyb3IubWVzc2FnZSB9LCAnRXJyb3IgcG9zdGluZyB0byBYJyk7XG4gICAgICB0aHJvdyBlcnJvcjtcbiAgICB9XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

@@ -1,0 +1,52 @@
+230a79919e464dc9ba254ec72a8ef8dc
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreatePersonaUseCase = void 0;
+const inversify_1 = require("inversify");
+const types_1 = require("../../../types");
+const PersonaRepository_1 = require("../../../infrastructure/repository/PersonaRepository");
+const errors_1 = require("../../../utils/errors");
+let CreatePersonaUseCase = class CreatePersonaUseCase {
+    personaRepository;
+    constructor(personaRepository) {
+        this.personaRepository = personaRepository;
+    }
+    async execute(data) {
+        // Basic validation
+        if (!data.name || !data.systemPrompt || !data.voiceSettings) {
+            throw new errors_1.AppError('Missing required fields', 400, 'VALIDATION_ERROR');
+        }
+        if (data.voiceSettings.provider !== 'elevenlabs' && data.voiceSettings.provider !== 'openai') {
+            // Allow other providers but maybe warn or validate later?
+            // For now, strict check to specific supported providers could be good, or just open.
+            // Let's keep it open but ensure provider is defined.
+        }
+        const persona = await this.personaRepository.create({
+            ...data,
+            price: data.price ?? 0,
+            isPublic: data.isPublic ?? false,
+            tags: data.tags ?? [],
+        }); // Type assertion needed due to Partial<IPersona> vs explicit DTO match
+        return persona;
+    }
+};
+exports.CreatePersonaUseCase = CreatePersonaUseCase;
+exports.CreatePersonaUseCase = CreatePersonaUseCase = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.PersonaRepository)),
+    __metadata("design:paramtypes", [typeof (_a = typeof PersonaRepository_1.IPersonaRepository !== "undefined" && PersonaRepository_1.IPersonaRepository) === "function" ? _a : Object])
+], CreatePersonaUseCase);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxhcHBsaWNhdGlvblxcdXNlY2FzZXNcXHBlcnNvbmFcXENyZWF0ZVBlcnNvbmFVc2VDYXNlLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSx5Q0FBK0M7QUFDL0MsMENBQXVDO0FBQ3ZDLDRGQUEwRjtBQUUxRixrREFBaUQ7QUFrQjFDLElBQU0sb0JBQW9CLEdBQTFCLE1BQU0sb0JBQW9CO0lBQ3NCO0lBQXJELFlBQXFELGlCQUFxQztRQUFyQyxzQkFBaUIsR0FBakIsaUJBQWlCLENBQW9CO0lBQUcsQ0FBQztJQUU5RixLQUFLLENBQUMsT0FBTyxDQUFDLElBQXNCO1FBQ2xDLG1CQUFtQjtRQUNuQixJQUFJLENBQUMsSUFBSSxDQUFDLElBQUksSUFBSSxDQUFDLElBQUksQ0FBQyxZQUFZLElBQUksQ0FBQyxJQUFJLENBQUMsYUFBYSxFQUFFLENBQUM7WUFDNUQsTUFBTSxJQUFJLGlCQUFRLENBQUMseUJBQXlCLEVBQUUsR0FBRyxFQUFFLGtCQUFrQixDQUFDLENBQUM7UUFDekUsQ0FBQztRQUVELElBQUksSUFBSSxDQUFDLGFBQWEsQ0FBQyxRQUFRLEtBQUssWUFBWSxJQUFJLElBQUksQ0FBQyxhQUFhLENBQUMsUUFBUSxLQUFLLFFBQVEsRUFBRSxDQUFDO1lBQzdGLDBEQUEwRDtZQUMxRCxxRkFBcUY7WUFDckYscURBQXFEO1FBQ3ZELENBQUM7UUFFRCxNQUFNLE9BQU8sR0FBRyxNQUFNLElBQUksQ0FBQyxpQkFBaUIsQ0FBQyxNQUFNLENBQUM7WUFDbEQsR0FBRyxJQUFJO1lBQ1AsS0FBSyxFQUFFLElBQUksQ0FBQyxLQUFLLElBQUksQ0FBQztZQUN0QixRQUFRLEVBQUUsSUFBSSxDQUFDLFFBQVEsSUFBSSxLQUFLO1lBQ2hDLElBQUksRUFBRSxJQUFJLENBQUMsSUFBSSxJQUFJLEVBQUU7U0FDZixDQUFDLENBQUMsQ0FBQyx1RUFBdUU7UUFFbEYsT0FBTyxPQUFPLENBQUM7SUFDakIsQ0FBQztDQUNGLENBQUE7QUF4Qlksb0RBQW9COytCQUFwQixvQkFBb0I7SUFEaEMsSUFBQSxzQkFBVSxHQUFFO0lBRUUsV0FBQSxJQUFBLGtCQUFNLEVBQUMsYUFBSyxDQUFDLGlCQUFpQixDQUFDLENBQUE7eURBQTRCLHNDQUFrQixvQkFBbEIsc0NBQWtCO0dBRC9FLG9CQUFvQixDQXdCaEMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxhcHBsaWNhdGlvblxcdXNlY2FzZXNcXHBlcnNvbmFcXENyZWF0ZVBlcnNvbmFVc2VDYXNlLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGluamVjdGFibGUsIGluamVjdCB9IGZyb20gJ2ludmVyc2lmeSc7XG5pbXBvcnQgeyBUWVBFUyB9IGZyb20gJy4uLy4uLy4uL3R5cGVzJztcbmltcG9ydCB7IElQZXJzb25hUmVwb3NpdG9yeSB9IGZyb20gJy4uLy4uLy4uL2luZnJhc3RydWN0dXJlL3JlcG9zaXRvcnkvUGVyc29uYVJlcG9zaXRvcnknO1xuaW1wb3J0IHsgSVBlcnNvbmEgfSBmcm9tICcuLi8uLi8uLi9tb2RlbHMvUGVyc29uYSc7XG5pbXBvcnQgeyBBcHBFcnJvciB9IGZyb20gJy4uLy4uLy4uL3V0aWxzL2Vycm9ycyc7XG5cbmV4cG9ydCBpbnRlcmZhY2UgQ3JlYXRlUGVyc29uYUR0byB7XG4gIG5hbWU6IHN0cmluZztcbiAgZGVzY3JpcHRpb246IHN0cmluZztcbiAgc3lzdGVtUHJvbXB0OiBzdHJpbmc7XG4gIHZvaWNlU2V0dGluZ3M6IHtcbiAgICBwcm92aWRlcjogc3RyaW5nO1xuICAgIHZvaWNlSWQ6IHN0cmluZztcbiAgICBzZXR0aW5ncz86IGFueTtcbiAgfTtcbiAgcHJpY2U/OiBudW1iZXI7XG4gIGlzUHVibGljPzogYm9vbGVhbjtcbiAgdGFncz86IHN0cmluZ1tdO1xuICBvd25lcklkOiBzdHJpbmc7XG59XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBDcmVhdGVQZXJzb25hVXNlQ2FzZSB7XG4gIGNvbnN0cnVjdG9yKEBpbmplY3QoVFlQRVMuUGVyc29uYVJlcG9zaXRvcnkpIHByaXZhdGUgcGVyc29uYVJlcG9zaXRvcnk6IElQZXJzb25hUmVwb3NpdG9yeSkge31cblxuICBhc3luYyBleGVjdXRlKGRhdGE6IENyZWF0ZVBlcnNvbmFEdG8pOiBQcm9taXNlPElQZXJzb25hPiB7XG4gICAgLy8gQmFzaWMgdmFsaWRhdGlvblxuICAgIGlmICghZGF0YS5uYW1lIHx8ICFkYXRhLnN5c3RlbVByb21wdCB8fCAhZGF0YS52b2ljZVNldHRpbmdzKSB7XG4gICAgICB0aHJvdyBuZXcgQXBwRXJyb3IoJ01pc3NpbmcgcmVxdWlyZWQgZmllbGRzJywgNDAwLCAnVkFMSURBVElPTl9FUlJPUicpO1xuICAgIH1cblxuICAgIGlmIChkYXRhLnZvaWNlU2V0dGluZ3MucHJvdmlkZXIgIT09ICdlbGV2ZW5sYWJzJyAmJiBkYXRhLnZvaWNlU2V0dGluZ3MucHJvdmlkZXIgIT09ICdvcGVuYWknKSB7XG4gICAgICAvLyBBbGxvdyBvdGhlciBwcm92aWRlcnMgYnV0IG1heWJlIHdhcm4gb3IgdmFsaWRhdGUgbGF0ZXI/XG4gICAgICAvLyBGb3Igbm93LCBzdHJpY3QgY2hlY2sgdG8gc3BlY2lmaWMgc3VwcG9ydGVkIHByb3ZpZGVycyBjb3VsZCBiZSBnb29kLCBvciBqdXN0IG9wZW4uXG4gICAgICAvLyBMZXQncyBrZWVwIGl0IG9wZW4gYnV0IGVuc3VyZSBwcm92aWRlciBpcyBkZWZpbmVkLlxuICAgIH1cblxuICAgIGNvbnN0IHBlcnNvbmEgPSBhd2FpdCB0aGlzLnBlcnNvbmFSZXBvc2l0b3J5LmNyZWF0ZSh7XG4gICAgICAuLi5kYXRhLFxuICAgICAgcHJpY2U6IGRhdGEucHJpY2UgPz8gMCxcbiAgICAgIGlzUHVibGljOiBkYXRhLmlzUHVibGljID8/IGZhbHNlLFxuICAgICAgdGFnczogZGF0YS50YWdzID8/IFtdLFxuICAgIH0gYXMgYW55KTsgLy8gVHlwZSBhc3NlcnRpb24gbmVlZGVkIGR1ZSB0byBQYXJ0aWFsPElQZXJzb25hPiB2cyBleHBsaWNpdCBEVE8gbWF0Y2hcblxuICAgIHJldHVybiBwZXJzb25hO1xuICB9XG59XG4iXSwidmVyc2lvbiI6M30=

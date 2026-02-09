@@ -1,0 +1,58 @@
+67c5f95d70442c58e1aa2946bdd37612
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const inversify_config_1 = require("../config/inversify.config");
+const router = (0, express_1.Router)();
+const controller = inversify_config_1.container.get(inversify_config_1.TYPES.GodModeController);
+/**
+ * @openapi
+ * /god-mode/projects:
+ *   get:
+ *     summary: List all AI projects
+ *     tags: [God Mode]
+ */
+router.get('/projects', (req, res, next) => controller.listProjects(req, res, next));
+router.post('/projects', (req, res, next) => controller.createProject(req, res, next));
+/**
+ * @openapi
+ * /god-mode/search:
+ *   post:
+ *     summary: Execute Hybrid Search (Vector + Full Text)
+ *     tags: [God Mode]
+ */
+router.post('/search', (req, res, next) => controller.hybridSearch(req, res, next));
+/**
+ * @openapi
+ * /god-mode/prompts:
+ *   get:
+ *     summary: List all available prompt templates
+ *     tags: [God Mode]
+ */
+router.get('/prompts', (req, res, next) => controller.listPrompts(req, res, next));
+/**
+ * @openapi
+ * /god-mode/prompts/:name:
+ *   get:
+ *     summary: Get a specific prompt template by name
+ *     tags: [God Mode]
+ */
+router.get('/prompts/:name', (req, res, next) => controller.getPrompt(req, res, next));
+/**
+ * @openapi
+ * /god-mode/audit:
+ *   get:
+ *     summary: View recent audit logs
+ *     tags: [God Mode]
+ */
+router.get('/audit', (req, res, next) => controller.getAuditLogs(req, res, next));
+/**
+ * @openapi
+ * /god-mode/test-notification:
+ *   post:
+ *     summary: Test sovereign notification channels
+ *     tags: [God Mode]
+ */
+router.post('/test-notification', (req, res, next) => controller.testNotification(req, res, next));
+exports.default = router;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxyb3V0ZXNcXGdvZG1vZGUucm91dGVzLnRzIiwibWFwcGluZ3MiOiI7O0FBQUEscUNBQWlDO0FBQ2pDLGlFQUE4RDtBQUc5RCxNQUFNLE1BQU0sR0FBRyxJQUFBLGdCQUFNLEdBQUUsQ0FBQztBQUN4QixNQUFNLFVBQVUsR0FBRyw0QkFBUyxDQUFDLEdBQUcsQ0FBb0Isd0JBQUssQ0FBQyxpQkFBaUIsQ0FBQyxDQUFDO0FBRTdFOzs7Ozs7R0FNRztBQUNILE1BQU0sQ0FBQyxHQUFHLENBQUMsV0FBVyxFQUFFLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLEVBQUUsRUFBRSxDQUFDLFVBQVUsQ0FBQyxZQUFZLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDO0FBQ3JGLE1BQU0sQ0FBQyxJQUFJLENBQUMsV0FBVyxFQUFFLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLEVBQUUsRUFBRSxDQUFDLFVBQVUsQ0FBQyxhQUFhLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDO0FBRXZGOzs7Ozs7R0FNRztBQUNILE1BQU0sQ0FBQyxJQUFJLENBQUMsU0FBUyxFQUFFLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLEVBQUUsRUFBRSxDQUFDLFVBQVUsQ0FBQyxZQUFZLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDO0FBRXBGOzs7Ozs7R0FNRztBQUNILE1BQU0sQ0FBQyxHQUFHLENBQUMsVUFBVSxFQUFFLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLEVBQUUsRUFBRSxDQUFDLFVBQVUsQ0FBQyxXQUFXLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDO0FBRW5GOzs7Ozs7R0FNRztBQUNILE1BQU0sQ0FBQyxHQUFHLENBQUMsZ0JBQWdCLEVBQUUsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLElBQUksRUFBRSxFQUFFLENBQUMsVUFBVSxDQUFDLFNBQVMsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLElBQUksQ0FBQyxDQUFDLENBQUM7QUFFdkY7Ozs7OztHQU1HO0FBQ0gsTUFBTSxDQUFDLEdBQUcsQ0FBQyxRQUFRLEVBQUUsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLElBQUksRUFBRSxFQUFFLENBQUMsVUFBVSxDQUFDLFlBQVksQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLElBQUksQ0FBQyxDQUFDLENBQUM7QUFFbEY7Ozs7OztHQU1HO0FBQ0gsTUFBTSxDQUFDLElBQUksQ0FBQyxvQkFBb0IsRUFBRSxDQUFDLEdBQUcsRUFBRSxHQUFHLEVBQUUsSUFBSSxFQUFFLEVBQUUsQ0FBQyxVQUFVLENBQUMsZ0JBQWdCLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDO0FBRW5HLGtCQUFlLE1BQU0sQ0FBQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJDOlxcVXNlcnNcXEFsZWphbmRyb1xcQUlHZXN0aW9uXFxiYWNrZW5kXFxzcmNcXHJvdXRlc1xcZ29kbW9kZS5yb3V0ZXMudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgUm91dGVyIH0gZnJvbSAnZXhwcmVzcyc7XG5pbXBvcnQgeyBjb250YWluZXIsIFRZUEVTIH0gZnJvbSAnLi4vY29uZmlnL2ludmVyc2lmeS5jb25maWcnO1xuaW1wb3J0IHsgR29kTW9kZUNvbnRyb2xsZXIgfSBmcm9tICcuLi9jb250cm9sbGVycy9nb2Rtb2RlLmNvbnRyb2xsZXInO1xuXG5jb25zdCByb3V0ZXIgPSBSb3V0ZXIoKTtcbmNvbnN0IGNvbnRyb2xsZXIgPSBjb250YWluZXIuZ2V0PEdvZE1vZGVDb250cm9sbGVyPihUWVBFUy5Hb2RNb2RlQ29udHJvbGxlcik7XG5cbi8qKlxuICogQG9wZW5hcGlcbiAqIC9nb2QtbW9kZS9wcm9qZWN0czpcbiAqICAgZ2V0OlxuICogICAgIHN1bW1hcnk6IExpc3QgYWxsIEFJIHByb2plY3RzXG4gKiAgICAgdGFnczogW0dvZCBNb2RlXVxuICovXG5yb3V0ZXIuZ2V0KCcvcHJvamVjdHMnLCAocmVxLCByZXMsIG5leHQpID0+IGNvbnRyb2xsZXIubGlzdFByb2plY3RzKHJlcSwgcmVzLCBuZXh0KSk7XG5yb3V0ZXIucG9zdCgnL3Byb2plY3RzJywgKHJlcSwgcmVzLCBuZXh0KSA9PiBjb250cm9sbGVyLmNyZWF0ZVByb2plY3QocmVxLCByZXMsIG5leHQpKTtcblxuLyoqXG4gKiBAb3BlbmFwaVxuICogL2dvZC1tb2RlL3NlYXJjaDpcbiAqICAgcG9zdDpcbiAqICAgICBzdW1tYXJ5OiBFeGVjdXRlIEh5YnJpZCBTZWFyY2ggKFZlY3RvciArIEZ1bGwgVGV4dClcbiAqICAgICB0YWdzOiBbR29kIE1vZGVdXG4gKi9cbnJvdXRlci5wb3N0KCcvc2VhcmNoJywgKHJlcSwgcmVzLCBuZXh0KSA9PiBjb250cm9sbGVyLmh5YnJpZFNlYXJjaChyZXEsIHJlcywgbmV4dCkpO1xuXG4vKipcbiAqIEBvcGVuYXBpXG4gKiAvZ29kLW1vZGUvcHJvbXB0czpcbiAqICAgZ2V0OlxuICogICAgIHN1bW1hcnk6IExpc3QgYWxsIGF2YWlsYWJsZSBwcm9tcHQgdGVtcGxhdGVzXG4gKiAgICAgdGFnczogW0dvZCBNb2RlXVxuICovXG5yb3V0ZXIuZ2V0KCcvcHJvbXB0cycsIChyZXEsIHJlcywgbmV4dCkgPT4gY29udHJvbGxlci5saXN0UHJvbXB0cyhyZXEsIHJlcywgbmV4dCkpO1xuXG4vKipcbiAqIEBvcGVuYXBpXG4gKiAvZ29kLW1vZGUvcHJvbXB0cy86bmFtZTpcbiAqICAgZ2V0OlxuICogICAgIHN1bW1hcnk6IEdldCBhIHNwZWNpZmljIHByb21wdCB0ZW1wbGF0ZSBieSBuYW1lXG4gKiAgICAgdGFnczogW0dvZCBNb2RlXVxuICovXG5yb3V0ZXIuZ2V0KCcvcHJvbXB0cy86bmFtZScsIChyZXEsIHJlcywgbmV4dCkgPT4gY29udHJvbGxlci5nZXRQcm9tcHQocmVxLCByZXMsIG5leHQpKTtcblxuLyoqXG4gKiBAb3BlbmFwaVxuICogL2dvZC1tb2RlL2F1ZGl0OlxuICogICBnZXQ6XG4gKiAgICAgc3VtbWFyeTogVmlldyByZWNlbnQgYXVkaXQgbG9nc1xuICogICAgIHRhZ3M6IFtHb2QgTW9kZV1cbiAqL1xucm91dGVyLmdldCgnL2F1ZGl0JywgKHJlcSwgcmVzLCBuZXh0KSA9PiBjb250cm9sbGVyLmdldEF1ZGl0TG9ncyhyZXEsIHJlcywgbmV4dCkpO1xuXG4vKipcbiAqIEBvcGVuYXBpXG4gKiAvZ29kLW1vZGUvdGVzdC1ub3RpZmljYXRpb246XG4gKiAgIHBvc3Q6XG4gKiAgICAgc3VtbWFyeTogVGVzdCBzb3ZlcmVpZ24gbm90aWZpY2F0aW9uIGNoYW5uZWxzXG4gKiAgICAgdGFnczogW0dvZCBNb2RlXVxuICovXG5yb3V0ZXIucG9zdCgnL3Rlc3Qtbm90aWZpY2F0aW9uJywgKHJlcSwgcmVzLCBuZXh0KSA9PiBjb250cm9sbGVyLnRlc3ROb3RpZmljYXRpb24ocmVxLCByZXMsIG5leHQpKTtcblxuZXhwb3J0IGRlZmF1bHQgcm91dGVyO1xuIl0sInZlcnNpb24iOjN9

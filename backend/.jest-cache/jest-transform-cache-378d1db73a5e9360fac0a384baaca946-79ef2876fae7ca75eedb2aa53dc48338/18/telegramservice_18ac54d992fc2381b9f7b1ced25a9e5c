@@ -1,0 +1,81 @@
+6daf6b93a85c3fae5e7f1ef0abdeeca2
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TelegramService = void 0;
+const telegraf_1 = require("telegraf");
+const inversify_1 = require("inversify");
+const env_schema_1 = require("../config/env.schema");
+const logger_1 = require("../utils/logger");
+let TelegramService = class TelegramService {
+    bot = null;
+    defaultChatId;
+    constructor() {
+        this.initialize();
+    }
+    initialize() {
+        if (env_schema_1.env.TELEGRAM_BOT_TOKEN) {
+            try {
+                this.bot = new telegraf_1.Telegraf(env_schema_1.env.TELEGRAM_BOT_TOKEN);
+                this.defaultChatId = env_schema_1.env.TELEGRAM_CHAT_ID;
+                logger_1.logger.info('Telegram Bot initialized');
+            }
+            catch (error) {
+                logger_1.logger.error('Failed to initialize Telegram Bot', error);
+            }
+        }
+        else {
+            logger_1.logger.warn('TELEGRAM_BOT_TOKEN not provided. Telegram notifications disabled.');
+        }
+    }
+    /**
+     * Send a text message to a chat
+     * @param chatId Optional chat ID. If not provided, uses the default env CHAT_ID.
+     * @param message Message content
+     */
+    async sendMessage(message, chatId) {
+        const targetChatId = chatId || this.defaultChatId;
+        if (!this.bot || !targetChatId) {
+            logger_1.logger.warn('Cannot send Telegram message: Bot not initialized or Chat ID missing');
+            return;
+        }
+        try {
+            await this.bot.telegram.sendMessage(targetChatId, message);
+            logger_1.logger.info(`Telegram message sent to ${targetChatId}`);
+        }
+        catch (error) {
+            logger_1.logger.error({ error: error.message }, 'Error sending Telegram message');
+        }
+    }
+    /**
+     * Send a video file to a chat
+     */
+    async sendVideo(videoPath, caption, chatId) {
+        const targetChatId = chatId || this.defaultChatId;
+        if (!this.bot || !targetChatId) {
+            return;
+        }
+        try {
+            await this.bot.telegram.sendVideo(targetChatId, { source: videoPath }, { caption });
+            logger_1.logger.info(`Telegram video sent to ${targetChatId}`);
+        }
+        catch (error) {
+            logger_1.logger.error({ error: error.message }, 'Error sending Telegram video');
+            throw error;
+        }
+    }
+};
+exports.TelegramService = TelegramService;
+exports.TelegramService = TelegramService = __decorate([
+    (0, inversify_1.injectable)(),
+    __metadata("design:paramtypes", [])
+], TelegramService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcdGVsZWdyYW0uc2VydmljZS50cyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFBQSx1Q0FBb0M7QUFDcEMseUNBQXVDO0FBQ3ZDLHFEQUEyQztBQUMzQyw0Q0FBeUM7QUFHbEMsSUFBTSxlQUFlLEdBQXJCLE1BQU0sZUFBZTtJQUNsQixHQUFHLEdBQW9CLElBQUksQ0FBQztJQUM1QixhQUFhLENBQXFCO0lBRTFDO1FBQ0UsSUFBSSxDQUFDLFVBQVUsRUFBRSxDQUFDO0lBQ3BCLENBQUM7SUFFTyxVQUFVO1FBQ2hCLElBQUksZ0JBQUcsQ0FBQyxrQkFBa0IsRUFBRSxDQUFDO1lBQzNCLElBQUksQ0FBQztnQkFDSCxJQUFJLENBQUMsR0FBRyxHQUFHLElBQUksbUJBQVEsQ0FBQyxnQkFBRyxDQUFDLGtCQUFrQixDQUFDLENBQUM7Z0JBQ2hELElBQUksQ0FBQyxhQUFhLEdBQUcsZ0JBQUcsQ0FBQyxnQkFBZ0IsQ0FBQztnQkFDMUMsZUFBTSxDQUFDLElBQUksQ0FBQywwQkFBMEIsQ0FBQyxDQUFDO1lBQzFDLENBQUM7WUFBQyxPQUFPLEtBQUssRUFBRSxDQUFDO2dCQUNmLGVBQU0sQ0FBQyxLQUFLLENBQUMsbUNBQW1DLEVBQUUsS0FBSyxDQUFDLENBQUM7WUFDM0QsQ0FBQztRQUNILENBQUM7YUFBTSxDQUFDO1lBQ04sZUFBTSxDQUFDLElBQUksQ0FBQyxtRUFBbUUsQ0FBQyxDQUFDO1FBQ25GLENBQUM7SUFDSCxDQUFDO0lBRUQ7Ozs7T0FJRztJQUNILEtBQUssQ0FBQyxXQUFXLENBQUMsT0FBZSxFQUFFLE1BQXdCO1FBQ3pELE1BQU0sWUFBWSxHQUFHLE1BQU0sSUFBSSxJQUFJLENBQUMsYUFBYSxDQUFDO1FBRWxELElBQUksQ0FBQyxJQUFJLENBQUMsR0FBRyxJQUFJLENBQUMsWUFBWSxFQUFFLENBQUM7WUFDL0IsZUFBTSxDQUFDLElBQUksQ0FBQyxzRUFBc0UsQ0FBQyxDQUFDO1lBQ3BGLE9BQU87UUFDVCxDQUFDO1FBRUQsSUFBSSxDQUFDO1lBQ0gsTUFBTSxJQUFJLENBQUMsR0FBRyxDQUFDLFFBQVEsQ0FBQyxXQUFXLENBQUMsWUFBWSxFQUFFLE9BQU8sQ0FBQyxDQUFDO1lBQzNELGVBQU0sQ0FBQyxJQUFJLENBQUMsNEJBQTRCLFlBQVksRUFBRSxDQUFDLENBQUM7UUFDMUQsQ0FBQztRQUFDLE9BQU8sS0FBVSxFQUFFLENBQUM7WUFDcEIsZUFBTSxDQUFDLEtBQUssQ0FBQyxFQUFFLEtBQUssRUFBRSxLQUFLLENBQUMsT0FBTyxFQUFFLEVBQUUsZ0NBQWdDLENBQUMsQ0FBQztRQUMzRSxDQUFDO0lBQ0gsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLFNBQVMsQ0FBQyxTQUFpQixFQUFFLE9BQWdCLEVBQUUsTUFBd0I7UUFDM0UsTUFBTSxZQUFZLEdBQUcsTUFBTSxJQUFJLElBQUksQ0FBQyxhQUFhLENBQUM7UUFFbEQsSUFBSSxDQUFDLElBQUksQ0FBQyxHQUFHLElBQUksQ0FBQyxZQUFZLEVBQUUsQ0FBQztZQUMvQixPQUFPO1FBQ1QsQ0FBQztRQUVELElBQUksQ0FBQztZQUNILE1BQU0sSUFBSSxDQUFDLEdBQUcsQ0FBQyxRQUFRLENBQUMsU0FBUyxDQUFDLFlBQVksRUFBRSxFQUFFLE1BQU0sRUFBRSxTQUFTLEVBQUUsRUFBRSxFQUFFLE9BQU8sRUFBRSxDQUFDLENBQUM7WUFDcEYsZUFBTSxDQUFDLElBQUksQ0FBQywwQkFBMEIsWUFBWSxFQUFFLENBQUMsQ0FBQztRQUN4RCxDQUFDO1FBQUMsT0FBTyxLQUFVLEVBQUUsQ0FBQztZQUNwQixlQUFNLENBQUMsS0FBSyxDQUFDLEVBQUUsS0FBSyxFQUFFLEtBQUssQ0FBQyxPQUFPLEVBQUUsRUFBRSw4QkFBOEIsQ0FBQyxDQUFDO1lBQ3ZFLE1BQU0sS0FBSyxDQUFDO1FBQ2QsQ0FBQztJQUNILENBQUM7Q0FDRixDQUFBO0FBN0RZLDBDQUFlOzBCQUFmLGVBQWU7SUFEM0IsSUFBQSxzQkFBVSxHQUFFOztHQUNBLGVBQWUsQ0E2RDNCIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXHRlbGVncmFtLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgVGVsZWdyYWYgfSBmcm9tICd0ZWxlZ3JhZic7XG5pbXBvcnQgeyBpbmplY3RhYmxlIH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB7IGVudiB9IGZyb20gJy4uL2NvbmZpZy9lbnYuc2NoZW1hJztcbmltcG9ydCB7IGxvZ2dlciB9IGZyb20gJy4uL3V0aWxzL2xvZ2dlcic7XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBUZWxlZ3JhbVNlcnZpY2Uge1xuICBwcml2YXRlIGJvdDogVGVsZWdyYWYgfCBudWxsID0gbnVsbDtcbiAgcHJpdmF0ZSBkZWZhdWx0Q2hhdElkOiBzdHJpbmcgfCB1bmRlZmluZWQ7XG5cbiAgY29uc3RydWN0b3IoKSB7XG4gICAgdGhpcy5pbml0aWFsaXplKCk7XG4gIH1cblxuICBwcml2YXRlIGluaXRpYWxpemUoKSB7XG4gICAgaWYgKGVudi5URUxFR1JBTV9CT1RfVE9LRU4pIHtcbiAgICAgIHRyeSB7XG4gICAgICAgIHRoaXMuYm90ID0gbmV3IFRlbGVncmFmKGVudi5URUxFR1JBTV9CT1RfVE9LRU4pO1xuICAgICAgICB0aGlzLmRlZmF1bHRDaGF0SWQgPSBlbnYuVEVMRUdSQU1fQ0hBVF9JRDtcbiAgICAgICAgbG9nZ2VyLmluZm8oJ1RlbGVncmFtIEJvdCBpbml0aWFsaXplZCcpO1xuICAgICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgICAgbG9nZ2VyLmVycm9yKCdGYWlsZWQgdG8gaW5pdGlhbGl6ZSBUZWxlZ3JhbSBCb3QnLCBlcnJvcik7XG4gICAgICB9XG4gICAgfSBlbHNlIHtcbiAgICAgIGxvZ2dlci53YXJuKCdURUxFR1JBTV9CT1RfVE9LRU4gbm90IHByb3ZpZGVkLiBUZWxlZ3JhbSBub3RpZmljYXRpb25zIGRpc2FibGVkLicpO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBTZW5kIGEgdGV4dCBtZXNzYWdlIHRvIGEgY2hhdFxuICAgKiBAcGFyYW0gY2hhdElkIE9wdGlvbmFsIGNoYXQgSUQuIElmIG5vdCBwcm92aWRlZCwgdXNlcyB0aGUgZGVmYXVsdCBlbnYgQ0hBVF9JRC5cbiAgICogQHBhcmFtIG1lc3NhZ2UgTWVzc2FnZSBjb250ZW50XG4gICAqL1xuICBhc3luYyBzZW5kTWVzc2FnZShtZXNzYWdlOiBzdHJpbmcsIGNoYXRJZD86IHN0cmluZyB8IG51bWJlcik6IFByb21pc2U8dm9pZD4ge1xuICAgIGNvbnN0IHRhcmdldENoYXRJZCA9IGNoYXRJZCB8fCB0aGlzLmRlZmF1bHRDaGF0SWQ7XG5cbiAgICBpZiAoIXRoaXMuYm90IHx8ICF0YXJnZXRDaGF0SWQpIHtcbiAgICAgIGxvZ2dlci53YXJuKCdDYW5ub3Qgc2VuZCBUZWxlZ3JhbSBtZXNzYWdlOiBCb3Qgbm90IGluaXRpYWxpemVkIG9yIENoYXQgSUQgbWlzc2luZycpO1xuICAgICAgcmV0dXJuO1xuICAgIH1cblxuICAgIHRyeSB7XG4gICAgICBhd2FpdCB0aGlzLmJvdC50ZWxlZ3JhbS5zZW5kTWVzc2FnZSh0YXJnZXRDaGF0SWQsIG1lc3NhZ2UpO1xuICAgICAgbG9nZ2VyLmluZm8oYFRlbGVncmFtIG1lc3NhZ2Ugc2VudCB0byAke3RhcmdldENoYXRJZH1gKTtcbiAgICB9IGNhdGNoIChlcnJvcjogYW55KSB7XG4gICAgICBsb2dnZXIuZXJyb3IoeyBlcnJvcjogZXJyb3IubWVzc2FnZSB9LCAnRXJyb3Igc2VuZGluZyBUZWxlZ3JhbSBtZXNzYWdlJyk7XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIFNlbmQgYSB2aWRlbyBmaWxlIHRvIGEgY2hhdFxuICAgKi9cbiAgYXN5bmMgc2VuZFZpZGVvKHZpZGVvUGF0aDogc3RyaW5nLCBjYXB0aW9uPzogc3RyaW5nLCBjaGF0SWQ/OiBzdHJpbmcgfCBudW1iZXIpOiBQcm9taXNlPHZvaWQ+IHtcbiAgICBjb25zdCB0YXJnZXRDaGF0SWQgPSBjaGF0SWQgfHwgdGhpcy5kZWZhdWx0Q2hhdElkO1xuXG4gICAgaWYgKCF0aGlzLmJvdCB8fCAhdGFyZ2V0Q2hhdElkKSB7XG4gICAgICByZXR1cm47XG4gICAgfVxuXG4gICAgdHJ5IHtcbiAgICAgIGF3YWl0IHRoaXMuYm90LnRlbGVncmFtLnNlbmRWaWRlbyh0YXJnZXRDaGF0SWQsIHsgc291cmNlOiB2aWRlb1BhdGggfSwgeyBjYXB0aW9uIH0pO1xuICAgICAgbG9nZ2VyLmluZm8oYFRlbGVncmFtIHZpZGVvIHNlbnQgdG8gJHt0YXJnZXRDaGF0SWR9YCk7XG4gICAgfSBjYXRjaCAoZXJyb3I6IGFueSkge1xuICAgICAgbG9nZ2VyLmVycm9yKHsgZXJyb3I6IGVycm9yLm1lc3NhZ2UgfSwgJ0Vycm9yIHNlbmRpbmcgVGVsZWdyYW0gdmlkZW8nKTtcbiAgICAgIHRocm93IGVycm9yO1xuICAgIH1cbiAgfVxufVxuIl0sInZlcnNpb24iOjN9

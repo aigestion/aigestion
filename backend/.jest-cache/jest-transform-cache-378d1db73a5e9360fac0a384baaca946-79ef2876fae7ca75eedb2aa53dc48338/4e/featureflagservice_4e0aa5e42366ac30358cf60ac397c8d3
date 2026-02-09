@@ -1,0 +1,58 @@
+c1c1ae75417e3439e4e1cf034ec87c8f
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FeatureFlagService = void 0;
+const inversify_1 = require("inversify");
+const redis_1 = require("../cache/redis");
+const logger_1 = require("../utils/logger");
+let FeatureFlagService = class FeatureFlagService {
+    CACHE_KEY = 'nexus:feature_flags';
+    /**
+     * Checks if a feature is enabled for a specific user or globally.
+     */
+    async isEnabled(flagName, userId) {
+        const client = (0, redis_1.getRedisClient)();
+        if (!client?.isOpen)
+            return false;
+        // 1. Check user-specific override
+        if (userId) {
+            const userOverride = await client.hGet(`${this.CACHE_KEY}:user:${userId}`, flagName);
+            if (userOverride !== null)
+                return userOverride === 'true';
+        }
+        // 2. Check global state
+        const globalState = await client.hGet(this.CACHE_KEY, flagName);
+        return globalState === 'true';
+    }
+    /**
+     * Sets a global feature flag.
+     */
+    async setGlobalFlag(flagName, enabled) {
+        const client = (0, redis_1.getRedisClient)();
+        if (!client?.isOpen)
+            return;
+        await client.hSet(this.CACHE_KEY, flagName, enabled.toString());
+        logger_1.logger.info(`[FeatureFlag] Global flag ${flagName} set to ${enabled}`);
+    }
+    /**
+     * Sets a user-specific feature flag override.
+     */
+    async setUserOverride(userId, flagName, enabled) {
+        const client = (0, redis_1.getRedisClient)();
+        if (!client?.isOpen)
+            return;
+        await client.hSet(`${this.CACHE_KEY}:user:${userId}`, flagName, enabled.toString());
+        logger_1.logger.info(`[FeatureFlag] User ${userId} override for ${flagName} set to ${enabled}`);
+    }
+};
+exports.FeatureFlagService = FeatureFlagService;
+exports.FeatureFlagService = FeatureFlagService = __decorate([
+    (0, inversify_1.injectable)()
+], FeatureFlagService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcZmVhdHVyZS1mbGFnLnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUEseUNBQXVDO0FBQ3ZDLDBDQUFnRDtBQUNoRCw0Q0FBeUM7QUFHbEMsSUFBTSxrQkFBa0IsR0FBeEIsTUFBTSxrQkFBa0I7SUFDWixTQUFTLEdBQUcscUJBQXFCLENBQUM7SUFFbkQ7O09BRUc7SUFDSCxLQUFLLENBQUMsU0FBUyxDQUFDLFFBQWdCLEVBQUUsTUFBZTtRQUMvQyxNQUFNLE1BQU0sR0FBRyxJQUFBLHNCQUFjLEdBQUUsQ0FBQztRQUNoQyxJQUFJLENBQUMsTUFBTSxFQUFFLE1BQU07WUFBRSxPQUFPLEtBQUssQ0FBQztRQUVsQyxrQ0FBa0M7UUFDbEMsSUFBSSxNQUFNLEVBQUUsQ0FBQztZQUNYLE1BQU0sWUFBWSxHQUFHLE1BQU0sTUFBTSxDQUFDLElBQUksQ0FBQyxHQUFHLElBQUksQ0FBQyxTQUFTLFNBQVMsTUFBTSxFQUFFLEVBQUUsUUFBUSxDQUFDLENBQUM7WUFDckYsSUFBSSxZQUFZLEtBQUssSUFBSTtnQkFBRSxPQUFPLFlBQVksS0FBSyxNQUFNLENBQUM7UUFDNUQsQ0FBQztRQUVELHdCQUF3QjtRQUN4QixNQUFNLFdBQVcsR0FBRyxNQUFNLE1BQU0sQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLFNBQVMsRUFBRSxRQUFRLENBQUMsQ0FBQztRQUNoRSxPQUFPLFdBQVcsS0FBSyxNQUFNLENBQUM7SUFDaEMsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLGFBQWEsQ0FBQyxRQUFnQixFQUFFLE9BQWdCO1FBQ3BELE1BQU0sTUFBTSxHQUFHLElBQUEsc0JBQWMsR0FBRSxDQUFDO1FBQ2hDLElBQUksQ0FBQyxNQUFNLEVBQUUsTUFBTTtZQUFFLE9BQU87UUFFNUIsTUFBTSxNQUFNLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxTQUFTLEVBQUUsUUFBUSxFQUFFLE9BQU8sQ0FBQyxRQUFRLEVBQUUsQ0FBQyxDQUFDO1FBQ2hFLGVBQU0sQ0FBQyxJQUFJLENBQUMsNkJBQTZCLFFBQVEsV0FBVyxPQUFPLEVBQUUsQ0FBQyxDQUFDO0lBQ3pFLENBQUM7SUFFRDs7T0FFRztJQUNILEtBQUssQ0FBQyxlQUFlLENBQUMsTUFBYyxFQUFFLFFBQWdCLEVBQUUsT0FBZ0I7UUFDdEUsTUFBTSxNQUFNLEdBQUcsSUFBQSxzQkFBYyxHQUFFLENBQUM7UUFDaEMsSUFBSSxDQUFDLE1BQU0sRUFBRSxNQUFNO1lBQUUsT0FBTztRQUU1QixNQUFNLE1BQU0sQ0FBQyxJQUFJLENBQUMsR0FBRyxJQUFJLENBQUMsU0FBUyxTQUFTLE1BQU0sRUFBRSxFQUFFLFFBQVEsRUFBRSxPQUFPLENBQUMsUUFBUSxFQUFFLENBQUMsQ0FBQztRQUNwRixlQUFNLENBQUMsSUFBSSxDQUFDLHNCQUFzQixNQUFNLGlCQUFpQixRQUFRLFdBQVcsT0FBTyxFQUFFLENBQUMsQ0FBQztJQUN6RixDQUFDO0NBQ0YsQ0FBQTtBQTFDWSxnREFBa0I7NkJBQWxCLGtCQUFrQjtJQUQ5QixJQUFBLHNCQUFVLEdBQUU7R0FDQSxrQkFBa0IsQ0EwQzlCIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXGZlYXR1cmUtZmxhZy5zZXJ2aWNlLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGluamVjdGFibGUgfSBmcm9tICdpbnZlcnNpZnknO1xuaW1wb3J0IHsgZ2V0UmVkaXNDbGllbnQgfSBmcm9tICcuLi9jYWNoZS9yZWRpcyc7XG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xuXG5AaW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgRmVhdHVyZUZsYWdTZXJ2aWNlIHtcbiAgcHJpdmF0ZSByZWFkb25seSBDQUNIRV9LRVkgPSAnbmV4dXM6ZmVhdHVyZV9mbGFncyc7XG5cbiAgLyoqXG4gICAqIENoZWNrcyBpZiBhIGZlYXR1cmUgaXMgZW5hYmxlZCBmb3IgYSBzcGVjaWZpYyB1c2VyIG9yIGdsb2JhbGx5LlxuICAgKi9cbiAgYXN5bmMgaXNFbmFibGVkKGZsYWdOYW1lOiBzdHJpbmcsIHVzZXJJZD86IHN0cmluZyk6IFByb21pc2U8Ym9vbGVhbj4ge1xuICAgIGNvbnN0IGNsaWVudCA9IGdldFJlZGlzQ2xpZW50KCk7XG4gICAgaWYgKCFjbGllbnQ/LmlzT3BlbikgcmV0dXJuIGZhbHNlO1xuXG4gICAgLy8gMS4gQ2hlY2sgdXNlci1zcGVjaWZpYyBvdmVycmlkZVxuICAgIGlmICh1c2VySWQpIHtcbiAgICAgIGNvbnN0IHVzZXJPdmVycmlkZSA9IGF3YWl0IGNsaWVudC5oR2V0KGAke3RoaXMuQ0FDSEVfS0VZfTp1c2VyOiR7dXNlcklkfWAsIGZsYWdOYW1lKTtcbiAgICAgIGlmICh1c2VyT3ZlcnJpZGUgIT09IG51bGwpIHJldHVybiB1c2VyT3ZlcnJpZGUgPT09ICd0cnVlJztcbiAgICB9XG5cbiAgICAvLyAyLiBDaGVjayBnbG9iYWwgc3RhdGVcbiAgICBjb25zdCBnbG9iYWxTdGF0ZSA9IGF3YWl0IGNsaWVudC5oR2V0KHRoaXMuQ0FDSEVfS0VZLCBmbGFnTmFtZSk7XG4gICAgcmV0dXJuIGdsb2JhbFN0YXRlID09PSAndHJ1ZSc7XG4gIH1cblxuICAvKipcbiAgICogU2V0cyBhIGdsb2JhbCBmZWF0dXJlIGZsYWcuXG4gICAqL1xuICBhc3luYyBzZXRHbG9iYWxGbGFnKGZsYWdOYW1lOiBzdHJpbmcsIGVuYWJsZWQ6IGJvb2xlYW4pOiBQcm9taXNlPHZvaWQ+IHtcbiAgICBjb25zdCBjbGllbnQgPSBnZXRSZWRpc0NsaWVudCgpO1xuICAgIGlmICghY2xpZW50Py5pc09wZW4pIHJldHVybjtcblxuICAgIGF3YWl0IGNsaWVudC5oU2V0KHRoaXMuQ0FDSEVfS0VZLCBmbGFnTmFtZSwgZW5hYmxlZC50b1N0cmluZygpKTtcbiAgICBsb2dnZXIuaW5mbyhgW0ZlYXR1cmVGbGFnXSBHbG9iYWwgZmxhZyAke2ZsYWdOYW1lfSBzZXQgdG8gJHtlbmFibGVkfWApO1xuICB9XG5cbiAgLyoqXG4gICAqIFNldHMgYSB1c2VyLXNwZWNpZmljIGZlYXR1cmUgZmxhZyBvdmVycmlkZS5cbiAgICovXG4gIGFzeW5jIHNldFVzZXJPdmVycmlkZSh1c2VySWQ6IHN0cmluZywgZmxhZ05hbWU6IHN0cmluZywgZW5hYmxlZDogYm9vbGVhbik6IFByb21pc2U8dm9pZD4ge1xuICAgIGNvbnN0IGNsaWVudCA9IGdldFJlZGlzQ2xpZW50KCk7XG4gICAgaWYgKCFjbGllbnQ/LmlzT3BlbikgcmV0dXJuO1xuXG4gICAgYXdhaXQgY2xpZW50LmhTZXQoYCR7dGhpcy5DQUNIRV9LRVl9OnVzZXI6JHt1c2VySWR9YCwgZmxhZ05hbWUsIGVuYWJsZWQudG9TdHJpbmcoKSk7XG4gICAgbG9nZ2VyLmluZm8oYFtGZWF0dXJlRmxhZ10gVXNlciAke3VzZXJJZH0gb3ZlcnJpZGUgZm9yICR7ZmxhZ05hbWV9IHNldCB0byAke2VuYWJsZWR9YCk7XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

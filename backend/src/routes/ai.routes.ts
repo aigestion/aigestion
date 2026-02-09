@@ -8,7 +8,7 @@ const router = Router();
 // POST /ai/prompt
 /**
  * @openapi
- * /ai/prompt:
+ * /api/v1/ai/prompt:
  *   post:
  *     summary: Run AI prompt
  *     tags: [AI]

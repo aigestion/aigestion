@@ -1,0 +1,74 @@
+﻿=== ANTIGRAVITY ANALYSIS REPORT - 20260122-141624 ===
+
+PROJECTS ANALYSIS
+==================
+
+AIGESTION ANALYSIS
+===================
+backups | Git:False | Package:False | Python: | RealSize:1.898GB | Total:1.898GB | Priority:Alta
+ml-service | Git:False | Package:False | Python: | RealSize:1.109GB | Total:1.109GB | Priority:Alta
+aig-ia-engine | Git:False | Package:False | Python: | RealSize:0.865GB | Total:0.865GB | Priority:Alta
+packages | Git:False | Package:False | Python: | RealSize:0.578GB | Total:0.578GB | Priority:Alta
+infra | Git:False | Package:False | Python: | RealSize:0.438GB | Total:0.438GB | Priority:Alta
+.git | Git:False | Package:False | Python: | RealSize:0.193GB | Total:0.193GB | Priority:Alta
+frontend | Git:False | Package:True | Python: | RealSize:0.129GB | Total:0.719GB | Priority:Alta
+terraform | Git:False | Package:False | Python: | RealSize:0.098GB | Total:0.098GB | Priority:Alta
+cloud | Git:False | Package:False | Python: | RealSize:0.098GB | Total:0.098GB | Priority:Alta
+backend | Git:False | Package:True | Python: | RealSize:0.078GB | Total:1.418GB | Priority:Alta
+node | Git:False | Package:False | Python: | RealSize:0.065GB | Total:0.065GB | Priority:Alta
+linters | Git:False | Package:False | Python: | RealSize:0.016GB | Total:0.016GB | Priority:Alta
+docker | Git:False | Package:False | Python: | RealSize:0.01GB | Total:0.01GB | Priority:Alta
+docs | Git:False | Package:False | Python: | RealSize:0.006GB | Total:0.006GB | Priority:Alta
+logs | Git:False | Package:False | Python: | RealSize:0.006GB | Total:0.006GB | Priority:Alta
+n8n_data | Git:False | Package:False | Python: | RealSize:0.005GB | Total:0.005GB | Priority:Alta
+AIGestion_Master_Drive | Git:False | Package:False | Python: | RealSize:0.004GB | Total:0.004GB | Priority:Alta
+coverage | Git:False | Package:False | Python: | RealSize:0.003GB | Total:0.003GB | Priority:Alta
+data | Git:False | Package:False | Python: | RealSize:0.003GB | Total:0.003GB | Priority:Alta
+scripts | Git:False | Package:True | Python: | RealSize:0.001GB | Total:0.001GB | Priority:Alta
+monitoring | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+n8n | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+promtail | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+optimization-plan | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+prometheus | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+uploads | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+tools | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+tests | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+workflows | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+vpn | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+utils | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+terraform_bin | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+runtimes | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+repo-tools | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+quarantine | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+task | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+supabase | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+workspace-config | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.vscode | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.vercel | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.windsurf | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+audit | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+actions | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.trunk | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.cache | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.agent | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.gemini | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.husky | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+.github | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+config | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+loki | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+legacy | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+metadata | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+mobile | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+migration-backup | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+k8s | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+daniela | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+cypress | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+dist | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+grafana | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Baja
+evaluation | Git:False | Package:False | Python: | RealSize:0GB | Total:0GB | Priority:Alta
+
+RECOMMENDATIONS
+================
+1. Copy Projects with Git repos and RealSize > 0 first
+2. Exclude node_modules, dist, build, .cache folders
+3. Prioritize AIGestion components with RealSize > 0.1GB

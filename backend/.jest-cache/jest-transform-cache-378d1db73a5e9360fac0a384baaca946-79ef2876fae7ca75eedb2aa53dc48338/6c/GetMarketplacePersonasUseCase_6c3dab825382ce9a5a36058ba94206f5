@@ -1,0 +1,36 @@
+01d54b40e94ce8a4806d0c28f409aef3
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GetMarketplacePersonasUseCase = void 0;
+const inversify_1 = require("inversify");
+const types_1 = require("../../../types");
+const PersonaRepository_1 = require("../../../infrastructure/repository/PersonaRepository");
+let GetMarketplacePersonasUseCase = class GetMarketplacePersonasUseCase {
+    personaRepository;
+    constructor(personaRepository) {
+        this.personaRepository = personaRepository;
+    }
+    async execute(limit = 20, offset = 0) {
+        return await this.personaRepository.findPublic(limit, offset);
+    }
+};
+exports.GetMarketplacePersonasUseCase = GetMarketplacePersonasUseCase;
+exports.GetMarketplacePersonasUseCase = GetMarketplacePersonasUseCase = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.PersonaRepository)),
+    __metadata("design:paramtypes", [typeof (_a = typeof PersonaRepository_1.IPersonaRepository !== "undefined" && PersonaRepository_1.IPersonaRepository) === "function" ? _a : Object])
+], GetMarketplacePersonasUseCase);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxhcHBsaWNhdGlvblxcdXNlY2FzZXNcXHBlcnNvbmFcXEdldE1hcmtldHBsYWNlUGVyc29uYXNVc2VDYXNlLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSx5Q0FBK0M7QUFDL0MsMENBQXVDO0FBQ3ZDLDRGQUEwRjtBQUluRixJQUFNLDZCQUE2QixHQUFuQyxNQUFNLDZCQUE2QjtJQUNhO0lBQXJELFlBQXFELGlCQUFxQztRQUFyQyxzQkFBaUIsR0FBakIsaUJBQWlCLENBQW9CO0lBQUcsQ0FBQztJQUU5RixLQUFLLENBQUMsT0FBTyxDQUNYLFFBQWdCLEVBQUUsRUFDbEIsU0FBaUIsQ0FBQztRQUVsQixPQUFPLE1BQU0sSUFBSSxDQUFDLGlCQUFpQixDQUFDLFVBQVUsQ0FBQyxLQUFLLEVBQUUsTUFBTSxDQUFDLENBQUM7SUFDaEUsQ0FBQztDQUNGLENBQUE7QUFUWSxzRUFBNkI7d0NBQTdCLDZCQUE2QjtJQUR6QyxJQUFBLHNCQUFVLEdBQUU7SUFFRSxXQUFBLElBQUEsa0JBQU0sRUFBQyxhQUFLLENBQUMsaUJBQWlCLENBQUMsQ0FBQTt5REFBNEIsc0NBQWtCLG9CQUFsQixzQ0FBa0I7R0FEL0UsNkJBQTZCLENBU3pDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcYXBwbGljYXRpb25cXHVzZWNhc2VzXFxwZXJzb25hXFxHZXRNYXJrZXRwbGFjZVBlcnNvbmFzVXNlQ2FzZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBpbmplY3RhYmxlLCBpbmplY3QgfSBmcm9tICdpbnZlcnNpZnknO1xuaW1wb3J0IHsgVFlQRVMgfSBmcm9tICcuLi8uLi8uLi90eXBlcyc7XG5pbXBvcnQgeyBJUGVyc29uYVJlcG9zaXRvcnkgfSBmcm9tICcuLi8uLi8uLi9pbmZyYXN0cnVjdHVyZS9yZXBvc2l0b3J5L1BlcnNvbmFSZXBvc2l0b3J5JztcbmltcG9ydCB7IElQZXJzb25hIH0gZnJvbSAnLi4vLi4vLi4vbW9kZWxzL1BlcnNvbmEnO1xuXG5AaW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgR2V0TWFya2V0cGxhY2VQZXJzb25hc1VzZUNhc2Uge1xuICBjb25zdHJ1Y3RvcihAaW5qZWN0KFRZUEVTLlBlcnNvbmFSZXBvc2l0b3J5KSBwcml2YXRlIHBlcnNvbmFSZXBvc2l0b3J5OiBJUGVyc29uYVJlcG9zaXRvcnkpIHt9XG5cbiAgYXN5bmMgZXhlY3V0ZShcbiAgICBsaW1pdDogbnVtYmVyID0gMjAsXG4gICAgb2Zmc2V0OiBudW1iZXIgPSAwLFxuICApOiBQcm9taXNlPHsgcGVyc29uYXM6IElQZXJzb25hW107IHRvdGFsOiBudW1iZXIgfT4ge1xuICAgIHJldHVybiBhd2FpdCB0aGlzLnBlcnNvbmFSZXBvc2l0b3J5LmZpbmRQdWJsaWMobGltaXQsIG9mZnNldCk7XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

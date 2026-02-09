@@ -73,7 +73,7 @@ apiV1Router.use('/swarm', swarmRouter);
 
 /**
  * @openapi
- * /system/credentials/verify:
+ * /api/v1/system/credentials/verify:
  *   post:
  *     summary: Verify all configured credentials and API keys
  *     tags: [System]
@@ -97,7 +97,7 @@ apiV1Router.post('/system/credentials/verify', async (req: any, res: any) => {
 
 /**
  * @openapi
- * /system/history/{metric}:
+ * /api/v1/system/history/{metric}:
  *   get:
  *     summary: Retrieve history for a specific metric
  *     tags: [System]
@@ -141,7 +141,7 @@ apiV1Router.use('/health', healthRouter);
 // Other services
 /**
  * @openapi
- * /stripe:
+ * /api/v1/stripe:
  *   get:
  *     summary: Stripe related endpoints (placeholder)
  *     tags: [Stripe]
@@ -152,7 +152,7 @@ apiV1Router.use('/health', healthRouter);
 apiV1Router.use('/stripe', stripeRouter);
 /**
  * @openapi
- * /youtube:
+ * /api/v1/youtube:
  *   get:
  *     summary: YouTube related endpoints (placeholder)
  *     tags: [YouTube]
@@ -188,7 +188,7 @@ apiV1Router.use('/analytics', redisCache(30), analyticsRouter);
 // Enhanced Voice Service (Daniela)
 /**
  * @openapi
- * /enhanced-voice:
+ * /api/v1/enhanced-voice:
  *   get:
  *     summary: Enhanced Voice Service endpoints for Daniela
  *     tags: [EnhancedVoice]
@@ -203,7 +203,7 @@ apiV1Router.use('/daniela', danielaRouter);
 
 /**
  * @openapi
- * /ai:
+ * /api/v1/ai:
  *   get:
  *     summary: AI related endpoints (placeholder)
  *     tags: [AI]
@@ -215,7 +215,7 @@ apiV1Router.use('/ai', dynamicRateLimiter, aiRouter);
 apiV1Router.use('/rag', ragRoutes);
 /**
  * @openapi
- * /exit-templates:
+ * /api/v1/exit-templates:
  *   get:
  *     summary: Exit email templates endpoints (placeholder)
  *     tags: [ExitEmail]

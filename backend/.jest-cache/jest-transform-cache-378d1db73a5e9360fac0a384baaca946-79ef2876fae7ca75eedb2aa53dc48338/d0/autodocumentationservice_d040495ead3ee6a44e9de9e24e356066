@@ -1,0 +1,72 @@
+4a0175be8b70f96c511367cf22f3add9
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AutoDocumentationService = void 0;
+const promises_1 = __importDefault(require("fs/promises"));
+const inversify_1 = require("inversify");
+const path_1 = __importDefault(require("path"));
+const types_1 = require("../types");
+const logger_1 = require("../utils/logger");
+const ai_service_1 = require("./ai.service");
+let AutoDocumentationService = class AutoDocumentationService {
+    aiService;
+    constructor(aiService) {
+        this.aiService = aiService;
+    }
+    /**
+     * Generates a README/documentation for a specific file or directory.
+     */
+    async generateDocs(targetPath) {
+        logger_1.logger.info(`[AutoDoc] Generating documentation for ${targetPath}`);
+        try {
+            const stats = await promises_1.default.stat(targetPath);
+            let content = '';
+            if (stats.isFile()) {
+                content = await promises_1.default.readFile(targetPath, 'utf8');
+            }
+            else {
+                const files = await promises_1.default.readdir(targetPath);
+                content = `Directory contains: ${files.join(', ')}`;
+            }
+            const prompt = `Generate a technical documentation for the following code or directory: ${content}. Use Markdown format. Focus on architecture, usage, and dependencies.`;
+            const docs = await this.aiService.generateContent(prompt, 'system', 'tech_writer');
+            return docs;
+        }
+        catch (error) {
+            logger_1.logger.error(`[AutoDoc] Error generating docs: ${error}`);
+            return 'Failed to generate documentation.';
+        }
+    }
+    /**
+     * Saves generated documentation to a file.
+     */
+    async saveDocs(targetPath, docContent) {
+        const docFileName = `${path_1.default.basename(targetPath)}.docs.md`;
+        const docFilePath = path_1.default.join(path_1.default.dirname(targetPath), docFileName);
+        await promises_1.default.writeFile(docFilePath, docContent);
+        logger_1.logger.info(`[AutoDoc] Saved documentation to ${docFilePath}`);
+    }
+};
+exports.AutoDocumentationService = AutoDocumentationService;
+exports.AutoDocumentationService = AutoDocumentationService = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.AIService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof ai_service_1.AIService !== "undefined" && ai_service_1.AIService) === "function" ? _a : Object])
+], AutoDocumentationService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcYXV0by1kb2N1bWVudGF0aW9uLnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLDJEQUE2QjtBQUM3Qix5Q0FBK0M7QUFDL0MsZ0RBQXdCO0FBQ3hCLG9DQUFpQztBQUNqQyw0Q0FBeUM7QUFDekMsNkNBQXlDO0FBR2xDLElBQU0sd0JBQXdCLEdBQTlCLE1BQU0sd0JBQXdCO0lBQ1U7SUFBN0MsWUFBNkMsU0FBb0I7UUFBcEIsY0FBUyxHQUFULFNBQVMsQ0FBVztJQUFHLENBQUM7SUFFckU7O09BRUc7SUFDSCxLQUFLLENBQUMsWUFBWSxDQUFDLFVBQWtCO1FBQ25DLGVBQU0sQ0FBQyxJQUFJLENBQUMsMENBQTBDLFVBQVUsRUFBRSxDQUFDLENBQUM7UUFFcEUsSUFBSSxDQUFDO1lBQ0gsTUFBTSxLQUFLLEdBQUcsTUFBTSxrQkFBRSxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsQ0FBQztZQUN4QyxJQUFJLE9BQU8sR0FBRyxFQUFFLENBQUM7WUFFakIsSUFBSSxLQUFLLENBQUMsTUFBTSxFQUFFLEVBQUUsQ0FBQztnQkFDbkIsT0FBTyxHQUFHLE1BQU0sa0JBQUUsQ0FBQyxRQUFRLENBQUMsVUFBVSxFQUFFLE1BQU0sQ0FBQyxDQUFDO1lBQ2xELENBQUM7aUJBQU0sQ0FBQztnQkFDTixNQUFNLEtBQUssR0FBRyxNQUFNLGtCQUFFLENBQUMsT0FBTyxDQUFDLFVBQVUsQ0FBQyxDQUFDO2dCQUMzQyxPQUFPLEdBQUcsdUJBQXVCLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLEVBQUUsQ0FBQztZQUN0RCxDQUFDO1lBRUQsTUFBTSxNQUFNLEdBQUcsMkVBQTJFLE9BQU8sd0VBQXdFLENBQUM7WUFDMUssTUFBTSxJQUFJLEdBQUcsTUFBTSxJQUFJLENBQUMsU0FBUyxDQUFDLGVBQWUsQ0FBQyxNQUFNLEVBQUUsUUFBUSxFQUFFLGFBQWEsQ0FBQyxDQUFDO1lBRW5GLE9BQU8sSUFBSSxDQUFDO1FBQ2QsQ0FBQztRQUFDLE9BQU8sS0FBSyxFQUFFLENBQUM7WUFDZixlQUFNLENBQUMsS0FBSyxDQUFDLG9DQUFvQyxLQUFLLEVBQUUsQ0FBQyxDQUFDO1lBQzFELE9BQU8sbUNBQW1DLENBQUM7UUFDN0MsQ0FBQztJQUNILENBQUM7SUFFRDs7T0FFRztJQUNILEtBQUssQ0FBQyxRQUFRLENBQUMsVUFBa0IsRUFBRSxVQUFrQjtRQUNuRCxNQUFNLFdBQVcsR0FBRyxHQUFHLGNBQUksQ0FBQyxRQUFRLENBQUMsVUFBVSxDQUFDLFVBQVUsQ0FBQztRQUMzRCxNQUFNLFdBQVcsR0FBRyxjQUFJLENBQUMsSUFBSSxDQUFDLGNBQUksQ0FBQyxPQUFPLENBQUMsVUFBVSxDQUFDLEVBQUUsV0FBVyxDQUFDLENBQUM7UUFFckUsTUFBTSxrQkFBRSxDQUFDLFNBQVMsQ0FBQyxXQUFXLEVBQUUsVUFBVSxDQUFDLENBQUM7UUFDNUMsZUFBTSxDQUFDLElBQUksQ0FBQyxvQ0FBb0MsV0FBVyxFQUFFLENBQUMsQ0FBQztJQUNqRSxDQUFDO0NBQ0YsQ0FBQTtBQXhDWSw0REFBd0I7bUNBQXhCLHdCQUF3QjtJQURwQyxJQUFBLHNCQUFVLEdBQUU7SUFFRSxXQUFBLElBQUEsa0JBQU0sRUFBQyxhQUFLLENBQUMsU0FBUyxDQUFDLENBQUE7eURBQW9CLHNCQUFTLG9CQUFULHNCQUFTO0dBRHRELHdCQUF3QixDQXdDcEMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcYXV0by1kb2N1bWVudGF0aW9uLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGZzIGZyb20gJ2ZzL3Byb21pc2VzJztcbmltcG9ydCB7IGluamVjdCwgaW5qZWN0YWJsZSB9IGZyb20gJ2ludmVyc2lmeSc7XG5pbXBvcnQgcGF0aCBmcm9tICdwYXRoJztcbmltcG9ydCB7IFRZUEVTIH0gZnJvbSAnLi4vdHlwZXMnO1xuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcbmltcG9ydCB7IEFJU2VydmljZSB9IGZyb20gJy4vYWkuc2VydmljZSc7XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBBdXRvRG9jdW1lbnRhdGlvblNlcnZpY2Uge1xuICBjb25zdHJ1Y3RvcihAaW5qZWN0KFRZUEVTLkFJU2VydmljZSkgcHJpdmF0ZSBhaVNlcnZpY2U6IEFJU2VydmljZSkge31cblxuICAvKipcbiAgICogR2VuZXJhdGVzIGEgUkVBRE1FL2RvY3VtZW50YXRpb24gZm9yIGEgc3BlY2lmaWMgZmlsZSBvciBkaXJlY3RvcnkuXG4gICAqL1xuICBhc3luYyBnZW5lcmF0ZURvY3ModGFyZ2V0UGF0aDogc3RyaW5nKTogUHJvbWlzZTxzdHJpbmc+IHtcbiAgICBsb2dnZXIuaW5mbyhgW0F1dG9Eb2NdIEdlbmVyYXRpbmcgZG9jdW1lbnRhdGlvbiBmb3IgJHt0YXJnZXRQYXRofWApO1xuXG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHN0YXRzID0gYXdhaXQgZnMuc3RhdCh0YXJnZXRQYXRoKTtcbiAgICAgIGxldCBjb250ZW50ID0gJyc7XG5cbiAgICAgIGlmIChzdGF0cy5pc0ZpbGUoKSkge1xuICAgICAgICBjb250ZW50ID0gYXdhaXQgZnMucmVhZEZpbGUodGFyZ2V0UGF0aCwgJ3V0ZjgnKTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIGNvbnN0IGZpbGVzID0gYXdhaXQgZnMucmVhZGRpcih0YXJnZXRQYXRoKTtcbiAgICAgICAgY29udGVudCA9IGBEaXJlY3RvcnkgY29udGFpbnM6ICR7ZmlsZXMuam9pbignLCAnKX1gO1xuICAgICAgfVxuXG4gICAgICBjb25zdCBwcm9tcHQgPSBgR2VuZXJhdGUgYSB0ZWNobmljYWwgZG9jdW1lbnRhdGlvbiBmb3IgdGhlIGZvbGxvd2luZyBjb2RlIG9yIGRpcmVjdG9yeTogJHtjb250ZW50fS4gVXNlIE1hcmtkb3duIGZvcm1hdC4gRm9jdXMgb24gYXJjaGl0ZWN0dXJlLCB1c2FnZSwgYW5kIGRlcGVuZGVuY2llcy5gO1xuICAgICAgY29uc3QgZG9jcyA9IGF3YWl0IHRoaXMuYWlTZXJ2aWNlLmdlbmVyYXRlQ29udGVudChwcm9tcHQsICdzeXN0ZW0nLCAndGVjaF93cml0ZXInKTtcblxuICAgICAgcmV0dXJuIGRvY3M7XG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIGxvZ2dlci5lcnJvcihgW0F1dG9Eb2NdIEVycm9yIGdlbmVyYXRpbmcgZG9jczogJHtlcnJvcn1gKTtcbiAgICAgIHJldHVybiAnRmFpbGVkIHRvIGdlbmVyYXRlIGRvY3VtZW50YXRpb24uJztcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogU2F2ZXMgZ2VuZXJhdGVkIGRvY3VtZW50YXRpb24gdG8gYSBmaWxlLlxuICAgKi9cbiAgYXN5bmMgc2F2ZURvY3ModGFyZ2V0UGF0aDogc3RyaW5nLCBkb2NDb250ZW50OiBzdHJpbmcpOiBQcm9taXNlPHZvaWQ+IHtcbiAgICBjb25zdCBkb2NGaWxlTmFtZSA9IGAke3BhdGguYmFzZW5hbWUodGFyZ2V0UGF0aCl9LmRvY3MubWRgO1xuICAgIGNvbnN0IGRvY0ZpbGVQYXRoID0gcGF0aC5qb2luKHBhdGguZGlybmFtZSh0YXJnZXRQYXRoKSwgZG9jRmlsZU5hbWUpO1xuXG4gICAgYXdhaXQgZnMud3JpdGVGaWxlKGRvY0ZpbGVQYXRoLCBkb2NDb250ZW50KTtcbiAgICBsb2dnZXIuaW5mbyhgW0F1dG9Eb2NdIFNhdmVkIGRvY3VtZW50YXRpb24gdG8gJHtkb2NGaWxlUGF0aH1gKTtcbiAgfVxufVxuIl0sInZlcnNpb24iOjN9

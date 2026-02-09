@@ -1,0 +1,55 @@
+{
+  "name": "aigestion-net",
+  "displayName": "AIGestion.net",
+  "description": "Arquitectura de Inteligencia Soberana - Development Environment",
+  "version": "1.0.0",
+  "publisher": "aigestion",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Extension Packs"
+  ],
+  "keywords": [
+    "aigestion",
+    "ai",
+    "intelligence",
+    "soberana",
+    "development",
+    "dashboard",
+    "admin",
+    "client"
+  ],
+  "extensionPack": [
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-json",
+    "formulahendry.auto-rename-tag",
+    "christian-kohler.path-intellisense",
+    "ms-vscode.vscode-git-graph",
+    "googlecloudtools.cloudcode",
+    "supabase.supabase-vscode",
+    "ms-vscode.vscode-docker",
+    "ms-vscode-remote.remote-containers",
+    "ms-vscode.vscode-powershell",
+    "ms-vscode.vscode-node-azure-pack",
+    "humao.rest-client",
+    "ms-vscode.vscode-thunder-client",
+    "ms-vscode.live-server",
+    "ms-vscode.vscode-browser-preview",
+    "ritwickdey.liveserver"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aigestion/aigestion-net.git"
+  },
+  "homepage": "https://aigestion.net",
+  "author": {
+    "name": "AIGestion Team",
+    "email": "dev@aigestion.net"
+  },
+  "license": "MIT"
+}

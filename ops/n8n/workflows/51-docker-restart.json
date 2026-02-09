@@ -1,0 +1,60 @@
+{
+  "name": "51-docker-restart",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "restart-container",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "command": "docker restart {{$node[\"Webhook\"].json[\"body\"][\"container\"]}}"
+      },
+      "name": "Restart",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "channel": "ops",
+        "text": "=restarted container: {{$node[\"Webhook\"].json[\"body\"][\"container\"]}}",
+        "otherOptions": {}
+      },
+      "name": "Notify",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Restart",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restart": {
+      "main": [
+        [
+          {
+            "node": "Notify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

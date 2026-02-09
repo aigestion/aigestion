@@ -118,7 +118,7 @@ export const Navigation: React.FC = () => {
               onClick={playClick}
               className="hidden sm:flex group relative items-center gap-3 px-6 py-2.5 overflow-hidden rounded-sm bg-white/5 border border-white/10 hover:border-nexus-cyan/50 transition-all duration-500 shadow-lg shadow-nexus-cyan/5"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-nexus-cyan/10 to-nexus-violet/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="absolute inset-0 bg-linear-to-r from-nexus-cyan/10 to-nexus-violet/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <Lock
                 size={14}
                 className="text-nexus-cyan-glow group-hover:text-white transition-colors"

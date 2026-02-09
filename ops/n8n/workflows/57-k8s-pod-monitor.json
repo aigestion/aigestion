@@ -1,0 +1,40 @@
+{
+  "name": "57-k8s-pod-monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "alertmanager-webhook",
+        "options": {}
+      },
+      "name": "Alertmanager",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "channel": "k8s-alerts",
+        "text": "=Pod CrashLoopBackOff: {{$node[\"Alertmanager\"].json[\"body\"][\"alerts\"][0][\"labels\"][\"pod\"]}}",
+        "otherOptions": {}
+      },
+      "name": "Slack Notify",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [450, 300]
+    }
+  ],
+  "connections": {
+    "Alertmanager": {
+      "main": [
+        [
+          {
+            "node": "Slack Notify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

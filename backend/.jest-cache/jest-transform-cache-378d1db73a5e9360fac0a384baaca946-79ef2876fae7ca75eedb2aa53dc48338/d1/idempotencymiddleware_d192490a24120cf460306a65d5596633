@@ -1,0 +1,53 @@
+3543d3c12cebe54495acb234538e73af
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.idempotencyMiddleware = void 0;
+const cacheManager_1 = require("../utils/cacheManager");
+const logger_1 = require("../utils/logger");
+const idempotencyMiddleware = async (req, res, next) => {
+    const idempotencyKey = req.headers['idempotency-key'];
+    // Solo aplicar si hay una clave y NO es un GET (las lecturas son idempotentes por naturaleza)
+    if (!idempotencyKey || req.method === 'GET') {
+        return next();
+    }
+    // Si el usuario está autenticado, incluimos su ID en el prefijo para evitar colisiones entre usuarios
+    const userId = req.user?.id || 'anonymous';
+    const cacheKey = `idempotency:${userId}:${idempotencyKey}`;
+    try {
+        // 1. Intentar recuperar respuesta previa del caché (L1 o L2)
+        const cachedResponse = (await cacheManager_1.cache.get(cacheKey));
+        if (cachedResponse) {
+            logger_1.logger.info({ cacheKey, path: req.path }, 'Idempotency HIT: Retornando respuesta cacheada');
+            res.setHeader('X-Idempotency-Hit', 'true');
+            return res.status(cachedResponse.status).json(cachedResponse.body);
+        }
+        // 2. Interceptar res.json para guardar la respuesta antes de enviarla
+        const originalJson = res.json;
+        res.json = function (body) {
+            // Restauramos el método original
+            res.json = originalJson;
+            // Guardar en caché solo si la respuesta es exitosa o error de cliente (2xx, 4xx)
+            // Evitamos cachear errores de servidor (5xx) para permitir reintentos inmediatos
+            if (res.statusCode < 500) {
+                // TTL de 24 horas por defecto para llaves de idempotencia
+                cacheManager_1.cache
+                    .set(cacheKey, {
+                    status: res.statusCode,
+                    body,
+                }, { ttl: 86400 })
+                    .catch(err => {
+                    logger_1.logger.error({ err, cacheKey }, 'Error al guardar respuesta de idempotencia');
+                });
+            }
+            return originalJson.call(this, body);
+        };
+        res.setHeader('X-Idempotency-Hit', 'false');
+        next();
+    }
+    catch (error) {
+        logger_1.logger.error({ error, cacheKey }, 'Error en middleware de idempotencia');
+        next();
+    }
+};
+exports.idempotencyMiddleware = idempotencyMiddleware;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxtaWRkbGV3YXJlXFxpZGVtcG90ZW5jeS5taWRkbGV3YXJlLnRzIiwibWFwcGluZ3MiOiI7OztBQUNBLHdEQUE4QztBQUM5Qyw0Q0FBeUM7QUFZbEMsTUFBTSxxQkFBcUIsR0FBRyxLQUFLLEVBQUUsR0FBWSxFQUFFLEdBQWEsRUFBRSxJQUFrQixFQUFFLEVBQUU7SUFDN0YsTUFBTSxjQUFjLEdBQUcsR0FBRyxDQUFDLE9BQU8sQ0FBQyxpQkFBaUIsQ0FBVyxDQUFDO0lBRWhFLDhGQUE4RjtJQUM5RixJQUFJLENBQUMsY0FBYyxJQUFJLEdBQUcsQ0FBQyxNQUFNLEtBQUssS0FBSyxFQUFFLENBQUM7UUFDNUMsT0FBTyxJQUFJLEVBQUUsQ0FBQztJQUNoQixDQUFDO0lBRUQsc0dBQXNHO0lBQ3RHLE1BQU0sTUFBTSxHQUFJLEdBQVcsQ0FBQyxJQUFJLEVBQUUsRUFBRSxJQUFJLFdBQVcsQ0FBQztJQUNwRCxNQUFNLFFBQVEsR0FBRyxlQUFlLE1BQU0sSUFBSSxjQUFjLEVBQUUsQ0FBQztJQUUzRCxJQUFJLENBQUM7UUFDSCw2REFBNkQ7UUFDN0QsTUFBTSxjQUFjLEdBQUcsQ0FBQyxNQUFNLG9CQUFLLENBQUMsR0FBRyxDQUFDLFFBQVEsQ0FBQyxDQUFtQixDQUFDO1FBRXJFLElBQUksY0FBYyxFQUFFLENBQUM7WUFDbkIsZUFBTSxDQUFDLElBQUksQ0FBQyxFQUFFLFFBQVEsRUFBRSxJQUFJLEVBQUUsR0FBRyxDQUFDLElBQUksRUFBRSxFQUFFLGdEQUFnRCxDQUFDLENBQUM7WUFDNUYsR0FBRyxDQUFDLFNBQVMsQ0FBQyxtQkFBbUIsRUFBRSxNQUFNLENBQUMsQ0FBQztZQUMzQyxPQUFPLEdBQUcsQ0FBQyxNQUFNLENBQUMsY0FBYyxDQUFDLE1BQU0sQ0FBQyxDQUFDLElBQUksQ0FBQyxjQUFjLENBQUMsSUFBSSxDQUFDLENBQUM7UUFDckUsQ0FBQztRQUVELHNFQUFzRTtRQUN0RSxNQUFNLFlBQVksR0FBRyxHQUFHLENBQUMsSUFBSSxDQUFDO1FBRTlCLEdBQUcsQ0FBQyxJQUFJLEdBQUcsVUFBVSxJQUFTO1lBQzVCLGlDQUFpQztZQUNqQyxHQUFHLENBQUMsSUFBSSxHQUFHLFlBQVksQ0FBQztZQUV4QixpRkFBaUY7WUFDakYsaUZBQWlGO1lBQ2pGLElBQUksR0FBRyxDQUFDLFVBQVUsR0FBRyxHQUFHLEVBQUUsQ0FBQztnQkFDekIsMERBQTBEO2dCQUMxRCxvQkFBSztxQkFDRixHQUFHLENBQ0YsUUFBUSxFQUNSO29CQUNFLE1BQU0sRUFBRSxHQUFHLENBQUMsVUFBVTtvQkFDdEIsSUFBSTtpQkFDTCxFQUNELEVBQUUsR0FBRyxFQUFFLEtBQUssRUFBRSxDQUNmO3FCQUNBLEtBQUssQ0FBQyxHQUFHLENBQUMsRUFBRTtvQkFDWCxlQUFNLENBQUMsS0FBSyxDQUFDLEVBQUUsR0FBRyxFQUFFLFFBQVEsRUFBRSxFQUFFLDRDQUE0QyxDQUFDLENBQUM7Z0JBQ2hGLENBQUMsQ0FBQyxDQUFDO1lBQ1AsQ0FBQztZQUVELE9BQU8sWUFBWSxDQUFDLElBQUksQ0FBQyxJQUFJLEVBQUUsSUFBSSxDQUFDLENBQUM7UUFDdkMsQ0FBQyxDQUFDO1FBRUYsR0FBRyxDQUFDLFNBQVMsQ0FBQyxtQkFBbUIsRUFBRSxPQUFPLENBQUMsQ0FBQztRQUM1QyxJQUFJLEVBQUUsQ0FBQztJQUNULENBQUM7SUFBQyxPQUFPLEtBQUssRUFBRSxDQUFDO1FBQ2YsZUFBTSxDQUFDLEtBQUssQ0FBQyxFQUFFLEtBQUssRUFBRSxRQUFRLEVBQUUsRUFBRSxxQ0FBcUMsQ0FBQyxDQUFDO1FBQ3pFLElBQUksRUFBRSxDQUFDO0lBQ1QsQ0FBQztBQUNILENBQUMsQ0FBQztBQXhEVyxRQUFBLHFCQUFxQix5QkF3RGhDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcbWlkZGxld2FyZVxcaWRlbXBvdGVuY3kubWlkZGxld2FyZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgdHlwZSB7IE5leHRGdW5jdGlvbiwgUmVxdWVzdCwgUmVzcG9uc2UgfSBmcm9tICdleHByZXNzJztcbmltcG9ydCB7IGNhY2hlIH0gZnJvbSAnLi4vdXRpbHMvY2FjaGVNYW5hZ2VyJztcbmltcG9ydCB7IGxvZ2dlciB9IGZyb20gJy4uL3V0aWxzL2xvZ2dlcic7XG5cbi8qKlxuICogTWlkZGxld2FyZSBkZSBJZGVtcG90ZW5jaWFcbiAqIEdhcmFudGl6YSBxdWUgcGV0aWNpb25lcyByZXBldGlkYXMgY29uIGVsIG1pc21vICdJZGVtcG90ZW5jeS1LZXknIHJldG9ybmVuIGVsIG1pc21vIHJlc3VsdGFkb1xuICogc2luIGVqZWN1dGFyIGxhIGzDs2dpY2EgZGUgbmVnb2NpbyBtw7psdGlwbGVzIHZlY2VzLlxuICovXG5pbnRlcmZhY2UgQ2FjaGVkUmVzcG9uc2Uge1xuICBzdGF0dXM6IG51bWJlcjtcbiAgYm9keTogYW55O1xufVxuXG5leHBvcnQgY29uc3QgaWRlbXBvdGVuY3lNaWRkbGV3YXJlID0gYXN5bmMgKHJlcTogUmVxdWVzdCwgcmVzOiBSZXNwb25zZSwgbmV4dDogTmV4dEZ1bmN0aW9uKSA9PiB7XG4gIGNvbnN0IGlkZW1wb3RlbmN5S2V5ID0gcmVxLmhlYWRlcnNbJ2lkZW1wb3RlbmN5LWtleSddIGFzIHN0cmluZztcblxuICAvLyBTb2xvIGFwbGljYXIgc2kgaGF5IHVuYSBjbGF2ZSB5IE5PIGVzIHVuIEdFVCAobGFzIGxlY3R1cmFzIHNvbiBpZGVtcG90ZW50ZXMgcG9yIG5hdHVyYWxlemEpXG4gIGlmICghaWRlbXBvdGVuY3lLZXkgfHwgcmVxLm1ldGhvZCA9PT0gJ0dFVCcpIHtcbiAgICByZXR1cm4gbmV4dCgpO1xuICB9XG5cbiAgLy8gU2kgZWwgdXN1YXJpbyBlc3TDoSBhdXRlbnRpY2FkbywgaW5jbHVpbW9zIHN1IElEIGVuIGVsIHByZWZpam8gcGFyYSBldml0YXIgY29saXNpb25lcyBlbnRyZSB1c3Vhcmlvc1xuICBjb25zdCB1c2VySWQgPSAocmVxIGFzIGFueSkudXNlcj8uaWQgfHwgJ2Fub255bW91cyc7XG4gIGNvbnN0IGNhY2hlS2V5ID0gYGlkZW1wb3RlbmN5OiR7dXNlcklkfToke2lkZW1wb3RlbmN5S2V5fWA7XG5cbiAgdHJ5IHtcbiAgICAvLyAxLiBJbnRlbnRhciByZWN1cGVyYXIgcmVzcHVlc3RhIHByZXZpYSBkZWwgY2FjaMOpIChMMSBvIEwyKVxuICAgIGNvbnN0IGNhY2hlZFJlc3BvbnNlID0gKGF3YWl0IGNhY2hlLmdldChjYWNoZUtleSkpIGFzIENhY2hlZFJlc3BvbnNlO1xuXG4gICAgaWYgKGNhY2hlZFJlc3BvbnNlKSB7XG4gICAgICBsb2dnZXIuaW5mbyh7IGNhY2hlS2V5LCBwYXRoOiByZXEucGF0aCB9LCAnSWRlbXBvdGVuY3kgSElUOiBSZXRvcm5hbmRvIHJlc3B1ZXN0YSBjYWNoZWFkYScpO1xuICAgICAgcmVzLnNldEhlYWRlcignWC1JZGVtcG90ZW5jeS1IaXQnLCAndHJ1ZScpO1xuICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoY2FjaGVkUmVzcG9uc2Uuc3RhdHVzKS5qc29uKGNhY2hlZFJlc3BvbnNlLmJvZHkpO1xuICAgIH1cblxuICAgIC8vIDIuIEludGVyY2VwdGFyIHJlcy5qc29uIHBhcmEgZ3VhcmRhciBsYSByZXNwdWVzdGEgYW50ZXMgZGUgZW52aWFybGFcbiAgICBjb25zdCBvcmlnaW5hbEpzb24gPSByZXMuanNvbjtcblxuICAgIHJlcy5qc29uID0gZnVuY3Rpb24gKGJvZHk6IGFueSk6IFJlc3BvbnNlIHtcbiAgICAgIC8vIFJlc3RhdXJhbW9zIGVsIG3DqXRvZG8gb3JpZ2luYWxcbiAgICAgIHJlcy5qc29uID0gb3JpZ2luYWxKc29uO1xuXG4gICAgICAvLyBHdWFyZGFyIGVuIGNhY2jDqSBzb2xvIHNpIGxhIHJlc3B1ZXN0YSBlcyBleGl0b3NhIG8gZXJyb3IgZGUgY2xpZW50ZSAoMnh4LCA0eHgpXG4gICAgICAvLyBFdml0YW1vcyBjYWNoZWFyIGVycm9yZXMgZGUgc2Vydmlkb3IgKDV4eCkgcGFyYSBwZXJtaXRpciByZWludGVudG9zIGlubWVkaWF0b3NcbiAgICAgIGlmIChyZXMuc3RhdHVzQ29kZSA8IDUwMCkge1xuICAgICAgICAvLyBUVEwgZGUgMjQgaG9yYXMgcG9yIGRlZmVjdG8gcGFyYSBsbGF2ZXMgZGUgaWRlbXBvdGVuY2lhXG4gICAgICAgIGNhY2hlXG4gICAgICAgICAgLnNldChcbiAgICAgICAgICAgIGNhY2hlS2V5LFxuICAgICAgICAgICAge1xuICAgICAgICAgICAgICBzdGF0dXM6IHJlcy5zdGF0dXNDb2RlLFxuICAgICAgICAgICAgICBib2R5LFxuICAgICAgICAgICAgfSxcbiAgICAgICAgICAgIHsgdHRsOiA4NjQwMCB9LFxuICAgICAgICAgIClcbiAgICAgICAgICAuY2F0Y2goZXJyID0+IHtcbiAgICAgICAgICAgIGxvZ2dlci5lcnJvcih7IGVyciwgY2FjaGVLZXkgfSwgJ0Vycm9yIGFsIGd1YXJkYXIgcmVzcHVlc3RhIGRlIGlkZW1wb3RlbmNpYScpO1xuICAgICAgICAgIH0pO1xuICAgICAgfVxuXG4gICAgICByZXR1cm4gb3JpZ2luYWxKc29uLmNhbGwodGhpcywgYm9keSk7XG4gICAgfTtcblxuICAgIHJlcy5zZXRIZWFkZXIoJ1gtSWRlbXBvdGVuY3ktSGl0JywgJ2ZhbHNlJyk7XG4gICAgbmV4dCgpO1xuICB9IGNhdGNoIChlcnJvcikge1xuICAgIGxvZ2dlci5lcnJvcih7IGVycm9yLCBjYWNoZUtleSB9LCAnRXJyb3IgZW4gbWlkZGxld2FyZSBkZSBpZGVtcG90ZW5jaWEnKTtcbiAgICBuZXh0KCk7XG4gIH1cbn07XG4iXSwidmVyc2lvbiI6M30=

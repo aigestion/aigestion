@@ -61,4 +61,15 @@ router.post('/portal', requireAuth, async (req: any, res: any) => {
   }
 });
 
+router.post('/paypal/create-order', requireAuth, async (req: any, res: any) => {
+  // Dynamically import controller to avoid circular deps if any, or just call directly
+  const { createPayPalOrder } = await import('../controllers/billing.controller');
+  await createPayPalOrder(req, res);
+});
+
+router.post('/paypal/capture-order', requireAuth, async (req: any, res: any) => {
+  const { capturePayPalOrder } = await import('../controllers/billing.controller');
+  await capturePayPalOrder(req, res);
+});
+
 export default router;

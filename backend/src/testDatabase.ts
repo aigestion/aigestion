@@ -1,40 +1,50 @@
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
-// Simple test database setup without MongoMemoryServer
-// Uses a local MongoDB instance or skips connection if unavailable
-
+let mongoServer: InstanceType<typeof MongoMemoryServer> | undefined;
 let isConnected = false;
 
 export const startInMemoryMongo = async (): Promise<void> => {
   if (isConnected) return;
 
-  // SECURITY: Always use a dedicated test database, never production
-  const uri = 'mongodb://127.0.0.1:27017/aigestion-test-jest';
-
-  console.log('🔧 [TEST] Connecting to MongoDB...');
-
   try {
-    // Connect to the provided URI (even in test mode)
+    // Create an actual in-memory MongoDB instance
+    mongoServer = await MongoMemoryServer.create();
+    const uri = mongoServer.getUri();
+
+    console.log(`🔧 [TEST] Connecting to MongoMemoryServer at ${uri}`);
+
     await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 5000,
-      connectTimeoutMS: 10000,
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 30000,
     });
+
     isConnected = true;
-    console.log(`✅ [TEST] Connected to MongoDB at ${uri}`);
-  } catch (error) {
-    console.log('⚠️ [TEST] MongoDB not available, tests will use mocks');
-    isConnected = true; // Mark as connected to prevent retry loops
+    console.log('✅ [TEST] Connected to MongoMemoryServer successfully');
+  } catch (error: any) {
+    console.error('❌ [TEST] Failed to start MongoMemoryServer:', error);
+
+    // Fallback if MongoMemoryServer fails (e.g., binaries missing)
+    const fallbackUri = 'mongodb://127.0.0.1:27017/aigestion-test-jest';
+    console.warn(`⚠️ [TEST] Using local fallback at ${fallbackUri}`);
+
+    try {
+      await mongoose.connect(fallbackUri);
+      isConnected = true;
+    } catch (fallbackError) {
+      console.error('❌ [TEST] Global MongoDB connection failure');
+      throw error;
+    }
   }
 };
 
 export const stopInMemoryMongo = async (): Promise<void> => {
   if (mongoose.connection.readyState !== 0) {
-    try {
-      await mongoose.disconnect();
-    } catch {
-      // Ignore disconnect errors
-    }
+    await mongoose.disconnect();
+  }
+  if (mongoServer) {
+    await mongoServer.stop();
   }
   isConnected = false;
-  console.log('🔧 [TEST] MongoDB connection closed');
+  console.log('🔧 [TEST] MongoDB connection and server closed');
 };

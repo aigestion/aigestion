@@ -1,0 +1,80 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile.production
+#1 transferring dockerfile: 41B 0.0s
+#1 transferring dockerfile: 906B 0.1s done
+#1 DONE 0.2s
+
+#2 [internal] load metadata for docker.io/library/node:22-alpine
+#2 ...
+
+#3 [internal] load metadata for docker.io/library/nginx:alpine
+#3 DONE 0.3s
+
+#4 [auth] library/node:pull token for registry-1.docker.io
+#4 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:22-alpine
+#2 DONE 1.5s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 514B 0.1s done
+#5 DONE 0.1s
+
+#6 [builder 1/6] FROM docker.io/library/node:22-alpine@sha256:e4bf2a82ad0a4037d28035ae71529873c069b13eb0455466ae0bc13363826e34
+#6 resolve docker.io/library/node:22-alpine@sha256:e4bf2a82ad0a4037d28035ae71529873c069b13eb0455466ae0bc13363826e34 done
+#6 DONE -0.5s
+
+#7 [internal] load build context
+#7 DONE 0.0s
+
+#8 [stage-1 1/3] FROM docker.io/library/nginx:alpine@sha256:7d7a15b8a280c661051955f14c2b91fed3e23724ddba18d2f53e8b44e74ab37a
+#8 resolve docker.io/library/nginx:alpine@sha256:7d7a15b8a280c661051955f14c2b91fed3e23724ddba18d2f53e8b44e74ab37a
+#8 resolve docker.io/library/nginx:alpine@sha256:7d7a15b8a280c661051955f14c2b91fed3e23724ddba18d2f53e8b44e74ab37a done
+#8 CACHED
+
+#7 [internal] load build context
+#7 transferring context: 1.26MB 5.3s
+#7 transferring context: 2.91MB 10.4s
+#7 transferring context: 4.73MB 16.7s done
+#7 DONE 21.0s
+
+#9 [builder 2/6] WORKDIR /app
+#9 CACHED
+
+#10 [builder 3/6] RUN npm install -g pnpm@9
+#10 CACHED
+
+#11 [builder 4/6] COPY . .
+#11 DONE 104.2s
+
+#12 [builder 5/6] RUN pnpm install --frozen-lockfile
+#12 8.616 Scope: all 11 workspace projects
+#12 14.74 ÔÇëERR_PNPM_OUTDATED_LOCKFILEÔÇë Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to date with <ROOT>/package.json
+#12 14.74 
+#12 14.74 Note that in CI environments this setting is true by default. If you still need to run install in such cases, use "pnpm install --no-frozen-lockfile"
+#12 14.74 
+#12 14.74     Failure reason:
+#12 14.74     specifiers in the lockfile ({"@vercel/analytics":"^1.6.1","@vercel/speed-insights":"^1.3.1","winston":"^3.19.0","winston-daily-rotate-file":"^5.0.0","@babel/core":"^7.28.5","@babel/preset-env":"^7.28.5","@babel/preset-typescript":"^7.28.5","@jest/console":"^29.7.0","@jest/reporters":"^29.7.0","@jest/test-result":"^29.7.0","@testing-library/jest-dom":"^6.9.1","@trunkio/launcher":"^1.3.4","@types/caller":"^1.0.2","@types/debug":"^4.1.12","@types/jest":"^29.5.14","@types/jest-specific-snapshot":"^0.5.9","@types/node":"^22.15.21","@types/semver":"^7.7.0","@typescript-eslint/eslint-plugin":"^8.32.1","@typescript-eslint/parser":"^8.32.1","babel-jest":"^30.2.0","caller":"^1.1.0","chalk":"^4.1.2","debug":"^4.4.1","eslint":"9.27.0","eslint-config-prettier":"^10.1.5","eslint-import-resolver-typescript":"^4.4.1","eslint-plugin-import":"^2.31.0","eslint-plugin-import-x":"^4.13.3","eslint-plugin-jest":"^28.11.0","eslint-plugin-n":"^17.18.0","eslint-plugin-prettier":"^5.4.0","eslint-plugin-simple-import-sort":"^12.1.1","fast-sort":"^3.4.1","husky":"^9.1.7","jest":"^29.7.0","jest-environment-jsdom":"^29.7.0","jest-extended":"^7.0.0","jest-junit":"^16.0.0","jest-specific-snapshot":"^8.0.0","lint-staged":"^15.5.2","semver":"^7.7.2","simple-git":"^3.27.0","sonarqube-scanner":"^4.3.4","ts-jest":"^29.4.6","ts-node":"^10.9.2","tsconfig-paths":"^4.2.0","typescript":"^5.9.3","typescript-eslint":"^8.32.1","yaml":"^2.8.0","zod":"^3.22.4"}) don't match specs in package.json ({"@babel/core":"^7.28.5","@babel/preset-env":"^7.28.5","@babel/preset-typescript":"^7.28.5","@jest/console":"^29.7.0","@jest/reporters":"^29.7.0","@jest/test-result":"^29.7.0","@testing-library/jest-dom":"^6.9.1","@trunkio/launcher":"^1.3.4","@types/caller":"^1.0.2","@types/debug":"^4.1.12","@types/jest":"^29.5.14","@types/jest-specific-snapshot":"^0.5.9","@types/node":"^22.15.21","@types/semver":"^7.7.0","@typescript-eslint/eslint-plugin":"^8.32.1","@typescript-eslint/parser":"^8.32.1","babel-jest":"^30.2.0","caller":"^1.1.0","chalk":"^4.1.2","concurrently":"^9.0.1","debug":"^4.4.1","eslint":"9.27.0","eslint-config-prettier":"^10.1.5","eslint-import-resolver-typescript":"^4.4.1","eslint-plugin-import":"^2.31.0","eslint-plugin-import-x":"^4.13.3","eslint-plugin-jest":"^28.11.0","eslint-plugin-n":"^17.18.0","eslint-plugin-prettier":"^5.4.0","eslint-plugin-simple-import-sort":"^12.1.1","fast-sort":"^3.4.1","husky":"^9.1.7","identity-obj-proxy":"^3.0.0","jest":"^29.7.0","jest-environment-jsdom":"^29.7.0","jest-extended":"^7.0.0","jest-junit":"^16.0.0","jest-specific-snapshot":"^8.0.0","lint-staged":"^15.5.2","semver":"^7.7.2","simple-git":"^3.27.0","sonarqube-scanner":"^4.3.4","ts-jest":"^29.4.6","ts-node":"^10.9.2","tsconfig-paths":"^4.2.0","typescript":"^5.9.3","typescript-eslint":"^8.32.1","yaml":"^2.8.0","zod":"^3.22.4","@vercel/analytics":"^1.6.1","@vercel/speed-insights":"^1.3.1","winston":"^3.19.0","winston-daily-rotate-file":"^5.0.0"})
+#12 ERROR: process "/bin/sh -c pnpm install --frozen-lockfile" did not complete successfully: exit code: 1
+------
+ > [builder 5/6] RUN pnpm install --frozen-lockfile:
+8.616 Scope: all 11 workspace projects
+14.74 ÔÇëERR_PNPM_OUTDATED_LOCKFILEÔÇë Cannot install with "frozen-lockfile" because pnpm-lock.yaml is not up to date with <ROOT>/package.json
+14.74 
+14.74 Note that in CI environments this setting is true by default. If you still need to run install in such cases, use "pnpm install --no-frozen-lockfile"
+14.74 
+14.74     Failure reason:
+14.74     specifiers in the lockfile ({"@vercel/analytics":"^1.6.1","@vercel/speed-insights":"^1.3.1","winston":"^3.19.0","winston-daily-rotate-file":"^5.0.0","@babel/core":"^7.28.5","@babel/preset-env":"^7.28.5","@babel/preset-typescript":"^7.28.5","@jest/console":"^29.7.0","@jest/reporters":"^29.7.0","@jest/test-result":"^29.7.0","@testing-library/jest-dom":"^6.9.1","@trunkio/launcher":"^1.3.4","@types/caller":"^1.0.2","@types/debug":"^4.1.12","@types/jest":"^29.5.14","@types/jest-specific-snapshot":"^0.5.9","@types/node":"^22.15.21","@types/semver":"^7.7.0","@typescript-eslint/eslint-plugin":"^8.32.1","@typescript-eslint/parser":"^8.32.1","babel-jest":"^30.2.0","caller":"^1.1.0","chalk":"^4.1.2","debug":"^4.4.1","eslint":"9.27.0","eslint-config-prettier":"^10.1.5","eslint-import-resolver-typescript":"^4.4.1","eslint-plugin-import":"^2.31.0","eslint-plugin-import-x":"^4.13.3","eslint-plugin-jest":"^28.11.0","eslint-plugin-n":"^17.18.0","eslint-plugin-prettier":"^5.4.0","eslint-plugin-simple-import-sort":"^12.1.1","fast-sort":"^3.4.1","husky":"^9.1.7","jest":"^29.7.0","jest-environment-jsdom":"^29.7.0","jest-extended":"^7.0.0","jest-junit":"^16.0.0","jest-specific-snapshot":"^8.0.0","lint-staged":"^15.5.2","semver":"^7.7.2","simple-git":"^3.27.0","sonarqube-scanner":"^4.3.4","ts-jest":"^29.4.6","ts-node":"^10.9.2","tsconfig-paths":"^4.2.0","typescript":"^5.9.3","typescript-eslint":"^8.32.1","yaml":"^2.8.0","zod":"^3.22.4"}) don't match specs in package.json ({"@babel/core":"^7.28.5","@babel/preset-env":"^7.28.5","@babel/preset-typescript":"^7.28.5","@jest/console":"^29.7.0","@jest/reporters":"^29.7.0","@jest/test-result":"^29.7.0","@testing-library/jest-dom":"^6.9.1","@trunkio/launcher":"^1.3.4","@types/caller":"^1.0.2","@types/debug":"^4.1.12","@types/jest":"^29.5.14","@types/jest-specific-snapshot":"^0.5.9","@types/node":"^22.15.21","@types/semver":"^7.7.0","@typescript-eslint/eslint-plugin":"^8.32.1","@typescript-eslint/parser":"^8.32.1","babel-jest":"^30.2.0","caller":"^1.1.0","chalk":"^4.1.2","concurrently":"^9.0.1","debug":"^4.4.1","eslint":"9.27.0","eslint-config-prettier":"^10.1.5","eslint-import-resolver-typescript":"^4.4.1","eslint-plugin-import":"^2.31.0","eslint-plugin-import-x":"^4.13.3","eslint-plugin-jest":"^28.11.0","eslint-plugin-n":"^17.18.0","eslint-plugin-prettier":"^5.4.0","eslint-plugin-simple-import-sort":"^12.1.1","fast-sort":"^3.4.1","husky":"^9.1.7","identity-obj-proxy":"^3.0.0","jest":"^29.7.0","jest-environment-jsdom":"^29.7.0","jest-extended":"^7.0.0","jest-junit":"^16.0.0","jest-specific-snapshot":"^8.0.0","lint-staged":"^15.5.2","semver":"^7.7.2","simple-git":"^3.27.0","sonarqube-scanner":"^4.3.4","ts-jest":"^29.4.6","ts-node":"^10.9.2","tsconfig-paths":"^4.2.0","typescript":"^5.9.3","typescript-eslint":"^8.32.1","yaml":"^2.8.0","zod":"^3.22.4","@vercel/analytics":"^1.6.1","@vercel/speed-insights":"^1.3.1","winston":"^3.19.0","winston-daily-rotate-file":"^5.0.0"})
+------
+Dockerfile.production:13
+--------------------
+  11 |     
+  12 |     # Install dependencies
+  13 | >>> RUN pnpm install --frozen-lockfile
+  14 |     
+  15 |     # Build the application
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c pnpm install --frozen-lockfile" did not complete successfully: exit code: 1
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/m3qonjuw02552dkbveybbe6sy

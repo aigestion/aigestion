@@ -1,0 +1,100 @@
+{
+  "name": "16-invoice-generation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtDayOfMonth": 1,
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "name": "Monthly Billing",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT * FROM subscriptions WHERE status = 'active'"
+      },
+      "name": "Get Subscriptions",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.invoiceninja.com/v1/invoices",
+        "method": "POST",
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "client_id",
+              "value": "={{$node[\"Get Subscriptions\"].json[\"client_id\"]}}"
+            },
+            {
+              "name": "amount",
+              "value": "={{$node[\"Get Subscriptions\"].json[\"plan_amount\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Create Invoice",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "toEmail": "={{$node[\"Get Subscriptions\"].json[\"email\"]}}",
+        "subject": "Your Monthly Invoice",
+        "text": "Attached is your invoice."
+      },
+      "name": "Email Client",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Monthly Billing": {
+      "main": [
+        [
+          {
+            "node": "Get Subscriptions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Subscriptions": {
+      "main": [
+        [
+          {
+            "node": "Create Invoice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Invoice": {
+      "main": [
+        [
+          {
+            "node": "Email Client",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

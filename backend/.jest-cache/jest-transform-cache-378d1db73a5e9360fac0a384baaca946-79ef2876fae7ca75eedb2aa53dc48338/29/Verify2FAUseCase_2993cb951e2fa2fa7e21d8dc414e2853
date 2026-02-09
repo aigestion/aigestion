@@ -1,0 +1,61 @@
+66f04bab4635a259a30270cfc085c13e
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Verify2FAUseCase = void 0;
+const inversify_1 = require("inversify");
+const types_1 = require("../../types");
+const User_1 = require("../../models/User");
+const two_factor_service_1 = require("../../services/two-factor.service");
+const rate_limit_service_1 = require("../../services/rate-limit.service");
+const errors_1 = require("../../utils/errors");
+let Verify2FAUseCase = class Verify2FAUseCase {
+    twoFactorService;
+    rateLimitService;
+    constructor(twoFactorService, rateLimitService) {
+        this.twoFactorService = twoFactorService;
+        this.rateLimitService = rateLimitService;
+    }
+    async execute(userId, token) {
+        // Rate Limit: 5 attempts per 15 minutes
+        await this.rateLimitService.incrementAndCheck(`2fa_verify:${userId}`, 5, 15 * 60);
+        const user = await User_1.User.findById(userId);
+        if (!user) {
+            throw new errors_1.AppError('User not found', 404, 'USER_NOT_FOUND');
+        }
+        if (!user.twoFactorSecret) {
+            throw new errors_1.AppError('2FA not enabled for this user', 400, '2FA_NOT_ENABLED');
+        }
+        const isValid = this.twoFactorService.verifyToken(user.twoFactorSecret, token);
+        if (!isValid) {
+            throw new errors_1.AppError('Invalid 2FA token', 401, 'INVALID_2FA_TOKEN');
+        }
+        // Mark MFA as enabled after successful verification
+        user.isMfaEnabled = true;
+        // Optionally, you could clear the secret after verification for added security
+        // user.twoFactorSecret = undefined;
+        // Clear rate limit on success
+        await this.rateLimitService.reset(`2fa_verify:${userId}`);
+        await user.save();
+    }
+};
+exports.Verify2FAUseCase = Verify2FAUseCase;
+exports.Verify2FAUseCase = Verify2FAUseCase = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.TwoFactorService)),
+    __param(1, (0, inversify_1.inject)(types_1.TYPES.RateLimitService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof two_factor_service_1.TwoFactorService !== "undefined" && two_factor_service_1.TwoFactorService) === "function" ? _a : Object, typeof (_b = typeof rate_limit_service_1.RateLimitService !== "undefined" && rate_limit_service_1.RateLimitService) === "function" ? _b : Object])
+], Verify2FAUseCase);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxhcHBsaWNhdGlvblxcdXNlY2FzZXNcXFZlcmlmeTJGQVVzZUNhc2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLHlDQUErQztBQUMvQyx1Q0FBb0M7QUFDcEMsNENBQXlDO0FBQ3pDLDBFQUFxRTtBQUNyRSwwRUFBcUU7QUFDckUsK0NBQThDO0FBR3ZDLElBQU0sZ0JBQWdCLEdBQXRCLE1BQU0sZ0JBQWdCO0lBRWU7SUFDQTtJQUYxQyxZQUMwQyxnQkFBa0MsRUFDbEMsZ0JBQWtDO1FBRGxDLHFCQUFnQixHQUFoQixnQkFBZ0IsQ0FBa0I7UUFDbEMscUJBQWdCLEdBQWhCLGdCQUFnQixDQUFrQjtJQUN6RSxDQUFDO0lBRUosS0FBSyxDQUFDLE9BQU8sQ0FBQyxNQUFjLEVBQUUsS0FBYTtRQUN6Qyx3Q0FBd0M7UUFDeEMsTUFBTSxJQUFJLENBQUMsZ0JBQWdCLENBQUMsaUJBQWlCLENBQUMsY0FBYyxNQUFNLEVBQUUsRUFBRSxDQUFDLEVBQUUsRUFBRSxHQUFHLEVBQUUsQ0FBQyxDQUFDO1FBRWxGLE1BQU0sSUFBSSxHQUFHLE1BQU0sV0FBSSxDQUFDLFFBQVEsQ0FBQyxNQUFNLENBQUMsQ0FBQztRQUN6QyxJQUFJLENBQUMsSUFBSSxFQUFFLENBQUM7WUFDVixNQUFNLElBQUksaUJBQVEsQ0FBQyxnQkFBZ0IsRUFBRSxHQUFHLEVBQUUsZ0JBQWdCLENBQUMsQ0FBQztRQUM5RCxDQUFDO1FBQ0QsSUFBSSxDQUFDLElBQUksQ0FBQyxlQUFlLEVBQUUsQ0FBQztZQUMxQixNQUFNLElBQUksaUJBQVEsQ0FBQywrQkFBK0IsRUFBRSxHQUFHLEVBQUUsaUJBQWlCLENBQUMsQ0FBQztRQUM5RSxDQUFDO1FBQ0QsTUFBTSxPQUFPLEdBQUcsSUFBSSxDQUFDLGdCQUFnQixDQUFDLFdBQVcsQ0FBQyxJQUFJLENBQUMsZUFBZSxFQUFFLEtBQUssQ0FBQyxDQUFDO1FBQy9FLElBQUksQ0FBQyxPQUFPLEVBQUUsQ0FBQztZQUNiLE1BQU0sSUFBSSxpQkFBUSxDQUFDLG1CQUFtQixFQUFFLEdBQUcsRUFBRSxtQkFBbUIsQ0FBQyxDQUFDO1FBQ3BFLENBQUM7UUFDRCxvREFBb0Q7UUFDcEQsSUFBSSxDQUFDLFlBQVksR0FBRyxJQUFJLENBQUM7UUFDekIsK0VBQStFO1FBQy9FLG9DQUFvQztRQUNwQyw4QkFBOEI7UUFDOUIsTUFBTSxJQUFJLENBQUMsZ0JBQWdCLENBQUMsS0FBSyxDQUFDLGNBQWMsTUFBTSxFQUFFLENBQUMsQ0FBQztRQUMxRCxNQUFNLElBQUksQ0FBQyxJQUFJLEVBQUUsQ0FBQztJQUNwQixDQUFDO0NBQ0YsQ0FBQTtBQTdCWSw0Q0FBZ0I7MkJBQWhCLGdCQUFnQjtJQUQ1QixJQUFBLHNCQUFVLEdBQUU7SUFHUixXQUFBLElBQUEsa0JBQU0sRUFBQyxhQUFLLENBQUMsZ0JBQWdCLENBQUMsQ0FBQTtJQUM5QixXQUFBLElBQUEsa0JBQU0sRUFBQyxhQUFLLENBQUMsZ0JBQWdCLENBQUMsQ0FBQTt5REFEMkIscUNBQWdCLG9CQUFoQixxQ0FBZ0Isb0RBQ2hCLHFDQUFnQixvQkFBaEIscUNBQWdCO0dBSGpFLGdCQUFnQixDQTZCNUIiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxhcHBsaWNhdGlvblxcdXNlY2FzZXNcXFZlcmlmeTJGQVVzZUNhc2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaW5qZWN0YWJsZSwgaW5qZWN0IH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB7IFRZUEVTIH0gZnJvbSAnLi4vLi4vdHlwZXMnO1xuaW1wb3J0IHsgVXNlciB9IGZyb20gJy4uLy4uL21vZGVscy9Vc2VyJztcbmltcG9ydCB7IFR3b0ZhY3RvclNlcnZpY2UgfSBmcm9tICcuLi8uLi9zZXJ2aWNlcy90d28tZmFjdG9yLnNlcnZpY2UnO1xuaW1wb3J0IHsgUmF0ZUxpbWl0U2VydmljZSB9IGZyb20gJy4uLy4uL3NlcnZpY2VzL3JhdGUtbGltaXQuc2VydmljZSc7XG5pbXBvcnQgeyBBcHBFcnJvciB9IGZyb20gJy4uLy4uL3V0aWxzL2Vycm9ycyc7XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBWZXJpZnkyRkFVc2VDYXNlIHtcbiAgY29uc3RydWN0b3IoXG4gICAgQGluamVjdChUWVBFUy5Ud29GYWN0b3JTZXJ2aWNlKSBwcml2YXRlIHR3b0ZhY3RvclNlcnZpY2U6IFR3b0ZhY3RvclNlcnZpY2UsXG4gICAgQGluamVjdChUWVBFUy5SYXRlTGltaXRTZXJ2aWNlKSBwcml2YXRlIHJhdGVMaW1pdFNlcnZpY2U6IFJhdGVMaW1pdFNlcnZpY2UsXG4gICkge31cblxuICBhc3luYyBleGVjdXRlKHVzZXJJZDogc3RyaW5nLCB0b2tlbjogc3RyaW5nKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgLy8gUmF0ZSBMaW1pdDogNSBhdHRlbXB0cyBwZXIgMTUgbWludXRlc1xuICAgIGF3YWl0IHRoaXMucmF0ZUxpbWl0U2VydmljZS5pbmNyZW1lbnRBbmRDaGVjayhgMmZhX3ZlcmlmeToke3VzZXJJZH1gLCA1LCAxNSAqIDYwKTtcblxuICAgIGNvbnN0IHVzZXIgPSBhd2FpdCBVc2VyLmZpbmRCeUlkKHVzZXJJZCk7XG4gICAgaWYgKCF1c2VyKSB7XG4gICAgICB0aHJvdyBuZXcgQXBwRXJyb3IoJ1VzZXIgbm90IGZvdW5kJywgNDA0LCAnVVNFUl9OT1RfRk9VTkQnKTtcbiAgICB9XG4gICAgaWYgKCF1c2VyLnR3b0ZhY3RvclNlY3JldCkge1xuICAgICAgdGhyb3cgbmV3IEFwcEVycm9yKCcyRkEgbm90IGVuYWJsZWQgZm9yIHRoaXMgdXNlcicsIDQwMCwgJzJGQV9OT1RfRU5BQkxFRCcpO1xuICAgIH1cbiAgICBjb25zdCBpc1ZhbGlkID0gdGhpcy50d29GYWN0b3JTZXJ2aWNlLnZlcmlmeVRva2VuKHVzZXIudHdvRmFjdG9yU2VjcmV0LCB0b2tlbik7XG4gICAgaWYgKCFpc1ZhbGlkKSB7XG4gICAgICB0aHJvdyBuZXcgQXBwRXJyb3IoJ0ludmFsaWQgMkZBIHRva2VuJywgNDAxLCAnSU5WQUxJRF8yRkFfVE9LRU4nKTtcbiAgICB9XG4gICAgLy8gTWFyayBNRkEgYXMgZW5hYmxlZCBhZnRlciBzdWNjZXNzZnVsIHZlcmlmaWNhdGlvblxuICAgIHVzZXIuaXNNZmFFbmFibGVkID0gdHJ1ZTtcbiAgICAvLyBPcHRpb25hbGx5LCB5b3UgY291bGQgY2xlYXIgdGhlIHNlY3JldCBhZnRlciB2ZXJpZmljYXRpb24gZm9yIGFkZGVkIHNlY3VyaXR5XG4gICAgLy8gdXNlci50d29GYWN0b3JTZWNyZXQgPSB1bmRlZmluZWQ7XG4gICAgLy8gQ2xlYXIgcmF0ZSBsaW1pdCBvbiBzdWNjZXNzXG4gICAgYXdhaXQgdGhpcy5yYXRlTGltaXRTZXJ2aWNlLnJlc2V0KGAyZmFfdmVyaWZ5OiR7dXNlcklkfWApO1xuICAgIGF3YWl0IHVzZXIuc2F2ZSgpO1xuICB9XG59XG4iXSwidmVyc2lvbiI6M30=

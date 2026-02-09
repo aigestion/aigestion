@@ -1,15 +1,15 @@
 from app.api import routes
 from app.config import get_settings
 from app.middleware import PrometheusMiddleware
-from app.middleware.zero_trust import ZeroTrustMiddleware
-from app.logging_config import configure_logging
+# from app.middleware.zero_trust import ZeroTrustMiddleware
+# from app.logging_config import configure_logging
 from app.services.metrics_service import metrics_service
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
 # Configure Logging
-configure_logging()
+# configure_logging()
 
 settings = get_settings()
 
@@ -24,7 +24,7 @@ app = FastAPI(
 app.add_middleware(PrometheusMiddleware)
 
 # Zero Trust Middleware - Security Layer
-app.add_middleware(ZeroTrustMiddleware)
+# app.add_middleware(ZeroTrustMiddleware)
 
 # CORS
 origins = settings.ALLOWED_HOSTS.split(",")

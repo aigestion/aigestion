@@ -138,6 +138,16 @@ const envSchema = z.object({
   // Supabase Configuration
   SUPABASE_URL: z.string().url().optional().describe('Supabase project URL'),
   SUPABASE_KEY: z.string().optional().describe('Supabase API key (Anon or Service Role)'),
+  ML_SERVICE_URL: z
+    .string()
+    .url()
+    .default('http://localhost:5000')
+    .describe('URL for NeuroCore ML service'),
+  IA_ENGINE_URL: z
+    .string()
+    .url()
+    .default('http://localhost:8000')
+    .describe('URL for Swarm IA engine'),
 
   // Runway API Token
   RUNWAY_API_KEY: z.string().optional().describe('Runway API token for external services'),
@@ -414,15 +424,10 @@ const envSchema = z.object({
   STRIPE_CURRENCY: z.string().default('usd').describe('Default currency for payments'),
   TAVILY_API_KEY: z.string().optional().describe('Tavily API key for web search'),
 
-  // Voice Configuration (DashScope/Qwen)
-  DASHSCOPE_API_KEY: z.string().optional().describe('Alibaba Cloud DashScope API Key for Qwen TTS'),
-  QWEN_TTS_VOICE_ID: z
-    .string()
-    .optional()
-    .default('longxiaomiao')
-    .describe('Voice ID for Qwen TTS'),
-  ELEVENLABS_API_KEY: z.string().optional().describe('ElevenLabs API Key'),
-  ELEVENLABS_VOICE_ID: z.string().optional().describe('ElevenLabs Voice ID'),
+  // PayPal Configuration
+  PAYPAL_CLIENT_ID: z.string().optional().describe('PayPal Client ID'),
+  PAYPAL_CLIENT_SECRET: z.string().optional().describe('PayPal Client Secret'),
+  PAYPAL_MODE: z.enum(['sandbox', 'live']).default('sandbox').describe('PayPal Environment Mode'),
 });
 
 /**
