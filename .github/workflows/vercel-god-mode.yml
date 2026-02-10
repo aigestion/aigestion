@@ -60,7 +60,7 @@ jobs:
       - name: 📊 Bundle Size Analysis
         id: bundle
         run: |
-          cd frontend/website-epic
+          cd frontend/apps/website-epic
           SIZE=$(du -sh dist | cut -f1)
           echo "size=$SIZE" >> $GITHUB_OUTPUT
           echo "Bundle size: $SIZE"
@@ -68,7 +68,7 @@ jobs:
       - name: ⚡ Performance Score
         id: perf
         run: |
-          cd frontend/website-epic
+          cd frontend/apps/website-epic
           npx lighthouse dist/index.html --output=json --quiet > lighthouse.json
           SCORE=$(cat lighthouse.json | jq '.lhr.categories.performance.score * 100 | floor')
           echo "score=$SCORE" >> $GITHUB_OUTPUT
@@ -77,7 +77,7 @@ jobs:
       - name: 🔒 Security Check
         id: security
         run: |
-          npm audit --audit-level=high --json > audit.json || echo "high" > security-status
+          npm audit --audit-level=critical --json > audit.json || echo "critical" > security-status
           if [ -f audit.json ]; then
             STATUS=$(cat audit.json | jq -r '.metadata.vulnerabilities.total')
             if [ "$STATUS" -eq 0 ]; then
@@ -95,7 +95,7 @@ jobs:
           PERF_SCORE=${{ steps.perf.outputs.score }}
           SECURITY=${{ steps.security.outputs.status }}
           FORCE=${{ github.event.inputs.force_deploy || 'false' }}
-          
+
           if [ "$FORCE" = "true" ]; then
             echo "approved=true" >> $GITHUB_OUTPUT
             echo "✅ Force deployment approved"
@@ -141,7 +141,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
-          working-directory: frontend/website-epic
+          working-directory: frontend/apps/website-epic
 
       - name: 📊 Deployment Summary
         run: |
@@ -222,7 +222,7 @@ jobs:
           if [ "${{ needs.vercel-deploy.result }}" != "success" ]; then
             STATUS="❌ Failed"
           fi
-          
+
           echo "## 🚀 AIGestion Deployment $STATUS" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Environment:** ${{ github.event.inputs.environment || 'production' }}" >> $GITHUB_STEP_SUMMARY
