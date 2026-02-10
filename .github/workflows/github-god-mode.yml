@@ -161,7 +161,6 @@ jobs:
         id: decision
         run: |
           FORCE=${{ github.event.inputs.force_deploy || 'false' }}
-          SECURITY=${{ steps.security-score.outputs.score }}
 
           if [ "$FORCE" = "true" ]; then
             echo "approved=true" >> $GITHUB_OUTPUT
