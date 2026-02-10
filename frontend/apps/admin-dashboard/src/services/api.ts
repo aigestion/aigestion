@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+const API_URL = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '/api';
 
 export interface SystemHealth {
   success: boolean;
@@ -7,6 +7,7 @@ export interface SystemHealth {
     timestamp: string;
     details?: string;
     version?: string;
+    uptime?: number;
   };
   requestId: string;
 }
@@ -14,7 +15,7 @@ export interface SystemHealth {
 export const api = {
   getSystemHealth: async (): Promise<SystemHealth> => {
     try {
-      const response = await fetch(`${API_URL}/system/health`);
+      const response = await fetch(`${API_URL}/health`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
