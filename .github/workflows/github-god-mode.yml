@@ -102,7 +102,9 @@ jobs:
         id: metrics
         run: |
           cd frontend/apps/website-epic
-          METRICS=$(cat <<EOF
+          {
+            echo "metrics<<EOF"
+            cat <<EOF
           {
             "total_files": $(find . -type f | wc -l),
             "total_lines": $(find . -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' | xargs wc -l | tail -1 | awk '{print $1}'),
@@ -112,13 +114,15 @@ jobs:
             "performance_score": "0"
           }
           EOF
-          )
-          echo "metrics=$METRICS" >> $GITHUB_OUTPUT
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: 🔍 Security Score Assessment
         id: security-score
         run: |
-          SCORE=$(cat <<EOF
+          {
+            echo "score<<EOF"
+            cat <<EOF
           {
             "secret_scan": "passed",
             "dependency_vulnerabilities": "0",
@@ -127,8 +131,8 @@ jobs:
             "overall_score": "95/100"
           }
           EOF
-          )
-          echo "score=$SCORE" >> $GITHUB_OUTPUT
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: ⚡ Performance Baseline
         id: perf-baseline
@@ -136,7 +140,9 @@ jobs:
           pnpm install --no-frozen-lockfile
           cd frontend/apps/website-epic
           pnpm run build
-          BASELINE=$(cat <<EOF
+          {
+            echo "baseline<<EOF"
+            cat <<EOF
           {
             "bundle_size": "$(du -sh dist | cut -f1)",
             "load_time": "1.2s",
@@ -145,13 +151,15 @@ jobs:
             "optimization_level": "enterprise"
           }
           EOF
-          )
-          echo "baseline=$BASELINE" >> $GITHUB_OUTPUT
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: ⚠️ Risk Assessment
         id: risk
         run: |
-          RISK=$(cat <<EOF
+          {
+            echo "risk<<EOF"
+            cat <<EOF
           {
             "deployment_risk": "low",
             "rollback_capability": "yes",
@@ -160,8 +168,8 @@ jobs:
             "incident_response": "ready"
           }
           EOF
-          )
-          echo "risk=$RISK" >> $GITHUB_OUTPUT
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: 🤖 Deployment Decision
         id: decision
