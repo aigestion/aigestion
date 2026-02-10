@@ -104,37 +104,29 @@ jobs:
         id: metrics
         run: |
           cd frontend/apps/website-epic
-          {
-            echo "metrics<<EOF"
-            cat <<EOF
-          {
-            "total_files": $(find . -type f | wc -l),
-            "total_lines": $(find . -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' | xargs wc -l | tail -1 | awk '{print $1}'),
-            "dependencies": $(cat package.json | jq '.dependencies | keys | length'),
-            "test_coverage": "0",
-            "security_issues": "0",
-            "performance_score": "0"
-          }
-          EOF
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          echo "metrics<<EOF" >> $GITHUB_OUTPUT
+          echo "{" >> $GITHUB_OUTPUT
+          echo "  \"total_files\": $(find . -type f | wc -l)," >> $GITHUB_OUTPUT
+          echo "  \"total_lines\": $(find . -name '*.ts' -o -name '*.tsx' -o -name '*.js' -o -name '*.jsx' | xargs wc -l | tail -1 | awk '{print $1}')," >> $GITHUB_OUTPUT
+          echo "  \"dependencies\": $(cat package.json | jq '.dependencies | keys | length')," >> $GITHUB_OUTPUT
+          echo "  \"test_coverage\": \"0\"," >> $GITHUB_OUTPUT
+          echo "  \"security_issues\": \"0\"," >> $GITHUB_OUTPUT
+          echo "  \"performance_score\": \"0\"" >> $GITHUB_OUTPUT
+          echo "}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: 🔍 Security Score Assessment
         id: security-score
         run: |
-          {
-            echo "score<<EOF"
-            cat <<EOF
-          {
-            "secret_scan": "passed",
-            "dependency_vulnerabilities": "0",
-            "code_quality": "A+",
-            "compliance": "GDPR, SOC2, ISO27001",
-            "overall_score": "95/100"
-          }
-          EOF
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          echo "score<<EOF" >> $GITHUB_OUTPUT
+          echo "{" >> $GITHUB_OUTPUT
+          echo "  \"secret_scan\": \"passed\"," >> $GITHUB_OUTPUT
+          echo "  \"dependency_vulnerabilities\": \"0\"," >> $GITHUB_OUTPUT
+          echo "  \"code_quality\": \"A+\"," >> $GITHUB_OUTPUT
+          echo "  \"compliance\": \"GDPR, SOC2, ISO27001\"," >> $GITHUB_OUTPUT
+          echo "  \"overall_score\": \"95/100\"" >> $GITHUB_OUTPUT
+          echo "}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: ⚡ Performance Baseline
         id: perf-baseline
@@ -142,36 +134,28 @@ jobs:
           pnpm install --no-frozen-lockfile
           cd frontend/apps/website-epic
           pnpm run build
-          {
-            echo "baseline<<EOF"
-            cat <<EOF
-          {
-            "bundle_size": "$(du -sh dist | cut -f1)",
-            "load_time": "1.2s",
-            "lighthouse_score": "95",
-            "core_web_vitals": "all_passed",
-            "optimization_level": "enterprise"
-          }
-          EOF
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          echo "baseline<<EOF" >> $GITHUB_OUTPUT
+          echo "{" >> $GITHUB_OUTPUT
+          echo "  \"bundle_size\": \"$(du -sh dist | cut -f1)\"," >> $GITHUB_OUTPUT
+          echo "  \"load_time\": \"1.2s\"," >> $GITHUB_OUTPUT
+          echo "  \"lighthouse_score\": \"95\"," >> $GITHUB_OUTPUT
+          echo "  \"core_web_vitals\": \"all_passed\"," >> $GITHUB_OUTPUT
+          echo "  \"optimization_level\": \"enterprise\"" >> $GITHUB_OUTPUT
+          echo "}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: ⚠️ Risk Assessment
         id: risk
         run: |
-          {
-            echo "risk<<EOF"
-            cat <<EOF
-          {
-            "deployment_risk": "low",
-            "rollback_capability": "yes",
-            "backup_status": "current",
-            "monitoring_coverage": "100%",
-            "incident_response": "ready"
-          }
-          EOF
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          echo "risk<<EOF" >> $GITHUB_OUTPUT
+          echo "{" >> $GITHUB_OUTPUT
+          echo "  \"deployment_risk\": \"low\"," >> $GITHUB_OUTPUT
+          echo "  \"rollback_capability\": \"yes\"," >> $GITHUB_OUTPUT
+          echo "  \"backup_status\": \"current\"," >> $GITHUB_OUTPUT
+          echo "  \"monitoring_coverage\": \"100%\"," >> $GITHUB_OUTPUT
+          echo "  \"incident_response\": \"ready\"" >> $GITHUB_OUTPUT
+          echo "}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: 🤖 Deployment Decision
         id: decision
