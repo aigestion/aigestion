@@ -45,17 +45,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: 📦 Install Dependencies
-        run: npm ci
+        run: pnpm install --no-frozen-lockfile
 
       - name: 🏗️ Build Application
-        run: npm run build
+        run: |
+          cd frontend/apps/website-epic
+          pnpm run build
 
       - name: 📊 Bundle Size Analysis
         id: bundle
@@ -121,17 +130,26 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: 📦 Install Dependencies
-        run: npm ci
+        run: pnpm install --no-frozen-lockfile
 
       - name: 🏗️ Build Application
-        run: npm run build
+        run: |
+          cd frontend/apps/website-epic
+          pnpm run build
 
       - name: 🚀 Deploy to Vercel
         id: deploy
