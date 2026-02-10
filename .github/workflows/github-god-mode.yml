@@ -9,7 +9,7 @@ on:
     types: [published, created, edited]
   schedule:
     # Run every 6 hours for continuous monitoring
-    - cron: '0 */6 * * *'
+    - cron: '4 14 * * *'
   workflow_dispatch:
     inputs:
       action_type:
