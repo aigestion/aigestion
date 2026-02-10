@@ -210,15 +210,13 @@ jobs:
 
       - name: 📦 Dependency Security Scan
         if: matrix.scan-type == 'dependencies'
-        run: |
-          cd frontend/apps/website-epic
-          pnpm audit --audit-level=high
+        run: pnpm audit --audit-level=critical --prod
 
       - name: 🔍 CodeQL Initialization
         if: matrix.scan-type == 'code'
         uses: github/codeql-action/init@v3
         with:
-          languages: '["javascript", "typescript"]'
+          languages: javascript, typescript
 
       - name: 🔍 CodeQL Analysis
         if: matrix.scan-type == 'code'
