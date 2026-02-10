@@ -131,5 +131,14 @@
     "@supabase/supabase-js": "^2.93.1",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "axios": "^1.13.5",
+      "fast-xml-parser": "^5.3.4",
+      "tar": "^6.2.1",
+      "cross-spawn": "^7.0.5",
+      "nanoid": "^3.3.8"
+    }
   }
 }

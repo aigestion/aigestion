@@ -94,6 +94,9 @@ import { YoutubeTranscriptionService } from '../utils/youtube-transcription.serv
 import { SystemController } from '../controllers/system.controller';
 import { YouTubeChannelService } from '../services/google/youtube-channel.service';
 import { YoutubeWatcherService } from '../utils/youtube-watcher.service';
+import { GmailService } from '../services/gmail.service';
+import { SheetsService } from '../services/sheets.service';
+import { Gemini2Service } from '../services/gemini-2.service';
 import { TYPES } from '../types';
 
 const container = new Container();
