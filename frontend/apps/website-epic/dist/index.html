@@ -33,6 +33,25 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
+    <!-- 💥 NUCLEAR SW KILLER: Unregister SW immediately before app loads -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for(let registration of registrations) {
+            registration.unregister().then(function() {
+              console.log('💥 SW Force Unregistered from index.html:', registration.scope);
+              // Clear caches as well for good measure
+              if ('caches' in window) {
+                caches.keys().then(function(names) {
+                  for (let name of names) caches.delete(name);
+                });
+              }
+            });
+          }
+        });
+      }
+    </script>
+
     <!-- Critical inline styles (skeleton only) -->
     <style>
       body {
@@ -47,13 +66,13 @@
       }
     </style>
 
-    <script type="module" crossorigin src="/assets/main-RdqEeAis.js"></script>
+    <script type="module" crossorigin src="/assets/main-B5DH-ZW_.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-react-DzSuaLpV.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-3d-BTgeB28l.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-motion-I6wcTx_q.js">
-    <link rel="modulepreload" crossorigin href="/assets/vendor-ui-B7S8ng-c.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-ui-DAuP2EEx.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-data-BRBMd6Um.js">
-    <link rel="stylesheet" crossorigin href="/assets/main-BoLCVK7G.css">
+    <link rel="stylesheet" crossorigin href="/assets/main-BSjZGEta.css">
   </head>
   <body>
     <div id="root"></div>

@@ -1,9 +1,9 @@
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 
 from core import AgentType, BaseAgent, Message, MessageType
 from services.browser import BrowserService
-from services.llm import LLMService
+from services.llm import LLMService, ModelTier
 
 logger = logging.getLogger("Agent-Navigator")
 
@@ -17,6 +17,8 @@ class Navigator(BaseAgent):
     def process_message(self, message: Message):
         if message.msg_type == MessageType.BROWSE_REQUEST:
             self._handle_browse(message)
+        elif message.msg_type == "VISION_REQUEST":
+            self._handle_vision(message)
 
     def _handle_browse(self, message: Message):
         payload = message.content
@@ -100,3 +102,28 @@ class Navigator(BaseAgent):
             self.send_message(
                 message.sender, f"Fatal error: {str(e)}", MessageType.ERROR
             )
+
+    def _handle_vision(self, message: Message):
+        """Handle visual analysis requests (e.g., screenshots, UI images)."""
+        payload = message.content
+        image_uri = payload.get("image_uri")
+        instruction = payload.get("instruction", "Describe this image.")
+
+        if not image_uri:
+            self.send_message(message.sender, "Missing image_uri", MessageType.ERROR)
+            return
+
+        self.log("initiating_vision_task", uri=image_uri)
+
+        try:
+            # Multi-modal prompt
+            content = [instruction, {"image_uri": image_uri}]
+            result = self.llm.generate_text(str(content), tier=ModelTier.REASONING)
+
+            self.send_message(
+                message.sender, {"analysis": result, "uri": image_uri}, "VISION_RESULT"
+            )
+            self.log("vision_task_success")
+        except Exception as e:
+            self.log("vision_fatal_error", error=str(e))
+            self.send_message(message.sender, str(e), MessageType.ERROR)

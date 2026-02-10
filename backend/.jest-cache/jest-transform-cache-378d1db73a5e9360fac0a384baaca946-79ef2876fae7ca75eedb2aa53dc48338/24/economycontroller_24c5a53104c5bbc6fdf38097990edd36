@@ -1,0 +1,103 @@
+d31b3cf2f43d5bb71516586e17c9b955
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EconomyController = void 0;
+const express_1 = require("express");
+const inversify_express_utils_1 = require("inversify-express-utils");
+const inversify_1 = require("inversify");
+const types_1 = require("../types");
+const economy_service_1 = require("../services/economy.service");
+const logger_1 = require("../utils/logger");
+let EconomyController = class EconomyController {
+    economyService;
+    constructor(economyService) {
+        this.economyService = economyService;
+    }
+    async getPrices(req, res) {
+        try {
+            const prices = await this.economyService.getEconomyUpdate();
+            res.status(200).json({ success: true, data: prices });
+        }
+        catch (error) {
+            logger_1.logger.error('[EconomyController] Error fetching prices:', error);
+            res.status(500).json({ success: false, message: 'Failed to fetch prices' });
+        }
+    }
+    async getAdvice(req, res) {
+        try {
+            const advice = await this.economyService.getInvestmentAdvice();
+            res.status(200).json({ success: true, data: advice });
+        }
+        catch (error) {
+            logger_1.logger.error('[EconomyController] Error fetching advice:', error);
+            res.status(500).json({ success: false, message: 'Failed to fetch advice' });
+        }
+    }
+    async getPortfolio(req, res) {
+        try {
+            // For the prototype, we use 'god_mode' as the userId.
+            // In production, this would come from req.user.id
+            const stats = await this.economyService.getPortfolioStats('god_mode');
+            res.status(200).json({ success: true, data: stats });
+        }
+        catch (error) {
+            logger_1.logger.error('[EconomyController] Error fetching portfolio:', error);
+            res.status(500).json({ success: false, message: 'Failed to fetch portfolio' });
+        }
+    }
+    async getHistory(req, res) {
+        try {
+            const symbol = req.params.symbol;
+            const history = await this.economyService.getHistoricalPrices(symbol);
+            res.status(200).json({ success: true, data: history });
+        }
+        catch (error) {
+            logger_1.logger.error(`[EconomyController] Error fetching history for ${req.params.symbol}:`, error);
+            res.status(500).json({ success: false, message: 'Failed to fetch history' });
+        }
+    }
+};
+exports.EconomyController = EconomyController;
+__decorate([
+    (0, inversify_express_utils_1.httpGet)('/prices'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _b : Object, typeof (_c = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _c : Object]),
+    __metadata("design:returntype", typeof (_d = typeof Promise !== "undefined" && Promise) === "function" ? _d : Object)
+], EconomyController.prototype, "getPrices", null);
+__decorate([
+    (0, inversify_express_utils_1.httpGet)('/advice'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_e = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _e : Object, typeof (_f = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _f : Object]),
+    __metadata("design:returntype", typeof (_g = typeof Promise !== "undefined" && Promise) === "function" ? _g : Object)
+], EconomyController.prototype, "getAdvice", null);
+__decorate([
+    (0, inversify_express_utils_1.httpGet)('/portfolio'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_h = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _h : Object, typeof (_j = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _j : Object]),
+    __metadata("design:returntype", typeof (_k = typeof Promise !== "undefined" && Promise) === "function" ? _k : Object)
+], EconomyController.prototype, "getPortfolio", null);
+__decorate([
+    (0, inversify_express_utils_1.httpGet)('/history/:symbol'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_l = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _l : Object, typeof (_m = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _m : Object]),
+    __metadata("design:returntype", typeof (_o = typeof Promise !== "undefined" && Promise) === "function" ? _o : Object)
+], EconomyController.prototype, "getHistory", null);
+exports.EconomyController = EconomyController = __decorate([
+    (0, inversify_express_utils_1.controller)('/v1/economy'),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.EconomyService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof economy_service_1.EconomyService !== "undefined" && economy_service_1.EconomyService) === "function" ? _a : Object])
+], EconomyController);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxjb250cm9sbGVyc1xcZWNvbm9teS5jb250cm9sbGVyLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxxQ0FBNEM7QUFDNUMscUVBQXdFO0FBQ3hFLHlDQUFtQztBQUNuQyxvQ0FBaUM7QUFDakMsaUVBQXlFO0FBQ3pFLDRDQUF5QztBQUdsQyxJQUFNLGlCQUFpQixHQUF2QixNQUFNLGlCQUFpQjtJQUNzQjtJQUFsRCxZQUFrRCxjQUE4QjtRQUE5QixtQkFBYyxHQUFkLGNBQWMsQ0FBZ0I7SUFBRyxDQUFDO0lBRzlFLEFBQU4sS0FBSyxDQUFDLFNBQVMsQ0FBQyxHQUFZLEVBQUUsR0FBYTtRQUN6QyxJQUFJLENBQUM7WUFDSCxNQUFNLE1BQU0sR0FBRyxNQUFNLElBQUksQ0FBQyxjQUFjLENBQUMsZ0JBQWdCLEVBQUUsQ0FBQztZQUM1RCxHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxFQUFFLE9BQU8sRUFBRSxJQUFJLEVBQUUsSUFBSSxFQUFFLE1BQU0sRUFBRSxDQUFDLENBQUM7UUFDeEQsQ0FBQztRQUFDLE9BQU8sS0FBSyxFQUFFLENBQUM7WUFDZixlQUFNLENBQUMsS0FBSyxDQUFDLDRDQUE0QyxFQUFFLEtBQUssQ0FBQyxDQUFDO1lBQ2xFLEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDLEVBQUUsT0FBTyxFQUFFLEtBQUssRUFBRSxPQUFPLEVBQUUsd0JBQXdCLEVBQUUsQ0FBQyxDQUFDO1FBQzlFLENBQUM7SUFDSCxDQUFDO0lBR0ssQUFBTixLQUFLLENBQUMsU0FBUyxDQUFDLEdBQVksRUFBRSxHQUFhO1FBQ3pDLElBQUksQ0FBQztZQUNILE1BQU0sTUFBTSxHQUFHLE1BQU0sSUFBSSxDQUFDLGNBQWMsQ0FBQyxtQkFBbUIsRUFBRSxDQUFDO1lBQy9ELEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFD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QWlCO0lBRDdCLElBQUEsb0NBQVUsRUFBQyxhQUFhLENBQUM7SUFFWCxXQUFBLElBQUEsa0JBQU0sRUFBQyxhQUFLLENBQUMsY0FBYyxDQUFDLENBQUE7eURBQXlCLGdDQUFjLG9CQUFkLGdDQUFjO0dBRHJFLGlCQUFpQixDQWlEN0IiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxjb250cm9sbGVyc1xcZWNvbm9teS5jb250cm9sbGVyLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFJlcXVlc3QsIFJlc3BvbnNlIH0gZnJvbSAnZXhwcmVzcyc7XG5pbXBvcnQgeyBjb250cm9sbGVyLCBodHRwR2V0LCBodHRwUG9zdCB9IGZyb20gJ2ludmVyc2lmeS1leHByZXNzLXV0aWxzJztcbmltcG9ydCB7IGluamVjdCB9IGZyb20gJ2ludmVyc2lmeSc7XG5pbXBvcnQgeyBUWVBFUyB9IGZyb20gJy4uL3R5cGVzJztcbmltcG9ydCB7IEVjb25vbXlTZXJ2aWNlLCBBc3NldFByaWNlIH0gZnJvbSAnLi4vc2VydmljZXMvZWNvbm9teS5zZXJ2aWNlJztcbmltcG9ydCB7IGxvZ2dlciB9IGZyb20gJy4uL3V0aWxzL2xvZ2dlcic7XG5cbkBjb250cm9sbGVyKCcvdjEvZWNvbm9teScpXG5leHBvcnQgY2xhc3MgRWNvbm9teUNvbnRyb2xsZXIge1xuICBjb25zdHJ1Y3RvcihAaW5qZWN0KFRZUEVTLkVjb25vbXlTZXJ2aWNlKSBwcml2YXRlIGVjb25vbXlTZXJ2aWNlOiBFY29ub215U2VydmljZSkge31cblxuICBAaHR0cEdldCgnL3ByaWNlcycpXG4gIGFzeW5jIGdldFByaWNlcyhyZXE6IFJlcXVlc3QsIHJlczogUmVzcG9uc2UpOiBQcm9taXNlPHZvaWQ+IHtcbiAgICB0cnkge1xuICAgICAgY29uc3QgcHJpY2VzID0gYXdhaXQgdGhpcy5lY29ub215U2VydmljZS5nZXRFY29ub215VXBkYXRlKCk7XG4gICAgICByZXMuc3RhdHVzKDIwMCkuanNvbih7IHN1Y2Nlc3M6IHRydWUsIGRhdGE6IHByaWNlcyB9KTtcbiAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgbG9nZ2VyLmVycm9yKCdbRWNvbm9teUNvbnRyb2xsZXJdIEVycm9yIGZldGNoaW5nIHByaWNlczonLCBlcnJvcik7XG4gICAgICByZXMuc3RhdHVzKDUwMCkuanNvbih7IHN1Y2Nlc3M6IGZhbHNlLCBtZXNzYWdlOiAnRmFpbGVkIHRvIGZldGNoIHByaWNlcycgfSk7XG4gICAgfVxuICB9XG5cbiAgQGh0dHBHZXQoJy9hZHZpY2UnKVxuICBhc3luYyBnZXRBZHZpY2UocmVxOiBSZXF1ZXN0LCByZXM6IFJlc3BvbnNlKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IGFkdmljZSA9IGF3YWl0IHRoaXMuZWNvbm9teVNlcnZpY2UuZ2V0SW52ZXN0bWVudEFkdmljZSgpO1xuICAgICAgcmVzLnN0YXR1cygyMDApLmpzb24oeyBzdWNjZXNzOiB0cnVlLCBkYXRhOiBhZHZpY2UgfSk7XG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIGxvZ2dlci5lcnJvcignW0Vjb25vbXlDb250cm9sbGVyXSBFcnJvciBmZXRjaGluZyBhZHZpY2U6JywgZXJyb3IpO1xuICAgICAgcmVzLnN0YXR1cyg1MDApLmpzb24oeyBzdWNjZXNzOiBmYWxzZSwgbWVzc2FnZTogJ0ZhaWxlZCB0byBmZXRjaCBhZHZpY2UnIH0pO1xuICAgIH1cbiAgfVxuXG4gIEBodHRwR2V0KCcvcG9ydGZvbGlvJylcbiAgYXN5bmMgZ2V0UG9ydGZvbGlvKHJlcTogUmVxdWVzdCwgcmVzOiBSZXNwb25zZSk6IFByb21pc2U8dm9pZD4ge1xuICAgIHRyeSB7XG4gICAgICAvLyBGb3IgdGhlIHByb3RvdHlwZSwgd2UgdXNlICdnb2RfbW9kZScgYXMgdGhlIHVzZXJJZC5cbiAgICAgIC8vIEluIHByb2R1Y3Rpb24sIHRoaXMgd291bGQgY29tZSBmcm9tIHJlcS51c2VyLmlkXG4gICAgICBjb25zdCBzdGF0cyA9IGF3YWl0IHRoaXMuZWNvbm9teVNlcnZpY2UuZ2V0UG9ydGZvbGlvU3RhdHMoJ2dvZF9tb2RlJyk7XG4gICAgICByZXMuc3RhdHVzKDIwMCkuanNvbih7IHN1Y2Nlc3M6IHRydWUsIGRhdGE6IHN0YXRzIH0pO1xuICAgIH0gY2F0Y2ggKGVycm9yKSB7XG4gICAgICBsb2dnZXIuZXJyb3IoJ1tFY29ub215Q29udHJvbGxlcl0gRXJyb3IgZmV0Y2hpbmcgcG9ydGZvbGlvOicsIGVycm9yKTtcbiAgICAgIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgc3VjY2VzczogZmFsc2UsIG1lc3NhZ2U6ICdGYWlsZWQgdG8gZmV0Y2ggcG9ydGZvbGlvJyB9KTtcbiAgICB9XG4gIH1cblxuICBAaHR0cEdldCgnL2hpc3RvcnkvOnN5bWJvbCcpXG4gIGFzeW5jIGdldEhpc3RvcnkocmVxOiBSZXF1ZXN0LCByZXM6IFJlc3BvbnNlKTogUHJvbWlzZTx2b2lkPiB7XG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHN5bWJvbCA9IHJlcS5wYXJhbXMuc3ltYm9sIGFzIHN0cmluZztcbiAgICAgIGNvbnN0IGhpc3RvcnkgPSBhd2FpdCB0aGlzLmVjb25vbXlTZXJ2aWNlLmdldEhpc3RvcmljYWxQcmljZXMoc3ltYm9sKTtcbiAgICAgIHJlcy5zdGF0dXMoMjAwKS5qc29uKHsgc3VjY2VzczogdHJ1ZSwgZGF0YTogaGlzdG9yeSB9KTtcbiAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgbG9nZ2VyLmVycm9yKGBbRWNvbm9teUNvbnRyb2xsZXJdIEVycm9yIGZldGNoaW5nIGhpc3RvcnkgZm9yICR7cmVxLnBhcmFtcy5zeW1ib2x9OmAsIGVycm9yKTtcbiAgICAgIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgc3VjY2VzczogZmFsc2UsIG1lc3NhZ2U6ICdGYWlsZWQgdG8gZmV0Y2ggaGlzdG9yeScgfSk7XG4gICAgfVxuICB9XG59XG4iXSwidmVyc2lvbiI6M30=

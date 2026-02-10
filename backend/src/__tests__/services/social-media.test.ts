@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import { jest } from '@jest/globals';
 import axios from 'axios';
-import { Container } from 'typedi';
+import { container, TYPES } from '../../config/inversify.config';
 
 import { env } from '../../config/env.schema';
 import { InstagramService } from '../../services/instagram.service';
@@ -23,7 +23,7 @@ describe('Social Media Services', () => {
     let service: InstagramService;
 
     beforeEach(() => {
-      service = Container.get(InstagramService);
+      service = container.get<InstagramService>(TYPES.InstagramService);
       // Mock env vars
       (env as any).INSTAGRAM_ACCESS_TOKEN = 'test-token';
       (env as any).INSTAGRAM_BUSINESS_ACCOUNT_ID = 'test-id';
@@ -59,7 +59,7 @@ describe('Social Media Services', () => {
     let service: LinkedInService;
 
     beforeEach(() => {
-      service = Container.get(LinkedInService);
+      service = container.get<LinkedInService>(TYPES.LinkedInService);
       (env as any).LINKEDIN_ACCESS_TOKEN = 'test-token';
       (env as any).LINKEDIN_ORGANIZATION_URN = '12345';
     });
@@ -87,7 +87,7 @@ describe('Social Media Services', () => {
     let service: TikTokService;
 
     beforeEach(() => {
-      service = Container.get(TikTokService);
+      service = container.get<TikTokService>(TYPES.TikTokService);
       (env as any).TIKTOK_ACCESS_TOKEN = 'test-token';
     });
 
@@ -109,7 +109,7 @@ describe('Social Media Services', () => {
     let service: XService;
 
     beforeEach(() => {
-      service = Container.get(XService);
+      service = container.get<XService>(TYPES.XService);
       (env as any).X_ACCESS_TOKEN = 'test-token';
     });
 

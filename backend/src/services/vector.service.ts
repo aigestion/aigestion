@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
 import { cache } from '../utils/cacheManager';
 
@@ -8,6 +9,7 @@ export interface VectorDocument {
   embedding?: number[];
 }
 
+@injectable()
 export class VectorService {
   private readonly provider: string = process.env.VECTOR_DB_PROVIDER || 'pinecone';
 

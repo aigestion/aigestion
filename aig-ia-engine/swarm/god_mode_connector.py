@@ -1,13 +1,15 @@
+import os
+from dotenv import load_dotenv
 
-import sys
-import json
-import requests
-import time
+# Load env from root or local
+load_dotenv()
 
 # Configuration
-# In production, this would come from env vars or a config file
-BACKEND_URL = "http://localhost:3000/api/v1"
-GOD_STATE_ENDPOINT = f"{BACKEND_URL}/ai/trigger_swarm" # Using the AI trigger as a proxy for now
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:3000/api/v1")
+IA_ENGINE_API_KEY = os.getenv(
+    "IA_ENGINE_API_KEY", "LOCAL_DEV_SWARM_SECRET_KEY_REPLACE_ME"
+)
+GOD_STATE_ENDPOINT = f"{BACKEND_URL}/ai/trigger_swarm"
 
 class GodModeConnector:
     """
@@ -32,9 +34,10 @@ class GodModeConnector:
                 json={
                     "message": "INTERNAL_SWARM_SYNC_REQUEST",
                     "history": [],
-                    "model": "gpt-4o", # Trigger highest tier to ensure tool availability
-                    "tools": ["trigger_swarm"]
-                }
+                    "model": "gpt-4o",  # Trigger highest tier to ensure tool availability
+                    "tools": ["trigger_swarm"],
+                },
+                headers={"X-API-Key": IA_ENGINE_API_KEY},
             )
 
             if response.status_code == 200:

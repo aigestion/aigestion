@@ -1,0 +1,64 @@
+00fb6b7260edf47aef1a06775d21b3b9
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.vectorService = exports.VectorService = void 0;
+const inversify_1 = require("inversify");
+const logger_1 = require("../utils/logger");
+const cacheManager_1 = require("../utils/cacheManager");
+let VectorService = class VectorService {
+    provider = process.env.VECTOR_DB_PROVIDER || 'pinecone';
+    /**
+     * Index a document into the long-term memory
+     */
+    async upsert(doc) {
+        try {
+            logger_1.logger.info({ docId: doc.id, provider: this.provider }, 'Upserting to Vector Memory');
+            // 1. Generate Embedding (Simulated for this jump)
+            // In production: const embedding = await openAI.createEmbedding(doc.text);
+            // 2. Storage Logic (Simulated for initial scaffold)
+            const vectorKey = `vector:mem:${doc.id}`;
+            await cacheManager_1.cache.set(vectorKey, {
+                ...doc,
+                indexedAt: Date.now(),
+            }, { ttl: 0 }); // Circular persistence
+            return true;
+        }
+        catch (error) {
+            logger_1.logger.error({ error, docId: doc.id }, 'Error upserting to Vector Memory');
+            return false;
+        }
+    }
+    /**
+     * Semantic search for relevant context
+     */
+    async search(query, limit = 5) {
+        try {
+            logger_1.logger.info({ query, limit }, 'Searching Vector Memory');
+            // In production: perform cosine similarity search in Pinecone/Weaviate
+            // For now, we return a symbolic context hit
+            return [
+                {
+                    id: 'ref-Q1-milestones',
+                    text: 'The Q1 2026 Roadmap focused on NestJS and Atomic Design System v2.',
+                    score: 0.98,
+                },
+            ];
+        }
+        catch (error) {
+            logger_1.logger.error({ error, query }, 'Error searching Vector Memory');
+            return [];
+        }
+    }
+};
+exports.VectorService = VectorService;
+exports.VectorService = VectorService = __decorate([
+    (0, inversify_1.injectable)()
+], VectorService);
+exports.vectorService = new VectorService();
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcdmVjdG9yLnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUEseUNBQXVDO0FBQ3ZDLDRDQUF5QztBQUN6Qyx3REFBOEM7QUFVdkMsSUFBTSxhQUFhLEdBQW5CLE1BQU0sYUFBYTtJQUNQLFFBQVEsR0FBVyxPQUFPLENBQUMsR0FBRyxDQUFDLGtCQUFrQixJQUFJLFVBQVUsQ0FBQztJQUVqRjs7T0FFRztJQUNILEtBQUssQ0FBQyxNQUFNLENBQUMsR0FBbUI7UUFDOUIsSUFBSSxDQUFDO1lBQ0gsZUFBTSxDQUFDLElBQUksQ0FBQyxFQUFFLEtBQUssRUFBRSxHQUFHLENBQUMsRUFBRSxFQUFFLFFBQVEsRUFBRSxJQUFJLENBQUMsUUFBUSxFQUFFLEVBQUUsNEJBQTRCLENBQUMsQ0FBQztZQUV0RixrREFBa0Q7WUFDbEQsMkVBQTJFO1lBRTNFLG9EQUFvRDtZQUNwRCxNQUFNLFNBQVMsR0FBRyxjQUFjLEdBQUcsQ0FBQyxFQUFFLEVBQUUsQ0FBQztZQUN6QyxNQUFNLG9CQUFLLENBQUMsR0FBRyxDQUNiLFNBQVMsRUFDVDtnQkFDRSxHQUFHLEdBQUc7Z0JBQ04sU0FBUyxFQUFFLElBQUksQ0FBQyxHQUFHLEVBQUU7YUFDdEIsRUFDRCxFQUFFLEdBQUcsRUFBRSxDQUFDLEVBQUUsQ0FDWCxDQUFDLENBQUMsdUJBQXVCO1lBRTFCLE9BQU8sSUFBSSxDQUFDO1FBQ2QsQ0FBQztRQUFDLE9BQU8sS0FBSyxFQUFFLENBQUM7WUFDZixlQUFNLENBQUMsS0FBSyxDQUFDLEVBQUUsS0FBSyxFQUFFLEtBQUssRUFBRSxHQUFHLENBQUMsRUFBRSxFQUFFLEVBQUUsa0NBQWtDLENBQUMsQ0FBQztZQUMzRSxPQUFPLEtBQUssQ0FBQztRQUNmLENBQUM7SUFDSCxDQUFDO0lBRUQ7O09BRUc7SUFDSCxLQUFLLENBQUMsTUFBTSxDQUFDLEtBQWEsRUFBRSxRQUFnQixDQUFDO1FBQzNDLElBQUksQ0FBQztZQUNILGVBQU0sQ0FBQyxJQUFJLENBQUMsRUFBRSxLQUFLLEVBQUUsS0FBSyxFQUFFLEVBQUUseUJBQXlCLENBQUMsQ0FBQztZQUV6RCx1RUFBdUU7WUFDdkUsNENBQTRDO1lBQzVDLE9BQU87Z0JBQ0w7b0JBQ0UsRUFBRSxFQUFFLG1CQUFtQjtvQkFDdkIsSUFBSSxFQUFFLG9FQUFvRTtvQkFDMUUsS0FBSyxFQUFFLElBQUk7aUJBQ1o7YUFDRixDQUFDO1FBQ0osQ0FBQztRQUFDLE9BQU8sS0FBSyxFQUFFLENBQUM7WUFDZixlQUFNLENBQUMsS0FBSyxDQUFDLEVBQUUsS0FBSyxFQUFFLEtBQUssRUFBRSxFQUFFLCtCQUErQixDQUFDLENBQUM7WUFDaEUsT0FBTyxFQUFFLENBQUM7UUFDWixDQUFDO0lBQ0gsQ0FBQztDQUNGLENBQUE7QUFwRFksc0NBQWE7d0JBQWIsYUFBYTtJQUR6QixJQUFBLHNCQUFVLEdBQUU7R0FDQSxhQUFhLENBb0R6QjtBQUVZLFFBQUEsYUFBYSxHQUFHLElBQUksYUFBYSxFQUFFLENBQUMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcdmVjdG9yLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaW5qZWN0YWJsZSB9IGZyb20gJ2ludmVyc2lmeSc7XG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xuaW1wb3J0IHsgY2FjaGUgfSBmcm9tICcuLi91dGlscy9jYWNoZU1hbmFnZXInO1xuXG5leHBvcnQgaW50ZXJmYWNlIFZlY3RvckRvY3VtZW50IHtcbiAgaWQ6IHN0cmluZztcbiAgdGV4dDogc3RyaW5nO1xuICBtZXRhZGF0YTogUmVjb3JkPHN0cmluZywgYW55PjtcbiAgZW1iZWRkaW5nPzogbnVtYmVyW107XG59XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBWZWN0b3JTZXJ2aWNlIHtcbiAgcHJpdmF0ZSByZWFkb25seSBwcm92aWRlcjogc3RyaW5nID0gcHJvY2Vzcy5lbnYuVkVDVE9SX0RCX1BST1ZJREVSIHx8ICdwaW5lY29uZSc7XG5cbiAgLyoqXG4gICAqIEluZGV4IGEgZG9jdW1lbnQgaW50byB0aGUgbG9uZy10ZXJtIG1lbW9yeVxuICAgKi9cbiAgYXN5bmMgdXBzZXJ0KGRvYzogVmVjdG9yRG9jdW1lbnQpIHtcbiAgICB0cnkge1xuICAgICAgbG9nZ2VyLmluZm8oeyBkb2NJZDogZG9jLmlkLCBwcm92aWRlcjogdGhpcy5wcm92aWRlciB9LCAnVXBzZXJ0aW5nIHRvIFZlY3RvciBNZW1vcnknKTtcblxuICAgICAgLy8gMS4gR2VuZXJhdGUgRW1iZWRkaW5nIChTaW11bGF0ZWQgZm9yIHRoaXMganVtcClcbiAgICAgIC8vIEluIHByb2R1Y3Rpb246IGNvbnN0IGVtYmVkZGluZyA9IGF3YWl0IG9wZW5BSS5jcmVhdGVFbWJlZGRpbmcoZG9jLnRleHQpO1xuXG4gICAgICAvLyAyLiBTdG9yYWdlIExvZ2ljIChTaW11bGF0ZWQgZm9yIGluaXRpYWwgc2NhZmZvbGQpXG4gICAgICBjb25zdCB2ZWN0b3JLZXkgPSBgdmVjdG9yOm1lbToke2RvYy5pZH1gO1xuICAgICAgYXdhaXQgY2FjaGUuc2V0KFxuICAgICAgICB2ZWN0b3JLZXksXG4gICAgICAgIHtcbiAgICAgICAgICAuLi5kb2MsXG4gICAgICAgICAgaW5kZXhlZEF0OiBEYXRlLm5vdygpLFxuICAgICAgICB9LFxuICAgICAgICB7IHR0bDogMCB9LFxuICAgICAgKTsgLy8gQ2lyY3VsYXIgcGVyc2lzdGVuY2VcblxuICAgICAgcmV0dXJuIHRydWU7XG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIGxvZ2dlci5lcnJvcih7IGVycm9yLCBkb2NJZDogZG9jLmlkIH0sICdFcnJvciB1cHNlcnRpbmcgdG8gVmVjdG9yIE1lbW9yeScpO1xuICAgICAgcmV0dXJuIGZhbHNlO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBTZW1hbnRpYyBzZWFyY2ggZm9yIHJlbGV2YW50IGNvbnRleHRcbiAgICovXG4gIGFzeW5jIHNlYXJjaChxdWVyeTogc3RyaW5nLCBsaW1pdDogbnVtYmVyID0gNSkge1xuICAgIHRyeSB7XG4gICAgICBsb2dnZXIuaW5mbyh7IHF1ZXJ5LCBsaW1pdCB9LCAnU2VhcmNoaW5nIFZlY3RvciBNZW1vcnknKTtcblxuICAgICAgLy8gSW4gcHJvZHVjdGlvbjogcGVyZm9ybSBjb3NpbmUgc2ltaWxhcml0eSBzZWFyY2ggaW4gUGluZWNvbmUvV2VhdmlhdGVcbiAgICAgIC8vIEZvciBub3csIHdlIHJldHVybiBhIHN5bWJvbGljIGNvbnRleHQgaGl0XG4gICAgICByZXR1cm4gW1xuICAgICAgICB7XG4gICAgICAgICAgaWQ6ICdyZWYtUTEtbWlsZXN0b25lcycsXG4gICAgICAgICAgdGV4dDogJ1RoZSBRMSAyMDI2IFJvYWRtYXAgZm9jdXNlZCBvbiBOZXN0SlMgYW5kIEF0b21pYyBEZXNpZ24gU3lzdGVtIHYyLicsXG4gICAgICAgICAgc2NvcmU6IDAuOTgsXG4gICAgICAgIH0sXG4gICAgICBdO1xuICAgIH0gY2F0Y2ggKGVycm9yKSB7XG4gICAgICBsb2dnZXIuZXJyb3IoeyBlcnJvciwgcXVlcnkgfSwgJ0Vycm9yIHNlYXJjaGluZyBWZWN0b3IgTWVtb3J5Jyk7XG4gICAgICByZXR1cm4gW107XG4gICAgfVxuICB9XG59XG5cbmV4cG9ydCBjb25zdCB2ZWN0b3JTZXJ2aWNlID0gbmV3IFZlY3RvclNlcnZpY2UoKTtcbiJdLCJ2ZXJzaW9uIjozfQ==

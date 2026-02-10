@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Building2, Home, CheckCircle2, ChevronRight } from 'lucide-react';
 import React, { useState } from 'react';
+import { useAppContext } from '../contexts/AppContext';
+
 
 type PlanCategory = 'familias' | 'empresas';
 
@@ -59,6 +61,8 @@ const categoryData = {
 
 export const PricingSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<PlanCategory>('empresas');
+
+  const { setIsContactModalOpen } = useAppContext();
 
   return (
     <section id="pricing" className="py-32 bg-black relative overflow-hidden">
@@ -153,7 +157,10 @@ export const PricingSection: React.FC = () => {
                     ))}
                   </ul>
 
-                  <button className="w-full mt-8 py-4 rounded-xl border border-white/10 hover:border-white/30 text-[10px] tracking-[0.4em] uppercase font-bold transition-all hover:bg-white/5 flex items-center justify-center gap-2 group/btn">
+                  <button
+                    onClick={() => setIsContactModalOpen(true)}
+                    className="w-full mt-8 py-4 rounded-xl border border-white/10 hover:border-white/30 text-[10px] tracking-[0.4em] uppercase font-bold transition-all hover:bg-white/5 flex items-center justify-center gap-2 group/btn"
+                  >
                     Adquirir Protocolo
                     <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
                   </button>

@@ -15,6 +15,9 @@ export interface IMission extends Document {
   status: MissionStatus;
   plan?: string;
   result?: string;
+  isEncrypted: boolean;
+  vaultIV?: string;
+  vaultTag?: string;
   error?: string;
   startedAt: Date;
   completedAt?: Date;
@@ -43,6 +46,16 @@ const missionSchema = new Schema<IMission>(
       type: String,
     },
     result: {
+      type: String,
+    },
+    isEncrypted: {
+      type: Boolean,
+      default: false,
+    },
+    vaultIV: {
+      type: String,
+    },
+    vaultTag: {
       type: String,
     },
     error: {

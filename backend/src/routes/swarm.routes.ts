@@ -6,6 +6,9 @@ import { TYPES } from '../types';
 const swarmRouter = Router();
 const controller = container.get<SwarmController>(TYPES.SwarmController);
 
-swarmRouter.use('/', controller.router);
+swarmRouter.post('/tool-call', (req, res, next) => controller.executeTool(req, res, next));
+swarmRouter.get('/god-state', (req, res, next) => controller.getGodState(req, res, next));
+swarmRouter.post('/missions', (req, res, next) => controller.createMission(req, res, next));
+swarmRouter.get('/missions/:id', (req, res, next) => controller.getMission(req, res, next));
 
 export default swarmRouter;

@@ -5,7 +5,20 @@ import { container } from '../../config/inversify.config';
 import { TYPES } from '../../types';
 import { MissionStatus } from '../../models/Mission';
 
-// Mock dependencies
+// Mock logger
+jest.mock('../../utils/logger', () => ({
+  logger: {
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+  },
+}));
+
+// Mock secrets utility
+jest.mock('../../utils/secrets', () => ({
+  deriveMissionKey: jest.fn().mockResolvedValue(Buffer.from('mock-key')),
+}));
+
 const mockAIService = {
   generateContent: jest.fn(),
 };
@@ -18,19 +31,20 @@ const mockSocketService = {
 const mockNotificationService = {
   createNotification: jest.fn(),
 };
+const mockVaultService = {
+  encrypt: jest.fn().mockResolvedValue({ iv: 'iv', ciphertext: 'cipher', tag: 'tag' }),
+};
+const mockSwarmClient = {
+  post: jest.fn(),
+};
+const mockKGService = {
+  indexMissionFindings: jest.fn(),
+};
 
 // Mock container
 jest.mock('../../config/inversify.config', () => ({
   container: {
     get: jest.fn(),
-  },
-}));
-
-// Mock logger
-jest.mock('../../utils/logger', () => ({
-  logger: {
-    info: jest.fn(),
-    error: jest.fn(),
   },
 }));
 
@@ -55,6 +69,9 @@ describe('SwarmProcessor', () => {
       if (type === TYPES.MissionRepository) return mockMissionRepo;
       if (type === TYPES.SocketService) return mockSocketService;
       if (type === TYPES.NotificationService) return mockNotificationService;
+      if (type === TYPES.VaultService) return mockVaultService;
+      if (type === TYPES.SwarmInternalClient) return mockSwarmClient;
+      if (type === TYPES.KnowledgeGraphService) return mockKGService;
       return {};
     });
   });
@@ -100,7 +117,10 @@ describe('SwarmProcessor', () => {
     expect(mockMissionRepo.update).toHaveBeenCalledWith(
       'mission-1',
       expect.objectContaining({
-        result: 'Mission Success Report',
+        result: 'cipher',
+        vaultIV: 'iv',
+        vaultTag: 'tag',
+        isEncrypted: true,
         status: MissionStatus.COMPLETED,
         completedAt: expect.any(Date),
       }),

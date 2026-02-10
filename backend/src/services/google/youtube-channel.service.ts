@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import * as fs from 'fs';
 import { google } from 'googleapis';
 
@@ -8,6 +9,7 @@ import { logger } from '../../utils/logger';
 /**
  * Servicio para gestión de múltiples canales de YouTube
  */
+@injectable()
 export class YouTubeChannelService {
   private readonly channels: Map<ChannelType, YouTubeChannel>;
 
@@ -289,8 +291,8 @@ export class YouTubeChannelService {
   async findPlaylistByName(channelType: ChannelType, name: string): Promise<string | null> {
     try {
       const playlists = await this.listPlaylists(channelType);
-      const found = playlists.find(
-        p => p.snippet?.title.toLowerCase().includes(name.toLowerCase()),
+      const found = playlists.find(p =>
+        p.snippet?.title.toLowerCase().includes(name.toLowerCase()),
       );
       return found?.id || null;
     } catch (error) {
@@ -453,6 +455,3 @@ export class YouTubeChannelService {
     }
   }
 }
-
-// Singleton instance
-export const youtubeChannelService = new YouTubeChannelService();

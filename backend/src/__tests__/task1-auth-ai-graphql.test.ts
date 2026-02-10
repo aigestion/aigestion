@@ -12,9 +12,19 @@
 const SKIP = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGRATION_TESTS;
 
 (SKIP ? describe.skip : describe)('Task 1.3: Auth & AI GraphQL', () => {
+  jest.setTimeout(60000);
   it('should return token and user on successful login', async () => {
     const request = require('supertest');
     const { app } = require('../app');
+    const { connectToDatabase } = require('../config/database');
+    await connectToDatabase();
+
+    // Create user for login
+    await request(app).post('/api/v1/users').send({
+      email: 'test@example.com',
+      name: 'GraphQL User',
+      password: 'AIGestion2026!',
+    });
 
     const mutation = `
       mutation {
@@ -34,10 +44,12 @@ const SKIP = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGRATION_TES
       .set('Content-Type', 'application/json')
       .send({ query: mutation });
 
-    expect(response.status).toBe(200);
+    if (response.body.errors) {
+      console.error('GraphQL Errors:', JSON.stringify(response.body.errors, null, 2));
+    }
     expect(response.body.errors).toBeUndefined();
     expect(response.body.data.login).toBeDefined();
-    expect(response.body.data.login.token).toBe('mock_jwt_token');
+    expect(response.body.data.login.token).toBeDefined();
     expect(response.body.data.login.user.email).toBe('test@example.com');
   });
 

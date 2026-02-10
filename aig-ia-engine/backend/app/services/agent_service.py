@@ -22,12 +22,15 @@ try:
     from services.llm import LLMService
 except ImportError as e:
     logging.getLogger(__name__).error(f"Failed to import Swarm modules: {e}")
+    import_error_msg = str(e)
     # Define dummy classes to prevent crash if imports fail during setup (for linting/check)
     class Navigator:
-        def __init__(self):
+
+        def __init__(self, *args, **kwargs):
             pass
+
         async def browse(self, url, instruction):
-            return {"error": f"Swarm modules not available: {e}"}
+            return {"error": f"Swarm modules not available: {import_error_msg}"}
 
     class BrowserService: pass
     class LLMService: pass

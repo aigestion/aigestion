@@ -1,13 +1,14 @@
-import { Service } from 'typedi';
+import { injectable, inject } from 'inversify';
 import { logger } from '../utils/logger';
 import { SemanticRouterService } from './ai-router.service';
 import { VectorService } from './vector.service';
+import { TYPES } from '../types';
 
-@Service()
+@injectable()
 export class AgentService {
   constructor(
-    private vectorService: VectorService,
-    private semanticRouter: SemanticRouterService,
+    @inject(TYPES.VectorService) private vectorService: VectorService,
+    @inject(TYPES.SemanticRouterService) private semanticRouter: SemanticRouterService,
   ) {}
 
   public async processQuery(userId: string, query: string, context?: any): Promise<any> {

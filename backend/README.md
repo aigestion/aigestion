@@ -93,3 +93,23 @@ docker run -p 3000:3000 --env-file .env nexus-backend
   ```bash
   stripe listen --forward-to localhost:3000/api/v1/stripe/webhook
   ```
+## 🔒 Security & Secret Management
+
+### Google Cloud Secret Manager
+The backend is configured to fetch critical secrets from **GCP Secret Manager** on startup in production.
+
+- **Bootstrap**: The app uses `src/bootstrap.ts` as the entry point to handle async secret loading before the Express server starts.
+- **Local Development**:
+  - By default, secrets are loaded from `.env`.
+  - To test GCP Secret Manager locally, set `ENABLE_GCP_SECRETS=true` and `GOOGLE_CLOUD_PROJECT_ID=aigestion-sovereign-2026`.
+  - Ensure you have run `gcloud auth application-default login`.
+
+### Required Secrets
+Ensure the following are created in Secret Manager:
+- `GEMINI_API_KEY`
+- `MONGO_ROOT_PASSWORD`
+- `JWT_SECRET`
+- `STRIPE_SECRET_KEY`
+
+### 🚫 Redaction Policy
+Wait! Do **NOT** commit actual API keys to `.env` files. Use the provided placeholders and rely on Secret Manager for all production-grade credentials.

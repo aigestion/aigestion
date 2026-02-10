@@ -10,6 +10,11 @@ import { SwarmController } from '../controllers/swarm.controller';
 import { GodModeController } from '../controllers/godmode.controller';
 import { DanielaController } from '../controllers/daniela.controller';
 import { EconomyController } from '../controllers/economy.controller';
+import { SocialController } from '../controllers/social.controller';
+import { DockerController } from '../controllers/docker.controller';
+import { AnalyticsController } from '../controllers/analytics.controller';
+import { BillingController } from '../controllers/billing.controller';
+import { UsageController } from '../controllers/usage.controller';
 import { DockerService } from '../infrastructure/docker/DockerService';
 import {
   IMissionRepository,
@@ -75,136 +80,128 @@ import { UserService } from '../services/user.service';
 import { XService } from '../services/x.service';
 import { WhatsAppService } from '../services/whatsapp.service';
 import { ZeroTrustService } from '../services/zero-trust.service';
+import { SwarmInternalClient } from '../services/swarm-internal.client';
+import { VaultService } from '../services/vault.service';
+import { PQCCommService } from '../services/pqc-comm.service';
+import { RunwayService } from '../services/runway.service';
+import { PayPalService } from '../services/paypal.service';
+import { FacebookService } from '../services/facebook.service';
+import { AgentService } from '../services/agent.service';
+import { VectorService } from '../services/vector.service';
+import { SemanticRouterService } from '../services/ai-router.service';
+import { YoutubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
+import { YoutubeTranscriptionService } from '../utils/youtube-transcription.service';
+import { SystemController } from '../controllers/system.controller';
+import { YouTubeChannelService } from '../services/google/youtube-channel.service';
+import { YoutubeWatcherService } from '../utils/youtube-watcher.service';
 import { TYPES } from '../types';
 
 const container = new Container();
 
-container.bind<HistoryService>(TYPES.HistoryService).to(HistoryService).inSingletonScope();
-container.bind<TelegramService>(TYPES.TelegramService).to(TelegramService).inSingletonScope();
-container.bind<TelegramBotHandler>(TelegramBotHandler).toSelf().inSingletonScope();
-container.bind<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode).toSelf().inSingletonScope();
-container.bind<DanielaAIService>(TYPES.DanielaAIService).to(DanielaAIService).inSingletonScope();
-container.bind<EconomyController>(EconomyController).toSelf().inSingletonScope();
-container
-  .bind<SystemMetricsService>(TYPES.SystemMetricsService)
-  .to(SystemMetricsService)
-  .inSingletonScope();
-container.bind<AlertingService>(TYPES.AlertingService).to(AlertingService).inSingletonScope();
-container
-  .bind<GoogleSecretManagerService>(TYPES.GoogleSecretManagerService)
-  .to(GoogleSecretManagerService)
-  .inSingletonScope();
-container
-  .bind<CredentialManagerService>(TYPES.CredentialManagerService)
-  .to(CredentialManagerService)
-  .inSingletonScope();
-container.bind('Container').toConstantValue(container);
+// ========================================
+// CORE SERVICES
+// ========================================
+const bind = <T>(id: any, target: any) => {
+  if (!container.isBound(id)) {
+    container.bind<T>(id).to(target).inSingletonScope();
+  }
+};
 
+bind<HistoryService>(TYPES.HistoryService, HistoryService);
+bind<TelegramService>(TYPES.TelegramService, TelegramService);
+if (!container.isBound(TelegramBotHandler)) container.bind<TelegramBotHandler>(TelegramBotHandler).toSelf().inSingletonScope();
+if (!container.isBound(TelegramBotHandlerGodMode)) container.bind<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode).toSelf().inSingletonScope();
+bind<DanielaAIService>(TYPES.DanielaAIService, DanielaAIService);
+if (!container.isBound(EconomyController)) container.bind<EconomyController>(EconomyController).toSelf().inSingletonScope();
+bind<SystemMetricsService>(TYPES.SystemMetricsService, SystemMetricsService);
+bind<AlertingService>(TYPES.AlertingService, AlertingService);
+bind<GoogleSecretManagerService>(TYPES.GoogleSecretManagerService, GoogleSecretManagerService);
+bind<CredentialManagerService>(TYPES.CredentialManagerService, CredentialManagerService);
+bind<SwarmInternalClient>(TYPES.SwarmInternalClient, SwarmInternalClient);
+if (!container.isBound('Container')) container.bind('Container').toConstantValue(container);
+
+// ========================================
+// APPLICATION USE CASES
+// ========================================
 import { Enable2FAUseCase } from '../application/usecases/Enable2FAUseCase';
 import { Verify2FALoginUseCase } from '../application/usecases/Verify2FALoginUseCase';
 import { Verify2FAUseCase } from '../application/usecases/Verify2FAUseCase';
 import { VerifyEmailUseCase } from '../application/usecases/VerifyEmailUseCase';
 import { UpdateUserRoleUseCase } from '../application/usecases/UpdateUserRoleUseCase';
 import { UpdateSubscriptionUseCase } from '../application/usecases/UpdateSubscriptionUseCase';
+
+bind<Enable2FAUseCase>(TYPES.Enable2FAUseCase, Enable2FAUseCase);
+bind<Verify2FAUseCase>(TYPES.Verify2FAUseCase, Verify2FAUseCase);
+bind<Verify2FALoginUseCase>(TYPES.Verify2FALoginUseCase, Verify2FALoginUseCase);
+bind<VerifyEmailUseCase>(TYPES.VerifyEmailUseCase, VerifyEmailUseCase);
+bind<UpdateUserRoleUseCase>(TYPES.UpdateUserRoleUseCase, UpdateUserRoleUseCase);
+bind<UpdateSubscriptionUseCase>(TYPES.UpdateSubscriptionUseCase, UpdateSubscriptionUseCase);
+bind<RegisterUserUseCase>(TYPES.RegisterUserUseCase, RegisterUserUseCase);
+bind<LoginUserUseCase>(TYPES.LoginUserUseCase, LoginUserUseCase);
+bind<CreatePersonaUseCase>(TYPES.CreatePersonaUseCase, CreatePersonaUseCase);
+bind<GetMarketplacePersonasUseCase>(TYPES.GetMarketplacePersonasUseCase, GetMarketplacePersonasUseCase);
+
+// ========================================
+// INFRASTRUCTURE & REPOSITORIES
+// ========================================
 import { EventBus } from '../infrastructure/eventbus/EventBus';
 import { CommandBus } from '../shared/cqrs/CommandBus';
 import { QueryBus } from '../shared/cqrs/QueryBus';
-
-container.bind<MetaverseService>(TYPES.MetaverseService).to(MetaverseService).inSingletonScope();
-container.bind<RateLimitService>(TYPES.RateLimitService).to(RateLimitService).inSingletonScope();
-container
-  .bind<DeFiStrategistService>(TYPES.DeFiStrategistService)
-  .to(DeFiStrategistService)
-  .inSingletonScope();
-container
-  .bind<InfraOptimizerService>(TYPES.InfraOptimizerService)
-  .to(InfraOptimizerService)
-  .inSingletonScope();
-container.bind<SocketService>(TYPES.SocketService).to(SocketService).inSingletonScope();
-container
-  .bind<INotificationRepository>(TYPES.NotificationRepository)
-  .to(NotificationRepository)
-  .inSingletonScope();
-container
-  .bind<GodNotificationService>(TYPES.GodNotificationService)
-  .to(GodNotificationService)
-  .inSingletonScope();
-container.bind<GodModeController>(TYPES.GodModeController).to(GodModeController).inSingletonScope();
-container.bind<DanielaController>(TYPES.DanielaController).to(DanielaController).inSingletonScope();
-container.bind<SwarmService>(TYPES.SwarmService).to(SwarmService).inSingletonScope();
-container.bind<TwoFactorService>(TYPES.TwoFactorService).to(TwoFactorService).inSingletonScope();
-container.bind<Enable2FAUseCase>(TYPES.Enable2FAUseCase).to(Enable2FAUseCase).inSingletonScope();
-container.bind<Verify2FAUseCase>(TYPES.Verify2FAUseCase).to(Verify2FAUseCase).inSingletonScope();
-container
-  .bind<Verify2FALoginUseCase>(TYPES.Verify2FALoginUseCase)
-  .to(Verify2FALoginUseCase)
-  .inSingletonScope();
-container
-  .bind<VerifyEmailUseCase>(TYPES.VerifyEmailUseCase)
-  .to(VerifyEmailUseCase)
-  .inSingletonScope();
-container
-  .bind<UpdateUserRoleUseCase>(TYPES.UpdateUserRoleUseCase)
-  .to(UpdateUserRoleUseCase)
-  .inSingletonScope();
-container
-  .bind<UpdateSubscriptionUseCase>(TYPES.UpdateSubscriptionUseCase)
-  .to(UpdateSubscriptionUseCase)
-  .inSingletonScope();
-
-container.bind<CommandBus>(TYPES.CommandBus).to(CommandBus).inSingletonScope();
-container.bind<QueryBus>(TYPES.QueryBus).to(QueryBus).inSingletonScope();
-container.bind<EventBus>(TYPES.EventBus).to(EventBus).inSingletonScope();
-container.bind<AIService>(TYPES.AIService).to(AIService).inSingletonScope();
-container
-  .bind<EnhancedVoiceService>(TYPES.EnhancedVoiceService)
-  .to(EnhancedVoiceService)
-  .inSingletonScope();
-container.bind<AnalyticsService>(TYPES.AnalyticsService).to(AnalyticsService).inSingletonScope();
-container.bind<AuthService>(TYPES.AuthService).to(AuthService).inSingletonScope();
-container.bind<DockerService>(TYPES.DockerService).to(DockerService).inSingletonScope();
-container.bind<EmailService>(TYPES.EmailService).to(EmailService).inSingletonScope();
-container.bind<InstagramService>(TYPES.InstagramService).to(InstagramService).inSingletonScope();
-container.bind<LinkedInService>(TYPES.LinkedInService).to(LinkedInService).inSingletonScope();
-container.bind<RagService>(TYPES.RagService).to(RagService).inSingletonScope();
-container.bind<StripeService>(TYPES.StripeService).to(StripeService).inSingletonScope();
-container.bind<TikTokService>(TYPES.TikTokService).to(TikTokService).inSingletonScope();
-container.bind<XService>(TYPES.XService).to(XService).inSingletonScope();
-container.bind<SearchService>(TYPES.SearchService).to(SearchService).inSingletonScope();
-container.bind<UsageService>(TYPES.UsageService).to(UsageService).inSingletonScope();
-container.bind<GoogleDriveService>(GoogleDriveService).toSelf().inSingletonScope();
-container.bind<BackupService>(TYPES.BackupService).to(BackupService).inSingletonScope();
-container
-  .bind<BackupSchedulerService>(TYPES.BackupSchedulerService)
-  .to(BackupSchedulerService)
-  .inSingletonScope();
-container.bind<IUserRepository>(TYPES.UserRepository).to(UserRepository).inSingletonScope();
-container
-  .bind<RegisterUserUseCase>(TYPES.RegisterUserUseCase)
-  .to(RegisterUserUseCase)
-  .inSingletonScope();
-container.bind<LoginUserUseCase>(TYPES.LoginUserUseCase).to(LoginUserUseCase).inSingletonScope();
-container.bind<UserService>(TYPES.UserService).to(UserService).inSingletonScope();
-
-container
-  .bind<IPersonaRepository>(TYPES.PersonaRepository)
-  .to(PersonaRepository)
-  .inSingletonScope();
-container
-  .bind<CreatePersonaUseCase>(TYPES.CreatePersonaUseCase)
-  .to(CreatePersonaUseCase)
-  .inSingletonScope();
-container
-  .bind<GetMarketplacePersonasUseCase>(TYPES.GetMarketplacePersonasUseCase)
-  .to(GetMarketplacePersonasUseCase)
-  .inSingletonScope();
-container.bind<SwarmController>(TYPES.SwarmController).to(SwarmController).inSingletonScope();
-container
-  .bind<IMissionRepository>(TYPES.MissionRepository)
-  .to(MissionRepository)
-  .inSingletonScope();
-
 import { JobQueue } from '../infrastructure/jobs/JobQueue';
+
+bind<CommandBus>(TYPES.CommandBus, CommandBus);
+bind<QueryBus>(TYPES.QueryBus, QueryBus);
+bind<EventBus>(TYPES.EventBus, EventBus);
+bind<JobQueue>(TYPES.JobQueue, JobQueue);
+
+bind<IUserRepository>(TYPES.UserRepository, UserRepository);
+bind<IPersonaRepository>(TYPES.PersonaRepository, PersonaRepository);
+bind<IMissionRepository>(TYPES.MissionRepository, MissionRepository);
+bind<INotificationRepository>(TYPES.NotificationRepository, NotificationRepository);
+
+// ========================================
+// BUSINESS SERVICES
+// ========================================
+bind<MetaverseService>(TYPES.MetaverseService, MetaverseService);
+bind<RateLimitService>(TYPES.RateLimitService, RateLimitService);
+bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
+bind<InfraOptimizerService>(TYPES.InfraOptimizerService, InfraOptimizerService);
+bind<SocketService>(TYPES.SocketService, SocketService);
+bind<GodNotificationService>(TYPES.GodNotificationService, GodNotificationService);
+bind<NotificationService>(TYPES.NotificationService, NotificationService);
+bind<SwarmService>(TYPES.SwarmService, SwarmService);
+bind<TwoFactorService>(TYPES.TwoFactorService, TwoFactorService);
+bind<EnhancedVoiceService>(TYPES.EnhancedVoiceService, EnhancedVoiceService);
+bind<AnalyticsService>(TYPES.AnalyticsService, AnalyticsService);
+bind<AuthService>(TYPES.AuthService, AuthService);
+bind<DockerService>(TYPES.DockerService, DockerService);
+bind<InstagramService>(TYPES.InstagramService, InstagramService);
+bind<LinkedInService>(TYPES.LinkedInService, LinkedInService);
+bind<RagService>(TYPES.RagService, RagService);
+bind<StripeService>(TYPES.StripeService, StripeService);
+bind<TikTokService>(TYPES.TikTokService, TikTokService);
+bind<XService>(TYPES.XService, XService);
+bind<SearchService>(TYPES.SearchService, SearchService);
+bind<UsageService>(TYPES.UsageService, UsageService);
+bind<UserService>(TYPES.UserService, UserService);
+bind<BackupService>(TYPES.BackupService, BackupService);
+bind<BackupSchedulerService>(TYPES.BackupSchedulerService, BackupSchedulerService);
+
+// ========================================
+// EXTERNAL INTEGRATIONS
+// ========================================
+if (!container.isBound(GoogleDriveService)) container.bind<GoogleDriveService>(GoogleDriveService).toSelf().inSingletonScope();
+if (!container.isBound(GmailService)) container.bind<GmailService>(GmailService).toSelf().inSingletonScope();
+if (!container.isBound(SheetsService)) container.bind<SheetsService>(SheetsService).toSelf().inSingletonScope();
+if (!container.isBound(Gemini2Service)) container.bind<Gemini2Service>(Gemini2Service).toSelf().inSingletonScope();
+bind<RunwayService>(TYPES.RunwayService, RunwayService);
+bind<PayPalService>(TYPES.PaypalService, PayPalService);
+bind<FacebookService>(TYPES.FacebookService, FacebookService);
+bind<AIService>(TYPES.AIService, AIService);
+
+// ========================================
+// SPECIALIZED SERVICES
+// ========================================
 import { BackupRestoreService } from '../services/backup-restore.service';
 import {
   CENTRAL_LOGGING_SERVICE_NAME,
@@ -217,102 +214,86 @@ import { ThreatIntelligenceService } from '../services/threat-intelligence.servi
 import { UserBehaviorService } from '../services/user-behavior.service';
 import { WAFService } from '../services/waf.service';
 
-container.bind<JobQueue>(TYPES.JobQueue).to(JobQueue).inSingletonScope();
-container
-  .bind<MalwareScannerService>(TYPES.MalwareScannerService)
-  .to(MalwareScannerService)
-  .inSingletonScope();
-container
-  .bind<DocumentProcessorService>(TYPES.DocumentProcessorService)
-  .to(DocumentProcessorService)
-  .inSingletonScope();
-container
-  .bind<ErrorReportingService>(TYPES.ErrorReportingService)
-  .to(ErrorReportingService)
-  .inSingletonScope();
-container.bind<HealthService>(TYPES.DetailedHealthService).to(HealthService).inSingletonScope();
-container.bind<WAFService>(TYPES.WAFService).to(WAFService).inSingletonScope();
-container
-  .bind<ThreatIntelligenceService>(TYPES.ThreatIntelligenceService)
-  .to(ThreatIntelligenceService)
-  .inSingletonScope();
-container.bind<MonitoringService>(TYPES.MonitoringService).to(MonitoringService).inSingletonScope();
-container
-  .bind<BackupRestoreService>(TYPES.BackupRestoreService)
-  .to(BackupRestoreService)
-  .inSingletonScope();
-container
-  .bind<CentralizedLoggingService>(CENTRAL_LOGGING_SERVICE_NAME)
-  .to(CentralizedLoggingService)
-  .inSingletonScope();
-container.bind<UserBehaviorService>(UserBehaviorService).toSelf().inSingletonScope();
+bind<MalwareScannerService>(TYPES.MalwareScannerService, MalwareScannerService);
+bind<DocumentProcessorService>(TYPES.DocumentProcessorService, DocumentProcessorService);
+bind<ErrorReportingService>(TYPES.ErrorReportingService, ErrorReportingService);
+bind<HealthService>(TYPES.DetailedHealthService, HealthService);
+bind<WAFService>(TYPES.WAFService, WAFService);
+bind<ThreatIntelligenceService>(TYPES.ThreatIntelligenceService, ThreatIntelligenceService);
+bind<MonitoringService>(TYPES.MonitoringService, MonitoringService);
+bind<BackupRestoreService>(TYPES.BackupRestoreService, BackupRestoreService);
+if (!container.isBound(CENTRAL_LOGGING_SERVICE_NAME))
+  container
+    .bind<CentralizedLoggingService>(CENTRAL_LOGGING_SERVICE_NAME)
+    .to(CentralizedLoggingService)
+    .inSingletonScope();
+if (!container.isBound(UserBehaviorService))
+  container.bind<UserBehaviorService>(UserBehaviorService).toSelf().inSingletonScope();
 
-import { DevicePostureController } from '../controllers/DevicePostureController';
 import { DevicePostureService } from '../services/device-posture.service';
-container
-  .bind<DevicePostureService>(TYPES.DevicePostureService)
-  .to(DevicePostureService)
-  .inSingletonScope();
-container
-  .bind<DevicePostureController>(TYPES.DevicePostureController)
-  .to(DevicePostureController)
-  .inSingletonScope();
-container
-  .bind<SemanticCacheService>(TYPES.SemanticCacheService)
-  .to(SemanticCacheService)
-  .inSingletonScope();
-container
-  .bind<KnowledgeGraphService>(TYPES.KnowledgeGraphService)
-  .to(KnowledgeGraphService)
-  .inSingletonScope();
-container
-  .bind<CloudFailoverService>(TYPES.CloudFailoverService)
-  .to(CloudFailoverService)
-  .inSingletonScope();
-container
-  .bind<ServiceMeshService>(TYPES.ServiceMeshService)
-  .to(ServiceMeshService)
-  .inSingletonScope();
-container.bind<ZeroTrustService>(TYPES.ZeroTrustService).to(ZeroTrustService).inSingletonScope();
-container
-  .bind<AnomalyDetectionService>(TYPES.AnomalyDetectionService)
-  .to(AnomalyDetectionService)
-  .inSingletonScope();
-container
-  .bind<AutoDocumentationService>(TYPES.AutoDocumentationService)
-  .to(AutoDocumentationService)
-  .inSingletonScope();
-container
-  .bind<FeatureFlagService>(TYPES.FeatureFlagService)
-  .to(FeatureFlagService)
-  .inSingletonScope();
-container
-  .bind<DoraMetricsService>(TYPES.DoraMetricsService)
-  .to(DoraMetricsService)
-  .inSingletonScope();
-container.bind<QwenTTSService>(TYPES.QwenTTSService).to(QwenTTSService).inSingletonScope();
-container.bind<WhatsAppService>(TYPES.WhatsAppService).to(WhatsAppService).inSingletonScope();
-container
-  .bind<EconomyService>(TYPES.EconomyService)
-  .to(EconomyService)
-  .inSingletonScope();
-container
-  .bind<EconomyChartService>(TYPES.EconomyChartService)
-  .to(EconomyChartService)
-  .inSingletonScope();
-container
-  .bind<SovereignVaultService>(TYPES.SovereignVaultService)
-  .to(SovereignVaultService)
-  .inSingletonScope();
-// ========================================
-// GOOGLE ECOSYSTEM INTEGRATION
-// ========================================
-import { GmailService } from '../services/gmail.service';
-import { SheetsService } from '../services/sheets.service';
-import { Gemini2Service } from '../services/gemini-2.service';
+bind<DevicePostureService>(TYPES.DevicePostureService, DevicePostureService);
 
-container.bind<GmailService>(GmailService).toSelf().inSingletonScope();
-container.bind<SheetsService>(SheetsService).toSelf().inSingletonScope();
-container.bind<Gemini2Service>(Gemini2Service).toSelf().inSingletonScope();
+import { SovereignHealingService } from '../services/SovereignHealingService';
+import { VoiceBiometricsService } from '../services/VoiceBiometricsService';
+import { SovereignSentinelService } from '../services/SovereignSentinelService';
+
+bind<SovereignHealingService>(TYPES.SovereignHealingService, SovereignHealingService);
+bind<VoiceBiometricsService>(TYPES.VoiceBiometricsService, VoiceBiometricsService);
+bind<SovereignSentinelService>(TYPES.SovereignSentinelService, SovereignSentinelService);
+bind<SovereignVaultService>(TYPES.SovereignVaultService, SovereignVaultService);
+bind<VaultService>(TYPES.VaultService, VaultService);
+bind<PQCCommService>(TYPES.PQCCommService, PQCCommService);
+
+bind<SemanticCacheService>(TYPES.SemanticCacheService, SemanticCacheService);
+bind<KnowledgeGraphService>(TYPES.KnowledgeGraphService, KnowledgeGraphService);
+bind<CloudFailoverService>(TYPES.CloudFailoverService, CloudFailoverService);
+bind<ServiceMeshService>(TYPES.ServiceMeshService, ServiceMeshService);
+bind<ZeroTrustService>(TYPES.ZeroTrustService, ZeroTrustService);
+bind<AnomalyDetectionService>(TYPES.AnomalyDetectionService, AnomalyDetectionService);
+bind<AutoDocumentationService>(TYPES.AutoDocumentationService, AutoDocumentationService);
+bind<FeatureFlagService>(TYPES.FeatureFlagService, FeatureFlagService);
+bind<DoraMetricsService>(TYPES.DoraMetricsService, DoraMetricsService);
+bind<QwenTTSService>(TYPES.QwenTTSService, QwenTTSService);
+bind<WhatsAppService>(TYPES.WhatsAppService, WhatsAppService);
+bind<EconomyService>(TYPES.EconomyService, EconomyService);
+bind<EconomyChartService>(TYPES.EconomyChartService, EconomyChartService);
+bind<SemanticRouterService>(TYPES.SemanticRouterService, SemanticRouterService);
+bind<YouTubeChannelService>(TYPES.YoutubeChannelService, YouTubeChannelService);
+bind<YoutubeWatcherService>(TYPES.YoutubeWatcherService, YoutubeWatcherService);
+bind<AgentService>(TYPES.AgentService, AgentService);
+bind<VectorService>(TYPES.VectorService, VectorService);
+bind<YoutubeTranscriptionQueue>(TYPES.YoutubeTranscriptionQueue, YoutubeTranscriptionQueue);
+bind<YoutubeTranscriptionService>(TYPES.YoutubeTranscriptionService, YoutubeTranscriptionService);
+
+// ========================================
+// CONTROLLERS
+// ========================================
+import { DevicePostureController } from '../controllers/DevicePostureController';
+import { WebAuthnController } from '../controllers/webauthn.controller';
+import { SovereignHandshakeController } from '../controllers/SovereignHandshakeController';
+import { SovereignBiometricsController } from '../controllers/SovereignBiometricsController';
+import { SentinelController } from '../controllers/SentinelController';
+
+bind<SwarmController>(TYPES.SwarmController, SwarmController);
+bind<GodModeController>(TYPES.GodModeController, GodModeController);
+bind<DanielaController>(TYPES.DanielaController, DanielaController);
+bind<SocialController>(TYPES.SocialController, SocialController);
+bind<DockerController>(TYPES.DockerController, DockerController);
+bind<AnalyticsController>(TYPES.AnalyticsController, AnalyticsController);
+bind<BillingController>(TYPES.BillingController, BillingController);
+bind<UsageController>(TYPES.UsageController, UsageController);
+bind<DevicePostureController>(TYPES.DevicePostureController, DevicePostureController);
+if (!container.isBound(WebAuthnController))
+  container.bind<WebAuthnController>(WebAuthnController).toSelf().inSingletonScope();
+bind<SovereignHandshakeController>(
+  TYPES.SovereignHandshakeController,
+  SovereignHandshakeController,
+);
+bind<SovereignBiometricsController>(
+  TYPES.SovereignBiometricsController,
+  SovereignBiometricsController,
+);
+bind<SentinelController>(TYPES.SentinelController, SentinelController);
+bind<SystemController>(TYPES.SystemController, SystemController);
 
 export { container, TYPES };

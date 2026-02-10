@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import MainApp from './MainApp.tsx';
+import MainApp from './MainApp';
 import { AppProvider } from './contexts/AppContext';
 import './index.css';
 
@@ -16,11 +16,18 @@ if (rootElement) {
 }
 
 // Service Worker registration
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
+// 💥 NUCLEAR OPTION: Force Unregister Service Workers
+// This is necessary because the previous SW cache is broken and preventing updates.
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/sw.js')
-      .then(reg => console.log('✅ [SW] Registered:', reg.scope))
-      .catch(err => console.error('❌ [SW] Registration Failed:', err));
+    navigator.serviceWorker.getRegistrations().then(registrations => {
+      for (let registration of registrations) {
+        registration.unregister().then(() => {
+          console.log('💥 [SW] Force Unregistered:', registration.scope);
+          // Optional: Force reload if we found and removed one
+          // window.location.reload();
+        });
+      }
+    });
   });
 }

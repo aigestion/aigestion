@@ -3,15 +3,18 @@ import {
   Activity,
   Box,
   Cpu,
-  Gamepad2,
+  Compass,
   Globe,
   MapPin,
   Rocket,
+  Shield,
   Sparkles,
   Star,
   Users,
   Zap,
 } from 'lucide-react';
+
+
 import React, { useEffect, useState } from 'react';
 import SpatialPresentation from './SpatialPresentation';
 
@@ -61,69 +64,71 @@ export const DecentralandOffice: React.FC = () => {
   const features = [
     {
       id: 1,
-      icon: <Gamepad2 className="w-6 h-6" />,
-      title: '🎮 Sala de Juegos IA',
-      description: 'Juega con Daniela IA en realidad virtual',
-      color: 'from-purple-500 to-pink-500',
+      icon: <Zap className="w-5 h-5" />,
+      title: 'Protocolo Neural',
+      description: 'Gestión asistida por Daniela IA de grado industrial',
+      color: 'from-zinc-400 to-zinc-600',
       status: 'ACTIVO',
     },
     {
       id: 2,
-      icon: <Rocket className="w-6 h-6" />,
-      title: '🚀 Laboratorio de Innovación',
-      description: 'Experimenta con tecnología del futuro',
-      color: 'from-blue-500 to-cyan-500',
-      status: 'DISPONIBLE',
+      icon: <Shield className="w-5 h-5" />,
+      title: 'Bóveda Soberana',
+      description: 'Infraestructura de seguridad cuántica local',
+      color: 'from-zinc-500 to-zinc-700',
+      status: 'PROTEGIDO',
     },
     {
       id: 3,
-      icon: <Globe className="w-6 h-6" />,
-      title: '🌍 Centro de Reuniones',
-      description: 'Conecta con personas de todo el mundo',
-      color: 'from-green-500 to-emerald-500',
-      status: 'ABIERTO',
+      icon: <Globe className="w-5 h-5" />,
+      title: 'Nexos Globales',
+      description: 'Interconexión de activos distribuidos en el tiempo real',
+      color: 'from-zinc-600 to-zinc-800',
+      status: 'SINCRO',
     },
     {
       id: 4,
-      icon: <Zap className="w-6 h-6" />,
-      title: '⚡ Galería NFT',
-      description: 'Colecciona arte digital único',
-      color: 'from-yellow-500 to-orange-500',
-      status: `${metaverseStatus.nfts} PIEZAS`,
+      icon: <Cpu className="w-5 h-5" />,
+      title: 'Núcleo Operativo',
+      description: 'Orquestación de procesos de alta disponibilidad',
+      color: 'from-zinc-700 to-zinc-900',
+      status: 'OPT-ON',
     },
     {
       id: 5,
-      icon: <Star className="w-6 h-6" />,
-      title: '🌟 Cine Inmersivo',
-      description: 'Películas y experiencias en 360°',
-      color: 'from-red-500 to-pink-500',
-      status: 'PROYECTANDO',
+      icon: <Star className="w-5 h-5" />,
+      title: 'Laboratorio Alfa',
+
+      description: 'Investigación y desarrollo de arquitecturas futuro',
+      color: 'from-zinc-300 to-zinc-500',
+      status: 'INVESTIGANDO',
     },
     {
       id: 6,
-      icon: <Sparkles className="w-6 h-6" />,
-      title: '✨ Tienda Mágica',
-      description: 'Compra items exclusivos del metaverso',
-      color: 'from-indigo-500 to-purple-500',
-      status: 'NUEVO',
+      icon: <Sparkles className="w-5 h-5" />,
+      title: 'Ecosistema v5.0',
+      description: 'Despliegues masivos con latencia ultra-baja',
+      color: 'from-zinc-500 to-zinc-800',
+      status: 'MODO DIOS',
     },
   ];
 
+
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 overflow-hidden">
+    <div className="relative min-h-screen bg-[#020205] overflow-hidden">
       {/* Animated Background Effects */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-purple-900/50 to-black" />
-        <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] opacity-10 bg-repeat" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-[#050508] to-black" />
+        <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] opacity-[0.03] bg-repeat" />
 
-        {/* Floating Particles */}
-        <div className="absolute top-20 left-20 w-2 h-2 bg-purple-400 rounded-full animate-ping" />
-        <div className="absolute top-40 right-32 w-3 h-3 bg-blue-400 rounded-full animate-ping animation-delay-1000" />
-        <div className="absolute bottom-32 left-40 w-2 h-2 bg-cyan-400 rounded-full animate-ping animation-delay-2000" />
-        <div className="absolute top-60 right-20 w-4 h-4 bg-pink-400 rounded-full animate-ping animation-delay-3000" />
+        {/* Floating Particles - Subtle Silver */}
+        <div className="absolute top-20 left-20 w-1 h-1 bg-white/20 rounded-full animate-ping" />
+        <div className="absolute top-40 right-32 w-1.5 h-1.5 bg-nexus-cyan/20 rounded-full animate-ping animation-delay-1000" />
+        <div className="absolute bottom-32 left-40 w-1 h-1 bg-white/10 rounded-full animate-ping animation-delay-2000" />
 
-        {/* Central Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200%] h-[200%] bg-[radial-gradient(circle_at_center,rgba(138,43,226,0.2),transparent_60%)] blur-3xl animate-pulse-slow" />
+        {/* Central Glow - Deep & Minimal */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.03),transparent_70%)] blur-3xl" />
       </div>
 
       <motion.div
@@ -133,104 +138,78 @@ export const DecentralandOffice: React.FC = () => {
         transition={{ duration: 0.8 }}
       >
         {/* Header Section */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-16">
           <motion.div
-            className="inline-flex items-center gap-3 mb-6"
-            initial={{ opacity: 0, scale: 0.8 }}
+            className="inline-flex items-center gap-3 mb-8"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center border-2 border-white/20 shadow-lg shadow-purple-500/30">
-              <Box className="w-8 h-8 text-white" />
+            <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 shadow-2xl backdrop-blur-md">
+              <Box className="w-5 h-5 text-nexus-cyan" />
             </div>
             <div className="text-left">
-              <h3 className="text-sm font-bold text-purple-300 uppercase tracking-wider">
-                🌐 Oficina Virtual Mágica
+              <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.5em] font-orbitron opacity-40">
+                CENTRO DE MANDO NEXUS
               </h3>
-              <div className="text-xs text-gray-400 font-mono">
-                ESTADO: ✅ SUPER ACTIVA // V.5.0 DIOS
+              <div className="text-[9px] text-nexus-cyan font-mono font-bold tracking-[0.3em] uppercase">
+                SISTEMA OPERATIVO // SOBERANO v.5.0
               </div>
             </div>
           </motion.div>
 
           <motion.h1
-            className="text-6xl md:text-8xl font-black text-white leading-[0.9] mb-6"
-            initial={{ opacity: 0, y: 30 }}
+            className="text-7xl md:text-9xl font-black text-white leading-tight mb-8 tracking-tighter uppercase font-orbitron"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            AIGESTION <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 animate-gradient-flow">
-              METAVERSE HQ 🚀
+            Sede <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-nexus-silver to-white/40">
+              Soberana
             </span>
           </motion.h1>
 
           <motion.p
-            className="text-xl text-gray-300 leading-relaxed max-w-3xl mx-auto mb-8"
+            className="text-xl text-nexus-silver/60 leading-relaxed max-w-3xl mx-auto mb-8 font-light italic"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            🎮 ¡Bienvenido a la oficina más cool del metaverso! Aquí puedes jugar con Daniela IA,
-            explorar mundos virtuales y conocer gente de todo el planeta. ¡Como un videojuego!
+            "Arquitectura inmersiva de alta disponibilidad diseñada para la orquestación
+            estratégica, la gobernanza digital soberana y la supervisión de activos en tiempo real."
           </motion.p>
         </div>
 
         {/* Stats Dashboard */}
         <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
-          initial={{ opacity: 0, y: 30 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16"
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <div className="p-6 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl border border-purple-500/30 backdrop-blur-sm hover:scale-105 transition-all group">
-            <div className="flex items-center gap-3 mb-3">
-              <MapPin className="w-6 h-6 text-purple-400 group-hover:scale-110 transition-transform" />
-              <span className="font-mono text-lg font-bold text-purple-300">-51, 114</span>
-            </div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">
-              📍 Coordenadas Secretas
-            </div>
-            <div className="text-xs text-purple-400 mt-1">🗺️ Encuéntranos!</div>
-          </div>
+          {[
+            { label: 'Coordenadas', value: '-51, 114', icon: MapPin },
+            { label: 'Tokens Activos', value: metaverseStatus.users, icon: Users },
+            { label: 'Latencia Red', value: '0.2ms', icon: Activity },
+            { label: 'Núcleo Kortex', value: 'OPERATIVO', icon: Cpu },
 
-          <div className="p-6 bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-2xl border border-green-500/30 backdrop-blur-sm hover:scale-105 transition-all group">
-            <div className="flex items-center gap-3 mb-3">
-              <Users className="w-6 h-6 text-green-400 group-hover:scale-110 transition-transform" />
-              <span className="font-mono text-lg font-bold text-green-300">
-                {metaverseStatus.users}
-              </span>
+          ].map((stat, i) => (
+            <div key={i} className="p-6 bg-white/[0.02] rounded-2xl border border-white/[0.05] backdrop-blur-3xl hover:border-nexus-cyan/20 transition-all group relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="flex items-center gap-3 mb-3">
+                <stat.icon className="w-4 h-4 text-nexus-cyan opacity-40 group-hover:opacity-100 transition-opacity" />
+                <span className="font-mono text-sm font-bold text-white tracking-widest leading-none">
+                  {stat.value}
+                </span>
+              </div>
+              <div className="text-[8px] text-white/20 uppercase tracking-[0.3em] font-bold">
+                {stat.label}
+              </div>
             </div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">👥 Amigos Online</div>
-            <div className="text-xs text-green-400 mt-1">🎮 ¡Juega con ellos!</div>
-          </div>
-
-          <div className="p-6 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-2xl border border-blue-500/30 backdrop-blur-sm hover:scale-105 transition-all group">
-            <div className="flex items-center gap-3 mb-3">
-              <Activity className="w-6 h-6 text-blue-400 group-hover:scale-110 transition-transform" />
-              <span className="font-mono text-lg font-bold text-blue-300">
-                {metaverseStatus.performance}%
-              </span>
-            </div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">
-              ⚡ Velocidad Súper Rápida
-            </div>
-            <div className="text-xs text-blue-400 mt-1">🚀 Como un cohete</div>
-          </div>
-
-          <div className="p-6 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-2xl border border-yellow-500/30 backdrop-blur-sm hover:scale-105 transition-all group">
-            <div className="flex items-center gap-3 mb-3">
-              <Cpu className="w-6 h-6 text-yellow-400 group-hover:scale-110 transition-transform" />
-              <span className="font-mono text-lg font-bold text-yellow-300">
-                {metaverseStatus.aiStatus.toUpperCase()}
-              </span>
-            </div>
-            <div className="text-xs text-gray-400 uppercase tracking-wider">
-              🧠 Daniela IA Activa
-            </div>
-            <div className="text-xs text-yellow-400 mt-1">💬 ¡Habla con ella!</div>
-          </div>
+          ))}
         </motion.div>
+
 
         {/* Interactive Features Grid */}
         <motion.div
@@ -239,9 +218,14 @@ export const DecentralandOffice: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <h2 className="text-3xl font-bold text-center text-white mb-8">
-            🎮 ¡Explora Nuestros Salones Mágicos!
-          </h2>
+          <div className="flex items-center gap-4 mb-12">
+            <div className="h-px grow bg-white/5" />
+            <h2 className="text-2xl font-bold font-orbitron text-white text-center tracking-[0.4em] uppercase">
+              Centro de Gobernanza
+            </h2>
+            <div className="h-px grow bg-white/5" />
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <motion.div
@@ -305,21 +289,26 @@ export const DecentralandOffice: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* 3D Visualization */}
           <motion.div
-            className="relative aspect-square lg:aspect-[4/3] rounded-3xl overflow-hidden border-2 border-white/20 bg-black/60 shadow-2xl"
+            className="relative aspect-square lg:aspect-[4/3] rounded-3xl overflow-hidden border border-white/10 bg-[#050508] shadow-2xl group"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
             transition={{ delay: 0.8 }}
           >
+            {/* Minimal Grid Overlay */}
+            <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+
             {/* 3D Scene Wrapper */}
-            <div className="absolute inset-0 z-10 cursor-move">
+            <div className="absolute inset-4 z-10 cursor-move rounded-2xl overflow-hidden border border-white/5 shadow-inner bg-black/40">
               <SpatialPresentation
-                title="AIG MetaVerse HQ"
+                title="Sede Metaverso AIG"
                 modelUrl="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
                 posterUrl="/images/dcl-thumbnail.png"
               />
             </div>
+
 
             {/* Interactive Overlay UI */}
             <div
@@ -329,19 +318,21 @@ export const DecentralandOffice: React.FC = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
               <div className="absolute bottom-8 left-8">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-900/50 border border-purple-500/30 text-purple-300 text-xs font-bold tracking-widest uppercase mb-3 animate-pulse">
-                  <span className="w-2 h-2 rounded-full bg-purple-400" />
-                  🎮 VISTA EN VIVO
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/40 text-[10px] font-bold tracking-[0.2em] uppercase mb-3">
+                  <span className="w-1.5 h-1.5 rounded-full bg-nexus-cyan animate-pulse" />
+                  Visualización Central
                 </div>
-                <h4 className="text-white font-bold text-2xl mb-1">🏰 Nuestro Castillo Virtual</h4>
-                <p className="text-gray-300 text-sm">Arrastra para explorar en 3D</p>
+                <h4 className="text-white font-bold text-2xl mb-1 tracking-tight">
+                  Arquitectura Digital
+                </h4>
+                <p className="text-nexus-silver/40 text-xs">Interacción dimensional 3D</p>
               </div>
 
               {/* Central "Drag to Explore" hint */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/60 backdrop-blur-md border border-white/20 px-6 py-4 rounded-full flex items-center gap-3">
-                <Gamepad2 className="text-white/80 animate-bounce" size={24} />
-                <span className="text-white/80 text-sm font-bold uppercase tracking-widest">
-                  🎮 Arrastra para explorar
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/40 backdrop-blur-xl border border-white/10 px-8 py-4 rounded-full flex items-center gap-4 group-hover:scale-110 transition-transform">
+                <Compass className="text-nexus-cyan animate-spin-slow" size={20} />
+                <span className="text-white text-[10px] font-bold uppercase tracking-[0.3em]">
+                  Navegación Espacial
                 </span>
               </div>
             </div>
@@ -357,72 +348,66 @@ export const DecentralandOffice: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.9 }}
           >
-            <div className="p-8 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl border border-purple-500/30 backdrop-blur-sm">
-              <h3 className="text-2xl font-bold text-white mb-4">🎪 ¿Qué Espera?</h3>
-              <ul className="space-y-3 text-gray-300">
-                <li className="flex items-start gap-3">
-                  <span className="text-purple-400 mt-1">🎮</span>
-                  <div>
-                    <strong className="text-white">Juegos con IA:</strong> Juega con Daniela IA en
-                    realidad virtual
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-blue-400 mt-1">👥</span>
-                  <div>
-                    <strong className="text-white">Amigos del mundo:</strong> Conoce gente de todos
-                    los países
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-green-400 mt-1">🎨</span>
-                  <div>
-                    <strong className="text-white">Arte digital:</strong> Colecciona NFTs únicos y
-                    especiales
-                  </div>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-yellow-400 mt-1">🚀</span>
-                  <div>
-                    <strong className="text-white">Tecnología futurista:</strong> Experimenta cosas
-                    del futuro
-                  </div>
-                </li>
+            <div className="p-8 bg-white/[0.02] rounded-3xl border border-white/[0.05] backdrop-blur-3xl shadow-2xl relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <h3 className="text-sm font-bold text-white mb-8 uppercase tracking-[0.4em] font-orbitron opacity-60">
+                CAPACIDADES DEL NÚCLEO
+              </h3>
+              <ul className="space-y-6">
+                {[
+                  { title: 'Asistencia Cognitiva', desc: 'Sincronización neuronal con Daniela IA.' },
+                  { title: 'Conectividad Global', desc: 'Orquestación de nodos en tiempo real.' },
+                  { title: 'Activos Inmutables', desc: 'Gobernanza de infraestructura soberana.' },
+                ].map((item, i) => (
+                  <li key={i} className="flex gap-4 group/item">
+                    <div className="w-1 h-1 rounded-full bg-nexus-cyan mt-2 opacity-20 group-hover/item:opacity-100 transition-opacity" />
+                    <div>
+                      <strong className="text-white text-xs font-bold block tracking-wider mb-1 uppercase opacity-80 group-hover/item:opacity-100 transition-opacity">
+                        {item.title}
+                      </strong>
+                      <p className="text-[10px] text-white/30 leading-relaxed font-light group-hover/item:text-white/50 transition-colors">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            <div className="space-y-4">
+
+            <div className="space-y-6">
               <motion.button
                 onClick={handleEnterDecentraland}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
                 disabled={isExploring}
-                className={`w-full px-8 py-6 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center gap-3 text-white font-bold text-lg tracking-wider shadow-lg shadow-purple-900/30 hover:shadow-purple-500/50 transition-all ${
-                  isExploring ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
+                className={`w-full px-8 py-6 bg-white text-black rounded-2xl flex items-center justify-center gap-4 font-orbitron font-black text-[10px] tracking-[0.4em] uppercase transition-all shadow-2xl hover:bg-nexus-cyan hover:text-white ${
+                  isExploring ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
                 {isExploring ? (
                   <>
-                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    <span>🚀 Abriendo Portal...</span>
+                    <div className="w-3 h-3 border border-black border-t-transparent rounded-full animate-spin" />
+                    <span>Inicializando...</span>
                   </>
                 ) : (
                   <>
-                    <Rocket size={24} />
-                    <span>🎮 ¡ENTRAR AL MUNDO MÁGICO!</span>
+                    <Rocket size={14} className="opacity-40" />
+                    <span>Entrar al Núcleo Soberano</span>
                   </>
                 )}
               </motion.button>
 
-              <div className="text-center text-sm text-gray-400">
-                <p>
-                  💡 <strong>Tip:</strong> Usa tu mouse para explorar el edificio en 3D
+              <div className="text-center space-y-2">
+                <p className="text-[9px] text-white/20 uppercase tracking-[0.3em] font-mono">
+                  SISTEMA DE NAVEGACIÓN DIMENSIONAL v5.1
                 </p>
-                <p className="mt-1">
-                  🌟 {metaverseStatus.visitors.toLocaleString()} personas ya visitaron hoy
+                <p className="text-[8px] text-nexus-cyan/40 uppercase tracking-[0.2em] font-mono">
+                  ESTADO: SOBERANO // NIVEL 5 ACTIVADO
                 </p>
               </div>
             </div>
+
           </motion.div>
         </div>
       </motion.div>

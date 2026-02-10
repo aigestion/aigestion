@@ -1,15 +1,17 @@
 import { Router } from 'express';
 
-import { buildError, buildResponse } from '../common/response-builder';
+import { container } from '../config/inversify.config';
 import { User } from '../models/User';
-import { stripeService } from '../services/stripe.service';
+import { StripeService } from '../services/stripe.service';
+import { TYPES } from '../types';
 import { logger } from '../utils/logger';
 
 const stripeRouter = Router();
+const stripeService = container.get<StripeService>(TYPES.StripeService);
 
 /**
  * @openapi
- * /stripe/checkout:
+ * /api/v1/stripe/checkout:
  *   post:
  *     summary: Create a Stripe Checkout Session
  *     tags: [Stripe]
@@ -95,7 +97,7 @@ stripeRouter.post('/checkout', async (req: any, res: any) => {
 
 /**
  * @openapi
- * /stripe/webhook:
+ * /api/v1/stripe/webhook:
  *   post:
  *     summary: Stripe webhook endpoint
  *     tags: [Stripe]

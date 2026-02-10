@@ -12,27 +12,11 @@ const danielaController = container.get<DanielaController>(TYPES.DanielaControll
  * @desc Interaction with Daniela AI
  * @access Private
  */
-router.post('/chat', protect, danielaController.chat);
-
-/**
- * @route GET /api/v1/daniela/status
- * @desc Get Daniela's operational status
- * @access Private
- */
-router.get('/status', protect, danielaController.getStatus);
-
-/**
- * @route GET /api/v1/daniela/system-status
- * @desc Get system status for dashboards
- * @access Private
- */
-router.get('/system-status', protect, danielaController.getSystemStatus);
-
-/**
- * @route GET /api/v1/daniela/insights
- * @desc Get strategic insights for dashboards
- * @access Private
- */
-router.get('/insights', protect, danielaController.getInsights);
+router.post('/chat', protect, (req, res, next) => danielaController.chat(req, res, next));
+router.get('/status', protect, (req, res, next) => danielaController.getStatus(req, res, next));
+router.get('/system-status', protect, (req, res, next) =>
+  danielaController.getSystemStatus(req, res, next),
+);
+router.get('/insights', protect, (req, res, next) => danielaController.getInsights(req, res, next));
 
 export default router;

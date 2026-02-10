@@ -264,14 +264,16 @@ jobs:
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
-  # 🚀 VERCEL DEPLOYMENT
-  vercel-deployment:
-    name: 🚀 Vercel Deployment - God Mode
+  # 🚀 VERCEL DEPLOYMENT - CANARY FLOW
+  vercel-canary:
+    name: 🛡️ Vercel Canary Deploy
     runs-on: ubuntu-latest
     needs: [intelligence-gathering, ultimate-security, performance-testing]
     if: needs.intelligence-gathering.outputs.deploy-approved == 'true'
+    outputs:
+      preview-url: ${{ steps.deploy.outputs.preview-url }}
     environment:
-      name: ${{ github.event.inputs.environment || 'production' }}
+      name: staging
       url: ${{ steps.deploy.outputs.preview-url }}
 
     steps:
@@ -295,8 +297,63 @@ jobs:
           cd frontend/website-epic
           npm run build
 
-      - name: 🚀 Deploy to Vercel
+      - name: 🛡️ Deploy Canary (Preview)
         id: deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '' # No --prod for canary
+          working-directory: frontend/website-epic
+
+  # 🔍 POST-DEPLOYMENT VALIDATION (Canary Health Check)
+  post-deploy-validation:
+    name: 🔍 Canary Validation
+    runs-on: ubuntu-latest
+    needs: vercel-canary
+    if: success()
+    outputs:
+      passed: ${{ steps.health.outputs.passed }}
+
+    steps:
+      - name: ⏱️ Wait for Propagation
+        run: sleep 15
+
+      - name: 🔍 Health Check
+        id: health
+        run: |
+          URL="${{ needs.vercel-canary.outputs.preview-url }}"
+          echo "Testing Canary at $URL"
+          for i in {1..5}; do
+            if curl -f "$URL" > /dev/null 2>&1; then
+              echo "✅ Health check passed"
+              echo "passed=true" >> $GITHUB_OUTPUT
+              exit 0
+            else
+              echo "⏳ Waiting... ($i/5)"
+              sleep 10
+            fi
+          done
+          echo "❌ Health check failed"
+          echo "passed=false" >> $GITHUB_OUTPUT
+          exit 1
+
+  # 🏆 PRODUCTION PROMOTION
+  production-promotion:
+    name: 🚀 Production Promotion
+    runs-on: ubuntu-latest
+    needs: [vercel-canary, post-deploy-validation]
+    if: needs.post-deploy-validation.result == 'success'
+    environment:
+      name: production
+      url: https://aigestion.net
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🚀 Promote to Production
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -304,68 +361,18 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
           working-directory: frontend/website-epic
+          vercel-project-name: 'aigestion-website-epic'
 
       - name: 📊 Deployment Summary
         run: |
-          echo "## 🚀 Vercel Deployment Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** ${{ github.event.inputs.environment || 'production' }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Preview URL:** ${{ steps.deploy.outputs.preview-url }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Bundle Size:** ${{ needs.intelligence-gathering.outputs.performance-baseline }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Security Score:** ${{ needs.intelligence-gathering.outputs.security-score }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Deployment Time:** $(date -u)" >> $GITHUB_STEP_SUMMARY
-
-  # 🔍 POST-DEPLOYMENT VALIDATION
-  post-deploy-validation:
-    name: 🔍 Post-Deployment Validation
-    runs-on: ubuntu-latest
-    needs: vercel-deployment
-    if: always() && needs.vercel-deployment.result == 'success'
-
-    steps:
-      - name: ⏱️ Wait for Deployment
-        run: sleep 30
-
-      - name: 🔍 Health Check
-        run: |
-          URL="${{ needs.vercel-deployment.outputs.preview-url }}"
-          for i in {1..10}; do
-            if curl -f "$URL" > /dev/null 2>&1; then
-              echo "✅ Health check passed"
-              break
-            else
-              echo "⏳ Waiting for deployment... ($i/10)"
-              sleep 10
-            fi
-          done
-
-      - name: ⚡ Performance Test
-        run: |
-          npx lighthouse "${{ needs.vercel-deployment.outputs.preview-url }}" \
-            --output=json \
-            --output-path=lighthouse-post-deploy.json \
-            --quiet
-
-      - name: 📊 Performance Report
-        run: |
-          PERF=$(cat lighthouse-post-deploy.json | jq '.lhr.categories.performance.score * 100 | floor')
-          echo "## 📊 Post-Deployment Performance" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Performance Score:** $PERF/100" >> $GITHUB_STEP_SUMMARY
-          echo "**Status:** $([ "$PERF" -gt 80 ] && echo "✅ Excellent" || echo "⚠️ Needs Optimization")" >> $GITHUB_STEP_SUMMARY
-
-      - name: 🔒 Security Scan
-        run: |
-          npx zap-baseline.py -t "${{ needs.vercel-deployment.outputs.preview-url }}" \
-            -J zap-report.json \
-            --quiet || true
+          echo "## 🚀 Production Promotion Successful" >> $GITHUB_STEP_SUMMARY
+          echo "The canary version has been promoted to production." >> $GITHUB_STEP_SUMMARY
 
   # 📢 NOTIFICATIONS
   notifications:
     name: 📢 Smart Notifications
     runs-on: ubuntu-latest
-    needs: [vercel-deployment, post-deploy-validation]
+    needs: [production-promotion, post-deploy-validation]
     if: always()
 
     steps:
@@ -373,28 +380,22 @@ jobs:
         if: always()
         run: |
           STATUS="✅ Success"
-          if [ "${{ needs.vercel-deployment.result }}" != "success" ]; then
+          if [ "${{ needs.production-promotion.result }}" != "success" ]; then
             STATUS="❌ Failed"
           fi
 
           echo "## 🚀 AIGestion Vercel Deployment $STATUS" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** ${{ github.event.inputs.environment || 'production' }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Bundle Size:** ${{ needs.intelligence-gathering.outputs.performance-baseline }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Security:** ${{ needs.intelligence-gathering.outputs.security-score }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Deployment URL:** ${{ needs.vercel-deployment.outputs.preview-url }}" >> $GITHUB_STEP_SUMMARY
-
-      - name: 📊 Update Deployment Metrics
-        run: |
-          echo "📊 Deployment metrics updated successfully"
+          echo "**Promotion Status:** $STATUS" >> $GITHUB_STEP_SUMMARY
+          echo "**Canary Validation:** ${{ needs.post-deploy-validation.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment URL:** https://aigestion.net" >> $GITHUB_STEP_SUMMARY
 
   # 🧹 CLEANUP
   cleanup:
     name: 🧹 Cleanup & Optimization
     runs-on: ubuntu-latest
-    needs: [vercel-deployment, post-deploy-validation]
-    if: always() && needs.vercel-deployment.result == 'success'
+    needs: [production-promotion]
+    if: always() && needs.production-promotion.result == 'success'
 
     steps:
       - name: 🧹 Clean Old Deployments
@@ -404,7 +405,3 @@ jobs:
       - name: 📊 Cache Optimization
         run: |
           echo "📊 Optimizing cache..."
-
-      - name: 🔄 Update CDN
-        run: |
-          echo "🔄 Updating CDN configuration..."

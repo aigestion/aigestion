@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { Service } from 'typedi';
+import { injectable } from 'inversify';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 
-@Service()
+@injectable()
 export class FacebookService {
   private readonly baseUrl = 'https://graph.facebook.com/v19.0';
 

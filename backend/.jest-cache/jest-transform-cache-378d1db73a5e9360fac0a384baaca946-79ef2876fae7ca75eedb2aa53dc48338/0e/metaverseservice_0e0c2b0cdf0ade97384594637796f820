@@ -1,0 +1,53 @@
+46708c1a87b0786346e9a89a70bc85a1
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MetaverseService = void 0;
+const inversify_1 = require("inversify");
+const logger_1 = require("../utils/logger");
+let MetaverseService = class MetaverseService {
+    parcelCoordinates = '-51,114';
+    /**
+     * Manages virtual office presence and event scheduling.
+     */
+    async getStatus() {
+        try {
+            logger_1.logger.info('[MetaverseService] Checking virtual office status...');
+            const activeEvents = [
+                {
+                    id: '1',
+                    title: 'Daily Sync - virtual',
+                    type: 'meeting',
+                    startTime: new Date().toISOString(),
+                    attendees: 5,
+                },
+            ];
+            return {
+                offline: false,
+                coordinates: this.parcelCoordinates,
+                parcelOwner: 'AIGestion Nexus',
+                activeEvents,
+                metaverse: 'Decentraland',
+                visitUrl: `https://play.decentraland.org/?position=${this.parcelCoordinates}`,
+            };
+        }
+        catch (error) {
+            logger_1.logger.error('[MetaverseService] Failed to get status:', error);
+            throw error;
+        }
+    }
+    async scheduleEvent(event) {
+        logger_1.logger.info(`[MetaverseService] Scheduling event: ${event.title}`);
+        return Math.random().toString(36).substr(2, 9);
+    }
+};
+exports.MetaverseService = MetaverseService;
+exports.MetaverseService = MetaverseService = __decorate([
+    (0, inversify_1.injectable)()
+], MetaverseService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcbWV0YXZlcnNlLnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUEseUNBQXVDO0FBQ3ZDLDRDQUF5QztBQVdsQyxJQUFNLGdCQUFnQixHQUF0QixNQUFNLGdCQUFnQjtJQUNWLGlCQUFpQixHQUFXLFNBQVMsQ0FBQztJQUV2RDs7T0FFRztJQUNILEtBQUssQ0FBQyxTQUFTO1FBQ2IsSUFBSSxDQUFDO1lBQ0gsZUFBTSxDQUFDLElBQUksQ0FBQyxzREFBc0QsQ0FBQyxDQUFDO1lBRXBFLE1BQU0sWUFBWSxHQUFxQjtnQkFDckM7b0JBQ0UsRUFBRSxFQUFFLEdBQUc7b0JBQ1AsS0FBSyxFQUFFLHNCQUFzQjtvQkFDN0IsSUFBSSxFQUFFLFNBQVM7b0JBQ2YsU0FBUyxFQUFFLElBQUksSUFBSSxFQUFFLENBQUMsV0FBVyxFQUFFO29CQUNuQyxTQUFTLEVBQUUsQ0FBQztpQkFDYjthQUNGLENBQUM7WUFFRixPQUFPO2dCQUNMLE9BQU8sRUFBRSxLQUFLO2dCQUNkLFdBQVcsRUFBRSxJQUFJLENBQUMsaUJBQWlCO2dCQUNuQyxXQUFXLEVBQUUsaUJBQWlCO2dCQUM5QixZQUFZO2dCQUNaLFNBQVMsRUFBRSxjQUFjO2dCQUN6QixRQUFRLEVBQUUsMkNBQTJDLElBQUksQ0FBQyxpQkFBaUIsRUFBRTthQUM5RSxDQUFDO1FBQ0osQ0FBQztRQUFDLE9BQU8sS0FBSyxFQUFFLENBQUM7WUFDZixlQUFNLENBQUMsS0FBSyxDQUFDLDBDQUEwQyxFQUFFLEtBQUssQ0FBQyxDQUFDO1lBQ2hFLE1BQU0sS0FBSyxDQUFDO1FBQ2QsQ0FBQztJQUNILENBQUM7SUFFRCxLQUFLLENBQUMsYUFBYSxDQUFDLEtBQWlDO1FBQ25ELGVBQU0sQ0FBQyxJQUFJLENBQUMsd0NBQXdDLEtBQUssQ0FBQyxLQUFLLEVBQUUsQ0FBQyxDQUFDO1FBQ25FLE9BQU8sSUFBSSxDQUFDLE1BQU0sRUFBRSxDQUFDLFFBQVEsQ0FBQyxFQUFFLENBQUMsQ0FBQyxNQUFNLENBQUMsQ0FBQyxFQUFFLENBQUMsQ0FBQyxDQUFDO0lBQ2pELENBQUM7Q0FDRixDQUFBO0FBdENZLDRDQUFnQjsyQkFBaEIsZ0JBQWdCO0lBRDVCLElBQUEsc0JBQVUsR0FBRTtHQUNBLGdCQUFnQixDQXNDNUIiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcbWV0YXZlcnNlLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaW5qZWN0YWJsZSB9IGZyb20gJ2ludmVyc2lmeSc7XG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xuXG5leHBvcnQgaW50ZXJmYWNlIE1ldGF2ZXJzZUV2ZW50IHtcbiAgaWQ6IHN0cmluZztcbiAgdGl0bGU6IHN0cmluZztcbiAgdHlwZTogJ21lZXRpbmcnIHwgJ2V2ZW50JyB8ICd0b3VyJztcbiAgc3RhcnRUaW1lOiBzdHJpbmc7XG4gIGF0dGVuZGVlczogbnVtYmVyO1xufVxuXG5AaW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgTWV0YXZlcnNlU2VydmljZSB7XG4gIHByaXZhdGUgcmVhZG9ubHkgcGFyY2VsQ29vcmRpbmF0ZXM6IHN0cmluZyA9ICctNTEsMTE0JztcblxuICAvKipcbiAgICogTWFuYWdlcyB2aXJ0dWFsIG9mZmljZSBwcmVzZW5jZSBhbmQgZXZlbnQgc2NoZWR1bGluZy5cbiAgICovXG4gIGFzeW5jIGdldFN0YXR1cygpOiBQcm9taXNlPGFueT4ge1xuICAgIHRyeSB7XG4gICAgICBsb2dnZXIuaW5mbygnW01ldGF2ZXJzZVNlcnZpY2VdIENoZWNraW5nIHZpcnR1YWwgb2ZmaWNlIHN0YXR1cy4uLicpO1xuXG4gICAgICBjb25zdCBhY3RpdmVFdmVudHM6IE1ldGF2ZXJzZUV2ZW50W10gPSBbXG4gICAgICAgIHtcbiAgICAgICAgICBpZDogJzEnLFxuICAgICAgICAgIHRpdGxlOiAnRGFpbHkgU3luYyAtIHZpcnR1YWwnLFxuICAgICAgICAgIHR5cGU6ICdtZWV0aW5nJyxcbiAgICAgICAgICBzdGFydFRpbWU6IG5ldyBEYXRlKCkudG9JU09TdHJpbmcoKSxcbiAgICAgICAgICBhdHRlbmRlZXM6IDUsXG4gICAgICAgIH0sXG4gICAgICBdO1xuXG4gICAgICByZXR1cm4ge1xuICAgICAgICBvZmZsaW5lOiBmYWxzZSxcbiAgICAgICAgY29vcmRpbmF0ZXM6IHRoaXMucGFyY2VsQ29vcmRpbmF0ZXMsXG4gICAgICAgIHBhcmNlbE93bmVyOiAnQUlHZXN0aW9uIE5leHVzJyxcbiAgICAgICAgYWN0aXZlRXZlbnRzLFxuICAgICAgICBtZXRhdmVyc2U6ICdEZWNlbnRyYWxhbmQnLFxuICAgICAgICB2aXNpdFVybDogYGh0dHBzOi8vcGxheS5kZWNlbnRyYWxhbmQub3JnLz9wb3NpdGlvbj0ke3RoaXMucGFyY2VsQ29vcmRpbmF0ZXN9YCxcbiAgICAgIH07XG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIGxvZ2dlci5lcnJvcignW01ldGF2ZXJzZVNlcnZpY2VdIEZhaWxlZCB0byBnZXQgc3RhdHVzOicsIGVycm9yKTtcbiAgICAgIHRocm93IGVycm9yO1xuICAgIH1cbiAgfVxuXG4gIGFzeW5jIHNjaGVkdWxlRXZlbnQoZXZlbnQ6IE9taXQ8TWV0YXZlcnNlRXZlbnQsICdpZCc+KTogUHJvbWlzZTxzdHJpbmc+IHtcbiAgICBsb2dnZXIuaW5mbyhgW01ldGF2ZXJzZVNlcnZpY2VdIFNjaGVkdWxpbmcgZXZlbnQ6ICR7ZXZlbnQudGl0bGV9YCk7XG4gICAgcmV0dXJuIE1hdGgucmFuZG9tKCkudG9TdHJpbmcoMzYpLnN1YnN0cigyLCA5KTtcbiAgfVxufVxuIl0sInZlcnNpb24iOjN9
