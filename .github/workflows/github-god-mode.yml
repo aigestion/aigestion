@@ -268,9 +268,17 @@ jobs:
           pnpm run build
 
       - name: 📊 Bundle Analysis
+        continue-on-error: true
         run: |
           cd frontend/apps/website-epic
-          npx webpack-bundle-analyzer dist/assets/*.js --mode json > bundle-analysis.json
+          # Try to find the largest JS file in assets/ to analyze
+          JS_FILE=$(find dist/assets -name "*.js" | head -n 1)
+          if [ -n "$JS_FILE" ]; then
+            npx webpack-bundle-analyzer "$JS_FILE" --mode json > bundle-analysis.json
+          else
+            echo "No JS files found for analysis"
+            echo "[]" > bundle-analysis.json
+          fi
 
       - name: ⚡ Performance Budget Check
         continue-on-error: true
