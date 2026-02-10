@@ -6,7 +6,7 @@ export interface IUser extends Document {
   email: string;
   twoFactorSecret?: string;
   password: string;
-  role: 'user' | 'admin' | 'dev' | 'sales' | 'god';
+
   lastLogin?: Date;
   isMfaEnabled: boolean;
   isTwoFactorEnabled?: boolean; // Alias for backward compatibility
@@ -54,6 +54,16 @@ export interface IUser extends Document {
   // IoT / Home Assistant
   haBaseUrl?: string;
   haAccessToken?: string;
+
+  // WebAuthn / Sovereign Hardware Keys
+  authenticators: {
+    credentialID: Buffer;
+    credentialPublicKey: Buffer;
+    counter: number;
+    credentialDeviceType: string;
+    credentialBackedUp: boolean;
+    transports?: string[];
+  }[];
 }
 
 const userSchema = new Schema<IUser>(
@@ -148,6 +158,18 @@ const userSchema = new Schema<IUser>(
     // IoT / Home Assistant (encrypted/hidden by default)
     haBaseUrl: { type: String },
     haAccessToken: { type: String, select: false },
+
+    // WebAuthn / Sovereign Hardware Keys
+    authenticators: [
+      {
+        credentialID: { type: Buffer, required: true },
+        credentialPublicKey: { type: Buffer, required: true },
+        counter: { type: Number, required: true },
+        credentialDeviceType: { type: String, required: true },
+        credentialBackedUp: { type: Boolean, required: true },
+        transports: [{ type: String }],
+      },
+    ],
   },
   {
     timestamps: true,

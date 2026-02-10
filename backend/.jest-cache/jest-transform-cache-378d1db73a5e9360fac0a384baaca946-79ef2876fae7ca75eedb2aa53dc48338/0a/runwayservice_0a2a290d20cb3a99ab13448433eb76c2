@@ -1,0 +1,97 @@
+5facc331c9ae511295dcfe39182e6c9e
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var RunwayService_1;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RunwayService = void 0;
+const axios_1 = __importDefault(require("axios"));
+const inversify_1 = require("inversify");
+const env_schema_1 = require("../config/env.schema");
+const logger_1 = require("../utils/logger");
+let RunwayService = class RunwayService {
+    static { RunwayService_1 = this; }
+    static API_URL = 'https://api.runwayml.com/v1';
+    /**
+     * Generates a video using Runway Gen-3 Alpha (Image-to-Video)
+     * Note: This is a simulated implementation based on typical GenAI API patterns,
+     * as specific backend SDKs might not be public or fully standardized yet.
+     */
+    /**
+     * Generates a video using Runway Gen-3 Alpha Turbo (Image-to-Video)
+     */
+    async generateImageToVideo(prompt, imageUri, // URL or Data URI
+    options = {}) {
+        if (!env_schema_1.env.RUNWAY_API_KEY) {
+            throw new Error('RUNWAY_API_KEY is missing');
+        }
+        try {
+            logger_1.logger.info(`Starting Runway Gen-3 Alpha Turbo Video Generation: "${prompt}"`);
+            const response = await axios_1.default.post(`${RunwayService_1.API_URL}/image_to_video`, // Standard endpoint, subject to change based on actual API version
+            {
+                promptText: prompt, // Specific field name might vary, checking docs simulation
+                image: imageUri,
+                model: 'gen3a_turbo', // Explicit model ID for Gen-3 Alpha Turbo
+                duration: options.duration || 5, // 5 or 10
+                ratio: options.aspect_ratio || '1280:768', // Cinema standard
+            }, {
+                headers: {
+                    Authorization: `Bearer ${env_schema_1.env.RUNWAY_API_KEY}`,
+                    'Content-Type': 'application/json',
+                    'X-Runway-Version': '2024-09-26',
+                },
+            });
+            return response.data;
+        }
+        catch (error) {
+            // Improved error logging
+            const errorData = error.response?.data;
+            const errorMsg = errorData?.error || error.message;
+            logger_1.logger.error('Runway API Error:', errorMsg);
+            if (errorData) {
+                logger_1.logger.error('Full Error Details:', JSON.stringify(errorData, null, 2));
+            }
+            if (error.response?.status === 402 ||
+                (error.response?.status === 400 && errorMsg.includes('credits'))) {
+                logger_1.logger.warn('This error likely indicates insufficient credits or a billing issue on your Runway account.');
+            }
+            else if (error.response?.status === 400) {
+                logger_1.logger.warn('This error might be due to credits, or possibly invalid parameters (e.g. image format). The image size confirms it should be valid for Data URI.');
+            }
+            throw error;
+        }
+    }
+    /**
+     * Check status of a generation task
+     */
+    async checkStatus(taskId) {
+        if (!env_schema_1.env.RUNWAY_API_KEY) {
+            throw new Error('RUNWAY_API_KEY is missing');
+        }
+        try {
+            const response = await axios_1.default.get(`${RunwayService_1.API_URL}/tasks/${taskId}`, {
+                headers: {
+                    Authorization: `Bearer ${env_schema_1.env.RUNWAY_API_KEY}`,
+                    'X-Runway-Version': '2024-09-26',
+                },
+            });
+            return response.data;
+        }
+        catch (error) {
+            logger_1.logger.error('Runway Status Check Error:', error.response?.data || error.message);
+            throw error;
+        }
+    }
+};
+exports.RunwayService = RunwayService;
+exports.RunwayService = RunwayService = RunwayService_1 = __decorate([
+    (0, inversify_1.injectable)()
+], RunwayService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xccnVud2F5LnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7OztBQUFBLGtEQUEwQjtBQUMxQix5Q0FBdUM7QUFDdkMscURBQTJDO0FBQzNDLDRDQUF5QztBQUdsQyxJQUFNLGFBQWEsR0FBbkIsTUFBTSxhQUFhOztJQUNoQixNQUFNLENBQVUsT0FBTyxHQUFHLDZCQUE2QixDQUFDO0lBRWhFOzs7O09BSUc7SUFDSDs7T0FFRztJQUNILEtBQUssQ0FBQyxvQkFBb0IsQ0FDeEIsTUFBYyxFQUNkLFFBQWdCLEVBQUUsa0JBQWtCO0lBQ3BDLFVBSUksRUFBRTtRQUVOLElBQUksQ0FBQyxnQkFBRyxDQUFDLGNBQWMsRUFBRSxDQUFDO1lBQ3hCLE1BQU0sSUFBSSxLQUFLLENBQUMsMkJBQTJCLENBQUMsQ0FBQztRQUMvQyxDQUFDO1FBRUQsSUFBSSxDQUFDO1lBQ0gsZUFBTSxDQUFDLElBQUksQ0FBQyx3REFBd0QsTUFBTSxHQUFHLENBQUMsQ0FBQztZQUUvRSxNQUFNLFFBQVEsR0FBRyxNQUFNLGVBQUssQ0FBQyxJQUFJLENBQy9CLEdBQUcsZUFBYSxDQUFDLE9BQU8saUJBQWlCLEVBQUUsbUVBQW1FO1lBQzlHO2dCQUNFLFVBQVUsRUFBRSxNQUFNLEVBQUUsMkRBQTJEO2dCQUMvRSxLQUFLLEVBQUUsUUFBUTtnQkFDZixLQUFLLEVBQUUsYUFBYSxFQUFFLDBDQUEwQztnQkFDaEUsUUFBUSxFQUFFLE9BQU8sQ0FBQyxRQUFRLElBQUksQ0FBQyxFQUFFLFVBQVU7Z0JBQzNDLEtBQUssRUFBRSxPQUFPLENBQUMsWUFBWSxJQUFJLFVBQVUsRUFBRSxrQkFBa0I7YUFDOUQsRUFDRDtnQkFDRSxPQUFPLEVBQUU7b0JBQ1AsYUFBYSxFQUFFLFVBQVUsZ0JBQUcsQ0FBQyxjQUFjLEVBQUU7b0JBQzdDLGNBQWMsRUFBRSxrQkFBa0I7b0JBQ2xDLGtCQUFrQixFQUFFLFlBQVk7aUJBQ2pDO2FBQ0YsQ0FDRixDQUFDO1lBRUYsT0FBTyxRQUFRLENBQUMsSUFBSSxDQUFDO1FBQ3ZCLENBQUM7UUFBQyxPQUFPLEtBQVUsRUFBRSxDQUFDO1lBQ3BCLHlCQUF5QjtZQUN6QixNQUFNLFNBQVMsR0FBRyxLQUFLLENBQUMsUUFBUSxFQUFFLElBQUksQ0FBQztZQUN2QyxNQUFNLFFBQVEsR0FBRyxTQUFTLEVBQUUsS0FBSyxJQUFJLEtBQUssQ0FBQyxPQUFPLENBQUM7WUFFbkQsZUFBTSxDQUFDLEtBQUssQ0FBQyxtQkFBbUIsRUFBRSxRQUFRLENBQUMsQ0FBQztZQUM1QyxJQUFJLFNBQVMsRUFBRSxDQUFDO2dCQUNkLGVBQU0sQ0FBQyxLQUFLLENBQUMscUJBQXFCLEVBQUUsSUFBSSxDQUFDLFNBQVMsQ0FBQyxTQUFTLEVBQUUsSUFBSSxFQUFFLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFDMUUsQ0FBQztZQUVELElBQ0UsS0FBSyxDQUFDLFFBQVEsRUFBRSxNQUFNLEtBQUssR0FBRztnQkFDOUIsQ0FBQyxLQUFLLENBQUMsUUFBUSxFQUFFLE1BQU0sS0FBSyxHQUFHLElBQUksUUFBUSxDQUFDLFFBQVEsQ0FBQyxTQUFTLENBQUMsQ0FBQyxFQUNoRSxDQUFDO2dCQUNELGVBQU0sQ0FBQyxJQUFJLENBQ1QsNkZBQTZGLENBQzlGLENBQUM7WUFDSixDQUFDO2lCQUFNLElBQUksS0FBSyxDQUFDLFFBQVEsRUFBRSxNQUFNLEtBQUssR0FBRyxFQUFFLENBQUM7Z0JBQzFDLGVBQU0sQ0FBQyxJQUFJLENBQ1Qsa0pBQWtKLENBQ25KLENBQUM7WUFDSixDQUFDO1lBRUQsTUFBTSxLQUFLLENBQUM7UUFDZCxDQUFDO0lBQ0gsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLFdBQVcsQ0FBQyxNQUFjO1FBQzlCLElBQUksQ0FBQyxnQkFBRyxDQUFDLGNBQWMsRUFBRSxDQUFDO1lBQ3hCLE1BQU0sSUFBSSxLQUFLLENBQUMsMkJBQTJCLENBQUMsQ0FBQztRQUMvQyxDQUFDO1FBRUQsSUFBSSxDQUFDO1lBQ0gsTUFBTSxRQUFRLEdBQUcsTUFBTSxlQUFLLENBQUMsR0FBRyxDQUFDLEdBQUcsZUFBYSxDQUFDLE9BQU8sVUFBVSxNQUFNLEVBQUUsRUFBRTtnQkFDM0UsT0FBTyxFQUFFO29CQUNQLGFBQWEsRUFBRSxVQUFVLGdCQUFHLENBQUMsY0FBYyxFQUFFO29CQUM3QyxrQkFBa0IsRUFBRSxZQUFZO2lCQUNqQzthQUNGLENBQUMsQ0FBQztZQUNILE9BQU8sUUFBUSxDQUFDLElBQUksQ0FBQztRQUN2QixDQUFDO1FBQUMsT0FBTyxLQUFVLEVBQUUsQ0FBQztZQUNwQixlQUFNLENBQUMsS0FBSyxDQUFDLDRCQUE0QixFQUFFLEtBQUssQ0FBQyxRQUFRLEVBQUUsSUFBSSxJQUFJLEtBQUssQ0FBQyxPQUFPLENBQUMsQ0FBQztZQUNsRixNQUFNLEtBQUssQ0FBQztRQUNkLENBQUM7SUFDSCxDQUFDOztBQTdGVSxzQ0FBYTt3QkFBYixhQUFhO0lBRHpCLElBQUEsc0JBQVUsR0FBRTtHQUNBLGFBQWEsQ0E4RnpCIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXHJ1bndheS5zZXJ2aWNlLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBheGlvcyBmcm9tICdheGlvcyc7XG5pbXBvcnQgeyBpbmplY3RhYmxlIH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB7IGVudiB9IGZyb20gJy4uL2NvbmZpZy9lbnYuc2NoZW1hJztcbmltcG9ydCB7IGxvZ2dlciB9IGZyb20gJy4uL3V0aWxzL2xvZ2dlcic7XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBSdW53YXlTZXJ2aWNlIHtcbiAgcHJpdmF0ZSBzdGF0aWMgcmVhZG9ubHkgQVBJX1VSTCA9ICdodHRwczovL2FwaS5ydW53YXltbC5jb20vdjEnO1xuXG4gIC8qKlxuICAgKiBHZW5lcmF0ZXMgYSB2aWRlbyB1c2luZyBSdW53YXkgR2VuLTMgQWxwaGEgKEltYWdlLXRvLVZpZGVvKVxuICAgKiBOb3RlOiBUaGlzIGlzIGEgc2ltdWxhdGVkIGltcGxlbWVudGF0aW9uIGJhc2VkIG9uIHR5cGljYWwgR2VuQUkgQVBJIHBhdHRlcm5zLFxuICAgKiBhcyBzcGVjaWZpYyBiYWNrZW5kIFNES3MgbWlnaHQgbm90IGJlIHB1YmxpYyBvciBmdWxseSBzdGFuZGFyZGl6ZWQgeWV0LlxuICAgKi9cbiAgLyoqXG4gICAqIEdlbmVyYXRlcyBhIHZpZGVvIHVzaW5nIFJ1bndheSBHZW4tMyBBbHBoYSBUdXJibyAoSW1hZ2UtdG8tVmlkZW8pXG4gICAqL1xuICBhc3luYyBnZW5lcmF0ZUltYWdlVG9WaWRlbyhcbiAgICBwcm9tcHQ6IHN0cmluZyxcbiAgICBpbWFnZVVyaTogc3RyaW5nLCAvLyBVUkwgb3IgRGF0YSBVUklcbiAgICBvcHRpb25zOiB7XG4gICAgICBkdXJhdGlvbj86IG51bWJlcjtcbiAgICAgIGFzcGVjdF9yYXRpbz86IHN0cmluZztcbiAgICAgIG1vZGVsPzogc3RyaW5nO1xuICAgIH0gPSB7fSxcbiAgKTogUHJvbWlzZTxhbnk+IHtcbiAgICBpZiAoIWVudi5SVU5XQVlfQVBJX0tFWSkge1xuICAgICAgdGhyb3cgbmV3IEVycm9yKCdSVU5XQVlfQVBJX0tFWSBpcyBtaXNzaW5nJyk7XG4gICAgfVxuXG4gICAgdHJ5IHtcbiAgICAgIGxvZ2dlci5pbmZvKGBTdGFydGluZyBSdW53YXkgR2VuLTMgQWxwaGEgVHVyYm8gVmlkZW8gR2VuZXJhdGlvbjogXCIke3Byb21wdH1cImApO1xuXG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGF4aW9zLnBvc3QoXG4gICAgICAgIGAke1J1bndheVNlcnZpY2UuQVBJX1VSTH0vaW1hZ2VfdG9fdmlkZW9gLCAvLyBTdGFuZGFyZCBlbmRwb2ludCwgc3ViamVjdCB0byBjaGFuZ2UgYmFzZWQgb24gYWN0dWFsIEFQSSB2ZXJzaW9uXG4gICAgICAgIHtcbiAgICAgICAgICBwcm9tcHRUZXh0OiBwcm9tcHQsIC8vIFNwZWNpZmljIGZpZWxkIG5hbWUgbWlnaHQgdmFyeSwgY2hlY2tpbmcgZG9jcyBzaW11bGF0aW9uXG4gICAgICAgICAgaW1hZ2U6IGltYWdlVXJpLFxuICAgICAgICAgIG1vZGVsOiAnZ2VuM2FfdHVyYm8nLCAvLyBFeHBsaWNpdCBtb2RlbCBJRCBmb3IgR2VuLTMgQWxwaGEgVHVyYm9cbiAgICAgICAgICBkdXJhdGlvbjogb3B0aW9ucy5kdXJhdGlvbiB8fCA1LCAvLyA1IG9yIDEwXG4gICAgICAgICAgcmF0aW86IG9wdGlvbnMuYXNwZWN0X3JhdGlvIHx8ICcxMjgwOjc2OCcsIC8vIENpbmVtYSBzdGFuZGFyZFxuICAgICAgICB9LFxuICAgICAgICB7XG4gICAgICAgICAgaGVhZGVyczoge1xuICAgICAgICAgICAgQXV0aG9yaXphdGlvbjogYEJlYXJlciAke2Vudi5SVU5XQVlfQVBJX0tFWX1gLFxuICAgICAgICAgICAgJ0NvbnRlbnQtVHlwZSc6ICdhcHBsaWNhdGlvbi9qc29uJyxcbiAgICAgICAgICAgICdYLVJ1bndheS1WZXJzaW9uJzogJzIwMjQtMDktMjYnLFxuICAgICAgICAgIH0sXG4gICAgICAgIH0sXG4gICAgICApO1xuXG4gICAgICByZXR1cm4gcmVzcG9uc2UuZGF0YTtcbiAgICB9IGNhdGNoIChlcnJvcjogYW55KSB7XG4gICAgICAvLyBJbXByb3ZlZCBlcnJvciBsb2dnaW5nXG4gICAgICBjb25zdCBlcnJvckRhdGEgPSBlcnJvci5yZXNwb25zZT8uZGF0YTtcbiAgICAgIGNvbnN0IGVycm9yTXNnID0gZXJyb3JEYXRhPy5lcnJvciB8fCBlcnJvci5tZXNzYWdlO1xuXG4gICAgICBsb2dnZXIuZXJyb3IoJ1J1bndheSBBUEkgRXJyb3I6JywgZXJyb3JNc2cpO1xuICAgICAgaWYgKGVycm9yRGF0YSkge1xuICAgICAgICBsb2dnZXIuZXJyb3IoJ0Z1bGwgRXJyb3IgRGV0YWlsczonLCBKU09OLnN0cmluZ2lmeShlcnJvckRhdGEsIG51bGwsIDIpKTtcbiAgICAgIH1cblxuICAgICAgaWYgKFxuICAgICAgICBlcnJvci5yZXNwb25zZT8uc3RhdHVzID09PSA0MDIgfHxcbiAgICAgICAgKGVycm9yLnJlc3BvbnNlPy5zdGF0dXMgPT09IDQwMCAmJiBlcnJvck1zZy5pbmNsdWRlcygnY3JlZGl0cycpKVxuICAgICAgKSB7XG4gICAgICAgIGxvZ2dlci53YXJuKFxuICAgICAgICAgICdUaGlzIGVycm9yIGxpa2VseSBpbmRpY2F0ZXMgaW5zdWZmaWNpZW50IGNyZWRpdHMgb3IgYSBiaWxsaW5nIGlzc3VlIG9uIHlvdXIgUnVud2F5IGFjY291bnQuJyxcbiAgICAgICAgKTtcbiAgICAgIH0gZWxzZSBpZiAoZXJyb3IucmVzcG9uc2U/LnN0YXR1cyA9PT0gNDAwKSB7XG4gICAgICAgIGxvZ2dlci53YXJuKFxuICAgICAgICAgICdUaGlzIGVycm9yIG1pZ2h0IGJlIGR1ZSB0byBjcmVkaXRzLCBvciBwb3NzaWJseSBpbnZhbGlkIHBhcmFtZXRlcnMgKGUuZy4gaW1hZ2UgZm9ybWF0KS4gVGhlIGltYWdlIHNpemUgY29uZmlybXMgaXQgc2hvdWxkIGJlIHZhbGlkIGZvciBEYXRhIFVSSS4nLFxuICAgICAgICApO1xuICAgICAgfVxuXG4gICAgICB0aHJvdyBlcnJvcjtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogQ2hlY2sgc3RhdHVzIG9mIGEgZ2VuZXJhdGlvbiB0YXNrXG4gICAqL1xuICBhc3luYyBjaGVja1N0YXR1cyh0YXNrSWQ6IHN0cmluZyk6IFByb21pc2U8YW55PiB7XG4gICAgaWYgKCFlbnYuUlVOV0FZX0FQSV9LRVkpIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcignUlVOV0FZX0FQSV9LRVkgaXMgbWlzc2luZycpO1xuICAgIH1cblxuICAgIHRyeSB7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGF4aW9zLmdldChgJHtSdW53YXlTZXJ2aWNlLkFQSV9VUkx9L3Rhc2tzLyR7dGFza0lkfWAsIHtcbiAgICAgICAgaGVhZGVyczoge1xuICAgICAgICAgIEF1dGhvcml6YXRpb246IGBCZWFyZXIgJHtlbnYuUlVOV0FZX0FQSV9LRVl9YCxcbiAgICAgICAgICAnWC1SdW53YXktVmVyc2lvbic6ICcyMDI0LTA5LTI2JyxcbiAgICAgICAgfSxcbiAgICAgIH0pO1xuICAgICAgcmV0dXJuIHJlc3BvbnNlLmRhdGE7XG4gICAgfSBjYXRjaCAoZXJyb3I6IGFueSkge1xuICAgICAgbG9nZ2VyLmVycm9yKCdSdW53YXkgU3RhdHVzIENoZWNrIEVycm9yOicsIGVycm9yLnJlc3BvbnNlPy5kYXRhIHx8IGVycm9yLm1lc3NhZ2UpO1xuICAgICAgdGhyb3cgZXJyb3I7XG4gICAgfVxuICB9XG59XG4iXSwidmVyc2lvbiI6M30=

@@ -1,6 +1,6 @@
 // YouTube Transcription Queue implementation using RabbitMQ (or mock)
 import amqplib, { ConsumeMessage } from 'amqplib';
-import { Service } from 'typedi';
+import { injectable } from 'inversify';
 
 import { logger } from '../utils/logger';
 
@@ -18,7 +18,7 @@ export interface TranscriptionJob {
  * Queue service responsible for publishing transcription jobs and starting a consumer.
  * In test environments the `amqplib` import is mocked (see src/__tests__/mocks/rabbitmq.ts).
  */
-@Service()
+@injectable()
 export class YoutubeTranscriptionQueue {
   private connection!: any;
   private channel!: any;
@@ -87,6 +87,3 @@ export class YoutubeTranscriptionQueue {
     logger.info('YoutubeTranscriptionQueue consumer started');
   }
 }
-
-// Export a singleton instance for convenience (used by existing code)
-export const youtubeTranscriptionQueue = new YoutubeTranscriptionQueue();

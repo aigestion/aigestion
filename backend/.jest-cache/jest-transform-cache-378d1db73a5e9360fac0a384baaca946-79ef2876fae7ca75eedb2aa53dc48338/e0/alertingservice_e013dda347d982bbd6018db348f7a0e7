@@ -1,0 +1,83 @@
+8c67684d2a1706ec5965beeedbca2b80
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AlertingService = void 0;
+const inversify_1 = require("inversify");
+const types_1 = require("../types");
+const logger_1 = require("../utils/logger");
+const system_metrics_service_1 = require("./system-metrics.service");
+const telegram_service_1 = require("./telegram.service");
+let AlertingService = class AlertingService {
+    metricsService;
+    telegramService;
+    thresholds = {
+        cpu: 90,
+        memory: 90,
+        disk: 90,
+    };
+    constructor(metricsService, telegramService) {
+        this.metricsService = metricsService;
+        this.telegramService = telegramService;
+    }
+    /**
+     * Check system health and trigger alerts if thresholds are exceeded
+     */
+    async checkSystemHealth() {
+        try {
+            const metrics = await this.metricsService.getSystemMetrics();
+            if (metrics.cpu > this.thresholds.cpu) {
+                await this.triggerAlert(`⚠️ High CPU Usage: ${metrics.cpu}%`, this.telegramService);
+            }
+            if (metrics.memory > this.thresholds.memory) {
+                await this.triggerAlert(`⚠️ High Memory Usage: ${metrics.memory}%`, this.telegramService);
+            }
+            if (metrics.disk > this.thresholds.disk) {
+                await this.triggerAlert(`⚠️ High Disk Usage: ${metrics.disk}%`, this.telegramService);
+            }
+            logger_1.logger.info('System health check completed');
+        }
+        catch (error) {
+            logger_1.logger.error('Failed to check system health', error);
+        }
+    }
+    /**
+     * Check Docker container health
+     */
+    async checkDockerHealth() {
+        try {
+            const count = await this.metricsService.getDockerContainerCount();
+            logger_1.logger.info(`Docker check: ${count} running containers`);
+            if (count === 0) {
+                await this.triggerAlert('⚠️ No Docker containers passing checks!', this.telegramService);
+            }
+        }
+        catch (error) {
+            logger_1.logger.error('Failed to check Docker health', error);
+        }
+    }
+    async triggerAlert(message, telegramService) {
+        logger_1.logger.warn(`ALERT: ${message}`);
+        await telegramService.sendMessage(`🚨 SYSTEM ALERT: ${message}`);
+    }
+};
+exports.AlertingService = AlertingService;
+exports.AlertingService = AlertingService = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.SystemMetricsService)),
+    __param(1, (0, inversify_1.inject)(types_1.TYPES.TelegramService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof system_metrics_service_1.SystemMetricsService !== "undefined" && system_metrics_service_1.SystemMetricsService) === "function" ? _a : Object, typeof (_b = typeof telegram_service_1.TelegramService !== "undefined" && telegram_service_1.TelegramService) === "function" ? _b : Object])
+], AlertingService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcYWxlcnRpbmcuc2VydmljZS50cyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7O0FBQUEseUNBQStDO0FBRS9DLG9DQUFpQztBQUNqQyw0Q0FBeUM7QUFDekMscUVBQWdFO0FBQ2hFLHlEQUFxRDtBQUc5QyxJQUFNLGVBQWUsR0FBckIsTUFBTSxlQUFlO0lBUW9CO0lBQ0w7SUFSakMsVUFBVSxHQUFHO1FBQ25CLEdBQUcsRUFBRSxFQUFFO1FBQ1AsTUFBTSxFQUFFLEVBQUU7UUFDVixJQUFJLEVBQUUsRUFBRTtLQUNULENBQUM7SUFFRixZQUM4QyxjQUFvQyxFQUN6QyxlQUFnQztRQUQzQixtQkFBYyxHQUFkLGNBQWMsQ0FBc0I7UUFDekMsb0JBQWUsR0FBZixlQUFlLENBQWlCO0lBQ3RFLENBQUM7SUFFSjs7T0FFRztJQUNILEtBQUssQ0FBQyxpQkFBaUI7UUFDckIsSUFBSSxDQUFDO1lBQ0gsTUFBTSxPQUFPLEdBQUcsTUFBTSxJQUFJLENBQUMsY0FBYyxDQUFDLGdCQUFnQixFQUFFLENBQUM7WUFFN0QsSUFBSSxPQUFPLENBQUMsR0FBRyxHQUFHLElBQUksQ0FBQyxVQUFVLENBQUMsR0FBRyxFQUFFLENBQUM7Z0JBQ3RDLE1BQU0sSUFBSSxDQUFDLFlBQVksQ0FBQyxzQkFBc0IsT0FBTyxDQUFDLEdBQUcsR0FBRyxFQUFFLElBQUksQ0FBQyxlQUFlLENBQUMsQ0FBQztZQUN0RixDQUFDO1lBRUQsSUFBSSxPQUFPLENBQUMsTUFBTSxHQUFHLElBQUksQ0FBQyxVQUFVLENBQUMsTUFBTSxFQUFFLENBQUM7Z0JBQzVDLE1BQU0sSUFBSSxDQUFDLFlBQVksQ0FBQyx5QkFBeUIsT0FBTyxDQUFDLE1BQU0sR0FBRyxFQUFFLElBQUksQ0FBQyxlQUFlLENBQUMsQ0FBQztZQUM1RixDQUFDO1lBRUQsSUFBSSxPQUFPLENBQUMsSUFBSSxHQUFHLElBQUksQ0FBQyxVQUFVLENBQUMsSUFBSSxFQUFFLENBQUM7Z0JBQ3hDLE1BQU0sSUFBSSxDQUFDLFlBQVksQ0FBQyx1QkFBdUIsT0FBTyxDQUFDLElBQUksR0FBRyxFQUFFLElBQUksQ0FBQyxlQUFlLENBQUMsQ0FBQztZQUN4RixDQUFDO1lBRUQsZUFBTSxDQUFDLElBQUksQ0FBQywrQkFBK0IsQ0FBQyxDQUFDO1FBQy9DLENBQUM7UUFBQyxPQUFPLEtBQUssRUFBRSxDQUFDO1lBQ2YsZUFBTSxDQUFDLEtBQUssQ0FBQywrQkFBK0IsRUFBRSxLQUFLLENBQUMsQ0FBQztRQUN2RCxDQUFDO0lBQ0gsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLGlCQUFpQjtRQUNyQixJQUFJLENBQUM7WUFDSCxNQUFNLEtBQUssR0FBRyxNQUFNLElBQUksQ0FBQyxjQUFjLENBQUMsdUJBQXVCLEVBQUUsQ0FBQztZQUNsRSxlQUFNLENBQUMsSUFBSSxDQUFDLGlCQUFpQixLQUFLLHFCQUFxQixDQUFDLENBQUM7WUFFekQsSUFBSSxLQUFLLEtBQUssQ0FBQyxFQUFFLENBQUM7Z0JBQ2hCLE1BQU0sSUFBSSxDQUFDLFlBQVksQ0FBQyx5Q0FBeUMsRUFBRSxJQUFJLENBQUMsZUFBZSxDQUFDLENBQUM7WUFDM0YsQ0FBQztRQUNILENBQUM7UUFBQyxPQUFPLEtBQUssRUFBRSxDQUFDO1lBQ2YsZUFBTSxDQUFDLEtBQUssQ0FBQywrQkFBK0IsRUFBRSxLQUFLLENBQUMsQ0FBQztRQUN2RCxDQUFDO0lBQ0gsQ0FBQztJQUVPLEtBQUssQ0FBQyxZQUFZLENBQUMsT0FBZSxFQUFFLGVBQWdDO1FBQzFFLGVBQU0sQ0FBQyxJQUFJLENBQUMsVUFBVSxPQUFPLEVBQUUsQ0FBQyxDQUFDO1FBQ2pDLE1BQU0sZUFBZSxDQUFDLFdBQVcsQ0FBQyxvQkFBb0IsT0FBTyxFQUFFLENBQUMsQ0FBQztJQUNuRSxDQUFDO0NBQ0YsQ0FBQTtBQXpEWSwwQ0FBZTswQkFBZixlQUFlO0lBRDNCLElBQUEsc0JBQVUsR0FBRTtJQVNSLFdBQUEsSUFBQSxrQkFBTSxFQUFDLGFBQUssQ0FBQyxvQkFBb0IsQ0FBQyxDQUFBO0lBQ2xDLFdBQUEsSUFBQSxrQkFBTSxFQUFDLGFBQUssQ0FBQyxlQUFlLENBQUMsQ0FBQTt5REFEOEIsNkNBQW9CLG9CQUFwQiw2Q0FBb0Isb0RBQ3hCLGtDQUFlLG9CQUFmLGtDQUFlO0dBVDlELGVBQWUsQ0F5RDNCIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXGFsZXJ0aW5nLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaW5qZWN0LCBpbmplY3RhYmxlIH0gZnJvbSAnaW52ZXJzaWZ5JztcblxuaW1wb3J0IHsgVFlQRVMgfSBmcm9tICcuLi90eXBlcyc7XG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xuaW1wb3J0IHsgU3lzdGVtTWV0cmljc1NlcnZpY2UgfSBmcm9tICcuL3N5c3RlbS1tZXRyaWNzLnNlcnZpY2UnO1xuaW1wb3J0IHsgVGVsZWdyYW1TZXJ2aWNlIH0gZnJvbSAnLi90ZWxlZ3JhbS5zZXJ2aWNlJztcblxuQGluamVjdGFibGUoKVxuZXhwb3J0IGNsYXNzIEFsZXJ0aW5nU2VydmljZSB7XG4gIHByaXZhdGUgdGhyZXNob2xkcyA9IHtcbiAgICBjcHU6IDkwLFxuICAgIG1lbW9yeTogOTAsXG4gICAgZGlzazogOTAsXG4gIH07XG5cbiAgY29uc3RydWN0b3IoXG4gICAgQGluamVjdChUWVBFUy5TeXN0ZW1NZXRyaWNzU2VydmljZSkgcHJpdmF0ZSBtZXRyaWNzU2VydmljZTogU3lzdGVtTWV0cmljc1NlcnZpY2UsXG4gICAgQGluamVjdChUWVBFUy5UZWxlZ3JhbVNlcnZpY2UpIHByaXZhdGUgdGVsZWdyYW1TZXJ2aWNlOiBUZWxlZ3JhbVNlcnZpY2UsXG4gICkge31cblxuICAvKipcbiAgICogQ2hlY2sgc3lzdGVtIGhlYWx0aCBhbmQgdHJpZ2dlciBhbGVydHMgaWYgdGhyZXNob2xkcyBhcmUgZXhjZWVkZWRcbiAgICovXG4gIGFzeW5jIGNoZWNrU3lzdGVtSGVhbHRoKCk6IFByb21pc2U8dm9pZD4ge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCBtZXRyaWNzID0gYXdhaXQgdGhpcy5tZXRyaWNzU2VydmljZS5nZXRTeXN0ZW1NZXRyaWNzKCk7XG5cbiAgICAgIGlmIChtZXRyaWNzLmNwdSA+IHRoaXMudGhyZXNob2xkcy5jcHUpIHtcbiAgICAgICAgYXdhaXQgdGhpcy50cmlnZ2VyQWxlcnQoYOKaoO+4jyBIaWdoIENQVSBVc2FnZTogJHttZXRyaWNzLmNwdX0lYCwgdGhpcy50ZWxlZ3JhbVNlcnZpY2UpO1xuICAgICAgfVxuXG4gICAgICBpZiAobWV0cmljcy5tZW1vcnkgPiB0aGlzLnRocmVzaG9sZHMubWVtb3J5KSB7XG4gICAgICAgIGF3YWl0IHRoaXMudHJpZ2dlckFsZXJ0KGDimqDvuI8gSGlnaCBNZW1vcnkgVXNhZ2U6ICR7bWV0cmljcy5tZW1vcnl9JWAsIHRoaXMudGVsZWdyYW1TZXJ2aWNlKTtcbiAgICAgIH1cblxuICAgICAgaWYgKG1ldHJpY3MuZGlzayA+IHRoaXMudGhyZXNob2xkcy5kaXNrKSB7XG4gICAgICAgIGF3YWl0IHRoaXMudHJpZ2dlckFsZXJ0KGDimqDvuI8gSGlnaCBEaXNrIFVzYWdlOiAke21ldHJpY3MuZGlza30lYCwgdGhpcy50ZWxlZ3JhbVNlcnZpY2UpO1xuICAgICAgfVxuXG4gICAgICBsb2dnZXIuaW5mbygnU3lzdGVtIGhlYWx0aCBjaGVjayBjb21wbGV0ZWQnKTtcbiAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgbG9nZ2VyLmVycm9yKCdGYWlsZWQgdG8gY2hlY2sgc3lzdGVtIGhlYWx0aCcsIGVycm9yKTtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogQ2hlY2sgRG9ja2VyIGNvbnRhaW5lciBoZWFsdGhcbiAgICovXG4gIGFzeW5jIGNoZWNrRG9ja2VySGVhbHRoKCk6IFByb21pc2U8dm9pZD4ge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCBjb3VudCA9IGF3YWl0IHRoaXMubWV0cmljc1NlcnZpY2UuZ2V0RG9ja2VyQ29udGFpbmVyQ291bnQoKTtcbiAgICAgIGxvZ2dlci5pbmZvKGBEb2NrZXIgY2hlY2s6ICR7Y291bnR9IHJ1bm5pbmcgY29udGFpbmVyc2ApO1xuXG4gICAgICBpZiAoY291bnQgPT09IDApIHtcbiAgICAgICAgYXdhaXQgdGhpcy50cmlnZ2VyQWxlcnQoJ+KaoO+4jyBObyBEb2NrZXIgY29udGFpbmVycyBwYXNzaW5nIGNoZWNrcyEnLCB0aGlzLnRlbGVncmFtU2VydmljZSk7XG4gICAgICB9XG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIGxvZ2dlci5lcnJvcignRmFpbGVkIHRvIGNoZWNrIERvY2tlciBoZWFsdGgnLCBlcnJvcik7XG4gICAgfVxuICB9XG5cbiAgcHJpdmF0ZSBhc3luYyB0cmlnZ2VyQWxlcnQobWVzc2FnZTogc3RyaW5nLCB0ZWxlZ3JhbVNlcnZpY2U6IFRlbGVncmFtU2VydmljZSkge1xuICAgIGxvZ2dlci53YXJuKGBBTEVSVDogJHttZXNzYWdlfWApO1xuICAgIGF3YWl0IHRlbGVncmFtU2VydmljZS5zZW5kTWVzc2FnZShg8J+aqCBTWVNURU0gQUxFUlQ6ICR7bWVzc2FnZX1gKTtcbiAgfVxufVxuIl0sInZlcnNpb24iOjN9

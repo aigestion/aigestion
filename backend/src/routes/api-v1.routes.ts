@@ -31,14 +31,15 @@ import danielaRouter from './daniela.routes';
 import dockerRouter from './docker.routes';
 import enhancedVoiceRouter from './enhanced-voice.routes';
 import personaRouter from './persona.routes';
-import stripeRouter from './stripe.routes';
-import swarmRouter from './swarm.routes';
-import usersRouter from './users.routes';
-import youtubeRouter from './youtube.routes';
+import { youtubeRouter } from './youtube.routes';
+import { GodModeController } from '../controllers/godmode.controller';
+import { BillingController } from '../controllers/billing.controller';
+import { UsageController } from '../controllers/usage.controller';
 import godmodeRoutes from './godmode.routes';
 
 // ... (existing imports)
 
+import { apiKeyAuth } from '../middleware/api-key.middleware';
 import { idempotencyMiddleware } from '../middleware/idempotency.middleware';
 import { dynamicRateLimiter } from '../middleware/rate-limit.middleware';
 import { redisCache } from '../middleware/redis-cache.middleware';
@@ -52,6 +53,8 @@ import systemRouter from './system.routes';
 import threatIntelRouter from './threat-intelligence.routes';
 import behaviorRouter from './user-behavior.routes';
 import wafRouter from './waf.routes';
+import webauthnRouter from './webauthn.routes';
+import sovereignHandshakeRouter from './sovereign-handshake.routes';
 
 /**
  * API v1 Router
@@ -61,6 +64,7 @@ const apiV1Router = Router();
 
 // Aplicar middleware de idempotencia globalmente para proteger todos los POST/PUT/PATCH
 apiV1Router.use(idempotencyMiddleware);
+apiV1Router.use(apiKeyAuth);
 
 console.log('DEBUG: API V1 router loaded');
 
@@ -70,6 +74,8 @@ apiV1Router.use('/auth', authRouter);
 apiV1Router.use('/docker', dockerRouter);
 apiV1Router.use('/personas', personaRouter);
 apiV1Router.use('/swarm', swarmRouter);
+apiV1Router.use('/webauthn', webauthnRouter);
+apiV1Router.use('/sovereign', sovereignHandshakeRouter);
 
 /**
  * @openapi
@@ -179,10 +185,21 @@ apiV1Router.use('/youtube', youtubeRouter);
 // Nueva ruta para el tracking de emails
 // apiV1Router.get('/email/tracking', getEmailTracking);
 
-apiV1Router.get('/usage/current', redisCache(60), getCurrentUsage);
-apiV1Router.get('/billing/snapshot', requireAuth, redisCache(300), getBillingSnapshot);
-apiV1Router.post('/billing/checkout', requireAuth, createCheckoutSession);
-apiV1Router.post('/billing/portal', requireAuth, createPortalSession);
+const billingController = container.get<BillingController>(TYPES.BillingController);
+const usageController = container.get<UsageController>(TYPES.UsageController);
+
+apiV1Router.get('/usage/current', redisCache(60), (req, res, next) =>
+  usageController.getCurrentUsage(req, res, next),
+);
+apiV1Router.get('/billing/snapshot', requireAuth, redisCache(300), (req, res, next) =>
+  billingController.getBillingSnapshot(req, res, next),
+);
+apiV1Router.post('/billing/checkout', requireAuth, (req, res, next) =>
+  billingController.createCheckoutSession(req, res, next),
+);
+apiV1Router.post('/billing/portal', requireAuth, (req, res, next) =>
+  billingController.createPortalSession(req, res, next),
+);
 apiV1Router.use('/analytics', redisCache(30), analyticsRouter);
 
 // Enhanced Voice Service (Daniela)

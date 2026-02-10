@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
 import { vectorService } from './vector.service';
 
@@ -11,6 +12,7 @@ export interface AIRoute {
   provider: 'openai' | 'anthropic' | 'google';
 }
 
+@injectable()
 export class SemanticRouterService {
   /**
    * Classify query complexity

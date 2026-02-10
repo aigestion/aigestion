@@ -1,0 +1,10 @@
+c16d0ed39b8231c2c26e331193511f3b
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.requestContext = void 0;
+const async_hooks_1 = require("async_hooks");
+/**
+ * Storage for request context (e.g., Request-ID)
+ */
+exports.requestContext = new async_hooks_1.AsyncLocalStorage();
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFx1dGlsc1xcY29udGV4dC50cyIsIm1hcHBpbmdzIjoiOzs7QUFBQSw2Q0FBZ0Q7QUFFaEQ7O0dBRUc7QUFDVSxRQUFBLGNBQWMsR0FBRyxJQUFJLCtCQUFpQixFQUF1QixDQUFDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcdXRpbHNcXGNvbnRleHQudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgQXN5bmNMb2NhbFN0b3JhZ2UgfSBmcm9tICdhc3luY19ob29rcyc7XG5cbi8qKlxuICogU3RvcmFnZSBmb3IgcmVxdWVzdCBjb250ZXh0IChlLmcuLCBSZXF1ZXN0LUlEKVxuICovXG5leHBvcnQgY29uc3QgcmVxdWVzdENvbnRleHQgPSBuZXcgQXN5bmNMb2NhbFN0b3JhZ2U8TWFwPHN0cmluZywgc3RyaW5nPj4oKTtcbiJdLCJ2ZXJzaW9uIjozfQ==

@@ -7,6 +7,9 @@ import { EconomyService } from './economy.service';
 import { RagService } from './rag.service';
 import { UserBehaviorService } from './user-behavior.service';
 import { UserService } from './user.service';
+import { SwarmInternalClient } from './swarm-internal.client';
+import { TYPES } from '../types';
+import { inject } from 'inversify';
 
 interface DanielaContext {
   userId: string;
@@ -32,7 +35,14 @@ export class DanielaAIService {
   private ragService: RagService | null = null;
   private economyService: EconomyService | null = null;
 
-  constructor() {
+  constructor(
+    @inject(TYPES.SwarmInternalClient) private swarmClient: SwarmInternalClient,
+    @inject(TYPES.AIService) private aiService: AIService,
+    @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
+    @inject(TYPES.RagService) private ragService: RagService,
+    @inject(TYPES.UserService) private userService: UserService,
+    @inject(TYPES.EconomyService) private economyService: EconomyService,
+  ) {
     this.initialize();
   }
 
@@ -143,6 +153,12 @@ export class DanielaAIService {
         return await this.handleTaskRequest(context, message, userContext);
       case 'insight':
         return await this.handleInsightRequest(context, message, userContext);
+      case 'browse':
+        return await this.handleBrowseRequest(context, message);
+      case 'competitor':
+        return await this.handleCompetitorAnalysisRequest(context, message);
+      case 'research':
+        return await this.handleMarketResearchRequest(context, message);
       case 'greeting':
         return this.generateGreeting(context);
       default:
@@ -247,7 +263,28 @@ Responde en ${
       lowerMessage.includes('patrón') ||
       lowerMessage.includes('analiza')
     ) {
+      if (lowerMessage.includes('competencia') || lowerMessage.includes('competidor')) {
+        return 'competitor';
+      }
       return 'insight';
+    }
+
+    if (
+      lowerMessage.includes('navega') ||
+      lowerMessage.includes('busca en la web') ||
+      lowerMessage.includes('url') ||
+      lowerMessage.includes('página') ||
+      lowerMessage.includes('sitio web')
+    ) {
+      return 'browse';
+    }
+
+    if (
+      lowerMessage.includes('investiga') ||
+      lowerMessage.includes('mercado') ||
+      lowerMessage.includes('research')
+    ) {
+      return 'research';
     }
 
     if (
@@ -373,6 +410,89 @@ Responde en ${
       `• Microlearning para nuevas habilidades\n\n` +
       `¿Quieres profundizar en algún insight?`
     );
+  }
+
+  /**
+   * Manejar solicitudes de navegación web mejorada
+   */
+  private async handleBrowseRequest(context: DanielaContext, message: string): Promise<string> {
+    try {
+      // Extraer URL con regex simple (esto se podría mejorar)
+      const urlMatch = message.match(/(https?:\/\/[^\s]+)/g);
+      const url = urlMatch ? urlMatch[0] : 'https://aigestion.net';
+      const instruction = message.replace(url || '', '').trim() || 'Analiza este sitio';
+
+      logger.info(`[DANIELA] Requesting browse for ${url}`);
+      const result = await this.swarmClient.post('/daniela/browse', { url, instruction });
+
+      return (
+        `🌐 *Daniela Browsing Context*\n\n` +
+        `${result.analysis || result.summary || 'Análisis completado.'}\n\n` +
+        `💡 *Daniela Insight:* ${result.insights?.[0] || 'Listo para el siguiente paso.'}`
+      );
+    } catch (error) {
+      logger.error('Error in handleBrowseRequest:', error);
+      return '🌐 Tuve un problema al navegar por ese sitio. ¿Puedes verificar la URL?';
+    }
+  }
+
+  /**
+   * Manejar análisis de competencia
+   */
+  private async handleCompetitorAnalysisRequest(
+    context: DanielaContext,
+    message: string,
+  ): Promise<string> {
+    try {
+      const urlMatch = message.match(/(https?:\/\/[^\s]+)/g);
+      const competitor_url = urlMatch ? urlMatch[0] : '';
+
+      if (!competitor_url) {
+        return '🔍 Por favor, indícame la URL del competidor que quieres que analice.';
+      }
+
+      logger.info(`[DANIELA] Requesting competitor analysis for ${competitor_url}`);
+      const result = await this.swarmClient.post('/daniela/competitor-analysis', {
+        competitor_url,
+      });
+
+      return (
+        `⚔️ *Análisis Competitivo por Daniela*\n\n` +
+        `🔹 *Fortalezas:* ${result.strengths || 'Detectadas'}\n` +
+        `🔸 *Debilidades:* ${result.weaknesses || 'Identificadas'}\n` +
+        `🚀 *Oportunidad:* ${result.opportunity || 'Estratégica'}\n\n` +
+        `"${result.conclusion || 'Análisis finalizado exitosamente.'}"`
+      );
+    } catch (error) {
+      logger.error('Error in handleCompetitorAnalysisRequest:', error);
+      return '🔍 No pude completar el análisis competitivo en este momento.';
+    }
+  }
+
+  /**
+   * Manejar investigación de mercado
+   */
+  private async handleMarketResearchRequest(
+    context: DanielaContext,
+    message: string,
+  ): Promise<string> {
+    try {
+      const topic =
+        message.replace(/investiga|research|mercado/gi, '').trim() || 'Tendencias IA 2026';
+
+      logger.info(`[DANIELA] Requesting market research for: ${topic}`);
+      const result = await this.swarmClient.post('/daniela/market-research', { topic });
+
+      return (
+        `📊 *Investigación de Mercado: ${topic}*\n\n` +
+        `${result.report || 'Generando informe estratégico...'}\n\n` +
+        `🎯 *Target sugerido:* ${result.target_audience || 'Empresas de tecnología'}\n` +
+        `🔥 *Tendencia:* ${result.top_trend || 'Crecimiento sostenido'}`
+      );
+    } catch (error) {
+      logger.error('Error in handleMarketResearchRequest:', error);
+      return '📊 No pude realizar la investigación de mercado en este momento.';
+    }
   }
 
   /**

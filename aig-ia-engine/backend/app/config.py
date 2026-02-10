@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     APP_WORKERS: int = 4
 
     SECRET_KEY: str = "change-this-in-production-use-strong-key"
-    API_KEY: Optional[str] = None
+    IA_ENGINE_API_KEY: Optional[str] = None
     ALLOWED_HOSTS: str = "localhost,127.0.0.1"
 
     DATABASE_URL: str = "sqlite:///../../assets/data/aigestion_ia.db"

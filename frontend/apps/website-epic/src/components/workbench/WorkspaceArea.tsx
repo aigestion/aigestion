@@ -1,6 +1,7 @@
 import React from 'react';
 import { useWorkbench } from './WorkbenchContext';
 import { Dashboard } from '../../components/Dashboard';
+import { SovereignIntelligenceHub } from '../../components/SovereignIntelligenceHub';
 
 interface WorkspaceAreaProps {
   user: any;
@@ -15,6 +16,8 @@ export const WorkspaceArea: React.FC<WorkspaceAreaProps> = ({ user, onLogout }) 
     switch (activeActivity) {
       case 'dashboard':
         return <Dashboard user={user} onLogout={onLogout} />;
+      case 'intelligence':
+        return <SovereignIntelligenceHub />;
       case 'search':
         return (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">

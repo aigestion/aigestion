@@ -211,6 +211,15 @@ export const RootQuery = new GraphQLObjectType({
         return User.find().skip(offset).limit(limit);
       },
     },
+    chat: {
+      type: GraphQLString,
+      args: {
+        message: { type: new GraphQLNonNull(GraphQLString) },
+      },
+      resolve: async (_obj, args) => {
+        return 'This is a mock AI response';
+      },
+    },
     systemMetrics: {
       type: SystemMetricsType,
       resolve: async () => {

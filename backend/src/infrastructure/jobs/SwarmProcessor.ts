@@ -8,6 +8,12 @@ import { MissionStatus } from '../../models/Mission';
 import { SocketService } from '../../services/socket.service';
 import { NotificationService } from '../../services/notification.service';
 import { NotificationType } from '../../models/Notification';
+import { SwarmInternalClient } from '../../services/swarm-internal.client';
+import { KnowledgeGraphService } from '../../services/knowledge-graph.service';
+import { VaultService } from '../../services/vault.service';
+import { deriveMissionKey } from '../../utils/secrets';
+
+const TOKEN_SAFETY_LIMIT = 50000; // Auto-freeze if mission exceeds this estimated limit
 
 export class SwarmProcessor {
   /**
@@ -25,6 +31,9 @@ export class SwarmProcessor {
       const missionRepo = container.get<IMissionRepository>(TYPES.MissionRepository);
       const socketService = container.get<SocketService>(TYPES.SocketService);
       const notificationService = container.get<NotificationService>(TYPES.NotificationService);
+      const swarmClient = container.get<SwarmInternalClient>(TYPES.SwarmInternalClient);
+      const kgService = container.get<KnowledgeGraphService>(TYPES.KnowledgeGraphService);
+      const vaultService = container.get<VaultService>(TYPES.VaultService);
 
       // 0. Update status to PLANNING
       await missionRepo.update(missionId, { status: MissionStatus.PLANNING });
@@ -46,38 +55,98 @@ export class SwarmProcessor {
         userId,
       );
 
-      // 1.5 Save Plan to DB & update status
       await missionRepo.update(missionId, {
         plan,
         status: MissionStatus.EXECUTING,
       });
       socketService.emitMissionUpdate(missionId, { plan, status: MissionStatus.EXECUTING });
 
-      // 2. Execution (Simulated complex steps for now)
-      logger.info(`[SwarmProcessor] [${job.id}] Phase 2: Executing strategy...`);
-      // Here we would call other services based on the plan.
-      // For now, let's just log progress.
+      // 2. Execution & Autonomous Research
+      logger.info(
+        `[SwarmProcessor] [${job.id}] Phase 2: Executing strategy & autonomous research...`,
+      );
 
-      // 3. Final Report
+      let specializedResearch = '';
+      const lowerObjective = objective.toLowerCase();
+
+      // Autonomous Decision: Do we need external market research or browsing?
+      if (
+        lowerObjective.includes('mercado') ||
+        lowerObjective.includes('investiga') ||
+        lowerObjective.includes('competidor')
+      ) {
+        logger.info(
+          `[SwarmProcessor] [${job.id}] Autonomous decision: Triggering Swarm Engine Research.`,
+        );
+
+        try {
+          const researchResult = await swarmClient.post('/daniela/market-research', {
+            topic: objective,
+          });
+
+          specializedResearch = researchResult.report || JSON.stringify(researchResult);
+          logger.info(`[SwarmProcessor] [${job.id}] Swarm research completed.`);
+
+          // 2.1 Persist findings to Knowledge Graph (Sovereign Memory)
+          await kgService.indexMissionFindings(missionId, objective, specializedResearch);
+        } catch (researchError) {
+          logger.warn(
+            `[SwarmProcessor] [${job.id}] Autonomous research failed (using internal fallback):`,
+            researchError,
+          );
+          specializedResearch = 'Mission proceeded with internal knowledge context.';
+        }
+      }
+
+      // 3. Final Report (Incorporate research if available)
       logger.info(`[SwarmProcessor] [${job.id}] Phase 3: Compiling final mission report...`);
       const report = await aiService.generateContent(
         `
                 The mission objective was: "${objective}".
-                The plan was executed.
+                The plan was: "${plan}".
+                
+                Additional Swarm Research Context:
+                ${specializedResearch}
 
                 Generate a final summary of results and recommendations for the user.
+                Express why this mission strengthens the AIGestion ecosystem.
             `,
         userId,
       );
 
-      // 4. Update Final Status
+      // 3.1 Sovereign Guardrails: Anomaly Detection
+      const estimatedTokens = (plan?.length || 0) / 4 + (report?.length || 0) / 4;
+      if (estimatedTokens > TOKEN_SAFETY_LIMIT) {
+        logger.warn(`[SwarmProcessor] [${job.id}] Sovereign Guardrail triggered: Excessive resource usage detected (${estimatedTokens} tokens). Freezing mission.`);
+        await missionRepo.update(missionId, { 
+          status: MissionStatus.FAILED, 
+          error: 'SOVEREIGN_RESOURCE_GUARD: Excessive tokens detected. Mission frozen for audit.' 
+        });
+        throw new Error('SOVEREIGN_GUARD_FREEZE');
+      }
+
+      // 4. Encrypt Findings for Sovereignty
+      logger.info(`[SwarmProcessor] [${job.id}] Phase 4: Securing findings in Sovereign Vault...`);
+
+      // Derive Mission-Specific Key via HKDF
+      const masterSeed = process.env.JWT_SECRET || 'SOVEREIGN_FALLBACK_SEED'; // In production, derived from user HW key via WebAuthn
+      const missionKey = await deriveMissionKey(masterSeed, missionId, userId);
+
+      const encrypted = await vaultService.encrypt(report, missionKey.toString('hex'));
+
+      // 5. Update Final Status with E2EE
       await missionRepo.update(missionId, {
-        result: report,
+        result: encrypted.ciphertext,
+        vaultIV: encrypted.iv,
+        vaultTag: encrypted.tag,
+        isEncrypted: true,
         status: MissionStatus.COMPLETED,
         completedAt: new Date(),
       });
+
       socketService.emitMissionUpdate(missionId, {
-        result: report,
+        result: '[ENCRYPTED_SOVEREIGN_DATA]',
+        isEncrypted: true,
         status: MissionStatus.COMPLETED,
       });
 

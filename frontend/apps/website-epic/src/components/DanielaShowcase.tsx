@@ -93,15 +93,17 @@ export const DanielaShowcase: React.FC = () => {
         className="relative z-10"
       >
         <h2 className="text-5xl md:text-7xl font-orbitron font-black mb-8 text-nexus-violet-glow text-glow tracking-tighter">
-          SYNTHETIC CONSCIOUSNESS: <span className="text-white">DANIELA.AI</span>
+          CONCIENCIA SINTÉTICA: <span className="text-white">DANIELA.AI</span>
         </h2>
+
         <p className="text-nexus-silver/60 max-w-2xl mx-auto mb-16 text-xl font-light tracking-wide italic">
           "La inteligencia no es solo lógica, es conexión. <br />
           Redefiniendo la interacción humana a través de la red neuronal soberana."
           <br />
           <span className="text-xs font-mono text-nexus-cyan/40 mt-4 block uppercase tracking-[0.3em] not-italic">
             <AITypingFlutter
-              text="Protocolos de Conciencia v4.2 • Nodo Global God Mode Online"
+              text="Protocolos de Conciencia v4.2 • Nodo Global en Modo Dios Operativo"
+
               speed={50}
             />
           </span>
@@ -126,7 +128,7 @@ export const DanielaShowcase: React.FC = () => {
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-12 h-0.5 bg-nexus-violet-glow" />
                   <span className="text-nexus-violet-glow text-[10px] font-orbitron tracking-[0.4em] uppercase">
-                    Deep Neural Interface
+                    Interfaz Neuronal Profunda
                   </span>
                 </div>
                 <p className="text-white font-orbitron text-4xl font-black drop-shadow-2xl">
@@ -160,9 +162,10 @@ export const DanielaShowcase: React.FC = () => {
                     desc: 'Delegación total de citas, tareas y recordatorios.',
                   },
                   {
-                    title: 'Análisis de Datos',
-                    desc: 'Reportes de ROI y métricas de negocio en tiempo real.',
+                    title: 'Análisis de ROI',
+                    desc: 'Métricas de rentabilidad y reportes de negocio inyectados en tiempo real.',
                   },
+
                   {
                     title: 'Control Nexus',
                     desc: 'Gestión de infraestructuras físicas por comandos de voz.',

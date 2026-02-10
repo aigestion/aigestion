@@ -4,6 +4,7 @@ from agents.critic import Critic
 from agents.detective import Detective
 from agents.mechanic import Mechanic
 from agents.overlord import Overlord
+from agents.red_swarm import RedSwarmAgent
 from core import SwarmOrchestrator
 
 from utils import configure_swarm_logging
@@ -23,6 +24,7 @@ def main():
     builder = Builder(orchestrator)
     critic = Critic(orchestrator)
     mechanic = Mechanic(orchestrator)
+    red_swarm = RedSwarmAgent(orchestrator)
 
     # Register Agents
     orchestrator.register_agent(overlord)
@@ -31,6 +33,7 @@ def main():
     orchestrator.register_agent(builder)
     orchestrator.register_agent(critic)
     orchestrator.register_agent(mechanic)
+    orchestrator.register_agent(red_swarm)
 
     # Initialize Navigator
     from agents.navigator import Navigator
@@ -47,5 +50,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
     main()

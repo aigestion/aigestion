@@ -1,0 +1,86 @@
+a445ea520cc02331faf386d06f2aa08c
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ElevenLabsService = void 0;
+const axios_1 = __importDefault(require("axios"));
+const inversify_1 = require("inversify");
+const env_schema_1 = require("../config/env.schema");
+const logger_1 = require("../utils/logger");
+const promises_1 = __importDefault(require("fs/promises"));
+const path_1 = __importDefault(require("path"));
+let ElevenLabsService = class ElevenLabsService {
+    apiKey;
+    baseUrl = 'https://api.elevenlabs.io/v1';
+    constructor() {
+        this.apiKey = env_schema_1.env.ELEVENLABS_API_KEY || '';
+    }
+    /**
+     * Generates audio from text and saves it to a file
+     * @param text The text to synthesize
+     * @param voiceId The ElevenLabs Voice ID
+     * @param outputPath Full path where the .mp3 will be saved
+     */
+    async textToSpeech(text, voiceId, outputPath) {
+        try {
+            logger_1.logger.info(`[ElevenLabsService] Synthesizing voice for: "${text.substring(0, 30)}..."`);
+            const response = await axios_1.default.post(`${this.baseUrl}/text-to-speech/${voiceId}`, {
+                text,
+                model_id: 'eleven_multilingual_v2',
+                voice_settings: {
+                    stability: 0.5,
+                    similarity_boost: 0.75,
+                },
+            }, {
+                headers: {
+                    'xi-api-key': this.apiKey,
+                    'Content-Type': 'application/json',
+                },
+                responseType: 'arraybuffer',
+            });
+            const buffer = Buffer.from(response.data);
+            // Ensure directory exists
+            const dir = path_1.default.dirname(outputPath);
+            await promises_1.default.mkdir(dir, { recursive: true });
+            await promises_1.default.writeFile(outputPath, buffer);
+            logger_1.logger.info(`[ElevenLabsService] Audio saved to: ${outputPath}`);
+            return outputPath;
+        }
+        catch (error) {
+            logger_1.logger.error('[ElevenLabsService] Synthesis failed:', error.response?.data?.toString() || error.message);
+            throw new Error('Failed to generate high-fidelity voice.');
+        }
+    }
+    /**
+     * Retrieves available voices
+     */
+    async getVoices() {
+        try {
+            const response = await axios_1.default.get(`${this.baseUrl}/voices`, {
+                headers: { 'xi-api-key': this.apiKey },
+            });
+            return response.data.voices;
+        }
+        catch (error) {
+            logger_1.logger.error('[ElevenLabsService] Failed to fetch voices:', error);
+            return [];
+        }
+    }
+};
+exports.ElevenLabsService = ElevenLabsService;
+exports.ElevenLabsService = ElevenLabsService = __decorate([
+    (0, inversify_1.injectable)(),
+    __metadata("design:paramtypes", [])
+], ElevenLabsService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcZWxldmVubGFicy5zZXJ2aWNlLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7OztBQUFBLGtEQUEwQjtBQUMxQix5Q0FBdUM7QUFDdkMscURBQTJDO0FBQzNDLDRDQUF5QztBQUN6QywyREFBNkI7QUFDN0IsZ0RBQXdCO0FBUWpCLElBQU0saUJBQWlCLEdBQXZCLE1BQU0saUJBQWlCO0lBQ1gsTUFBTSxDQUFTO0lBQ2YsT0FBTyxHQUFHLDhCQUE4QixDQUFDO0lBRTFEO1FBQ0UsSUFBSSxDQUFDLE1BQU0sR0FBRyxnQkFBRyxDQUFDLGtCQUFrQixJQUFJLEVBQUUsQ0FBQztJQUM3QyxDQUFDO0lBRUQ7Ozs7O09BS0c7SUFDSCxLQUFLLENBQUMsWUFBWSxDQUFDLElBQVksRUFBRSxPQUFlLEVBQUUsVUFBa0I7UUFDbEUsSUFBSSxDQUFDO1lBQ0gsZUFBTSxDQUFDLElBQUksQ0FBQyxnREFBZ0QsSUFBSSxDQUFDLFNBQVMsQ0FBQyxDQUFDLEVBQUUsRUFBRSxDQUFDLE1BQU0sQ0FBQyxDQUFDO1lBRXpGLE1BQU0sUUFBUSxHQUFHLE1BQU0sZUFBSyxDQUFDLElBQUksQ0FDL0IsR0FBRyxJQUFJLENBQUMsT0FBTyxtQkFBbUIsT0FBTyxFQUFFLEVBQzNDO2dCQUNFLElBQUk7Z0JBQ0osUUFBUSxFQUFFLHdCQUF3QjtnQkFDbEMsY0FBYyxFQUFFO29CQUNkLFNBQVMsRUFBRSxHQUFHO29CQUNkLGdCQUFnQixFQUFFLElBQUk7aUJBQ3ZCO2FBQ0YsRUFDRDtnQkFDRSxPQUFPLEVBQUU7b0JBQ1AsWUFBWSxFQUFFLElBQUksQ0FBQyxNQUFNO29CQUN6QixjQUFjLEVBQUUsa0JBQWtCO2lCQUNuQztnQkFDRCxZQUFZLEVBQUUsYUFBYTthQUM1QixDQUNGLENBQUM7WUFFRixNQUFNLE1BQU0sR0FBRyxNQUFNLENBQUMsSUFBSSxDQUFDLFFBQVEsQ0FBQyxJQUFJLENBQUMsQ0FBQztZQUUxQywwQkFBMEI7WUFDMUIsTUFBTSxHQUFHLEdBQUcsY0FBSSxDQUFDLE9BQU8sQ0FBQyxVQUFVLENBQUMsQ0FBQztZQUNyQyxNQUFNLGtCQUFFLENBQUMsS0FBSyxDQUFDLEdBQUcsRUFBRSxFQUFFLFNBQVMsRUFBRSxJQUFJLEVBQUUsQ0FBQyxDQUFDO1lBRXpDLE1BQU0sa0JBQUUsQ0FBQyxTQUFTLENBQUMsVUFBVSxFQUFFLE1BQU0sQ0FBQyxDQUFDO1lBRXZDLGVBQU0sQ0FBQyxJQUFJLENBQUMsdUNBQXVDLFVBQVUsRUFBRSxDQUFDLENBQUM7WUFDakUsT0FBTyxVQUFVLENBQUM7UUFDcEIsQ0FBQztRQUFDLE9BQU8sS0FBVSxFQUFFLENBQUM7WUFDcEIsZUFBTSxDQUFDLEtBQUssQ0FDVix1Q0FBdUMsRUFDdkMsS0FBSyxDQUFDLFFBQVEsRUFBRSxJQUFJLEVBQUUsUUFBUSxFQUFFLElBQUksS0FBSyxDQUFDLE9BQU8sQ0FDbEQsQ0FBQztZQUNGLE1BQU0sSUFBSSxLQUFLLENBQUMseUNBQXlDLENBQUMsQ0FBQztRQUM3RCxDQUFDO0lBQ0gsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLFNBQVM7UUFDYixJQUFJLENBQUM7WUFDSCxNQUFNLFFBQVEsR0FBRyxNQUFNLGVBQUssQ0FBQyxHQUFHLENBQUMsR0FBRyxJQUFJLENBQUMsT0FBTyxTQUFTLEVBQUU7Z0JBQ3pELE9BQU8sRUFBRSxFQUFFLFlBQVksRUFBRSxJQUFJLENBQUMsTUFBTSxFQUFFO2FBQ3ZDLENBQUMsQ0FBQztZQUNILE9BQU8sUUFBUSxDQUFDLElBQUksQ0FBQyxNQUFNLENBQUM7UUFDOUIsQ0FBQztRQUFDLE9BQU8sS0FBSyxFQUFFLENBQUM7WUFDZixlQUFNLENBQUMsS0FBSyxDQUFDLDZDQUE2QyxFQUFFLEtBQUssQ0FBQyxDQUFDO1lBQ25FLE9BQU8sRUFBRSxDQUFDO1FBQ1osQ0FBQztJQUNILENBQUM7Q0FDRixDQUFBO0FBdEVZLDhDQUFpQjs0QkFBakIsaUJBQWlCO0lBRDdCLElBQUEsc0JBQVUsR0FBRTs7R0FDQSxpQkFBaUIsQ0FzRTdCIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXGVsZXZlbmxhYnMuc2VydmljZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgYXhpb3MgZnJvbSAnYXhpb3MnO1xuaW1wb3J0IHsgaW5qZWN0YWJsZSB9IGZyb20gJ2ludmVyc2lmeSc7XG5pbXBvcnQgeyBlbnYgfSBmcm9tICcuLi9jb25maWcvZW52LnNjaGVtYSc7XG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xuaW1wb3J0IGZzIGZyb20gJ2ZzL3Byb21pc2VzJztcbmltcG9ydCBwYXRoIGZyb20gJ3BhdGgnO1xuXG5leHBvcnQgaW50ZXJmYWNlIFZvaWNlU2V0dGluZ3Mge1xuICBzdGFiaWxpdHk6IG51bWJlcjtcbiAgc2ltaWxhcml0eV9ib29zdDogbnVtYmVyO1xufVxuXG5AaW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgRWxldmVuTGFic1NlcnZpY2Uge1xuICBwcml2YXRlIHJlYWRvbmx5IGFwaUtleTogc3RyaW5nO1xuICBwcml2YXRlIHJlYWRvbmx5IGJhc2VVcmwgPSAnaHR0cHM6Ly9hcGkuZWxldmVubGFicy5pby92MSc7XG5cbiAgY29uc3RydWN0b3IoKSB7XG4gICAgdGhpcy5hcGlLZXkgPSBlbnYuRUxFVkVOTEFCU19BUElfS0VZIHx8ICcnO1xuICB9XG5cbiAgLyoqXG4gICAqIEdlbmVyYXRlcyBhdWRpbyBmcm9tIHRleHQgYW5kIHNhdmVzIGl0IHRvIGEgZmlsZVxuICAgKiBAcGFyYW0gdGV4dCBUaGUgdGV4dCB0byBzeW50aGVzaXplXG4gICAqIEBwYXJhbSB2b2ljZUlkIFRoZSBFbGV2ZW5MYWJzIFZvaWNlIElEXG4gICAqIEBwYXJhbSBvdXRwdXRQYXRoIEZ1bGwgcGF0aCB3aGVyZSB0aGUgLm1wMyB3aWxsIGJlIHNhdmVkXG4gICAqL1xuICBhc3luYyB0ZXh0VG9TcGVlY2godGV4dDogc3RyaW5nLCB2b2ljZUlkOiBzdHJpbmcsIG91dHB1dFBhdGg6IHN0cmluZyk6IFByb21pc2U8c3RyaW5nPiB7XG4gICAgdHJ5IHtcbiAgICAgIGxvZ2dlci5pbmZvKGBbRWxldmVuTGFic1NlcnZpY2VdIFN5bnRoZXNpemluZyB2b2ljZSBmb3I6IFwiJHt0ZXh0LnN1YnN0cmluZygwLCAzMCl9Li4uXCJgKTtcblxuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBheGlvcy5wb3N0KFxuICAgICAgICBgJHt0aGlzLmJhc2VVcmx9L3RleHQtdG8tc3BlZWNoLyR7dm9pY2VJZH1gLFxuICAgICAgICB7XG4gICAgICAgICAgdGV4dCxcbiAgICAgICAgICBtb2RlbF9pZDogJ2VsZXZlbl9tdWx0aWxpbmd1YWxfdjInLFxuICAgICAgICAgIHZvaWNlX3NldHRpbmdzOiB7XG4gICAgICAgICAgICBzdGFiaWxpdHk6IDAuNSxcbiAgICAgICAgICAgIHNpbWlsYXJpdHlfYm9vc3Q6IDAuNzUsXG4gICAgICAgICAgfSxcbiAgICAgICAgfSxcbiAgICAgICAge1xuICAgICAgICAgIGhlYWRlcnM6IHtcbiAgICAgICAgICAgICd4aS1hcGkta2V5JzogdGhpcy5hcGlLZXksXG4gICAgICAgICAgICAnQ29udGVudC1UeXBlJzogJ2FwcGxpY2F0aW9uL2pzb24nLFxuICAgICAgICAgIH0sXG4gICAgICAgICAgcmVzcG9uc2VUeXBlOiAnYXJyYXlidWZmZXInLFxuICAgICAgICB9LFxuICAgICAgKTtcblxuICAgICAgY29uc3QgYnVmZmVyID0gQnVmZmVyLmZyb20ocmVzcG9uc2UuZGF0YSk7XG5cbiAgICAgIC8vIEVuc3VyZSBkaXJlY3RvcnkgZXhpc3RzXG4gICAgICBjb25zdCBkaXIgPSBwYXRoLmRpcm5hbWUob3V0cHV0UGF0aCk7XG4gICAgICBhd2FpdCBmcy5ta2RpcihkaXIsIHsgcmVjdXJzaXZlOiB0cnVlIH0pO1xuXG4gICAgICBhd2FpdCBmcy53cml0ZUZpbGUob3V0cHV0UGF0aCwgYnVmZmVyKTtcblxuICAgICAgbG9nZ2VyLmluZm8oYFtFbGV2ZW5MYWJzU2VydmljZV0gQXVkaW8gc2F2ZWQgdG86ICR7b3V0cHV0UGF0aH1gKTtcbiAgICAgIHJldHVybiBvdXRwdXRQYXRoO1xuICAgIH0gY2F0Y2ggKGVycm9yOiBhbnkpIHtcbiAgICAgIGxvZ2dlci5lcnJvcihcbiAgICAgICAgJ1tFbGV2ZW5MYWJzU2VydmljZV0gU3ludGhlc2lzIGZhaWxlZDonLFxuICAgICAgICBlcnJvci5yZXNwb25zZT8uZGF0YT8udG9TdHJpbmcoKSB8fCBlcnJvci5tZXNzYWdlLFxuICAgICAgKTtcbiAgICAgIHRocm93IG5ldyBFcnJvcignRmFpbGVkIHRvIGdlbmVyYXRlIGhpZ2gtZmlkZWxpdHkgdm9pY2UuJyk7XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIFJldHJpZXZlcyBhdmFpbGFibGUgdm9pY2VzXG4gICAqL1xuICBhc3luYyBnZXRWb2ljZXMoKTogUHJvbWlzZTxhbnlbXT4ge1xuICAgIHRyeSB7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGF4aW9zLmdldChgJHt0aGlzLmJhc2VVcmx9L3ZvaWNlc2AsIHtcbiAgICAgICAgaGVhZGVyczogeyAneGktYXBpLWtleSc6IHRoaXMuYXBpS2V5IH0sXG4gICAgICB9KTtcbiAgICAgIHJldHVybiByZXNwb25zZS5kYXRhLnZvaWNlcztcbiAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgbG9nZ2VyLmVycm9yKCdbRWxldmVuTGFic1NlcnZpY2VdIEZhaWxlZCB0byBmZXRjaCB2b2ljZXM6JywgZXJyb3IpO1xuICAgICAgcmV0dXJuIFtdO1xuICAgIH1cbiAgfVxufVxuIl0sInZlcnNpb24iOjN9

@@ -1,26 +1,33 @@
-﻿import * as chokidar from 'chokidar';
+﻿import { injectable, inject } from 'inversify';
+import * as chokidar from 'chokidar';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Container } from 'typedi';
 
 import { env } from '../config/env.schema';
-import { TranscriptionJob, youtubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
-import { youtubeChannelService } from '../services/google/youtube-channel.service';
+import { TranscriptionJob, YoutubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
+import { YouTubeChannelService } from '../services/google/youtube-channel.service';
 import { TelegramService } from '../services/telegram.service';
 import { logger } from '../utils/logger';
+import { TYPES } from '../types';
 
 const VIDEO_EXTENSIONS = ['.mp4', '.mov', '.avi', '.mkv'];
 
 /**
  * Servicio de vigilancia de carpeta para archivos de YouTube
  */
+@injectable()
 export class YoutubeWatcherService {
   private watcher: chokidar.FSWatcher | null = null;
   private watchPath: string;
   private processedPath: string;
   private recipientEmail: string;
 
-  constructor() {
+  constructor(
+    @inject(TYPES.YoutubeTranscriptionQueue)
+    private youtubeTranscriptionQueue: YoutubeTranscriptionQueue,
+    @inject(TYPES.YoutubeChannelService) private youtubeChannelService: YouTubeChannelService,
+    @inject(TYPES.TelegramService) private telegramService: TelegramService,
+  ) {
     // La carpeta a vigilar está en la raíz del proyecto NEXUS V1
     const projectRoot = path.resolve(__dirname, '../../../../');
     this.watchPath = path.join(projectRoot, 'youtube', 'Videos.Transcripcion');
@@ -142,7 +149,7 @@ export class YoutubeWatcherService {
     };
 
     // Encolar el job
-    const enqueued = await youtubeTranscriptionQueue.publishTranscriptionJob(job);
+    const enqueued = await this.youtubeTranscriptionQueue.publishTranscriptionJob(job);
 
     if (enqueued) {
       logger.info(`Job encolado exitosamente para: ${fileName}`);
@@ -158,7 +165,7 @@ export class YoutubeWatcherService {
 
     try {
       // 1. Subir a YouTube (Canal AIGestion)
-      const videoId = await youtubeChannelService.uploadVideo({
+      const videoId = await this.youtubeChannelService.uploadVideo({
         channelType: 'business',
         filePath: filePath,
         metadata: {
@@ -171,9 +178,12 @@ export class YoutubeWatcherService {
       });
 
       // 2. Añadir a la lista de Tutoriales
-      const playlistId = await youtubeChannelService.findPlaylistByName('business', 'Tutoriales');
+      const playlistId = await this.youtubeChannelService.findPlaylistByName(
+        'business',
+        'Tutoriales',
+      );
       if (playlistId) {
-        await youtubeChannelService.addVideoToPlaylist('business', videoId, playlistId);
+        await this.youtubeChannelService.addVideoToPlaylist('business', videoId, playlistId);
         logger.info(`Video añadido a la playlist Tutoriales: ${playlistId}`);
       }
 
@@ -196,7 +206,6 @@ export class YoutubeWatcherService {
 
         // 4. Notificación Premium por Telegram
         try {
-          const telegramService = Container.get(TelegramService);
           const adminChatId = process.env.TELEGRAM_ADMIN_CHAT_ID || process.env.TELEGRAM_CHAT_ID;
 
           if (adminChatId) {
@@ -208,7 +217,7 @@ export class YoutubeWatcherService {
               `🔗 *URL:* ${videoUrl}\n\n` +
               `📝 _La transcripción se está procesando y se incluirá en el próximo Briefing._`;
 
-            await telegramService.sendMessage(adminChatId, message);
+            await this.telegramService.sendMessage(adminChatId, message);
             logger.info('Notificación de Telegram enviada exitosamente.');
           }
         } catch (msgError) {
@@ -284,5 +293,3 @@ export class YoutubeWatcherService {
     };
   }
 }
-
-export const youtubeWatcherService = new YoutubeWatcherService();

@@ -23,6 +23,9 @@ import { TelegramBotHandler } from './services/telegram-bot.handler';
 import { TelegramService } from './services/telegram.service';
 import { logger } from './utils/logger';
 import { stats } from './utils/stats';
+import { WorkerSetup } from './infrastructure/jobs/WorkerSetup';
+import { JobQueue } from './infrastructure/jobs/JobQueue';
+import { JobName } from './infrastructure/jobs/job-definitions';
 
 console.log('🔵 [DEBUG] server.ts starting...');
 

@@ -67,6 +67,7 @@
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
+    "@capacitor/cli": "^8.0.2",
     "@jest/console": "^29.7.0",
     "@jest/reporters": "^29.7.0",
     "@jest/test-result": "^29.7.0",
@@ -126,7 +127,6 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.0.2",
-    "@capacitor/cli": "^8.0.2",
     "@capacitor/core": "^8.0.2",
     "@supabase/supabase-js": "^2.93.1",
     "winston": "^3.19.0",

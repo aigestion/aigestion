@@ -137,4 +137,9 @@ The AIGestion system is now powered by **God Mode v2.0**, featuring:
 
 ---
 
-Last updated: 2026-02-02 15:55:00
+- **GCP Secret Manager Integration**: Hardened production secrets by migrating from `.env` to Google Cloud Secret Manager.
+
+---
+
+Last updated: 2026-02-10 07:25:00
+

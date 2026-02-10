@@ -1,0 +1,38 @@
+version: '3.9'
+
+services:
+  sovereign-bridge:
+    image: alpine/socat
+    container_name: sovereign-bridge
+    # Bridge traffic from port 8000 on the app network to aig-ia-engine:8000 on the swarm network
+    command: tcp-listen:8000,fork,reuseaddr tcp:aigestion-aig-engine:8000
+    networks:
+      - aigestion-network
+      - swarm-network
+    restart: unless-stopped
+    depends_on:
+      - aig-ia-engine
+
+  aig-ia-engine:
+    build:
+      context: ../../aig-ia-engine
+      dockerfile: Dockerfile
+    container_name: aigestion-aig-engine
+    # Port 8000 is NOT exposed to the host, ensuring true isolation
+    volumes:
+      - ../../aig-ia-engine:/app
+    environment:
+      - APP_ENV=development
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+    networks:
+      - swarm-network
+    restart: unless-stopped
+
+networks:
+  aigestion-network:
+    external: true
+    name: aigestion-network
+  swarm-network:
+    driver: bridge
+    name: swarm-network

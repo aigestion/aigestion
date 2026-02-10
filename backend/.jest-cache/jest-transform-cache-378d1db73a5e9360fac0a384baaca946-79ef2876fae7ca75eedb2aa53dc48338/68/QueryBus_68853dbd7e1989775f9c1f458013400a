@@ -1,0 +1,35 @@
+c2d9becd79aa48f03e11006fcef02791
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.QueryBus = void 0;
+const inversify_1 = require("inversify");
+let QueryBus = class QueryBus {
+    container;
+    constructor(container) {
+        this.container = container;
+    }
+    execute(queryId, query) {
+        const handler = this.container.get(queryId);
+        return handler.handle(query);
+    }
+};
+exports.QueryBus = QueryBus;
+exports.QueryBus = QueryBus = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)('Container')),
+    __metadata("design:paramtypes", [typeof (_a = typeof inversify_1.Container !== "undefined" && inversify_1.Container) === "function" ? _a : Object])
+], QueryBus);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzaGFyZWRcXGNxcnNcXFF1ZXJ5QnVzLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSx5Q0FBMEQ7QUFLbkQsSUFBTSxRQUFRLEdBQWQsTUFBTSxRQUFRO0lBQ3NCO0lBQXpDLFlBQXlDLFNBQW9CO1FBQXBCLGNBQVMsR0FBVCxTQUFTLENBQVc7SUFBRyxDQUFDO0lBRWpFLE9BQU8sQ0FBZ0IsT0FBZSxFQUFFLEtBQWE7UUFDbkQsTUFBTSxPQUFPLEdBQUcsSUFBSSxDQUFDLFNBQVMsQ0FBQyxHQUFHLENBQWlDLE9BQU8sQ0FBQyxDQUFDO1FBQzVFLE9BQU8sT0FBTyxDQUFDLE1BQU0sQ0FBQyxLQUFLLENBQUMsQ0FBQztJQUMvQixDQUFDO0NBQ0YsQ0FBQTtBQVBZLDRCQUFRO21CQUFSLFFBQVE7SUFEcEIsSUFBQSxzQkFBVSxHQUFFO0lBRUUsV0FBQSxJQUFBLGtCQUFNLEVBQUMsV0FBVyxDQUFDLENBQUE7eURBQW9CLHFCQUFTLG9CQUFULHFCQUFTO0dBRGxELFFBQVEsQ0FPcEIiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzaGFyZWRcXGNxcnNcXFF1ZXJ5QnVzLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGluamVjdGFibGUsIGluamVjdCwgQ29udGFpbmVyIH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB7IElRdWVyeSB9IGZyb20gJy4vbWVzc2FnZXMnO1xuaW1wb3J0IHsgSVF1ZXJ5SGFuZGxlciB9IGZyb20gJy4vaGFuZGxlcnMnO1xuXG5AaW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgUXVlcnlCdXMge1xuICBjb25zdHJ1Y3RvcihAaW5qZWN0KCdDb250YWluZXInKSBwcml2YXRlIGNvbnRhaW5lcjogQ29udGFpbmVyKSB7fVxuXG4gIGV4ZWN1dGU8VFJlc3VsdCA9IGFueT4ocXVlcnlJZDogc3RyaW5nLCBxdWVyeTogSVF1ZXJ5KTogUHJvbWlzZTxUUmVzdWx0PiB7XG4gICAgY29uc3QgaGFuZGxlciA9IHRoaXMuY29udGFpbmVyLmdldDxJUXVlcnlIYW5kbGVyPElRdWVyeSwgVFJlc3VsdD4+KHF1ZXJ5SWQpO1xuICAgIHJldHVybiBoYW5kbGVyLmhhbmRsZShxdWVyeSk7XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

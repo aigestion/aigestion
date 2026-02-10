@@ -1,4 +1,5 @@
 import { YoutubeTranscript } from 'youtube-transcript';
+import { injectable } from 'inversify';
 
 import { logger } from './logger';
 
@@ -23,6 +24,7 @@ interface TranscriptItem {
 /**
  * Servicio para extraer transcripciones de videos de YouTube
  */
+@injectable()
 export class YoutubeTranscriptionService {
   /**
    * Extrae el ID del video desde una URL de YouTube
@@ -135,5 +137,3 @@ export class YoutubeTranscriptionService {
     };
   }
 }
-
-export const youtubeTranscriptionService = new YoutubeTranscriptionService();

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Suspense, lazy, useEffect, useMemo } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { ScrollProgress } from './components/ScrollProgress';
@@ -7,23 +7,23 @@ import { CustomCursor } from './components/CustomCursor';
 import { MeshGradientBG } from './components/MeshGradientBG';
 import { useNotification } from './contexts/NotificationContext';
 import { Login } from './pages/Login';
+import { Maintenance } from './pages/Maintenance';
 
 // ============================================
-// LAZY LOAD: Above-the-fold hero sections
+// CRITICAL: Static Load for Hero Section
+// Prevents "Black Screen" if chunk loading fails
 // ============================================
-const CinematicPresentation = lazy(() =>
-  import('./components/CinematicPresentation').then(m => ({ default: m.CinematicPresentation }))
-);
+import { CinematicPresentation } from './components/CinematicPresentation';
+
+// ============================================
+// LAZY LOAD: Below-the-fold content sections
+// ============================================
 const DanielaShowcase = lazy(() =>
   import('./components/DanielaShowcase').then(m => ({ default: m.DanielaShowcase }))
 );
 const NexusAndroid = lazy(() =>
   import('./components/NexusAndroid').then(m => ({ default: m.NexusAndroid }))
 );
-
-// ============================================
-// LAZY LOAD: Below-the-fold content sections
-// ============================================
 const ServicesDeepDive = lazy(() =>
   import('./components/ServicesDeepDive').then(m => ({ default: m.ServicesDeepDive }))
 );
@@ -51,9 +51,8 @@ const DecentralandOffice = lazy(() =>
 const FAQSection = lazy(() =>
   import('./components/FAQSection').then(m => ({ default: m.FAQSection }))
 );
-const ContactSection = lazy(() =>
-  import('./components/ContactSection').then(m => ({ default: m.ContactSection }))
-);
+import { ContactModal } from './components/ContactModal';
+
 
 // ============================================
 // LAZY LOAD: Non-critical widgets & overlays
@@ -166,19 +165,29 @@ export const AppContent = ({
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const redirectPath = sessionStorage.getItem('redirect');
-    if (redirectPath) {
-      sessionStorage.removeItem('redirect');
-      navigate(redirectPath, { replace: true });
-    }
-  }, [navigate]);
+  // 🚧 Maintenance Mode Logic with God Mode Bypass
+  // Access via: https://aigestion.net/?mode=god
+  const searchParams = new URLSearchParams(location.search);
+  const isGodMode = searchParams.get('mode') === 'god';
+
+  // Persist God Mode session
+  const [bypassMaintenance, setBypassMaintenance] = useState(() => {
+    return sessionStorage.getItem('god_mode_bypass') === 'true';
+  });
 
   useEffect(() => {
-    if (!loading) {
-      notify('SISTEMA ACTIVADO', 'Protocolos Antigravity God Mode Online', 'success');
+    if (isGodMode) {
+      sessionStorage.setItem('god_mode_bypass', 'true');
+      setBypassMaintenance(true);
+      notify('GOD MODE ACTIVADO', 'Bypass de mantenimiento habilitado', 'success');
     }
-  }, [loading, notify]);
+  }, [isGodMode, notify]);
+
+  const MAINTENANCE_MODE = import.meta.env.VITE_MAINTENANCE_MODE === 'true'; // Default to false!
+
+  if (MAINTENANCE_MODE && !bypassMaintenance && !isGodMode) {
+    return <Maintenance />;
+  }
 
   return (
     <div className="bg-black min-h-screen text-white font-sans selection:bg-nexus-cyan/20 selection:text-white relative overflow-x-hidden custom-cursor">
@@ -225,7 +234,6 @@ export const AppContent = ({
                     <MetaverseSection />
                     <DecentralandOffice />
                     <FAQSection />
-                    <ContactSection />
                   </main>
                 ) : (
                   <Navigate to="/dashboard" />
@@ -253,8 +261,10 @@ export const AppContent = ({
       </AnimatePresence>
 
       <Footer />
+      <ContactModal />
 
       {/* Non-critical overlays — lazy loaded */}
+
       <Suspense fallback={null}>
         <CommandTerminal />
         <CommandPalette />
@@ -265,4 +275,4 @@ export const AppContent = ({
       </Suspense>
     </div>
   );
-};
+};;

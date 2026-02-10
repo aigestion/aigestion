@@ -112,6 +112,16 @@ export const config = {
   rabbitmq: {
     url: env.RABBITMQ_URL,
   },
+  // IA Engine Configuration
+  iaEngine: {
+    url: env.IA_ENGINE_URL,
+    apiKey: env.IA_ENGINE_API_KEY,
+  },
+  // WebAuthn Configuration
+  webauthn: {
+    rpID: env.WEBAUTHN_RP_ID,
+    origin: env.WEBAUTHN_ORIGIN,
+  },
 } as const;
 
 export type Config = typeof config;

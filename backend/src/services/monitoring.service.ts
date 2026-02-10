@@ -326,7 +326,7 @@ export class MonitoringService {
   /**
    * Get metrics in time range
    */
-  private async getMetricsInRange(
+  public async getMetricsInRange(
     name: string,
     startTime: number,
     endTime: number,

@@ -3,7 +3,18 @@ import path from 'path';
 import { z } from 'zod';
 
 // Load .env from project root
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+const envPath = path.resolve(__dirname, '../../.env');
+const result = dotenv.config({ path: envPath });
+if (process.env.NODE_ENV === 'test') {
+  console.log(`[DEBUG] Loading .env from: ${envPath}`);
+  if (result.error) {
+    console.error(`[DEBUG] Error loading .env: ${result.error.message}`);
+  } else {
+    console.log(
+      `[DEBUG] .env loaded successfully. MONGODB_URI: ${process.env.MONGODB_URI ? 'Defined' : 'UNDEFINED'}`,
+    );
+  }
+}
 
 /**
  * Environment variable schema with validation rules
@@ -115,15 +126,9 @@ const envSchema = z.object({
     .default('info')
     .describe('Winston log level'),
 
-  // API Keys
-  GOOGLE_GENAI_API_KEY: z
-    .string()
-    .optional()
-    .describe('Google Gemini API key (GOOGLE_GENAI_API_KEY)'),
-  GEMINI_API_KEY: z
-    .string()
-    .optional()
-    .describe('Google Gemini API key (optional for development)'),
+  // AI Services
+  GEMINI_API_KEY: z.string().optional().describe('Google Gemini API key (Standard)'),
+  GOOGLE_GENAI_API_KEY: z.string().optional().describe('Google Generative AI API key (Alias)'),
   PINECONE_API_KEY: z.string().optional().describe('Pinecone API key for vector database'),
   PINECONE_INDEX_NAME: z.string().default('aigestion-docs').describe('Pinecone index name'),
   PINECONE_NAMESPACE_DEFAULT: z
@@ -143,11 +148,19 @@ const envSchema = z.object({
     .url()
     .default('http://localhost:5000')
     .describe('URL for NeuroCore ML service'),
+  ML_SERVICE_API_KEY: z
+    .string()
+    .default('LOCAL_DEV_SECRET_KEY_REPLACE_ME')
+    .describe('API Key for NeuroCore ML service auth'),
   IA_ENGINE_URL: z
     .string()
     .url()
     .default('http://localhost:8000')
     .describe('URL for Swarm IA engine'),
+  IA_ENGINE_API_KEY: z
+    .string()
+    .default('LOCAL_DEV_SWARM_SECRET_KEY_REPLACE_ME')
+    .describe('API Key for Swarm IA engine auth'),
 
   // Runway API Token
   RUNWAY_API_KEY: z.string().optional().describe('Runway API token for external services'),
@@ -428,6 +441,14 @@ const envSchema = z.object({
   PAYPAL_CLIENT_ID: z.string().optional().describe('PayPal Client ID'),
   PAYPAL_CLIENT_SECRET: z.string().optional().describe('PayPal Client Secret'),
   PAYPAL_MODE: z.enum(['sandbox', 'live']).default('sandbox').describe('PayPal Environment Mode'),
+
+  // WebAuthn Configuration
+  WEBAUTHN_RP_ID: z.string().default('localhost').describe('WebAuthn Relying Party ID'),
+  WEBAUTHN_ORIGIN: z
+    .string()
+    .url()
+    .default('http://localhost:3000')
+    .describe('WebAuthn expected origin'),
 });
 
 /**

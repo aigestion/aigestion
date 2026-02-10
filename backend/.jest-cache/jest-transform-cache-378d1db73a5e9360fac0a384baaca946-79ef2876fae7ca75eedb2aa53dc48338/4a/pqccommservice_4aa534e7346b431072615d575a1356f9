@@ -1,0 +1,119 @@
+f8e0a12f3699bb850804ae08a68537f2
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PQCCommService = void 0;
+const inversify_1 = require("inversify");
+const kyber = __importStar(require("crystals-kyber"));
+const nacl = __importStar(require("tweetnacl"));
+const node_crypto_1 = __importDefault(require("node:crypto"));
+const logger_1 = require("../utils/logger");
+let PQCCommService = class PQCCommService {
+    /**
+     * Generates a hybrid keypair for the initial handshake.
+     */
+    async generateHandshakeKeys() {
+        try {
+            // 1. Classic X25519 Keypair
+            const classicKeys = nacl.box.keyPair();
+            // 2. Post-Quantum Kyber768 Keypair
+            // crystals-kyber KeyGen returns
+            const [kyberPK, kyberSK] = kyber.KeyGen768();
+            return {
+                classic: {
+                    public: Buffer.from(classicKeys.publicKey).toString('hex'),
+                    private: Buffer.from(classicKeys.secretKey).toString('hex'),
+                },
+                pqc: {
+                    public: Buffer.from(kyberPK).toString('hex'),
+                    private: Buffer.from(kyberSK).toString('hex'),
+                },
+            };
+        }
+        catch (error) {
+            logger_1.logger.error('[PQCComm] Key generation failed:', error);
+            throw error;
+        }
+    }
+    /**
+     * Derives a symmetric key using hybrid shared secrets.
+     * finalKey = HKDF(X25519_SS || Kyber_SS)
+     */
+    async deriveSymmetricKey(myClassicSK, theirClassicPK, myKyberSK, theirCiphertext, // If they encapsulated for us
+    myKyberPK, // If we need to encapsulate for them
+    theirKyberPK) {
+        try {
+            // 1. Classic Shared Secret
+            const classicSS = nacl.box.before(Buffer.from(theirClassicPK, 'hex'), Buffer.from(myClassicSK, 'hex'));
+            let kyberSS;
+            if (theirCiphertext) {
+                // They encapsulated for us, we decrypt
+                kyberSS = kyber.Decrypt768(Buffer.from(theirCiphertext, 'hex'), Buffer.from(myKyberSK, 'hex'));
+            }
+            else if (theirKyberPK) {
+                // We encapsulate for them (this usually happens on one side)
+                // In a real handshake, one side generates and the other encapsulates
+                const [, ss] = kyber.Encrypt768(Buffer.from(theirKyberPK, 'hex'));
+                kyberSS = ss;
+                // Note: ciphertext 'c' would need to be sent to them.
+                // This service would be called multiple times in a real protocol.
+            }
+            else {
+                throw new Error('MISSING_PQC_HANDSHAKE_DATA');
+            }
+            // 2. Hybrid KDF (Simplification: HMAC of concatenated secrets)
+            const combined = Buffer.concat([Buffer.from(classicSS), Buffer.from(kyberSS)]);
+            return node_crypto_1.default.createHash('sha256').update(combined).digest('hex');
+        }
+        catch (error) {
+            logger_1.logger.error('[PQCComm] Key derivation failed:', error);
+            throw error;
+        }
+    }
+};
+exports.PQCCommService = PQCCommService;
+exports.PQCCommService = PQCCommService = __decorate([
+    (0, inversify_1.injectable)()
+], PQCCommService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xccHFjLWNvbW0uc2VydmljZS50cyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSx5Q0FBdUM7QUFDdkMsc0RBQXdDO0FBQ3hDLGdEQUFrQztBQUNsQyw4REFBaUM7QUFDakMsNENBQXlDO0FBR2xDLElBQU0sY0FBYyxHQUFwQixNQUFNLGNBQWM7SUFDekI7O09BRUc7SUFDSCxLQUFLLENBQUMscUJBQXFCO1FBQ3pCLElBQUksQ0FBQztZQUNILDRCQUE0QjtZQUM1QixNQUFNLFdBQVcsR0FBRyxJQUFJLENBQUMsR0FBRyxDQUFDLE9BQU8sRUFBRSxDQUFDO1lBRXZDLG1DQUFtQztZQUNuQyxnQ0FBZ0M7WUFDaEMsTUFBTSxDQUFDLE9BQU8sRUFBRSxPQUFPLENBQUMsR0FBRyxLQUFLLENBQUMsU0FBUyxFQUFFLENBQUM7WUFFN0MsT0FBTztnQkFDTCxPQUFPLEVBQUU7b0JBQ1AsTUFBTSxFQUFFLE1BQU0sQ0FBQyxJQUFJLENBQUMsV0FBVyxDQUFDLFNBQVMsQ0FBQyxDQUFDLFFBQVEsQ0FBQyxLQUFLLENBQUM7b0JBQzFELE9BQU8sRUFBRSxNQUFNLENBQUMsSUFBSSxDQUFDLFdBQVcsQ0FBQyxTQUFTLENBQUMsQ0FBQyxRQUFRLENBQUMsS0FBSyxDQUFDO2lCQUM1RDtnQkFDRCxHQUFHLEVBQUU7b0JBQ0gsTUFBTSxFQUFFLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUMsUUFBUSxDQUFDLEtBQUssQ0FBQztvQkFDNUMsT0FBTyxFQUFFLE1BQU0sQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLENBQUMsUUFBUSxDQUFDLEtBQUssQ0FBQztpQkFDOUM7YUFDRixDQUFDO1FBQ0osQ0FBQztRQUFDLE9BQU8sS0FBSyxFQUFFLENBQUM7WUFDZixlQUFNLENBQUMsS0FBSyxDQUFDLGtDQUFrQyxFQUFFLEtBQUssQ0FBQyxDQUFDO1lBQ3hELE1BQU0sS0FBSyxDQUFDO1FBQ2QsQ0FBQztJQUNILENBQUM7SUFFRDs7O09BR0c7SUFDSCxLQUFLLENBQUMsa0JBQWtCLENBQ3RCLFdBQW1CLEVBQ25CLGNBQXNCLEVBQ3RCLFNBQWlCLEVBQ2pCLGVBQXdCLEVBQUUsOEJBQThCO0lBQ3hELFNBQWtCLEVBQUUscUNBQXFDO0lBQ3pELFlBQXFCO1FBRXJCLElBQUksQ0FBQztZQUNILDJCQUEyQjtZQUMzQixNQUFNLFNBQVMsR0FBRyxJQUFJLENBQUMsR0FBRyxDQUFDLE1BQU0sQ0FDL0IsTUFBTSxDQUFDLElBQUksQ0FBQyxjQUFjLEVBQUUsS0FBSyxDQUFDLEVBQ2xDLE1BQU0sQ0FBQyxJQUFJLENBQUMsV0FBVyxFQUFFLEtBQUssQ0FBQyxDQUNoQyxDQUFDO1lBRUYsSUFBSSxPQUFtQixDQUFDO1lBRXhCLElBQUksZUFBZSxFQUFFLENBQUM7Z0JBQ3BCLHVDQUF1QztnQkFDdkMsT0FBTyxHQUFHLEtBQUssQ0FBQyxVQUFVLENBQ3hCLE1BQU0sQ0FBQyxJQUFJLENBQUMsZUFBZSxFQUFFLEtBQUssQ0FBQyxFQUNuQyxNQUFNLENBQUMsSUFBSSxDQUFDLFNBQVMsRUFBRSxLQUFLLENBQUMsQ0FDOUIsQ0FBQztZQUNKLENBQUM7aUJBQU0sSUFBSSxZQUFZLEVBQUUsQ0FBQztnQkFDeEIsNkRBQTZEO2dCQUM3RCxxRUFBcUU7Z0JBQ3JFLE1BQU0sQ0FBQyxFQUFFLEVBQUUsQ0FBQyxHQUFHLEtBQUssQ0FBQyxVQUFVLENBQUMsTUFBTSxDQUFDLElBQUksQ0FBQyxZQUFZLEVBQUUsS0FBSyxDQUFDLENBQUMsQ0FBQztnQkFDbEUsT0FBTyxHQUFHLEVBQUUsQ0FBQztnQkFDYixzREFBc0Q7Z0JBQ3RELGtFQUFrRTtZQUNwRSxDQUFDO2lCQUFNLENBQUM7Z0JBQ04sTUFBTSxJQUFJLEtBQUssQ0FBQyw0QkFBNEIsQ0FBQyxDQUFDO1lBQ2hELENBQUM7WUFFRCwrREFBK0Q7WUFDL0QsTUFBTSxRQUFRLEdBQUcsTUFBTSxDQUFDLE1BQU0sQ0FBQyxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsU0FBUyxDQUFDLEVBQUUsTUFBTSxDQUFDLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLENBQUM7WUFFL0UsT0FBTyxxQkFBTSxDQUFDLFVBQVUsQ0FBQyxRQUFRLENBQUMsQ0FBQyxNQUFNLENBQUMsUUFBUSxDQUFDLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBQ3BFLENBQUM7UUFBQyxPQUFPLEtBQUssRUFBRSxDQUFDO1lBQ2YsZUFBTSxDQUFDLEtBQUssQ0FBQyxrQ0FBa0MsRUFBRSxLQUFLLENBQUMsQ0FBQztZQUN4RCxNQUFNLEtBQUssQ0FBQztRQUNkLENBQUM7SUFDSCxDQUFDO0NBQ0YsQ0FBQTtBQTVFWSx3Q0FBYzt5QkFBZCxjQUFjO0lBRDFCLElBQUEsc0JBQVUsR0FBRTtHQUNBLGNBQWMsQ0E0RTFCIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXHBxYy1jb21tLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaW5qZWN0YWJsZSB9IGZyb20gJ2ludmVyc2lmeSc7XHJcbmltcG9ydCAqIGFzIGt5YmVyIGZyb20gJ2NyeXN0YWxzLWt5YmVyJztcclxuaW1wb3J0ICogYXMgbmFjbCBmcm9tICd0d2VldG5hY2wnO1xyXG5pbXBvcnQgY3J5cHRvIGZyb20gJ25vZGU6Y3J5cHRvJztcclxuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcclxuXHJcbkBpbmplY3RhYmxlKClcclxuZXhwb3J0IGNsYXNzIFBRQ0NvbW1TZXJ2aWNlIHtcclxuICAvKipcclxuICAgKiBHZW5lcmF0ZXMgYSBoeWJyaWQga2V5cGFpciBmb3IgdGhlIGluaXRpYWwgaGFuZHNoYWtlLlxyXG4gICAqL1xyXG4gIGFzeW5jIGdlbmVyYXRlSGFuZHNoYWtlS2V5cygpIHtcclxuICAgIHRyeSB7XHJcbiAgICAgIC8vIDEuIENsYXNzaWMgWDI1NTE5IEtleXBhaXJcclxuICAgICAgY29uc3QgY2xhc3NpY0tleXMgPSBuYWNsLmJveC5rZXlQYWlyKCk7XHJcblxyXG4gICAgICAvLyAyLiBQb3N0LVF1YW50dW0gS3liZXI3NjggS2V5cGFpclxyXG4gICAgICAvLyBjcnlzdGFscy1reWJlciBLZXlHZW4gcmV0dXJuc1xyXG4gICAgICBjb25zdCBba3liZXJQSywga3liZXJTS10gPSBreWJlci5LZXlHZW43NjgoKTtcclxuXHJcbiAgICAgIHJldHVybiB7XHJcbiAgICAgICAgY2xhc3NpYzoge1xyXG4gICAgICAgICAgcHVibGljOiBCdWZmZXIuZnJvbShjbGFzc2ljS2V5cy5wdWJsaWNLZXkpLnRvU3RyaW5nKCdoZXgnKSxcclxuICAgICAgICAgIHByaXZhdGU6IEJ1ZmZlci5mcm9tKGNsYXNzaWNLZXlzLnNlY3JldEtleSkudG9TdHJpbmcoJ2hleCcpLFxyXG4gICAgICAgIH0sXHJcbiAgICAgICAgcHFjOiB7XHJcbiAgICAgICAgICBwdWJsaWM6IEJ1ZmZlci5mcm9tKGt5YmVyUEspLnRvU3RyaW5nKCdoZXgnKSxcclxuICAgICAgICAgIHByaXZhdGU6IEJ1ZmZlci5mcm9tKGt5YmVyU0spLnRvU3RyaW5nKCdoZXgnKSxcclxuICAgICAgICB9LFxyXG4gICAgICB9O1xyXG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcclxuICAgICAgbG9nZ2VyLmVycm9yKCdbUFFDQ29tbV0gS2V5IGdlbmVyYXRpb24gZmFpbGVkOicsIGVycm9yKTtcclxuICAgICAgdGhyb3cgZXJyb3I7XHJcbiAgICB9XHJcbiAgfVxyXG5cclxuICAvKipcclxuICAgKiBEZXJpdmVzIGEgc3ltbWV0cmljIGtleSB1c2luZyBoeWJyaWQgc2hhcmVkIHNlY3JldHMuXHJcbiAgICogZmluYWxLZXkgPSBIS0RGKFgyNTUxOV9TUyB8fCBLeWJlcl9TUylcclxuICAgKi9cclxuICBhc3luYyBkZXJpdmVTeW1tZXRyaWNLZXkoXHJcbiAgICBteUNsYXNzaWNTSzogc3RyaW5nLFxyXG4gICAgdGhlaXJDbGFzc2ljUEs6IHN0cmluZyxcclxuICAgIG15S3liZXJTSzogc3RyaW5nLFxyXG4gICAgdGhlaXJDaXBoZXJ0ZXh0Pzogc3RyaW5nLCAvLyBJZiB0aGV5IGVuY2Fwc3VsYXRlZCBmb3IgdXNcclxuICAgIG15S3liZXJQSz86IHN0cmluZywgLy8gSWYgd2UgbmVlZCB0byBlbmNhcHN1bGF0ZSBmb3IgdGhlbVxyXG4gICAgdGhlaXJLeWJlclBLPzogc3RyaW5nLFxyXG4gICk6IFByb21pc2U8c3RyaW5nPiB7XHJcbiAgICB0cnkge1xyXG4gICAgICAvLyAxLiBDbGFzc2ljIFNoYXJlZCBTZWNyZXRcclxuICAgICAgY29uc3QgY2xhc3NpY1NTID0gbmFjbC5ib3guYmVmb3JlKFxyXG4gICAgICAgIEJ1ZmZlci5mcm9tKHRoZWlyQ2xhc3NpY1BLLCAnaGV4JyksXHJcbiAgICAgICAgQnVmZmVyLmZyb20obXlDbGFzc2ljU0ssICdoZXgnKSxcclxuICAgICAgKTtcclxuXHJcbiAgICAgIGxldCBreWJlclNTOiBVaW50OEFycmF5O1xyXG5cclxuICAgICAgaWYgKHRoZWlyQ2lwaGVydGV4dCkge1xyXG4gICAgICAgIC8vIFRoZXkgZW5jYXBzdWxhdGVkIGZvciB1cywgd2UgZGVjcnlwdFxyXG4gICAgICAgIGt5YmVyU1MgPSBreWJlci5EZWNyeXB0NzY4KFxyXG4gICAgICAgICAgQnVmZmVyLmZyb20odGhlaXJDaXBoZXJ0ZXh0LCAnaGV4JyksXHJcbiAgICAgICAgICBCdWZmZXIuZnJvbShteUt5YmVyU0ssICdoZXgnKSxcclxuICAgICAgICApO1xyXG4gICAgICB9IGVsc2UgaWYgKHRoZWlyS3liZXJQSykge1xyXG4gICAgICAgIC8vIFdlIGVuY2Fwc3VsYXRlIGZvciB0aGVtICh0aGlzIHVzdWFsbHkgaGFwcGVucyBvbiBvbmUgc2lkZSlcclxuICAgICAgICAvLyBJbiBhIHJlYWwgaGFuZHNoYWtlLCBvbmUgc2lkZSBnZW5lcmF0ZXMgYW5kIHRoZSBvdGhlciBlbmNhcHN1bGF0ZXNcclxuICAgICAgICBjb25zdCBbLCBzc10gPSBreWJlci5FbmNyeXB0NzY4KEJ1ZmZlci5mcm9tKHRoZWlyS3liZXJQSywgJ2hleCcpKTtcclxuICAgICAgICBreWJlclNTID0gc3M7XHJcbiAgICAgICAgLy8gTm90ZTogY2lwaGVydGV4dCAnYycgd291bGQgbmVlZCB0byBiZSBzZW50IHRvIHRoZW0uXHJcbiAgICAgICAgLy8gVGhpcyBzZXJ2aWNlIHdvdWxkIGJlIGNhbGxlZCBtdWx0aXBsZSB0aW1lcyBpbiBhIHJlYWwgcHJvdG9jb2wuXHJcbiAgICAgIH0gZWxzZSB7XHJcbiAgICAgICAgdGhyb3cgbmV3IEVycm9yKCdNSVNTSU5HX1BRQ19IQU5EU0hBS0VfREFUQScpO1xyXG4gICAgICB9XHJcblxyXG4gICAgICAvLyAyLiBIeWJyaWQgS0RGIChTaW1wbGlmaWNhdGlvbjogSE1BQyBvZiBjb25jYXRlbmF0ZWQgc2VjcmV0cylcclxuICAgICAgY29uc3QgY29tYmluZWQgPSBCdWZmZXIuY29uY2F0KFtCdWZmZXIuZnJvbShjbGFzc2ljU1MpLCBCdWZmZXIuZnJvbShreWJlclNTKV0pO1xyXG5cclxuICAgICAgcmV0dXJuIGNyeXB0by5jcmVhdGVIYXNoKCdzaGEyNTYnKS51cGRhdGUoY29tYmluZWQpLmRpZ2VzdCgnaGV4Jyk7XHJcbiAgICB9IGNhdGNoIChlcnJvcikge1xyXG4gICAgICBsb2dnZXIuZXJyb3IoJ1tQUUNDb21tXSBLZXkgZGVyaXZhdGlvbiBmYWlsZWQ6JywgZXJyb3IpO1xyXG4gICAgICB0aHJvdyBlcnJvcjtcclxuICAgIH1cclxuICB9XHJcbn1cclxuIl0sInZlcnNpb24iOjN9

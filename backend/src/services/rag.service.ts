@@ -209,11 +209,16 @@ export class RagService {
   ): Promise<void> {
     try {
       const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://ml-service:5000';
-      await axios.post(`${mlServiceUrl}/archive`, {
-        content,
-        source: filename,
-        tags,
-      });
+      const apiKey = process.env.ML_SERVICE_API_KEY || 'LOCAL_DEV_SECRET_KEY_REPLACE_ME';
+      await axios.post(
+        `${mlServiceUrl}/archive`,
+        {
+          content,
+          source: filename,
+          tags,
+        },
+        { headers: { 'X-API-Key': apiKey } },
+      );
       logger.info(`[RagService] Document archived to local NeuroCore: ${filename}`);
     } catch (error: any) {
       logger.warn(`[RagService] Failed to archive to local NeuroCore: ${error.message}`);
@@ -226,7 +231,12 @@ export class RagService {
   private async queryLocalMemory(query: string): Promise<string | null> {
     try {
       const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://ml-service:5000';
-      const response = await axios.post(`${mlServiceUrl}/recall`, { query, limit: 3 });
+      const apiKey = process.env.ML_SERVICE_API_KEY || 'LOCAL_DEV_SECRET_KEY_REPLACE_ME';
+      const response = await axios.post(
+        `${mlServiceUrl}/recall`,
+        { query, limit: 3 },
+        { headers: { 'X-API-Key': apiKey } },
+      );
 
       const results = response.data.results;
       if (results && results.length > 0) {

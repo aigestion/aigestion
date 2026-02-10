@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { Request, Response } from 'express';
-import { Container } from 'typedi';
+import { inject, injectable } from 'inversify';
 
 import { buildError } from '../common/response-builder';
 import { config } from '../config/index';
@@ -8,12 +8,21 @@ import { InstagramService } from '../services/instagram.service';
 import { LinkedInService } from '../services/linkedin.service';
 import { TikTokService } from '../services/tiktok.service';
 import { XService } from '../services/x.service';
+import { TYPE_ID, TYPES } from '../types';
 
 const FB_API_URL = config.whatsapp.apiUrl;
 
+@injectable()
 export class SocialController {
+  constructor(
+    @inject(TYPES.InstagramService) private instagramService: InstagramService,
+    @inject(TYPES.LinkedInService) private linkedinService: LinkedInService,
+    @inject(TYPES.TikTokService) private tiktokService: TikTokService,
+    @inject(TYPES.XService) private xService: XService,
+  ) {}
+
   // Publicar en Facebook Page
-  static async publishPost(req: Request, res: Response): Promise<void> {
+  async publishPost(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { message, link } = req.body;
       const pageId = process.env.FACEBOOK_PAGE_ID;
@@ -32,7 +41,7 @@ export class SocialController {
         access_token: accessToken,
       });
 
-      console.log('✅ Published successfully:', response.data);
+      console.log('✅ Published successfully:', response.data.id);
       res.json({ success: true, postId: response.data.id });
     } catch (error: any) {
       console.error('❌ Error publishing to Facebook:', error.response?.data || error.message);
@@ -43,7 +52,7 @@ export class SocialController {
   }
 
   // Obtener Métricas de la Página
-  static async getPageStats(_req: Request, res: Response): Promise<void> {
+  async getPageStats(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const pageId = process.env.FACEBOOK_PAGE_ID;
       const accessToken = process.env.FACEBOOK_ACCESS_TOKEN;
@@ -56,6 +65,7 @@ export class SocialController {
           engagement: 8.5,
           mock: true,
         });
+        return;
       }
 
       const response = await axios.get(`${FB_API_URL}/${pageId}`, {
@@ -75,11 +85,10 @@ export class SocialController {
   }
 
   // Enviar Mensaje Directo Instagram
-  static async sendInstagramDM(req: Request, res: Response): Promise<void> {
+  async sendInstagramDM(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { recipientId, text } = req.body;
-      const instagramService = Container.get(InstagramService) as any;
-      const result = await instagramService.sendDM(recipientId, text);
+      const result = await this.instagramService.sendDM(recipientId, text);
       res.json({ success: true, result });
     } catch (error: any) {
       res.status(500).json({ error: 'Failed to send Instagram DM' });
@@ -87,7 +96,7 @@ export class SocialController {
   }
 
   // Publicar Tweet en X
-  static async postTweet(req: Request, res: Response): Promise<void> {
+  async postTweet(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { text } = req.body as { text?: unknown };
       // Ensure we have a string; if not, coerce to string or reject
@@ -95,8 +104,7 @@ export class SocialController {
         res.status(400).json({ error: 'Invalid tweet text' });
         return;
       }
-      const xService = Container.get(XService);
-      const result = await xService.postTweet(text);
+      const result = await this.xService.postTweet(text);
       res.json({ success: true, result });
     } catch (error: any) {
       res.status(500).json({ error: 'Failed to post Tweet to X' });
@@ -104,11 +112,10 @@ export class SocialController {
   }
 
   // Publicar Video en TikTok
-  static async publishTikTokVideo(req: Request, res: Response): Promise<void> {
+  async publishTikTokVideo(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { videoUrl, title } = (req as any).body || {};
-      const tiktokService = Container.get(TikTokService);
-      const result = await tiktokService.publishVideo(videoUrl, title);
+      const result = await this.tiktokService.publishVideo(videoUrl, title);
       res.json({ success: true, result });
     } catch (error: any) {
       res.status(500).json({ error: 'Failed to publish to TikTok' });
@@ -116,11 +123,10 @@ export class SocialController {
   }
 
   // Publicar Post en LinkedIn
-  static async publishLinkedInPost(req: Request, res: Response): Promise<void> {
+  async publishLinkedInPost(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { text } = (req as any).body || {};
-      const linkedinService = Container.get(LinkedInService) as any;
-      const result = await linkedinService.sharePost(text);
+      const result = await this.linkedinService.sharePost(text);
       res.json({ success: true, result });
     } catch (error: any) {
       res.status(500).json({ error: 'Failed to publish to LinkedIn' });

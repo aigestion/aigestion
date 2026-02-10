@@ -1,11 +1,12 @@
 import { useWorkbench } from './WorkbenchContext';
-import { LayoutDashboard, Search, Bot, Settings, FolderGit2 } from 'lucide-react'; // Assuming lucide-react is available, consistent with modern stacks
+import { LayoutDashboard, Search, Bot, Settings, FolderGit2, Shield } from 'lucide-react'; 
 
 export const ActivityBar = () => {
   const { activeActivity, setActiveActivity } = useWorkbench();
 
   const activities = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { id: 'intelligence', icon: Shield, label: 'Sovereign Intelligence' },
     { id: 'search', icon: Search, label: 'Search' },
     { id: 'ai', icon: Bot, label: 'Daniela AI' },
     { id: 'files', icon: FolderGit2, label: 'Projects' },

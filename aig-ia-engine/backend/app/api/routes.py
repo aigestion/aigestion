@@ -30,11 +30,12 @@ from app.services.file_inference_service import file_inference_service
 from app.services.inference_service import inference_service
 from app.services.job_service import JobStatus, JobType, job_service
 from app.services.training_service import training_service
-from fastapi import APIRouter, File, HTTPException, Query, UploadFile
+from app.middleware.auth import verify_api_key
+from fastapi import APIRouter, File, HTTPException, Query, UploadFile, Depends
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(verify_api_key)])
 
 # Include Daniela Routes
 router.include_router(daniela_routes.router)
@@ -46,7 +47,7 @@ settings = get_settings()
 # ============================================
 
 
-@router.get("/health", response_model=HealthResponse, tags=["Health"])
+@router.get("/health", response_model=HealthResponse, tags=["Health"], dependencies=[])
 async def health_check():
     """
     Health check endpoint.

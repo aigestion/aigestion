@@ -1,11 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { Container } from 'typedi';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 
 import { EmailService } from '../services/email.service';
 import { TelegramService } from '../services/telegram.service';
 import { logger } from '../utils/logger';
-import { youtubeTranscriptionService } from '../utils/youtube-transcription.service';
+import { YoutubeTranscriptionService } from '../utils/youtube-transcription.service';
 import { TranscriptionJob } from './youtube-transcription.queue';
 
 /**
@@ -16,8 +17,11 @@ import { TranscriptionJob } from './youtube-transcription.queue';
  * 4. Notify via Telegram
  */
 export async function processTranscriptionJob(job: TranscriptionJob): Promise<void> {
-  const emailService = Container.get(EmailService);
-  const telegramService = Container.get(TelegramService);
+  const emailService = container.get<EmailService>(TYPES.EmailService);
+  const telegramService = container.get<TelegramService>(TYPES.TelegramService);
+  const youtubeTranscriptionService = container.get<YoutubeTranscriptionService>(
+    TYPES.YoutubeTranscriptionService,
+  );
 
   logger.info(`⚡ Processing transcription for: ${job.fileName}`);
 
@@ -51,16 +55,16 @@ ${formattedTranscript}
 
     // 3. Send Email
     if (job.recipientEmail) {
-      await emailService.sendEmail(
-        job.recipientEmail,
-        `📝 Transcription Ready: ${result.title}`,
-        `<p>Hello,</p>
-         <p>Here is the transcription for your video: <b>${result.title}</b></p>
-         <p>Video URL: <a href="${result.url}">${result.url}</a></p>
-         <br>
-         <p>The transcript file is attached.</p>`,
-        [{ filename: outputFileName, path: outputPath }],
-      );
+      await emailService.sendEmail({
+        to: job.recipientEmail,
+        subject: `📝 Transcription Ready: ${result.title}`,
+        html: `<p>Hello,</p>
+               <p>Here is the transcription for your video: <b>${result.title}</b></p>
+               <p>Video URL: <a href="${result.url}">${result.url}</a></p>
+               <br>
+               <p>The transcript file is attached.</p>`,
+        attachments: [{ filename: outputFileName, path: outputPath }],
+      });
     }
 
     // 4. Notify Telegram
