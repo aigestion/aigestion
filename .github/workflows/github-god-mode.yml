@@ -85,17 +85,23 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: frontend/website-epic/package-lock.json
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: 📊 Repository Metrics Analysis
         id: metrics
         run: |
-          cd frontend/website-epic
+          cd frontend/apps/website-epic
           METRICS=$(cat <<EOF
           {
             "total_files": $(find . -type f | wc -l),
@@ -127,9 +133,9 @@ jobs:
       - name: ⚡ Performance Baseline
         id: perf-baseline
         run: |
-          cd frontend/website-epic
-          npm ci
-          npm run build
+          pnpm install --no-frozen-lockfile
+          cd frontend/apps/website-epic
+          pnpm run build
           BASELINE=$(cat <<EOF
           {
             "bundle_size": "$(du -sh dist | cut -f1)",
@@ -197,9 +203,8 @@ jobs:
       - name: 📦 Dependency Security Scan
         if: matrix.scan-type == 'dependencies'
         run: |
-          cd frontend/website-epic
-          npm audit --audit-level=high
-          npm ls --depth=0
+          cd frontend/apps/website-epic
+          pnpm audit --audit-level=high
 
       - name: 🔍 CodeQL Analysis
         if: matrix.scan-type == 'code'
@@ -229,37 +234,43 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: frontend/website-epic/package-lock.json
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: 📦 Install Dependencies
         run: |
-          cd frontend/website-epic
-          npm ci
+          pnpm install --no-frozen-lockfile
+          cd frontend/apps/website-epic
 
       - name: 🏗️ Build Application
         run: |
-          cd frontend/website-epic
-          npm run build
+          cd frontend/apps/website-epic
+          pnpm run build
 
       - name: 📊 Bundle Analysis
         run: |
-          cd frontend/website-epic
+          cd frontend/apps/website-epic
           npx webpack-bundle-analyzer dist/static/js/*.js --mode json > bundle-analysis.json
 
       - name: ⚡ Performance Budget Check
         run: |
-          cd frontend/website-epic
+          cd frontend/apps/website-epic
           node scripts/check-bundle-size.js
 
       - name: 🔍 Lighthouse CI
         run: |
-          cd frontend/website-epic
-          npm install -g @lhci/cli@0.12.x
+          cd frontend/apps/website-epic
+          pnpm install -g @lhci/cli@0.12.x
           lhci autorun
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
@@ -280,22 +291,28 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: frontend/website-epic/package-lock.json
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: 📦 Install Dependencies
         run: |
-          cd frontend/website-epic
-          npm ci
+          pnpm install --no-frozen-lockfile
+          cd frontend/apps/website-epic
 
       - name: 🏗️ Build Application
         run: |
-          cd frontend/website-epic
-          npm run build
+          cd frontend/apps/website-epic
+          pnpm run build
 
       - name: 🛡️ Deploy Canary (Preview)
         id: deploy
@@ -305,7 +322,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '' # No --prod for canary
-          working-directory: frontend/website-epic
+          working-directory: frontend/apps/website-epic
 
   # 🔍 POST-DEPLOYMENT VALIDATION (Canary Health Check)
   post-deploy-validation:
@@ -360,7 +377,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
-          working-directory: frontend/website-epic
+          working-directory: frontend/apps/website-epic
           vercel-project-name: 'aigestion-website-epic'
 
       - name: 📊 Deployment Summary
