@@ -14,7 +14,7 @@ export interface SystemHealth {
 export const api = {
   getSystemHealth: async (): Promise<SystemHealth> => {
     try {
-      const response = await fetch(`${API_URL}/system/health`);
+      const response = await fetch(`${API_URL}/health`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
