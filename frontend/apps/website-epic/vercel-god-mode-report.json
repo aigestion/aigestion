@@ -1,0 +1,609 @@
+{
+  "timestamp": "2026-02-09T14:02:14.325Z",
+  "totalTime": 74160,
+  "metrics": {
+    "buildTime": 45752,
+    "bundleSize": 20586392,
+    "files": [
+      {
+        "path": "images\\cinematic\\nexus_iot.png",
+        "size": 1037456,
+        "sizeKB": "1013.14"
+      },
+      {
+        "path": "images\\cinematic\\hero_eye.png",
+        "size": 975747,
+        "sizeKB": "952.88"
+      },
+      {
+        "path": "images\\cinematic\\hero_wide.png",
+        "size": 962714,
+        "sizeKB": "940.15"
+      },
+      {
+        "path": "images\\nexus\\nexus_guardian_godmode.png",
+        "size": 923201,
+        "sizeKB": "901.56"
+      },
+      {
+        "path": "images\\cinematic\\viral_architecture.png",
+        "size": 921078,
+        "sizeKB": "899.49"
+      },
+      {
+        "path": "images\\cinematic\\roi_synergy.png",
+        "size": 868332,
+        "sizeKB": "847.98"
+      },
+      {
+        "path": "images\\daniela\\lab.png",
+        "size": 855780,
+        "sizeKB": "835.72"
+      },
+      {
+        "path": "images\\cinematic\\aigestion_core.png",
+        "size": 855444,
+        "sizeKB": "835.39"
+      },
+      {
+        "path": "images\\cinematic\\core.png",
+        "size": 854096,
+        "sizeKB": "834.08"
+      },
+      {
+        "path": "images\\cinematic\\hero_rise.png",
+        "size": 816630,
+        "sizeKB": "797.49"
+      },
+      {
+        "path": "images\\dcl-thumbnail.png",
+        "size": 807917,
+        "sizeKB": "788.98"
+      },
+      {
+        "path": "images\\nexus\\collaboration_v2.png",
+        "size": 797098,
+        "sizeKB": "778.42"
+      },
+      {
+        "path": "images\\cinematic\\daniela_office.png",
+        "size": 787066,
+        "sizeKB": "768.62"
+      },
+      {
+        "path": "images\\daniela\\daniela_office_godmode.png",
+        "size": 762481,
+        "sizeKB": "744.61"
+      },
+      {
+        "path": "images\\cinematic\\future_portal.png",
+        "size": 761312,
+        "sizeKB": "743.47"
+      },
+      {
+        "path": "images\\brand\\ui_elements.png",
+        "size": 737728,
+        "sizeKB": "720.44"
+      },
+      {
+        "path": "images\\nexus\\hero.png",
+        "size": 736305,
+        "sizeKB": "719.05"
+      },
+      {
+        "path": "images\\daniela\\desk.png",
+        "size": 731327,
+        "sizeKB": "714.19"
+      },
+      {
+        "path": "images\\cinematic\\nexus_ops.png",
+        "size": 711573,
+        "sizeKB": "694.90"
+      },
+      {
+        "path": "images\\nexus\\collaboration.png",
+        "size": 693067,
+        "sizeKB": "676.82"
+      },
+      {
+        "path": "images\\daniela\\daniela_lab_godmode.png",
+        "size": 688252,
+        "sizeKB": "672.12"
+      },
+      {
+        "path": "images\\daniela\\lobby.png",
+        "size": 680423,
+        "sizeKB": "664.48"
+      },
+      {
+        "path": "images\\brand\\logo.png",
+        "size": 635400,
+        "sizeKB": "620.51"
+      },
+      {
+        "path": "images\\brand\\icon.png",
+        "size": 620508,
+        "sizeKB": "605.96"
+      },
+      {
+        "path": "images\\brand\\avatars.png",
+        "size": 397264,
+        "sizeKB": "387.95"
+      },
+      {
+        "path": "assets\\vendor-data-BRBMd6Um.js",
+        "size": 193323,
+        "sizeKB": "188.79"
+      },
+      {
+        "path": "assets\\vendor-react-DzSuaLpV.js",
+        "size": 160469,
+        "sizeKB": "156.71"
+      },
+      {
+        "path": "assets\\main-BSjZGEta.css",
+        "size": 145561,
+        "sizeKB": "142.15"
+      },
+      {
+        "path": "assets\\vendor-motion-I6wcTx_q.js",
+        "size": 126440,
+        "sizeKB": "123.48"
+      },
+      {
+        "path": "assets\\main-B5DH-ZW_.js",
+        "size": 51143,
+        "sizeKB": "49.94"
+      },
+      {
+        "path": "assets\\vendor-ui-DAuP2EEx.js",
+        "size": 39236,
+        "sizeKB": "38.32"
+      },
+      {
+        "path": "assets\\DanielaDemo-DpqryObI.js",
+        "size": 24052,
+        "sizeKB": "23.49"
+      },
+      {
+        "path": "assets\\DecentralandOffice-Udo5d8tc.js",
+        "size": 20985,
+        "sizeKB": "20.49"
+      },
+      {
+        "path": "assets\\DanielaDemo-xtF6Yytv.css",
+        "size": 19113,
+        "sizeKB": "18.67"
+      },
+      {
+        "path": "assets\\Dashboard-Sq5Wbxao.js",
+        "size": 17843,
+        "sizeKB": "17.42"
+      },
+      {
+        "path": "assets\\WorkbenchLayout-DqJOhtUQ.js",
+        "size": 14272,
+        "sizeKB": "13.94"
+      },
+      {
+        "path": "assets\\DanielaShowcase-nOvnfIEH.js",
+        "size": 14010,
+        "sizeKB": "13.68"
+      },
+      {
+        "path": "assets\\EnhancedROI-D_KPNL2-.js",
+        "size": 11650,
+        "sizeKB": "11.38"
+      },
+      {
+        "path": "sw-advanced.js",
+        "size": 10332,
+        "sizeKB": "10.09"
+      },
+      {
+        "path": "assets\\MetaverseSection-CvaQXHgW.js",
+        "size": 10017,
+        "sizeKB": "9.78"
+      },
+      {
+        "path": "assets\\ContactSection-D6do0aLs.js",
+        "size": 9124,
+        "sizeKB": "8.91"
+      },
+      {
+        "path": "assets\\NexusAndroid-BMM59rRT.js",
+        "size": 7021,
+        "sizeKB": "6.86"
+      },
+      {
+        "path": "assets\\VirtualOfficePreview-D8-HerMU.js",
+        "size": 6789,
+        "sizeKB": "6.63"
+      },
+      {
+        "path": "assets\\Register-CARdZSVb.js",
+        "size": 5809,
+        "sizeKB": "5.67"
+      },
+      {
+        "path": "assets\\PricingSection-DCT8on4D.js",
+        "size": 4908,
+        "sizeKB": "4.79"
+      },
+      {
+        "path": "assets\\SelectRole-qJoEFP-L.js",
+        "size": 4557,
+        "sizeKB": "4.45"
+      },
+      {
+        "path": "assets\\SelectPlan-DXbWn7kw.js",
+        "size": 4092,
+        "sizeKB": "4.00"
+      },
+      {
+        "path": "deploy-website.yml",
+        "size": 4071,
+        "sizeKB": "3.98"
+      },
+      {
+        "path": "assets\\CommandPalette-DQkVJWQF.js",
+        "size": 3814,
+        "sizeKB": "3.72"
+      },
+      {
+        "path": "assets\\ServicesDeepDive-CfDiSv1K.js",
+        "size": 3661,
+        "sizeKB": "3.58"
+      },
+      {
+        "path": "assets\\DanielaOmniWidget-jz3LnDw4.js",
+        "size": 3625,
+        "sizeKB": "3.54"
+      },
+      {
+        "path": "index.html",
+        "size": 3505,
+        "sizeKB": "3.42"
+      },
+      {
+        "path": "dist\\index.html",
+        "size": 3391,
+        "sizeKB": "3.31"
+      },
+      {
+        "path": "assets\\VerifyEmail-BpN_MxJ5.js",
+        "size": 3331,
+        "sizeKB": "3.25"
+      },
+      {
+        "path": "assets\\CommandTerminal-B-GOB-g0.js",
+        "size": 3298,
+        "sizeKB": "3.22"
+      },
+      {
+        "path": "manifest.json",
+        "size": 2681,
+        "sizeKB": "2.62"
+      },
+      {
+        "path": "assets\\IngeniousPlan-1PJ-Jh60.js",
+        "size": 2391,
+        "sizeKB": "2.33"
+      },
+      {
+        "path": "assets\\CaseStudies-BwYV6Mbr.js",
+        "size": 2289,
+        "sizeKB": "2.24"
+      },
+      {
+        "path": "assets\\WeaponDashboard-CsgAtaSm.js",
+        "size": 2288,
+        "sizeKB": "2.23"
+      },
+      {
+        "path": "assets\\VideoTutorials-B7jkJN0a.js",
+        "size": 2272,
+        "sizeKB": "2.22"
+      },
+      {
+        "path": "assets\\FAQSection-c3fLGfFH.js",
+        "size": 1810,
+        "sizeKB": "1.77"
+      },
+      {
+        "path": "assets\\vendor-3d-BTgeB28l.js",
+        "size": 1719,
+        "sizeKB": "1.68"
+      },
+      {
+        "path": "cors-proxy.html",
+        "size": 1716,
+        "sizeKB": "1.68"
+      },
+      {
+        "path": "apple-touch-icon.png",
+        "size": 1497,
+        "sizeKB": "1.46"
+      },
+      {
+        "path": "dist\\favicon.ico",
+        "size": 1497,
+        "sizeKB": "1.46"
+      },
+      {
+        "path": "favicon.ico",
+        "size": 1497,
+        "sizeKB": "1.46"
+      },
+      {
+        "path": "vite.svg",
+        "size": 1497,
+        "sizeKB": "1.46"
+      },
+      {
+        "path": "client.html",
+        "size": 1226,
+        "sizeKB": "1.20"
+      },
+      {
+        "path": "dist\\public\\client.html",
+        "size": 1226,
+        "sizeKB": "1.20"
+      },
+      {
+        "path": "admin.html",
+        "size": 1159,
+        "sizeKB": "1.13"
+      },
+      {
+        "path": "dist\\public\\admin.html",
+        "size": 1159,
+        "sizeKB": "1.13"
+      },
+      {
+        "path": "demo.html",
+        "size": 1143,
+        "sizeKB": "1.12"
+      },
+      {
+        "path": "dist\\public\\demo.html",
+        "size": 1143,
+        "sizeKB": "1.12"
+      },
+      {
+        "path": "images\\nexus\\grid.svg",
+        "size": 1033,
+        "sizeKB": "1.01"
+      },
+      {
+        "path": "assets\\CyberpunkGrid-BGgXv3Q7.js",
+        "size": 925,
+        "sizeKB": "0.90"
+      },
+      {
+        "path": "assets\\AnimatedMeshGradient-Bvy1hm4H.js",
+        "size": 840,
+        "sizeKB": "0.82"
+      },
+      {
+        "path": "assets\\useDanielaVoice-DGiZ24v-.js",
+        "size": 767,
+        "sizeKB": "0.75"
+      },
+      {
+        "path": "images\\nexus\\scanlines.svg",
+        "size": 684,
+        "sizeKB": "0.67"
+      },
+      {
+        "path": "assets\\NeuralParticles-By7u1U_y.js",
+        "size": 660,
+        "sizeKB": "0.64"
+      },
+      {
+        "path": "404.html",
+        "size": 502,
+        "sizeKB": "0.49"
+      },
+      {
+        "path": "assets\\GlitchText-B2uVSyOl.js",
+        "size": 469,
+        "sizeKB": "0.46"
+      },
+      {
+        "path": "sw-disabled.js",
+        "size": 456,
+        "sizeKB": "0.45"
+      },
+      {
+        "path": "og-image.png",
+        "size": 419,
+        "sizeKB": "0.41"
+      },
+      {
+        "path": "assets\\useSound-azmCqhWP.js",
+        "size": 404,
+        "sizeKB": "0.39"
+      },
+      {
+        "path": "sounds\\hover_glass.mp3",
+        "size": 315,
+        "sizeKB": "0.31"
+      },
+      {
+        "path": "sounds\\wuaw_subtle.mp3",
+        "size": 315,
+        "sizeKB": "0.31"
+      },
+      {
+        "path": "sw.js",
+        "size": 286,
+        "sizeKB": "0.28"
+      },
+      {
+        "path": "sounds\\.gitkeep",
+        "size": 93,
+        "sizeKB": "0.09"
+      },
+      {
+        "path": "sounds\\click_activate.mp3",
+        "size": 59,
+        "sizeKB": "0.06"
+      },
+      {
+        "path": "sounds\\data_pulse.mp3",
+        "size": 59,
+        "sizeKB": "0.06"
+      },
+      {
+        "path": "sounds\\error_buzzer.mp3",
+        "size": 59,
+        "sizeKB": "0.06"
+      },
+      {
+        "path": "sounds\\menu_open.mp3",
+        "size": 59,
+        "sizeKB": "0.06"
+      },
+      {
+        "path": "sounds\\nexus_hum.mp3",
+        "size": 59,
+        "sizeKB": "0.06"
+      },
+      {
+        "path": "sounds\\success_chime.mp3",
+        "size": 59,
+        "sizeKB": "0.06"
+      },
+      {
+        "path": "CNAME",
+        "size": 13,
+        "sizeKB": "0.01"
+      },
+      {
+        "path": "sounds\\hover_glass.wav",
+        "size": 5,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": ".nojekyll",
+        "size": 1,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "daniela-ai-8k.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "images\\nexus\\ai_avatar.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "images\\nexus\\android_robot.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "images\\nexus\\cinematic_portal.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "images\\nexus\\default_ai.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "images\\nexus\\digital_network.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "images\\nexus\\financial_chart.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "images\\nexus\\futuristic_abstract.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      },
+      {
+        "path": "images\\nexus\\neural_network.jpg",
+        "size": 0,
+        "sizeKB": "0.00"
+      }
+    ]
+  },
+  "config": {
+    "performance": {
+      "bundleSize": {
+        "max": 250000,
+        "warning": 200000,
+        "optimal": 150000
+      },
+      "buildTime": {
+        "max": 60000,
+        "warning": 45000,
+        "optimal": 30000
+      },
+      "lighthouse": {
+        "min": 90,
+        "warning": 85,
+        "optimal": 95
+      }
+    },
+    "security": {
+      "headers": [
+        "X-DNS-Prefetch-Control",
+        "Strict-Transport-Security",
+        "X-Frame-Options",
+        "X-Content-Type-Options",
+        "X-XSS-Protection",
+        "Referrer-Policy",
+        "Permissions-Policy"
+      ],
+      "cors": {
+        "origins": [
+          "https://aigestion.net",
+          "https://www.aigestion.net"
+        ],
+        "methods": [
+          "GET",
+          "POST",
+          "PUT",
+          "DELETE",
+          "PATCH",
+          "OPTIONS"
+        ],
+        "headers": [
+          "X-Requested-With",
+          "Content-Type",
+          "Authorization",
+          "Cache-Control"
+        ]
+      }
+    },
+    "analytics": {
+      "enabled": true,
+      "metrics": [
+        "bundle-size",
+        "build-time",
+        "lighthouse-score",
+        "first-contentful-paint",
+        "largest-contentful-paint",
+        "cumulative-layout-shift",
+        "first-input-delay"
+      ]
+    },
+    "ai": {
+      "autoOptimization": true,
+      "predictivePreloading": true,
+      "intelligentCaching": true,
+      "adaptivePerformance": true
+    }
+  },
+  "status": "success"
+}

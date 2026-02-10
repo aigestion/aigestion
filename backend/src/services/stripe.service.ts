@@ -1,11 +1,11 @@
 import type Stripe from 'stripe';
-import { Service } from 'typedi';
+import { injectable } from 'inversify';
 
 import { env } from '../config/env.schema';
 import { CircuitBreakerFactory } from '../infrastructure/resilience/CircuitBreakerFactory';
 import { logger } from '../utils/logger';
 
-@Service()
+@injectable()
 export class StripeService {
   private _stripe: Stripe | undefined;
 
@@ -154,5 +154,3 @@ export class StripeService {
     }
   }
 }
-
-export const stripeService = new StripeService();

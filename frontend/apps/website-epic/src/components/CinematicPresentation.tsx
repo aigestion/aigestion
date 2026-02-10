@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSentimentUI } from '../hooks/useSentimentUI';
 import { useSound } from '../services/audio-service';
 import { MagneticButton } from './MagneticButton';
+import { useAppContext } from '../contexts/AppContext';
+
 
 interface Slide {
   id: string;
@@ -94,6 +96,8 @@ export const CinematicPresentation: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const { playWuaw, playHover } = useSound();
   const { colors } = useSentimentUI();
+  const { setIsContactModalOpen } = useAppContext();
+
 
   const mouseX = useSpring(0, { damping: 30, stiffness: 100 });
   const mouseY = useSpring(0, { damping: 30, stiffness: 100 });
@@ -248,18 +252,19 @@ export const CinematicPresentation: React.FC = () => {
               <MagneticButton>
                 <button
                   onMouseEnter={playHover}
-                  onClick={() => (globalThis.location.href = '/dashboard')}
-                  className="px-12 py-5 bg-nexus-cyan/5 border border-nexus-cyan/20 text-white rounded-full text-[10px] tracking-[0.4em] uppercase hover:bg-nexus-cyan/10 hover:border-nexus-cyan/40 transition-all font-bold shadow-[0_0_30px_rgba(0,245,255,0.15)]"
+                  onClick={() => setIsContactModalOpen(true)}
+                  className="px-12 py-5 bg-white text-black border border-white rounded-full text-[10px] tracking-[0.4em] uppercase hover:bg-nexus-cyan hover:text-white transition-all font-bold shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                 >
-                  Iniciar Despliegue
+                  Contactar Especialista
                 </button>
               </MagneticButton>
 
               <button
                 onClick={toggleFunFact}
                 className="text-nexus-cyan-glow/60 hover:text-nexus-cyan-glow text-[10px] tracking-[0.4em] uppercase transition-colors"
+                onMouseEnter={playHover}
               >
-                Especificaciones
+                Especificaciones Técnicas
               </button>
 
               <div className="flex gap-4">

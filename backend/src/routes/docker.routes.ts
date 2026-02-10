@@ -1,11 +1,10 @@
-// src/routes/docker.routes.ts
 import { Router } from 'express';
 import { container } from '../config/inversify.config';
 import { TYPES } from '../types';
-import { DockerService } from '../infrastructure/docker/DockerService';
+import { DockerController } from '../controllers/docker.controller';
 
 const router = Router();
-const dockerService = container.get<DockerService>(TYPES.DockerService);
+const controller = container.get<DockerController>(TYPES.DockerController);
 
 /**
  * @openapi
@@ -16,28 +15,8 @@ const dockerService = container.get<DockerService>(TYPES.DockerService);
  *     responses:
  *       200:
  *         description: List of containers
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *       500:
- *         description: Docker error
  */
-// GET /docker/containers - list all containers
-router.get('/containers', async (_req: any, res: any) => {
-  try {
-    const containers = await dockerService.getContainers();
-    res.json({ data: containers });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Docker error';
-    res.status(500).json({ error: message });
-  }
-});
+router.get('/containers', (req, res, next) => controller.getContainers(req, res, next));
 
 /**
  * @openapi
@@ -45,30 +24,10 @@ router.get('/containers', async (_req: any, res: any) => {
  *   get:
  *     summary: Get stats for a specific container
  *     tags: [Docker]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Container ID
- *     responses:
- *       200:
- *         description: Container stats
- *       500:
- *         description: Docker error
  */
-// GET /docker/containers/:id/stats - get stats for a container
-router.get('/containers/:id/stats', async (req: any, res: any) => {
-  const { id } = req.params as { id: string };
-  try {
-    const stats = await dockerService.getContainerStats(id);
-    res.json({ data: stats });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Docker error';
-    res.status(500).json({ error: message });
-  }
-});
+router.get('/containers/:id/stats', (req, res, next) =>
+  controller.getContainerStats(req, res, next),
+);
 
 /**
  * @openapi
@@ -76,30 +35,8 @@ router.get('/containers/:id/stats', async (req: any, res: any) => {
  *   post:
  *     summary: Start a specific container
  *     tags: [Docker]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Container ID
- *     responses:
- *       200:
- *         description: Container started
- *       500:
- *         description: Docker error
  */
-// POST /docker/containers/:id/start - start a container
-router.post('/containers/:id/start', async (req: any, res: any) => {
-  const { id } = req.params as { id: string };
-  try {
-    await dockerService.startContainer(id);
-    res.json({ message: `Container ${id} started` });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Docker error';
-    res.status(500).json({ error: message });
-  }
-});
+router.post('/containers/:id/start', (req, res, next) => controller.startContainer(req, res, next));
 
 /**
  * @openapi
@@ -107,29 +44,7 @@ router.post('/containers/:id/start', async (req: any, res: any) => {
  *   post:
  *     summary: Stop a specific container
  *     tags: [Docker]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: Container ID
- *     responses:
- *       200:
- *         description: Container stopped
- *       500:
- *         description: Docker error
  */
-// POST /docker/containers/:id/stop - stop a container
-router.post('/containers/:id/stop', async (req: any, res: any) => {
-  const { id } = req.params as { id: string };
-  try {
-    await dockerService.stopContainer(id);
-    res.json({ message: `Container ${id} stopped` });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Docker error';
-    res.status(500).json({ error: message });
-  }
-});
+router.post('/containers/:id/stop', (req, res, next) => controller.stopContainer(req, res, next));
 
 export default router;

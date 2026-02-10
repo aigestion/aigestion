@@ -1,12 +1,21 @@
 import logging
 import os
-from typing import Optional
+import time
+from enum import Enum
+from typing import Optional, Union
 
 import google.generativeai as genai
 from services.llm_cache import LLMCache
 from services.circuit_breaker import CircuitBreaker
+from services.telemetry import TelemetryService
 
 logger = logging.getLogger("LLMService")
+
+
+class ModelTier(str, Enum):
+    FAST = "gemini-2.0-flash"
+    BALANCED = "gemini-2.0-flash"
+    REASONING = "gemini-2.0-pro-exp-02-05"
 
 
 class LLMService:
@@ -21,9 +30,10 @@ class LLMService:
     def _initialize(self):
         api_key = os.getenv("GEMINI_API_KEY")
 
-        # Initialize Cache and Circuit Breaker
+        # Initialize Cache, Circuit Breaker and Telemetry
         self.cache = LLMCache()
         self.circuit_breaker = CircuitBreaker(name="GeminiAPI", failure_threshold=3)
+        self.telemetry = TelemetryService()
 
         if not api_key:
             logger.warning(
@@ -34,40 +44,65 @@ class LLMService:
 
         try:
             genai.configure(api_key=api_key)
-            self.model = genai.GenerativeModel("models/gemini-2.0-flash")
-            logger.info("LLMService initialized with models/gemini-2.0-flash")
+            self.default_model_name = "models/gemini-2.0-flash"
+            self.pro_model_name = "models/gemini-2.0-pro-exp-02-05"
+
+            # Pre-initialize both models
+            self.models = {
+                ModelTier.FAST: genai.GenerativeModel(self.default_model_name),
+                ModelTier.REASONING: genai.GenerativeModel(self.pro_model_name),
+            }
+            logger.info(
+                f"LLMService initialized with tiers: {[t.value for t in self.models.keys()]}"
+            )
         except Exception as e:
             logger.error(f"Failed to initialize Gemini: {e}")
-            self.model = None
+            self.models = {}
 
-    def generate_text(self, prompt: str, use_cache: bool = True) -> Optional[str]:
-        if not self.model:
-            logger.error("LLM model not initialized.")
+    def generate_text(
+        self, prompt: str, use_cache: bool = True, tier: ModelTier = ModelTier.BALANCED
+    ) -> Optional[str]:
+        model = self.models.get(tier) or self.models.get(ModelTier.FAST)
+        if not model:
+            logger.error(f"LLM model for tier {tier} not initialized.")
             return "Error: LLM not configured."
 
         # 1. Check Cache
         if use_cache:
-            cached = self.cache.get(prompt)
+            cache_key = f"{tier.name}:{prompt}"
+            cached = self.cache.get(cache_key)
             if cached:
-                logger.info("LLM Cache Hit")
+                logger.info(f"LLM Cache Hit ({tier.name})")
                 return cached
 
         # 2. Execute via Circuit Breaker
         try:
+            start_t = time.time()
 
             def _call():
-                response = self.model.generate_content(prompt)
-                return response.text
+                response = model.generate_content(prompt)
+                return response
 
-            result = self.circuit_breaker.call(_call)
+            response = self.circuit_breaker.call(_call)
+            result = response.text
+            latency = time.time() - start_t
 
-            # 3. Store in Cache
+            # 3. Log Telemetry
+            usage = getattr(response, "usage_metadata", None)
+            token_count = (
+                usage.total_token_count
+                if usage
+                else len(prompt) // 4 + len(result) // 4
+            )  # Fallback estimation
+            self.telemetry.log_inference(tier.name, latency, token_count)
+
+            # 4. Store in Cache
             if result and use_cache:
-                self.cache.set(prompt, result)
+                self.cache.set(cache_key, result)
 
             return result
         except Exception as e:
-            logger.error(f"LLM Generation failed: {e}")
+            logger.error(f"LLM Generation failed ({tier.name}): {e}")
             return f"Error communicating with AI service: {e}"
 
     def review_code(self, code: str, context: str = "") -> str:
@@ -83,7 +118,7 @@ class LLMService:
 
         Output: valid markdown with findings (Security, Performance, Style) and a PASS/FAIL recommendation.
         """
-        return self.generate_text(prompt)
+        return self.generate_text(prompt, tier=ModelTier.REASONING)
 
     def generate_solution(self, issue: str) -> str:
         prompt = f"""
@@ -95,4 +130,4 @@ class LLMService:
 
         Output: A concise implementation plan in markdown.
         """
-        return self.generate_text(prompt)
+        return self.generate_text(prompt, tier=ModelTier.REASONING)

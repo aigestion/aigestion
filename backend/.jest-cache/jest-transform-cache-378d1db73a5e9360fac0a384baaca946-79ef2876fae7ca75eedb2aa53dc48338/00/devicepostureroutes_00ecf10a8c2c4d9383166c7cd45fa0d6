@@ -1,0 +1,42 @@
+1b9dc07749745c80ea368184db9f18fa
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const inversify_config_1 = require("../config/inversify.config");
+const auth_middleware_1 = require("../middleware/auth.middleware");
+const router = (0, express_1.Router)();
+const controller = inversify_config_1.container.get(inversify_config_1.TYPES.DevicePostureController);
+/**
+ * @openapi
+ * /device-posture/me:
+ *   get:
+ *     summary: Get trusted devices for the current user
+ *     tags: [Security]
+ */
+router.get('/me', auth_middleware_1.protect, controller.getMyDevices);
+/**
+ * @openapi
+ * /device-posture/register:
+ *   post:
+ *     summary: Register the current/new device as trusted
+ *     tags: [Security]
+ */
+router.post('/register', auth_middleware_1.protect, controller.registerDevice);
+/**
+ * @openapi
+ * /device-posture/verify:
+ *   get:
+ *     summary: Manual posture check for the current request
+ *     tags: [Security]
+ */
+router.get('/verify', auth_middleware_1.protect, controller.verifyCurrentDevice);
+/**
+ * @openapi
+ * /device-posture/{deviceId}:
+ *   delete:
+ *     summary: Revoke trust for a specific device
+ *     tags: [Security]
+ */
+router.delete('/:deviceId', auth_middleware_1.protect, controller.revokeDevice);
+exports.default = router;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxyb3V0ZXNcXGRldmljZS1wb3N0dXJlLnJvdXRlcy50cyIsIm1hcHBpbmdzIjoiOztBQUFBLHFDQUFpQztBQUNqQyxpRUFBOEQ7QUFFOUQsbUVBQXdEO0FBRXhELE1BQU0sTUFBTSxHQUFHLElBQUEsZ0JBQU0sR0FBRSxDQUFDO0FBQ3hCLE1BQU0sVUFBVSxHQUFHLDRCQUFTLENBQUMsR0FBRyxDQUEwQix3QkFBSyxDQUFDLHVCQUF1QixDQUFDLENBQUM7QUFFekY7Ozs7OztHQU1HO0FBQ0gsTUFBTSxDQUFDLEdBQUcsQ0FBQyxLQUFLLEVBQUUseUJBQU8sRUFBRSxVQUFVLENBQUMsWUFBWSxDQUFDLENBQUM7QUFFcEQ7Ozs7OztHQU1HO0FBQ0gsTUFBTSxDQUFDLElBQUksQ0FBQyxXQUFXLEVBQUUseUJBQU8sRUFBRSxVQUFVLENBQUMsY0FBYyxDQUFDLENBQUM7QUFFN0Q7Ozs7OztHQU1HO0FBQ0gsTUFBTSxDQUFDLEdBQUcsQ0FBQyxTQUFTLEVBQUUseUJBQU8sRUFBRSxVQUFVLENBQUMsbUJBQW1CLENBQUMsQ0FBQztBQUUvRDs7Ozs7O0dBTUc7QUFDSCxNQUFNLENBQUMsTUFBTSxDQUFDLFlBQVksRUFBRSx5QkFBTyxFQUFFLFVBQVUsQ0FBQyxZQUFZLENBQUMsQ0FBQztBQUU5RCxrQkFBZSxNQUFNLENBQUMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxyb3V0ZXNcXGRldmljZS1wb3N0dXJlLnJvdXRlcy50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBSb3V0ZXIgfSBmcm9tICdleHByZXNzJztcbmltcG9ydCB7IGNvbnRhaW5lciwgVFlQRVMgfSBmcm9tICcuLi9jb25maWcvaW52ZXJzaWZ5LmNvbmZpZyc7XG5pbXBvcnQgeyBEZXZpY2VQb3N0dXJlQ29udHJvbGxlciB9IGZyb20gJy4uL2NvbnRyb2xsZXJzL0RldmljZVBvc3R1cmVDb250cm9sbGVyJztcbmltcG9ydCB7IHByb3RlY3QgfSBmcm9tICcuLi9taWRkbGV3YXJlL2F1dGgubWlkZGxld2FyZSc7XG5cbmNvbnN0IHJvdXRlciA9IFJvdXRlcigpO1xuY29uc3QgY29udHJvbGxlciA9IGNvbnRhaW5lci5nZXQ8RGV2aWNlUG9zdHVyZUNvbnRyb2xsZXI+KFRZUEVTLkRldmljZVBvc3R1cmVDb250cm9sbGVyKTtcblxuLyoqXG4gKiBAb3BlbmFwaVxuICogL2RldmljZS1wb3N0dXJlL21lOlxuICogICBnZXQ6XG4gKiAgICAgc3VtbWFyeTogR2V0IHRydXN0ZWQgZGV2aWNlcyBmb3IgdGhlIGN1cnJlbnQgdXNlclxuICogICAgIHRhZ3M6IFtTZWN1cml0eV1cbiAqL1xucm91dGVyLmdldCgnL21lJywgcHJvdGVjdCwgY29udHJvbGxlci5nZXRNeURldmljZXMpO1xuXG4vKipcbiAqIEBvcGVuYXBpXG4gKiAvZGV2aWNlLXBvc3R1cmUvcmVnaXN0ZXI6XG4gKiAgIHBvc3Q6XG4gKiAgICAgc3VtbWFyeTogUmVnaXN0ZXIgdGhlIGN1cnJlbnQvbmV3IGRldmljZSBhcyB0cnVzdGVkXG4gKiAgICAgdGFnczogW1NlY3VyaXR5XVxuICovXG5yb3V0ZXIucG9zdCgnL3JlZ2lzdGVyJywgcHJvdGVjdCwgY29udHJvbGxlci5yZWdpc3RlckRldmljZSk7XG5cbi8qKlxuICogQG9wZW5hcGlcbiAqIC9kZXZpY2UtcG9zdHVyZS92ZXJpZnk6XG4gKiAgIGdldDpcbiAqICAgICBzdW1tYXJ5OiBNYW51YWwgcG9zdHVyZSBjaGVjayBmb3IgdGhlIGN1cnJlbnQgcmVxdWVzdFxuICogICAgIHRhZ3M6IFtTZWN1cml0eV1cbiAqL1xucm91dGVyLmdldCgnL3ZlcmlmeScsIHByb3RlY3QsIGNvbnRyb2xsZXIudmVyaWZ5Q3VycmVudERldmljZSk7XG5cbi8qKlxuICogQG9wZW5hcGlcbiAqIC9kZXZpY2UtcG9zdHVyZS97ZGV2aWNlSWR9OlxuICogICBkZWxldGU6XG4gKiAgICAgc3VtbWFyeTogUmV2b2tlIHRydXN0IGZvciBhIHNwZWNpZmljIGRldmljZVxuICogICAgIHRhZ3M6IFtTZWN1cml0eV1cbiAqL1xucm91dGVyLmRlbGV0ZSgnLzpkZXZpY2VJZCcsIHByb3RlY3QsIGNvbnRyb2xsZXIucmV2b2tlRGV2aWNlKTtcblxuZXhwb3J0IGRlZmF1bHQgcm91dGVyO1xuIl0sInZlcnNpb24iOjN9

@@ -1,0 +1,70 @@
+c319576e635684e6530a4ca8ff2b1a7b
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.aiRouter = exports.SemanticRouterService = exports.ModelComplexity = void 0;
+const inversify_1 = require("inversify");
+const logger_1 = require("../utils/logger");
+const vector_service_1 = require("./vector.service");
+var ModelComplexity;
+(function (ModelComplexity) {
+    ModelComplexity["SIMPLE"] = "simple";
+    ModelComplexity["COMPLEX"] = "complex";
+})(ModelComplexity || (exports.ModelComplexity = ModelComplexity = {}));
+let SemanticRouterService = class SemanticRouterService {
+    /**
+     * Classify query complexity
+     * In a production scenario, this might use embeddings or a small local model.
+     * For this implementation, we use a heuristic-based approach.
+     */
+    classifyQuery(query) {
+        const complexKeywords = [
+            'analyze',
+            'architect',
+            'performance',
+            'optimize',
+            'debug',
+            'explain deeply',
+            'security audit',
+            'refactor',
+        ];
+        const wordCount = query.split(' ').length;
+        const hasComplexKeyword = complexKeywords.some(kw => query.toLowerCase().includes(kw));
+        if (wordCount > 30 || hasComplexKeyword) {
+            return ModelComplexity.COMPLEX;
+        }
+        return ModelComplexity.SIMPLE;
+    }
+    /**
+     * Get the optimal route for a given query
+     */
+    async getOptimalRoute(query) {
+        const complexity = this.classifyQuery(query);
+        // Phase 14: Enhanced Context Awareness
+        const memoryContext = await vector_service_1.vectorService.search(query, 1);
+        const hasLongTermContext = memoryContext.length > 0;
+        if (complexity === ModelComplexity.COMPLEX || hasLongTermContext) {
+            logger_1.logger.debug({ complexity, hasLongTermContext }, 'Routing to high-intelligence model (GPT-4/Claude-3)');
+            return {
+                model: process.env.AI_MODEL_COMPLEX || 'gpt-4-turbo-preview',
+                provider: 'openai',
+            };
+        }
+        logger_1.logger.debug({ complexity }, 'Routing to cost-efficient model (GPT-3.5/Haiku)');
+        return {
+            model: process.env.AI_MODEL_SIMPLE || 'gpt-3.5-turbo',
+            provider: 'openai',
+        };
+    }
+};
+exports.SemanticRouterService = SemanticRouterService;
+exports.SemanticRouterService = SemanticRouterService = __decorate([
+    (0, inversify_1.injectable)()
+], SemanticRouterService);
+exports.aiRouter = new SemanticRouterService();
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcYWktcm91dGVyLnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUEseUNBQXVDO0FBQ3ZDLDRDQUF5QztBQUN6QyxxREFBaUQ7QUFFakQsSUFBWSxlQUdYO0FBSEQsV0FBWSxlQUFlO0lBQ3pCLG9DQUFpQixDQUFBO0lBQ2pCLHNDQUFtQixDQUFBO0FBQ3JCLENBQUMsRUFIVyxlQUFlLCtCQUFmLGVBQWUsUUFHMUI7QUFRTSxJQUFNLHFCQUFxQixHQUEzQixNQUFNLHFCQUFxQjtJQUNoQzs7OztPQUlHO0lBQ0ssYUFBYSxDQUFDLEtBQWE7UUFDakMsTUFBTSxlQUFlLEdBQUc7WUFDdEIsU0FBUztZQUNULFdBQVc7WUFDWCxhQUFhO1lBQ2IsVUFBVTtZQUNWLE9BQU87WUFDUCxnQkFBZ0I7WUFDaEIsZ0JBQWdCO1lBQ2hCLFVBQVU7U0FDWCxDQUFDO1FBRUYsTUFBTSxTQUFTLEdBQUcsS0FBSyxDQUFDLEtBQUssQ0FBQyxHQUFHLENBQUMsQ0FBQyxNQUFNLENBQUM7UUFDMUMsTUFBTSxpQkFBaUIsR0FBRyxlQUFlLENBQUMsSUFBSSxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUMsS0FBSyxDQUFDLFdBQVcsRUFBRSxDQUFDLFFBQVEsQ0FBQyxFQUFFLENBQUMsQ0FBQyxDQUFDO1FBRXZGLElBQUksU0FBUyxHQUFHLEVBQUUsSUFBSSxpQkFBaUIsRUFBRSxDQUFDO1lBQ3hDLE9BQU8sZUFBZSxDQUFDLE9BQU8sQ0FBQztRQUNqQyxDQUFDO1FBRUQsT0FBTyxlQUFlLENBQUMsTUFBTSxDQUFDO0lBQ2hDLENBQUM7SUFFRDs7T0FFRztJQUNILEtBQUssQ0FBQyxlQUFlLENBQUMsS0FBYTtRQUNqQyxNQUFNLFVBQVUsR0FBRyxJQUFJLENBQUMsYUFBYSxDQUFDLEtBQUssQ0FBQyxDQUFDO1FBRTdDLHVDQUF1QztRQUN2QyxNQUFNLGFBQWEsR0FBRyxNQUFNLDhCQUFhLENBQUMsTUFBTSxDQUFDLEtBQUssRUFBRSxDQUFDLENBQUMsQ0FBQztRQUMzRCxNQUFNLGtCQUFrQixHQUFHLGFBQWEsQ0FBQyxNQUFNLEdBQUcsQ0FBQyxDQUFDO1FBRXBELElBQUksVUFBVSxLQUFLLGVBQWUsQ0FBQyxPQUFPLElBQUksa0JBQWtCLEVBQUUsQ0FBQztZQUNqRSxlQUFNLENBQUMsS0FBSyxDQUNWLEVBQUUsVUFBVSxFQUFFLGtCQUFrQixFQUFFLEVBQ2xDLHFEQUFxRCxDQUN0RCxDQUFDO1lBQ0YsT0FBTztnQkFDTCxLQUFLLEVBQUUsT0FBTyxDQUFDLEdBQUcsQ0FBQyxnQkFBZ0IsSUFBSSxxQkFBcUI7Z0JBQzVELFFBQVEsRUFBRSxRQUFRO2FBQ25CLENBQUM7UUFDSixDQUFDO1FBRUQsZUFBTSxDQUFDLEtBQUssQ0FBQyxFQUFFLFVBQVUsRUFBRSxFQUFFLGlEQUFpRCxDQUFDLENBQUM7UUFDaEYsT0FBTztZQUNMLEtBQUssRUFBRSxPQUFPLENBQUMsR0FBRyxDQUFDLGVBQWUsSUFBSSxlQUFlO1lBQ3JELFFBQVEsRUFBRSxRQUFRO1NBQ25CLENBQUM7SUFDSixDQUFDO0NBQ0YsQ0FBQTtBQXZEWSxzREFBcUI7Z0NBQXJCLHFCQUFxQjtJQURqQyxJQUFBLHNCQUFVLEdBQUU7R0FDQSxxQkFBcUIsQ0F1RGpDO0FBRVksUUFBQSxRQUFRLEdBQUcsSUFBSSxxQkFBcUIsRUFBRSxDQUFDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXGFpLXJvdXRlci5zZXJ2aWNlLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGluamVjdGFibGUgfSBmcm9tICdpbnZlcnNpZnknO1xuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcbmltcG9ydCB7IHZlY3RvclNlcnZpY2UgfSBmcm9tICcuL3ZlY3Rvci5zZXJ2aWNlJztcblxuZXhwb3J0IGVudW0gTW9kZWxDb21wbGV4aXR5IHtcbiAgU0lNUExFID0gJ3NpbXBsZScsXG4gIENPTVBMRVggPSAnY29tcGxleCcsXG59XG5cbmV4cG9ydCBpbnRlcmZhY2UgQUlSb3V0ZSB7XG4gIG1vZGVsOiBzdHJpbmc7XG4gIHByb3ZpZGVyOiAnb3BlbmFpJyB8ICdhbnRocm9waWMnIHwgJ2dvb2dsZSc7XG59XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBTZW1hbnRpY1JvdXRlclNlcnZpY2Uge1xuICAvKipcbiAgICogQ2xhc3NpZnkgcXVlcnkgY29tcGxleGl0eVxuICAgKiBJbiBhIHByb2R1Y3Rpb24gc2NlbmFyaW8sIHRoaXMgbWlnaHQgdXNlIGVtYmVkZGluZ3Mgb3IgYSBzbWFsbCBsb2NhbCBtb2RlbC5cbiAgICogRm9yIHRoaXMgaW1wbGVtZW50YXRpb24sIHdlIHVzZSBhIGhldXJpc3RpYy1iYXNlZCBhcHByb2FjaC5cbiAgICovXG4gIHByaXZhdGUgY2xhc3NpZnlRdWVyeShxdWVyeTogc3RyaW5nKTogTW9kZWxDb21wbGV4aXR5IHtcbiAgICBjb25zdCBjb21wbGV4S2V5d29yZHMgPSBbXG4gICAgICAnYW5hbHl6ZScsXG4gICAgICAnYXJjaGl0ZWN0JyxcbiAgICAgICdwZXJmb3JtYW5jZScsXG4gICAgICAnb3B0aW1pemUnLFxuICAgICAgJ2RlYnVnJyxcbiAgICAgICdleHBsYWluIGRlZXBseScsXG4gICAgICAnc2VjdXJpdHkgYXVkaXQnLFxuICAgICAgJ3JlZmFjdG9yJyxcbiAgICBdO1xuXG4gICAgY29uc3Qgd29yZENvdW50ID0gcXVlcnkuc3BsaXQoJyAnKS5sZW5ndGg7XG4gICAgY29uc3QgaGFzQ29tcGxleEtleXdvcmQgPSBjb21wbGV4S2V5d29yZHMuc29tZShrdyA9PiBxdWVyeS50b0xvd2VyQ2FzZSgpLmluY2x1ZGVzKGt3KSk7XG5cbiAgICBpZiAod29yZENvdW50ID4gMzAgfHwgaGFzQ29tcGxleEtleXdvcmQpIHtcbiAgICAgIHJldHVybiBNb2RlbENvbXBsZXhpdHkuQ09NUExFWDtcbiAgICB9XG5cbiAgICByZXR1cm4gTW9kZWxDb21wbGV4aXR5LlNJTVBMRTtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgdGhlIG9wdGltYWwgcm91dGUgZm9yIGEgZ2l2ZW4gcXVlcnlcbiAgICovXG4gIGFzeW5jIGdldE9wdGltYWxSb3V0ZShxdWVyeTogc3RyaW5nKTogUHJvbWlzZTxBSVJvdXRlPiB7XG4gICAgY29uc3QgY29tcGxleGl0eSA9IHRoaXMuY2xhc3NpZnlRdWVyeShxdWVyeSk7XG5cbiAgICAvLyBQaGFzZSAxNDogRW5oYW5jZWQgQ29udGV4dCBBd2FyZW5lc3NcbiAgICBjb25zdCBtZW1vcnlDb250ZXh0ID0gYXdhaXQgdmVjdG9yU2VydmljZS5zZWFyY2gocXVlcnksIDEpO1xuICAgIGNvbnN0IGhhc0xvbmdUZXJtQ29udGV4dCA9IG1lbW9yeUNvbnRleHQubGVuZ3RoID4gMDtcblxuICAgIGlmIChjb21wbGV4aXR5ID09PSBNb2RlbENvbXBsZXhpdHkuQ09NUExFWCB8fCBoYXNMb25nVGVybUNvbnRleHQpIHtcbiAgICAgIGxvZ2dlci5kZWJ1ZyhcbiAgICAgICAgeyBjb21wbGV4aXR5LCBoYXNMb25nVGVybUNvbnRleHQgfSxcbiAgICAgICAgJ1JvdXRpbmcgdG8gaGlnaC1pbnRlbGxpZ2VuY2UgbW9kZWwgKEdQVC00L0NsYXVkZS0zKScsXG4gICAgICApO1xuICAgICAgcmV0dXJuIHtcbiAgICAgICAgbW9kZWw6IHByb2Nlc3MuZW52LkFJX01PREVMX0NPTVBMRVggfHwgJ2dwdC00LXR1cmJvLXByZXZpZXcnLFxuICAgICAgICBwcm92aWRlcjogJ29wZW5haScsXG4gICAgICB9O1xuICAgIH1cblxuICAgIGxvZ2dlci5kZWJ1Zyh7IGNvbXBsZXhpdHkgfSwgJ1JvdXRpbmcgdG8gY29zdC1lZmZpY2llbnQgbW9kZWwgKEdQVC0zLjUvSGFpa3UpJyk7XG4gICAgcmV0dXJuIHtcbiAgICAgIG1vZGVsOiBwcm9jZXNzLmVudi5BSV9NT0RFTF9TSU1QTEUgfHwgJ2dwdC0zLjUtdHVyYm8nLFxuICAgICAgcHJvdmlkZXI6ICdvcGVuYWknLFxuICAgIH07XG4gIH1cbn1cblxuZXhwb3J0IGNvbnN0IGFpUm91dGVyID0gbmV3IFNlbWFudGljUm91dGVyU2VydmljZSgpO1xuIl0sInZlcnNpb24iOjN9

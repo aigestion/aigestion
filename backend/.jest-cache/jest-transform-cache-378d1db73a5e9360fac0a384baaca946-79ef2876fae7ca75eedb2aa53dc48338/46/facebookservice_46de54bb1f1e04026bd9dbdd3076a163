@@ -1,0 +1,90 @@
+059e1c4650aa8401a7471351b1ed3de0
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FacebookService = void 0;
+const axios_1 = __importDefault(require("axios"));
+const inversify_1 = require("inversify");
+const env_schema_1 = require("../config/env.schema");
+const logger_1 = require("../utils/logger");
+let FacebookService = class FacebookService {
+    baseUrl = 'https://graph.facebook.com/v19.0';
+    /**
+     * Post a message to a Facebook Page feed
+     */
+    async postToPage(pageId, message, accessToken) {
+        const token = accessToken || env_schema_1.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+        if (!token) {
+            throw new Error('Facebook Page Access Token not configured');
+        }
+        try {
+            const response = await axios_1.default.post(`${this.baseUrl}/${pageId}/feed`, {
+                message: message,
+            }, {
+                params: { access_token: token },
+            });
+            logger_1.logger.info(`Posted to Facebook Page ${pageId}: ${response.data.id}`);
+            return response.data;
+        }
+        catch (error) {
+            logger_1.logger.error({ error: error.response?.data || error.message }, 'Error posting to Facebook Page');
+            throw error;
+        }
+    }
+    /**
+     * Get Page insights (e.g., page_impressions, page_engagement)
+     */
+    async getPageInsights(pageId, metrics = 'page_impressions,page_engaged_users') {
+        const token = env_schema_1.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+        if (!token) {
+            return null;
+        }
+        try {
+            const response = await axios_1.default.get(`${this.baseUrl}/${pageId}/insights`, {
+                params: {
+                    metric: metrics,
+                    access_token: token,
+                },
+            });
+            return response.data;
+        }
+        catch (error) {
+            logger_1.logger.error({ error: error.response?.data || error.message }, 'Error fetching Facebook Page insights');
+            return null;
+        }
+    }
+    /**
+     * Get comments for a specific post
+     */
+    async getPostComments(postId) {
+        const token = env_schema_1.env.FACEBOOK_PAGE_ACCESS_TOKEN;
+        if (!token) {
+            return null;
+        }
+        try {
+            const response = await axios_1.default.get(`${this.baseUrl}/${postId}/comments`, {
+                params: {
+                    access_token: token,
+                },
+            });
+            return response.data;
+        }
+        catch (error) {
+            logger_1.logger.error({ error: error.response?.data || error.message }, 'Error fetching Facebook post comments');
+            return null;
+        }
+    }
+};
+exports.FacebookService = FacebookService;
+exports.FacebookService = FacebookService = __decorate([
+    (0, inversify_1.injectable)()
+], FacebookService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcZmFjZWJvb2suc2VydmljZS50cyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFBQSxrREFBMEI7QUFDMUIseUNBQXVDO0FBQ3ZDLHFEQUEyQztBQUMzQyw0Q0FBeUM7QUFHbEMsSUFBTSxlQUFlLEdBQXJCLE1BQU0sZUFBZTtJQUNULE9BQU8sR0FBRyxrQ0FBa0MsQ0FBQztJQUU5RDs7T0FFRztJQUNILEtBQUssQ0FBQyxVQUFVLENBQUMsTUFBYyxFQUFFLE9BQWUsRUFBRSxXQUFvQjtRQUNwRSxNQUFNLEtBQUssR0FBRyxXQUFXLElBQUksZ0JBQUcsQ0FBQywwQkFBMEIsQ0FBQztRQUU1RCxJQUFJLENBQUMsS0FBSyxFQUFFLENBQUM7WUFDWCxNQUFNLElBQUksS0FBSyxDQUFDLDJDQUEyQyxDQUFDLENBQUM7UUFDL0QsQ0FBQztRQUVELElBQUksQ0FBQztZQUNILE1BQU0sUUFBUSxHQUFHLE1BQU0sZUFBSyxDQUFDLElBQUksQ0FDL0IsR0FBRyxJQUFJLENBQUMsT0FBTyxJQUFJLE1BQU0sT0FBTyxFQUNoQztnQkFDRSxPQUFPLEVBQUUsT0FBTzthQUNqQixFQUNEO2dCQUNFLE1BQU0sRUFBRSxFQUFFLFlBQVksRUFBRSxLQUFLLEVBQUU7YUFDaEMsQ0FDRixDQUFDO1lBRUYsZUFBTSxDQUFDLElBQUksQ0FBQywyQkFBMkIsTUFBTSxLQUFLLFFBQVEsQ0FBQyxJQUFJLENBQUMsRUFBRSxFQUFFLENBQUMsQ0FBQztZQUN0RSxPQUFPLFFBQVEsQ0FBQyxJQUFJLENBQUM7UUFDdkIsQ0FBQztRQUFDLE9BQU8sS0FBVSxFQUFFLENBQUM7WUFDcEIsZUFBTSxDQUFDLEtBQUssQ0FDVixFQUFFLEtBQUssRUFBRSxLQUFLLENBQUMsUUFBUSxFQUFFLElBQUksSUFBSSxLQUFLLENBQUMsT0FBTyxFQUFFLEVBQ2hELGdDQUFnQyxDQUNqQyxDQUFDO1lBQ0YsTUFBTSxLQUFLLENBQUM7UUFDZCxDQUFDO0lBQ0gsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLGVBQWUsQ0FDbkIsTUFBYyxFQUNkLFVBQWtCLHFDQUFxQztRQUV2RCxNQUFNLEtBQUssR0FBRyxnQkFBRyxDQUFDLDBCQUEwQixDQUFDO1FBRTdDLElBQUksQ0FBQyxLQUFLLEVBQUUsQ0FBQztZQUNYLE9BQU8sSUFBSSxDQUFDO1FBQ2QsQ0FBQztRQUVELElBQUksQ0FBQztZQUNILE1BQU0sUUFBUSxHQUFHLE1BQU0sZUFBSyxDQUFDLEdBQUcsQ0FBQyxHQUFHLElBQUksQ0FBQyxPQUFPLElBQUksTUFBTSxXQUFXLEVBQUU7Z0JBQ3JFLE1BQU0sRUFBRTtvQkFDTixNQUFNLEVBQUUsT0FBTztvQkFDZixZQUFZLEVBQUUsS0FBSztpQkFDcEI7YUFDRixDQUFDLENBQUM7WUFDSCxPQUFPLFFBQVEsQ0FBQyxJQUFJLENBQUM7UUFDdkIsQ0FBQztRQUFDLE9BQU8sS0FBVSxFQUFFLENBQUM7WUFDcEIsZUFBTSxDQUFDLEtBQUssQ0FDVixFQUFFLEtBQUssRUFBRSxLQUFLLENBQUMsUUFBUSxFQUFFLElBQUksSUFBSSxLQUFLLENBQUMsT0FBTyxFQUFFLEVBQ2hELHVDQUF1QyxDQUN4QyxDQUFDO1lBQ0YsT0FBTyxJQUFJLENBQUM7UUFDZCxDQUFDO0lBQ0gsQ0FBQztJQUVEOztPQUVHO0lBQ0gsS0FBSyxDQUFDLGVBQWUsQ0FBQyxNQUFjO1FBQ2xDLE1BQU0sS0FBSyxHQUFHLGdCQUFHLENBQUMsMEJBQTBCLENBQUM7UUFFN0MsSUFBSSxDQUFDLEtBQUssRUFBRSxDQUFDO1lBQ1gsT0FBTyxJQUFJLENBQUM7UUFDZCxDQUFDO1FBRUQsSUFBSSxDQUFDO1lBQ0gsTUFBTSxRQUFRLEdBQUcsTUFBTSxlQUFLLENBQUMsR0FBRyxDQUFDLEdBQUcsSUFBSSxDQUFDLE9BQU8sSUFBSSxNQUFNLFdBQVcsRUFBRTtnQkFDckUsTUFBTSxFQUFFO29CQUNOLFlBQVksRUFBRSxLQUFLO2lCQUNwQjthQUNGLENBQUMsQ0FBQztZQUNILE9BQU8sUUFBUSxDQUFDLElBQUksQ0FBQztRQUN2QixDQUFDO1FBQUMsT0FBTyxLQUFVLEVBQUUsQ0FBQztZQUNwQixlQUFNLENBQUMsS0FBSyxDQUNWLEVBQUUsS0FBSyxFQUFFLEtBQUssQ0FBQyxRQUFRLEVBQUUsSUFBSSxJQUFJLEtBQUssQ0FBQyxPQUFPLEVBQUUsRUFDaEQsdUNBQXVDLENBQ3hDLENBQUM7WUFDRixPQUFPLElBQUksQ0FBQztRQUNkLENBQUM7SUFDSCxDQUFDO0NBQ0YsQ0FBQTtBQTFGWSwwQ0FBZTswQkFBZixlQUFlO0lBRDNCLElBQUEsc0JBQVUsR0FBRTtHQUNBLGVBQWUsQ0EwRjNCIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXGZhY2Vib29rLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IGF4aW9zIGZyb20gJ2F4aW9zJztcbmltcG9ydCB7IGluamVjdGFibGUgfSBmcm9tICdpbnZlcnNpZnknO1xuaW1wb3J0IHsgZW52IH0gZnJvbSAnLi4vY29uZmlnL2Vudi5zY2hlbWEnO1xuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcblxuQGluamVjdGFibGUoKVxuZXhwb3J0IGNsYXNzIEZhY2Vib29rU2VydmljZSB7XG4gIHByaXZhdGUgcmVhZG9ubHkgYmFzZVVybCA9ICdodHRwczovL2dyYXBoLmZhY2Vib29rLmNvbS92MTkuMCc7XG5cbiAgLyoqXG4gICAqIFBvc3QgYSBtZXNzYWdlIHRvIGEgRmFjZWJvb2sgUGFnZSBmZWVkXG4gICAqL1xuICBhc3luYyBwb3N0VG9QYWdlKHBhZ2VJZDogc3RyaW5nLCBtZXNzYWdlOiBzdHJpbmcsIGFjY2Vzc1Rva2VuPzogc3RyaW5nKTogUHJvbWlzZTxhbnk+IHtcbiAgICBjb25zdCB0b2tlbiA9IGFjY2Vzc1Rva2VuIHx8IGVudi5GQUNFQk9PS19QQUdFX0FDQ0VTU19UT0tFTjtcblxuICAgIGlmICghdG9rZW4pIHtcbiAgICAgIHRocm93IG5ldyBFcnJvcignRmFjZWJvb2sgUGFnZSBBY2Nlc3MgVG9rZW4gbm90IGNvbmZpZ3VyZWQnKTtcbiAgICB9XG5cbiAgICB0cnkge1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBheGlvcy5wb3N0KFxuICAgICAgICBgJHt0aGlzLmJhc2VVcmx9LyR7cGFnZUlkfS9mZWVkYCxcbiAgICAgICAge1xuICAgICAgICAgIG1lc3NhZ2U6IG1lc3NhZ2UsXG4gICAgICAgIH0sXG4gICAgICAgIHtcbiAgICAgICAgICBwYXJhbXM6IHsgYWNjZXNzX3Rva2VuOiB0b2tlbiB9LFxuICAgICAgICB9LFxuICAgICAgKTtcblxuICAgICAgbG9nZ2VyLmluZm8oYFBvc3RlZCB0byBGYWNlYm9vayBQYWdlICR7cGFnZUlkfTogJHtyZXNwb25zZS5kYXRhLmlkfWApO1xuICAgICAgcmV0dXJuIHJlc3BvbnNlLmRhdGE7XG4gICAgfSBjYXRjaCAoZXJyb3I6IGFueSkge1xuICAgICAgbG9nZ2VyLmVycm9yKFxuICAgICAgICB7IGVycm9yOiBlcnJvci5yZXNwb25zZT8uZGF0YSB8fCBlcnJvci5tZXNzYWdlIH0sXG4gICAgICAgICdFcnJvciBwb3N0aW5nIHRvIEZhY2Vib29rIFBhZ2UnLFxuICAgICAgKTtcbiAgICAgIHRocm93IGVycm9yO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgUGFnZSBpbnNpZ2h0cyAoZS5nLiwgcGFnZV9pbXByZXNzaW9ucywgcGFnZV9lbmdhZ2VtZW50KVxuICAgKi9cbiAgYXN5bmMgZ2V0UGFnZUluc2lnaHRzKFxuICAgIHBhZ2VJZDogc3RyaW5nLFxuICAgIG1ldHJpY3M6IHN0cmluZyA9ICdwYWdlX2ltcHJlc3Npb25zLHBhZ2VfZW5nYWdlZF91c2VycycsXG4gICk6IFByb21pc2U8YW55PiB7XG4gICAgY29uc3QgdG9rZW4gPSBlbnYuRkFDRUJPT0tfUEFHRV9BQ0NFU1NfVE9LRU47XG5cbiAgICBpZiAoIXRva2VuKSB7XG4gICAgICByZXR1cm4gbnVsbDtcbiAgICB9XG5cbiAgICB0cnkge1xuICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBheGlvcy5nZXQoYCR7dGhpcy5iYXNlVXJsfS8ke3BhZ2VJZH0vaW5zaWdodHNgLCB7XG4gICAgICAgIHBhcmFtczoge1xuICAgICAgICAgIG1ldHJpYzogbWV0cmljcyxcbiAgICAgICAgICBhY2Nlc3NfdG9rZW46IHRva2VuLFxuICAgICAgICB9LFxuICAgICAgfSk7XG4gICAgICByZXR1cm4gcmVzcG9uc2UuZGF0YTtcbiAgICB9IGNhdGNoIChlcnJvcjogYW55KSB7XG4gICAgICBsb2dnZXIuZXJyb3IoXG4gICAgICAgIHsgZXJyb3I6IGVycm9yLnJlc3BvbnNlPy5kYXRhIHx8IGVycm9yLm1lc3NhZ2UgfSxcbiAgICAgICAgJ0Vycm9yIGZldGNoaW5nIEZhY2Vib29rIFBhZ2UgaW5zaWdodHMnLFxuICAgICAgKTtcbiAgICAgIHJldHVybiBudWxsO1xuICAgIH1cbiAgfVxuXG4gIC8qKlxuICAgKiBHZXQgY29tbWVudHMgZm9yIGEgc3BlY2lmaWMgcG9zdFxuICAgKi9cbiAgYXN5bmMgZ2V0UG9zdENvbW1lbnRzKHBvc3RJZDogc3RyaW5nKTogUHJvbWlzZTxhbnk+IHtcbiAgICBjb25zdCB0b2tlbiA9IGVudi5GQUNFQk9PS19QQUdFX0FDQ0VTU19UT0tFTjtcblxuICAgIGlmICghdG9rZW4pIHtcbiAgICAgIHJldHVybiBudWxsO1xuICAgIH1cblxuICAgIHRyeSB7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGF4aW9zLmdldChgJHt0aGlzLmJhc2VVcmx9LyR7cG9zdElkfS9jb21tZW50c2AsIHtcbiAgICAgICAgcGFyYW1zOiB7XG4gICAgICAgICAgYWNjZXNzX3Rva2VuOiB0b2tlbixcbiAgICAgICAgfSxcbiAgICAgIH0pO1xuICAgICAgcmV0dXJuIHJlc3BvbnNlLmRhdGE7XG4gICAgfSBjYXRjaCAoZXJyb3I6IGFueSkge1xuICAgICAgbG9nZ2VyLmVycm9yKFxuICAgICAgICB7IGVycm9yOiBlcnJvci5yZXNwb25zZT8uZGF0YSB8fCBlcnJvci5tZXNzYWdlIH0sXG4gICAgICAgICdFcnJvciBmZXRjaGluZyBGYWNlYm9vayBwb3N0IGNvbW1lbnRzJyxcbiAgICAgICk7XG4gICAgICByZXR1cm4gbnVsbDtcbiAgICB9XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

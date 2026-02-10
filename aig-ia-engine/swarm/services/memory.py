@@ -5,6 +5,7 @@ from typing import Any, Dict, List
 
 import google.generativeai as genai
 import numpy as np
+from services.llm import LLMService, ModelTier
 
 logger = logging.getLogger("MemoryService")
 
@@ -24,6 +25,7 @@ class MemoryService:
         )
         self.documents = []
         self._load_memory()
+        self.max_docs = 500
 
         api_key = os.getenv("GEMINI_API_KEY")
         if api_key:
@@ -73,6 +75,14 @@ class MemoryService:
                 "timestamp": metadata.get("timestamp", "unknown"),
             }
             self.documents.append(doc)
+
+            # Pruning logic: Keep it lean
+            if len(self.documents) > self.max_docs:
+                logger.info(
+                    f"Memory limit reached ({self.max_docs}). Pruning oldest entry."
+                )
+                self.documents.pop(0)
+
             self._save_memory()
             logger.info(f"Stored in memory: {text[:50]}...")
 
@@ -118,3 +128,28 @@ class MemoryService:
                         )
                         count += 1
         return count
+
+    def summarize_past_memories(self, batch_size: int = 50):
+        """Use LLM to compress a batch of old memories into a single synthesis."""
+        if len(self.documents) < batch_size:
+            return
+
+        old_docs = self.documents[:batch_size]
+        text_to_summarize = "\n".join([d["text"] for d in old_docs])
+
+        llm = LLMService()
+        prompt = f"""
+        Role: Sovereign Memory Archiver.
+        Task: Synthesize the following batch of thoughts into a single high-level summary.
+        Objective: Maintain core mission insights and technical rulings while discarding minor logs.
+        
+        Batch Content:
+        {text_to_summarize}
+        """
+
+        summary = llm.generate_text(prompt, tier=ModelTier.REASONING)
+        if summary:
+            # Replace old batch with a single synthesized memory
+            self.documents = self.documents[batch_size:]
+            self.remember(f"[SYNTHESIS] {summary}", {"type": "legacy_summary"})
+            logger.info("Batch summarization complete. Memory compressed.")

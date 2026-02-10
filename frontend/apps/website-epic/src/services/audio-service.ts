@@ -86,9 +86,16 @@ class AudioService {
           audio.preload = 'auto';
 
           const timeout = setTimeout(() => {
-            console.warn(`[AudioService] Timeout loading ${type} from ${src}`);
-            resolveLoad(createSilentFallback());
-          }, 5000);
+            // interaction sounds shouldn't block, so we fall back quickly
+            const fastFallback = type !== 'nexus_hum';
+            if (fastFallback) {
+              resolveLoad(createSilentFallback());
+            } else {
+              console.warn(`[AudioService] Timeout loading ${type} from ${src}`);
+              resolveLoad(createSilentFallback());
+            }
+          }, 2000);
+
 
           audio.addEventListener('canplaythrough', () => {
             clearTimeout(timeout);

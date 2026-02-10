@@ -77,17 +77,34 @@ export class KnowledgeGraphService {
     return related;
   }
 
-  /**
-   * Finds the "Knowledge Path" between two concepts (Basic BFS).
-   * Useful for RAG to explain HOW two things are connected.
-   */
   async findPath(startId: string, endId: string): Promise<string[]> {
-    // Implementation placeholder for BFS/DFS traversal
-    // In a real graph database (Neo4j) this is native.
-    // For Redis, we simulated it for immediate adjacencies.
     const direct = await this.getRelated(startId);
     const match = direct.find(d => d.target === endId);
-
     return match ? [startId, match.relation, endId] : [];
+  }
+
+  /**
+   * Specialized method to index findings from an autonomous mission.
+   * Builds the "Sovereign Memory" by linking the mission to its findings.
+   */
+  async indexMissionFindings(missionId: string, objective: string, report: string): Promise<void> {
+    const findingsNodeId = `findings:${missionId}`;
+
+    // 1. Create findings node
+    await this.addNode({
+      id: findingsNodeId,
+      type: 'concept',
+      label: `Result: ${objective.substring(0, 30)}...`,
+    });
+
+    // 2. Link Mission to Findings
+    await this.addEdge({
+      source: missionId,
+      target: findingsNodeId,
+      relation: 'created',
+      weight: 1.0,
+    });
+
+    logger.info(`[KnowledgeGraph] Indexed findings for mission ${missionId}`);
   }
 }

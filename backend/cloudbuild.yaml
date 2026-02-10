@@ -64,7 +64,7 @@ steps:
       - '300'
       # Environment variables
       - '--set-env-vars'
-      - 'NODE_ENV=production,SKIP_ENV_VALIDATION=true,JWT_SECRET=PROD_JWT_SECRET_AIGESTION_2024_ULTRA_SECURE_RANDOM_STRING_256BIT_MINIMUM,MONGODB_URI=mongodb://admin:PROD_AIGESTION_2024_SECURE_PASS@127.0.0.1:27017/aigestion_dashboard?authSource=admin'
+      - 'NODE_ENV=production,GOOGLE_CLOUD_PROJECT_ID=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=europe-west1'
     waitFor: ['push-image']
 
 # Build options

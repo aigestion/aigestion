@@ -1,24 +1,31 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react'
 
 interface AppContextType {
-  isLoading: boolean
-  setIsLoading: (loading: boolean) => void
-  error: string | null
-  setError: (error: string | null) => void
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+  isContactModalOpen: boolean;
+  setIsContactModalOpen: (open: boolean) => void;
+  error: string | null;
+  setError: (error: string | null) => void;
 }
+
 
 const AppContext = createContext<AppContextType | undefined>(undefined)
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null)
 
   const value: AppContextType = {
     isLoading,
     setIsLoading,
+    isContactModalOpen,
+    setIsContactModalOpen,
     error,
-    setError
-  }
+    setError,
+  };
+
 
   return (
     <AppContext.Provider value={value}>

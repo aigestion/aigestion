@@ -1,0 +1,110 @@
+07f38df9a53fa6d968dc54824b589712
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var _a, _b, _c, _d, _e;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SovereignHandshakeController = void 0;
+const express_1 = require("express");
+const inversify_1 = require("inversify");
+const inversify_express_utils_1 = require("inversify-express-utils");
+const types_1 = require("../types");
+const pqc_comm_service_1 = require("../services/pqc-comm.service");
+const logger_1 = require("../utils/logger");
+const redis_1 = require("../cache/redis");
+const node_crypto_1 = __importDefault(require("node:crypto"));
+let SovereignHandshakeController = class SovereignHandshakeController {
+    pqcService;
+    constructor(pqcService) {
+        this.pqcService = pqcService;
+    }
+    /**
+     * 🌌 Step 1: Initiate Handshake
+     * Server provides its public hybrid keys.
+     */
+    async initHandshake(req, res) {
+        try {
+            const handshakeId = node_crypto_1.default.randomUUID();
+            const keys = await this.pqcService.generateHandshakeKeys();
+            // Store private keys in Redis (transient) for the session
+            await (0, redis_1.setCache)(`pqc:handshake:${handshakeId}`, JSON.stringify(keys), 300); // 5 min TTL
+            return res.json({
+                success: true,
+                handshakeId,
+                publicKey: {
+                    classic: keys.classic.public,
+                    pqc: keys.pqc.public,
+                },
+            });
+        }
+        catch (error) {
+            logger_1.logger.error('[SovereignHandshake] Init failed:', error);
+            return res.status(500).json({ error: 'Handshake initialization failed' });
+        }
+    }
+    /**
+     * 🌌 Step 2: Finalize Handshake
+     * Receive client keys, derive symmetric secret.
+     */
+    async finalizeHandshake(req, res) {
+        try {
+            const { handshakeId, clientPublicKey, clientCiphertext } = req.body;
+            const cachedKeysStr = await (0, redis_1.getCache)(`pqc:handshake:${handshakeId}`);
+            if (!cachedKeysStr) {
+                return res.status(400).json({ error: 'Handshake session expired or invalid' });
+            }
+            const myKeys = JSON.parse(cachedKeysStr);
+            // Derive Symmetric Key
+            const symmetricKey = await this.pqcService.deriveSymmetricKey(myKeys.classic.private, clientPublicKey.classic, myKeys.pqc.private, clientCiphertext);
+            // Store the final session secret for this Sovereign Session
+            const sessionToken = node_crypto_1.default.randomUUID();
+            await (0, redis_1.setCache)(`sovereign:session:${sessionToken}`, symmetricKey, 3600); // 1 hour TTL
+            return res.json({
+                success: true,
+                sessionToken,
+                // The client already knows the symmetric key if they encapsulated correctly
+                message: 'Sovereign channel established.',
+            });
+        }
+        catch (error) {
+            logger_1.logger.error('[SovereignHandshake] Finalization failed:', error);
+            return res.status(500).json({ error: 'Handshake finalization failed' });
+        }
+    }
+};
+exports.SovereignHandshakeController = SovereignHandshakeController;
+__decorate([
+    (0, inversify_express_utils_1.httpGet)('/handshake/init'),
+    __param(0, (0, inversify_express_utils_1.request)()),
+    __param(1, (0, inversify_express_utils_1.response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _b : Object, typeof (_c = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _c : Object]),
+    __metadata("design:returntype", Promise)
+], SovereignHandshakeController.prototype, "initHandshake", null);
+__decorate([
+    (0, inversify_express_utils_1.httpPost)('/handshake/finalize'),
+    __param(0, (0, inversify_express_utils_1.request)()),
+    __param(1, (0, inversify_express_utils_1.response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_d = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _d : Object, typeof (_e = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _e : Object]),
+    __metadata("design:returntype", Promise)
+], SovereignHandshakeController.prototype, "finalizeHandshake", null);
+exports.SovereignHandshakeController = SovereignHandshakeController = __decorate([
+    (0, inversify_express_utils_1.controller)('/auth/sovereign'),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.PQCCommService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof pqc_comm_service_1.PQCCommService !== "undefined" && pqc_comm_service_1.PQCCommService) === "function" ? _a : Object])
+], SovereignHandshakeController);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxjb250cm9sbGVyc1xcU292ZXJlaWduSGFuZHNoYWtlQ29udHJvbGxlci50cyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEscUNBQTRDO0FBQzVDLHlDQUFtQztBQUNuQyxxRUFBMkY7QUFDM0Ysb0NBQWlDO0FBQ2pDLG1FQUE4RDtBQUM5RCw0Q0FBeUM7QUFDekMsMENBQW9EO0FBQ3BELDhEQUFpQztBQUcxQixJQUFNLDRCQUE0QixHQUFsQyxNQUFNLDRCQUE0QjtJQUNXO0lBQWxELFlBQWtELFVBQTBCO1FBQTFCLGVBQVUsR0FBVixVQUFVLENBQWdCO0lBQUcsQ0FBQztJQUVoRjs7O09BR0c7SUFFVSxBQUFOLEtBQUssQ0FBQyxhQUFhLENBQVksR0FBWSxFQUFjLEdBQWE7UUFDM0UsSUFBSSxDQUFDO1lBQ0gsTUFBTSxXQUFXLEdBQUcscUJBQU0sQ0FBQyxVQUFVLEVBQUUsQ0FBQztZQUN4QyxNQUFNLElBQUksR0FBRyxNQUFNLElBQUksQ0FBQyxVQUFVLENBQUMscUJBQXFCLEVBQUUsQ0FBQztZQUUzRCwwREFBMEQ7WUFDMUQsTUFBTSxJQUFBLGdCQUFRLEVBQUMsaUJBQWlCLFdBQVcsRUFBRSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLEVBQUUsR0FBRyxDQUFDLENBQUMsQ0FBQyxZQUFZO1lBRXZGLE9BQU8sR0FBRyxDQUFDLElBQUksQ0FBQztnQkFDZCxPQUFPLEVBQUUsSUFBSTtnQkFDYixXQUFXO2dCQUNYLFNBQVMsRUFBRTtvQkFDVCxPQUFPLEVBQUUsSUFBSSxDQUFDLE9BQU8sQ0FBQyxNQUFNO29CQUM1QixHQUFHLEVBQUUsSUFBSSxDQUFDLEdBQUcsQ0FBQyxNQUFNO2lCQUNyQjthQUNGLENBQUMsQ0FBQztRQUNMLENBQUM7UUFBQyxPQUFPLEtBQVUsRUFBRSxDQUFDO1lBQ3BCLGVBQU0sQ0FBQyxLQUFLLENBQUMsbUNBQW1DLEVBQUUsS0FBSyxDQUFDLENBQUM7WUFDekQsT0FBTyxHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxFQUFFLEtBQUssRUFBRSxpQ0FBaUMsRUFBRSxDQUFDLENBQUM7UUFDNUUsQ0FBQztJQUNILENBQUM7SUFFRDs7O09BR0c7SUFFVSxBQUFOLEtBQUssQ0FBQyxpQkFBaUIsQ0FBWSxHQUFZLEVBQWMsR0FBYTtRQUMvRSxJQUFJLENBQUM7WUFDSCxNQUFNLEVBQUUsV0FBVyxFQUFFLGVBQWUsRUFBRSxnQkFBZ0IsRUFBRSxHQUFHLEdBQUcsQ0FBQyxJQUFJLENBQUM7WUFFcEUsTUFBTSxhQUFhLEdBQUcsTUFBTSxJQUFBLGdCQUFRLEVBQUMsaUJBQWlCLFdBQVcsRUFBRSxDQUFDLENBQUM7WUFDckUsSUFBSSxDQUFDLGFBQWEsRUFBRSxDQUFDO2dCQUNuQixPQUFPLEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDLEVBQUUsS0FBSyxFQUFFLHNDQUFzQyxFQUFFLENBQUMsQ0FBQztZQUNqRixDQUFDO1lBRUQsTUFBTSxNQUFNLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBQyxhQUFhLENBQUMsQ0FBQztZQUV6Qyx1QkFBdUI7WUFDdkIsTUFBTSxZQUFZLEdBQUcsTUFBTSxJQUFJLENBQUMsVUFBVSxDQUFDLGtCQUFrQixDQUMzRCxNQUFNLENBQUMsT0FBTyxDQUFDLE9BQU8sRUFDdEIsZUFBZSxDQUFDLE9BQU8sRUFDdkIsTUFBTSxDQUFDLEdBQUcsQ0FBQyxPQUFPLEVBQ2xCLGdCQUFnQixDQUNqQixDQUFDO1lBRUYsNERBQTREO1lBQzVELE1BQU0sWUFBWSxHQUFHLHFCQUFNLENBQUMsVUFBVSxFQUFFLENBQUM7WUFDekMsTUFBTSxJQUFBLGdCQUFRLEVBQUMscUJBQXFCLFlBQVksRUFBRSxFQUFFLFlBQVksRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDLGFBQWE7WUFFdEYsT0FBTyxHQUFHLENBQUMsSUFBSSxDQUFDO2dCQUNkLE9BQU8sRUFBRSxJQUFJO2dCQUNiLFlBQVk7Z0JBQ1osNEVBQTRFO2dCQUM1RSxPQUFPLEVBQUUsZ0NBQWdDO2FBQzFDLENBQUMsQ0FBQztRQUNMLENBQUM7UUFBQyxPQUFPLEtBQVUsRUFBRSxDQUFDO1lBQ3BCLGVBQU0sQ0FBQyxLQUFLLENBQUMsMkNBQTJDLEVBQUUsS0FBSyxDQUFDLENBQUM7WUFDakUsT0FBTyxHQUFHLENBQUMsTUFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLElBQUksQ0FBQyxFQUFFLEtBQUssRUFBRSwrQkFBK0IsRUFBRSxDQUFDLENBQUM7UUFDMUUsQ0FBQztJQUNILENBQUM7Q0FDRixDQUFBO0FBckVZLG9FQUE0QjtBQVExQjtJQURaLElBQUEsaUNBQU8sRUFBQyxpQkFBaUIsQ0FBQztJQUNDLFdBQUEsSUFBQSxpQ0FBTyxHQUFFLENBQUE7SUFBZ0IsV0FBQSxJQUFBLGtDQUFRLEdBQUUsQ0FBQTs7eURBQXBCLGlCQUFPLG9CQUFQLGlCQUFPLG9EQUFtQixrQkFBUSxvQkFBUixrQkFBUTs7aUVBb0I1RTtBQU9ZO0lBRFosSUFBQSxrQ0FBUSxFQUFDLHFCQUFxQixDQUFDO0lBQ0EsV0FBQSxJQUFBLGlDQUFPLEdBQUUsQ0FBQTtJQUFnQixXQUFBLElBQUEsa0NBQVEsR0FBRSxDQUFBOzt5REFBcEIsaUJBQU8sb0JBQVAsaUJBQU8sb0RBQW1CLGtCQUFRLG9CQUFSLGtCQUFROztxRUFpQ2hGO3VDQXBFVSw0QkFBNEI7SUFEeEMsSUFBQSxvQ0FBVSxFQUFDLGlCQUFpQixDQUFDO0lBRWYsV0FBQSxJQUFBLGtCQUFNLEVBQUMsYUFBSyxDQUFDLGNBQWMsQ0FBQyxDQUFBO3lEQUFxQixpQ0FBYyxvQkFBZCxpQ0FBYztHQURqRSw0QkFBNEIsQ0FxRXhDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcY29udHJvbGxlcnNcXFNvdmVyZWlnbkhhbmRzaGFrZUNvbnRyb2xsZXIudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgUmVxdWVzdCwgUmVzcG9uc2UgfSBmcm9tICdleHByZXNzJztcclxuaW1wb3J0IHsgaW5qZWN0IH0gZnJvbSAnaW52ZXJzaWZ5JztcclxuaW1wb3J0IHsgY29udHJvbGxlciwgaHR0cEdldCwgaHR0cFBvc3QsIHJlcXVlc3QsIHJlc3BvbnNlIH0gZnJvbSAnaW52ZXJzaWZ5LWV4cHJlc3MtdXRpbHMnO1xyXG5pbXBvcnQgeyBUWVBFUyB9IGZyb20gJy4uL3R5cGVzJztcclxuaW1wb3J0IHsgUFFDQ29tbVNlcnZpY2UgfSBmcm9tICcuLi9zZXJ2aWNlcy9wcWMtY29tbS5zZXJ2aWNlJztcclxuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcclxuaW1wb3J0IHsgc2V0Q2FjaGUsIGdldENhY2hlIH0gZnJvbSAnLi4vY2FjaGUvcmVkaXMnO1xyXG5pbXBvcnQgY3J5cHRvIGZyb20gJ25vZGU6Y3J5cHRvJztcclxuXHJcbkBjb250cm9sbGVyKCcvYXV0aC9zb3ZlcmVpZ24nKVxyXG5leHBvcnQgY2xhc3MgU292ZXJlaWduSGFuZHNoYWtlQ29udHJvbGxlciB7XHJcbiAgY29uc3RydWN0b3IoQGluamVjdChUWVBFUy5QUUNDb21tU2VydmljZSkgcHJpdmF0ZSBwcWNTZXJ2aWNlOiBQUUNDb21tU2VydmljZSkge31cclxuXHJcbiAgLyoqXHJcbiAgICog8J+MjCBTdGVwIDE6IEluaXRpYXRlIEhhbmRzaGFrZVxyXG4gICAqIFNlcnZlciBwcm92aWRlcyBpdHMgcHVibGljIGh5YnJpZCBrZXlzLlxyXG4gICAqL1xyXG4gIEBodHRwR2V0KCcvaGFuZHNoYWtlL2luaXQnKVxyXG4gIHB1YmxpYyBhc3luYyBpbml0SGFuZHNoYWtlKEByZXF1ZXN0KCkgcmVxOiBSZXF1ZXN0LCBAcmVzcG9uc2UoKSByZXM6IFJlc3BvbnNlKSB7XHJcbiAgICB0cnkge1xyXG4gICAgICBjb25zdCBoYW5kc2hha2VJZCA9IGNyeXB0by5yYW5kb21VVUlEKCk7XHJcbiAgICAgIGNvbnN0IGtleXMgPSBhd2FpdCB0aGlzLnBxY1NlcnZpY2UuZ2VuZXJhdGVIYW5kc2hha2VLZXlzKCk7XHJcblxyXG4gICAgICAvLyBTdG9yZSBwcml2YXRlIGtleXMgaW4gUmVkaXMgKHRyYW5zaWVudCkgZm9yIHRoZSBzZXNzaW9uXHJcbiAgICAgIGF3YWl0IHNldENhY2hlKGBwcWM6aGFuZHNoYWtlOiR7aGFuZHNoYWtlSWR9YCwgSlNPTi5zdHJpbmdpZnkoa2V5cyksIDMwMCk7IC8vIDUgbWluIFRUTFxyXG5cclxuICAgICAgcmV0dXJuIHJlcy5qc29uKHtcclxuICAgICAgICBzdWNjZXNzOiB0cnVlLFxyXG4gICAgICAgIGhhbmRzaGFrZUlkLFxyXG4gICAgICAgIHB1YmxpY0tleToge1xyXG4gICAgICAgICAgY2xhc3NpYzoga2V5cy5jbGFzc2ljLnB1YmxpYyxcclxuICAgICAgICAgIHBxYzoga2V5cy5wcWMucHVibGljLFxyXG4gICAgICAgIH0sXHJcbiAgICAgIH0pO1xyXG4gICAgfSBjYXRjaCAoZXJyb3I6IGFueSkge1xyXG4gICAgICBsb2dnZXIuZXJyb3IoJ1tTb3ZlcmVpZ25IYW5kc2hha2VdIEluaXQgZmFpbGVkOicsIGVycm9yKTtcclxuICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgZXJyb3I6ICdIYW5kc2hha2UgaW5pdGlhbGl6YXRpb24gZmFpbGVkJyB9KTtcclxuICAgIH1cclxuICB9XHJcblxyXG4gIC8qKlxyXG4gICAqIPCfjIwgU3RlcCAyOiBGaW5hbGl6ZSBIYW5kc2hha2VcclxuICAgKiBSZWNlaXZlIGNsaWVudCBrZXlzLCBkZXJpdmUgc3ltbWV0cmljIHNlY3JldC5cclxuICAgKi9cclxuICBAaHR0cFBvc3QoJy9oYW5kc2hha2UvZmluYWxpemUnKVxyXG4gIHB1YmxpYyBhc3luYyBmaW5hbGl6ZUhhbmRzaGFrZShAcmVxdWVzdCgpIHJlcTogUmVxdWVzdCwgQHJlc3BvbnNlKCkgcmVzOiBSZXNwb25zZSkge1xyXG4gICAgdHJ5IHtcclxuICAgICAgY29uc3QgeyBoYW5kc2hha2VJZCwgY2xpZW50UHVibGljS2V5LCBjbGllbnRDaXBoZXJ0ZXh0IH0gPSByZXEuYm9keTtcclxuXHJcbiAgICAgIGNvbnN0IGNhY2hlZEtleXNTdHIgPSBhd2FpdCBnZXRDYWNoZShgcHFjOmhhbmRzaGFrZToke2hhbmRzaGFrZUlkfWApO1xyXG4gICAgICBpZiAoIWNhY2hlZEtleXNTdHIpIHtcclxuICAgICAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDApLmpzb24oeyBlcnJvcjogJ0hhbmRzaGFrZSBzZXNzaW9uIGV4cGlyZWQgb3IgaW52YWxpZCcgfSk7XHJcbiAgICAgIH1cclxuXHJcbiAgICAgIGNvbnN0IG15S2V5cyA9IEpTT04ucGFyc2UoY2FjaGVkS2V5c1N0cik7XHJcblxyXG4gICAgICAvLyBEZXJpdmUgU3ltbWV0cmljIEtleVxyXG4gICAgICBjb25zdCBzeW1tZXRyaWNLZXkgPSBhd2FpdCB0aGlzLnBxY1NlcnZpY2UuZGVyaXZlU3ltbWV0cmljS2V5KFxyXG4gICAgICAgIG15S2V5cy5jbGFzc2ljLnByaXZhdGUsXHJcbiAgICAgICAgY2xpZW50UHVibGljS2V5LmNsYXNzaWMsXHJcbiAgICAgICAgbXlLZXlzLnBxYy5wcml2YXRlLFxyXG4gICAgICAgIGNsaWVudENpcGhlcnRleHQsIC8vIENsaWVudCBzaG91bGQgaGF2ZSBlbmNhcHN1bGF0ZWQgZm9yIHVzXHJcbiAgICAgICk7XHJcblxyXG4gICAgICAvLyBTdG9yZSB0aGUgZmluYWwgc2Vzc2lvbiBzZWNyZXQgZm9yIHRoaXMgU292ZXJlaWduIFNlc3Npb25cclxuICAgICAgY29uc3Qgc2Vzc2lvblRva2VuID0gY3J5cHRvLnJhbmRvbVVVSUQoKTtcclxuICAgICAgYXdhaXQgc2V0Q2FjaGUoYHNvdmVyZWlnbjpzZXNzaW9uOiR7c2Vzc2lvblRva2VufWAsIHN5bW1ldHJpY0tleSwgMzYwMCk7IC8vIDEgaG91ciBUVExcclxuXHJcbiAgICAgIHJldHVybiByZXMuanNvbih7XHJcbiAgICAgICAgc3VjY2VzczogdHJ1ZSxcclxuICAgICAgICBzZXNzaW9uVG9rZW4sXHJcbiAgICAgICAgLy8gVGhlIGNsaWVudCBhbHJlYWR5IGtub3dzIHRoZSBzeW1tZXRyaWMga2V5IGlmIHRoZXkgZW5jYXBzdWxhdGVkIGNvcnJlY3RseVxyXG4gICAgICAgIG1lc3NhZ2U6ICdTb3ZlcmVpZ24gY2hhbm5lbCBlc3RhYmxpc2hlZC4nLFxyXG4gICAgICB9KTtcclxuICAgIH0gY2F0Y2ggKGVycm9yOiBhbnkpIHtcclxuICAgICAgbG9nZ2VyLmVycm9yKCdbU292ZXJlaWduSGFuZHNoYWtlXSBGaW5hbGl6YXRpb24gZmFpbGVkOicsIGVycm9yKTtcclxuICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgZXJyb3I6ICdIYW5kc2hha2UgZmluYWxpemF0aW9uIGZhaWxlZCcgfSk7XHJcbiAgICB9XHJcbiAgfVxyXG59XHJcbiJdLCJ2ZXJzaW9uIjozfQ==

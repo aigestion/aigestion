@@ -15,6 +15,9 @@ export const useSound = () => {
   const playClick = useCallback(() => play('click_activate'), [play]);
   const playWuaw = useCallback(() => play('wuaw_subtle'), [play]);
   const playPulse = useCallback(() => play('data_pulse'), [play]);
+  const playSuccess = useCallback(() => play('success_chime'), [play]);
+  const playError = useCallback(() => play('error_buzzer'), [play]);
+  const playMenu = useCallback(() => play('menu_open'), [play]);
 
   return {
     play,
@@ -22,5 +25,9 @@ export const useSound = () => {
     playClick,
     playWuaw,
     playPulse,
+    playSuccess,
+    playError,
+    playMenu,
   };
+
 };

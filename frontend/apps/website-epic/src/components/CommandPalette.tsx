@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useSound } from '../hooks/useSound';
 import { Search, Map, CreditCard, User, Box, Shield, Zap } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useAppContext } from '../contexts/AppContext';
+
 
 interface CommandItem {
   id: string;
@@ -14,6 +16,8 @@ interface CommandItem {
 
 export const CommandPalette: React.FC = () => {
   const { playHover, playClick } = useSound();
+  const { setIsContactModalOpen } = useAppContext();
+
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -37,9 +41,10 @@ export const CommandPalette: React.FC = () => {
       id: '3',
       icon: <User className="w-4 h-4" />,
       title: 'Contactar Ventas',
-      path: '/contact',
+      action: () => setIsContactModalOpen(true),
       shortcut: 'C',
     },
+
     {
       id: '4',
       icon: <Box className="w-4 h-4" />,

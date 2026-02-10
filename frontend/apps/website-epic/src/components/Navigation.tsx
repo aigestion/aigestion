@@ -3,11 +3,14 @@ import { ChevronRight, Lock, Menu, Rocket, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSoundEffects } from '../hooks/useSoundEffects';
+import { useAppContext } from '../contexts/AppContext';
 import { MagneticWrapper } from './MagneticWrapper';
+
 import { SoundControl } from './SoundControl';
 
 export const Navigation: React.FC = () => {
   const { playHover, playClick } = useSoundEffects();
+  const { setIsContactModalOpen } = useAppContext();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -26,18 +29,23 @@ export const Navigation: React.FC = () => {
     { label: 'Precios', path: '#pricing', isHash: true },
     { label: 'Soluciones', path: '#plan', isHash: true },
     { label: 'Tutoriales', path: '#tutoriales', isHash: true },
-    { label: 'Contacto', path: '#contact', isHash: true },
+    { label: 'Contacto', path: '#contact', isHash: true, isModal: true },
     { label: 'Panel de Control', path: '/dashboard' },
   ];
 
-  const handleLinkClick = (path: string, isHash?: boolean) => {
+  const handleLinkClick = (path: string, isHash?: boolean, isModal?: boolean) => {
     playClick();
     setIsMobileMenuOpen(false);
+    if (isModal) {
+      setIsContactModalOpen(true);
+      return;
+    }
     if (isHash) {
       const element = document.querySelector(path);
       element?.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
 
   return (
     <motion.nav
@@ -87,10 +95,11 @@ export const Navigation: React.FC = () => {
               onClick={e => {
                 if (item.isHash) {
                   e.preventDefault();
-                  handleLinkClick(item.path, true);
+                  handleLinkClick(item.path, true, item.isModal);
                 } else {
-                  handleLinkClick(item.path);
+                  handleLinkClick(item.path, false, item.isModal);
                 }
+
               }}
               onMouseEnter={playHover}
               className={`relative font-orbitron text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:text-white ${
@@ -164,11 +173,12 @@ export const Navigation: React.FC = () => {
                     onClick={e => {
                       if (item.isHash) {
                         e.preventDefault();
-                        handleLinkClick(item.path, true);
+                        handleLinkClick(item.path, true, item.isModal);
                       } else {
-                        handleLinkClick(item.path);
+                        handleLinkClick(item.path, false, item.isModal);
                       }
                     }}
+
                     className="flex items-center justify-between py-4 border-b border-white/5 group"
                   >
                     <span className="font-orbitron font-medium text-[11px] tracking-[0.3em] uppercase text-nexus-silver/60 group-hover:text-white transition-colors">

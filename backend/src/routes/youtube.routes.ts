@@ -1,11 +1,15 @@
 import { Router } from 'express';
 import { z } from 'zod';
 
-import { buildError, buildResponse } from '../common/response-builder';
-import { youtubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
+import { container } from '../config/inversify.config';
+import { YoutubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
+import { TYPES } from '../types';
 import { logger } from '../utils/logger';
 
 const youtubeRouter = Router();
+const youtubeTranscriptionQueue = container.get<YoutubeTranscriptionQueue>(
+  TYPES.YoutubeTranscriptionQueue,
+);
 
 const TranscribeSchema = z.object({
   videoUrl: z.string().url(),

@@ -4,3 +4,5 @@ packages:
   - 'frontend/apps/*'
   - 'ml-service'
   - 'aig-ia-engine'
+  - 'android'
+  - 'mobile'

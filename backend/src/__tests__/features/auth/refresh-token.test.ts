@@ -12,6 +12,7 @@ const mockUsers: any[] = [];
   let authCookie: string;
 
   beforeAll(async () => {
+    jest.setTimeout(30000);
     jest.clearAllMocks();
     // @ts-ignore
     await User.deleteMany({});

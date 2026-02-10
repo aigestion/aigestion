@@ -1,4 +1,4 @@
-import { Service } from 'typedi';
+import { injectable } from 'inversify';
 import axios from 'axios';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
@@ -16,7 +16,7 @@ interface CaptureOrderResponse {
   payer: any;
 }
 
-@Service()
+@injectable()
 export class PayPalService {
   private baseUrl: string;
   private clientId: string;
@@ -29,26 +29,25 @@ export class PayPalService {
   private captureOrderBreaker: any;
 
   constructor() {
-    this.baseUrl = env.PAYPAL_MODE === 'live'
-      ? 'https://api-m.paypal.com'
-      : 'https://api-m.sandbox.paypal.com';
+    this.baseUrl =
+      env.PAYPAL_MODE === 'live' ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com';
 
     this.clientId = env.PAYPAL_CLIENT_ID || '';
     this.clientSecret = env.PAYPAL_CLIENT_SECRET || '';
 
     if (!this.clientId || !this.clientSecret) {
-        logger.warn('PayPal credentials missing. PayPalService will not function.');
+      logger.warn('PayPal credentials missing. PayPalService will not function.');
     }
 
     // Initialize Circuit Breakers
     this.createOrderBreaker = CircuitBreakerFactory.create(
       (amount: string, currency: string) => this.createOrderInternal(amount, currency),
-      { name: 'PayPal.createOrder' }
+      { name: 'PayPal.createOrder' },
     );
 
     this.captureOrderBreaker = CircuitBreakerFactory.create(
       (orderId: string) => this.captureOrderInternal(orderId),
-      { name: 'PayPal.captureOrder' }
+      { name: 'PayPal.captureOrder' },
     );
   }
 
@@ -65,14 +64,14 @@ export class PayPalService {
         'grant_type=client_credentials',
         {
           headers: {
-            'Authorization': `Basic ${auth}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }
+            Authorization: `Basic ${auth}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
       );
 
       this.accessToken = response.data.access_token;
-      this.tokenExpiry = Date.now() + (response.data.expires_in * 1000) - 60000; // Buffer 1 min
+      this.tokenExpiry = Date.now() + response.data.expires_in * 1000 - 60000; // Buffer 1 min
       return this.accessToken!;
     } catch (error) {
       logger.error(error, 'Failed to get PayPal access token');
@@ -81,10 +80,13 @@ export class PayPalService {
   }
 
   async createOrder(amount: string, currency: string = 'USD'): Promise<CreateOrderResponse> {
-      return this.createOrderBreaker.fire(amount, currency);
+    return this.createOrderBreaker.fire(amount, currency);
   }
 
-  private async createOrderInternal(amount: string, currency: string): Promise<CreateOrderResponse> {
+  private async createOrderInternal(
+    amount: string,
+    currency: string,
+  ): Promise<CreateOrderResponse> {
     const token = await this.getAccessToken();
 
     try {
@@ -96,17 +98,17 @@ export class PayPalService {
             {
               amount: {
                 currency_code: currency,
-                value: amount
-              }
-            }
-          ]
+                value: amount,
+              },
+            },
+          ],
         },
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
       );
 
       return response.data;
@@ -117,7 +119,7 @@ export class PayPalService {
   }
 
   async captureOrder(orderId: string): Promise<CaptureOrderResponse> {
-      return this.captureOrderBreaker.fire(orderId);
+    return this.captureOrderBreaker.fire(orderId);
   }
 
   private async captureOrderInternal(orderId: string): Promise<CaptureOrderResponse> {
@@ -129,10 +131,10 @@ export class PayPalService {
         {},
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
       );
 
       return response.data;

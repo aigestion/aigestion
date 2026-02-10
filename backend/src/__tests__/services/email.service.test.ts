@@ -2,8 +2,7 @@ import 'reflect-metadata';
 
 import { jest } from '@jest/globals';
 import nodemailer from 'nodemailer';
-import { Container } from 'typedi';
-
+import { container, TYPES } from '../../config/inversify.config';
 import { EmailService } from '../../services/email.service';
 
 const mockSendMail = jest.fn();
@@ -24,7 +23,7 @@ describe('EmailService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    service = Container.get(EmailService);
+    service = container.get<EmailService>(TYPES.EmailService);
   });
 
   it('should create transporter on initialization', () => {
@@ -48,7 +47,11 @@ describe('EmailService', () => {
   describe('sendEmail', () => {
     it('should send email successfully', async () => {
       mockSendMail.mockResolvedValue({ messageId: 'test-id' });
-      await service.sendEmail('test@example.com', 'Test Subject', 'Test Body');
+      await service.sendEmail({
+        to: 'test@example.com',
+        subject: 'Test Subject',
+        html: 'Test Body',
+      });
       expect(mockSendMail).toHaveBeenCalledWith(
         expect.objectContaining({
           to: 'test@example.com',
@@ -58,9 +61,10 @@ describe('EmailService', () => {
       );
     });
 
-    it('should throw error on failure', async () => {
+    it('should return false on failure', async () => {
       mockSendMail.mockRejectedValue(new Error('Send failed'));
-      await expect(service.sendEmail('test', 'test', 'test')).rejects.toThrow('Send failed');
+      const result = await service.sendEmail({ to: 'test', subject: 'test', html: 'test' });
+      expect(result).toBe(false);
     });
   });
 });

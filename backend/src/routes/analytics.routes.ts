@@ -1,23 +1,27 @@
 import { Router } from 'express';
-
-import {
-  exportReport,
-  getAnalyticsOverview,
-  getDashboardData,
-  getErrorRates,
-  getSystemUsage,
-  getUserActivity,
-} from '../controllers/analytics.controller';
-
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
+import { AnalyticsController } from '../controllers/analytics.controller';
 import { cacheMiddleware } from '../middleware/cache.middleware';
 
 const router = Router();
+const controller = container.get<AnalyticsController>(TYPES.AnalyticsController);
 
-router.get('/overview', cacheMiddleware(600), getAnalyticsOverview);
-router.get('/user-activity', cacheMiddleware(300), getUserActivity);
-router.get('/system-usage', cacheMiddleware(120), getSystemUsage);
-router.get('/error-rates', cacheMiddleware(60), getErrorRates);
-router.get('/dashboard-data', cacheMiddleware(300), getDashboardData);
-router.get('/export', exportReport);
+router.get('/overview', cacheMiddleware(600), (req, res, next) =>
+  controller.getAnalyticsOverview(req, res, next),
+);
+router.get('/user-activity', cacheMiddleware(300), (req, res, next) =>
+  controller.getUserActivity(req, res, next),
+);
+router.get('/system-usage', cacheMiddleware(120), (req, res, next) =>
+  controller.getSystemUsage(req, res, next),
+);
+router.get('/error-rates', cacheMiddleware(60), (req, res, next) =>
+  controller.getErrorRates(req, res, next),
+);
+router.get('/dashboard-data', cacheMiddleware(300), (req, res, next) =>
+  controller.getDashboardData(req, res, next),
+);
+router.get('/export', (req, res, next) => controller.exportReport(req, res, next));
 
 export default router;

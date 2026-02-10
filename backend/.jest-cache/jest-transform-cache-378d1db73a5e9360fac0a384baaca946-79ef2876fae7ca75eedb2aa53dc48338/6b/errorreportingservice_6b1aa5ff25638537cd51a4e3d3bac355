@@ -1,0 +1,63 @@
+14e3f5c69998d8566cdc62a3a3b2775d
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ErrorReportingService = void 0;
+const error_reporting_1 = require("@google-cloud/error-reporting");
+const inversify_1 = require("inversify");
+const logger_1 = require("../../utils/logger");
+const config_1 = require("../../config/config");
+let ErrorReportingService = class ErrorReportingService {
+    errors = null;
+    constructor() {
+        if (config_1.config.nodeEnv === 'production') {
+            try {
+                this.errors = new error_reporting_1.ErrorReporting({
+                    reportMode: 'always',
+                    serviceContext: {
+                        service: 'aigestion-backend',
+                        version: '1.0.0',
+                    },
+                });
+                logger_1.logger.info('Google Cloud Error Reporting initialized');
+            }
+            catch (err) {
+                logger_1.logger.error('Failed to initialize Google Cloud Error Reporting', err);
+            }
+        }
+    }
+    /**
+     * Report an error to Google Cloud
+     */
+    report(err, req) {
+        if (this.errors) {
+            this.errors.report(err, req);
+        }
+        else {
+            // Fallback for development or if initialization failed
+            logger_1.logger.error('[ErrorReporting Fallback]:', err);
+        }
+    }
+    /**
+     * Report a specific security violation or custom event
+     */
+    reportViolation(type, details) {
+        const error = new Error(`Security Violation: ${type}`);
+        error.details = details;
+        this.report(error);
+    }
+};
+exports.ErrorReportingService = ErrorReportingService;
+exports.ErrorReportingService = ErrorReportingService = __decorate([
+    (0, inversify_1.injectable)(),
+    __metadata("design:paramtypes", [])
+], ErrorReportingService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcZ29vZ2xlXFxlcnJvci1yZXBvcnRpbmcuc2VydmljZS50cyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFBQSxtRUFBK0Q7QUFDL0QseUNBQXVDO0FBQ3ZDLCtDQUE0QztBQUM1QyxnREFBNkM7QUFHdEMsSUFBTSxxQkFBcUIsR0FBM0IsTUFBTSxxQkFBcUI7SUFDeEIsTUFBTSxHQUEwQixJQUFJLENBQUM7SUFFN0M7UUFDRSxJQUFJLGVBQU0sQ0FBQyxPQUFPLEtBQUssWUFBWSxFQUFFLENBQUM7WUFDcEMsSUFBSSxDQUFDO2dCQUNILElBQUksQ0FBQyxNQUFNLEdBQUcsSUFBSSxnQ0FBYyxDQUFDO29CQUMvQixVQUFVLEVBQUUsUUFBUTtvQkFDcEIsY0FBYyxFQUFFO3dCQUNkLE9BQU8sRUFBRSxtQkFBbUI7d0JBQzVCLE9BQU8sRUFBRSxPQUFPO3FCQUNqQjtpQkFDRixDQUFDLENBQUM7Z0JBQ0gsZUFBTSxDQUFDLElBQUksQ0FBQywwQ0FBMEMsQ0FBQyxDQUFDO1lBQzFELENBQUM7WUFBQyxPQUFPLEdBQUcsRUFBRSxDQUFDO2dCQUNiLGVBQU0sQ0FBQyxLQUFLLENBQUMsbURBQW1ELEVBQUUsR0FBRyxDQUFDLENBQUM7WUFDekUsQ0FBQztRQUNILENBQUM7SUFDSCxDQUFDO0lBRUQ7O09BRUc7SUFDSSxNQUFNLENBQUMsR0FBUSxFQUFFLEdBQVM7UUFDL0IsSUFBSSxJQUFJLENBQUMsTUFBTSxFQUFFLENBQUM7WUFDaEIsSUFBSSxDQUFDLE1BQU0sQ0FBQyxNQUFNLENBQUMsR0FBRyxFQUFFLEdBQUcsQ0FBQyxDQUFDO1FBQy9CLENBQUM7YUFBTSxDQUFDO1lBQ04sdURBQXVEO1lBQ3ZELGVBQU0sQ0FBQyxLQUFLLENBQUMsNEJBQTRCLEVBQUUsR0FBRyxDQUFDLENBQUM7UUFDbEQsQ0FBQztJQUNILENBQUM7SUFFRDs7T0FFRztJQUNJLGVBQWUsQ0FBQyxJQUFZLEVBQUUsT0FBWTtRQUMvQyxNQUFNLEtBQUssR0FBRyxJQUFJLEtBQUssQ0FBQyx1QkFBdUIsSUFBSSxFQUFFLENBQUMsQ0FBQztRQUN0RCxLQUFhLENBQUMsT0FBTyxHQUFHLE9BQU8sQ0FBQztRQUVqQyxJQUFJLENBQUMsTUFBTSxDQUFDLEtBQUssQ0FBQyxDQUFDO0lBQ3JCLENBQUM7Q0FDRixDQUFBO0FBekNZLHNEQUFxQjtnQ0FBckIscUJBQXFCO0lBRGpDLElBQUEsc0JBQVUsR0FBRTs7R0FDQSxxQkFBcUIsQ0F5Q2pDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXGdvb2dsZVxcZXJyb3ItcmVwb3J0aW5nLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgRXJyb3JSZXBvcnRpbmcgfSBmcm9tICdAZ29vZ2xlLWNsb3VkL2Vycm9yLXJlcG9ydGluZyc7XG5pbXBvcnQgeyBpbmplY3RhYmxlIH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB7IGxvZ2dlciB9IGZyb20gJy4uLy4uL3V0aWxzL2xvZ2dlcic7XG5pbXBvcnQgeyBjb25maWcgfSBmcm9tICcuLi8uLi9jb25maWcvY29uZmlnJztcblxuQGluamVjdGFibGUoKVxuZXhwb3J0IGNsYXNzIEVycm9yUmVwb3J0aW5nU2VydmljZSB7XG4gIHByaXZhdGUgZXJyb3JzOiBFcnJvclJlcG9ydGluZyB8IG51bGwgPSBudWxsO1xuXG4gIGNvbnN0cnVjdG9yKCkge1xuICAgIGlmIChjb25maWcubm9kZUVudiA9PT0gJ3Byb2R1Y3Rpb24nKSB7XG4gICAgICB0cnkge1xuICAgICAgICB0aGlzLmVycm9ycyA9IG5ldyBFcnJvclJlcG9ydGluZyh7XG4gICAgICAgICAgcmVwb3J0TW9kZTogJ2Fsd2F5cycsXG4gICAgICAgICAgc2VydmljZUNvbnRleHQ6IHtcbiAgICAgICAgICAgIHNlcnZpY2U6ICdhaWdlc3Rpb24tYmFja2VuZCcsXG4gICAgICAgICAgICB2ZXJzaW9uOiAnMS4wLjAnLFxuICAgICAgICAgIH0sXG4gICAgICAgIH0pO1xuICAgICAgICBsb2dnZXIuaW5mbygnR29vZ2xlIENsb3VkIEVycm9yIFJlcG9ydGluZyBpbml0aWFsaXplZCcpO1xuICAgICAgfSBjYXRjaCAoZXJyKSB7XG4gICAgICAgIGxvZ2dlci5lcnJvcignRmFpbGVkIHRvIGluaXRpYWxpemUgR29vZ2xlIENsb3VkIEVycm9yIFJlcG9ydGluZycsIGVycik7XG4gICAgICB9XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIFJlcG9ydCBhbiBlcnJvciB0byBHb29nbGUgQ2xvdWRcbiAgICovXG4gIHB1YmxpYyByZXBvcnQoZXJyOiBhbnksIHJlcT86IGFueSk6IHZvaWQge1xuICAgIGlmICh0aGlzLmVycm9ycykge1xuICAgICAgdGhpcy5lcnJvcnMucmVwb3J0KGVyciwgcmVxKTtcbiAgICB9IGVsc2Uge1xuICAgICAgLy8gRmFsbGJhY2sgZm9yIGRldmVsb3BtZW50IG9yIGlmIGluaXRpYWxpemF0aW9uIGZhaWxlZFxuICAgICAgbG9nZ2VyLmVycm9yKCdbRXJyb3JSZXBvcnRpbmcgRmFsbGJhY2tdOicsIGVycik7XG4gICAgfVxuICB9XG5cbiAgLyoqXG4gICAqIFJlcG9ydCBhIHNwZWNpZmljIHNlY3VyaXR5IHZpb2xhdGlvbiBvciBjdXN0b20gZXZlbnRcbiAgICovXG4gIHB1YmxpYyByZXBvcnRWaW9sYXRpb24odHlwZTogc3RyaW5nLCBkZXRhaWxzOiBhbnkpOiB2b2lkIHtcbiAgICBjb25zdCBlcnJvciA9IG5ldyBFcnJvcihgU2VjdXJpdHkgVmlvbGF0aW9uOiAke3R5cGV9YCk7XG4gICAgKGVycm9yIGFzIGFueSkuZGV0YWlscyA9IGRldGFpbHM7XG5cbiAgICB0aGlzLnJlcG9ydChlcnJvcik7XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==
