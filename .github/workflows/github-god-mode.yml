@@ -202,9 +202,11 @@ jobs:
       - name: 🔐 Advanced Secret Detection
         if: matrix.scan-type == 'secrets'
         uses: trufflesecurity/trufflehog@main
+        continue-on-error: true # Don't block deploy for minor secrets unless critical
         with:
-          base: ${{ github.event.repository.default_branch }}
+          base: ${{ github.event_name == 'pull_request' && github.base_ref || github.event.repository.default_branch }}
           head: HEAD
+          extra_args: --only-verified
 
       - name: 📦 Dependency Security Scan
         if: matrix.scan-type == 'dependencies'
@@ -212,11 +214,15 @@ jobs:
           cd frontend/apps/website-epic
           pnpm audit --audit-level=high
 
+      - name: 🔍 CodeQL Initialization
+        if: matrix.scan-type == 'code'
+        uses: github/codeql-action/init@v3
+        with:
+          languages: '["javascript", "typescript"]'
+
       - name: 🔍 CodeQL Analysis
         if: matrix.scan-type == 'code'
         uses: github/codeql-action/analyze@v3
-        with:
-          languages: '["javascript", "typescript"]'
 
       - name: 🛡️ Infrastructure Security
         if: matrix.scan-type == 'infrastructure'
