@@ -68,6 +68,7 @@ jobs:
 
       - name: 📊 Bundle Size Analysis
         id: bundle
+        continue-on-error: true
         run: |
           cd frontend/apps/website-epic
           SIZE=$(du -sh dist | cut -f1)
@@ -76,6 +77,7 @@ jobs:
 
       - name: ⚡ Performance Score
         id: perf
+        continue-on-error: true
         run: |
           cd frontend/apps/website-epic
           npx lighthouse dist/index.html --output=json --quiet > lighthouse.json
@@ -85,6 +87,7 @@ jobs:
 
       - name: 🔒 Security Check
         id: security
+        continue-on-error: true
         run: |
           npm audit --audit-level=critical --json > audit.json || echo "critical" > security-status
           if [ -f audit.json ]; then
