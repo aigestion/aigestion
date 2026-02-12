@@ -75,6 +75,9 @@ const CyberpunkGrid = lazy(() =>
 const NeuralParticles = lazy(() =>
   import('./components/NeuralParticles').then(m => ({ default: m.NeuralParticles }))
 );
+const NexusGuardianWidget = lazy(() =>
+  import('./components/NexusGuardianWidget').then(m => ({ default: m.NexusGuardianWidget }))
+);
 
 // ============================================
 // LAZY LOAD: Route-level pages
@@ -269,6 +272,7 @@ export const AppContent = ({
         <CommandTerminal />
         <CommandPalette />
         <DanielaOmniWidget />
+        <NexusGuardianWidget />
         <AnimatedMeshGradient />
         <CyberpunkGrid />
         <NeuralParticles />
