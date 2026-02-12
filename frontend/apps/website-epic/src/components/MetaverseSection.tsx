@@ -9,15 +9,16 @@ import {
   Ruler,
   DraftingCompass,
 } from 'lucide-react';
+import { useAppContext } from '../contexts/AppContext';
 
 type MetaverseMode = 'hq' | 'real-estate';
 
 export const MetaverseSection: React.FC = () => {
+  const { setIsContactModalOpen } = useAppContext();
   const [activeTab, setActiveTab] = useState<MetaverseMode>('hq');
 
   return (
-    <section className="py-40 bg-black text-white relative overflow-hidden" id="metaverse">
-      <div className="grain-overlay" />
+    <section className="py-40 smooth-mesh-bg text-white relative overflow-hidden" id="metaverse">
 
       {/* Architectural Background Lines */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
@@ -132,7 +133,10 @@ export const MetaverseSection: React.FC = () => {
                   ))}
                 </ul>
 
-                <button className="group flex items-center gap-3 px-8 py-4 bg-nexus-cyan text-black font-bold font-orbitron tracking-widest hover:bg-nexus-cyan/80 hover:shadow-[0_0_30px_rgba(0,245,255,0.4)] transition-all rounded-sm">
+                <button 
+                  onClick={() => setIsContactModalOpen(true)}
+                  className="group flex items-center gap-3 px-8 py-4 bg-nexus-cyan text-black font-bold font-orbitron tracking-widest hover:bg-nexus-cyan/80 hover:shadow-[0_0_30px_rgba(0,245,255,0.4)] transition-all rounded-sm"
+                >
                   VISITAR OFICINA
                   <ExternalLink className="w-4 h-4" />
                 </button>
@@ -208,7 +212,10 @@ export const MetaverseSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <button className="w-full py-4 border-2 border-nexus-violet/40 hover:bg-nexus-violet/20 hover:border-nexus-violet text-white transition-all font-orbitron tracking-widest text-xs uppercase flex justify-center items-center gap-2">
+                  <button 
+                    onClick={() => setIsContactModalOpen(true)}
+                    className="w-full py-4 border-2 border-nexus-violet/40 hover:bg-nexus-violet/20 hover:border-nexus-violet text-white transition-all font-orbitron tracking-widest text-xs uppercase flex justify-center items-center gap-2"
+                  >
                     Consultar Disponibilidad
                   </button>
                 </div>
@@ -240,7 +247,10 @@ export const MetaverseSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <button className="w-full py-4 bg-nexus-cyan text-black hover:bg-nexus-cyan/80 hover:shadow-[0_0_20px_rgba(0,245,255,0.4)] transition-all font-orbitron tracking-widest text-xs uppercase flex justify-center items-center gap-2">
+                  <button 
+                    onClick={() => setIsContactModalOpen(true)}
+                    className="w-full py-4 bg-nexus-cyan text-black hover:bg-nexus-cyan/80 hover:shadow-[0_0_20px_rgba(0,245,255,0.4)] transition-all font-orbitron tracking-widest text-xs uppercase flex justify-center items-center gap-2"
+                  >
                     Iniciar Proyecto
                     <Ruler className="w-3 h-3" />
                   </button>
