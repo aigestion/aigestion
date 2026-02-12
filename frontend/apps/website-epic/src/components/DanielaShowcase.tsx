@@ -73,9 +73,7 @@ export const DanielaShowcase: React.FC = () => {
   };
 
   return (
-    <section className="py-32 bg-nexus-obsidian text-white text-center relative overflow-hidden">
-      <div className="grain-overlay" />
-
+    <section className="py-32 smooth-mesh-bg text-white text-center relative overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-nexus-violet/20 to-transparent" />
       <div className="absolute inset-0 bg-radial-at-center from-nexus-violet/5 via-transparent to-transparent pointer-events-none" />
@@ -103,7 +101,6 @@ export const DanielaShowcase: React.FC = () => {
           <span className="text-xs font-mono text-nexus-cyan/40 mt-4 block uppercase tracking-[0.3em] not-italic">
             <AITypingFlutter
               text="Protocolos de Conciencia v4.2 • Nodo Global en Modo Dios Operativo"
-
               speed={50}
             />
           </span>
