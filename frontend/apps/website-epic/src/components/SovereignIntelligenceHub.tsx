@@ -259,11 +259,11 @@ export const SovereignIntelligenceHub: React.FC = () => {
   const standardMissions = missions.filter(m => !m.metadata?.isHealingProposal);
 
   return (
-    <div className="flex flex-col h-full bg-[#050505] text-white font-sans overflow-hidden">
+    <div className="flex flex-col h-full smooth-mesh-bg text-white font-sans overflow-hidden">
       {/* Header */}
       <div className="p-8 border-b border-white/5 flex justify-between items-center bg-black/50 backdrop-blur-md">
         <div>
-          <h1 className="text-3xl font-orbitron font-bold tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-nexus-cyan via-white to-nexus-violet">
+          <h1 className="text-3xl font-orbitron font-bold tracking-[0.2em] text-transparent bg-clip-text bg-linear-to-r from-nexus-cyan via-white to-nexus-violet">
             SOVEREIGN INTELLIGENCE HUB
           </h1>
           <p className="text-nexus-silver/40 text-xs font-orbitron tracking-widest mt-2 uppercase">
@@ -368,12 +368,14 @@ export const SovereignIntelligenceHub: React.FC = () => {
           <button
             onClick={() => setActiveTab('terminal')}
             className={`p-3 rounded-xl transition-all ${activeTab === 'terminal' ? 'bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30' : 'text-white/30 hover:text-white'}`}
+            title="TERMINAL"
           >
             <Terminal size={24} />
           </button>
           <button
             onClick={() => setActiveTab('missions')}
             className={`p-3 rounded-xl transition-all ${activeTab === 'missions' ? 'bg-nexus-violet/10 text-nexus-violet border border-nexus-violet/30' : 'text-white/30 hover:text-white'}`}
+            title="MISIONES"
           >
             <div className="relative">
               <Activity size={24} />
@@ -385,12 +387,14 @@ export const SovereignIntelligenceHub: React.FC = () => {
           <button
             onClick={() => setActiveTab('memory')}
             className={`p-3 rounded-xl transition-all ${activeTab === 'memory' ? 'bg-nexus-cyan/10 text-nexus-cyan border border-white/10' : 'text-white/30 hover:text-white'}`}
+            title="MEMORIA"
           >
             <Network size={24} />
           </button>
           <button
             onClick={() => setActiveTab('sentinel')}
             className={`p-3 rounded-xl transition-all ${activeTab === 'sentinel' ? 'bg-nexus-violet/10 text-nexus-violet border border-nexus-violet/30' : 'text-white/30 hover:text-white'}`}
+            title="CENTINELA"
           >
             <Eye size={24} />
           </button>
@@ -489,7 +493,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
                         className="bg-white/5 p-4 rounded-xl border border-white/5"
                       >
                         <span className="text-[10px] font-orbitron text-white/30 uppercase tracking-widest">
-                          {f.metric} Projection
+                          Proyección de {f.metric}
                         </span>
                         <div className="flex items-baseline gap-2 mt-1">
                           <span className="text-xl font-orbitron font-bold text-nexus-silver">
@@ -714,7 +718,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
                     SOVEREIGN KNOWLEDGE GRAPH
                   </h3>
                   <div className="text-[10px] text-nexus-silver/40 font-orbitron tracking-[0.3em] uppercase">
-                    Visualizador de Memoria Distribuida
+                    Visualizador de Memoria Distribuida (Grafo de Conocimiento)
                   </div>
                 </div>
 

@@ -4,17 +4,17 @@ import { useSound } from '../hooks/useSound';
 import { NeuralServer } from './3d/NeuralServer';
 import { FluidBackground } from './FluidBackground';
 import { MiniDashboard } from './MiniDashboard';
+import { useAppContext } from '../contexts/AppContext';
 
 interface CinematicHeroProps {
   onHeroComplete?: () => void;
 }
 
 export const CinematicHero: React.FC<CinematicHeroProps> = () => {
+  const { setIsContactModalOpen } = useAppContext();
   const [currentScene, setCurrentScene] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [showDemo, setShowDemo] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const { playHover, playClick } = useSound();
 
   const scenes = [
@@ -41,7 +41,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
     },
     {
       id: 'nexus-android',
-      title: 'NEXUS ANDROID WARRIOR',
+      title: 'GUERRERO NEXUS ANDROID',
       subtitle: 'Guardián Cuántico de la Innovación',
       video: '/videos/cinematic/nexus-android.mp4',
       duration: 4000,
@@ -93,7 +93,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black" data-build="website-epic-v2">
+    <div className="relative w-full h-screen overflow-hidden bg-black" data-build="website-epic-v3">
       {/* Background Layer with Multi-layered effects */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="wait">
@@ -106,11 +106,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
             className="relative w-full h-full"
           >
             {/* Base Layer: wide hero or video */}
-            <img
-              src="/images/cinematic/hero_wide.png"
-              className="absolute inset-0 w-full h-full object-cover opacity-40 scale-110 blur-[2px]"
-              alt="Background Depth"
-            />
+            <div className="absolute inset-0 smooth-mesh-bg opacity-40 scale-110 blur-[2px]" />
 
             <motion.video
               ref={videoRef}
@@ -140,8 +136,8 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
         <div className="scanline" />
 
         {/* Global Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,245,255,0.05),transparent_80%)]" />
+        <div className="absolute inset-0 bg-linear-to-b from-black via-transparent to-black" />
+        <div className="absolute inset-0 bg-radial-at-center from-nexus-cyan/5 via-transparent to-transparent" />
       </div>
 
       {/* Content Layer */}
@@ -183,13 +179,13 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
               onClick={handlePlayPause}
               className="premium-glass px-6 py-3 rounded-full text-white text-xs font-orbitron font-bold tracking-widest uppercase hover:text-nexus-cyan transition-colors"
             >
-              {isPlaying ? '⏸ Pause' : '▶ Play'}
+              {isPlaying ? '⏸ PAUSA' : '▶ PLAY'}
             </button>
             <button
-              onClick={() => setShowDemo(true)}
+              onClick={() => setIsContactModalOpen(true)}
               className="btn-enterprise px-8 py-3 rounded-full"
             >
-              Enter the Nexus
+              INGRESAR AL NEXUS
             </button>
           </motion.div>
         </div>
@@ -275,12 +271,12 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
               whileTap={{ scale: 0.95 }}
               onMouseEnter={playHover}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-nexus-violet/20 to-nexus-cyan/20" />
+              <div className="absolute inset-0 bg-linear-to-br from-nexus-violet/20 to-nexus-cyan/20" />
               <div className="relative z-10 p-2">
-                <p className="text-white text-xs font-bold text-center">
+                <p className="text-white text-[10px] font-bold text-center">
                   {scene.title.split(' ')[0]}
                 </p>
-                <p className="text-nexus-cyan text-xs text-center mt-1">{index + 1}/6</p>
+                <p className="text-nexus-cyan text-[10px] text-center mt-1">{index + 1}/5</p>
               </div>
               {currentScene === index && (
                 <motion.div
