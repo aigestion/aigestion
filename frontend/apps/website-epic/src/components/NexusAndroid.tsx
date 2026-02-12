@@ -2,8 +2,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Smartphone, ShieldCheck, Cpu, Download, Lock, Settings2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useSound } from '../hooks/useSound';
+import { useAppContext } from '../contexts/AppContext';
 
 export const NexusAndroid: React.FC = () => {
+  const { setIsContactModalOpen } = useAppContext();
   const [activeMode, setActiveMode] = useState('mobile');
   const { playHover, playClick } = useSound();
 
@@ -46,8 +48,7 @@ export const NexusAndroid: React.FC = () => {
   const currentMode = modes.find(m => m.id === activeMode) || modes[0];
 
   return (
-    <section className="relative py-32 bg-black overflow-hidden">
-      <div className="grain-overlay" />
+    <section className="relative py-32 smooth-mesh-bg overflow-hidden">
 
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none">
@@ -218,7 +219,10 @@ export const NexusAndroid: React.FC = () => {
                 "Instala Nexus en tu Android y toma las riendas de tu vida digital. Privacidad
                 extrema sin necesidad de ser un experto."
               </p>
-              <button className="btn-enterprise mt-8 w-full group">
+              <button 
+                onClick={() => setIsContactModalOpen(true)}
+                className="btn-enterprise mt-8 w-full group"
+              >
                 OBTENER NEXUS + APP MÓVIL
               </button>
             </div>
