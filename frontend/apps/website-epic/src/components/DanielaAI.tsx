@@ -1,8 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { useSound } from '../hooks/useSound';
+import { useAppContext } from '../contexts/AppContext';
 
 export const DanielaAI: React.FC = () => {
+  const { setIsContactModalOpen } = useAppContext();
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -44,7 +46,7 @@ export const DanielaAI: React.FC = () => {
   };
 
   return (
-    <section className="relative py-32 bg-gradient-to-b from-black via-purple-950/20 to-black overflow-hidden">
+    <section className="relative py-32 smooth-mesh-bg overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <img
@@ -52,7 +54,7 @@ export const DanielaAI: React.FC = () => {
           alt="Office Context"
           className="absolute inset-0 w-full h-full object-cover opacity-20 filter blur-sm grayscale"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/80 to-black" />
+        <div className="absolute inset-0 bg-linear-to-b from-black via-black/80 to-black" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(138,43,226,0.1),transparent_70%)]" />
 
         {/* Floating Data Particles */}
@@ -60,7 +62,7 @@ export const DanielaAI: React.FC = () => {
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-[1px] h-20 bg-gradient-to-b from-transparent via-nexus-cyan to-transparent opacity-20"
+              className="absolute w-px h-20 bg-linear-to-b from-transparent via-nexus-cyan to-transparent opacity-20"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
@@ -114,7 +116,7 @@ export const DanielaAI: React.FC = () => {
             viewport={{ once: true }}
           >
             {/* Avatar Container */}
-            <div className="relative mx-auto w-80 h-80 lg:w-[32rem] lg:h-[32rem]">
+            <div className="relative mx-auto w-80 h-80 lg:w-lg lg:h-128">
               {/* Pulse Ring Effect */}
               <motion.div
                 className="absolute inset-0 border-2 border-nexus-cyan/30 rounded-full"
@@ -128,7 +130,7 @@ export const DanielaAI: React.FC = () => {
               />
 
               {/* Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-nexus-violet to-nexus-cyan rounded-full blur-3xl opacity-20 animate-pulse" />
+              <div className="absolute inset-0 bg-linear-to-r from-nexus-violet to-nexus-cyan rounded-full blur-3xl opacity-20 animate-pulse" />
 
               {/* Avatar */}
               <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-white/10 shadow-2xl shadow-nexus-cyan/20 neon-glow-cyan">
@@ -139,8 +141,7 @@ export const DanielaAI: React.FC = () => {
                 />
 
                 {/* Cyber Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-nexus-violet/30 via-transparent to-transparent mix-blend-overlay" />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+                <div className="absolute inset-0 bg-linear-to-t from-nexus-violet/30 via-transparent to-transparent mix-blend-overlay" />
 
                 {/* Speaking Indicator */}
                 <AnimatePresence>
@@ -180,7 +181,7 @@ export const DanielaAI: React.FC = () => {
                 transition={{
                   duration: 4,
                   repeat: Infinity,
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                 }}
               />
               <motion.div
@@ -192,7 +193,7 @@ export const DanielaAI: React.FC = () => {
                 transition={{
                   duration: 5,
                   repeat: Infinity,
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                 }}
               />
             </div>
@@ -200,16 +201,14 @@ export const DanielaAI: React.FC = () => {
             {/* Interaction Button */}
             <div className="text-center mt-8">
               <motion.button
-                onClick={handleInteraction}
-                className="premium-glass px-8 py-4 rounded-full border border-nexus-cyan/30 hover:border-nexus-cyan/60 transition-all"
+                onClick={() => setIsContactModalOpen(true)}
+                className="premium-glass px-8 py-4 rounded-full border border-nexus-cyan/30 hover:border-nexus-cyan/60 transition-all font-orbitron tracking-widest text-[10px] font-bold"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onMouseEnter={playHover}
                 disabled={isProcessing}
               >
-                <span className="text-white font-bold">
-                  {isProcessing ? 'Conectando...' : 'Conectar con Daniela'}
-                </span>
+                <span className="text-white uppercase">Establecer Conexión Neuronal</span>
               </motion.button>
             </div>
           </motion.div>
@@ -225,7 +224,7 @@ export const DanielaAI: React.FC = () => {
             {/* Message Display */}
             <div className="premium-glass p-6 rounded-2xl border border-nexus-violet/30">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-nexus-violet to-nexus-cyan rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-linear-to-br from-nexus-violet to-nexus-cyan rounded-full flex items-center justify-center shrink-0">
                   <span className="text-white font-bold">AI</span>
                 </div>
                 <div className="flex-1">
@@ -247,14 +246,28 @@ export const DanielaAI: React.FC = () => {
 
             {/* Capabilities */}
             <div className="space-y-6">
-              <h3 className="text-2xl font-orbitron font-bold text-white">Capacidades Neuronales</h3>
+              <h3 className="text-2xl font-orbitron font-bold text-white">
+                Capacidades Neuronales
+              </h3>
 
               <div className="grid gap-4">
                 {[
-                  { icon: '🧠', title: 'Procesamiento Cuántico', desc: '10^15 operaciones por segundo' },
+                  {
+                    icon: '🧠',
+                    title: 'Procesamiento Cuántico',
+                    desc: '10^15 operaciones por segundo',
+                  },
                   { icon: '🔮', title: 'Predicción Perfecta', desc: '99.97% precisión predictiva' },
-                  { icon: '⚡', title: 'Aprendizaje Instantáneo', desc: 'Adaptación en tiempo real' },
-                  { icon: '🌐', title: 'Conciencia Global', desc: 'Conectada a todos los sistemas' },
+                  {
+                    icon: '⚡',
+                    title: 'Aprendizaje Instantáneo',
+                    desc: 'Adaptación en tiempo real',
+                  },
+                  {
+                    icon: '🌐',
+                    title: 'Conciencia Global',
+                    desc: 'Conectada a todos los sistemas',
+                  },
                 ].map((capability, index) => (
                   <motion.div
                     key={capability.title}
@@ -279,11 +292,11 @@ export const DanielaAI: React.FC = () => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-4 border-t border-white/5 pt-8">
               {[
-                { value: '8K', label: 'Resolución' },
-                { value: '∞', label: 'Evolución' },
-                { value: '100%', label: 'Precisión' },
+                { value: '8K', label: 'RESOLUCIÓN' },
+                { value: '∞', label: 'EVOLUCIÓN' },
+                { value: '100%', label: 'PRECISIÓN' },
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -293,8 +306,12 @@ export const DanielaAI: React.FC = () => {
                   transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <div className="text-3xl font-orbitron font-black text-nexus-cyan">{stat.value}</div>
-                  <div className="text-sm text-gray-400">{stat.label}</div>
+                  <div className="text-3xl font-orbitron font-black text-nexus-cyan drop-shadow-[0_0_10px_rgba(0,245,255,0.3)]">
+                    {stat.value}
+                  </div>
+                  <div className="text-[10px] font-orbitron text-gray-400 tracking-widest">
+                    {stat.label}
+                  </div>
                 </motion.div>
               ))}
             </div>
