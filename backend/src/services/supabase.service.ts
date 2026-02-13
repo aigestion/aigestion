@@ -65,6 +65,7 @@ export class SupabaseService {
    */
   public async testConnection(): Promise<boolean> {
     try {
+      if (!this.client) return false;
       // Check for profiles table
       const { error: profileError } = await this.client
         .from('profiles')
@@ -108,6 +109,7 @@ export class SupabaseService {
     threshold: number = 0.5,
     count: number = 5,
   ) {
+    if (!this.client) throw new Error('Supabase client not initialized');
     const { data, error } = await this.client.rpc('hybrid_search', {
       query_text: queryText,
       query_embedding: embedding,
@@ -128,6 +130,7 @@ export class SupabaseService {
    * Retrieve versioned system prompts.
    */
   public async getPromptTemplate(name: string) {
+    if (!this.client) throw new Error('Supabase client not initialized');
     const { data, error } = await this.client
       .from('prompt_templates')
       .select('*')
@@ -148,6 +151,7 @@ export class SupabaseService {
    * 📂 Knowledge Base Operations
    */
   public async upsertDocument(document: any) {
+    if (!this.client) throw new Error('Supabase client not initialized');
     const { data, error } = await this.client
       .from('documents')
       .upsert(document, { onConflict: 'id' })
@@ -162,4 +166,7 @@ export class SupabaseService {
   }
 }
 
-export const supabaseService = SupabaseService.getInstance();
+
+// REMOVED top-level singleton initialization to prevent circular dependency issues during module loading.
+// Services should use SupabaseService.getInstance() or better, rely on Inversify injection.
+

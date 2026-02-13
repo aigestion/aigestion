@@ -25,12 +25,11 @@ export const Navigation: React.FC = () => {
 
   const navItems = [
     { label: 'Servicios', path: '#services', isHash: true },
-    { label: 'Casos de Éxito', path: '#cases', isHash: true },
     { label: 'Precios', path: '#pricing', isHash: true },
     { label: 'Soluciones', path: '#plan', isHash: true },
     { label: 'Tutoriales', path: '#tutoriales', isHash: true },
     { label: 'Contacto', path: '#contact', isHash: true, isModal: true },
-    { label: 'Panel de Control', path: '/dashboard' },
+    { label: 'Demo', path: '/dashboard' },
   ];
 
   const handleLinkClick = (path: string, isHash?: boolean, isModal?: boolean) => {
@@ -66,23 +65,18 @@ export const Navigation: React.FC = () => {
           onMouseEnter={playHover}
           className="group flex items-center gap-0 relative"
         >
-          <div className="relative z-10 w-10 h-10 mr-3 transition-transform duration-500 group-hover:scale-105">
-            <div className="absolute inset-0 bg-nexus-cyan/20 blur-lg rounded-full opacity-50 group-hover:opacity-100 transition-opacity" />
-            <img
-              src="/images/brand/logo.png"
-              alt="Logo"
-              className="w-full h-full object-contain filter brightness-110"
-            />
+          <div className="relative z-10 w-10 h-10 mr-4 flex items-center justify-center">
+            <div className="absolute inset-0 bg-nexus-cyan/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="w-6 h-6 border-[1.5px] border-nexus-cyan/30 rounded-lg rotate-45 group-hover:rotate-[135deg] transition-transform duration-1000 ease-out flex items-center justify-center">
+              <div className="w-2 h-2 bg-nexus-cyan rounded-full animate-pulse shadow-[0_0_10px_rgba(0,245,255,0.8)]" />
+            </div>
           </div>
 
-          <div className="flex flex-col justify-center h-10">
-            <h1 className="font-orbitron font-bold text-xl tracking-[0.2em] leading-none text-white transition-all duration-300">
+          <div className="flex flex-col justify-center">
+            <h1 className="font-orbitron font-black text-2xl tracking-tighter text-white transition-all duration-300">
               AIGESTION
-              <span className="text-nexus-cyan-glow">.NET</span>
+              <span className="text-nexus-cyan font-extralight opacity-80">.NET</span>
             </h1>
-            <span className="text-[9px] font-mono text-nexus-silver/40 tracking-[0.4em] uppercase mt-1">
-              Arquitectura de Inteligencia Soberana
-            </span>
           </div>
         </Link>
 
@@ -99,7 +93,6 @@ export const Navigation: React.FC = () => {
                 } else {
                   handleLinkClick(item.path, false, item.isModal);
                 }
-
               }}
               onMouseEnter={playHover}
               className={`relative font-orbitron text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:text-white ${
@@ -178,7 +171,6 @@ export const Navigation: React.FC = () => {
                         handleLinkClick(item.path, false, item.isModal);
                       }
                     }}
-
                     className="flex items-center justify-between py-4 border-b border-white/5 group"
                   >
                     <span className="font-orbitron font-medium text-[11px] tracking-[0.3em] uppercase text-nexus-silver/60 group-hover:text-white transition-colors">

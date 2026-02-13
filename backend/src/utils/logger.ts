@@ -27,28 +27,29 @@ const pinoLogger = pino({
 
 // Helper to support both (msg, meta) and (meta, msg) signatures
 // Compatible with Winston legacy usage
-function wrap(method: 'info' | 'error' | 'warn' | 'debug' | 'trace' | 'fatal') {
-  return (arg1: any, arg2?: any, ...rest: any[]) => {
+function wrap(method: 'info' | 'error' | 'warn' | 'debug' | 'trace' | 'fatal'): any {
+  return (...args: any[]) => {
+    const [arg1, arg2, ...rest] = args;
     // Determine which argument is the message and which is the object
     if (typeof arg1 === 'string') {
       if (arg2 && typeof arg2 === 'object') {
         // (msg, meta) -> Pino (meta, msg)
-        pinoLogger[method](arg2, arg1, ...rest);
+        (pinoLogger as any)[method](arg2, arg1, ...rest);
       } else {
         // (msg)
-        pinoLogger[method](arg1, arg2, ...rest);
+        (pinoLogger as any)[method](arg1, arg2, ...rest);
       }
     } else if (typeof arg1 === 'object' && typeof arg2 === 'string') {
       // (meta, msg) -> Pino (meta, msg)
-      pinoLogger[method](arg1, arg2, ...rest);
+      (pinoLogger as any)[method](arg1, arg2, ...rest);
     } else {
       // Fallback
-      pinoLogger[method](arg1, arg2, ...rest);
+      (pinoLogger as any)[method](arg1, arg2, ...rest);
     }
   };
 }
 
-export const logger = {
+const internalLogger = {
   info: wrap('info'),
   error: wrap('error'),
   warn: wrap('warn'),
@@ -57,4 +58,6 @@ export const logger = {
   silly: wrap('trace'), // Map silly to trace
 };
 
-export default logger;
+export const logger = internalLogger;
+export default internalLogger;
+

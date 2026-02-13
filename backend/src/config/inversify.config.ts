@@ -1,11 +1,22 @@
 import 'reflect-metadata';
-
 import { Container } from 'inversify';
 
+// Types
+import { TYPES } from '../types';
+
+// Use Cases
 import { LoginUserUseCase } from '../application/usecases/LoginUserUseCase';
 import { RegisterUserUseCase } from '../application/usecases/RegisterUserUseCase';
 import { CreatePersonaUseCase } from '../application/usecases/persona/CreatePersonaUseCase';
 import { GetMarketplacePersonasUseCase } from '../application/usecases/persona/GetMarketplacePersonasUseCase';
+import { Enable2FAUseCase } from '../application/usecases/Enable2FAUseCase';
+import { Verify2FALoginUseCase } from '../application/usecases/Verify2FALoginUseCase';
+import { Verify2FAUseCase } from '../application/usecases/Verify2FAUseCase';
+import { VerifyEmailUseCase } from '../application/usecases/VerifyEmailUseCase';
+import { UpdateUserRoleUseCase } from '../application/usecases/UpdateUserRoleUseCase';
+import { UpdateSubscriptionUseCase } from '../application/usecases/UpdateSubscriptionUseCase';
+
+// Controllers
 import { SwarmController } from '../controllers/swarm.controller';
 import { GodModeController } from '../controllers/godmode.controller';
 import { DanielaController } from '../controllers/daniela.controller';
@@ -15,20 +26,14 @@ import { DockerController } from '../controllers/docker.controller';
 import { AnalyticsController } from '../controllers/analytics.controller';
 import { BillingController } from '../controllers/billing.controller';
 import { UsageController } from '../controllers/usage.controller';
-import { DockerService } from '../infrastructure/docker/DockerService';
-import {
-  IMissionRepository,
-  MissionRepository,
-} from '../infrastructure/repository/MissionRepository';
-import {
-  INotificationRepository,
-  NotificationRepository,
-} from '../infrastructure/repository/NotificationRepository';
-import {
-  IPersonaRepository,
-  PersonaRepository,
-} from '../infrastructure/repository/PersonaRepository';
-import { IUserRepository, UserRepository } from '../infrastructure/repository/UserRepository';
+import { DevicePostureController } from '../controllers/DevicePostureController';
+import { WebAuthnController } from '../controllers/webauthn.controller';
+import { SovereignHandshakeController } from '../controllers/SovereignHandshakeController';
+import { SovereignBiometricsController } from '../controllers/SovereignBiometricsController';
+import { SentinelController } from '../controllers/SentinelController';
+import { SystemController } from '../controllers/system.controller';
+
+// Services
 import { AIService } from '../services/ai.service';
 import { AlertingService } from '../services/alerting.service';
 import { AnalyticsService } from '../services/analytics.service';
@@ -89,33 +94,72 @@ import { FacebookService } from '../services/facebook.service';
 import { AgentService } from '../services/agent.service';
 import { VectorService } from '../services/vector.service';
 import { SemanticRouterService } from '../services/ai-router.service';
-import { YoutubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
-import { YoutubeTranscriptionService } from '../utils/youtube-transcription.service';
-import { SystemController } from '../controllers/system.controller';
-import { YouTubeChannelService } from '../services/google/youtube-channel.service';
-import { YoutubeWatcherService } from '../utils/youtube-watcher.service';
+import { Gemini2Service } from '../services/gemini-2.service';
 import { GmailService } from '../services/gmail.service';
 import { SheetsService } from '../services/sheets.service';
-import { Gemini2Service } from '../services/gemini-2.service';
-import { TYPES } from '../types';
+import { VoiceService } from '../services/voice.service';
+import { YouTubeChannelService } from '../services/google/youtube-channel.service';
+import { YoutubeWatcherService } from '../utils/youtube-watcher.service';
+import { BackupRestoreService } from '../services/backup-restore.service';
+import {
+  CENTRAL_LOGGING_SERVICE_NAME,
+  CentralizedLoggingService,
+} from '../services/centralized-logging.service';
+import { DocumentProcessorService } from '../services/google/document-processor.service';
+import { MalwareScannerService } from '../services/malware-scanner.service';
+import { MonitoringService } from '../services/monitoring.service';
+import { ThreatIntelligenceService } from '../services/threat-intelligence.service';
+import { UserBehaviorService } from '../services/user-behavior.service';
+import { WAFService } from '../services/waf.service';
+import { DevicePostureService } from '../services/device-posture.service';
+import { SovereignHealingService } from '../services/SovereignHealingService';
+import { VoiceBiometricsService } from '../services/VoiceBiometricsService';
+import { SovereignSentinelService } from '../services/SovereignSentinelService';
+
+// Infrastructure
+import { DockerService } from '../infrastructure/docker/DockerService';
+import {
+  IMissionRepository,
+  MissionRepository,
+} from '../infrastructure/repository/MissionRepository';
+import {
+  INotificationRepository,
+  NotificationRepository,
+} from '../infrastructure/repository/NotificationRepository';
+import {
+  IPersonaRepository,
+  PersonaRepository,
+} from '../infrastructure/repository/PersonaRepository';
+import { IUserRepository, UserRepository } from '../infrastructure/repository/UserRepository';
+import { EventBus } from '../infrastructure/eventbus/EventBus';
+import { CommandBus } from '../shared/cqrs/CommandBus';
+import { QueryBus } from '../shared/cqrs/QueryBus';
+import { JobQueue } from '../infrastructure/jobs/JobQueue';
+
+// Queues & Utils
+import { YoutubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
+import { YoutubeTranscriptionService } from '../utils/youtube-transcription.service';
 
 const container = new Container();
 
-// ========================================
-// CORE SERVICES
-// ========================================
 const bind = <T>(id: any, target: any) => {
   if (!container.isBound(id)) {
     container.bind<T>(id).to(target).inSingletonScope();
   }
 };
 
+// ========================================
+// CORE SERVICES
+// ========================================
 bind<HistoryService>(TYPES.HistoryService, HistoryService);
 bind<TelegramService>(TYPES.TelegramService, TelegramService);
-if (!container.isBound(TelegramBotHandler)) container.bind<TelegramBotHandler>(TelegramBotHandler).toSelf().inSingletonScope();
-if (!container.isBound(TelegramBotHandlerGodMode)) container.bind<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode).toSelf().inSingletonScope();
+if (!container.isBound(TelegramBotHandler))
+  container.bind<TelegramBotHandler>(TelegramBotHandler).toSelf().inSingletonScope();
+if (!container.isBound(TelegramBotHandlerGodMode))
+  container.bind<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode).toSelf().inSingletonScope();
 bind<DanielaAIService>(TYPES.DanielaAIService, DanielaAIService);
-if (!container.isBound(EconomyController)) container.bind<EconomyController>(EconomyController).toSelf().inSingletonScope();
+if (!container.isBound(EconomyController))
+  container.bind<EconomyController>(EconomyController).toSelf().inSingletonScope();
 bind<SystemMetricsService>(TYPES.SystemMetricsService, SystemMetricsService);
 bind<AlertingService>(TYPES.AlertingService, AlertingService);
 bind<GoogleSecretManagerService>(TYPES.GoogleSecretManagerService, GoogleSecretManagerService);
@@ -126,13 +170,6 @@ if (!container.isBound('Container')) container.bind('Container').toConstantValue
 // ========================================
 // APPLICATION USE CASES
 // ========================================
-import { Enable2FAUseCase } from '../application/usecases/Enable2FAUseCase';
-import { Verify2FALoginUseCase } from '../application/usecases/Verify2FALoginUseCase';
-import { Verify2FAUseCase } from '../application/usecases/Verify2FAUseCase';
-import { VerifyEmailUseCase } from '../application/usecases/VerifyEmailUseCase';
-import { UpdateUserRoleUseCase } from '../application/usecases/UpdateUserRoleUseCase';
-import { UpdateSubscriptionUseCase } from '../application/usecases/UpdateSubscriptionUseCase';
-
 bind<Enable2FAUseCase>(TYPES.Enable2FAUseCase, Enable2FAUseCase);
 bind<Verify2FAUseCase>(TYPES.Verify2FAUseCase, Verify2FAUseCase);
 bind<Verify2FALoginUseCase>(TYPES.Verify2FALoginUseCase, Verify2FALoginUseCase);
@@ -142,16 +179,14 @@ bind<UpdateSubscriptionUseCase>(TYPES.UpdateSubscriptionUseCase, UpdateSubscript
 bind<RegisterUserUseCase>(TYPES.RegisterUserUseCase, RegisterUserUseCase);
 bind<LoginUserUseCase>(TYPES.LoginUserUseCase, LoginUserUseCase);
 bind<CreatePersonaUseCase>(TYPES.CreatePersonaUseCase, CreatePersonaUseCase);
-bind<GetMarketplacePersonasUseCase>(TYPES.GetMarketplacePersonasUseCase, GetMarketplacePersonasUseCase);
+bind<GetMarketplacePersonasUseCase>(
+  TYPES.GetMarketplacePersonasUseCase,
+  GetMarketplacePersonasUseCase,
+);
 
 // ========================================
 // INFRASTRUCTURE & REPOSITORIES
 // ========================================
-import { EventBus } from '../infrastructure/eventbus/EventBus';
-import { CommandBus } from '../shared/cqrs/CommandBus';
-import { QueryBus } from '../shared/cqrs/QueryBus';
-import { JobQueue } from '../infrastructure/jobs/JobQueue';
-
 bind<CommandBus>(TYPES.CommandBus, CommandBus);
 bind<QueryBus>(TYPES.QueryBus, QueryBus);
 bind<EventBus>(TYPES.EventBus, EventBus);
@@ -187,16 +222,21 @@ bind<XService>(TYPES.XService, XService);
 bind<SearchService>(TYPES.SearchService, SearchService);
 bind<UsageService>(TYPES.UsageService, UsageService);
 bind<UserService>(TYPES.UserService, UserService);
+bind<EmailService>(TYPES.EmailService, EmailService);
 bind<BackupService>(TYPES.BackupService, BackupService);
 bind<BackupSchedulerService>(TYPES.BackupSchedulerService, BackupSchedulerService);
 
 // ========================================
 // EXTERNAL INTEGRATIONS
 // ========================================
-if (!container.isBound(GoogleDriveService)) container.bind<GoogleDriveService>(GoogleDriveService).toSelf().inSingletonScope();
-if (!container.isBound(GmailService)) container.bind<GmailService>(GmailService).toSelf().inSingletonScope();
-if (!container.isBound(SheetsService)) container.bind<SheetsService>(SheetsService).toSelf().inSingletonScope();
-if (!container.isBound(Gemini2Service)) container.bind<Gemini2Service>(Gemini2Service).toSelf().inSingletonScope();
+if (!container.isBound(GoogleDriveService))
+  container.bind<GoogleDriveService>(GoogleDriveService).toSelf().inSingletonScope();
+if (!container.isBound(GmailService))
+  container.bind<GmailService>(GmailService).toSelf().inSingletonScope();
+if (!container.isBound(SheetsService))
+  container.bind<SheetsService>(SheetsService).toSelf().inSingletonScope();
+if (!container.isBound(Gemini2Service))
+  container.bind<Gemini2Service>(Gemini2Service).toSelf().inSingletonScope();
 bind<RunwayService>(TYPES.RunwayService, RunwayService);
 bind<PayPalService>(TYPES.PaypalService, PayPalService);
 bind<FacebookService>(TYPES.FacebookService, FacebookService);
@@ -205,18 +245,6 @@ bind<AIService>(TYPES.AIService, AIService);
 // ========================================
 // SPECIALIZED SERVICES
 // ========================================
-import { BackupRestoreService } from '../services/backup-restore.service';
-import {
-  CENTRAL_LOGGING_SERVICE_NAME,
-  CentralizedLoggingService,
-} from '../services/centralized-logging.service';
-import { DocumentProcessorService } from '../services/google/document-processor.service';
-import { MalwareScannerService } from '../services/malware-scanner.service';
-import { MonitoringService } from '../services/monitoring.service';
-import { ThreatIntelligenceService } from '../services/threat-intelligence.service';
-import { UserBehaviorService } from '../services/user-behavior.service';
-import { WAFService } from '../services/waf.service';
-
 bind<MalwareScannerService>(TYPES.MalwareScannerService, MalwareScannerService);
 bind<DocumentProcessorService>(TYPES.DocumentProcessorService, DocumentProcessorService);
 bind<ErrorReportingService>(TYPES.ErrorReportingService, ErrorReportingService);
@@ -233,20 +261,13 @@ if (!container.isBound(CENTRAL_LOGGING_SERVICE_NAME))
 if (!container.isBound(UserBehaviorService))
   container.bind<UserBehaviorService>(UserBehaviorService).toSelf().inSingletonScope();
 
-import { DevicePostureService } from '../services/device-posture.service';
 bind<DevicePostureService>(TYPES.DevicePostureService, DevicePostureService);
-
-import { SovereignHealingService } from '../services/SovereignHealingService';
-import { VoiceBiometricsService } from '../services/VoiceBiometricsService';
-import { SovereignSentinelService } from '../services/SovereignSentinelService';
-
 bind<SovereignHealingService>(TYPES.SovereignHealingService, SovereignHealingService);
 bind<VoiceBiometricsService>(TYPES.VoiceBiometricsService, VoiceBiometricsService);
 bind<SovereignSentinelService>(TYPES.SovereignSentinelService, SovereignSentinelService);
 bind<SovereignVaultService>(TYPES.SovereignVaultService, SovereignVaultService);
 bind<VaultService>(TYPES.VaultService, VaultService);
 bind<PQCCommService>(TYPES.PQCCommService, PQCCommService);
-
 bind<SemanticCacheService>(TYPES.SemanticCacheService, SemanticCacheService);
 bind<KnowledgeGraphService>(TYPES.KnowledgeGraphService, KnowledgeGraphService);
 bind<CloudFailoverService>(TYPES.CloudFailoverService, CloudFailoverService);
@@ -265,18 +286,13 @@ bind<YouTubeChannelService>(TYPES.YoutubeChannelService, YouTubeChannelService);
 bind<YoutubeWatcherService>(TYPES.YoutubeWatcherService, YoutubeWatcherService);
 bind<AgentService>(TYPES.AgentService, AgentService);
 bind<VectorService>(TYPES.VectorService, VectorService);
+bind<VoiceService>(TYPES.VoiceService, VoiceService);
 bind<YoutubeTranscriptionQueue>(TYPES.YoutubeTranscriptionQueue, YoutubeTranscriptionQueue);
 bind<YoutubeTranscriptionService>(TYPES.YoutubeTranscriptionService, YoutubeTranscriptionService);
 
 // ========================================
 // CONTROLLERS
 // ========================================
-import { DevicePostureController } from '../controllers/DevicePostureController';
-import { WebAuthnController } from '../controllers/webauthn.controller';
-import { SovereignHandshakeController } from '../controllers/SovereignHandshakeController';
-import { SovereignBiometricsController } from '../controllers/SovereignBiometricsController';
-import { SentinelController } from '../controllers/SentinelController';
-
 bind<SwarmController>(TYPES.SwarmController, SwarmController);
 bind<GodModeController>(TYPES.GodModeController, GodModeController);
 bind<DanielaController>(TYPES.DanielaController, DanielaController);

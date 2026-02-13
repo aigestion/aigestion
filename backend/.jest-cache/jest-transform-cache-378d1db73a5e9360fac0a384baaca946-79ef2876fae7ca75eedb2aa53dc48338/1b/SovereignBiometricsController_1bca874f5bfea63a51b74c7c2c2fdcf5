@@ -1,0 +1,106 @@
+7244909355f369480679907d4e0fc316
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c, _d, _e;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SovereignBiometricsController = void 0;
+const express_1 = require("express");
+const inversify_1 = require("inversify");
+const inversify_express_utils_1 = require("inversify-express-utils");
+const types_1 = require("../types");
+const VoiceBiometricsService_1 = require("../services/VoiceBiometricsService");
+const logger_1 = require("../utils/logger");
+const redis_1 = require("../cache/redis");
+let SovereignBiometricsController = class SovereignBiometricsController {
+    voiceService;
+    constructor(voiceService) {
+        this.voiceService = voiceService;
+    }
+    /**
+     * Enrolls a user's voiceprint.
+     * Expects a base64 encoded audio buffer in the body.
+     */
+    async enrollVoice(req, res) {
+        try {
+            const { audio, userId } = req.body;
+            if (!audio)
+                return res.status(400).json({ error: 'Missing audio data' });
+            const audioBuffer = Buffer.from(audio, 'base64');
+            const voiceHash = await this.voiceService.generateVoiceHash(audioBuffer);
+            // Store the voiceprint in a persistent way (mocked with Redis for now, should be in User DB)
+            // In a real implementation, we'd associate this with the Sovereign Identity.
+            await (0, redis_1.setCache)(`sovereign:voiceprint:${userId || 'default'}`, voiceHash);
+            logger_1.logger.info({ userId }, '[SovereignBiometrics] Voice enrolled successfully');
+            return res.json({
+                success: true,
+                message: 'Voiceprint enrolled and locked in vault.',
+                voiceHash: voiceHash.substring(0, 10) + '...'
+            });
+        }
+        catch (error) {
+            logger_1.logger.error('[SovereignBiometrics] Enrollment failed:', error);
+            return res.status(500).json({ error: 'Biometric enrollment failed' });
+        }
+    }
+    /**
+     * Verifies a voice challenge.
+     */
+    async verifyVoice(req, res) {
+        try {
+            const { audio, userId } = req.body;
+            if (!audio)
+                return res.status(400).json({ error: 'Missing audio data' });
+            const storedHash = await (0, redis_1.getCache)(`sovereign:voiceprint:${userId || 'default'}`);
+            if (!storedHash) {
+                return res.status(404).json({ error: 'No voiceprint found for this user' });
+            }
+            const audioBuffer = Buffer.from(audio, 'base64');
+            const isValid = await this.voiceService.verifyVoiceprint(storedHash, audioBuffer);
+            if (!isValid) {
+                return res.status(401).json({ error: 'Biometric mismatch' });
+            }
+            return res.json({
+                success: true,
+                message: 'Voice identity verified.'
+            });
+        }
+        catch (error) {
+            logger_1.logger.error('[SovereignBiometrics] Verification failed:', error);
+            return res.status(500).json({ error: 'Biometric verification failed' });
+        }
+    }
+};
+exports.SovereignBiometricsController = SovereignBiometricsController;
+__decorate([
+    (0, inversify_express_utils_1.httpPost)('/enroll-voice'),
+    __param(0, (0, inversify_express_utils_1.request)()),
+    __param(1, (0, inversify_express_utils_1.response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_b = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _b : Object, typeof (_c = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _c : Object]),
+    __metadata("design:returntype", Promise)
+], SovereignBiometricsController.prototype, "enrollVoice", null);
+__decorate([
+    (0, inversify_express_utils_1.httpPost)('/verify-voice'),
+    __param(0, (0, inversify_express_utils_1.request)()),
+    __param(1, (0, inversify_express_utils_1.response)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [typeof (_d = typeof express_1.Request !== "undefined" && express_1.Request) === "function" ? _d : Object, typeof (_e = typeof express_1.Response !== "undefined" && express_1.Response) === "function" ? _e : Object]),
+    __metadata("design:returntype", Promise)
+], SovereignBiometricsController.prototype, "verifyVoice", null);
+exports.SovereignBiometricsController = SovereignBiometricsController = __decorate([
+    (0, inversify_express_utils_1.controller)('/auth/sovereign/biometrics'),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.VoiceBiometricsService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof VoiceBiometricsService_1.VoiceBiometricsService !== "undefined" && VoiceBiometricsService_1.VoiceBiometricsService) === "function" ? _a : Object])
+], SovereignBiometricsController);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxjb250cm9sbGVyc1xcU292ZXJlaWduQmlvbWV0cmljc0NvbnRyb2xsZXIudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLHFDQUE0QztBQUM1Qyx5Q0FBbUM7QUFDbkMscUVBQWtGO0FBQ2xGLG9DQUFpQztBQUNqQywrRUFBNEU7QUFDNUUsNENBQXlDO0FBQ3pDLDBDQUFvRDtBQUc3QyxJQUFNLDZCQUE2QixHQUFuQyxNQUFNLDZCQUE2QjtJQUVRO0lBRGhELFlBQ2dELFlBQW9DO1FBQXBDLGlCQUFZLEdBQVosWUFBWSxDQUF3QjtJQUNqRixDQUFDO0lBRUo7OztPQUdHO0lBRVUsQUFBTixLQUFLLENBQUMsV0FBVyxDQUFZLEdBQVksRUFBYyxHQUFhO1FBQ3pFLElBQUksQ0FBQztZQUNILE1BQU0sRUFBRSxLQUFLLEVBQUUsTUFBTSxFQUFFLEdBQUcsR0FBRyxDQUFDLElBQUksQ0FBQztZQUNuQyxJQUFJLENBQUMsS0FBSztnQkFBRSxPQUFPLEdBQUcsQ0FBQyxNQUFNLENBQUMsR0FBRyxDQUFDLENBQUMsSUFBSSxDQUFDLEVBQUUsS0FBSyxFQUFFLG9CQUFvQixFQUFFLENBQUMsQ0FBQztZQUV6RSxNQUFNLFdBQVcsR0FBRyxNQUFNLENBQUMsSUFBSSxDQUFDLEtBQUssRUFBRSxRQUFRLENBQUMsQ0FBQztZQUNqRCxNQUFNLFNBQVMsR0FBRyxNQUFNLElBQUksQ0FBQyxZQUFZLENBQUMsaUJBQWlCLENBQUMsV0FBVyxDQUFDLENBQUM7WUFFekUsNkZBQTZGO1lBQzdGLDZFQUE2RTtZQUM3RSxNQUFNLElBQUEsZ0JBQVEsRUFBQyx3QkFBd0IsTUFBTSxJQUFJLFNBQVMsRUFBRSxFQUFFLFNBQVMsQ0FBQyxDQUFDO1lBRXpFLGVBQU0sQ0FBQyxJQUFJLENBQUMsRUFBRSxNQUFNLEVBQUUsRUFBRSxtREFBbUQsQ0FBQyxDQUFDO1lBRTdFLE9BQU8sR0FBRyxDQUFDLElBQUksQ0FBQztn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LENBQUE7eURBQXVCLCtDQUFzQixvQkFBdEIsK0NBQXNCO0dBRnpFLDZCQUE2QixDQWlFekMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxjb250cm9sbGVyc1xcU292ZXJlaWduQmlvbWV0cmljc0NvbnRyb2xsZXIudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgUmVxdWVzdCwgUmVzcG9uc2UgfSBmcm9tICdleHByZXNzJztcclxuaW1wb3J0IHsgaW5qZWN0IH0gZnJvbSAnaW52ZXJzaWZ5JztcclxuaW1wb3J0IHsgY29udHJvbGxlciwgaHR0cFBvc3QsIHJlcXVlc3QsIHJlc3BvbnNlIH0gZnJvbSAnaW52ZXJzaWZ5LWV4cHJlc3MtdXRpbHMnO1xyXG5pbXBvcnQgeyBUWVBFUyB9IGZyb20gJy4uL3R5cGVzJztcclxuaW1wb3J0IHsgVm9pY2VCaW9tZXRyaWNzU2VydmljZSB9IGZyb20gJy4uL3NlcnZpY2VzL1ZvaWNlQmlvbWV0cmljc1NlcnZpY2UnO1xyXG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xyXG5pbXBvcnQgeyBzZXRDYWNoZSwgZ2V0Q2FjaGUgfSBmcm9tICcuLi9jYWNoZS9yZWRpcyc7XHJcblxyXG5AY29udHJvbGxlcignL2F1dGgvc292ZXJlaWduL2Jpb21ldHJpY3MnKVxyXG5leHBvcnQgY2xhc3MgU292ZXJlaWduQmlvbWV0cmljc0NvbnRyb2xsZXIge1xyXG4gIGNvbnN0cnVjdG9yKFxyXG4gICAgQGluamVjdChUWVBFUy5Wb2ljZUJpb21ldHJpY3NTZXJ2aWNlKSBwcml2YXRlIHZvaWNlU2VydmljZTogVm9pY2VCaW9tZXRyaWNzU2VydmljZVxyXG4gICkge31cclxuXHJcbiAgLyoqXHJcbiAgICogRW5yb2xscyBhIHVzZXIncyB2b2ljZXByaW50LlxyXG4gICAqIEV4cGVjdHMgYSBiYXNlNjQgZW5jb2RlZCBhdWRpbyBidWZmZXIgaW4gdGhlIGJvZHkuXHJcbiAgICovXHJcbiAgQGh0dHBQb3N0KCcvZW5yb2xsLXZvaWNlJylcclxuICBwdWJsaWMgYXN5bmMgZW5yb2xsVm9pY2UoQHJlcXVlc3QoKSByZXE6IFJlcXVlc3QsIEByZXNwb25zZSgpIHJlczogUmVzcG9uc2UpIHtcclxuICAgIHRyeSB7XHJcbiAgICAgIGNvbnN0IHsgYXVkaW8sIHVzZXJJZCB9ID0gcmVxLmJvZHk7XHJcbiAgICAgIGlmICghYXVkaW8pIHJldHVybiByZXMuc3RhdHVzKDQwMCkuanNvbih7IGVycm9yOiAnTWlzc2luZyBhdWRpbyBkYXRhJyB9KTtcclxuXHJcbiAgICAgIGNvbnN0IGF1ZGlvQnVmZmVyID0gQnVmZmVyLmZyb20oYXVkaW8sICdiYXNlNjQnKTtcclxuICAgICAgY29uc3Qgdm9pY2VIYXNoID0gYXdhaXQgdGhpcy52b2ljZVNlcnZpY2UuZ2VuZXJhdGVWb2ljZUhhc2goYXVkaW9CdWZmZXIpO1xyXG5cclxuICAgICAgLy8gU3RvcmUgdGhlIHZvaWNlcHJpbnQgaW4gYSBwZXJzaXN0ZW50IHdheSAobW9ja2VkIHdpdGggUmVkaXMgZm9yIG5vdywgc2hvdWxkIGJlIGluIFVzZXIgREIpXHJcbiAgICAgIC8vIEluIGEgcmVhbCBpbXBsZW1lbnRhdGlvbiwgd2UnZCBhc3NvY2lhdGUgdGhpcyB3aXRoIHRoZSBTb3ZlcmVpZ24gSWRlbnRpdHkuXHJcbiAgICAgIGF3YWl0IHNldENhY2hlKGBzb3ZlcmVpZ246dm9pY2VwcmludDoke3VzZXJJZCB8fCAnZGVmYXVsdCd9YCwgdm9pY2VIYXNoKTtcclxuXHJcbiAgICAgIGxvZ2dlci5pbmZvKHsgdXNlcklkIH0sICdbU292ZXJlaWduQmlvbWV0cmljc10gVm9pY2UgZW5yb2xsZWQgc3VjY2Vzc2Z1bGx5Jyk7XHJcblxyXG4gICAgICByZXR1cm4gcmVzLmpzb24oe1xyXG4gICAgICAgIHN1Y2Nlc3M6IHRydWUsXHJcbiAgICAgICAgbWVzc2FnZTogJ1ZvaWNlcHJpbnQgZW5yb2xsZWQgYW5kIGxvY2tlZCBpbiB2YXVsdC4nLFxyXG4gICAgICAgIHZvaWNlSGFzaDogdm9pY2VIYXNoLnN1YnN0cmluZygwLCAxMCkgKyAnLi4uJ1xyXG4gICAgICB9KTtcclxuICAgIH0gY2F0Y2ggKGVycm9yKSB7XHJcbiAgICAgIGxvZ2dlci5lcnJvcignW1NvdmVyZWlnbkJpb21ldHJpY3NdIEVucm9sbG1lbnQgZmFpbGVkOicsIGVycm9yKTtcclxuICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgZXJyb3I6ICdCaW9tZXRyaWMgZW5yb2xsbWVudCBmYWlsZWQnIH0pO1xyXG4gICAgfVxyXG4gIH1cclxuXHJcbiAgLyoqXHJcbiAgICogVmVyaWZpZXMgYSB2b2ljZSBjaGFsbGVuZ2UuXHJcbiAgICovXHJcbiAgQGh0dHBQb3N0KCcvdmVyaWZ5LXZvaWNlJylcclxuICBwdWJsaWMgYXN5bmMgdmVyaWZ5Vm9pY2UoQHJlcXVlc3QoKSByZXE6IFJlcXVlc3QsIEByZXNwb25zZSgpIHJlczogUmVzcG9uc2UpIHtcclxuICAgIHRyeSB7XHJcbiAgICAgIGNvbnN0IHsgYXVkaW8sIHVzZXJJZCB9ID0gcmVxLmJvZHk7XHJcbiAgICAgIGlmICghYXVkaW8pIHJldHVybiByZXMuc3RhdHVzKDQwMCkuanNvbih7IGVycm9yOiAnTWlzc2luZyBhdWRpbyBkYXRhJyB9KTtcclxuXHJcbiAgICAgIGNvbnN0IHN0b3JlZEhhc2ggPSBhd2FpdCBnZXRDYWNoZShgc292ZXJlaWduOnZvaWNlcHJpbnQ6JHt1c2VySWQgfHwgJ2RlZmF1bHQnfWApO1xyXG4gICAgICBpZiAoIXN0b3JlZEhhc2gpIHtcclxuICAgICAgICByZXR1cm4gcmVzLnN0YXR1cyg0MDQpLmpzb24oeyBlcnJvcjogJ05vIHZvaWNlcHJpbnQgZm91bmQgZm9yIHRoaXMgdXNlcicgfSk7XHJcbiAgICAgIH1cclxuXHJcbiAgICAgIGNvbnN0IGF1ZGlvQnVmZmVyID0gQnVmZmVyLmZyb20oYXVkaW8sICdiYXNlNjQnKTtcclxuICAgICAgY29uc3QgaXNWYWxpZCA9IGF3YWl0IHRoaXMudm9pY2VTZXJ2aWNlLnZlcmlmeVZvaWNlcHJpbnQoc3RvcmVkSGFzaCwgYXVkaW9CdWZmZXIpO1xyXG5cclxuICAgICAgaWYgKCFpc1ZhbGlkKSB7XHJcbiAgICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNDAxKS5qc29uKHsgZXJyb3I6ICdCaW9tZXRyaWMgbWlzbWF0Y2gnIH0pO1xyXG4gICAgICB9XHJcblxyXG4gICAgICByZXR1cm4gcmVzLmpzb24oe1xyXG4gICAgICAgIHN1Y2Nlc3M6IHRydWUsXHJcbiAgICAgICAgbWVzc2FnZTogJ1ZvaWNlIGlkZW50aXR5IHZlcmlmaWVkLidcclxuICAgICAgfSk7XHJcbiAgICB9IGNhdGNoIChlcnJvcikge1xyXG4gICAgICBsb2dnZXIuZXJyb3IoJ1tTb3ZlcmVpZ25CaW9tZXRyaWNzXSBWZXJpZmljYXRpb24gZmFpbGVkOicsIGVycm9yKTtcclxuICAgICAgcmV0dXJuIHJlcy5zdGF0dXMoNTAwKS5qc29uKHsgZXJyb3I6ICdCaW9tZXRyaWMgdmVyaWZpY2F0aW9uIGZhaWxlZCcgfSk7XHJcbiAgICB9XHJcbiAgfVxyXG59XHJcbiJdLCJ2ZXJzaW9uIjozfQ==

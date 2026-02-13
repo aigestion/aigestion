@@ -1,9 +1,8 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import { Suspense, lazy, useEffect, useMemo, useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { ScrollProgress } from './components/ScrollProgress';
-import { CustomCursor } from './components/CustomCursor';
 import { MeshGradientBG } from './components/MeshGradientBG';
 import { useNotification } from './contexts/NotificationContext';
 import { Login } from './pages/Login';
@@ -50,6 +49,9 @@ const DecentralandOffice = lazy(() =>
 );
 const FAQSection = lazy(() =>
   import('./components/FAQSection').then(m => ({ default: m.FAQSection }))
+);
+const DemoDashboard = lazy(() =>
+  import('./components/DemoDashboard').then(m => ({ default: m.DemoDashboard }))
 );
 import { ContactModal } from './components/ContactModal';
 
@@ -193,9 +195,8 @@ export const AppContent = ({
   }
 
   return (
-    <div className="bg-black min-h-screen text-white font-sans selection:bg-nexus-cyan/20 selection:text-white relative overflow-x-hidden custom-cursor">
+    <div className="bg-black min-h-screen text-white font-sans selection:bg-nexus-cyan/20 selection:text-white relative overflow-x-hidden">
       <div className="grain-overlay" />
-      <CustomCursor />
       <MeshGradientBG />
       <ScrollProgress />
 
@@ -228,6 +229,9 @@ export const AppContent = ({
                     <CinematicPresentation />
                     <DanielaShowcase />
                     <NexusAndroid />
+                    <section id="demo-dashboard">
+                      <DemoDashboard />
+                    </section>
                     <ServicesDeepDive />
                     <CaseStudies />
                     <EnhancedROI />

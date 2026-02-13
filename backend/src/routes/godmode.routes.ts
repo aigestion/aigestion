@@ -3,7 +3,8 @@ import { container, TYPES } from '../config/inversify.config';
 import { GodModeController } from '../controllers/godmode.controller';
 
 const router = Router();
-const controller = container.get<GodModeController>(TYPES.GodModeController);
+
+// Controller resolution moved inside route handlers to avoid circular dependency
 
 /**
  * @openapi
@@ -12,8 +13,12 @@ const controller = container.get<GodModeController>(TYPES.GodModeController);
  *     summary: List all AI projects
  *     tags: [God Mode]
  */
-router.get('/projects', (req, res, next) => controller.listProjects(req, res, next));
-router.post('/projects', (req, res, next) => controller.createProject(req, res, next));
+router.get('/projects', (req, res, next) =>
+  container.get<GodModeController>(TYPES.GodModeController).listProjects(req, res, next),
+);
+router.post('/projects', (req, res, next) =>
+  container.get<GodModeController>(TYPES.GodModeController).createProject(req, res, next),
+);
 
 /**
  * @openapi
@@ -22,7 +27,9 @@ router.post('/projects', (req, res, next) => controller.createProject(req, res, 
  *     summary: Execute Hybrid Search (Vector + Full Text)
  *     tags: [God Mode]
  */
-router.post('/search', (req, res, next) => controller.hybridSearch(req, res, next));
+router.post('/search', (req, res, next) =>
+  container.get<GodModeController>(TYPES.GodModeController).hybridSearch(req, res, next),
+);
 
 /**
  * @openapi
@@ -31,7 +38,9 @@ router.post('/search', (req, res, next) => controller.hybridSearch(req, res, nex
  *     summary: List all available prompt templates
  *     tags: [God Mode]
  */
-router.get('/prompts', (req, res, next) => controller.listPrompts(req, res, next));
+router.get('/prompts', (req, res, next) =>
+  container.get<GodModeController>(TYPES.GodModeController).listPrompts(req, res, next),
+);
 
 /**
  * @openapi
@@ -40,7 +49,9 @@ router.get('/prompts', (req, res, next) => controller.listPrompts(req, res, next
  *     summary: Get a specific prompt template by name
  *     tags: [God Mode]
  */
-router.get('/prompts/:name', (req, res, next) => controller.getPrompt(req, res, next));
+router.get('/prompts/:name', (req, res, next) =>
+  container.get<GodModeController>(TYPES.GodModeController).getPrompt(req, res, next),
+);
 
 /**
  * @openapi
@@ -49,7 +60,9 @@ router.get('/prompts/:name', (req, res, next) => controller.getPrompt(req, res, 
  *     summary: View recent audit logs
  *     tags: [God Mode]
  */
-router.get('/audit', (req, res, next) => controller.getAuditLogs(req, res, next));
+router.get('/audit', (req, res, next) =>
+  container.get<GodModeController>(TYPES.GodModeController).getAuditLogs(req, res, next),
+);
 
 /**
  * @openapi
@@ -58,6 +71,8 @@ router.get('/audit', (req, res, next) => controller.getAuditLogs(req, res, next)
  *     summary: Test sovereign notification channels
  *     tags: [God Mode]
  */
-router.post('/test-notification', (req, res, next) => controller.testNotification(req, res, next));
+router.post('/test-notification', (req, res, next) =>
+  container.get<GodModeController>(TYPES.GodModeController).testNotification(req, res, next),
+);
 
 export default router;

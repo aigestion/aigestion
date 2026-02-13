@@ -17,6 +17,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   setupFiles: ['dotenv/config'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   cacheDirectory: '.jest-cache',
   maxWorkers: '50%',
 };

@@ -1,0 +1,81 @@
+55fc5a25e5412cdbde06b169ee178ae6
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ServiceMeshService = void 0;
+const inversify_1 = require("inversify");
+const logger_1 = require("../utils/logger");
+let ServiceMeshService = class ServiceMeshService {
+    /**
+     * Generates a basic Istio VirtualService configuration for a given service.
+     */
+    generateVirtualService(serviceName, host, subset = 'v1') {
+        const yaml = `
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: ${serviceName}
+spec:
+  hosts:
+  - "${host}"
+  http:
+  - route:
+    - destination:
+        host: ${serviceName}
+        subset: ${subset}
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+    timeout: 10s
+`;
+        return yaml.trim();
+    }
+    /**
+     * Generates a DestinationRule for circuit breaking.
+     */
+    generateDestinationRule(serviceName) {
+        const yaml = `
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: ${serviceName}
+spec:
+  host: ${serviceName}
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+      http:
+        http1MaxPendingRequests: 1024
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+`;
+        return yaml.trim();
+    }
+    /**
+     * Scaffolds a full mesh config for the AIGestion backend.
+     */
+    scaffoldMeshConfig() {
+        logger_1.logger.info('[ServiceMesh] Generating scaffolding for backend services...');
+        return {
+            'backend-vs.yaml': this.generateVirtualService('nexus-backend', 'api.nexus.com'),
+            'backend-dr.yaml': this.generateDestinationRule('nexus-backend'),
+            'rag-core-vs.yaml': this.generateVirtualService('rag-core', 'rag.nexus.internal'),
+            'ml-service-vs.yaml': this.generateVirtualService('ml-service', 'ai.nexus.internal'),
+        };
+    }
+};
+exports.ServiceMeshService = ServiceMeshService;
+exports.ServiceMeshService = ServiceMeshService = __decorate([
+    (0, inversify_1.injectable)()
+], ServiceMeshService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcc2VydmljZS1tZXNoLnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUEseUNBQXVDO0FBQ3ZDLDRDQUF5QztBQUdsQyxJQUFNLGtCQUFrQixHQUF4QixNQUFNLGtCQUFrQjtJQUM3Qjs7T0FFRztJQUNILHNCQUFzQixDQUFDLFdBQW1CLEVBQUUsSUFBWSxFQUFFLFNBQWlCLElBQUk7UUFDN0UsTUFBTSxJQUFJLEdBQUc7Ozs7VUFJUCxXQUFXOzs7T0FHZCxJQUFJOzs7O2dCQUlLLFdBQVc7a0JBQ1QsTUFBTTs7Ozs7Q0FLdkIsQ0FBQztRQUNFLE9BQU8sSUFBSSxDQUFDLElBQUksRUFBRSxDQUFDO0lBQ3JCLENBQUM7SUFFRDs7T0FFRztJQUNILHVCQUF1QixDQUFDLFdBQW1CO1FBQ3pDLE1BQU0sSUFBSSxHQUFHOzs7O1VBSVAsV0FBVzs7VUFFWCxXQUFXOzs7Ozs7Ozs7Ozs7O0NBYXBCLENBQUM7UUFDRSxPQUFPLElBQUksQ0FBQyxJQUFJLEVBQUUsQ0FBQztJQUNyQixDQUFDO0lBRUQ7O09BRUc7SUFDSCxrQkFBa0I7UUFDaEIsZUFBTSxDQUFDLElBQUksQ0FBQyw4REFBOEQsQ0FBQyxDQUFDO1FBRTVFLE9BQU87WUFDTCxpQkFBaUIsRUFBRSxJQUFJLENBQUMsc0JBQXNCLENBQUMsZUFBZSxFQUFFLGVBQWUsQ0FBQztZQUNoRixpQkFBaUIsRUFBRSxJQUFJLENBQUMsdUJBQXVCLENBQUMsZUFBZSxDQUFDO1lBQ2hFLGtCQUFrQixFQUFFLElBQUksQ0FBQyxzQkFBc0IsQ0FBQyxVQUFVLEVBQUUsb0JBQW9CLENBQUM7WUFDakYsb0JBQW9CLEVBQUUsSUFBSSxDQUFDLHNCQUFzQixDQUFDLFlBQVksRUFBRSxtQkFBbUIsQ0FBQztTQUNyRixDQUFDO0lBQ0osQ0FBQztDQUNGLENBQUE7QUFsRVksZ0RBQWtCOzZCQUFsQixrQkFBa0I7SUFEOUIsSUFBQSxzQkFBVSxHQUFFO0dBQ0Esa0JBQWtCLENBa0U5QiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJDOlxcVXNlcnNcXEFsZWphbmRyb1xcQUlHZXN0aW9uXFxiYWNrZW5kXFxzcmNcXHNlcnZpY2VzXFxzZXJ2aWNlLW1lc2guc2VydmljZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBpbmplY3RhYmxlIH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCB7IGxvZ2dlciB9IGZyb20gJy4uL3V0aWxzL2xvZ2dlcic7XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBTZXJ2aWNlTWVzaFNlcnZpY2Uge1xuICAvKipcbiAgICogR2VuZXJhdGVzIGEgYmFzaWMgSXN0aW8gVmlydHVhbFNlcnZpY2UgY29uZmlndXJhdGlvbiBmb3IgYSBnaXZlbiBzZXJ2aWNlLlxuICAgKi9cbiAgZ2VuZXJhdGVWaXJ0dWFsU2VydmljZShzZXJ2aWNlTmFtZTogc3RyaW5nLCBob3N0OiBzdHJpbmcsIHN1YnNldDogc3RyaW5nID0gJ3YxJyk6IHN0cmluZyB7XG4gICAgY29uc3QgeWFtbCA9IGBcbmFwaVZlcnNpb246IG5ldHdvcmtpbmcuaXN0aW8uaW8vdjFhbHBoYTNcbmtpbmQ6IFZpcnR1YWxTZXJ2aWNlXG5tZXRhZGF0YTpcbiAgbmFtZTogJHtzZXJ2aWNlTmFtZX1cbnNwZWM6XG4gIGhvc3RzOlxuICAtIFwiJHtob3N0fVwiXG4gIGh0dHA6XG4gIC0gcm91dGU6XG4gICAgLSBkZXN0aW5hdGlvbjpcbiAgICAgICAgaG9zdDogJHtzZXJ2aWNlTmFtZX1cbiAgICAgICAgc3Vic2V0OiAke3N1YnNldH1cbiAgICByZXRyaWVzOlxuICAgICAgYXR0ZW1wdHM6IDNcbiAgICAgIHBlclRyeVRpbWVvdXQ6IDJzXG4gICAgdGltZW91dDogMTBzXG5gO1xuICAgIHJldHVybiB5YW1sLnRyaW0oKTtcbiAgfVxuXG4gIC8qKlxuICAgKiBHZW5lcmF0ZXMgYSBEZXN0aW5hdGlvblJ1bGUgZm9yIGNpcmN1aXQgYnJlYWtpbmcuXG4gICAqL1xuICBnZW5lcmF0ZURlc3RpbmF0aW9uUnVsZShzZXJ2aWNlTmFtZTogc3RyaW5nKTogc3RyaW5nIHtcbiAgICBjb25zdCB5YW1sID0gYFxuYXBpVmVyc2lvbjogbmV0d29ya2luZy5pc3Rpby5pby92MWFscGhhM1xua2luZDogRGVzdGluYXRpb25SdWxlXG5tZXRhZGF0YTpcbiAgbmFtZTogJHtzZXJ2aWNlTmFtZX1cbnNwZWM6XG4gIGhvc3Q6ICR7c2VydmljZU5hbWV9XG4gIHRyYWZmaWNQb2xpY3k6XG4gICAgY29ubmVjdGlvblBvb2w6XG4gICAgICB0Y3A6XG4gICAgICAgIG1heENvbm5lY3Rpb25zOiAxMDBcbiAgICAgIGh0dHA6XG4gICAgICAgIGh0dHAxTWF4UGVuZGluZ1JlcXVlc3RzOiAxMDI0XG4gICAgICAgIG1heFJlcXVlc3RzUGVyQ29ubmVjdGlvbjogMTBcbiAgICBvdXRsaWVyRGV0ZWN0aW9uOlxuICAgICAgY29uc2VjdXRpdmU1eHhFcnJvcnM6IDVcbiAgICAgIGludGVydmFsOiAzMHNcbiAgICAgIGJhc2VFamVjdGlvblRpbWU6IDMwc1xuICAgICAgbWF4RWplY3Rpb25QZXJjZW50OiA1MFxuYDtcbiAgICByZXR1cm4geWFtbC50cmltKCk7XG4gIH1cblxuICAvKipcbiAgICogU2NhZmZvbGRzIGEgZnVsbCBtZXNoIGNvbmZpZyBmb3IgdGhlIEFJR2VzdGlvbiBiYWNrZW5kLlxuICAgKi9cbiAgc2NhZmZvbGRNZXNoQ29uZmlnKCk6IGFueSB7XG4gICAgbG9nZ2VyLmluZm8oJ1tTZXJ2aWNlTWVzaF0gR2VuZXJhdGluZyBzY2FmZm9sZGluZyBmb3IgYmFja2VuZCBzZXJ2aWNlcy4uLicpO1xuXG4gICAgcmV0dXJuIHtcbiAgICAgICdiYWNrZW5kLXZzLnlhbWwnOiB0aGlzLmdlbmVyYXRlVmlydHVhbFNlcnZpY2UoJ25leHVzLWJhY2tlbmQnLCAnYXBpLm5leHVzLmNvbScpLFxuICAgICAgJ2JhY2tlbmQtZHIueWFtbCc6IHRoaXMuZ2VuZXJhdGVEZXN0aW5hdGlvblJ1bGUoJ25leHVzLWJhY2tlbmQnKSxcbiAgICAgICdyYWctY29yZS12cy55YW1sJzogdGhpcy5nZW5lcmF0ZVZpcnR1YWxTZXJ2aWNlKCdyYWctY29yZScsICdyYWcubmV4dXMuaW50ZXJuYWwnKSxcbiAgICAgICdtbC1zZXJ2aWNlLXZzLnlhbWwnOiB0aGlzLmdlbmVyYXRlVmlydHVhbFNlcnZpY2UoJ21sLXNlcnZpY2UnLCAnYWkubmV4dXMuaW50ZXJuYWwnKSxcbiAgICB9O1xuICB9XG59XG4iXSwidmVyc2lvbiI6M30=

@@ -1,0 +1,81 @@
+a6007a2c1e9ea4bb87ce1d8c8a2567f7
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GodNotificationService = void 0;
+const inversify_1 = require("inversify");
+const types_1 = require("../types");
+const telegram_service_1 = require("./telegram.service");
+const whatsapp_service_1 = require("./whatsapp.service");
+const email_service_1 = require("./email.service");
+const logger_1 = require("../utils/logger");
+const env_schema_1 = require("../config/env.schema");
+const daniela_persona_1 = require("../config/prompts/daniela.persona");
+let GodNotificationService = class GodNotificationService {
+    telegram;
+    whatsapp;
+    email;
+    constructor(telegram, whatsapp, email) {
+        this.telegram = telegram;
+        this.whatsapp = whatsapp;
+        this.email = email;
+    }
+    /**
+     * Sends a high-priority alert through all enabled sovereign channels.
+     */
+    async broadcastGodAlert(title, message, urgency = 'medium') {
+        const formattedMessage = this.formatMessage(title, message, urgency);
+        logger_1.logger.info(`[GodNotificationService] Broadcasting alert: ${title} (${urgency})`);
+        const tasks = [];
+        // 1. Telegram (Immediate)
+        tasks.push(this.telegram.sendMessage(formattedMessage));
+        // 2. WhatsApp (Direct, for high urgency)
+        if (urgency === 'high' && env_schema_1.env.WHATSAPP_PHONE_NUMBER) {
+            tasks.push(this.whatsapp.sendMessage(env_schema_1.env.WHATSAPP_PHONE_NUMBER, formattedMessage));
+        }
+        // 3. Email (Formal record)
+        if (urgency !== 'low') {
+            const emailTo = env_schema_1.env.EMAIL_FROM || 'admin@nexusv1.net';
+            const emailSubject = `[${daniela_persona_1.DANIELA_IDENTITY.brand} ALERT] ${title}`;
+            const emailHtml = `<pre style="font-family: monospace; font-size: 14px;">${formattedMessage}</pre>`;
+            tasks.push(this.email.sendEmail(emailTo, emailSubject, emailHtml));
+        }
+        await Promise.allSettled(tasks);
+    }
+    /**
+     * Applies Daniela's persona to the notification content.
+     */
+    formatMessage(title, message, urgency) {
+        const icon = urgency === 'high' ? '🚨' : urgency === 'medium' ? '⚡' : 'ℹ️';
+        return `
+${icon} *${title.toUpperCase()}*
+-------------------
+${message}
+
+--
+${daniela_persona_1.DANIELA_IDENTITY.name} | ${daniela_persona_1.DANIELA_IDENTITY.title}
+${daniela_persona_1.DANIELA_IDENTITY.brand} Sovereign Operations
+    `.trim();
+    }
+};
+exports.GodNotificationService = GodNotificationService;
+exports.GodNotificationService = GodNotificationService = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.TelegramService)),
+    __param(1, (0, inversify_1.inject)(types_1.TYPES.WhatsAppService)),
+    __param(2, (0, inversify_1.inject)(types_1.TYPES.EmailService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof telegram_service_1.TelegramService !== "undefined" && telegram_service_1.TelegramService) === "function" ? _a : Object, typeof (_b = typeof whatsapp_service_1.WhatsAppService !== "undefined" && whatsapp_service_1.WhatsAppService) === "function" ? _b : Object, typeof (_c = typeof email_service_1.EmailService !== "undefined" && email_service_1.EmailService) === "function" ? _c : Object])
+], GodNotificationService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcZ29kLW5vdGlmaWNhdGlvbi5zZXJ2aWNlLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSx5Q0FBK0M7QUFDL0Msb0NBQWlDO0FBQ2pDLHlEQUFxRDtBQUNyRCx5REFBcUQ7QUFDckQsbURBQStDO0FBQy9DLDRDQUF5QztBQUN6QyxxREFBMkM7QUFDM0MsdUVBQXFFO0FBRzlELElBQU0sc0JBQXNCLEdBQTVCLE1BQU0sc0JBQXNCO0lBRVE7SUFDQTtJQUNIO0lBSHRDLFlBQ3lDLFFBQXlCLEVBQ3pCLFFBQXlCLEVBQzVCLEtBQW1CO1FBRmhCLGFBQVEsR0FBUixRQUFRLENBQWlCO1FBQ3pCLGFBQVEsR0FBUixRQUFRLENBQWlCO1FBQzVCLFVBQUssR0FBTCxLQUFLLENBQWM7SUFDdEQsQ0FBQztJQUVKOztPQUVHO0lBQ0gsS0FBSyxDQUFDLGlCQUFpQixDQUNyQixLQUFhLEVBQ2IsT0FBZSxFQUNmLFVBQXFDLFFBQVE7UUFFN0MsTUFBTSxnQkFBZ0IsR0FBRyxJQUFJLENBQUMsYUFBYSxDQUFDLEtBQUssRUFBRSxPQUFPLEVBQUUsT0FBTyxDQUFDLENBQUM7UUFFckUsZUFBTSxDQUFDLElBQUksQ0FBQyxnREFBZ0QsS0FBSyxLQUFLLE9BQU8sR0FBRyxDQUFDLENBQUM7UUFFbEYsTUFBTSxLQUFLLEdBQW1CLEVBQUUsQ0FBQztRQUVqQywwQkFBMEI7UUFDMUIsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxnQkFBZ0IsQ0FBQyxDQUFDLENBQUM7UUFFeEQseUNBQXlDO1FBQ3pDLElBQUksT0FBTyxLQUFLLE1BQU0sSUFBSSxnQkFBRyxDQUFDLHFCQUFxQixFQUFFLENBQUM7WUFDcEQsS0FBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLFdBQVcsQ0FBQyxnQkFBRyxDQUFDLHFCQUFxQixFQUFFLGdCQUFnQixDQUFDLENBQUMsQ0FBQztRQUNyRixDQUFDO1FBRUQsMkJBQTJCO1FBQzNCLElBQUksT0FBTyxLQUFLLEtBQUssRUFBRSxDQUFDO1lBQ3RCLE1BQU0sT0FBTyxHQUFHLGdCQUFHLENBQUMsVUFBVSxJQUFJLG1CQUFtQixDQUFDO1lBQ3RELE1BQU0sWUFBWSxHQUFHLElBQUksa0NBQWdCLENBQUMsS0FBSyxXQUFXLEtBQUssRUFBRSxDQUFDO1lBQ2xFLE1BQU0sU0FBUyxHQUFHLHlEQUF5RCxnQkFBZ0IsUUFBUSxDQUFDO1lBRXBHLEtBQUssQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssQ0FBQyxTQUFTLENBQUMsT0FBTyxFQUFFLFlBQVksRUFBRSxTQUFTLENBQUMsQ0FBQyxDQUFDO1FBQ3JFLENBQUM7UUFFRCxNQUFNLE9BQU8sQ0FBQyxVQUFVLENBQUMsS0FBSyxDQUFDLENBQUM7SUFDbEMsQ0FBQztJQUVEOztPQUVHO0lBQ0ssYUFBYSxDQUFDLEtBQWEsRUFBRSxPQUFlLEVBQUUsT0FBZTtRQUNuRSxNQUFNLElBQUksR0FBRyxPQUFPLEtBQUssTUFBTSxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLE9BQU8sS0FBSyxRQUFRLENBQUMsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsSUFBSSxDQUFDO1FBQzNFLE9BQU87RUFDVCxJQUFJLEtBQUssS0FBSyxDQUFDLFdBQVcsRUFBRTs7RUFFNUIsT0FBTzs7O0VBR1Asa0NBQWdCLENBQUMsSUFBSSxNQUFNLGtDQUFnQixDQUFDLEtBQUs7RUFDakQsa0NBQWdCLENBQUMsS0FBSztLQUNuQixDQUFDLElBQUksRUFBRSxDQUFDO0lBQ1gsQ0FBQztDQUNGLENBQUE7QUF4RFksd0RBQXNCO2lDQUF0QixzQkFBc0I7SUFEbEMsSUFBQSxzQkFBVSxHQUFFO0lBR1IsV0FBQSxJQUFBLGtCQUFNLEVBQUMsYUFBSyxDQUFDLGVBQWUsQ0FBQyxDQUFBO0lBQzdCLFdBQUEsSUFBQSxrQkFBTSxFQUFDLGFBQUssQ0FBQyxlQUFlLENBQUMsQ0FBQTtJQUM3QixXQUFBLElBQUEsa0JBQU0sRUFBQyxhQUFLLENBQUMsWUFBWSxDQUFDLENBQUE7eURBRnNCLGtDQUFlLG9CQUFmLGtDQUFlLG9EQUNmLGtDQUFlLG9CQUFmLGtDQUFlLG9EQUNyQiw0QkFBWSxvQkFBWiw0QkFBWTtHQUo5QyxzQkFBc0IsQ0F3RGxDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xcc2VydmljZXNcXGdvZC1ub3RpZmljYXRpb24uc2VydmljZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBpbmplY3RhYmxlLCBpbmplY3QgfSBmcm9tICdpbnZlcnNpZnknO1xuaW1wb3J0IHsgVFlQRVMgfSBmcm9tICcuLi90eXBlcyc7XG5pbXBvcnQgeyBUZWxlZ3JhbVNlcnZpY2UgfSBmcm9tICcuL3RlbGVncmFtLnNlcnZpY2UnO1xuaW1wb3J0IHsgV2hhdHNBcHBTZXJ2aWNlIH0gZnJvbSAnLi93aGF0c2FwcC5zZXJ2aWNlJztcbmltcG9ydCB7IEVtYWlsU2VydmljZSB9IGZyb20gJy4vZW1haWwuc2VydmljZSc7XG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xuaW1wb3J0IHsgZW52IH0gZnJvbSAnLi4vY29uZmlnL2Vudi5zY2hlbWEnO1xuaW1wb3J0IHsgREFOSUVMQV9JREVOVElUWSB9IGZyb20gJy4uL2NvbmZpZy9wcm9tcHRzL2RhbmllbGEucGVyc29uYSc7XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBHb2ROb3RpZmljYXRpb25TZXJ2aWNlIHtcbiAgY29uc3RydWN0b3IoXG4gICAgQGluamVjdChUWVBFUy5UZWxlZ3JhbVNlcnZpY2UpIHByaXZhdGUgdGVsZWdyYW06IFRlbGVncmFtU2VydmljZSxcbiAgICBAaW5qZWN0KFRZUEVTLldoYXRzQXBwU2VydmljZSkgcHJpdmF0ZSB3aGF0c2FwcDogV2hhdHNBcHBTZXJ2aWNlLFxuICAgIEBpbmplY3QoVFlQRVMuRW1haWxTZXJ2aWNlKSBwcml2YXRlIGVtYWlsOiBFbWFpbFNlcnZpY2UsXG4gICkge31cblxuICAvKipcbiAgICogU2VuZHMgYSBoaWdoLXByaW9yaXR5IGFsZXJ0IHRocm91Z2ggYWxsIGVuYWJsZWQgc292ZXJlaWduIGNoYW5uZWxzLlxuICAgKi9cbiAgYXN5bmMgYnJvYWRjYXN0R29kQWxlcnQoXG4gICAgdGl0bGU6IHN0cmluZyxcbiAgICBtZXNzYWdlOiBzdHJpbmcsXG4gICAgdXJnZW5jeTogJ2xvdycgfCAnbWVkaXVtJyB8ICdoaWdoJyA9ICdtZWRpdW0nLFxuICApIHtcbiAgICBjb25zdCBmb3JtYXR0ZWRNZXNzYWdlID0gdGhpcy5mb3JtYXRNZXNzYWdlKHRpdGxlLCBtZXNzYWdlLCB1cmdlbmN5KTtcblxuICAgIGxvZ2dlci5pbmZvKGBbR29kTm90aWZpY2F0aW9uU2VydmljZV0gQnJvYWRjYXN0aW5nIGFsZXJ0OiAke3RpdGxlfSAoJHt1cmdlbmN5fSlgKTtcblxuICAgIGNvbnN0IHRhc2tzOiBQcm9taXNlPGFueT5bXSA9IFtdO1xuXG4gICAgLy8gMS4gVGVsZWdyYW0gKEltbWVkaWF0ZSlcbiAgICB0YXNrcy5wdXNoKHRoaXMudGVsZWdyYW0uc2VuZE1lc3NhZ2UoZm9ybWF0dGVkTWVzc2FnZSkpO1xuXG4gICAgLy8gMi4gV2hhdHNBcHAgKERpcmVjdCwgZm9yIGhpZ2ggdXJnZW5jeSlcbiAgICBpZiAodXJnZW5jeSA9PT0gJ2hpZ2gnICYmIGVudi5XSEFUU0FQUF9QSE9ORV9OVU1CRVIpIHtcbiAgICAgIHRhc2tzLnB1c2godGhpcy53aGF0c2FwcC5zZW5kTWVzc2FnZShlbnYuV0hBVFNBUFBfUEhPTkVfTlVNQkVSLCBmb3JtYXR0ZWRNZXNzYWdlKSk7XG4gICAgfVxuXG4gICAgLy8gMy4gRW1haWwgKEZvcm1hbCByZWNvcmQpXG4gICAgaWYgKHVyZ2VuY3kgIT09ICdsb3cnKSB7XG4gICAgICBjb25zdCBlbWFpbFRvID0gZW52LkVNQUlMX0ZST00gfHwgJ2FkbWluQG5leHVzdjEubmV0JztcbiAgICAgIGNvbnN0IGVtYWlsU3ViamVjdCA9IGBbJHtEQU5JRUxBX0lERU5USVRZLmJyYW5kfSBBTEVSVF0gJHt0aXRsZX1gO1xuICAgICAgY29uc3QgZW1haWxIdG1sID0gYDxwcmUgc3R5bGU9XCJmb250LWZhbWlseTogbW9ub3NwYWNlOyBmb250LXNpemU6IDE0cHg7XCI+JHtmb3JtYXR0ZWRNZXNzYWdlfTwvcHJlPmA7XG5cbiAgICAgIHRhc2tzLnB1c2godGhpcy5lbWFpbC5zZW5kRW1haWwoZW1haWxUbywgZW1haWxTdWJqZWN0LCBlbWFpbEh0bWwpKTtcbiAgICB9XG5cbiAgICBhd2FpdCBQcm9taXNlLmFsbFNldHRsZWQodGFza3MpO1xuICB9XG5cbiAgLyoqXG4gICAqIEFwcGxpZXMgRGFuaWVsYSdzIHBlcnNvbmEgdG8gdGhlIG5vdGlmaWNhdGlvbiBjb250ZW50LlxuICAgKi9cbiAgcHJpdmF0ZSBmb3JtYXRNZXNzYWdlKHRpdGxlOiBzdHJpbmcsIG1lc3NhZ2U6IHN0cmluZywgdXJnZW5jeTogc3RyaW5nKTogc3RyaW5nIHtcbiAgICBjb25zdCBpY29uID0gdXJnZW5jeSA9PT0gJ2hpZ2gnID8gJ/CfmqgnIDogdXJnZW5jeSA9PT0gJ21lZGl1bScgPyAn4pqhJyA6ICfihLnvuI8nO1xuICAgIHJldHVybiBgXG4ke2ljb259ICoke3RpdGxlLnRvVXBwZXJDYXNlKCl9KlxuLS0tLS0tLS0tLS0tLS0tLS0tLVxuJHttZXNzYWdlfVxuXG4tLVxuJHtEQU5JRUxBX0lERU5USVRZLm5hbWV9IHwgJHtEQU5JRUxBX0lERU5USVRZLnRpdGxlfVxuJHtEQU5JRUxBX0lERU5USVRZLmJyYW5kfSBTb3ZlcmVpZ24gT3BlcmF0aW9uc1xuICAgIGAudHJpbSgpO1xuICB9XG59XG4iXSwidmVyc2lvbiI6M30=

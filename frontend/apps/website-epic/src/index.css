@@ -4,27 +4,33 @@
 
 @layer base {
   :root {
-    --color-nexus-obsidian: #000000;
-    --color-nexus-obsidian-light: #050505;
+    --color-nexus-obsidian: #020205;
+    --color-nexus-obsidian-light: #0a0a0f;
     --color-nexus-obsidian-deep: #000000;
 
     --color-nexus-violet: #8a2be2;
-    --color-nexus-violet-glow: #a855f7;
+    --color-nexus-violet-glow: #bf00ff;
 
     --color-nexus-cyan: #00f5ff;
-    --color-nexus-cyan-glow: #22d3ee;
-    --color-nexus-cyan-mute: rgba(0, 245, 255, 0.1);
+    --color-nexus-cyan-glow: #00ffff;
+    --color-nexus-cyan-mute: rgba(0, 245, 255, 0.05);
 
-    --color-nexus-gold: #ffd700;
-    --color-nexus-silver: #f5f5f7;
-    --color-nexus-silver-mute: rgba(245, 245, 247, 0.4);
+    --color-nexus-gold: #ffcc00;
+    --color-nexus-silver: #ececf1;
+    --color-nexus-silver-mute: rgba(236, 236, 241, 0.3);
 
-    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-    --font-orbitron: 'Orbitron', sans-serif;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-orbitron: 'Orbitron', 'Inter', sans-serif;
 
-    --animate-float: float 6s ease-in-out infinite;
-    --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    --animate-pulse-border: pulse-border 4s ease-in-out infinite;
+    --animate-float: float 8s ease-in-out infinite;
+    --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+    --animate-pulse-border: pulse-border 5s ease-in-out infinite;
+    --animate-spin-slow: spin 12s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
 
   @keyframes pulse-border {
@@ -101,11 +107,26 @@
     outline: none;
   }
   .text-glow {
-    text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+    text-shadow: 0 0 30px rgba(138, 43, 226, 0.6);
   }
 
   .text-glow-cyan {
-    text-shadow: 0 0 20px rgba(0, 245, 255, 0.5);
+    text-shadow: 0 0 30px rgba(0, 245, 255, 0.6);
+  }
+
+  .text-glow-white {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+
+  .neon-border {
+    position: relative;
+    border: 1px solid rgba(0, 245, 255, 0.2);
+    box-shadow: 0 0 15px rgba(0, 245, 255, 0.1);
+  }
+
+  .neon-border:hover {
+    border-color: rgba(0, 245, 255, 0.5);
+    box-shadow: 0 0 25px rgba(0, 245, 255, 0.3);
   }
 
   .premium-glass {
