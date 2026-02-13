@@ -141,7 +141,7 @@ const DemoDashboard = () => {
           <div className="lg:col-span-9">
             <div className="relative w-full h-full bg-black/60 backdrop-blur-2xl rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
               {/* Header Bar */}
-              <div className="px-8 py-6 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
+              <div className="px-8 py-6 border-b border-white/5 flex items-center justify-between bg-white/2">
                 <div className="flex items-center gap-6">
                   <div className="flex gap-1.5">
                     <div className="w-2 h-2 rounded-full bg-red-500/40" />
@@ -222,7 +222,7 @@ const DemoDashboard = () => {
                       className="space-y-6"
                     >
                       <div className="bg-nexus-violet/5 rounded-2xl p-8 border border-nexus-violet/20 flex gap-6">
-                        <div className="w-16 h-16 rounded-full bg-linear-to-br from-nexus-violet to-nexus-cyan p-[1px]">
+                        <div className="w-16 h-16 rounded-full bg-linear-to-br from-nexus-violet to-nexus-cyan p-px">
                           <div className="w-full h-full bg-black rounded-full flex items-center justify-center overflow-hidden">
                             <img
                               src="https://api.dicebear.com/7.x/bottts/svg?seed=Daniela"
@@ -259,7 +259,7 @@ const DemoDashboard = () => {
 };
 
 const StatCard = ({ label, value, icon: Icon, color }: any) => (
-  <div className="bg-white/[0.03] border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-colors group">
+  <div className="bg-white/3 border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-colors group">
     <div className="flex items-center justify-between mb-4">
       <span className="text-[10px] text-nexus-silver/40 font-bold tracking-widest uppercase">
         {label}

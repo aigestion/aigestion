@@ -110,6 +110,28 @@ export const Footer: React.FC = () => {
                       </button>
                     </li>
                   ))}
+                  {section.title === 'RECURSOS' && (
+                    <>
+                      <li>
+                        <a
+                          href="#privacy"
+                          className="text-nexus-silver/30 hover:text-nexus-cyan transition-colors text-[10px] font-orbitron tracking-widest uppercase flex items-center gap-2 group"
+                        >
+                          <span className="w-0 h-px bg-nexus-cyan group-hover:w-4 transition-all duration-300" />
+                          Privacy Policy
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#terms"
+                          className="text-nexus-silver/30 hover:text-nexus-cyan transition-colors text-[10px] font-orbitron tracking-widest uppercase flex items-center gap-2 group"
+                        >
+                          <span className="w-0 h-px bg-nexus-cyan group-hover:w-4 transition-all duration-300" />
+                          Terms of Service
+                        </a>
+                      </li>
+                    </>
+                  )}
                 </ul>
               </motion.div>
             ))}

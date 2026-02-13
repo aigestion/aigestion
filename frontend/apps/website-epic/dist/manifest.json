@@ -15,16 +15,16 @@
   "categories": ["business", "productivity", "utilities"],
   "icons": [
     {
-      "src": "/apple-touch-icon.png",
-      "sizes": "192x192",
-      "type": "image/png",
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/apple-touch-icon.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
@@ -33,21 +33,21 @@
       "short_name": "Dashboard",
       "description": "Acceso rápido al panel principal",
       "url": "/dashboard",
-      "icons": [{ "src": "/apple-touch-icon.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [{ "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }]
     },
     {
       "name": "War Room",
       "short_name": "War Room",
       "description": "Centro de control estratégico",
       "url": "/war-room",
-      "icons": [{ "src": "/apple-touch-icon.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [{ "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }]
     },
     {
       "name": "IA Assistant",
       "short_name": "Daniela",
       "description": "Asistente de IA conversacional",
       "url": "/daniela",
-      "icons": [{ "src": "/apple-touch-icon.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [{ "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }]
     }
   ],
   "screenshots": [],

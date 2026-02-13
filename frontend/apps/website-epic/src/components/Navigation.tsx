@@ -24,12 +24,12 @@ export const Navigation: React.FC = () => {
   }, []);
 
   const navItems = [
+    { label: 'Demo', path: '#demo-dashboard', isHash: true },
     { label: 'Servicios', path: '#services', isHash: true },
-    { label: 'Precios', path: '#pricing', isHash: true },
     { label: 'Soluciones', path: '#plan', isHash: true },
     { label: 'Tutoriales', path: '#tutoriales', isHash: true },
+    { label: 'Precios', path: '#pricing', isHash: true },
     { label: 'Contacto', path: '#contact', isHash: true, isModal: true },
-    { label: 'Demo', path: '/dashboard' },
   ];
 
   const handleLinkClick = (path: string, isHash?: boolean, isModal?: boolean) => {
