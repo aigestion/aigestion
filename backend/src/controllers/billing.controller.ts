@@ -12,7 +12,7 @@ import { TYPES } from '../types';
 export class BillingController {
   constructor(
     @inject(TYPES.StripeService) private stripeService: StripeService,
-    @inject(TYPES.PaypalService) private payPalService: PayPalService,
+    @inject(TYPES.PaypalService) private payPalService: PayPalService
   ) {}
 
   public async getBillingSnapshot(req: Request, res: Response, next: NextFunction) {
@@ -67,7 +67,7 @@ export class BillingController {
         customerId,
         priceId,
         `${env.FRONTEND_URL}/billing?success=true`,
-        `${env.FRONTEND_URL}/billing?canceled=true`,
+        `${env.FRONTEND_URL}/billing?canceled=true`
       );
 
       res.json({ sessionId: session.id, url: session.url });
@@ -87,7 +87,7 @@ export class BillingController {
 
       const session = await this.stripeService.createPortalSession(
         user.stripeCustomerId,
-        `${env.FRONTEND_URL}/billing`,
+        `${env.FRONTEND_URL}/billing`
       );
 
       res.json({ url: session.url });

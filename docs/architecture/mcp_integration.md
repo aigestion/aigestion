@@ -4,8 +4,8 @@
 
 ## Active Servers
 
-| Server Name           | Status                  | Details                                                                    | Must Check Method |
-| :-------------------- | :---------------------- | :------------------------------------------------------------------------- | :---------------- |
+| Server Name           | Status                   | Details                                                                    | Must Check Method |
+| :-------------------- | :----------------------- | :------------------------------------------------------------------------- | :---------------- |
 | **notion-mcp-server** | 🟢 **Operational**       | Successfully retrieved connected users.                                    | `get_users`       |
 | **cloudrun**          | 🟡 **Connected (Empty)** | Connected but listing no projects. Verify `gcloud` context or permissions. | `list_projects`   |
 | **github-mcp-server** | 🟢 **Operational**       | Configured with User Provided Token. Verification pending restart.         | `get_me`          |
@@ -22,7 +22,6 @@
 | **aws**               | 🔵 **Added**             | Cloud resource management (EC2, S3, etc.).                                 | -                 |
 | **railway**           | 🔵 **Added**             | Deployment platform management.                                            | -                 |
 | **datadog**           | 🔵 **Added**             | Monitoring and observability services.                                     | -                 |
-
 
 ## Available Credentials & Recommendations
 

@@ -126,7 +126,7 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
   // Detect system theme preference
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
       setSystemTheme(e.matches ? 'dark' : 'light');
     };
@@ -136,7 +136,7 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
 
     // Listen for changes
     mediaQuery.addEventListener('change', handleChange);
-    
+
     return () => {
       mediaQuery.removeEventListener('change', handleChange);
     };
@@ -149,22 +149,22 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
   // Apply theme to document
   useEffect(() => {
     const root = document.documentElement;
-    
+
     // Remove existing theme classes
     root.classList.remove('light', 'dark');
-    
+
     // Add current theme class
     root.classList.add(currentTheme);
-    
+
     // Set CSS custom properties
     Object.entries(theme.colors).forEach(([key, value]) => {
       root.style.setProperty(`--color-${key}`, value);
     });
-    
+
     // Set transition properties
     root.style.setProperty('--transition-duration', theme.transitions.duration);
     root.style.setProperty('--transition-easing', theme.transitions.easing);
-    
+
     // Set shadow properties
     Object.entries(theme.shadows).forEach(([key, value]) => {
       root.style.setProperty(`--shadow-${key}`, value);
@@ -203,11 +203,7 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     isSystemTheme: themeMode === 'system',
   };
 
-  return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 // Hook for theme-aware styles
@@ -274,18 +270,18 @@ export const themeUtils = {
   // Generate theme-aware CSS variables
   generateCSSVariables: (theme: Theme): Record<string, string> => {
     const variables: Record<string, string> = {};
-    
+
     Object.entries(theme.colors).forEach(([key, value]) => {
       variables[`--color-${key}`] = value;
     });
-    
+
     Object.entries(theme.shadows).forEach(([key, value]) => {
       variables[`--shadow-${key}`] = value;
     });
-    
+
     variables['--transition-duration'] = theme.transitions.duration;
     variables['--transition-easing'] = theme.transitions.easing;
-    
+
     return variables;
   },
 

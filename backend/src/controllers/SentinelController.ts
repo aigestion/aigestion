@@ -18,7 +18,7 @@ export class SentinelController {
       return res.json({
         success: true,
         timestamp: new Date(),
-        forecasts
+        forecasts,
       });
     } catch (error) {
       logger.error('[SentinelController] Forecast failed:', error);

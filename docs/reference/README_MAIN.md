@@ -67,8 +67,8 @@ cd scripts
 
 **Última Auditoría:** 5 Diciembre 2025
 
-| Área             | Estado       | Detalles                                  |
-| ---------------- | ------------ | ----------------------------------------- |
+| Área             | Estado        | Detalles                                  |
+| ---------------- | ------------- | ----------------------------------------- |
 | **Seguridad**    | ✅ EXCELLENTE | 0 vulnerabilidades, 12 secretos (revisar) |
 | **Código**       | ✨ BUENO      | 4 TS + 5 JS, Doc 67%                      |
 | **Compliance**   | 🟡 ATENCIÓN   | 13 archivos sin commitear                 |
@@ -243,4 +243,3 @@ Este proyecto es parte de **NEXUS V1 (Autogestión Pro)**.
 ---
 
 Documentación generada automáticamente por el Sistema de Auditoría NEXUS V1
-

@@ -63,8 +63,8 @@ class BillingService {
     });
 
     if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
-        throw new Error(error.message || 'Failed to create checkout session');
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || 'Failed to create checkout session');
     }
 
     return response.json();
@@ -78,8 +78,8 @@ class BillingService {
     });
 
     if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
-        throw new Error(error.message || 'Failed to create portal session');
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.message || 'Failed to create portal session');
     }
 
     return response.json();

@@ -11,7 +11,7 @@ interface LoginProps {
 export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{
@@ -104,9 +104,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
                   className="w-full pl-10 pr-4 py-2 bg-nexus-obsidian/60 border border-white/10 rounded-lg text-white placeholder-nexus-silver/40 focus:outline-none focus:border-nexus-cyan disabled:opacity-50"
                 />
               </div>
-              {fieldErrors.email && (
-                <p className="text-red-400 text-sm">{fieldErrors.email}</p>
-              )}
+              {fieldErrors.email && <p className="text-red-400 text-sm">{fieldErrors.email}</p>}
             </div>
 
             {/* Password Input */}
@@ -115,7 +113,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
               <div className="relative">
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40" />
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
@@ -129,11 +127,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
                   className="absolute right-3 top-3 text-nexus-silver/40 hover:text-nexus-silver/60 disabled:opacity-50"
                   disabled={loading}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
               {fieldErrors.password && (

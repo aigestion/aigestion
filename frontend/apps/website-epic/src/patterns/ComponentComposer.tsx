@@ -78,10 +78,7 @@ export class HookRegistry {
 
 // Provider registry
 export class ProviderRegistry {
-  static register<P = ComponentProps>(
-    name: string,
-    provider: ComponentType<P>
-  ): void {
+  static register<P = ComponentProps>(name: string, provider: ComponentType<P>): void {
     compositionContext.providers.set(name, provider);
   }
 
@@ -133,15 +130,12 @@ export function composeProviders(
   providers: Array<{ name: string; props?: ComponentProps }>,
   children: ReactNode
 ): ReactNode {
-  return providers.reduceRight(
-    (acc, { name, props }) => {
-      const Provider = ProviderRegistry.get(name);
-      if (!Provider) return acc;
+  return providers.reduceRight((acc, { name, props }) => {
+    const Provider = ProviderRegistry.get(name);
+    if (!Provider) return acc;
 
-      return <Provider {...props}>{acc}</Provider>;
-    },
-    children
-  );
+    return <Provider {...props}>{acc}</Provider>;
+  }, children);
 }
 
 // Hook composer
@@ -175,7 +169,7 @@ export function LazyComponent({
   fallback,
 }: {
   readonly name: string;
-    readonly loader: () => Promise<{ default: ComponentType<any> }>;
+  readonly loader: () => Promise<{ default: ComponentType<any> }>;
   readonly fallback?: ReactNode;
 }) {
   const [Component, setComponent] = useState<ComponentType<any> | null>(null);
@@ -184,7 +178,7 @@ export function LazyComponent({
 
   useEffect(() => {
     loader()
-      .then((module) => {
+      .then(module => {
         if (module.default) {
           ComponentRegistry.register(name, module.default);
           setComponent(() => module.default);
@@ -192,7 +186,7 @@ export function LazyComponent({
           setError('No default export found');
         }
       })
-      .catch((err) => {
+      .catch(err => {
         setError(err.message);
       })
       .finally(() => {
@@ -208,13 +202,11 @@ export function LazyComponent({
 }
 
 // Component factory
-export function createComponentFactory<P = ComponentProps>(
-  defaultConfig: {
-    readonly wrapper?: ComponentType<{ children: ReactNode }>;
-    readonly providers?: Array<{ name: string; props?: ComponentProps }>;
-    readonly hooks?: Array<string>;
-  }
-) {
+export function createComponentFactory<P = ComponentProps>(defaultConfig: {
+  readonly wrapper?: ComponentType<{ children: ReactNode }>;
+  readonly providers?: Array<{ name: string; props?: ComponentProps }>;
+  readonly hooks?: Array<string>;
+}) {
   return function FactoryComponent({
     name,
     props,

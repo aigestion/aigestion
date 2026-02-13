@@ -181,7 +181,7 @@ bind<LoginUserUseCase>(TYPES.LoginUserUseCase, LoginUserUseCase);
 bind<CreatePersonaUseCase>(TYPES.CreatePersonaUseCase, CreatePersonaUseCase);
 bind<GetMarketplacePersonasUseCase>(
   TYPES.GetMarketplacePersonasUseCase,
-  GetMarketplacePersonasUseCase,
+  GetMarketplacePersonasUseCase
 );
 
 // ========================================
@@ -306,11 +306,11 @@ if (!container.isBound(WebAuthnController))
   container.bind<WebAuthnController>(WebAuthnController).toSelf().inSingletonScope();
 bind<SovereignHandshakeController>(
   TYPES.SovereignHandshakeController,
-  SovereignHandshakeController,
+  SovereignHandshakeController
 );
 bind<SovereignBiometricsController>(
   TYPES.SovereignBiometricsController,
-  SovereignBiometricsController,
+  SovereignBiometricsController
 );
 bind<SentinelController>(TYPES.SentinelController, SentinelController);
 bind<SystemController>(TYPES.SystemController, SystemController);

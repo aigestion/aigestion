@@ -7,7 +7,8 @@ Welcome to the central intelligence hub of **AIGestion**. All documentation has 
 ## 🚀 Quick Access
 
 ### [📚 Central Documentation Hub](./docs/README.md)
-*Your primary entry point for everything related to AIGestion.*
+
+_Your primary entry point for everything related to AIGestion._
 
 - **[🏗️ Architecture](./docs/architecture/TECHNICAL_DOCUMENTATION.md)**: Deep dive into the system's design.
 - **[🚀 Deployment](./docs/deployment/)**: CI/CD and production shipping guides.

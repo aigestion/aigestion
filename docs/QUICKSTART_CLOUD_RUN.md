@@ -5,11 +5,13 @@
 Replace `PROJECT_ID` with your actual GCP project ID.
 
 ### Step 1: Set Project ID
+
 ```bash
 export PROJECT_ID="your-project-id-here"
 ```
 
 ### Step 2: Build Backend
+
 ```bash
 cd backend
 npm ci
@@ -17,12 +19,14 @@ npm run build
 ```
 
 ### Step 3: Build & Push Docker Image
+
 ```bash
 docker build -t gcr.io/$PROJECT_ID/backend:latest .
 docker push gcr.io/$PROJECT_ID/backend:latest
 ```
 
 ### Step 4: Deploy to Cloud Run (God Mode)
+
 ```bash
 gcloud run deploy backend-aigestion \
   --image gcr.io/$PROJECT_ID/backend:latest \
@@ -42,6 +46,7 @@ gcloud run deploy backend-aigestion \
 ```
 
 ### Step 5: Test Deployment
+
 ```bash
 # Get service URL
 SERVICE_URL=$(gcloud run services describe backend-aigestion \
@@ -55,14 +60,17 @@ curl $SERVICE_URL/api/v1/health
 ```
 
 **Expected response:**
+
 ```json
 {"status":"healthy","uptime":xxx,"version":"1.0.0"}
 ```
 
 ### Step 6: Update Vercel Configuration
+
 Update the backend URL in your Vercel configuration:
 
 **File: `vercel.json`**
+
 ```json
 {
   "routes": [
@@ -85,6 +93,7 @@ Replace `YOUR_SERVICE_URL` with the actual Cloud Run service URL from Step 5.
 ## Rollback
 
 If something goes wrong:
+
 ```bash
 # List revisions
 gcloud run revisions list --service=backend-aigestion --region=us-central1

@@ -1,5 +1,5 @@
 import { useWorkbench } from './WorkbenchContext';
-import { LayoutDashboard, Search, Bot, Settings, FolderGit2, Shield } from 'lucide-react'; 
+import { LayoutDashboard, Search, Bot, Settings, FolderGit2, Shield } from 'lucide-react';
 
 export const ActivityBar = () => {
   const { activeActivity, setActiveActivity } = useWorkbench();
@@ -15,7 +15,7 @@ export const ActivityBar = () => {
   return (
     <div className="flex flex-col items-center py-4 h-full justify-between w-full">
       <div className="flex flex-col items-center gap-6 w-full">
-        {activities.map((item) => {
+        {activities.map(item => {
           const Icon = item.icon;
           const isActive = activeActivity === item.id;
           return (

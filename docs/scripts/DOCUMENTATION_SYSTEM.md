@@ -7,11 +7,13 @@ El sistema de documentación automático del NEXUS V1 mantiene todos los archivo
 ## Componentes
 
 ### 1. **organize-docs.ps1** - Organizador Automático
+
 **Propósito**: Ordena automáticamente archivos .md según reglas inteligentes
 
 **Ubicación**: `scripts/organize-docs.ps1`
 
 **Uso**:
+
 ```powershell
 # Preview de cambios
 npm run docs:organize:dry
@@ -21,6 +23,7 @@ npm run docs:organize
 ```
 
 **Cómo funciona**:
+
 - Escanea proyecto buscando archivos .md
 - Excluye automáticamente: node_modules, .git, .venv, proyectos, packages, apps, node
 - Aplica reglas de categorización por nombre de archivo:
@@ -38,16 +41,19 @@ npm run docs:organize
 ---
 
 ### 2. **generate-docs-index.ps1** - Indexador
+
 **Propósito**: Genera INDEX.md automático con toda la documentación
 
 **Ubicación**: `scripts/generate-docs-index.ps1`
 
 **Uso**:
+
 ```powershell
 npm run docs:index
 ```
 
 **Cómo funciona**:
+
 - Lee todas las carpetas en `docs/`
 - Extrae archivos .md de cada categoría
 - Genera INDEX.md con estructura jerárquica
@@ -55,25 +61,29 @@ npm run docs:index
 - Incluye links navegables
 
 **Salida**: `docs/INDEX.md` con:
+
 ```markdown
 # NEXUS V1 Documentation Index
 
 Updated: 2025-12-07 10:48:00
 
 ## overview
+
 - [README](path/to/README.md)
 - [QUICKSTART](path/to/QUICKSTART.md)
-...
+  ...
 ```
 
 ---
 
 ### 3. **show-docs-tree.ps1** - Visualizador
+
 **Propósito**: Muestra estructura visual de la documentación
 
 **Ubicación**: `scripts/show-docs-tree.ps1`
 
 **Uso**:
+
 ```powershell
 npm run docs:tree
 
@@ -82,12 +92,14 @@ pwsh scripts/show-docs-tree.ps1 -ShowStats
 ```
 
 **Cómo funciona**:
+
 - Recorre recursivamente carpeta `docs/`
 - Dibuja árbol ASCII con emojis
 - Calcula tamaños y conteos
 - Mide tiempo de ejecución
 
 **Output**:
+
 ```
 📚 NEXUS V1 Documentation Structure
 ================================================================================
@@ -156,16 +168,19 @@ docs/
 ## Características Avanzadas
 
 ### Smart Categorization
+
 - Coincidencia fuzzy en nombres de archivo
 - Fallback a carpeta por defecto si no hay match
 - Soporte para archivos con múltiples palabras clave
 
 ### Automation
+
 - Puede ejecutarse en CI/CD
 - Pre-commit hooks para validación
 - GitHub Actions para organización automática
 
 ### Safety
+
 - Dry-run mode para preview
 - Validación antes de mover
 - No sobrescribe archivos existentes
@@ -190,15 +205,18 @@ docs/
 ## Troubleshooting
 
 **P: Los archivos no se mueven correctamente**
+
 - Verificar que ExcludePatterns no incluye la ruta origen
 - Ejecutar con `-DryRun` primero para preview
 - Revisar permisos del usuario
 
 **P: INDEX.md no se actualiza**
+
 - Ejecutar manualmente: `npm run docs:index`
 - Verificar que docs/ contiene archivos .md
 
 **P: El árbol no muestra bien los emojis**
+
 - Actualizar terminal a versión reciente
 - Verificar codificación UTF-8
 
@@ -207,4 +225,3 @@ docs/
 **Sistema creado**: Diciembre 2025
 **Nivel**: 🔥 Producción (Nivel Dios)
 **Status**: Operacional
-

@@ -76,7 +76,7 @@ describe('EnhancedVoiceService', () => {
       mockAnalyticsService,
       mockMetaverseService,
       mockElevenLabsService,
-      mockQwenTTSService,
+      mockQwenTTSService
     );
   });
 
@@ -124,7 +124,7 @@ describe('EnhancedVoiceService', () => {
 
     it('should analyze emotion and include it in response', async () => {
       mockAIService.generateContent.mockResolvedValue(
-        emotionJSON({ emotion: 'happy', confidence: 0.9, sentiment: 'positive' }),
+        emotionJSON({ emotion: 'happy', confidence: 0.9, sentiment: 'positive' })
       );
 
       const result = await enhancedVoiceService.processConversation(mockPayload);
@@ -203,7 +203,7 @@ describe('EnhancedVoiceService', () => {
           confidence: 0.9,
           sentiment: 'positive',
           suggestions: ['continue_positive_tone'],
-        }),
+        })
       );
 
       const result = await enhancedVoiceService.analyzeEmotion(mockText, mockContext);
@@ -221,12 +221,12 @@ describe('EnhancedVoiceService', () => {
           confidence: 0.8,
           sentiment: 'negative',
           suggestions: ['offer_support'],
-        }),
+        })
       );
 
       const result = await enhancedVoiceService.analyzeEmotion(
         'Estoy preocupado por el costo',
-        mockContext,
+        mockContext
       );
 
       expect(result.emotion).toBe('concerned');
@@ -254,12 +254,12 @@ describe('EnhancedVoiceService', () => {
           confidence: 0.7,
           sentiment: 'positive',
           suggestions: ['friendly_response'],
-        }),
+        })
       );
 
       const result = await enhancedVoiceService.analyzeEmotion(
         '\u00a1Gracias por tu ayuda!',
-        contextWithHistory,
+        contextWithHistory
       );
 
       expect(result.emotion).toBe('happy');
@@ -306,7 +306,7 @@ describe('EnhancedVoiceService', () => {
 
     it('should adapt tone based on emotional analysis', async () => {
       mockAIService.generateContent.mockResolvedValue(
-        emotionJSON({ emotion: 'happy', confidence: 0.9, sentiment: 'positive' }),
+        emotionJSON({ emotion: 'happy', confidence: 0.9, sentiment: 'positive' })
       );
 
       const result = await enhancedVoiceService.processConversation({
@@ -366,7 +366,7 @@ describe('EnhancedVoiceService', () => {
       const result = await enhancedVoiceService.generateSuggestedActions(
         'Mu\u00e9strame el dashboard',
         mockAnalysis,
-        mockContext,
+        mockContext
       );
 
       expect(result).toBeDefined();
@@ -383,11 +383,11 @@ describe('EnhancedVoiceService', () => {
       const result = await enhancedVoiceService.generateSuggestedActions(
         'dashboard principal',
         mockAnalysis,
-        mockContext,
+        mockContext
       );
 
       const dashboardActions = result.filter(action =>
-        action.text.toLowerCase().includes('dashboard'),
+        action.text.toLowerCase().includes('dashboard')
       );
       expect(dashboardActions.length).toBeGreaterThan(0);
     });
@@ -402,11 +402,11 @@ describe('EnhancedVoiceService', () => {
       const result = await enhancedVoiceService.generateSuggestedActions(
         'Tengo un problema',
         concernedAnalysis,
-        mockContext,
+        mockContext
       );
 
       const supportActions = result.filter(
-        action => action.type === 'question' || action.text.toLowerCase().includes('ayuda'),
+        action => action.type === 'question' || action.text.toLowerCase().includes('ayuda')
       );
       expect(supportActions.length).toBeGreaterThan(0);
     });
@@ -415,7 +415,7 @@ describe('EnhancedVoiceService', () => {
       const result = await enhancedVoiceService.generateSuggestedActions(
         'Mu\u00e9strame el dashboard',
         mockAnalysis,
-        mockContext,
+        mockContext
       );
 
       expect(result.length).toBeLessThanOrEqual(3);
@@ -425,7 +425,7 @@ describe('EnhancedVoiceService', () => {
       const result = await enhancedVoiceService.generateSuggestedActions(
         'Mu\u00e9strame el dashboard',
         mockAnalysis,
-        mockContext,
+        mockContext
       );
 
       const highPriorityActions = result.filter(action => action.priority === 'high');
@@ -484,7 +484,7 @@ describe('EnhancedVoiceService', () => {
   describe('Error Handling', () => {
     it('should handle AI service errors gracefully', async () => {
       mockAIService.generateContent.mockRejectedValue(
-        new Error('AI service temporarily unavailable'),
+        new Error('AI service temporarily unavailable')
       );
 
       // analyzeEmotion catches and returns neutral fallback
@@ -500,7 +500,7 @@ describe('EnhancedVoiceService', () => {
 
     it('should handle analytics service errors', async () => {
       mockAnalyticsService.getDashboardData.mockRejectedValue(
-        new Error('Analytics service unavailable'),
+        new Error('Analytics service unavailable')
       );
 
       mockAIService.generateContent.mockResolvedValue(emotionJSON());
@@ -557,7 +557,7 @@ describe('EnhancedVoiceService', () => {
           sessionId: `session_${i}`,
           userId: `user_${i}`,
           text: `Message ${i}`,
-        }),
+        })
       );
 
       const results = await Promise.all(promises);

@@ -53,7 +53,7 @@ export class EnhancedVoiceService {
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.MetaverseService) private metaverseService: MetaverseService,
     @inject(TYPES.ElevenLabsService) private elevenLabsService: ElevenLabsService,
-    @inject(TYPES.QwenTTSService) private qwenTTSService: QwenTTSService,
+    @inject(TYPES.QwenTTSService) private qwenTTSService: QwenTTSService
   ) {}
 
   /**
@@ -103,7 +103,7 @@ export class EnhancedVoiceService {
       const response = await this.generateContextualResponse(
         transcription,
         emotionalAnalysis,
-        context,
+        context
       );
 
       // Convert response to audio
@@ -113,7 +113,7 @@ export class EnhancedVoiceService {
       const suggestedActions = await this.generateSuggestedActions(
         transcription,
         emotionalAnalysis,
-        context,
+        context
       );
 
       // Add Daniela's response to context
@@ -167,7 +167,7 @@ export class EnhancedVoiceService {
    */
   private async analyzeEmotion(
     text: string,
-    context: ConversationContext,
+    context: ConversationContext
   ): Promise<EmotionalAnalysis> {
     try {
       const prompt = `
@@ -225,7 +225,7 @@ export class EnhancedVoiceService {
   private async generateContextualResponse(
     text: string,
     emotionalAnalysis: EmotionalAnalysis,
-    context: ConversationContext,
+    context: ConversationContext
   ): Promise<string> {
     try {
       const systemPrompt = `
@@ -300,7 +300,7 @@ export class EnhancedVoiceService {
    */
   public async textToSpeech(
     text: string,
-    provider: 'elevenlabs' | 'qwen' = 'qwen',
+    provider: 'elevenlabs' | 'qwen' = 'qwen'
   ): Promise<Buffer> {
     try {
       const tempPath = path.join(process.cwd(), 'uploads', 'voice', `${Date.now()}.mp3`);
@@ -313,7 +313,7 @@ export class EnhancedVoiceService {
         audioPath = await this.elevenLabsService.textToSpeech(
           text,
           env.ELEVENLABS_VOICE_ID || '',
-          tempPath,
+          tempPath
         );
       }
 
@@ -340,7 +340,7 @@ export class EnhancedVoiceService {
   private async generateSuggestedActions(
     text: string,
     emotionalAnalysis: EmotionalAnalysis,
-    context: ConversationContext,
+    context: ConversationContext
   ): Promise<SuggestedAction[]> {
     const actions: SuggestedAction[] = [];
 

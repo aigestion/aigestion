@@ -18,7 +18,7 @@ export class SocialController {
     @inject(TYPES.InstagramService) private instagramService: InstagramService,
     @inject(TYPES.LinkedInService) private linkedinService: LinkedInService,
     @inject(TYPES.TikTokService) private tiktokService: TikTokService,
-    @inject(TYPES.XService) private xService: XService,
+    @inject(TYPES.XService) private xService: XService
   ) {}
 
   // Publicar en Facebook Page

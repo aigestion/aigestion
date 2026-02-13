@@ -10,7 +10,7 @@ import { User } from '../models/User';
 export class DevicePostureController {
   constructor(
     @inject(TYPES.DevicePostureService)
-    private devicePostureService: DevicePostureService,
+    private devicePostureService: DevicePostureService
   ) {}
 
   /**
@@ -35,7 +35,7 @@ export class DevicePostureController {
   public registerDevice = async (
     req: Request,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> => {
     try {
       if (!req.user) throw new AppError('Unauthorized', 401);
@@ -52,7 +52,7 @@ export class DevicePostureController {
       res
         .status(201)
         .json(
-          buildResponse({ message: 'Device registered successfully' }, 201, (req as any).requestId),
+          buildResponse({ message: 'Device registered successfully' }, 201, (req as any).requestId)
         );
     } catch (error) {
       next(error);
@@ -65,7 +65,7 @@ export class DevicePostureController {
   public verifyCurrentDevice = async (
     req: Request,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ): Promise<void> => {
     try {
       if (!req.user) throw new AppError('Unauthorized', 401);

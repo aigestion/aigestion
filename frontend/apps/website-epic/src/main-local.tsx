@@ -1,11 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import MainApp from './MainApp.tsx'
-import { AppProvider } from './contexts/AppContext'
-import './index.css'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import MainApp from './MainApp.tsx';
+import { AppProvider } from './contexts/AppContext';
+import './index.css';
 
 // Mobile detection and error handling
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  navigator.userAgent
+);
 
 // Main App Entry with mobile error handling
 const rootElement = document.getElementById('root');
@@ -53,9 +55,9 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
     navigator.serviceWorker
       .register('/sw.js', { scope: '/' })
-      .then((registration) => {
+      .then(registration => {
         console.log('✅ Service Worker registered successfully:', registration.scope);
-        
+
         // Check for updates
         registration.addEventListener('updatefound', () => {
           const newWorker = registration.installing;
@@ -68,7 +70,7 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
           }
         });
       })
-      .catch((error) => {
+      .catch(error => {
         console.warn('⚠️ Service Worker registration failed:', error);
       });
   });

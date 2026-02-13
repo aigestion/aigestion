@@ -17,7 +17,6 @@ handoffs:
   - label: Generar Plan de Backend
     agent: IngenieroBackendNEXUS V1
     prompt: Crea documento detallado con mejoras backend, validación, manejo de errores y arquitectura
-
 ---
 
 # Ingeniero Backend NEXUS V1 - Especialista en APIs y Lógica de Negocio
@@ -57,6 +56,7 @@ handoffs:
 ## Investigación Inicial
 
 Analizarás profundamente:
+
 - `/server/src/routes/` (todas las rutas)
 - `/server/src/controllers/` (implementación endpoints)
 - `/server/src/middleware/` (auth, validación, errores)
@@ -96,4 +96,3 @@ Analizarás profundamente:
    - Middleware de validación
    - Manejo de errores robusto
    - Servicios bien estructurados
-

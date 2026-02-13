@@ -14,10 +14,7 @@ export const apiKeyAuth = (req: Request, res: Response, next: NextFunction) => {
   }
 
   // Check against our known service keys
-  const validKeys = [
-    env.ML_SERVICE_API_KEY,
-    env.IA_ENGINE_API_KEY,
-  ];
+  const validKeys = [env.ML_SERVICE_API_KEY, env.IA_ENGINE_API_KEY];
 
   if (validKeys.includes(apiKey as string)) {
     // If it's a valid service key, we grant a "system" user context

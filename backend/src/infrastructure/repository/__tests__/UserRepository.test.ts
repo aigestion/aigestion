@@ -76,7 +76,7 @@ describe('UserRepository', () => {
     expect(User.findByIdAndUpdate).toHaveBeenCalledWith(
       'custom-id',
       { name: 'Updated Name' },
-      { new: true },
+      { new: true }
     );
   });
 

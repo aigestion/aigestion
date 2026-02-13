@@ -1,6 +1,6 @@
-import React from "react";
-import { DanielaProvider, useDaniela } from "./DanielaProvider";
-import { DanielaConfig } from "./DanielaTypes";
+import React from 'react';
+import { DanielaProvider, useDaniela } from './DanielaProvider';
+import { DanielaConfig } from './DanielaTypes';
 
 interface DanielaCoreProps {
   config?: Partial<DanielaConfig>;
@@ -8,7 +8,7 @@ interface DanielaCoreProps {
   children?: React.ReactNode;
 }
 
-const DanielaCoreContent: React.FC<DanielaCoreProps> = ({ config, className = "", children }) => {
+const DanielaCoreContent: React.FC<DanielaCoreProps> = ({ config, className = '', children }) => {
   const { state } = useDaniela();
 
   return (
@@ -17,14 +17,16 @@ const DanielaCoreContent: React.FC<DanielaCoreProps> = ({ config, className = ""
         {children || (
           <div className="daniela-default">
             <div className="daniela-status">
-              <span className={`status-indicator ${state.isConnected ? "connected" : "disconnected"}`}>
-                {state.isConnected ? "🟢 En línea" : "🟡 Modo demo"}
+              <span
+                className={`status-indicator ${state.isConnected ? 'connected' : 'disconnected'}`}
+              >
+                {state.isConnected ? '🟢 En línea' : '🟡 Modo demo'}
               </span>
             </div>
             <div className="daniela-messages">
-              {state.messages.map((message) => (
+              {state.messages.map(message => (
                 <div key={message.id} className={`message ${message.sender}`}>
-                  <strong>{message.sender === "daniela" ? "🧠 Daniela" : "👤 Tú"}:</strong>
+                  <strong>{message.sender === 'daniela' ? '🧠 Daniela' : '👤 Tú'}:</strong>
                   <p>{message.text}</p>
                   {message.suggestions && (
                     <div className="suggestions">

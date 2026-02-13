@@ -35,7 +35,7 @@ export class AppError extends Error {
     statusCode: number = HttpStatusCode.INTERNAL_SERVER_ERROR,
     code?: string,
     details?: any,
-    isOperational = true,
+    isOperational = true
   ) {
     super(message);
     this.statusCode = statusCode;

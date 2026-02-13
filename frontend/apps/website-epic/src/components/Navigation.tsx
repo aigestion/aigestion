@@ -45,7 +45,6 @@ export const Navigation: React.FC = () => {
     }
   };
 
-
   return (
     <motion.nav
       initial={{ y: -100 }}

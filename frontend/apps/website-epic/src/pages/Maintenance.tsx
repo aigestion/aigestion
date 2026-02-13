@@ -42,16 +42,16 @@ export const Maintenance: React.FC = () => {
 
         {/* Status Text */}
         <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ duration: 0.8, delay: 0.6 }}
-           className="relative inline-block"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="relative inline-block"
         >
-            <div className="absolute -inset-4 bg-nexus-violet/10 rounded-lg blur-lg" />
-            <h2 className="relative text-2xl md:text-4xl font-bold tracking-[0.5em] uppercase text-white mb-2 stack-reveal">
-                PRÓXIMAMENTE
-            </h2>
-            <div className="h-1 w-full bg-gradient-to-r from-transparent via-nexus-cyan-glow to-transparent mt-4 opacity-70" />
+          <div className="absolute -inset-4 bg-nexus-violet/10 rounded-lg blur-lg" />
+          <h2 className="relative text-2xl md:text-4xl font-bold tracking-[0.5em] uppercase text-white mb-2 stack-reveal">
+            PRÓXIMAMENTE
+          </h2>
+          <div className="h-1 w-full bg-gradient-to-r from-transparent via-nexus-cyan-glow to-transparent mt-4 opacity-70" />
         </motion.div>
 
         {/* Description */}
@@ -67,26 +67,26 @@ export const Maintenance: React.FC = () => {
 
         {/* Loading Indicator */}
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
-            className="mt-16 flex justify-center gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="mt-16 flex justify-center gap-2"
         >
-            {[0, 1, 2].map((i) => (
-                <motion.div
-                    key={i}
-                    animate={{
-                        scale: [1, 1.5, 1],
-                        opacity: [0.3, 1, 0.3]
-                    }}
-                    transition={{
-                        duration: 1.5,
-                        repeat: Infinity,
-                        delay: i * 0.2
-                    }}
-                    className="w-2 h-2 bg-nexus-cyan-glow rounded-full shadow-[0_0_10px_rgba(0,245,255,0.8)]"
-                />
-            ))}
+          {[0, 1, 2].map(i => (
+            <motion.div
+              key={i}
+              animate={{
+                scale: [1, 1.5, 1],
+                opacity: [0.3, 1, 0.3],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                delay: i * 0.2,
+              }}
+              className="w-2 h-2 bg-nexus-cyan-glow rounded-full shadow-[0_0_10px_rgba(0,245,255,0.8)]"
+            />
+          ))}
         </motion.div>
       </div>
 

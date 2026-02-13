@@ -2,7 +2,7 @@ import React, { lazy } from 'react';
 
 // Enhanced lazy loading with error handling and loading states
 export function createLazyComponent<T extends React.ComponentType<any>>(
-  importFunc: () => Promise<{ default: T }>,
+  importFunc: () => Promise<{ default: T }>
 ) {
   return lazy(() => {
     return importFunc().catch(error => {
@@ -16,61 +16,61 @@ export function createLazyComponent<T extends React.ComponentType<any>>(
 // Predefined lazy components with loading states
 export const LazyComponents = {
   // Main presentation components
-  CinematicPresentation: createLazyComponent(
-    () => import('../components/CinematicPresentation').then(m => ({ default: m.CinematicPresentation }))
+  CinematicPresentation: createLazyComponent(() =>
+    import('../components/CinematicPresentation').then(m => ({ default: m.CinematicPresentation }))
   ),
 
-  ClientShowcase: createLazyComponent(
-    () => import('../components/ClientShowcase').then(m => ({ default: m.ClientShowcase }))
+  ClientShowcase: createLazyComponent(() =>
+    import('../components/ClientShowcase').then(m => ({ default: m.ClientShowcase }))
   ),
 
-  DanielaShowcase: createLazyComponent(
-    () => import('../components/DanielaShowcase').then(m => ({ default: m.DanielaShowcase }))
+  DanielaShowcase: createLazyComponent(() =>
+    import('../components/DanielaShowcase').then(m => ({ default: m.DanielaShowcase }))
   ),
 
   // Interactive components
-  CommandPalette: createLazyComponent(
-    () => import('../components/CommandPalette').then(m => ({ default: m.CommandPalette }))
+  CommandPalette: createLazyComponent(() =>
+    import('../components/CommandPalette').then(m => ({ default: m.CommandPalette }))
   ),
 
-  ContactSection: createLazyComponent(
-    () => import('../components/ContactSection').then(m => ({ default: m.ContactSection }))
+  ContactSection: createLazyComponent(() =>
+    import('../components/ContactSection').then(m => ({ default: m.ContactSection }))
   ),
 
   // Advanced features
-  DecentralandOffice: createLazyComponent(
-    () => import('../components/DecentralandOffice').then(m => ({ default: m.DecentralandOffice }))
+  DecentralandOffice: createLazyComponent(() =>
+    import('../components/DecentralandOffice').then(m => ({ default: m.DecentralandOffice }))
   ),
 
-  EnhancedROI: createLazyComponent(
-    () => import('../components/EnhancedROI').then(m => ({ default: m.EnhancedROI }))
+  EnhancedROI: createLazyComponent(() =>
+    import('../components/EnhancedROI').then(m => ({ default: m.EnhancedROI }))
   ),
 
-  NexusAndroid: createLazyComponent(
-    () => import('../components/NexusAndroid').then(m => ({ default: m.NexusAndroid }))
+  NexusAndroid: createLazyComponent(() =>
+    import('../components/NexusAndroid').then(m => ({ default: m.NexusAndroid }))
   ),
 
-  VitureXRExperience: createLazyComponent(
-    () => import('../components/VitureXRExperience').then(m => ({ default: m.VitureXRExperience }))
+  VitureXRExperience: createLazyComponent(() =>
+    import('../components/VitureXRExperience').then(m => ({ default: m.VitureXRExperience }))
   ),
 
   // Pages
-  DanielaDemo: createLazyComponent(
-    () => import('../pages/DanielaDemo').then(m => ({ default: m.DanielaDemo }))
+  DanielaDemo: createLazyComponent(() =>
+    import('../pages/DanielaDemo').then(m => ({ default: m.DanielaDemo }))
   ),
 
-  VirtualOfficePreview: createLazyComponent(
-    () => import('../pages/VirtualOfficePreview').then(m => ({ default: m.default }))
+  VirtualOfficePreview: createLazyComponent(() =>
+    import('../pages/VirtualOfficePreview').then(m => ({ default: m.default }))
   ),
 
   // Workbench components
-  WorkbenchLayout: createLazyComponent(
-    () => import('../components/workbench/WorkbenchLayout').then(m => ({ default: m.WorkbenchLayout }))
+  WorkbenchLayout: createLazyComponent(() =>
+    import('../components/workbench/WorkbenchLayout').then(m => ({ default: m.WorkbenchLayout }))
   ),
 
   // 3D and XR components (heavier, load on demand)
-  ThreeJSComponents: createLazyComponent(
-    () => import('../components/3d/OptimizedThreeScene').then(m => ({ default: m.OptimizedThreeScene }))
+  ThreeJSComponents: createLazyComponent(() =>
+    import('../components/3d/OptimizedThreeScene').then(m => ({ default: m.OptimizedThreeScene }))
   ),
 };
 
@@ -123,10 +123,6 @@ export function createIntersectionLazyComponent<T extends React.ComponentType<an
       return () => observer.disconnect();
     }, []);
 
-    return (
-      <div ref={elementRef}>
-        {shouldLoad ? <LazyComp {...props} /> : null}
-      </div>
-    );
+    return <div ref={elementRef}>{shouldLoad ? <LazyComp {...props} /> : null}</div>;
   };
 }

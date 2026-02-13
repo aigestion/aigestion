@@ -63,7 +63,7 @@ export class UsageService {
       }
 
       logger.info(
-        `[UsageService] Tracked ${totalTokens} tokens for user ${params.userId} (${params.modelId})`,
+        `[UsageService] Tracked ${totalTokens} tokens for user ${params.userId} (${params.modelId})`
       );
     } catch (error) {
       logger.error(error, `[UsageService] Failed to track usage for user ${params.userId}`);

@@ -43,13 +43,13 @@ app.use(
         connectSrc: ["'self'", 'ws:', 'wss:'],
       },
     },
-  }),
+  })
 );
 app.use(
   cors({
     origin: (
       origin: string | undefined,
-      callback: (err: Error | null, allow?: boolean) => void,
+      callback: (err: Error | null, allow?: boolean) => void
     ) => {
       const allowedOrigins = config.cors.origin;
       const isAllowed =
@@ -64,7 +64,7 @@ app.use(
       }
     },
     credentials: true,
-  }),
+  })
 );
 
 // Rate limiting middleware (15 min window, 100 requests per IP)
@@ -107,7 +107,7 @@ app.use(
   compression({
     level: 7, // Slightly higher compression
     threshold: 512, // Compress smaller payloads for mobile speed
-  }) as any,
+  }) as any
 );
 
 // Logging Middleware
@@ -117,7 +117,7 @@ app.use(
       write: (message: string) => logger.info(message.trim()),
     },
     skip: (req: Request) => req.url === '/api/v1/health',
-  }),
+  })
 );
 
 // Request Parsing
@@ -129,7 +129,7 @@ app.use(
         req.rawBody = buf;
       }
     },
-  }),
+  })
 );
 app.use(cookieParser());
 

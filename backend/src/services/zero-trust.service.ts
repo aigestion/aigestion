@@ -20,7 +20,7 @@ export class ZeroTrustService {
    */
   async verifyAccess(context: AccessContext): Promise<{ allowed: boolean; reason?: string }> {
     logger.info(
-      `[ZeroTrust] Verifying access for user ${context.userId} on device ${context.deviceId}`,
+      `[ZeroTrust] Verifying access for user ${context.userId} on device ${context.deviceId}`
     );
 
     // 1. Check device posture

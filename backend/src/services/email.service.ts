@@ -113,7 +113,7 @@ export class EmailService {
     videoTitle: string,
     videoUrl: string,
     transcript: string,
-    videoId: string,
+    videoId: string
   ): Promise<boolean> {
     const htmlContent = `
       <!DOCTYPE html>

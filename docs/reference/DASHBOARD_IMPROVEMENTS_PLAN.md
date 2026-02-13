@@ -1,6 +1,7 @@
 ﻿# 🚀 Plan de Mejoras para Dashboards NEXUS V1
 
 ## 📋 Objetivo
+
 Mejorar los dashboards existentes con funcionalidades reales conectadas al backend y nuevos componentes interactivos.
 
 ---
@@ -8,9 +9,11 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ## 🎯 Mejoras Planificadas por Dashboard
 
 ### 1. **God Admin Dashboard** (Admin)
+
 **Estado Actual**: Dashboard básico con métricas estáticas
 
 **Mejoras a Implementar**:
+
 - ✅ Integración con Docker API real
 - ✅ Métricas del sistema en tiempo real (CPU, RAM, Disco)
 - ✅ Monitor de IA Engine con modelos activos
@@ -21,6 +24,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 - ✅ Acciones administrativas (restart services, clear cache, etc.)
 
 **Nuevos Componentes**:
+
 - [x] `SystemMetricsWidget` - Métricas del sistema en tiempo real
 - `UserManagementPanel` - Gestión de usuarios
 - `ServiceControlPanel` - Control de servicios
@@ -29,9 +33,11 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ---
 
 ### 2. **Developer Dashboard**
+
 **Estado Actual**: Dashboard con herramientas de desarrollo básicas
 
 **Mejoras a Implementar**:
+
 - ✅ Integración con Git (commits recientes, branches)
 - [x] Estado de builds en tiempo real
 - ✅ Logs de errores y debugging
@@ -42,6 +48,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 - ✅ Dependency analyzer
 
 **Nuevos Componentes**:
+
 - `GitActivityFeed` - Feed de actividad Git
 - [x] `BuildStatusWidget` - Estado de builds
 - `APIPlayground` - Herramienta para probar APIs
@@ -52,9 +59,11 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ---
 
 ### 3. **Analyst Dashboard**
+
 **Estado Actual**: Dashboard con visualizaciones básicas
 
 **Mejoras a Implementar**:
+
 - ✅ Gráficos interactivos con datos reales
 - ✅ Exportación de reportes (PDF, Excel)
 - ✅ Filtros avanzados y segmentación
@@ -66,6 +75,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 
 **Nuevos Componentes**:
 **Nuevos Componentes**:
+
 - [x] `InteractiveChart` - Gráficos interactivos
 - `ReportExporter` - Exportador de reportes
 - `KPIBuilder` - Constructor de KPIs
@@ -74,9 +84,11 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ---
 
 ### 4. **Operator Dashboard**
+
 **Estado Actual**: Dashboard con monitoreo básico
 
 **Mejoras a Implementar**:
+
 - ✅ Monitor de contenedores Docker en tiempo real
 - ✅ Logs de sistema agregados
 - ✅ Alertas y notificaciones
@@ -87,6 +99,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 - ✅ Runbook automation
 
 **Nuevos Componentes**:
+
 - `DockerMonitor` - Monitor de Docker en tiempo real
 - `IncidentPanel` - Panel de gestión de incidentes
 - `NetworkMonitor` - Monitor de red
@@ -95,9 +108,11 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ---
 
 ### 5. **Demo Dashboard**
+
 **Estado Actual**: Dashboard demo básico
 
 **Mejoras a Implementar**:
+
 - ✅ Tour guiado interactivo
 - ✅ Datos de demostración realistas
 - ✅ Simulación de funcionalidades
@@ -108,6 +123,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 - ✅ Feedback collector
 
 **Nuevos Componentes**:
+
 - `GuidedTour` - Tour guiado
 - `DemoDataGenerator` - Generador de datos demo
 - `VideoTutorial` - Reproductor de tutoriales
@@ -118,6 +134,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ## 🔧 Componentes Compartidos a Crear
 
 ### Widgets Reutilizables:
+
 1. **`RealTimeChart`** - Gráfico en tiempo real con WebSocket
 2. **`DataTable`** - Tabla de datos con filtros, ordenamiento, paginación
 3. **`MetricCard`** - Tarjeta de métrica con tendencia
@@ -130,6 +147,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 10. **`FilterPanel`** - Panel de filtros
 
 ### Hooks Personalizados:
+
 1. **`useWebSocket`** - Hook para WebSocket
 2. **`useRealTimeData`** - Hook para datos en tiempo real
 3. **`useDockerStats`** - Hook para stats de Docker
@@ -142,10 +160,12 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ## 📊 APIs del Backend a Integrar
 
 ### Endpoints Existentes:
+
 - `/api/auth/*` - Autenticación
 - `/api/ai/*` - IA Engine
 
 ### Endpoints a Crear:
+
 - `/api/system/metrics` - Métricas del sistema
 - `/api/docker/containers` - Contenedores Docker
 - `/api/docker/stats` - Estadísticas Docker
@@ -160,6 +180,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ## 🎨 Mejoras de UX/UI
 
 ### Generales:
+
 - ✅ Tema oscuro/claro toggle
 - ✅ Personalización de dashboard (drag & drop)
 - ✅ Atajos de teclado
@@ -170,6 +191,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 - ✅ Favoritos y bookmarks
 
 ### Animaciones:
+
 - ✅ Transiciones suaves entre vistas
 - ✅ Loading skeletons
 - ✅ Micro-interacciones
@@ -180,17 +202,20 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ## 🚀 Prioridades de Implementación
 
 ### Fase 1: Fundamentos (AHORA)
+
 1. ✅ Crear componentes compartidos base
 2. ✅ Integrar Docker API en God Admin Dashboard
 3. ✅ Implementar WebSocket para datos en tiempo real
 4. ✅ Crear sistema de notificaciones
 
 ### Fase 2: Dashboards Específicos (SIGUIENTE)
+
 1. [x] Mejorar Developer Dashboard con Git integration y Build Status
 2. ✅ Mejorar Operator Dashboard con Docker monitoring
 3. [x] Mejorar Analyst Dashboard con gráficos interactivos
 
 ### Fase 3: Funcionalidades Avanzadas (FUTURO)
+
 1. ✅ Dashboard builder personalizable
 2. ✅ Alertas y automatizaciones
 3. ✅ Exportación de reportes
@@ -201,6 +226,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 ## 📝 Notas de Implementación
 
 ### Tecnologías a Usar:
+
 - **React Query** - Para fetching y caching de datos
 - **WebSocket** - Para datos en tiempo real
 - **Recharts/Chart.js** - Para gráficos
@@ -210,6 +236,7 @@ Mejorar los dashboards existentes con funcionalidades reales conectadas al backe
 - **Axios** - Para HTTP requests
 
 ### Estructura de Carpetas:
+
 ```
 src/
 ├── components/
@@ -225,6 +252,5 @@ src/
 
 ---
 
-*Plan creado: 2025-12-13*
-*Versión: 1.0.0*
-
+_Plan creado: 2025-12-13_
+_Versión: 1.0.0_

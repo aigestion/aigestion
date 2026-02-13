@@ -50,14 +50,14 @@ export const errorHandler = (err: any, req: Request, res: Response, _next: NextF
     error = new AppError(
       'Invalid token. Please log in again!',
       HttpStatusCode.UNAUTHORIZED,
-      'INVALID_TOKEN',
+      'INVALID_TOKEN'
     );
   }
   if (err.name === 'TokenExpiredError') {
     error = new AppError(
       'Your token has expired! Please log in again.',
       HttpStatusCode.UNAUTHORIZED,
-      'TOKEN_EXPIRED',
+      'TOKEN_EXPIRED'
     );
   }
 
@@ -90,7 +90,7 @@ export const errorHandler = (err: any, req: Request, res: Response, _next: NextF
     error.code || 'INTERNAL_ERROR',
     statusCode,
     requestId,
-    error.details,
+    error.details
   );
 
   // Add stack trace in development

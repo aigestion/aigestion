@@ -5,7 +5,35 @@
 
 import React, { useState, useEffect } from 'react';
 import { calendarGodMode } from '../services/calendar-godmode';
-import { Calendar, Clock, Users, Plus, Search, Filter, Bell, Settings, TrendingUp, Target, CheckCircle, AlertCircle, BarChart3, Video, Phone, MapPin, Coffee, Briefcase, Star, ChevronRight, ChevronLeft, MoreVertical, Edit, Trash2, VideoOff, Mic, MicOff } from 'lucide-react';
+import {
+  Calendar,
+  Clock,
+  Users,
+  Plus,
+  Search,
+  Filter,
+  Bell,
+  Settings,
+  TrendingUp,
+  Target,
+  CheckCircle,
+  AlertCircle,
+  BarChart3,
+  Video,
+  Phone,
+  MapPin,
+  Coffee,
+  Briefcase,
+  Star,
+  ChevronRight,
+  ChevronLeft,
+  MoreVertical,
+  Edit,
+  Trash2,
+  VideoOff,
+  Mic,
+  MicOff,
+} from 'lucide-react';
 
 interface CalendarEvent {
   id: string;
@@ -41,10 +69,10 @@ export const CalendarGodModeDashboard: React.FC = () => {
   const loadCalendarData = async () => {
     try {
       await calendarGodMode.initialize();
-      
+
       const calendarEvents = calendarGodMode.getEvents();
       const calendarStats = calendarGodMode.getStats();
-      
+
       setEvents(calendarEvents);
       setStats(calendarStats);
       setIsLoading(false);
@@ -56,49 +84,64 @@ export const CalendarGodModeDashboard: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'text-red-600 bg-red-50';
-      case 'high': return 'text-orange-600 bg-orange-50';
-      case 'medium': return 'text-yellow-600 bg-yellow-50';
-      case 'low': return 'text-green-600 bg-green-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'critical':
+        return 'text-red-600 bg-red-50';
+      case 'high':
+        return 'text-orange-600 bg-orange-50';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-50';
+      case 'low':
+        return 'text-green-600 bg-green-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'meeting': return 'text-blue-600 bg-blue-50';
-      case 'deadline': return 'text-red-600 bg-red-50';
-      case 'reminder': return 'text-purple-600 bg-purple-50';
-      case 'personal': return 'text-green-600 bg-green-50';
-      case 'task': return 'text-orange-600 bg-orange-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'meeting':
+        return 'text-blue-600 bg-blue-50';
+      case 'deadline':
+        return 'text-red-600 bg-red-50';
+      case 'reminder':
+        return 'text-purple-600 bg-purple-50';
+      case 'personal':
+        return 'text-green-600 bg-green-50';
+      case 'task':
+        return 'text-orange-600 bg-orange-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
   const formatEventTime = (start: any, end: any) => {
     const startDate = new Date(start.dateTime || start.date);
     const endDate = new Date(end.dateTime || end.date);
-    
+
     if (start.date) {
       return startDate.toLocaleDateString('es-ES', { weekday: 'short' });
     }
-    
-    return startDate.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    }) + ' - ' + endDate.toLocaleTimeString('es-ES', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    });
+
+    return (
+      startDate.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+      }) +
+      ' - ' +
+      endDate.toLocaleTimeString('es-ES', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    );
   };
 
   const getEventDuration = (event: CalendarEvent): string => {
     if (!event.start.dateTime || !event.end.dateTime) return '';
-    
+
     const start = new Date(event.start.dateTime);
     const end = new Date(event.end.dateTime);
     const duration = Math.round((end.getTime() - start.getTime()) / (1000 * 60));
-    
+
     if (duration < 60) {
       return `${duration}min`;
     } else {
@@ -109,18 +152,19 @@ export const CalendarGodModeDashboard: React.FC = () => {
   };
 
   const filteredEvents = events.filter(event => {
-    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (event.description && event.description.toLowerCase().includes(searchTerm.toLowerCase()));
-    
-    const matchesCalendar = selectedCalendar === 'all' || 
-                          event.start.dateTime?.includes(selectedCalendar);
-    
+    const matchesSearch =
+      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (event.description && event.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const matchesCalendar =
+      selectedCalendar === 'all' || event.start.dateTime?.includes(selectedCalendar);
+
     return matchesSearch && matchesCalendar;
   });
 
   const navigateCalendar = (direction: 'prev' | 'next') => {
     const newDate = new Date(currentDate);
-    
+
     if (currentView === 'month') {
       newDate.setMonth(newDate.getMonth() + (direction === 'next' ? 1 : -1));
     } else if (currentView === 'week') {
@@ -128,7 +172,7 @@ export const CalendarGodModeDashboard: React.FC = () => {
     } else if (currentView === 'day') {
       newDate.setDate(newDate.getDate() + (direction === 'next' ? 1 : -1));
     }
-    
+
     setCurrentDate(newDate);
   };
 
@@ -161,8 +205,8 @@ export const CalendarGodModeDashboard: React.FC = () => {
               <button
                 onClick={() => setCurrentView('day')}
                 className={`px-4 py-2 rounded-lg transition-colors ${
-                  currentView === 'day' 
-                    ? 'bg-blue-600 text-white' 
+                  currentView === 'day'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -171,8 +215,8 @@ export const CalendarGodModeDashboard: React.FC = () => {
               <button
                 onClick={() => setCurrentView('week')}
                 className={`px-4 py-2 rounded-lg transition-colors ${
-                  currentView === 'week' 
-                    ? 'bg-blue-600 text-white' 
+                  currentView === 'week'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -181,8 +225,8 @@ export const CalendarGodModeDashboard: React.FC = () => {
               <button
                 onClick={() => setCurrentView('month')}
                 className={`px-4 py-2 rounded-lg transition-colors ${
-                  currentView === 'month' 
-                    ? 'bg-blue-600 text-white' 
+                  currentView === 'month'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -191,8 +235,8 @@ export const CalendarGodModeDashboard: React.FC = () => {
               <button
                 onClick={() => setCurrentView('agenda')}
                 className={`px-4 py-2 rounded-lg transition-colors ${
-                  currentView === 'agenda' 
-                    ? 'bg-blue-600 text-white' 
+                  currentView === 'agenda'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -257,21 +301,28 @@ export const CalendarGodModeDashboard: React.FC = () => {
               >
                 <ChevronLeft className="w-5 h-5 text-gray-600" />
               </button>
-              
+
               <div className="text-center">
                 <h2 className="text-xl font-semibold text-gray-800">
-                  {currentDate.toLocaleDateString('es-ES', { 
-                    month: 'long', 
-                    year: 'numeric' 
+                  {currentDate.toLocaleDateString('es-ES', {
+                    month: 'long',
+                    year: 'numeric',
                   })}
                 </h2>
                 {currentView === 'week' && (
                   <p className="text-sm text-gray-500">
-                    Semana del {new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1)).getDate()} al {new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 7)).getDate()}
+                    Semana del{' '}
+                    {new Date(
+                      currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1)
+                    ).getDate()}{' '}
+                    al{' '}
+                    {new Date(
+                      currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 7)
+                    ).getDate()}
                   </p>
                 )}
               </div>
-              
+
               <button
                 onClick={() => navigateCalendar('next')}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -287,16 +338,16 @@ export const CalendarGodModeDashboard: React.FC = () => {
                   type="text"
                   placeholder="Buscar eventos..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-              
+
               <button className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
                 <Plus className="w-5 h-5" />
                 <span>Nuevo Evento</span>
               </button>
-              
+
               <button className="px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors flex items-center space-x-2">
                 <Filter className="w-5 h-5" />
                 <span>Filtros</span>
@@ -308,56 +359,66 @@ export const CalendarGodModeDashboard: React.FC = () => {
         {/* Events List */}
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           <div className="divide-y divide-gray-200">
-            {filteredEvents.map((event) => (
-              <div 
-                key={event.id} 
+            {filteredEvents.map(event => (
+              <div
+                key={event.id}
                 className="p-6 hover:bg-gray-50 transition-colors cursor-pointer"
                 onClick={() => setSelectedEvent(event)}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-start space-x-4 flex-1">
-                    <div className="w-3 h-3 rounded-full mt-1" 
-                         style={{ backgroundColor: calendarGodModeConfig.calendars.find(c => c.id === event.start.dateTime?.split('T')[0])?.color || '#4285F4' }}>
-                    </div>
-                    
+                    <div
+                      className="w-3 h-3 rounded-full mt-1"
+                      style={{
+                        backgroundColor:
+                          calendarGodModeConfig.calendars.find(
+                            c => c.id === event.start.dateTime?.split('T')[0]
+                          )?.color || '#4285F4',
+                      }}
+                    ></div>
+
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-2">
                         <h3 className="font-semibold text-gray-900">{event.title}</h3>
                         {event.context_analysis && (
                           <div className="flex items-center space-x-2">
-                            <div className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(event.context_analysis.priority)}`}>
+                            <div
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(event.context_analysis.priority)}`}
+                            >
                               {event.context_analysis.priority}
                             </div>
-                            <div className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(event.context_analysis.type)}`}>
+                            <div
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(event.context_analysis.type)}`}
+                            >
                               {event.context_analysis.type}
                             </div>
                           </div>
                         )}
                       </div>
-                      
+
                       {event.description && (
                         <p className="text-sm text-gray-600 mb-2">
                           {event.description.substring(0, 100)}...
                         </p>
                       )}
-                      
+
                       <div className="flex items-center space-x-4 text-sm text-gray-500">
                         <div className="flex items-center space-x-1">
                           <Clock className="w-4 h-4" />
                           <span>{formatEventTime(event.start, event.end)}</span>
                         </div>
-                        
+
                         <div className="flex items-center space-x-1">
                           <Users className="w-4 h-4" />
                           <span>{event.attendees?.length || 1} participantes</span>
                         </div>
-                        
+
                         <div className="flex items-center space-x-1">
                           <Coffee className="w-4 h-4" />
                           <span>{getEventDuration(event)}</span>
                         </div>
                       </div>
-                      
+
                       {event.context_analysis?.follow_up_required && (
                         <div className="flex items-center space-x-1 text-orange-600">
                           <AlertCircle className="w-4 h-4" />
@@ -366,16 +427,16 @@ export const CalendarGodModeDashboard: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center space-x-2">
                     {event.reminders && !event.reminders.useDefault && (
                       <Bell className="w-4 h-4 text-gray-400" />
                     )}
-                    
+
                     {event.start.dateTime?.includes('T') && (
                       <Video className="w-4 h-4 text-blue-500" />
                     )}
-                    
+
                     <button
                       className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
                       title="Más opciones"
@@ -400,7 +461,7 @@ export const CalendarGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Nueva reunión o tarea</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Users className="w-5 h-5 text-green-600" />
               <div className="text-left">
@@ -408,7 +469,7 @@ export const CalendarGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Añadir asistentes</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Video className="w-5 h-5 text-purple-600" />
               <div className="text-left">
@@ -416,7 +477,7 @@ export const CalendarGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Google Meet</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Settings className="w-5 h-5 text-orange-600" />
               <div className="text-left">
@@ -442,26 +503,38 @@ export const CalendarGodModeDashboard: React.FC = () => {
                   </button>
                 </div>
               </div>
-              
+
               <div className="p-6">
                 <div className="mb-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">{selectedEvent.title}</h3>
-                  
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                    {selectedEvent.title}
+                  </h3>
+
                   {selectedEvent.description && (
                     <p className="text-gray-600 mb-4">{selectedEvent.description}</p>
                   )}
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                       <h4 className="font-medium text-gray-700 mb-2">Información del Evento</h4>
                       <div className="space-y-2">
                         <div className="flex items-center text-sm">
                           <Clock className="w-4 h-4 mr-2 text-gray-400" />
-                          <span>Inicio: {new Date(selectedEvent.start.dateTime || selectedEvent.start.date).toLocaleString()}</span>
+                          <span>
+                            Inicio:{' '}
+                            {new Date(
+                              selectedEvent.start.dateTime || selectedEvent.start.date
+                            ).toLocaleString()}
+                          </span>
                         </div>
                         <div className="flex items-center text-sm">
                           <Clock className="w-4 h-4 mr-2 text-gray-400" />
-                          <span>Fin: {new Date(selectedEvent.end.dateTime || selectedEvent.end.date).toLocaleString()}</span>
+                          <span>
+                            Fin:{' '}
+                            {new Date(
+                              selectedEvent.end.dateTime || selectedEvent.end.date
+                            ).toLocaleString()}
+                          </span>
                         </div>
                         <div className="flex items-center text-sm">
                           <Users className="w-4 h-4 mr-2 text-gray-400" />
@@ -469,7 +542,7 @@ export const CalendarGodModeDashboard: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-medium text-gray-700 mb-2">Participantes</h4>
                       <div className="space-y-2">
@@ -485,32 +558,36 @@ export const CalendarGodModeDashboard: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 {selectedEvent.context_analysis && (
                   <div className="mb-6">
                     <h4 className="font-medium text-gray-700 mb-2">Análisis IA</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <span className="text-sm text-gray-500">Prioridad:</span>
-                        <div className={`mt-1 px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(selectedEvent.context_analysis.priority)}`}>
+                        <div
+                          className={`mt-1 px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(selectedEvent.context_analysis.priority)}`}
+                        >
                           {selectedEvent.context_analysis.priority}
                         </div>
                       </div>
-                      
+
                       <div>
                         <span className="text-sm text-gray-500">Tipo:</span>
-                        <div className={`mt-1 px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(selectedEvent.context_analysis.type)}`}>
+                        <div
+                          className={`mt-1 px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(selectedEvent.context_analysis.type)}`}
+                        >
                           {selectedEvent.context_analysis.type}
                         </div>
                       </div>
-                      
+
                       <div>
                         <span className="text-sm text-gray-500">Tiempo preparación:</span>
                         <div className="mt-1 text-sm font-medium">
                           {selectedEvent.context_analysis.preparation_time} minutos
                         </div>
                       </div>
-                      
+
                       <div>
                         <span className="text-sm text-gray-500">Seguimiento requerido:</span>
                         <div className="mt-1 text-sm font-medium">
@@ -518,23 +595,25 @@ export const CalendarGodModeDashboard: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     {selectedEvent.context_analysis.ai_suggestions.length > 0 && (
                       <div className="mt-4">
                         <h4 className="font-medium text-gray-700 mb-2">Sugerencias de IA</h4>
                         <div className="space-y-2">
-                          {selectedEvent.context_analysis.ai_suggestions.map((suggestion, index) => (
-                            <div key={index} className="flex items-center space-x-2 text-sm">
-                              <CheckCircle className="w-4 h-4 text-green-500" />
-                              <span>{suggestion}</span>
-                            </div>
-                          ))}
+                          {selectedEvent.context_analysis.ai_suggestions.map(
+                            (suggestion, index) => (
+                              <div key={index} className="flex items-center space-x-2 text-sm">
+                                <CheckCircle className="w-4 h-4 text-green-500" />
+                                <span>{suggestion}</span>
+                              </div>
+                            )
+                          )}
                         </div>
                       </div>
                     )}
                   </div>
                 )}
-                
+
                 <div className="flex justify-end space-x-3">
                   <button
                     onClick={() => setSelectedEvent(null)}
@@ -542,10 +621,8 @@ export const CalendarGodModeDashboard: React.FC = () => {
                   >
                     Cerrar
                   </button>
-                  
-                  <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                  >
+
+                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
                     <Edit className="w-4 h-4" />
                     <span>Editar</span>
                   </button>

@@ -33,7 +33,7 @@ export class SupabaseService {
       logger.info('[SupabaseService] 🚀 Sovereign Client initialized');
     } else {
       logger.warn(
-        '[SupabaseService] ⚠️ Supabase credentials missing. Client is running in DISABLED mode.',
+        '[SupabaseService] ⚠️ Supabase credentials missing. Client is running in DISABLED mode.'
       );
       this.client = null as any;
     }
@@ -43,7 +43,7 @@ export class SupabaseService {
     if (!env.SUPABASE_URL || !env.SUPABASE_KEY) {
       logger.error('❌ Critical: SUPABASE_URL or SUPABASE_KEY missing from environment.');
       logger.warn(
-        '⚠️ [SupabaseService] Running without valid credentials. Some features will be disabled.',
+        '⚠️ [SupabaseService] Running without valid credentials. Some features will be disabled.'
       );
     }
   }
@@ -92,7 +92,7 @@ export class SupabaseService {
       return true;
     } catch (err: any) {
       logger.error(
-        `[SupabaseService] 💥 Catastrophic failure during God Mode health check: ${err.message}`,
+        `[SupabaseService] 💥 Catastrophic failure during God Mode health check: ${err.message}`
       );
       return false;
     }
@@ -107,7 +107,7 @@ export class SupabaseService {
     queryText: string,
     embedding: number[],
     threshold: number = 0.5,
-    count: number = 5,
+    count: number = 5
   ) {
     if (!this.client) throw new Error('Supabase client not initialized');
     const { data, error } = await this.client.rpc('hybrid_search', {
@@ -140,7 +140,7 @@ export class SupabaseService {
 
     if (error) {
       logger.error(
-        `[SupabaseService] ❌ Failed to fetch prompt template [${name}]: ${error.message}`,
+        `[SupabaseService] ❌ Failed to fetch prompt template [${name}]: ${error.message}`
       );
       throw error;
     }
@@ -166,7 +166,5 @@ export class SupabaseService {
   }
 }
 
-
 // REMOVED top-level singleton initialization to prevent circular dependency issues during module loading.
 // Services should use SupabaseService.getInstance() or better, rely on Inversify injection.
-

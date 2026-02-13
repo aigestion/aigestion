@@ -17,7 +17,7 @@ export const RouteProtection: React.FC<RouteProtectionProps> = ({
   requireAdmin = false,
   requirePhoneVerification = false,
   redirectTo = '/login',
-  fallbackPath = '/dashboard'
+  fallbackPath = '/dashboard',
 }) => {
   const { user, isAuthenticated, isAdmin, loading } = useAuth();
 
@@ -45,11 +45,9 @@ export const RouteProtection: React.FC<RouteProtectionProps> = ({
         <div className="text-center p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 max-w-md">
           <div className="text-6xl mb-4">🚫</div>
           <h2 className="text-2xl font-bold text-white mb-2">Acceso Restringido</h2>
-          <p className="text-gray-300 mb-6">
-            Esta área es solo para administradores del sistema.
-          </p>
+          <p className="text-gray-300 mb-6">Esta área es solo para administradores del sistema.</p>
           <button
-            onClick={() => window.location.href = fallbackPath}
+            onClick={() => (window.location.href = fallbackPath)}
             className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full font-bold text-white hover:scale-105 transition-all"
           >
             Volver al Panel
@@ -67,17 +65,18 @@ export const RouteProtection: React.FC<RouteProtectionProps> = ({
           <div className="text-6xl mb-4">📱</div>
           <h2 className="text-2xl font-bold text-white mb-2">Verificación Requerida</h2>
           <p className="text-gray-300 mb-6">
-            Para acceder a tu panel de cliente, necesitas verificar tu número de teléfono para prevenir fraudes.
+            Para acceder a tu panel de cliente, necesitas verificar tu número de teléfono para
+            prevenir fraudes.
           </p>
           <div className="space-y-3">
             <button
-              onClick={() => window.location.href = '/verify-phone'}
+              onClick={() => (window.location.href = '/verify-phone')}
               className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full font-bold text-white hover:scale-105 transition-all"
             >
               📞 Verificar Teléfono
             </button>
             <button
-              onClick={() => window.location.href = fallbackPath}
+              onClick={() => (window.location.href = fallbackPath)}
               className="w-full px-6 py-3 bg-gray-600 rounded-full font-bold text-white hover:scale-105 transition-all"
             >
               Volver
@@ -110,10 +109,10 @@ export const DemoRouteProtection: React.FC<{ children: React.ReactNode }> = ({ c
 };
 
 // Public route that redirects authenticated users away
-export const PublicRouteProtection: React.FC<{ children: React.ReactNode; redirectTo?: string }> = ({ 
-  children, 
-  redirectTo = '/dashboard' 
-}) => {
+export const PublicRouteProtection: React.FC<{
+  children: React.ReactNode;
+  redirectTo?: string;
+}> = ({ children, redirectTo = '/dashboard' }) => {
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {

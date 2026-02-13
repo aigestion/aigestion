@@ -19,7 +19,6 @@ export const MetaverseSection: React.FC = () => {
 
   return (
     <section className="py-40 smooth-mesh-bg text-white relative overflow-hidden" id="metaverse">
-
       {/* Architectural Background Lines */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
         <div className="absolute top-0 left-1/4 w-px h-full bg-linear-to-b from-transparent via-nexus-cyan to-transparent" />
@@ -133,7 +132,7 @@ export const MetaverseSection: React.FC = () => {
                   ))}
                 </ul>
 
-                <button 
+                <button
                   onClick={() => setIsContactModalOpen(true)}
                   className="group flex items-center gap-3 px-8 py-4 bg-nexus-cyan text-black font-bold font-orbitron tracking-widest hover:bg-nexus-cyan/80 hover:shadow-[0_0_30px_rgba(0,245,255,0.4)] transition-all rounded-sm"
                 >
@@ -212,7 +211,7 @@ export const MetaverseSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={() => setIsContactModalOpen(true)}
                     className="w-full py-4 border-2 border-nexus-violet/40 hover:bg-nexus-violet/20 hover:border-nexus-violet text-white transition-all font-orbitron tracking-widest text-xs uppercase flex justify-center items-center gap-2"
                   >
@@ -247,7 +246,7 @@ export const MetaverseSection: React.FC = () => {
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={() => setIsContactModalOpen(true)}
                     className="w-full py-4 bg-nexus-cyan text-black hover:bg-nexus-cyan/80 hover:shadow-[0_0_20px_rgba(0,245,255,0.4)] transition-all font-orbitron tracking-widest text-xs uppercase flex justify-center items-center gap-2"
                   >

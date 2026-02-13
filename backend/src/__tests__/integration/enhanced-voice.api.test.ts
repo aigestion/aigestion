@@ -38,7 +38,7 @@ const SKIP_INTEGRATION = process.env.NODE_ENV === 'test' && !process.env.RUN_INT
         tokenVersion: testUser.tokenVersion,
       },
       config.jwt.secret,
-      { expiresIn: '1h' },
+      { expiresIn: '1h' }
     )}`;
 
     // Mock User.findById for middleware
@@ -139,10 +139,7 @@ const SKIP_INTEGRATION = process.env.NODE_ENV === 'test' && !process.env.RUN_INT
     });
 
     it('should return 401 for missing authorization', async () => {
-      await request(app)
-        .post('/api/v1/enhanced-voice/process')
-        .send(validPayload)
-        .expect(401);
+      await request(app).post('/api/v1/enhanced-voice/process').send(validPayload).expect(401);
     });
 
     it('should return 400 for invalid payload', async () => {

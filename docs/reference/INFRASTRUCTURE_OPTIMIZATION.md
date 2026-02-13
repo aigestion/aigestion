@@ -21,6 +21,7 @@
 ## 🎯 Resumen Ejecutivo
 
 ### Estado Inicial
+
 - ✅ Arquitectura microservicios funcional (6 servicios Docker)
 - ✅ Kubernetes production-ready con StatefulSets
 - ✅ OpenTelemetry tracing con Jaeger
@@ -29,6 +30,7 @@
 - ⚠️ Falta PodDisruptionBudget en Kubernetes
 
 ### Estado Optimizado
+
 - ✅ **Resource limits** implementados en todos los servicios
 - ✅ **Dockerfile optimizado** con layer caching y metadata OCI
 - ✅ **PodDisruptionBudgets** para alta disponibilidad
@@ -36,8 +38,9 @@
 - ✅ **.dockerignore** completo (reduce build context 70%)
 
 ### Métricas de Impacto
-| Métrica              | Antes      | Después      | Mejora    |
-| -------------------- | ---------- | ------------ | --------- |
+
+| Métrica              | Antes      | Después      | Mejora     |
+| -------------------- | ---------- | ------------ | ---------- |
 | **Build time**       | ~8 min     | ~4 min       | 50% ⚡     |
 | **Image size**       | ~1.2 GB    | ~850 MB      | 30% 📦     |
 | **Memory usage**     | Sin límite | 6.5 GB total | Control 🎯 |
@@ -83,6 +86,7 @@ graph TB
 ### Inventario de Infraestructura
 
 #### Docker Compose Services (6 servicios)
+
 1. **app** - Frontend (Vite) + Backend (Express)
    - Puertos: 5173 (frontend), 3000 (backend)
    - Resources: 2GB limit / 512MB reservation
@@ -116,6 +120,7 @@ graph TB
    - Profile: production
 
 #### Kubernetes Manifests (14 archivos)
+
 - **Namespace**: NEXUS V1
 - **Deployments**: app (3 replicas), evaluation (2-6 replicas)
 - **StatefulSets**: mongodb, rabbitmq, redis (persistencia)
@@ -137,6 +142,7 @@ graph TB
 #### Cambios Aplicados
 
 **✅ Metadata Labels OCI**
+
 ```dockerfile
 LABEL org.opencontainers.image.title="NEXUS V1 - Autogestión Pro"
 LABEL org.opencontainers.image.description="Full-stack TypeScript application"
@@ -146,11 +152,13 @@ LABEL org.opencontainers.image.source="https://github.com/noepab/NEXUS V1"
 ```
 
 **✅ Layer Caching Optimization**
+
 - Paquetes Alpine ordenados alfabéticamente: `g++ libc6-compat make python3`
 - `COPY package*.json` antes que `COPY .` (cache de dependencias)
 - `npm ci --omit=optional` (omite dependencias opcionales)
 
 **✅ Correcciones Linter**
+
 - `cd server` reemplazado por `WORKDIR /app/server`
 - `RUN addgroup && adduser` combinados en una sola capa
 - User non-root `appuser:nodejs` (uid=1001)
@@ -176,6 +184,7 @@ LABEL org.opencontainers.image.source="https://github.com/noepab/NEXUS V1"
 **Total recursos límite**: 5.5 CPU / 6.5 GB
 
 #### Configuración Ejemplo
+
 ```yaml
 deploy:
   resources:
@@ -188,6 +197,7 @@ deploy:
 ```
 
 **Beneficios**:
+
 - ✅ Previene resource starvation entre servicios
 - ✅ Garantiza recursos mínimos para operación
 - ✅ Evita OOM kills inesperados
@@ -209,10 +219,11 @@ deploy:
 | **nginx**    | `nginx -t`                  | 30s      | 10s     | 3       | -            |
 
 **Mejora aplicada**:
+
 ```yaml
 depends_on:
   mongodb:
-    condition: service_healthy  # ✅ Orden de inicio garantizado
+    condition: service_healthy # ✅ Orden de inicio garantizado
   rabbitmq:
     condition: service_healthy
   redis:
@@ -228,6 +239,7 @@ depends_on:
 #### Archivo Creado: `k8s/pdb.yaml`
 
 **Para Aplicaciones (minAvailable: 1)**
+
 ```yaml
 apiVersion: policy/v1
 kind: PodDisruptionBudget
@@ -235,13 +247,14 @@ metadata:
   name: alejandro-app-pdb
   namespace: NEXUS V1
 spec:
-  minAvailable: 1  # Siempre 1 pod disponible
+  minAvailable: 1 # Siempre 1 pod disponible
   selector:
     matchLabels:
       app: alejandro-app
 ```
 
 **Para Bases de Datos (maxUnavailable: 0)**
+
 ```yaml
 apiVersion: policy/v1
 kind: PodDisruptionBudget
@@ -249,13 +262,14 @@ metadata:
   name: mongodb-pdb
   namespace: NEXUS V1
 spec:
-  maxUnavailable: 0  # No se puede apagar ningún pod
+  maxUnavailable: 0 # No se puede apagar ningún pod
   selector:
     matchLabels:
       app: mongodb
 ```
 
 **Servicios Protegidos**:
+
 - ✅ alejandro-app (min 1 disponible)
 - ✅ evaluation (min 1 disponible)
 - ✅ mongodb (max 0 no disponibles)
@@ -263,12 +277,14 @@ spec:
 - ✅ redis (max 0 no disponibles)
 
 **Beneficios**:
+
 - 🛡️ Protección durante `kubectl drain`
 - 🛡️ Protección durante rolling updates
 - 🛡️ Protección durante mantenimiento de nodos
 - 🛡️ Garantiza disponibilidad SLA
 
 **Aplicar**:
+
 ```bash
 kubectl apply -f k8s/pdb.yaml
 kubectl get pdb -n NEXUS V1
@@ -281,6 +297,7 @@ kubectl get pdb -n NEXUS V1
 #### Archivos Excluidos (Ya Existente)
 
 **Optimización de Build Context**:
+
 ```ignore
 node_modules/          # 300+ MB
 dist/                  # Archivos compilados
@@ -305,19 +322,22 @@ scripts/              # Scripts de deploy
 #### Windows con WSL2 (Configuración Óptima)
 
 **Settings → Resources**:
+
 ```yaml
-Memory: 8 GB          # Mínimo recomendado
-CPUs: 4 cores         # Mínimo recomendado
-Swap: 2 GB            # Buffer para picos
-Disk size: 100 GB     # Espacio para imágenes/volúmenes
+Memory: 8 GB # Mínimo recomendado
+CPUs: 4 cores # Mínimo recomendado
+Swap: 2 GB # Buffer para picos
+Disk size: 100 GB # Espacio para imágenes/volúmenes
 ```
 
 **Settings → General**:
+
 - ✅ Use WSL 2 based engine
 - ✅ Use Docker Compose V2
 - ❌ Send usage statistics (opcional)
 
 **Settings → Docker Engine**:
+
 ```json
 {
   "builder": {
@@ -328,7 +348,7 @@ Disk size: 100 GB     # Espacio para imágenes/volúmenes
   },
   "experimental": false,
   "features": {
-    "buildkit": true  // ✅ BuildKit habilitado
+    "buildkit": true // ✅ BuildKit habilitado
   }
 }
 ```
@@ -336,6 +356,7 @@ Disk size: 100 GB     # Espacio para imágenes/volúmenes
 #### BuildKit Features
 
 **Habilitar en CLI**:
+
 ```bash
 # Permanentemente
 $env:DOCKER_BUILDKIT = 1
@@ -346,6 +367,7 @@ docker buildx version
 ```
 
 **Ventajas BuildKit**:
+
 - ⚡ Builds paralelos
 - 📦 Cache mount para node_modules
 - 🔒 Secret mount para credenciales
@@ -358,6 +380,7 @@ docker buildx version
 #### Comandos Útiles
 
 **Limpieza Regular**:
+
 ```bash
 # Remover contenedores detenidos, redes sin usar, imágenes colgadas
 docker system prune -a
@@ -373,6 +396,7 @@ docker builder prune -a
 ```
 
 **Monitoreo de Recursos**:
+
 ```bash
 # Stats en tiempo real
 docker stats
@@ -391,6 +415,7 @@ docker inspect <container-id>
 ### Docker Best Practices
 
 #### ✅ Multi-Stage Builds
+
 - Base image común (`node:20-alpine AS base`)
 - Stage de dependencias (`deps`)
 - Stage de build (`builder`)
@@ -398,19 +423,23 @@ docker inspect <container-id>
 - **Beneficio**: Imagen final 60% más pequeña
 
 #### ✅ Non-Root User
+
 ```dockerfile
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 appuser
 USER appuser
 ```
+
 - **Beneficio**: Seguridad mejorada, cumple con Pod Security Standards
 
 #### ✅ Layer Caching
+
 - Dependencias antes que código fuente
 - Archivos más estáticos primero
 - `.dockerignore` para excluir archivos innecesarios
 
 #### ✅ Health Checks
+
 ```dockerfile
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
@@ -421,6 +450,7 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
 ### Kubernetes Best Practices
 
 #### ✅ Resource Requests & Limits
+
 ```yaml
 resources:
   requests:
@@ -430,10 +460,12 @@ resources:
     memory: '2Gi'
     cpu: '1000m'
 ```
+
 - **Requests**: Garantizados por scheduler
 - **Limits**: Máximo permitido (OOM kill si excede)
 
 #### ✅ Probes (Liveness & Readiness)
+
 ```yaml
 livenessProbe:
   httpGet:
@@ -451,6 +483,7 @@ readinessProbe:
 ```
 
 #### ✅ Horizontal Pod Autoscaler
+
 ```yaml
 minReplicas: 3
 maxReplicas: 10
@@ -464,6 +497,7 @@ metrics:
 ```
 
 #### ✅ Pod Anti-Affinity
+
 ```yaml
 affinity:
   podAntiAffinity:
@@ -475,9 +509,11 @@ affinity:
               app: alejandro-app
           topologyKey: kubernetes.io/hostname
 ```
+
 - **Beneficio**: Pods distribuidos en diferentes nodos (HA)
 
 #### ✅ StatefulSets para Datos
+
 - MongoDB, RabbitMQ, Redis usan StatefulSets
 - PersistentVolumeClaims para persistencia
 - Identidad de red estable
@@ -487,6 +523,7 @@ affinity:
 ### Security Best Practices
 
 #### ✅ Secrets Management
+
 ```yaml
 env:
   - name: MONGODB_URI
@@ -495,11 +532,13 @@ env:
         name: alejandro-secrets
         key: MONGODB_URI
 ```
+
 - ❌ Nunca hardcodear credenciales
 - ✅ Usar Kubernetes Secrets
 - ✅ GitHub Secrets para CI/CD
 
 #### ✅ Network Policies
+
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -515,6 +554,7 @@ spec:
 ```
 
 #### ✅ Resource Quotas
+
 ```yaml
 spec:
   hard:
@@ -532,6 +572,7 @@ spec:
 ### Stack Implementado
 
 #### OpenTelemetry + Jaeger
+
 ```yaml
 environment:
   - OTEL_SERVICE_NAME=NEXUS V1-backend
@@ -540,11 +581,13 @@ environment:
 ```
 
 **Acceso**:
+
 - Jaeger UI: http://localhost:16686
 - OTLP gRPC: 4317
 - OTLP HTTP: 4318
 
 #### Prometheus Metrics
+
 ```yaml
 annotations:
   prometheus.io/scrape: 'true'
@@ -553,11 +596,13 @@ annotations:
 ```
 
 **Métricas Disponibles**:
+
 - Request rate, duration, errors (RED)
 - CPU, memory, disk I/O
 - Custom business metrics
 
 #### Health Check Endpoints
+
 - `/health` - Liveness probe (servidor vivo)
 - `/ready` - Readiness probe (listo para tráfico)
 - `/metrics` - Prometheus metrics
@@ -567,6 +612,7 @@ annotations:
 ### Dashboards Recomendados
 
 #### Kubernetes Cluster
+
 ```bash
 # Metrics Server (requerido para HPA)
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
@@ -582,6 +628,7 @@ kubectl get events -n NEXUS V1 --sort-by='.lastTimestamp'
 ```
 
 #### Docker Stats
+
 ```bash
 # Tiempo real
 docker stats
@@ -598,10 +645,13 @@ docker-compose -f docker-compose.yml logs -f app
 ### Health Check Scripts
 
 **Docker**:
+
 ```bash
 ./scripts/docker-health-check.sh
 ```
+
 Valida:
+
 - ✅ Docker daemon running
 - ✅ Compose file válido
 - ✅ Todos los servicios healthy
@@ -609,10 +659,13 @@ Valida:
 - ✅ Port availability
 
 **Kubernetes**:
+
 ```bash
 ./scripts/k8s-health-check.sh
 ```
+
 Valida:
+
 - ✅ Namespace existe
 - ✅ Deployments ready
 - ✅ StatefulSets running
@@ -625,6 +678,7 @@ Valida:
 ### Comandos de Verificación
 
 #### Docker Compose
+
 ```bash
 # Status general
 docker-compose ps
@@ -640,6 +694,7 @@ docker inspect NEXUS V1-app --format='{{.State.Health.Status}}'
 ```
 
 #### Kubernetes
+
 ```bash
 # Estado general
 kubectl get all -n NEXUS V1
@@ -671,13 +726,16 @@ kubectl get events -n NEXUS V1 --sort-by='.lastTimestamp' | tail -20
 ### Optimizaciones Pendientes
 
 #### 1. Multi-Architecture Builds (Prioridad: Media)
+
 ```dockerfile
 # Buildx para AMD64 + ARM64
 docker buildx build --platform linux/amd64,linux/arm64 -t NEXUS V1:latest .
 ```
+
 **Beneficio**: Compatibilidad con servidores ARM (Graviton, Apple Silicon)
 
 #### 2. Image Scanning Automatizado (Prioridad: Alta)
+
 ```yaml
 # GitHub Actions - Trivy scan
 - name: Run Trivy vulnerability scanner
@@ -688,17 +746,20 @@ docker buildx build --platform linux/amd64,linux/arm64 -t NEXUS V1:latest .
 ```
 
 #### 3. Service Mesh (Prioridad: Baja)
+
 - Istio o Linkerd para traffic management
 - mTLS entre servicios
 - Retry, circuit breaker automático
 
 #### 4. GitOps con ArgoCD (Prioridad: Media)
+
 ```bash
 # Deployment declarativo
 kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 ```
 
 #### 5. Backup Automatizado (Prioridad: Alta)
+
 ```bash
 # MongoDB backup diario
 0 2 * * * docker-compose exec mongodb mongodump --out /backup/$(date +\%Y\%m\%d)
@@ -709,6 +770,7 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manif
 ### Roadmap de Infraestructura
 
 #### Q1 2025
+
 - ✅ Resource limits implementados
 - ✅ PodDisruptionBudgets configurados
 - ✅ Dockerfile optimizado
@@ -716,12 +778,14 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manif
 - 🔄 Backup automatizado
 
 #### Q2 2025
+
 - 📋 Multi-architecture builds
 - 📋 Service mesh (Istio)
 - 📋 GitOps con ArgoCD
 - 📋 Disaster recovery plan
 
 #### Q3 2025
+
 - 📋 Chaos engineering (Litmus)
 - 📋 Cost optimization (Spot instances)
 - 📋 Multi-region deployment
@@ -731,17 +795,20 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manif
 ## 📚 Referencias y Recursos
 
 ### Documentación Oficial
+
 - [Docker Best Practices](https://docs.docker.com/develop/dev-best-practices/)
 - [Kubernetes Production Best Practices](https://learnk8s.io/production-best-practices)
 - [OpenTelemetry JavaScript](https://opentelemetry.io/docs/languages/js/)
 
 ### Herramientas Recomendadas
+
 - **Lens** - Kubernetes IDE (https://k8slens.dev/)
 - **k9s** - Terminal UI para K8s (https://k9scli.io/)
 - **Dive** - Docker image analyzer (https://github.com/wagoodman/dive)
 - **Trivy** - Security scanner (https://trivy.dev/)
 
 ### Checklists
+
 - [x] ✅ .dockerignore configurado
 - [x] ✅ Multi-stage Dockerfile
 - [x] ✅ Resource limits en Docker Compose
@@ -772,8 +839,8 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manif
 
 ### Métricas de Éxito
 
-| KPI             | Objetivo        | Estado   |
-| --------------- | --------------- | -------- |
+| KPI             | Objetivo        | Estado    |
+| --------------- | --------------- | --------- |
 | Build time      | < 5 min         | ✅ 4 min  |
 | Image size      | < 1 GB          | ✅ 850 MB |
 | Resource limits | 100% servicios  | ✅ 6/6    |
@@ -814,6 +881,7 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manif
 ```
 
 **Características:**
+
 - ✅ Pre-validaciones de kubectl, contexto, recursos
 - ✅ Deployment por capas (namespace → secrets → stateful → apps)
 - ✅ Health checks automáticos con timeout
@@ -831,6 +899,7 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manif
 ```
 
 **Validaciones incluidas:**
+
 - ✅ Pods en ejecución (Running vs CrashLoopBackOff)
 - ✅ StatefulSets con réplicas listas
 - ✅ Services con endpoints válidos
@@ -841,6 +910,7 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manif
 - ✅ Eventos recientes sin errores
 
 **Output esperado:**
+
 ```
 ╔═══════════════════════════════════════════════════════════╗
 ║  RESUMEN DE VALIDACIÓN                                    ║
@@ -863,6 +933,7 @@ kubectl apply -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manif
 ```
 
 Elimina:
+
 - Contenedores detenidos
 - Imágenes sin usar (>72h)
 - Volúmenes huérfanos
@@ -875,6 +946,7 @@ Elimina:
 **Archivo:** `DOCKER_DESKTOP_CONFIG.md`
 
 **Contenido:**
+
 - 🔧 Configuración óptima de recursos (6 CPUs, 10GB RAM, 2GB Swap)
 - ⚙️ Docker Engine settings (BuildKit, log rotation, overlay2)
 - 🐧 WSL 2 optimization (.wslconfig)
@@ -883,6 +955,7 @@ Elimina:
 - ✅ Checklist de validación completo
 
 **Quick Start:**
+
 ```powershell
 # Aplicar configuración recomendada
 # 1. Docker Desktop → Settings → Resources → Advanced
@@ -901,10 +974,12 @@ wsl --shutdown
 ### 2. Kubernetes Deployment Scripts
 
 **Archivos creados:**
+
 - `scripts/deploy-k8s.ps1` - Deployment automatizado (350+ líneas)
 - `scripts/k8s-health-check.ps1` - Validación completa (400+ líneas)
 
 **Integraciones:**
+
 - ✅ kubectl validation
 - ✅ Context verification (producción requiere confirmación)
 - ✅ Resource availability checks
@@ -914,25 +989,29 @@ wsl --shutdown
 ## 🎯 Próximos Pasos Actualizados
 
 ### Fase 1: Validación de Kubernetes Existente ✅
+
 - [x] Crear script de deployment automatizado
 - [x] Crear script de health check
 - [x] Documentar configuración de Docker Desktop
-- [ ] Revisar configuraciones de k8s/*.yaml (13 archivos)
+- [ ] Revisar configuraciones de k8s/\*.yaml (13 archivos)
 - [ ] Validar PodDisruptionBudgets settings
 - [ ] Verificar HPA thresholds
 
 ### Fase 2: Optimizaciones Adicionales
+
 - [ ] Implementar Prometheus + Grafana para métricas
 - [ ] Configurar alertas (Alertmanager)
 - [ ] Crear dashboards de Grafana
 - [ ] Implementar log aggregation (EFK stack)
 
 ### Fase 3: CI/CD para Kubernetes
+
 - [ ] GitHub Actions workflow para k8s deployment
 - [ ] Automated testing en staging antes de prod
 - [ ] Helm charts para deployment simplificado
 
 ### Fase 4: Disaster Recovery
+
 - [ ] Scripts de backup de StatefulSets
 - [ ] Procedimientos de restore
 - [ ] Documentación de DR runbooks
@@ -940,6 +1019,7 @@ wsl --shutdown
 ---
 
 Para preguntas o issues:
+
 - GitHub Issues: https://github.com/noepab/NEXUS V1/issues
 - Documentación: `docs/architecture/`
 - Scripts: `scripts/`
@@ -948,5 +1028,4 @@ Para preguntas o issues:
 
 **Última actualización:** 2025-12-XX
 **Versión:** 2.0.0 (Scripts de automatización agregados)
-*Este documento se actualizará con nuevas optimizaciones y aprendizajes* 🚀
-
+_Este documento se actualizará con nuevas optimizaciones y aprendizajes_ 🚀

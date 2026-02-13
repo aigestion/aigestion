@@ -21,7 +21,7 @@ export class DevicePostureService {
    */
   async verifyDevice(
     userId: string,
-    postureData: DevicePostureData,
+    postureData: DevicePostureData
   ): Promise<{
     isTrusted: boolean;
     isCompliant: boolean;
@@ -60,7 +60,7 @@ export class DevicePostureService {
       },
       {
         arrayFilters: [{ 'elem.deviceId': postureData.deviceId }],
-      },
+      }
     );
 
     return {
@@ -79,7 +79,7 @@ export class DevicePostureService {
       deviceId: string;
       name: string;
       deviceInfo: any;
-    },
+    }
   ): Promise<void> {
     const user = await this.userRepository.findById(userId);
     if (!user) throw new Error('User not found');

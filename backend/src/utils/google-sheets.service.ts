@@ -80,7 +80,7 @@ export class GoogleSheetsService {
    */
   async findOrCreateSpreadsheet(
     title: string,
-    sheetTitles: string[] = ['Videos'],
+    sheetTitles: string[] = ['Videos']
   ): Promise<string> {
     try {
       // Necesitamos Drive API para buscar por nombre de archivo si no tenemos el ID
@@ -174,7 +174,7 @@ export class GoogleSheetsService {
     spreadsheetId: string,
     range: string,
     values: CellValue[][],
-    valueInputOption: 'RAW' | 'USER_ENTERED' = 'USER_ENTERED',
+    valueInputOption: 'RAW' | 'USER_ENTERED' = 'USER_ENTERED'
   ): Promise<void> {
     const sheets = await this.getSheetsClient();
 
@@ -200,7 +200,7 @@ export class GoogleSheetsService {
     spreadsheetId: string,
     sheetName: string,
     values: CellValue[][],
-    valueInputOption: 'RAW' | 'USER_ENTERED' = 'USER_ENTERED',
+    valueInputOption: 'RAW' | 'USER_ENTERED' = 'USER_ENTERED'
   ): Promise<void> {
     const sheets = await this.getSheetsClient();
 
@@ -308,7 +308,7 @@ export class GoogleSheetsService {
       fontSize?: number;
       backgroundColor?: { red: number; green: number; blue: number };
       textColor?: { red: number; green: number; blue: number };
-    },
+    }
   ): Promise<void> {
     const sheets = await this.getSheetsClient();
 
@@ -358,7 +358,7 @@ export class GoogleSheetsService {
     spreadsheetId: string,
     find: string,
     replacement: string,
-    sheetId?: number,
+    sheetId?: number
   ): Promise<number> {
     const sheets = await this.getSheetsClient();
 

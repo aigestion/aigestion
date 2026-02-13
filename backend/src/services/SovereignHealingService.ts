@@ -12,7 +12,7 @@ export enum HealingAction {
   RESTART_CONTAINER = 'RESTART_CONTAINER',
   PRUNE_CACHE = 'PRUNE_CACHE',
   SCALE_INSTANCES = 'SCALE_INSTANCES',
-  REBOOT_SYSTEM = 'REBOOT_SYSTEM'
+  REBOOT_SYSTEM = 'REBOOT_SYSTEM',
 }
 
 export interface HealingProposal {
@@ -34,7 +34,7 @@ export class SovereignHealingService {
   ) {
     // Start monitoring loop
     if (process.env.NODE_ENV !== 'test') {
-       this.startHealingMonitor();
+      this.startHealingMonitor();
     }
   }
 
@@ -61,20 +61,20 @@ export class SovereignHealingService {
 
   private async generateHealingProposal(alert: any) {
     const proposalId = `heal_${crypto.randomBytes(4).toString('hex')}`;
-    
+
     // Logic to determine action based on alert name/metadata
     let action: HealingAction = HealingAction.PRUNE_CACHE;
     let target = 'system';
     let impact: 'low' | 'medium' | 'high' = 'low';
 
     if (alert.name.includes('memory')) {
-        action = HealingAction.PRUNE_CACHE;
-        target = 'redis/node-heap';
-        impact = 'low';
+      action = HealingAction.PRUNE_CACHE;
+      target = 'redis/node-heap';
+      impact = 'low';
     } else if (alert.name.includes('cpu')) {
-        action = HealingAction.RESTART_CONTAINER;
-        target = alert.metadata?.container || 'backend-api';
-        impact = 'medium';
+      action = HealingAction.RESTART_CONTAINER;
+      target = alert.metadata?.container || 'backend-api';
+      impact = 'medium';
     }
 
     logger.info({ proposalId, alert: alert.name }, '[SovereignHealing] Generating repair proposal');
@@ -91,12 +91,12 @@ export class SovereignHealingService {
       target,
       impact,
       status: 'pending',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     const encryptedProposal = await this.vaultService.encrypt(
-        JSON.stringify(proposal), 
-        missionKey.toString('hex')
+      JSON.stringify(proposal),
+      missionKey.toString('hex')
     );
 
     await this.missionRepo.create({
@@ -108,25 +108,28 @@ export class SovereignHealingService {
       result: encryptedProposal.ciphertext,
       vaultIV: encryptedProposal.iv,
       vaultTag: encryptedProposal.tag,
-      metadata: { 
-          isHealingProposal: true,
-          originalAlertId: alert.id
-      }
+      metadata: {
+        isHealingProposal: true,
+        originalAlertId: alert.id,
+      },
     });
 
     logger.warn({ proposalId }, '[SovereignHealing] Repair proposal stored. Awaiting approval.');
   }
 
   public async executeRepair(proposalId: string, approved: boolean) {
-      if (!approved) {
-          await this.missionRepo.update(proposalId, { status: MissionStatus.FAILED, error: 'Authorization Denied' });
-          return;
-      }
+    if (!approved) {
+      await this.missionRepo.update(proposalId, {
+        status: MissionStatus.FAILED,
+        error: 'Authorization Denied',
+      });
+      return;
+    }
 
-      // In Phase 12, we'd trigger actual infrastructure commands here
-      logger.info({ proposalId }, '[SovereignHealing] Executing authorized repair...');
-      
-      // Update mission to COMPLETED
-      await this.missionRepo.update(proposalId, { status: MissionStatus.COMPLETED });
+    // In Phase 12, we'd trigger actual infrastructure commands here
+    logger.info({ proposalId }, '[SovereignHealing] Executing authorized repair...');
+
+    // Update mission to COMPLETED
+    await this.missionRepo.update(proposalId, { status: MissionStatus.COMPLETED });
   }
 }

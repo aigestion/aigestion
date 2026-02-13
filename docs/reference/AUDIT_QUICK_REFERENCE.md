@@ -13,12 +13,14 @@
 ## ⚡ Inicio Rápido
 
 ### Primera vez
+
 ```powershell
 cd c:\Users\Alejandro\NEXUS V1\scripts
 .\audit-quickstart.ps1      # Configuración automática
 ```
 
 ### Uso diario
+
 ```powershell
 # Interfaz principal
 .\audit-control-center.ps1
@@ -34,6 +36,7 @@ cd c:\Users\Alejandro\NEXUS V1\scripts
 ## 🎯 Comandos Principales
 
 ### Control Center
+
 ```powershell
 # Modo interactivo (menú)
 .\audit-control-center.ps1
@@ -50,24 +53,28 @@ cd c:\Users\Alejandro\NEXUS V1\scripts
 ```
 
 ### Auditoría Completa
+
 ```powershell
 # Ejecutar auditoría semanal completa
 .\weekly-auto-audit.ps1
 ```
 
 ### Análisis Predictivo
+
 ```powershell
 # Generar análisis y predicciones
 .\audit-metrics-analyzer.ps1
 ```
 
 ### Dashboard
+
 ```powershell
 # Ver visualización de tendencias
 .\weekly-audit-dashboard.ps1
 ```
 
 ### Agendador
+
 ```powershell
 # Configurar auditoría automática
 .\setup-weekly-audit-scheduler.ps1
@@ -84,6 +91,7 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
 ## 📊 Interpretación de Reportes
 
 ### Índice de Salud
+
 ```
 9-10 🟢 EXCELENTE   → Mantener el estándar actual
 7-8  🟡 BUENO       → Continuar mejorando
@@ -92,6 +100,7 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
 ```
 
 ### Dashboard - Barras de Salud
+
 ```
 ████████░░  = 8/10 (80%)
 ███████░░░  = 7/10 (70%)
@@ -100,6 +109,7 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
 ```
 
 ### Tendencias Detectadas
+
 ```
 ↑ INCREASING    → Métrica en aumento
 ↓ DECREASING    → Métrica en disminución
@@ -108,6 +118,7 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
 ```
 
 ### Severidad de Anomalías
+
 ```
 🔴 CRITICAL     → Requiere atención inmediata
 🟠 HIGH         → Revisar esta semana
@@ -143,6 +154,7 @@ c:\Users\Alejandro\NEXUS V1\
 ## 🔍 Troubleshooting
 
 ### Problema: "Script no encontrado"
+
 ```powershell
 # Solución 1: Verificar ubicación
 cd c:\Users\Alejandro\NEXUS V1\scripts
@@ -153,6 +165,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Problema: "No hay datos históricos"
+
 ```powershell
 # Solución: Ejecutar primera auditoría
 .\audit-control-center.ps1 run
@@ -161,6 +174,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Problema: "Tarea programada no se ejecuta"
+
 ```powershell
 # Verificar estado
 Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit" | Select *
@@ -173,6 +187,7 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit" | Select *
 ```
 
 ### Problema: "Datos inconsistentes"
+
 ```powershell
 # Limpiar y reiniciar
 .\audit-control-center.ps1 clean
@@ -180,6 +195,7 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit" | Select *
 ```
 
 ### Problema: "PowerShell lento"
+
 ```powershell
 # Ejecutar en background
 Start-Job -FilePath ".\weekly-auto-audit.ps1"
@@ -190,12 +206,14 @@ Start-Job -FilePath ".\weekly-auto-audit.ps1"
 ## ⏰ Programación Automática
 
 ### Default Setup
+
 - **Día**: Lunes
 - **Hora**: 8:00 AM
 - **Frecuencia**: Semanal
 - **Usuario**: Tu usuario actual
 
 ### Cambiar Programación
+
 ```powershell
 # Método 1: Task Scheduler UI
 taskmgr → Task Scheduler → NEXUS V1-Weekly-Auto-Audit → Properties
@@ -213,6 +231,7 @@ $task | Unregister-ScheduledTask -Confirm:$false
 ## 📊 Visualización de Datos
 
 ### Dashboard Interactivo
+
 ```
 ┌─ TENDENCIA DE SEGURIDAD
 │  Semana 2025-01: 5 vulnerabilidades
@@ -232,6 +251,7 @@ $task | Unregister-ScheduledTask -Confirm:$false
 ```
 
 ### Exportar Datos
+
 ```powershell
 # Exportar histórico como JSON (ya está)
 type audit-data\audit-history.json
@@ -249,6 +269,7 @@ type audit-data\predictive-analysis.json
 ## 💡 Atajos Útiles
 
 ### Crear alias en PowerShell
+
 ```powershell
 # Agregar al profile de PowerShell
 $PROFILE | Out-File $PROFILE -Force
@@ -258,6 +279,7 @@ Set-Alias NEXUS V1 'c:\Users\Alejandro\NEXUS V1\scripts\audit-control-center.ps1
 ```
 
 ### Desktop Shortcut
+
 ```powershell
 $shell = New-Object -ComObject WScript.Shell
 $lnk = $shell.CreateShortcut("$env:USERPROFILE\Desktop\NEXUS V1-Audit.lnk")
@@ -267,6 +289,7 @@ $lnk.Save()
 ```
 
 ### Abrir en Explorer
+
 ```powershell
 # Abrir carpeta de datos
 explorer.exe c:\Users\Alejandro\NEXUS V1\audit-data
@@ -276,6 +299,7 @@ explorer.exe c:\Users\Alejandro\NEXUS V1\audit-data\reports
 ```
 
 ### Ver últimas actualizaciones
+
 ```powershell
 # Último reporte
 Get-ChildItem c:\Users\Alejandro\NEXUS V1\audit-data\reports | Sort-Object LastWriteTime -Descending | Select-Object -First 1
@@ -288,15 +312,15 @@ Get-Content (Get-ChildItem c:\Users\Alejandro\NEXUS V1\audit-data\reports -Filte
 
 ## 📈 Métricas Disponibles
 
-| Métrica | Recolección | Alertas |
-|---|---|---|
-| 🔐 Vulnerabilidades | Automática (npm audit) | ↑ Aumento > 0 |
-| 🔐 Secretos expuestos | Automática (pattern) | > 0 |
-| 📝 Archivos TS/JS | Automática | Crecimiento % |
-| 📚 Documentación | Automática | < 3 archivos |
-| 🐙 Git status | Automática | > 10 archivos sin sync |
-| 💾 Dependencias | Automática | ±20 cambios |
-| 🔄 Commits | Automática | Promedio semanal |
+| Métrica               | Recolección            | Alertas                |
+| --------------------- | ---------------------- | ---------------------- |
+| 🔐 Vulnerabilidades   | Automática (npm audit) | ↑ Aumento > 0          |
+| 🔐 Secretos expuestos | Automática (pattern)   | > 0                    |
+| 📝 Archivos TS/JS     | Automática             | Crecimiento %          |
+| 📚 Documentación      | Automática             | < 3 archivos           |
+| 🐙 Git status         | Automática             | > 10 archivos sin sync |
+| 💾 Dependencias       | Automática             | ±20 cambios            |
+| 🔄 Commits            | Automática             | Promedio semanal       |
 
 ---
 
@@ -312,14 +336,14 @@ Get-Content (Get-ChildItem c:\Users\Alejandro\NEXUS V1\audit-data\reports -Filte
 
 ## 📞 Ayuda Rápida
 
-| Pregunta | Comando |
-|---|---|
-| ¿Cómo inicio? | `.\audit-quickstart.ps1` |
-| ¿Qué es la salud? | `.\audit-control-center.ps1 analyze` |
-| ¿Dónde están mis datos? | `explorer.exe c:\Users\Alejandro\NEXUS V1\audit-data` |
-| ¿Cuándo se ejecuta? | `Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"` |
-| ¿Qué veo en el dashboard? | `.\audit-control-center.ps1 dashboard` |
-| ¿Cómo limpio datos? | `.\audit-control-center.ps1 clean` |
+| Pregunta                  | Comando                                                    |
+| ------------------------- | ---------------------------------------------------------- |
+| ¿Cómo inicio?             | `.\audit-quickstart.ps1`                                   |
+| ¿Qué es la salud?         | `.\audit-control-center.ps1 analyze`                       |
+| ¿Dónde están mis datos?   | `explorer.exe c:\Users\Alejandro\NEXUS V1\audit-data`      |
+| ¿Cuándo se ejecuta?       | `Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"` |
+| ¿Qué veo en el dashboard? | `.\audit-control-center.ps1 dashboard`                     |
+| ¿Cómo limpio datos?       | `.\audit-control-center.ps1 clean`                         |
 
 ---
 
@@ -327,7 +351,7 @@ Get-Content (Get-ChildItem c:\Users\Alejandro\NEXUS V1\audit-data\reports -Filte
 
 ```
 ┌──────────────────┐
-│  weekly-auto-    │  
+│  weekly-auto-    │
 │  audit.ps1       │  1. Recolecta métricas
 └────────┬─────────┘
          │
@@ -366,5 +390,3 @@ Get-Content (Get-ChildItem c:\Users\Alejandro\NEXUS V1\audit-data\reports -Filte
 ---
 
 **Última actualización**: 2024 | **Versión**: 2.0
-
-

@@ -8,7 +8,7 @@ import { logger } from '../utils/logger';
 
 const youtubeRouter = Router();
 const youtubeTranscriptionQueue = container.get<YoutubeTranscriptionQueue>(
-  TYPES.YoutubeTranscriptionQueue,
+  TYPES.YoutubeTranscriptionQueue
 );
 
 const TranscribeSchema = z.object({
@@ -56,8 +56,8 @@ youtubeRouter.post('/transcribe', async (req: any, res: any) => {
             'VALIDATION_ERROR',
             400,
             requestId,
-            validated.error.flatten().fieldErrors,
-          ),
+            validated.error.flatten().fieldErrors
+          )
         );
     }
 
@@ -76,7 +76,7 @@ youtubeRouter.post('/transcribe', async (req: any, res: any) => {
     if (published) {
       logger.info(`Transcription requested for ${videoUrl} by ${recipientEmail}`);
       return res.json(
-        buildResponse({ message: 'Transcription job queued', jobId: fileName }, 202, requestId),
+        buildResponse({ message: 'Transcription job queued', jobId: fileName }, 202, requestId)
       );
     } else {
       return res.status(500).json(buildError('Failed to queue job', 'QUEUE_ERROR', 500, requestId));

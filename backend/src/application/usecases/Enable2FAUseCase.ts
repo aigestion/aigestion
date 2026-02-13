@@ -19,7 +19,7 @@ export class Enable2FAUseCase {
 
     const { secret, qrCode } = await this.twoFactorService.generateTOTPSecret(
       user.id as string,
-      user.email,
+      user.email
     );
     user.twoFactorSecret = secret;
     user.isMfaEnabled = false; // will be true after verification

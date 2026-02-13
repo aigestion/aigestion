@@ -40,4 +40,4 @@ Esta guía está diseñada para resolver rápidamente los fallos más comunes en
 
 ---
 
-*Si el problema persiste, consulta los logs centralizados: `gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=backend-aigestion"`*
+_Si el problema persiste, consulta los logs centralizados: `gcloud logging read "resource.type=cloud_run_revision AND resource.labels.service_name=backend-aigestion"`_

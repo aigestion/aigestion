@@ -82,6 +82,7 @@ frontend/
 ```
 
 **Tecnologías:**
+
 - React 19
 - Vite 6
 - TypeScript 5
@@ -137,6 +138,7 @@ server/
 ```
 
 **Tecnologías:**
+
 - Node.js 18+
 - Express.js
 - TypeScript
@@ -178,6 +180,7 @@ src/
 ```
 
 **Tecnologías:**
+
 - Python 3.10+
 - Google Generative AI (Gemini)
 - FastAPI / Flask
@@ -270,12 +273,12 @@ src/
 
 ### Redis Keys
 
-| Key Pattern | Tipo | TTL | Descripción |
-|-------------|------|-----|-------------|
-| `session:<userId>` | String | 24h | Sesión de usuario |
-| `rate:<ip>` | String | 15min | Contador de rate limit |
-| `cache:user:<id>` | Hash | 1h | Cache de usuario |
-| `queue:ai` | List | - | Cola de mensajes AI |
+| Key Pattern        | Tipo   | TTL   | Descripción            |
+| ------------------ | ------ | ----- | ---------------------- |
+| `session:<userId>` | String | 24h   | Sesión de usuario      |
+| `rate:<ip>`        | String | 15min | Contador de rate limit |
+| `cache:user:<id>`  | Hash   | 1h    | Cache de usuario       |
+| `queue:ai`         | List   | -     | Cola de mensajes AI    |
 
 ---
 
@@ -288,43 +291,43 @@ services:
   # Backend API
   backend:
     build: ./server
-    ports: ["5000:5000"]
+    ports: ['5000:5000']
     depends_on: [mongodb, redis]
 
   # Frontend
   frontend:
     build: ./frontend
-    ports: ["5173:5173"]
+    ports: ['5173:5173']
     depends_on: [backend]
 
   # Database
   mongodb:
     image: mongo:7
-    ports: ["27017:27017"]
+    ports: ['27017:27017']
     volumes: [mongodb_data:/data/db]
 
   # Cache
   redis:
     image: redis:alpine
-    ports: ["6379:6379"]
+    ports: ['6379:6379']
 
   # Message Queue
   rabbitmq:
     image: rabbitmq:3-management
-    ports: ["5672:5672", "15672:15672"]
+    ports: ['5672:5672', '15672:15672']
 
   # Monitoring
   prometheus:
     image: prom/prometheus
-    ports: ["9090:9090"]
+    ports: ['9090:9090']
 
   grafana:
     image: grafana/grafana
-    ports: ["3001:3000"]
+    ports: ['3001:3000']
 
   jaeger:
     image: jaegertracing/all-in-one
-    ports: ["16686:16686"]
+    ports: ['16686:16686']
 ```
 
 ---
@@ -358,12 +361,12 @@ spec:
   minReplicas: 2
   maxReplicas: 10
   metrics:
-  - type: Resource
-    resource:
-      name: cpu
-      target:
-        type: Utilization
-        averageUtilization: 70
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
 ```
 
 ---
@@ -425,5 +428,4 @@ spec:
 
 ---
 
-*Documentación de arquitectura generada por Antigravity AI Assistant* ⚡
-
+_Documentación de arquitectura generada por Antigravity AI Assistant_ ⚡

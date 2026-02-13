@@ -17,12 +17,18 @@ export const MotionWrapper: React.FC<MotionWrapperProps> = ({
 }) => {
   const getInitial = () => {
     switch (direction) {
-      case 'up': return { opacity: 0, y: 30 };
-      case 'down': return { opacity: 0, y: -30 };
-      case 'left': return { opacity: 0, x: 30 };
-      case 'right': return { opacity: 0, x: -30 };
-      case 'none': return { opacity: 0 };
-      default: return { opacity: 0, y: 30 };
+      case 'up':
+        return { opacity: 0, y: 30 };
+      case 'down':
+        return { opacity: 0, y: -30 };
+      case 'left':
+        return { opacity: 0, x: 30 };
+      case 'right':
+        return { opacity: 0, x: -30 };
+      case 'none':
+        return { opacity: 0 };
+      default:
+        return { opacity: 0, y: 30 };
     }
   };
 
@@ -30,8 +36,8 @@ export const MotionWrapper: React.FC<MotionWrapperProps> = ({
     <motion.div
       initial={getInitial()}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
       className={className}
       {...props}
     >

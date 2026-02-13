@@ -20,7 +20,7 @@ export class BillingService {
   async reportUsage(customerId: string, subscriptionItemId: string, quantity: number = 1) {
     try {
       const timestamp = Math.floor(Date.now() / 1000);
-      
+
       this.logger.log(`Reporting usage for ${customerId}: +${quantity} units`);
 
       // 1. Log to Redis (Mocked for now via Logger) for real-time analytics
@@ -44,10 +44,10 @@ export class BillingService {
    * Check if user has sufficient credits (Simulated logic)
    */
   async checkCredits(customerId: string): Promise<boolean> {
-      // In a real implementation, this would check Redis or Stripe balances
-      // For Sovereign MVP, we assume active subscription = has credits
-      const status = await this.getSubscriptionStatus(customerId);
-      return status.active;
+    // In a real implementation, this would check Redis or Stripe balances
+    // For Sovereign MVP, we assume active subscription = has credits
+    const status = await this.getSubscriptionStatus(customerId);
+    return status.active;
   }
 
   /**

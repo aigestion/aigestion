@@ -11,4 +11,3 @@ Bienvenido a la documentación centralizada del monorepo NEXUS V1.
 - Automatización CI/CD
 - Calidad y seguridad
 - Contribución colaborativa
-

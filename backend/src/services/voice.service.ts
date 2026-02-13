@@ -12,7 +12,7 @@ export class VoiceService {
   constructor(
     @inject(TYPES.AIService) private aiService: AIService,
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
-    @inject(TYPES.MetaverseService) private metaverseService: MetaverseService,
+    @inject(TYPES.MetaverseService) private metaverseService: MetaverseService
   ) {}
 
   /**
@@ -78,7 +78,7 @@ export class VoiceService {
         return {
           result: `The current monthly revenue is $${data.revenue.reduce(
             (acc: number, curr: any) => acc + curr.value,
-            0,
+            0
           )}. User growth is steady with ${data.users.length} new signups recently.`,
         };
       }

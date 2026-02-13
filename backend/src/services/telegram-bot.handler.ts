@@ -26,7 +26,7 @@ export class TelegramBotHandler {
     const botToken = env.TELEGRAM_BOT_TOKEN_PUBLIC || env.TELEGRAM_BOT_TOKEN;
     if (!botToken) {
       logger.warn(
-        'TELEGRAM_BOT_TOKEN_PUBLIC/TELEGRAM_BOT_TOKEN not provided. Telegram Bot disabled.',
+        'TELEGRAM_BOT_TOKEN_PUBLIC/TELEGRAM_BOT_TOKEN not provided. Telegram Bot disabled.'
       );
       return;
     }
@@ -70,7 +70,7 @@ export class TelegramBotHandler {
             `/analytics - Analytics del proyecto\n` +
             `/settings - Configurar preferencias\n` +
             `/daniela - Asistente IA\n\n` +
-            `¿Cómo puedo ayudarte?`,
+            `¿Cómo puedo ayudarte?`
         );
       } catch (error) {
         logger.error('Error in /start command', error);
@@ -90,7 +90,7 @@ export class TelegramBotHandler {
             `/settings - Configurar preferencias\n` +
             `/daniela - Asistente IA\n\n` +
             `_Para más información, visita nuestro sitio web._`,
-          { parse_mode: 'Markdown' },
+          { parse_mode: 'Markdown' }
         );
       } catch (error) {
         logger.error('Error in /help command', error);
@@ -124,7 +124,7 @@ export class TelegramBotHandler {
         message,
         ctx.from?.first_name || 'User',
         ctx.from?.id.toString() || 'unknown',
-        'public',
+        'public'
       );
 
       await ctx.reply(response, { parse_mode: 'Markdown' });
@@ -139,7 +139,7 @@ export class TelegramBotHandler {
             `🟢 Telegram Bot: Conectado\n` +
             `🟢 Notificaciones: Activas\n\n` +
             `Última actualización: ${new Date().toLocaleString()}`,
-          { parse_mode: 'Markdown' },
+          { parse_mode: 'Markdown' }
         );
       } catch (error) {
         logger.error('Error in /status command', error);
@@ -156,7 +156,7 @@ export class TelegramBotHandler {
             `✅ Tareas completadas: 87%\n` +
             `⏱️ Tiempo promedio: 4.2h\n\n` +
             `Últimos 7 días: +15% de productividad`,
-          { parse_mode: 'Markdown' },
+          { parse_mode: 'Markdown' }
         );
       } catch (error) {
         logger.error('Error in /analytics command', error);
@@ -182,7 +182,7 @@ export class TelegramBotHandler {
                 [{ text: '❌ Cerrar', callback_data: 'settings_close' }],
               ],
             },
-          },
+          }
         );
       } catch (error) {
         logger.error('Error in /settings command', error);

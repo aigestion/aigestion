@@ -26,7 +26,7 @@ router.get('/containers', (req, res, next) => controller.getContainers(req, res,
  *     tags: [Docker]
  */
 router.get('/containers/:id/stats', (req, res, next) =>
-  controller.getContainerStats(req, res, next),
+  controller.getContainerStats(req, res, next)
 );
 
 /**

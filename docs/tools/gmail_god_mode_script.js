@@ -10,12 +10,12 @@
 const CONFIG = {
   // Label Structure
   labels: {
-    professional: "🔧 TRABAJO",
-    personal: "📱 PERSONAL",
-    security: "🔐 SEGURIDAD",
-    finance: "💰 FINANZAS",
-    ai_alerts: "🤖 AI_ALERTS", // For AIGestion/VertexAI notifications
-    newsletters: "📰 READING"
+    professional: '🔧 TRABAJO',
+    personal: '📱 PERSONAL',
+    security: '🔐 SEGURIDAD',
+    finance: '💰 FINANZAS',
+    ai_alerts: '🤖 AI_ALERTS', // For AIGestion/VertexAI notifications
+    newsletters: '📰 READING',
   },
 
   // Archiving Rules (Days to keep in Inbox before auto-archive if read)
@@ -23,17 +23,41 @@ const CONFIG = {
 
   // Professional Keywords (Regex)
   professionalKeywords: [
-    "invoice", "factura", "recibo", "contract", "contrato",
-    "vertex", "google cloud", "aws", "azure", "vercel", "docker",
-    "github", "gitlab", "jira", "trello", "slack", "meeting",
-    "propuesta", "presupuesto", "aigestion", "nexus", "api key"
+    'invoice',
+    'factura',
+    'recibo',
+    'contract',
+    'contrato',
+    'vertex',
+    'google cloud',
+    'aws',
+    'azure',
+    'vercel',
+    'docker',
+    'github',
+    'gitlab',
+    'jira',
+    'trello',
+    'slack',
+    'meeting',
+    'propuesta',
+    'presupuesto',
+    'aigestion',
+    'nexus',
+    'api key',
   ],
 
   // Security/Tech Keywords
   securityKeywords: [
-    "security alert", "verify your device", "2fa", "code", "verification",
-    "password reset", "login alert", "nueva inicio de sesión"
-  ]
+    'security alert',
+    'verify your device',
+    '2fa',
+    'code',
+    'verification',
+    'password reset',
+    'login alert',
+    'nueva inicio de sesión',
+  ],
 };
 
 // ==========================================
@@ -44,12 +68,12 @@ const CONFIG = {
  * Main Trigger Function - Run this every 10-15 minutes or Hourly.
  */
 function godModeRun() {
-  Logger.log("🚀 Starting God Mode Run...");
+  Logger.log('🚀 Starting God Mode Run...');
 
   autoLabelIncoming();
   cleanupOldNotifications();
 
-  Logger.log("✅ God Mode Run Complete.");
+  Logger.log('✅ God Mode Run Complete.');
 }
 
 /**
@@ -60,7 +84,7 @@ function autoLabelIncoming() {
   const threads = GmailApp.getInboxThreads(0, 50);
 
   if (threads.length === 0) {
-    Logger.log("No new threads in Inbox.");
+    Logger.log('No new threads in Inbox.');
     return;
   }
 
@@ -83,18 +107,18 @@ function autoLabelIncoming() {
     let isLabeled = false;
 
     // 1. Security Check
-    if (matchesAny(subject + " " + body, CONFIG.securityKeywords)) {
+    if (matchesAny(subject + ' ' + body, CONFIG.securityKeywords)) {
       thread.addLabel(labelSecurity);
       isLabeled = true;
       Logger.log(`[SECURITY] Labeled: ${subject}`);
     }
 
     // 2. Professional / Tech Check
-    else if (matchesAny(subject + " " + body + " " + sender, CONFIG.professionalKeywords)) {
+    else if (matchesAny(subject + ' ' + body + ' ' + sender, CONFIG.professionalKeywords)) {
       thread.addLabel(labelWork);
 
       // Sub-label for AI/Cloud specific
-      if (subject.includes("vertex") || subject.includes("ai") || sender.includes("google")) {
+      if (subject.includes('vertex') || subject.includes('ai') || sender.includes('google')) {
         thread.addLabel(labelAI);
       }
 
@@ -149,12 +173,14 @@ function matchesAny(text, keywords) {
  * TEST RUNNER - Run this manually to verify logic without processing everything.
  */
 function test_run() {
-  Logger.log("🧪 STARTING TEST RUN");
+  Logger.log('🧪 STARTING TEST RUN');
   const threads = GmailApp.getInboxThreads(0, 5); // Just check top 5
   Logger.log(`Found ${threads.length} threads to test.`);
 
   threads.forEach(t => {
     Logger.log(`Subject: ${t.getFirstMessageSubject()}`);
   });
-  Logger.log("🧪 TEST COMPLETE (No actions taken in this specific log function, refer to godModeRun for action)");
+  Logger.log(
+    '🧪 TEST COMPLETE (No actions taken in this specific log function, refer to godModeRun for action)'
+  );
 }

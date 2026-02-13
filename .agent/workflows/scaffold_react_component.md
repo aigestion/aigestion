@@ -5,10 +5,12 @@ description: Scaffolds a new React component with styles, tests, and storybook f
 # Scaffold React Component
 
 ## 1. Input Required
+
 - **Component Name**: (e.g., `feature-card`)
 - **Destination Path**: (e.g., `frontend/apps/dashboard/src/components`)
 
 ## 2. Generate Files
+
 - [ ] Create directory `[Destination Path]/[Component Name]`
 - [ ] Create `index.ts` (Export)
 - [ ] Create `[Component Name].tsx` (Logic & UI)
@@ -16,6 +18,7 @@ description: Scaffolds a new React component with styles, tests, and storybook f
 - [ ] Create `[Component Name].test.tsx` (Unit Test)
 
 ## 3. Standard Template (Reference)
+
 ```tsx
 import styles from './[Component Name].module.css';
 

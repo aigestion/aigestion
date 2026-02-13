@@ -19,12 +19,12 @@ router.post('/x/tweet', (req, res, next) => socialController.postTweet(req, res,
 
 // TikTok Routes
 router.post('/tiktok/publish', (req, res, next) =>
-  socialController.publishTikTokVideo(req, res, next),
+  socialController.publishTikTokVideo(req, res, next)
 );
 
 // LinkedIn Routes
 router.post('/linkedin/post', (req, res, next) =>
-  socialController.publishLinkedInPost(req, res, next),
+  socialController.publishLinkedInPost(req, res, next)
 );
 
 export default router;

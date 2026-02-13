@@ -60,7 +60,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       if (isPlaying && !isLoading) {
-        setCurrentScene((prev) => (prev + 1) % scenes.length);
+        setCurrentScene(prev => (prev + 1) % scenes.length);
       }
     }, scenes[currentScene].duration);
 
@@ -337,4 +337,3 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
     </div>
   );
 };
-

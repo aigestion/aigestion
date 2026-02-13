@@ -12,14 +12,14 @@
 
 ### 📁 Files Modified
 
-| File | Status | Description |
-|------|--------|-------------|
-| server/src/config/tracing.ts | ✅ Ready | OpenTelemetry configuration with modern APIs |
-| server/.env | ✅ Updated | Added OTEL_SERVICE_NAME and OTEL_EXPORTER_OTLP_ENDPOINT |
-| server/.env.example | ✅ Updated | Template includes OpenTelemetry variables |
-| server/tsconfig.json | ✅ Fixed | Changed moduleResolution to 'node' for compatibility |
-| server/TRACING.md | ✅ Created | Complete tracing documentation (221 lines) |
-| TRACING_SETUP_SUMMARY.md | ✅ Created | Quick reference guide |
+| File                         | Status     | Description                                             |
+| ---------------------------- | ---------- | ------------------------------------------------------- |
+| server/src/config/tracing.ts | ✅ Ready   | OpenTelemetry configuration with modern APIs            |
+| server/.env                  | ✅ Updated | Added OTEL_SERVICE_NAME and OTEL_EXPORTER_OTLP_ENDPOINT |
+| server/.env.example          | ✅ Updated | Template includes OpenTelemetry variables               |
+| server/tsconfig.json         | ✅ Fixed   | Changed moduleResolution to 'node' for compatibility    |
+| server/TRACING.md            | ✅ Created | Complete tracing documentation (221 lines)              |
+| TRACING_SETUP_SUMMARY.md     | ✅ Created | Quick reference guide                                   |
 
 ### 🎯 Quick Start Commands
 
@@ -47,17 +47,19 @@ npm run dev
 
 - /health endpoint
 - /favicon.ico
-- /static/* assets
+- /static/\* assets
 - File system operations
 
 ### 🔧 Technical Details
 
 **Resource Attributes:**
+
 - service.name: NEXUS V1-backend
 - service.version: 1.0.0
 - deployment.environment: development
 
 **Exporter:**
+
 - Protocol: OTLP/HTTP
 - Endpoint: http://localhost:4318/v1/traces
 - Timeout: 15 seconds
@@ -72,6 +74,7 @@ npm run dev
 ### ✨ Next Actions
 
 You can now:
+
 1. Run `npm run dev` in the server directory
 2. Make API requests to your backend
 3. View traces in AI Toolkit in real-time
@@ -79,8 +82,8 @@ You can now:
 5. Add custom spans if needed (see TRACING.md)
 
 ---
+
 **Compilation Status:** ✅ No TypeScript errors
 **Environment:** ✅ Configured
 **Collector:** ✅ Running at localhost:4318
 **Documentation:** ✅ Complete
-

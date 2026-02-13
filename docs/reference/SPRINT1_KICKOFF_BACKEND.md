@@ -127,22 +127,22 @@
 
 ### Performance Targets
 
-| Métrica | Baseline | Target | Semana 1 | Semana 2 |
-|---------|----------|--------|----------|----------|
-| API Response p95 | 500ms | <200ms | 350ms | 200ms |
-| Query Response p95 | 300ms | <100ms | 200ms | 100ms |
-| Cache Hit Rate | 0% | 70%+ | 30% | 70%+ |
-| Throughput (req/s) | 100 | 300+ | 150 | 300+ |
-| Error Rate | 2% | <0.1% | 1.5% | 0.1% |
+| Métrica            | Baseline | Target | Semana 1 | Semana 2 |
+| ------------------ | -------- | ------ | -------- | -------- |
+| API Response p95   | 500ms    | <200ms | 350ms    | 200ms    |
+| Query Response p95 | 300ms    | <100ms | 200ms    | 100ms    |
+| Cache Hit Rate     | 0%       | 70%+   | 30%      | 70%+     |
+| Throughput (req/s) | 100      | 300+   | 150      | 300+     |
+| Error Rate         | 2%       | <0.1%  | 1.5%     | 0.1%     |
 
 ### Quality Targets
 
-| Métrica | Meta |
-|---------|------|
-| Test Coverage | >85% |
-| API Documentation | 100% |
+| Métrica              | Meta        |
+| -------------------- | ----------- |
+| Test Coverage        | >85%        |
+| API Documentation    | 100%        |
 | Code Review Approval | 2 reviewers |
-| Production Incidents | 0 |
+| Production Incidents | 0           |
 
 ---
 

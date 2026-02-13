@@ -38,7 +38,7 @@ export class DanielaController {
         message,
         userName,
         userId,
-        userRole,
+        userRole
       );
 
       res.json(buildResponse({ response }, 200, (req as any).requestId));
@@ -62,8 +62,8 @@ export class DanielaController {
             version: '1.0.0-PRO',
           },
           200,
-          (req as any).requestId,
-        ),
+          (req as any).requestId
+        )
       );
     } catch (error) {
       next(error);
@@ -102,8 +102,8 @@ export class DanielaController {
             },
           },
           200,
-          (req as any).requestId,
-        ),
+          (req as any).requestId
+        )
       );
     } catch (error) {
       next(error);

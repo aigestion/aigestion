@@ -9,6 +9,7 @@ Complete API documentation for the Daniela Enhanced Voice Service, including end
 ## 🔐 Authentication
 
 ### JWT Token Required
+
 All API endpoints require a valid JWT token in the Authorization header:
 
 ```http
@@ -16,6 +17,7 @@ Authorization: Bearer <your_jwt_token>
 ```
 
 ### Token Format
+
 ```json
 {
   "sub": "user_id",
@@ -35,6 +37,7 @@ Authorization: Bearer <your_jwt_token>
 Process conversation with Daniela AI (text or audio input).
 
 #### Request
+
 ```http
 POST /api/v1/enhanced-voice/process
 Content-Type: application/json
@@ -42,6 +45,7 @@ Authorization: Bearer <token>
 ```
 
 **Request Body**:
+
 ```json
 {
   "sessionId": "session_123456",
@@ -52,12 +56,14 @@ Authorization: Bearer <token>
 ```
 
 **Parameters**:
+
 - `sessionId` (string, required): Unique session identifier
 - `userId` (string, required): User identifier
 - `text` (string, optional): Text input for processing
 - `audio` (string, optional): Base64 encoded audio data
 
 #### Response
+
 ```json
 {
   "success": true,
@@ -130,6 +136,7 @@ Authorization: Bearer <token>
 ```
 
 #### Error Responses
+
 ```json
 {
   "success": false,
@@ -153,15 +160,18 @@ Authorization: Bearer <token>
 Retrieve conversation history for a specific session.
 
 #### Request
+
 ```http
 GET /api/v1/enhanced-voice/history?sessionId=session_123456
 Authorization: Bearer <token>
 ```
 
 **Query Parameters**:
+
 - `sessionId` (string, required): Session identifier
 
 #### Response
+
 ```json
 {
   "success": true,
@@ -211,6 +221,7 @@ Authorization: Bearer <token>
 Clear conversation session data.
 
 #### Request
+
 ```http
 POST /api/v1/enhanced-voice/clear
 Content-Type: application/json
@@ -218,6 +229,7 @@ Authorization: Bearer <token>
 ```
 
 **Request Body**:
+
 ```json
 {
   "sessionId": "session_123456"
@@ -225,6 +237,7 @@ Authorization: Bearer <token>
 ```
 
 #### Response
+
 ```json
 {
   "success": true,
@@ -248,12 +261,14 @@ Authorization: Bearer <token>
 Get analytics for a specific session.
 
 #### Request
+
 ```http
 GET /api/v1/enhanced-voice/analytics/session?sessionId=session_123456
 Authorization: Bearer <token>
 ```
 
 #### Response
+
 ```json
 {
   "success": true,
@@ -305,16 +320,19 @@ Authorization: Bearer <token>
 Get analytics for a specific user across all sessions.
 
 #### Request
+
 ```http
 GET /api/v1/enhanced-voice/analytics/user?userId=user_789012&period=7d
 Authorization: Bearer <token>
 ```
 
 **Query Parameters**:
+
 - `userId` (string, required): User identifier
 - `period` (string, optional): Time period (1d, 7d, 30d, 90d)
 
 #### Response
+
 ```json
 {
   "success": true,
@@ -337,7 +355,7 @@ Authorization: Bearer <token>
     "emotionalTrends": {
       "positive": 0.65,
       "neutral": 0.25,
-      "concerned": 0.10
+      "concerned": 0.1
     },
     "satisfactionTrend": [
       {
@@ -367,12 +385,14 @@ Authorization: Bearer <token>
 Get current Daniela configuration.
 
 #### Request
+
 ```http
 GET /api/v1/enhanced-voice/config
 Authorization: Bearer <token>
 ```
 
 #### Response
+
 ```json
 {
   "success": true,
@@ -419,6 +439,7 @@ Authorization: Bearer <token>
 Update Daniela configuration (admin only).
 
 #### Request
+
 ```http
 PUT /api/v1/enhanced-voice/config
 Content-Type: application/json
@@ -426,6 +447,7 @@ Authorization: Bearer <admin_token>
 ```
 
 **Request Body**:
+
 ```json
 {
   "voice": {
@@ -440,6 +462,7 @@ Authorization: Bearer <admin_token>
 ```
 
 #### Response
+
 ```json
 {
   "success": true,
@@ -464,11 +487,13 @@ Authorization: Bearer <admin_token>
 Health check for the enhanced voice service.
 
 #### Request
+
 ```http
 GET /api/v1/enhanced-voice/health
 ```
 
 #### Response
+
 ```json
 {
   "success": true,
@@ -503,6 +528,7 @@ GET /api/v1/enhanced-voice/health
 ## 📝 Data Models
 
 ### ConversationMessage
+
 ```typescript
 interface ConversationMessage {
   id: string;
@@ -516,6 +542,7 @@ interface ConversationMessage {
 ```
 
 ### EmotionalAnalysis
+
 ```typescript
 interface EmotionalAnalysis {
   emotion: string;
@@ -526,6 +553,7 @@ interface EmotionalAnalysis {
 ```
 
 ### SuggestedAction
+
 ```typescript
 interface SuggestedAction {
   id: string;
@@ -537,6 +565,7 @@ interface SuggestedAction {
 ```
 
 ### ConversationContext
+
 ```typescript
 interface ConversationContext {
   messages: ConversationMessage[];
@@ -553,33 +582,35 @@ interface ConversationContext {
 
 ## 🚨 Error Codes
 
-| Code | Message | HTTP Status | Description |
-|------|---------|-------------|-------------|
-| D001 | Invalid session ID | 400 | Session not found or invalid |
-| D002 | Audio processing failed | 500 | Error processing audio input |
-| D003 | AI provider error | 502 | External AI service unavailable |
-| D004 | Rate limit exceeded | 429 | Too many requests |
-| D005 | Authentication required | 401 | Missing or invalid token |
-| D006 | Insufficient permissions | 403 | User lacks required permissions |
-| D007 | Invalid request format | 400 | Malformed request body |
-| D008 | Service temporarily unavailable | 503 | Service under maintenance |
-| D009 | Quota exceeded | 429 | User quota exceeded |
-| D010 | Unsupported audio format | 400 | Audio format not supported |
+| Code | Message                         | HTTP Status | Description                     |
+| ---- | ------------------------------- | ----------- | ------------------------------- |
+| D001 | Invalid session ID              | 400         | Session not found or invalid    |
+| D002 | Audio processing failed         | 500         | Error processing audio input    |
+| D003 | AI provider error               | 502         | External AI service unavailable |
+| D004 | Rate limit exceeded             | 429         | Too many requests               |
+| D005 | Authentication required         | 401         | Missing or invalid token        |
+| D006 | Insufficient permissions        | 403         | User lacks required permissions |
+| D007 | Invalid request format          | 400         | Malformed request body          |
+| D008 | Service temporarily unavailable | 503         | Service under maintenance       |
+| D009 | Quota exceeded                  | 429         | User quota exceeded             |
+| D010 | Unsupported audio format        | 400         | Audio format not supported      |
 
 ---
 
 ## 📊 Rate Limiting
 
 ### Endpoints Limits
-| Endpoint | Requests/Minute | Burst | Daily Limit |
-|----------|-----------------|-------|------------|
-| /process | 30 | 5 | 1000 |
-| /history | 60 | 10 | 2000 |
-| /clear | 10 | 2 | 100 |
-| /analytics/* | 20 | 5 | 500 |
-| /config | 5 | 2 | 50 |
+
+| Endpoint      | Requests/Minute | Burst | Daily Limit |
+| ------------- | --------------- | ----- | ----------- |
+| /process      | 30              | 5     | 1000        |
+| /history      | 60              | 10    | 2000        |
+| /clear        | 10              | 2     | 100         |
+| /analytics/\* | 20              | 5     | 500         |
+| /config       | 5               | 2     | 50          |
 
 ### Headers
+
 ```http
 X-RateLimit-Limit: 30
 X-RateLimit-Remaining: 25
@@ -591,15 +622,18 @@ X-RateLimit-Reset: 1640995200
 ## 🔄 Webhooks
 
 ### Conversation Events
+
 Configure webhooks to receive real-time conversation events.
 
 #### Event Types
+
 - `conversation.started`: New conversation initiated
 - `message.received`: New message received
 - `emotion.changed`: Emotional state changed
 - `conversation.ended`: Conversation completed
 
 #### Webhook Payload
+
 ```json
 {
   "event": "message.received",
@@ -624,6 +658,7 @@ Configure webhooks to receive real-time conversation events.
 ### cURL Examples
 
 #### Process Text Conversation
+
 ```bash
 curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/process \
   -H "Content-Type: application/json" \
@@ -636,6 +671,7 @@ curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/proces
 ```
 
 #### Process Audio Conversation
+
 ```bash
 curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/process \
   -H "Content-Type: application/json" \
@@ -648,6 +684,7 @@ curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/proces
 ```
 
 #### Get Conversation History
+
 ```bash
 curl -X GET "https://aigestion-backend.onrender.com/api/v1/enhanced-voice/history?sessionId=test_session" \
   -H "Authorization: Bearer YOUR_JWT_TOKEN"
@@ -656,19 +693,20 @@ curl -X GET "https://aigestion-backend.onrender.com/api/v1/enhanced-voice/histor
 ### JavaScript Examples
 
 #### Using Fetch API
+
 ```javascript
 const processConversation = async (text, sessionId, userId) => {
   const response = await fetch('/api/v1/enhanced-voice/process', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       sessionId,
       userId,
-      text
-    })
+      text,
+    }),
   });
 
   const result = await response.json();
@@ -676,26 +714,25 @@ const processConversation = async (text, sessionId, userId) => {
 };
 
 // Usage
-const result = await processConversation(
-  'Hola Daniela',
-  'session_123',
-  'user_456'
-);
+const result = await processConversation('Hola Daniela', 'session_123', 'user_456');
 console.log(result.response);
 ```
 
 #### Using WebSocket for Real-time
+
 ```javascript
 const ws = new WebSocket('wss://aigestion-backend.onrender.com/ws/enhanced-voice');
 
 ws.onopen = () => {
-  ws.send(JSON.stringify({
-    type: 'authenticate',
-    token: 'YOUR_JWT_TOKEN'
-  }));
+  ws.send(
+    JSON.stringify({
+      type: 'authenticate',
+      token: 'YOUR_JWT_TOKEN',
+    })
+  );
 };
 
-ws.onmessage = (event) => {
+ws.onmessage = event => {
   const data = JSON.parse(event.data);
   if (data.type === 'conversation_response') {
     console.log('Daniela:', data.response);
@@ -708,12 +745,13 @@ ws.onmessage = (event) => {
 ## 📚 SDK Examples
 
 ### Node.js SDK
+
 ```javascript
 const { DanielaClient } = require('@aigestion/daniela-sdk');
 
 const client = new DanielaClient({
   apiKey: 'YOUR_API_KEY',
-  baseUrl: 'https://aigestion-backend.onrender.com'
+  baseUrl: 'https://aigestion-backend.onrender.com',
 });
 
 async function chatWithDaniela() {
@@ -721,7 +759,7 @@ async function chatWithDaniela() {
 
   const response = await client.processMessage({
     sessionId: session.id,
-    text: 'Hola Daniela, ¿cómo estás?'
+    text: 'Hola Daniela, ¿cómo estás?',
   });
 
   console.log(response.response);
@@ -735,6 +773,7 @@ async function chatWithDaniela() {
 ```
 
 ### Python SDK
+
 ```python
 from aigestion_daniela import DanielaClient
 
@@ -764,12 +803,14 @@ async def chat_with_daniela():
 ## 📞 Support
 
 ### API Support
+
 - **Documentation**: https://docs.aigestion.net
 - **Status Page**: https://status.aigestion.net
 - **Support Email**: api-support@aigestion.net
 - **Developer Discord**: https://discord.gg/aigestion
 
 ### Rate Limit Support
+
 - **Enterprise Plans**: Unlimited requests
 - **Custom Limits**: Contact sales@aigestion.net
 - **Burst Requests**: Available on premium plans

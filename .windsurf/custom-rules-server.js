@@ -28,7 +28,7 @@ class CustomRulesEngine {
       description: 'Escaneo de seguridad avanzado',
       pattern: /(?=.*\b(password|secret|token|api_key|private_key)\b)/i,
       action: 'alert',
-      severity: 'high'
+      severity: 'high',
     });
 
     // Reglas de código
@@ -37,7 +37,7 @@ class CustomRulesEngine {
       description: 'Verificación de calidad de código',
       pattern: /console\.(log|debug|info)/,
       action: 'warning',
-      severity: 'medium'
+      severity: 'medium',
     });
 
     // Reglas de arquitectura
@@ -46,7 +46,7 @@ class CustomRulesEngine {
       description: 'Validación de patrones de arquitectura',
       pattern: /class.*extends.*Component/,
       action: 'review',
-      severity: 'low'
+      severity: 'low',
     });
   }
 
@@ -65,7 +65,7 @@ class CustomRulesEngine {
           severity: rule.severity,
           action: rule.action,
           description: rule.description,
-          matches: content.match(rule.pattern)
+          matches: content.match(rule.pattern),
         });
       }
     }
@@ -77,12 +77,12 @@ class CustomRulesEngine {
     const templates = {
       javascript: {
         function: `// Custom generated function: ${description}\nfunction customFunction() {\n  // Pattern: ${pattern}\n  // TODO: Implement custom logic\n}`,
-        class: `// Custom generated class: ${description}\nclass CustomClass {\n  constructor() {\n    // Pattern: ${pattern}\n  }\n}`
+        class: `// Custom generated class: ${description}\nclass CustomClass {\n  constructor() {\n    // Pattern: ${pattern}\n  }\n}`,
       },
       python: {
         function: `# Custom generated function: ${description}\ndef custom_function():\n    # Pattern: ${pattern}\n    # TODO: Implement custom logic\n    pass`,
-        class: `# Custom generated class: ${description}\nclass CustomClass:\n    def __init__(self):\n        # Pattern: ${pattern}\n        pass`
-      }
+        class: `# Custom generated class: ${description}\nclass CustomClass:\n    def __init__(self):\n        # Pattern: ${pattern}\n        pass`,
+      },
     };
 
     const lang = language.toLowerCase();
@@ -168,7 +168,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 });
 
 // Handle tool calls
-server.setRequestHandler(CallToolRequestSchema, async (request) => {
+server.setRequestHandler(CallToolRequestSchema, async request => {
   const { name, arguments: args } = request.params;
 
   try {
@@ -194,7 +194,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           pattern: regexPattern,
           action,
           severity,
-          description: description || `Custom rule: ${ruleName}`
+          description: description || `Custom rule: ${ruleName}`,
         });
         return {
           content: [
@@ -224,7 +224,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           name,
           description: rule.description,
           severity: rule.severity,
-          action: rule.action
+          action: rule.action,
         }));
         return {
           content: [
@@ -251,7 +251,7 @@ async function main() {
 }
 
 if (require.main === module) {
-  main().catch((error) => {
+  main().catch(error => {
     console.error('Server error:', error);
     process.exit(1);
   });

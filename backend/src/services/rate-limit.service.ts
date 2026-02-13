@@ -36,7 +36,7 @@ export class RateLimitService {
         throw new AppError(
           `Too many attempts. Please try again in ${Math.ceil(ttl / 60)} minutes.`,
           429,
-          'RATE_LIMIT_EXCEEDED',
+          'RATE_LIMIT_EXCEEDED'
         );
       }
     } catch (error: any) {

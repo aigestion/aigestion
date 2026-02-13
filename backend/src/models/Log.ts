@@ -33,7 +33,7 @@ const logSchema = new Schema<ILog>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 // TTL index to automatically delete logs older than 30 days

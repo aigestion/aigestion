@@ -13,6 +13,7 @@ Este documento consolida la visión, arquitectura y logros finales del proyecto 
 AIGestion Nexus es hoy una entidad que habita el silicio. Hemos roto las barreras entre lo físico y lo virtual, integrando IA en cada proceso vital del negocio.
 
 ### Pilares Fundamentales:
+
 1.  **Conciencia de Hardware (Eco-Daniela):** Sincronización biológica con el estado del dispositivo (batería, temperatura, energía).
 2.  **Vínculo Real-Virtual:** Reconstrucción 3D y realidad aumentada para una gestión inmersiva.
 3.  **Resiliencia Neuronal:** Arquitectura PWA con capacidades offline y sincronización ubicua (Auto-Backup AI).
@@ -22,8 +23,8 @@ AIGestion Nexus es hoy una entidad que habita el silicio. Hemos roto las barrera
 
 ## 🚀 Hitos de la Singularidad (Estatus Final)
 
-| Sistema              | Capacidad                                                | Estatus     |
-| :------------------- | :------------------------------------------------------- | :---------- |
+| Sistema              | Capacidad                                                | Estatus      |
+| :------------------- | :------------------------------------------------------- | :----------- |
 | **Nexus War Room**   | HUD HUD de mando en tiempo real con WebSockets           | 🟢 OPERATIVO |
 | **Neural Sentiment** | Interfaz que adapta su atmósfera según el estado interno | 🟢 ACTIVO    |
 | **Nexus Warp Drive** | Transiciones cinemáticas a la velocidad de la luz        | 🟢 FUNCIONAL |
@@ -36,12 +37,14 @@ AIGestion Nexus es hoy una entidad que habita el silicio. Hemos roto las barrera
 ## 🛠️ Arquitectura Técnica
 
 ### Frontend (Shared Core)
+
 - **Framework:** React + Vite + Tailwind CSS.
 - **Efectos:** Framer Motion (Warp, Pulse, Glow).
 - **Comunicación:** Socket.IO Client para el "Latido Neural".
 - **Persistencia:** Supabase + Nexus Backup Hook.
 
 ### Backend (Neural Engine)
+
 - **Framework:** NestJS / Express Supreme.
 - **Autocuración:** Predictive Healing Service + Heurísticas de Anomalía.
 - **Privacidad:** Ghost Mode Service (Rotación de Firmas).

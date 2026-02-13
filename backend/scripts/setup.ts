@@ -196,7 +196,8 @@ const envConfig: Record<string, EnvVarConfig> = {
 const validators: Record<string, (value: string, config?: EnvVarConfig) => boolean | string> = {
   string: (value: string, _config?: EnvVarConfig) =>
     (typeof value === 'string' && value.length > 0) || 'Valor requerido',
-  number: (value: string, _config?: EnvVarConfig) => !isNaN(Number(value)) || 'Debe ser un número válido',
+  number: (value: string, _config?: EnvVarConfig) =>
+    !isNaN(Number(value)) || 'Debe ser un número válido',
   boolean: (value: string, _config?: EnvVarConfig) =>
     ['true', 'false', '0', '1'].includes(value.toLowerCase()) || 'Debe ser verdadero o falso',
   url: (value: string, _config?: EnvVarConfig) => {
@@ -235,8 +236,8 @@ async function setupEnvironment() {
   console.log(chalk.blue.bold('🚀 Asistente de Configuración - NEXUS V1 Dashboard\n'));
   console.log(
     chalk.gray(
-      'Este asistente te guiará en la configuración de las variables de entorno necesarias.\n',
-    ),
+      'Este asistente te guiará en la configuración de las variables de entorno necesarias.\n'
+    )
   );
 
   // Cargar variables existentes
@@ -255,8 +256,8 @@ async function setupEnvironment() {
 
     console.log(
       chalk.yellow(
-        '🔍 Se detectó un archivo .env existente. Se preservarán los valores actuales.\n',
-      ),
+        '🔍 Se detectó un archivo .env existente. Se preservarán los valores actuales.\n'
+      )
     );
   }
 
@@ -322,7 +323,7 @@ async function setupEnvironment() {
   // Si no hay preguntas, mostrar mensaje y salir
   if (questions.length === 0) {
     console.log(
-      chalk.green('✅ Todas las variables de entorno ya están configuradas correctamente.\n'),
+      chalk.green('✅ Todas las variables de entorno ya están configuradas correctamente.\n')
     );
     console.log(chalk.blue('📄 Archivo .env encontrado en:'), envPath);
     process.exit(0);
@@ -334,8 +335,8 @@ async function setupEnvironment() {
     const isNew = !existingEnv[q.name];
     console.log(
       `  ${isNew ? chalk.green('+') : chalk.yellow('~')} ${chalk.cyan(q.name)}: ${chalk.gray(
-        q.message.split(': ')[1],
-      )}`,
+        q.message.split(': ')[1]
+      )}`
     );
   });
   console.log('');
@@ -417,7 +418,7 @@ async function setupEnvironment() {
 
   // Mostrar próximos pasos
   console.log(
-    '\n🚀 ' + chalk.green.bold('¡Listo para comenzar!') + ' Ejecuta los siguientes comandos:',
+    '\n🚀 ' + chalk.green.bold('¡Listo para comenzar!') + ' Ejecuta los siguientes comandos:'
   );
   console.log(chalk.blue('   npm install') + '         - Instalar dependencias');
   console.log(chalk.blue('   npm run dev') + '           - Iniciar servidor en modo desarrollo');
@@ -426,7 +427,7 @@ async function setupEnvironment() {
 }
 
 // Manejo de errores
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', error => {
   console.error('\n❌ ' + chalk.red('Error inesperado:'));
   console.error(error);
   process.exit(1);

@@ -31,10 +31,7 @@
       "status": "✅ CORRECT",
       "buildCommand": "cd frontend/apps/website-epic && pnpm install && npm run build",
       "outputDirectory": "frontend/apps/website-epic/dist",
-      "domains": [
-        "www.aigestion.net",
-        "aigestion.net"
-      ],
+      "domains": ["www.aigestion.net", "aigestion.net"],
       "rewrites": [
         {
           "source": "/(.*)",

@@ -4,7 +4,7 @@ import { AIService } from '../src/services/ai.service';
 // Mock Dependencies
 const mockAnalytics = {} as any;
 const mockRag = {} as any;
-const mockUsage = { trackUsage: () => { } } as any;
+const mockUsage = { trackUsage: () => {} } as any;
 const mockSemanticCache = { get: () => null, set: () => undefined } as any;
 
 async function runProof() {
@@ -58,7 +58,7 @@ async function runProof() {
     (capturedConfig.modelId.includes('sonnet') || capturedConfig.modelId.includes('premium'))
   ) {
     console.log(
-      `   ✅ SUCCESS: Routed to PREMIUM model (${capturedConfig.modelId}) despite simple prompt.`,
+      `   ✅ SUCCESS: Routed to PREMIUM model (${capturedConfig.modelId}) despite simple prompt.`
     );
     console.log('      (Proof: Logic bypassed heuristics and forced Premium)');
   } else {
@@ -75,7 +75,7 @@ async function runProof() {
     (capturedConfig.provider === 'gemini' || capturedConfig.modelId.includes('flash'))
   ) {
     console.log(
-      `   ✅ SUCCESS: Routed to STANDARD/ECONOMY model (${capturedConfig.modelId}) for normal user.`,
+      `   ✅ SUCCESS: Routed to STANDARD/ECONOMY model (${capturedConfig.modelId}) for normal user.`
     );
   } else {
     console.log(`   ❌ FAILURE: Routed to ${capturedConfig?.modelId} (Expected Economy/Standard)`);

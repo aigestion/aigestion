@@ -1,39 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test JavaScript Files</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Test JavaScript Files</h1>
     <div id="results"></div>
-    
+
     <script>
-        async function testFiles() {
-            const files = [
-                'main.HP31QMQh.js',
-                'vendor.CE0h8kDB.js', 
-                'ui.DGIYQTaI.ChDC4nxS.js',
-                'charts.DvdfUCxK.DviAFsqj.js'
-            ];
-            
-            const results = document.getElementById('results');
-            
-            for (const file of files) {
-                try {
-                    const response = await fetch(file);
-                    const status = response.status;
-                    const statusText = status === 200 ? '✅ OK' : '❌ ERROR';
-                    
-                    results.innerHTML += `<p>${file}: ${status} ${statusText}</p>`;
-                } catch (error) {
-                    results.innerHTML += `<p>${file}: ❌ FAILED - ${error.message}</p>`;
-                }
-            }
+      async function testFiles() {
+        const files = [
+          'main.HP31QMQh.js',
+          'vendor.CE0h8kDB.js',
+          'ui.DGIYQTaI.ChDC4nxS.js',
+          'charts.DvdfUCxK.DviAFsqj.js',
+        ];
+
+        const results = document.getElementById('results');
+
+        for (const file of files) {
+          try {
+            const response = await fetch(file);
+            const status = response.status;
+            const statusText = status === 200 ? '✅ OK' : '❌ ERROR';
+
+            results.innerHTML += `<p>${file}: ${status} ${statusText}</p>`;
+          } catch (error) {
+            results.innerHTML += `<p>${file}: ❌ FAILED - ${error.message}</p>`;
+          }
         }
-        
-        testFiles();
+      }
+
+      testFiles();
     </script>
-</body>
+  </body>
 </html>

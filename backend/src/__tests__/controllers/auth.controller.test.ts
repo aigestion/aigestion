@@ -105,7 +105,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           message: 'El correo electrónico ya está registrado',
           statusCode: 400,
-        }),
+        })
       );
     });
 
@@ -126,15 +126,13 @@ describe('Auth Controller', () => {
         name: userData.name,
         role: 'user',
         save: jest.fn().mockResolvedValue(true),
-        toObject: jest
-          .fn()
-          .mockReturnValue({
-            _id: 'user_id',
-            email: userData.email,
-            name: userData.name,
-            role: 'user',
-            password: 'hashed_password',
-          }),
+        toObject: jest.fn().mockReturnValue({
+          _id: 'user_id',
+          email: userData.email,
+          name: userData.name,
+          role: 'user',
+          password: 'hashed_password',
+        }),
         refreshTokens: [],
       };
 
@@ -155,7 +153,7 @@ describe('Auth Controller', () => {
           data: expect.objectContaining({
             token: 'fake_token',
           }),
-        }),
+        })
       );
 
       // Verify repo usage
@@ -182,7 +180,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           message: 'Credenciales inválidas',
           statusCode: 401,
-        }),
+        })
       );
     });
 
@@ -215,13 +213,13 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           loginAttempts: 0,
           lockUntil: expect.any(Date),
-        }),
+        })
       );
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({
           message: 'Credenciales inválidas',
           statusCode: 401,
-        }),
+        })
       );
     });
 
@@ -260,13 +258,13 @@ describe('Auth Controller', () => {
           loginAttempts: 0,
           lockUntil: undefined,
           lastLogin: expect.any(Date),
-        }),
+        })
       );
       expect(statusMock).toHaveBeenCalledWith(200);
       expect(jsonMock).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({ token: 'auth_token' }),
-        }),
+        })
       );
     });
   });

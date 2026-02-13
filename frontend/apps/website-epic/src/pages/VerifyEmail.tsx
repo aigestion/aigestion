@@ -14,8 +14,8 @@ export const VerifyEmail: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user?.id) {
-        setError('No se ha encontrado el usuario. Por favor regístrate nuevamente.');
-        return;
+      setError('No se ha encontrado el usuario. Por favor regístrate nuevamente.');
+      return;
     }
 
     setLoading(true);
@@ -41,23 +41,28 @@ export const VerifyEmail: React.FC = () => {
       >
         <div className="premium-glass p-8 rounded-2xl neon-border neon-glow-cyan text-center">
           <div className="mb-6 flex justify-center">
-              <div className="bg-nexus-cyan/10 p-4 rounded-full ring-1 ring-nexus-cyan/50 shadow-[0_0_20px_rgba(0,245,255,0.3)]">
-                <Mail className="h-10 w-10 text-nexus-cyan" />
-              </div>
+            <div className="bg-nexus-cyan/10 p-4 rounded-full ring-1 ring-nexus-cyan/50 shadow-[0_0_20px_rgba(0,245,255,0.3)]">
+              <Mail className="h-10 w-10 text-nexus-cyan" />
+            </div>
           </div>
 
-          <h1 className="text-2xl font-orbitron font-bold text-white mb-2 tracking-wider">VERIFICAR EMAIL</h1>
+          <h1 className="text-2xl font-orbitron font-bold text-white mb-2 tracking-wider">
+            VERIFICAR EMAIL
+          </h1>
           <p className="text-nexus-silver/60 text-sm mb-6">
-            Hemos enviado un código a <span className="text-nexus-cyan font-semibold">{user?.email}</span>
+            Hemos enviado un código a{' '}
+            <span className="text-nexus-cyan font-semibold">{user?.email}</span>
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-1 text-left">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Código de Seguridad</label>
+              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
+                Código de Seguridad
+              </label>
               <input
                 type="text"
                 value={code}
-                onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                onChange={e => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 placeholder="123456"
                 className="w-full text-center text-3xl tracking-[0.5em] font-orbitron py-3 bg-nexus-obsidian/60 border border-white/10 rounded-xl text-white placeholder-nexus-silver/10 focus:outline-none focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 transition-all nexus-input-focus"
                 required
@@ -92,8 +97,8 @@ export const VerifyEmail: React.FC = () => {
           </form>
 
           <p className="text-nexus-silver/40 text-xs mt-6">
-             Revisa tu bandeja de spam si no encuentras el código. <br />
-             El código expira en 15 minutos.
+            Revisa tu bandeja de spam si no encuentras el código. <br />
+            El código expira en 15 minutos.
           </p>
         </div>
       </motion.div>

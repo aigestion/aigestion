@@ -16,7 +16,7 @@ export const WorkbenchProvider = ({ children }: { children: ReactNode }) => {
   const [activeActivity, setActiveActivity] = useState<ActivityId>('dashboard');
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
-  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+  const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
   // Logic: if clicking the same activity that is active, toggle sidebar
   const handleActivityChange = (id: ActivityId) => {

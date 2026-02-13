@@ -12,7 +12,7 @@ export const AITypingFlutter: React.FC<AITypingFlutterProps> = ({
   text,
   speed = 30,
   className = '',
-  onComplete
+  onComplete,
 }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isDone, setIsDone] = useState(false);

@@ -36,7 +36,7 @@ async function autoDocument() {
 
     await fs.writeFile(
       artifactPath,
-      `# 🏛️ Auto-Generated System Architecture\n\n> Last updated: ${new Date().toLocaleString()}\n\n${documentation}`,
+      `# 🏛️ Auto-Generated System Architecture\n\n> Last updated: ${new Date().toLocaleString()}\n\n${documentation}`
     );
 
     logger.info(`[AutoDoc] Documentation successfully written to ${artifactPath}`);

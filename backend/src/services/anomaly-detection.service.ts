@@ -10,9 +10,7 @@ export class AnomalyDetectionService {
   /**
    * Analyzes recent system metrics/logs for anomalies.
    */
-  async analyzePatterns(
-    data: any,
-  ): Promise<{
+  async analyzePatterns(data: any): Promise<{
     anomalyDetected: boolean;
     threatLevel: 'low' | 'medium' | 'high';
     message?: string;
@@ -22,7 +20,7 @@ export class AnomalyDetectionService {
     // Real-world: Use a specialized model or statistical analysis.
     // God-mode: Leverage AIService for high-level semantic anomaly detection.
     const prompt = `Analyze the following system behavior logs for security anomalies: ${JSON.stringify(
-      data,
+      data
     )}. Return a JSON with "anomalyDetected" (boolean), "threatLevel" (string), and "explanation" (string).`;
 
     try {
@@ -31,7 +29,7 @@ export class AnomalyDetectionService {
 
       if (result.anomalyDetected) {
         logger.warn(
-          `[AnomalyDetection] ALERT: ${result.explanation} (Level: ${result.threatLevel})`,
+          `[AnomalyDetection] ALERT: ${result.explanation} (Level: ${result.threatLevel})`
         );
       }
 

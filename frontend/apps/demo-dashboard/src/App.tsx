@@ -1,7 +1,7 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { DemoDashboard } from './components/DemoDashboard'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { DemoDashboard } from './components/DemoDashboard';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         <Route path="*" element={<DemoDashboard />} />
       </Routes>
     </motion.div>
-  )
+  );
 }
 
-export default App
+export default App;

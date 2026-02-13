@@ -97,7 +97,7 @@ describe('SwarmProcessor', () => {
     expect(mockAIService.generateContent).toHaveBeenNthCalledWith(
       1,
       expect.stringContaining('Develop a concise step-by-step strategy'),
-      'user-1',
+      'user-1'
     );
 
     // Verify Executing Phase
@@ -110,7 +110,7 @@ describe('SwarmProcessor', () => {
     expect(mockAIService.generateContent).toHaveBeenNthCalledWith(
       2,
       expect.stringContaining('Generate a final summary'),
-      'user-1',
+      'user-1'
     );
 
     // Verify Completion
@@ -123,7 +123,7 @@ describe('SwarmProcessor', () => {
         isEncrypted: true,
         status: MissionStatus.COMPLETED,
         completedAt: expect.any(Date),
-      }),
+      })
     );
 
     // Verify Notification — uses positional args:
@@ -133,7 +133,7 @@ describe('SwarmProcessor', () => {
       expect.anything(), // NotificationType.MISSION_COMPLETED enum value
       expect.any(String), // title
       expect.stringContaining('Test Mission'), // message
-      expect.objectContaining({ missionId: 'mission-1' }), // metadata
+      expect.objectContaining({ missionId: 'mission-1' }) // metadata
     );
   });
 
@@ -150,7 +150,7 @@ describe('SwarmProcessor', () => {
         status: MissionStatus.FAILED,
         error: 'AI Service Down',
         completedAt: expect.any(Date),
-      }),
+      })
     );
 
     // Verify Socket Error Emit
@@ -159,7 +159,7 @@ describe('SwarmProcessor', () => {
       expect.objectContaining({
         status: MissionStatus.FAILED,
         error: 'AI Service Down',
-      }),
+      })
     );
 
     // Verify Failure Notification — uses positional args:
@@ -169,7 +169,7 @@ describe('SwarmProcessor', () => {
       expect.anything(), // NotificationType.MISSION_FAILED enum value
       expect.any(String), // title
       expect.stringContaining('AI Service Down'), // message
-      expect.objectContaining({ missionId: 'mission-1' }), // metadata
+      expect.objectContaining({ missionId: 'mission-1' }) // metadata
     );
   });
 
@@ -210,7 +210,7 @@ describe('SwarmProcessor', () => {
     const { logger } = require('../../utils/logger');
     expect(logger.error).toHaveBeenCalledWith(
       expect.stringContaining('Failed to update mission failure status'),
-      secondaryError,
+      secondaryError
     );
   });
 });

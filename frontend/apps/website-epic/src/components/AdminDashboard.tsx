@@ -1,7 +1,30 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { Users, TrendingUp, DollarSign, Activity, Settings, Database, Shield, Zap } from 'lucide-react'
+import React from 'react';
+import { motion } from 'framer-motion';
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+import {
+  Users,
+  TrendingUp,
+  DollarSign,
+  Activity,
+  Settings,
+  Database,
+  Shield,
+  Zap,
+} from 'lucide-react';
 
 const AdminDashboard = () => {
   const stats = [
@@ -9,7 +32,7 @@ const AdminDashboard = () => {
     { title: 'Ingresos Mensuales', value: '$45,678', icon: DollarSign, color: 'text-green-400' },
     { title: 'Tasa de Crecimiento', value: '+23.5%', icon: TrendingUp, color: 'text-purple-400' },
     { title: 'Actividad del Sistema', value: '98.2%', icon: Activity, color: 'text-orange-400' },
-  ]
+  ];
 
   const chartData = [
     { name: 'Ene', usuarios: 4000, ingresos: 2400 },
@@ -18,13 +41,13 @@ const AdminDashboard = () => {
     { name: 'Abr', usuarios: 2780, ingresos: 3908 },
     { name: 'May', usuarios: 1890, ingresos: 4800 },
     { name: 'Jun', usuarios: 2390, ingresos: 3800 },
-  ]
+  ];
 
   const pieData = [
     { name: 'Desktop', value: 400, color: '#8884d8' },
     { name: 'Mobile', value: 300, color: '#82ca9d' },
     { name: 'Tablet', value: 300, color: '#ffc658' },
-  ]
+  ];
 
   return (
     <div className="p-6 space-y-6">
@@ -166,7 +189,7 @@ const AdminDashboard = () => {
         </div>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export { AdminDashboard }
+export { AdminDashboard };

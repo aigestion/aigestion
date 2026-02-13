@@ -1,15 +1,15 @@
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
 import {
-    Battery,
-    Cpu,
-    Fingerprint,
-    Layout,
-    Maximize2,
-    Monitor,
-    Radio,
-    ScanLine,
-    ShieldCheck,
-    Zap,
+  Battery,
+  Cpu,
+  Fingerprint,
+  Layout,
+  Maximize2,
+  Monitor,
+  Radio,
+  ScanLine,
+  ShieldCheck,
+  Zap,
 } from 'lucide-react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useSound } from '../hooks/useSound';
@@ -57,7 +57,7 @@ const BootSequence: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setStage((prev) => {
+      setStage(prev => {
         if (prev < stages.length - 1) return prev + 1;
         clearInterval(timer);
         setTimeout(onComplete, 1000);
@@ -184,13 +184,13 @@ export const VitureXRExperience: React.FC = () => {
       mouseX.set(x);
       mouseY.set(y);
     },
-    [mouseX, mouseY],
+    [mouseX, mouseY]
   );
 
   useEffect(() => {
     if (isXRActive) {
       const interval = setInterval(() => {
-        setImmersionLevel((prev) => (prev < 100 ? prev + 1 : 100));
+        setImmersionLevel(prev => (prev < 100 ? prev + 1 : 100));
       }, 30);
       play('nexus_hum'); // Sound loop
       return () => {

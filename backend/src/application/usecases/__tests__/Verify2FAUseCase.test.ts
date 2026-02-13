@@ -53,7 +53,7 @@ describe('Verify2FAUseCase', () => {
     expect(mockRateLimitServiceInstance.incrementAndCheck).toHaveBeenCalledWith(
       `2fa_verify:${userId}`,
       5,
-      900,
+      900
     );
     expect(mockServiceInstance.verifyToken).toHaveBeenCalledWith(secret, token);
     expect(userMock.isMfaEnabled).toBe(true);

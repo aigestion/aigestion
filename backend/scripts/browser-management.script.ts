@@ -11,7 +11,7 @@ async function verifyGodMode() {
   console.log('\n[Test 1] Advanced Extraction (Example Site)');
   const result1 = await tool.executeTask([
     { action: 'navigate', url: 'https://github.com/browserless/browserless' },
-    { action: 'extract' } // This will trigger the new metadata extraction logic
+    { action: 'extract' }, // This will trigger the new metadata extraction logic
   ]);
 
   if (result1.success) {
@@ -27,7 +27,10 @@ async function verifyGodMode() {
   const tasks = [
     tool.executeTask([{ action: 'navigate', url: 'https://google.com' }, { action: 'extract' }]),
     tool.executeTask([{ action: 'navigate', url: 'https://bing.com' }, { action: 'extract' }]),
-    tool.executeTask([{ action: 'navigate', url: 'https://duckduckgo.com' }, { action: 'extract' }])
+    tool.executeTask([
+      { action: 'navigate', url: 'https://duckduckgo.com' },
+      { action: 'extract' },
+    ]),
   ];
 
   const concurrencyResults = await Promise.all(tasks);
@@ -38,7 +41,7 @@ async function verifyGodMode() {
   console.log('\n[Test 3] Stealth/Navigation Verification');
   const result3 = await tool.executeTask([
     { action: 'navigate', url: 'https://bot.sannysoft.com/' },
-    { action: 'screenshot' }
+    { action: 'screenshot' },
   ]);
 
   if (result3.success) {

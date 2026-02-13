@@ -8,7 +8,11 @@ const services = [
     description:
       'Diseñamos el núcleo inteligente que gobierna procesos críticos con control total de datos y modelos.',
     icon: Brain,
-    bullets: ['Modelos privados y gobernanza', 'Orquestación multi-agente', 'Auditoría y explicabilidad'],
+    bullets: [
+      'Modelos privados y gobernanza',
+      'Orquestación multi-agente',
+      'Auditoría y explicabilidad',
+    ],
   },
   {
     title: 'Automatización Operativa',
@@ -33,15 +37,13 @@ const services = [
   },
   {
     title: 'Integraciones Extremo a Extremo',
-    description:
-      'Conectamos tu ecosistema digital sin fricción con APIs y conectores listos.',
+    description: 'Conectamos tu ecosistema digital sin fricción con APIs y conectores listos.',
     icon: PlugZap,
     bullets: ['Conectores empresariales', 'APIs seguras', 'Eventos en tiempo real'],
   },
   {
     title: 'Capacitación & Change Management',
-    description:
-      'Alineamos al equipo para adopción rápida y sostenible con formación por roles.',
+    description: 'Alineamos al equipo para adopción rápida y sostenible con formación por roles.',
     icon: GraduationCap,
     bullets: ['Academia AIGestion', 'Playbooks por gremio', 'Soporte premium'],
   },
@@ -63,8 +65,8 @@ export const ServicesDeepDive: React.FC = () => (
           SERVICIOS <span className="text-nexus-cyan text-glow">INTEGRALES</span>
         </h2>
         <p className="text-lg text-nexus-silver/70 max-w-3xl mx-auto">
-          AIGestion entrega una plataforma completa: estrategia, tecnología, automatización y adopción.
-          Cada módulo está diseñado para resultados medibles y escalables.
+          AIGestion entrega una plataforma completa: estrategia, tecnología, automatización y
+          adopción. Cada módulo está diseñado para resultados medibles y escalables.
         </p>
       </motion.div>
 
@@ -86,7 +88,7 @@ export const ServicesDeepDive: React.FC = () => (
               <h3 className="text-xl font-orbitron text-white font-bold">{service.title}</h3>
               <p className="text-sm text-nexus-silver/70 leading-relaxed">{service.description}</p>
               <ul className="space-y-2 text-xs text-nexus-silver/60">
-                {service.bullets.map((bullet) => (
+                {service.bullets.map(bullet => (
                   <li key={bullet} className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-nexus-cyan" />
                     {bullet}

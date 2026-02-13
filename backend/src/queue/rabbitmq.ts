@@ -68,7 +68,7 @@ const handleReconnection = async (): Promise<void> => {
   reconnectAttempts++;
 
   logger.warn(
-    `Attempting to reconnect to RabbitMQ (attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS}) in ${delay}ms`,
+    `Attempting to reconnect to RabbitMQ (attempt ${reconnectAttempts}/${MAX_RECONNECT_ATTEMPTS}) in ${delay}ms`
   );
 
   setTimeout(async () => {
@@ -125,7 +125,7 @@ const initializeChannelPool = async (): Promise<void> => {
       } catch (error) {
         logger.warn(error, 'Error closing channel during pool initialization:');
       }
-    }),
+    })
   );
 
   channelPool.length = 0; // Clear the array
@@ -203,7 +203,7 @@ export const closeRabbitMQ = async (): Promise<void> => {
       } catch (error) {
         logger.warn(error, 'Error closing channel during shutdown:');
       }
-    }),
+    })
   );
 
   channelPool.length = 0;

@@ -9,19 +9,21 @@ interface DanielaAssistantProps {
 export const DanielaAssistant: React.FC<DanielaAssistantProps> = ({ className = '' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState<Array<{ role: 'user' | 'daniela'; text: string }>>([
-    {
-      role: 'daniela',
-      text: '¡Hola! Soy Daniela, tu asistente de IA. ¿En qué puedo ayudarte hoy?',
-    },
-  ]);
+  const [chatHistory, setChatHistory] = useState<Array<{ role: 'user' | 'daniela'; text: string }>>(
+    [
+      {
+        role: 'daniela',
+        text: '¡Hola! Soy Daniela, tu asistente de IA. ¿En qué puedo ayudarte hoy?',
+      },
+    ]
+  );
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
 
     // Add user message
     const userMessage = { role: 'user' as const, text: message };
-    setChatHistory((prev) => [...prev, userMessage]);
+    setChatHistory(prev => [...prev, userMessage]);
 
     // Simulate Daniela response
     setTimeout(() => {
@@ -32,7 +34,7 @@ export const DanielaAssistant: React.FC<DanielaAssistantProps> = ({ className = 
         '¿Te gustaría que te muestre nuestras capacidades de IA?',
       ];
       const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      setChatHistory((prev) => [...prev, { role: 'daniela', text: randomResponse }]);
+      setChatHistory(prev => [...prev, { role: 'daniela', text: randomResponse }]);
     }, 500);
 
     setMessage('');
@@ -119,9 +121,7 @@ export const DanielaAssistant: React.FC<DanielaAssistantProps> = ({ className = 
                 >
                   <div
                     className={`max-w-[80%] p-3 rounded-2xl ${
-                      msg.role === 'user'
-                        ? 'bg-violet-600 text-white'
-                        : 'bg-gray-700 text-gray-100'
+                      msg.role === 'user' ? 'bg-violet-600 text-white' : 'bg-gray-700 text-gray-100'
                     }`}
                   >
                     {msg.role === 'daniela' && (
@@ -142,8 +142,8 @@ export const DanielaAssistant: React.FC<DanielaAssistantProps> = ({ className = 
                 <input
                   type="text"
                   value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onChange={e => setMessage(e.target.value)}
+                  onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Escribe tu mensaje..."
                   className="flex-1 bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
                 />

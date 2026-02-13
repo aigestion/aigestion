@@ -1,6 +1,7 @@
 # SSL Certificate Setup for AIGestion
 
 ## 🔒 Problema Actual
+
 Tu sitio `aigestion.net` muestra "No es seguro" en todos los navegadores porque no tiene un certificado SSL válido instalado.
 
 ## 🛠️ Solución Rápida
@@ -9,6 +10,7 @@ Tu sitio `aigestion.net` muestra "No es seguro" en todos los navegadores porque 
 
 1. **Conéctate a tu servidor via SSH**
 2. **Ejecuta el script de configuración SSL:**
+
 ```bash
 cd /ruta/a/tu/proyecto
 chmod +x scripts/setup-ssl.sh
@@ -46,8 +48,8 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./nginx-ssl.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
@@ -80,6 +82,7 @@ sudo nginx -t
 ## 🚀 Después de la Configuración
 
 Tu sitio será accesible en:
+
 - `https://aigestion.net` ✅ Seguro
 - `https://www.aigestion.net` ✅ Seguro
 - `http://aigestion.net` → Redirige a HTTPS

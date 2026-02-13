@@ -133,7 +133,7 @@ export class UserBehaviorService {
       await this.redis.setEx(
         `behavior:profile:${event.userId}`,
         this.cacheTimeout,
-        JSON.stringify(profile),
+        JSON.stringify(profile)
       );
 
       logger.debug('User behavior profile updated', {
@@ -152,7 +152,7 @@ export class UserBehaviorService {
     userId: string,
     filename: string,
     threats: string[],
-    ipAddress: string,
+    ipAddress: string
   ): Promise<void> {
     const event: UserBehaviorEvent = {
       userId,
@@ -463,7 +463,7 @@ export class UserBehaviorService {
       await this.redis.setEx(
         `behavior:anomaly:${anomaly.id}`,
         7 * 24 * 60 * 60, // 7 days
-        JSON.stringify(anomaly),
+        JSON.stringify(anomaly)
       );
 
       // Add to user anomalies list
@@ -563,7 +563,7 @@ export class UserBehaviorService {
         await this.redis.setEx(
           `behavior:anomaly:${anomalyId}`,
           7 * 24 * 60 * 60,
-          JSON.stringify(updatedAnomaly),
+          JSON.stringify(updatedAnomaly)
         );
       }
 

@@ -22,7 +22,7 @@ export class RunwayService {
       duration?: number;
       aspect_ratio?: string;
       model?: string;
-    } = {},
+    } = {}
   ): Promise<any> {
     if (!env.RUNWAY_API_KEY) {
       throw new Error('RUNWAY_API_KEY is missing');
@@ -46,7 +46,7 @@ export class RunwayService {
             'Content-Type': 'application/json',
             'X-Runway-Version': '2024-09-26',
           },
-        },
+        }
       );
 
       return response.data;
@@ -65,11 +65,11 @@ export class RunwayService {
         (error.response?.status === 400 && errorMsg.includes('credits'))
       ) {
         logger.warn(
-          'This error likely indicates insufficient credits or a billing issue on your Runway account.',
+          'This error likely indicates insufficient credits or a billing issue on your Runway account.'
         );
       } else if (error.response?.status === 400) {
         logger.warn(
-          'This error might be due to credits, or possibly invalid parameters (e.g. image format). The image size confirms it should be valid for Data URI.',
+          'This error might be due to credits, or possibly invalid parameters (e.g. image format). The image size confirms it should be valid for Data URI.'
         );
       }
 

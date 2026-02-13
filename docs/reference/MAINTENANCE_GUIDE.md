@@ -5,6 +5,7 @@
 ### Al Crear Nueva Documentación
 
 1. **Crea el archivo .md donde sea conveniente**
+
    ```bash
    # Puedes crear en cualquier lugar (no dentro de node_modules, .venv, etc.)
    code nuevo-feature.md
@@ -49,6 +50,7 @@ $OrganizationRules = @{
 ```
 
 Luego:
+
 ```bash
 npm run docs:organize
 git commit -m "feat: nueva regla de organización"
@@ -57,6 +59,7 @@ git commit -m "feat: nueva regla de organización"
 ### Crear Nueva Categoría
 
 1. **Edita** `scripts/generate-docs-index.ps1`
+
 ```powershell
 $Categories = [ordered]@{
     # ... categorías existentes ...
@@ -65,11 +68,13 @@ $Categories = [ordered]@{
 ```
 
 2. **Crea la carpeta**
+
 ```bash
 mkdir docs/nueva-categoria
 ```
 
 3. **Regenera índice**
+
 ```bash
 npm run docs:index
 ```
@@ -88,6 +93,7 @@ Edita `.github/workflows/docs-validation.yml`:
 ### Problema: Archivos no se organizan automáticamente
 
 **Solución:**
+
 ```bash
 # 1. Verifica que el archivo no esté excluido
 npm run docs:organize:dry
@@ -102,6 +108,7 @@ npm run docs:organize
 ### Problema: INDEX.md desactualizado
 
 **Solución:**
+
 ```bash
 npm run docs:index
 git add docs/INDEX.md
@@ -111,9 +118,11 @@ git commit -m "docs: actualizar índice"
 ### Problema: GitHub Action falla
 
 **Solución:**
+
 1. Revisa los logs en GitHub Actions
 2. Verifica que PowerShell esté instalado en runner
 3. Prueba localmente:
+
 ```bash
 npm run docs:full
 ```
@@ -129,16 +138,19 @@ npm run docs:full
 ## 🔄 Comandos de Mantenimiento
 
 ### Reorganizar Todo
+
 ```bash
 npm run docs:full
 ```
 
 ### Ver Estado Actual
+
 ```bash
 npm run docs:tree
 ```
 
 ### Limpiar y Reorganizar
+
 ```bash
 # 1. Ver qué se va a mover
 npm run docs:organize:dry
@@ -154,6 +166,7 @@ npm run docs:index
 ```
 
 ### Validar Antes de PR
+
 ```bash
 npm run docs:validate
 npm run docs:tree
@@ -217,6 +230,7 @@ Puedes agregar en GitHub Action:
 ### Scripts de Ejecución
 
 Todos los scripts PowerShell deben tener:
+
 ```powershell
 #!/usr/bin/env pwsh
 # Al inicio del archivo
@@ -261,4 +275,3 @@ Si encuentras problemas:
 **Última actualización**: Diciembre 2025
 **Versión del sistema**: 1.0.0
 **Mantenedor**: NEXUS V1 Team
-

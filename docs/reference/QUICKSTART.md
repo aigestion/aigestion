@@ -154,7 +154,7 @@ Cobertura de documentación: 67%
 
 | Quiero...           | Leer...                                                                                            |
 | ------------------- | -------------------------------------------------------------------------------------------------- |
-| Empezar rápido      | 👈 **Este archivo**                                                                                 |
+| Empezar rápido      | 👈 **Este archivo**                                                                                |
 | Referencia rápida   | [AUDIT_QUICK_REFERENCE.md](../docs/audit/AUDIT_QUICK_REFERENCE.md)                                 |
 | Análisis profundo   | [ANALYSIS_AND_OPTIMIZATIONS_2025-12-05.md](../docs/audit/ANALYSIS_AND_OPTIMIZATIONS_2025-12-05.md) |
 | Plan de mejoras     | [IMPROVEMENTS_PHASE_1_2025-12-05.md](../docs/audit/IMPROVEMENTS_PHASE_1_2025-12-05.md)             |
@@ -246,8 +246,8 @@ code (Get-ChildItem "audit-data\reports\*.md" | Sort-Object LastWriteTime | Sele
 
 ## 📊 Resumen Estado Actual
 
-| Métrica           | Valor                |
-| ----------------- | -------------------- |
+| Métrica           | Valor                 |
+| ----------------- | --------------------- |
 | **Seguridad**     | ✅ EXCELLENTE         |
 | **Código**        | ✨ BUENO              |
 | **Compliance**    | 🟡 13 archivos sucios |
@@ -308,7 +308,7 @@ R: Se reportan en el dashboard, revisar inmediatamente
 
 | Nivel     | Referencia                                                                          |
 | --------- | ----------------------------------------------------------------------------------- |
-| Muy Nuevo | 👈 **Este archivo**                                                                  |
+| Muy Nuevo | 👈 **Este archivo**                                                                 |
 | Conceptos | [docs/audit/AUDIT_QUICK_REFERENCE.md](../docs/audit/AUDIT_QUICK_REFERENCE.md)       |
 | Problemas | [docs/guides/CONTRIBUTING.md](../docs/guides/CONTRIBUTING.md)                       |
 | Técnico   | [docs/architecture/PROJECT_STRUCTURE.md](../docs/architecture/PROJECT_STRUCTURE.md) |
@@ -336,5 +336,4 @@ cd C:\Users\Alejandro\NEXUS V1\scripts
 **Para:** Usuarios del Sistema NEXUS V1 Audit
 **Próxima actualización:** Cuando haya nuevas características
 
-*La documentación completa está en `docs/` - ¡Explora!*
-
+_La documentación completa está en `docs/` - ¡Explora!_

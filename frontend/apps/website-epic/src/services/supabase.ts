@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY;
@@ -13,22 +13,22 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('[Supabase] ⚠️  Configuration missing. Auth features will be disabled.');
 }
 
-export const supabase = supabaseUrl && supabaseAnonKey
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null
+export const supabase =
+  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 /**
  * 🚀 [DIVINE MODE] Supabase Admin Client (Service Role)
  * For server-side operations and admin functions.
  */
-export const supabaseAdmin = supabaseUrl && supabaseServiceKey
-  ? createClient(supabaseUrl, supabaseServiceKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    })
-  : null
+export const supabaseAdmin =
+  supabaseUrl && supabaseServiceKey
+    ? createClient(supabaseUrl, supabaseServiceKey, {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      })
+    : null;
 
 /**
  * Optimized Authentication layer
@@ -44,12 +44,12 @@ export const signInWithGoogle = async () => {
       redirectTo: window.location.origin,
     },
   });
-}
+};
 
 export const signOut = async () => {
   if (!supabase) return;
   return await supabase.auth.signOut();
-}
+};
 
 /**
  * Health check utility
@@ -62,7 +62,7 @@ export const checkSupabaseHealth = async (): Promise<boolean> => {
   } catch {
     return false;
   }
-}
+};
 
 /**
  * 🌌 [DIVINE MODE] Advanced Database Operations
@@ -78,10 +78,10 @@ export const createAdminUser = async (email: string, password: string) => {
     email_confirm: true,
     user_metadata: {
       role: 'admin',
-      created_by: 'divine_mode'
-    }
+      created_by: 'divine_mode',
+    },
   });
-}
+};
 
 export const createDatabaseTable = async (tableName: string, schema: any) => {
   if (!supabaseAdmin) {
@@ -91,4 +91,4 @@ export const createDatabaseTable = async (tableName: string, schema: any) => {
   // This would require SQL execution - placeholder for divine mode
   console.log(`[DIVINE MODE] Creating table: ${tableName}`, schema);
   return { success: true, message: 'Table creation initiated' };
-}
+};

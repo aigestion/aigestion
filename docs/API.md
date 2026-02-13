@@ -1,6 +1,7 @@
 # 📚 AIGestion API Documentation
 
 ## 📋 Table of Contents
+
 - [Overview](#overview)
 - [Authentication](#authentication)
 - [Base URL](#base-url)
@@ -19,6 +20,7 @@
 The AIGestion API provides RESTful endpoints for managing users, conversations, AI interactions, and system administration.
 
 ### API Features
+
 - ✅ **RESTful architecture** with JSON responses
 - ✅ **JWT authentication** with OAuth2 support
 - ✅ **Rate limiting** with sliding window algorithm
@@ -32,6 +34,7 @@ The AIGestion API provides RESTful endpoints for managing users, conversations, 
 ## 🔐 Authentication
 
 ### JWT Authentication
+
 ```bash
 # Get access token
 POST /api/v1/auth/login
@@ -61,6 +64,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
 ### OAuth2 Flow
+
 ```bash
 # Authorization URL
 https://api.aigestion.net/oauth/authorize?
@@ -86,6 +90,7 @@ client_secret=your_client_secret
 ## 🌐 Base URL
 
 ### Environments
+
 ```bash
 # Production
 https://api.aigestion.net
@@ -98,6 +103,7 @@ http://localhost:3000
 ```
 
 ### API Versions
+
 ```bash
 # Current stable version
 /api/v1/
@@ -114,6 +120,7 @@ http://localhost:3000
 ## ⚡ Rate Limiting
 
 ### Rate Limits
+
 ```bash
 # Default limits
 - 100 requests per minute per IP
@@ -132,6 +139,7 @@ X-RateLimit-Reset: 1640995200
 ```
 
 ### Rate Limit Response
+
 ```json
 {
   "error": {
@@ -151,6 +159,7 @@ X-RateLimit-Reset: 1640995200
 ## ❌ Error Handling
 
 ### Error Response Format
+
 ```json
 {
   "error": {
@@ -166,21 +175,22 @@ X-RateLimit-Reset: 1640995200
 ```
 
 ### Common Error Codes
+
 ```typescript
 // Client errors (4xx)
-400 - BAD_REQUEST              // Invalid request data
-401 - UNAUTHORIZED            // Authentication required
-403 - FORBIDDEN               // Insufficient permissions
-404 - NOT_FOUND               // Resource not found
-409 - CONFLICT                // Resource conflict
-422 - VALIDATION_ERROR       // Validation failed
-429 - RATE_LIMIT_EXCEEDED     // Rate limit exceeded
+400 - BAD_REQUEST; // Invalid request data
+401 - UNAUTHORIZED; // Authentication required
+403 - FORBIDDEN; // Insufficient permissions
+404 - NOT_FOUND; // Resource not found
+409 - CONFLICT; // Resource conflict
+422 - VALIDATION_ERROR; // Validation failed
+429 - RATE_LIMIT_EXCEEDED; // Rate limit exceeded
 
 // Server errors (5xx)
-500 - INTERNAL_SERVER_ERROR   // Unexpected server error
-502 - BAD_GATEWAY             // Upstream service error
-503 - SERVICE_UNAVAILABLE     // Service temporarily unavailable
-504 - GATEWAY_TIMEOUT         // Request timeout
+500 - INTERNAL_SERVER_ERROR; // Unexpected server error
+502 - BAD_GATEWAY; // Upstream service error
+503 - SERVICE_UNAVAILABLE; // Service temporarily unavailable
+504 - GATEWAY_TIMEOUT; // Request timeout
 ```
 
 ---
@@ -190,6 +200,7 @@ X-RateLimit-Reset: 1640995200
 ### Authentication Endpoints
 
 #### Login
+
 ```http
 POST /api/v1/auth/login
 Content-Type: application/json
@@ -201,6 +212,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "data": {
@@ -220,6 +232,7 @@ Content-Type: application/json
 ```
 
 #### Refresh Token
+
 ```http
 POST /api/v1/auth/refresh
 Content-Type: application/json
@@ -230,6 +243,7 @@ Content-Type: application/json
 ```
 
 #### Logout
+
 ```http
 POST /api/v1/auth/logout
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -238,12 +252,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ### User Endpoints
 
 #### Get Current User
+
 ```http
 GET /api/v1/users/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
 **Response:**
+
 ```json
 {
   "data": {
@@ -269,6 +285,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
 #### Update User
+
 ```http
 PUT /api/v1/users/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -286,6 +303,7 @@ Content-Type: application/json
 ### Conversation Endpoints
 
 #### Create Conversation
+
 ```http
 POST /api/v1/conversations
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -299,6 +317,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "data": {
@@ -330,12 +349,14 @@ Content-Type: application/json
 ```
 
 #### Get Conversations
+
 ```http
 GET /api/v1/conversations?page=1&limit=20&type=chat
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
 ```
 
 #### Send Message
+
 ```http
 POST /api/v1/conversations/{conversationId}/messages
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -354,6 +375,7 @@ Content-Type: application/json
 ### AI Endpoints
 
 #### Chat with AI
+
 ```http
 POST /api/v1/ai/chat
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -375,6 +397,7 @@ Content-Type: application/json
 ```
 
 **Response:**
+
 ```json
 {
   "data": {
@@ -397,6 +420,7 @@ Content-Type: application/json
 ```
 
 #### Voice Processing
+
 ```http
 POST /api/v1/ai/voice/process
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -410,6 +434,7 @@ translate: false
 ```
 
 **Response:**
+
 ```json
 {
   "data": {
@@ -438,6 +463,7 @@ translate: false
 ### Admin Endpoints
 
 #### Get System Stats
+
 ```http
 GET /api/v1/admin/stats
 Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
@@ -445,6 +471,7 @@ X-Admin-Role: admin
 ```
 
 **Response:**
+
 ```json
 {
   "data": {
@@ -478,6 +505,7 @@ X-Admin-Role: admin
 ## 📋 Data Models
 
 ### User Model
+
 ```typescript
 interface User {
   id: string;
@@ -502,6 +530,7 @@ interface User {
 ```
 
 ### Conversation Model
+
 ```typescript
 interface Conversation {
   id: string;
@@ -533,6 +562,7 @@ interface Participant {
 ```
 
 ### Message Model
+
 ```typescript
 interface Message {
   id: string;
@@ -572,6 +602,7 @@ interface Attachment {
 ## 🪝 Webhooks
 
 ### Webhook Configuration
+
 ```bash
 # Register webhook
 POST /api/v1/webhooks
@@ -594,6 +625,7 @@ Content-Type: application/json
 ### Webhook Events
 
 #### Message Created
+
 ```json
 {
   "event": "message.created",
@@ -617,6 +649,7 @@ Content-Type: application/json
 ```
 
 #### AI Response
+
 ```json
 {
   "event": "ai.response",
@@ -638,15 +671,13 @@ Content-Type: application/json
 ```
 
 ### Webhook Verification
+
 ```javascript
 // Verify webhook signature (Node.js)
 const crypto = require('crypto');
 
 function verifyWebhook(payload, signature, secret) {
-  const expectedSignature = crypto
-    .createHmac('sha256', secret)
-    .update(payload)
-    .digest('hex');
+  const expectedSignature = crypto.createHmac('sha256', secret).update(payload).digest('hex');
 
   return `sha256=${expectedSignature}` === signature;
 }
@@ -671,6 +702,7 @@ app.post('/webhooks/aigestion', (req, res) => {
 ## 📚 SDKs & Libraries
 
 ### JavaScript/TypeScript SDK
+
 ```bash
 npm install @aigestion/sdk
 ```
@@ -680,29 +712,30 @@ import { AIGestionClient } from '@aigestion/sdk';
 
 const client = new AIGestionClient({
   baseURL: 'https://api.aigestion.net',
-  apiKey: 'your-api-key'
+  apiKey: 'your-api-key',
 });
 
 // Authentication
 const user = await client.auth.login({
   email: 'user@example.com',
-  password: 'password'
+  password: 'password',
 });
 
 // Send message
 const message = await client.conversations.sendMessage('conv_123', {
   content: 'Hello!',
-  type: 'text'
+  type: 'text',
 });
 
 // Chat with AI
 const response = await client.ai.chat({
   message: 'What is the weather?',
-  model: 'gpt-4'
+  model: 'gpt-4',
 });
 ```
 
 ### Python SDK
+
 ```bash
 pip install aigestion-python
 ```
@@ -736,6 +769,7 @@ response = client.ai.chat(
 ```
 
 ### cURL Examples
+
 ```bash
 # Login
 curl -X POST https://api.aigestion.net/api/v1/auth/login \
@@ -758,17 +792,18 @@ curl -X POST https://api.aigestion.net/api/v1/conversations/conv_123/messages \
 ## 💡 Examples
 
 ### Complete Chat Flow
+
 ```typescript
 // 1. Authenticate
 const auth = await client.auth.login({
   email: 'user@example.com',
-  password: 'password'
+  password: 'password',
 });
 
 // 2. Create conversation
 const conversation = await client.conversations.create({
   title: 'AI Assistant Chat',
-  type: 'ai'
+  type: 'ai',
 });
 
 // 3. Send message to AI
@@ -776,45 +811,43 @@ const response = await client.ai.chat({
   message: 'Help me write a Python function',
   context: {
     language: 'python',
-    framework: 'flask'
+    framework: 'flask',
   },
-  model: 'gpt-4'
+  model: 'gpt-4',
 });
 
 // 4. Get conversation history
-const history = await client.conversations.getMessages(
-  conversation.id,
-  { limit: 50 }
-);
+const history = await client.conversations.getMessages(conversation.id, { limit: 50 });
 
 // 5. Real-time updates via WebSocket
 const ws = client.websockets.connect(conversation.id);
-ws.on('message', (message) => {
+ws.on('message', message => {
   console.log('New message:', message);
 });
 ```
 
 ### Voice Processing Flow
+
 ```typescript
 // 1. Upload audio file
 const audioFile = fs.readFileSync('recording.wav');
 const transcription = await client.ai.voice.process(audioFile, {
   language: 'en',
   model: 'whisper-1',
-  transcribe: true
+  transcribe: true,
 });
 
 // 2. Process transcribed text with AI
 const response = await client.ai.chat({
   message: transcription.transcript,
-  context: { isVoice: true }
+  context: { isVoice: true },
 });
 
 // 3. Convert AI response to speech
 const speech = await client.ai.voice.synthesize({
   text: response.message,
   voice: 'alloy',
-  language: 'en'
+  language: 'en',
 });
 
 // 4. Play audio
@@ -823,6 +856,7 @@ fs.writeFileSync('response.mp3', audioBuffer);
 ```
 
 ### Admin Dashboard Integration
+
 ```typescript
 // 1. Get system statistics
 const stats = await client.admin.getStats();
@@ -834,7 +868,7 @@ const conversations = await client.admin.getActiveConversations();
 const users = await client.admin.getUsers({
   page: 1,
   limit: 50,
-  role: 'user'
+  role: 'user',
 });
 
 // 4. Update user role
@@ -849,34 +883,37 @@ const health = await client.admin.getHealth();
 ## 🔧 Advanced Usage
 
 ### Custom Headers
+
 ```typescript
 const client = new AIGestionClient({
   baseURL: 'https://api.aigestion.net',
   apiKey: 'your-api-key',
   defaultHeaders: {
     'X-Client-Version': '1.0.0',
-    'X-Client-Name': 'MyApp'
-  }
+    'X-Client-Name': 'MyApp',
+  },
 });
 ```
 
 ### Retry Logic
+
 ```typescript
 const response = await client.ai.chat({
   message: 'Hello!',
   retry: {
     attempts: 3,
     delay: 1000,
-    backoff: 'exponential'
-  }
+    backoff: 'exponential',
+  },
 });
 ```
 
 ### Streaming Responses
+
 ```typescript
 const stream = await client.ai.chatStream({
   message: 'Tell me a story',
-  stream: true
+  stream: true,
 });
 
 for await (const chunk of stream) {
@@ -889,21 +926,24 @@ for await (const chunk of stream) {
 ## 📞 Support
 
 ### Getting Help
+
 - 📧 **Email**: api-support@aigestion.net
 - 💬 **Discord**: [AIGestion API Discord](https://discord.gg/aigestion)
 - 📖 **Documentation**: [docs.aigestion.net](https://docs.aigestion.net)
 - 🐛 **Issues**: [GitHub Issues](https://github.com/aigestion/aigestion-net/issues)
 
 ### API Status
+
 - 🌐 **Status Page**: [status.aigestion.net](https://status.aigestion.net)
 - 📊 **Uptime**: 99.9% SLA
 - 🚨 **Incidents**: Posted on status page
 
 ### Rate Limit Appeals
+
 - 📧 **Email**: limits@aigestion.net
 - 📋 **Include**: API key, use case, expected request volume
 
 ---
 
-*Last Updated: 2025-01-25*
-*API Documentation Version: 2.0.0-GOLD*
+_Last Updated: 2025-01-25_
+_API Documentation Version: 2.0.0-GOLD_

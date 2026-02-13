@@ -1,9 +1,11 @@
 # 🚀 PLAN DE OPTIMIZACIÓN DE RENDIMIENTO - FASE 2
 
 ## 📅 Fechas Estimadas
+
 **29 Enero - 5 Febrero 2026 (1 semana)**
 
 ## 🎯 OBJETIVO
+
 **Optimizar el rendimiento del website AIGestion en 30-50% mediante implementación de best practices de performance.**
 
 ---
@@ -13,12 +15,14 @@
 ### **📊 Día 1: Lighthouse CI y Auditorías Automatizadas**
 
 #### **Tareas**
+
 - [ ] Configurar Lighthouse CI en GitHub Actions
 - [ ] Establecer baseline de performance actual
 - [ ] Implementar auditorías automáticas
 - [ ] Configurar thresholds de performance
 
 #### **Implementación**
+
 ```yaml
 # .github/workflows/performance.yml
 - name: Run Lighthouse CI
@@ -30,6 +34,7 @@
 ```
 
 #### **Métricas Objetivo**
+
 - **Performance**: 85+ → 95+
 - **Accessibility**: 90+ → 95+
 - **Best Practices**: 85+ → 95+
@@ -40,12 +45,14 @@
 ### **🖼️ Día 2-3: Optimización de Imágenes y Assets**
 
 #### **Tareas**
+
 - [ ] Implementar WebP para todas las imágenes
 - [ ] Configurar lazy loading estratégico
 - [ ] Optimizar delivery de imágenes
 - [ ] Implementar responsive images
 
 #### **Implementación Técnica**
+
 ```typescript
 // Image optimization service
 class ImageOptimizer {
@@ -58,6 +65,7 @@ class ImageOptimizer {
 ```
 
 #### **Impacto Esperado**
+
 - **Bundle Size**: -40%
 - **Load Time**: -30%
 - **LCP**: -50%
@@ -67,12 +75,14 @@ class ImageOptimizer {
 ### **⚡ Día 4: Bundle Analysis y Code Splitting**
 
 #### **Tareas**
+
 - [ ] Analizar bundle actual con webpack-bundle-analyzer
 - [ ] Implementar code splitting dinámico
 - [ ] Optimizar dependencias
 - [ ] Implementar tree shaking
 
 #### **Implementación**
+
 ```typescript
 // vite.config.ts optimization
 export default defineConfig({
@@ -83,15 +93,16 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
           ui: ['@radix-ui/react-icons', 'lucide-react'],
           three: ['three', '@react-three/fiber'],
-          utils: ['clsx', 'tailwind-merge']
-        }
-      }
-    }
-  }
+          utils: ['clsx', 'tailwind-merge'],
+        },
+      },
+    },
+  },
 });
 ```
 
 #### **Impacto Esperado**
+
 - **Initial Load**: -25%
 - **Bundle Size**: -35%
 - **Parse Time**: -40%
@@ -101,12 +112,14 @@ export default defineConfig({
 ### **🌐 Día 5: CDN Integration y Caching**
 
 #### **Tareas**
+
 - [ ] Configurar Cloudflare CDN
 - [ ] Implementar headers de caché
 - [ ] Optimizar delivery estático
 - [ ] Configurar Brotli compression
 
 #### **Headers de Performance**
+
 ```typescript
 // Cache headers
 Cache-Control: public, max-age=31536000, immutable
@@ -115,6 +128,7 @@ Last-Modified: proper timestamps
 ```
 
 #### **Impacto Esperado**
+
 - **TTI**: -20%
 - **Network Transfer**: -60%
 - **Global Performance**: +40%
@@ -125,15 +139,16 @@ Last-Modified: proper timestamps
 
 ### **🎯 KPIs de Performance**
 
-| Métrica | Actual | Objetivo | Mejora |
-|---------|--------|----------|---------|
-| **LCP** | 3.2s | 1.6s | -50% |
-| **FID** | 180ms | 50ms | -72% |
-| **CLS** | 0.15 | 0.05 | -67% |
-| **Performance Score** | 75 | 92 | +23% |
-| **Bundle Size** | 2.8MB | 1.6MB | -43% |
+| Métrica               | Actual | Objetivo | Mejora |
+| --------------------- | ------ | -------- | ------ |
+| **LCP**               | 3.2s   | 1.6s     | -50%   |
+| **FID**               | 180ms  | 50ms     | -72%   |
+| **CLS**               | 0.15   | 0.05     | -67%   |
+| **Performance Score** | 75     | 92       | +23%   |
+| **Bundle Size**       | 2.8MB  | 1.6MB    | -43%   |
 
 ### **📈 Herramientas de Medición**
+
 - **Lighthouse CI**: Auditorías automáticas
 - **Web Vitals**: Métricas core
 - **Bundle Analyzer**: Análisis de código
@@ -146,6 +161,7 @@ Last-Modified: proper timestamps
 ### **📦 Optimizaciones de Build**
 
 #### **Vite Configuration**
+
 ```typescript
 export default defineConfig({
   build: {
@@ -157,24 +173,21 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
           ui: ['framer-motion', 'lucide-react'],
           three: ['three', '@react-three/fiber'],
-          utils: ['clsx', 'tailwind-merge']
-        }
-      }
+          utils: ['clsx', 'tailwind-merge'],
+        },
+      },
     },
-    chunkSizeWarningLimit: 1000
-  }
+    chunkSizeWarningLimit: 1000,
+  },
 });
 ```
 
 #### **Service Worker Optimization**
+
 ```typescript
 // sw.js - Caching strategy
 const CACHE_NAME = 'aigestion-v1';
-const STATIC_ASSETS = [
-  '/',
-  '/assets/index.css',
-  '/assets/index.js'
-];
+const STATIC_ASSETS = ['/', '/assets/index.css', '/assets/index.js'];
 
 // Cache-first strategy for static assets
 // Network-first strategy for API calls
@@ -183,10 +196,11 @@ const STATIC_ASSETS = [
 ### **🖼️ Image Optimization Pipeline**
 
 #### **WebP Conversion**
+
 ```typescript
 // Automatic WebP conversion
 const convertToWebP = async (file: File): Promise<string> => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     // Convert to WebP with quality 80%
@@ -195,9 +209,10 @@ const convertToWebP = async (file: File): Promise<string> => {
 ```
 
 #### **Lazy Loading Implementation**
+
 ```typescript
 // Intersection Observer for lazy loading
-const imageObserver = new IntersectionObserver((entries) => {
+const imageObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       loadImage(entry.target);
@@ -213,27 +228,31 @@ const imageObserver = new IntersectionObserver((entries) => {
 ### **📋 Rollout Plan**
 
 #### **Phase 1: Testing (Día 1-2)**
+
 - Implementar cambios en branch `performance-optimization`
 - Testing local con Lighthouse
 - Validar no regresiones funcionales
 
 #### **Phase 2: Staging (Día 3-4)**
+
 - Deploy a staging environment
 - Performance testing completo
 - Validar métricas objetivo
 
 #### **Phase 3: Production (Día 5)**
+
 - Deploy gradual con feature flags
 - Monitor performance en tiempo real
 - Rollback plan preparado
 
 ### **🔄 Feature Flags**
+
 ```typescript
 // Feature flag system
 const FEATURES = {
   WEBP_IMAGES: process.env.VITE_ENABLE_WEBP === 'true',
   LAZY_LOADING: process.env.VITE_ENABLE_LAZY === 'true',
-  CDN_OPTIMIZATION: process.env.VITE_ENABLE_CDN === 'true'
+  CDN_OPTIMIZATION: process.env.VITE_ENABLE_CDN === 'true',
 };
 ```
 
@@ -242,6 +261,7 @@ const FEATURES = {
 ## 📊 MONITORING Y MÉTRICAS
 
 ### **📈 Real User Monitoring (RUM)**
+
 ```typescript
 // Web Vitals monitoring
 import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
@@ -254,6 +274,7 @@ getTTFB(console.log);
 ```
 
 ### **🔍 Performance Budgets**
+
 ```json
 {
   "budgets": [
@@ -276,12 +297,14 @@ getTTFB(console.log);
 ### **📊 Mejoras Cuantificables**
 
 #### **Performance Metrics**
+
 - **Load Time**: 3.2s → 1.6s (-50%)
 - **Bundle Size**: 2.8MB → 1.6MB (-43%)
 - **Lighthouse Score**: 75 → 92 (+23)
 - **User Experience**: Buena → Excelente
 
 #### **Business Impact**
+
 - **Conversion Rate**: +15%
 - **Bounce Rate**: -25%
 - **Page Views**: +20%
@@ -292,12 +315,14 @@ getTTFB(console.log);
 ## 🛡️ RIESGOS Y MITIGACIÓN
 
 ### **🚨 Riesgos Identificados**
+
 - **Breaking Changes**: Testing exhaustivo
 - **Performance Regressions**: Monitoreo continuo
 - **Browser Compatibility**: Polyfills necesarios
 - **Cache Issues**: Versioning de assets
 
 ### **🛡️ Estrategias de Mitigación**
+
 - **Feature Flags**: Rollback instantáneo
 - **A/B Testing**: Validación gradual
 - **Monitoring**: Alertas automáticas
@@ -307,19 +332,20 @@ getTTFB(console.log);
 
 ## 📅 TIMELINE DETALLADO
 
-| Día | Tareas | Entregables |
-|-----|--------|------------|
+| Día   | Tareas                   | Entregables                         |
+| ----- | ------------------------ | ----------------------------------- |
 | **1** | Lighthouse CI + Baseline | Auditorías automáticas configuradas |
-| **2** | WebP + Lazy Loading | Imágenes optimizadas |
-| **3** | Responsive Images | Imágenes adaptativas |
-| **4** | Bundle Analysis | Código optimizado |
-| **5** | CDN + Caching | Deploy optimizado |
+| **2** | WebP + Lazy Loading      | Imágenes optimizadas                |
+| **3** | Responsive Images        | Imágenes adaptativas                |
+| **4** | Bundle Analysis          | Código optimizado                   |
+| **5** | CDN + Caching            | Deploy optimizado                   |
 
 ---
 
 ## 🎊 SUCCESS CRITERIA
 
 ### **✅ Completion Checklist**
+
 - [ ] Lighthouse score ≥ 90
 - [ ] Bundle size ≤ 2MB
 - [ ] Load time ≤ 2s
@@ -328,6 +354,7 @@ getTTFB(console.log);
 - [ ] Documentation actualizada
 
 ### **🏆 Success Metrics**
+
 - **Performance Score**: 90+
 - **Bundle Size**: < 2MB
 - **Load Time**: < 2s
@@ -339,12 +366,14 @@ getTTFB(console.log);
 ## 🔄 CONTINUOUS IMPROVEMENT
 
 ### **📈 Next Steps**
+
 - **Week 2**: SEO Optimization
-- **Week 3**: Accessibility Compliance  
+- **Week 3**: Accessibility Compliance
 - **Week 4**: Security Hardening
 - **Week 5**: Analytics Integration
 
 ### **🎯 Long-term Goals**
+
 - **Performance Score**: 95+
 - **Bundle Size**: < 1.5MB
 - **Load Time**: < 1.5s
@@ -352,6 +381,6 @@ getTTFB(console.log);
 
 ---
 
-*Plan de Optimización de Rendimiento - Fase 2*  
-*29 Enero 2026 - 5 Febrero 2026*  
-*Status: Ready for Implementation*
+_Plan de Optimización de Rendimiento - Fase 2_  
+_29 Enero 2026 - 5 Febrero 2026_  
+_Status: Ready for Implementation_

@@ -14,7 +14,6 @@ import {
   Zap,
 } from 'lucide-react';
 
-
 import React, { useEffect, useState } from 'react';
 import SpatialPresentation from './SpatialPresentation';
 
@@ -113,8 +112,6 @@ export const DecentralandOffice: React.FC = () => {
     },
   ];
 
-
-
   return (
     <div className="relative min-h-screen bg-[#020205] overflow-hidden">
       {/* Animated Background Effects */}
@@ -193,9 +190,11 @@ export const DecentralandOffice: React.FC = () => {
             { label: 'Tokens Activos', value: metaverseStatus.users, icon: Users },
             { label: 'Latencia Red', value: '0.2ms', icon: Activity },
             { label: 'Núcleo Kortex', value: 'OPERATIVO', icon: Cpu },
-
           ].map((stat, i) => (
-            <div key={i} className="p-6 bg-white/[0.02] rounded-2xl border border-white/[0.05] backdrop-blur-3xl hover:border-nexus-cyan/20 transition-all group relative overflow-hidden">
+            <div
+              key={i}
+              className="p-6 bg-white/[0.02] rounded-2xl border border-white/[0.05] backdrop-blur-3xl hover:border-nexus-cyan/20 transition-all group relative overflow-hidden"
+            >
               <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="flex items-center gap-3 mb-3">
                 <stat.icon className="w-4 h-4 text-nexus-cyan opacity-40 group-hover:opacity-100 transition-opacity" />
@@ -209,7 +208,6 @@ export const DecentralandOffice: React.FC = () => {
             </div>
           ))}
         </motion.div>
-
 
         {/* Interactive Features Grid */}
         <motion.div
@@ -309,7 +307,6 @@ export const DecentralandOffice: React.FC = () => {
               />
             </div>
 
-
             {/* Interactive Overlay UI */}
             <div
               className={`absolute inset-0 z-20 pointer-events-none transition-all duration-500 ${
@@ -355,7 +352,10 @@ export const DecentralandOffice: React.FC = () => {
               </h3>
               <ul className="space-y-6">
                 {[
-                  { title: 'Asistencia Cognitiva', desc: 'Sincronización neuronal con Daniela IA.' },
+                  {
+                    title: 'Asistencia Cognitiva',
+                    desc: 'Sincronización neuronal con Daniela IA.',
+                  },
                   { title: 'Conectividad Global', desc: 'Orquestación de nodos en tiempo real.' },
                   { title: 'Activos Inmutables', desc: 'Gobernanza de infraestructura soberana.' },
                 ].map((item, i) => (
@@ -373,7 +373,6 @@ export const DecentralandOffice: React.FC = () => {
                 ))}
               </ul>
             </div>
-
 
             <div className="space-y-6">
               <motion.button
@@ -407,7 +406,6 @@ export const DecentralandOffice: React.FC = () => {
                 </p>
               </div>
             </div>
-
           </motion.div>
         </div>
       </motion.div>

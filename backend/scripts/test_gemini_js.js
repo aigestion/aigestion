@@ -17,7 +17,7 @@ async function run() {
       console.error('❌ No GEMINI_API_KEY or GOOGLE_GENAI_API_KEY found');
       console.log(
         'Environment keys:',
-        Object.keys(process.env).filter((k) => k.includes('API_KEY'))
+        Object.keys(process.env).filter(k => k.includes('API_KEY'))
       );
       process.exit(1);
     }

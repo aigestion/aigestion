@@ -30,7 +30,7 @@ export function createGraphQLRouter() {
           code: error.extensions?.code || 'INTERNAL_ERROR',
         },
       }),
-    })),
+    }))
   );
 
   return router;

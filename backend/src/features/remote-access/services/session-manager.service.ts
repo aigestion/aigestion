@@ -43,7 +43,7 @@ export class SessionManagerService extends EventEmitter {
           this.emit('requestExpired', request);
         }
       },
-      15 * 60 * 1000,
+      15 * 60 * 1000
     );
 
     logger.info(`Nueva solicitud de acceso creada: ${request.id}`);
@@ -58,7 +58,7 @@ export class SessionManagerService extends EventEmitter {
   respondToRequest(
     requestId: string,
     approve: boolean,
-    userId: string,
+    userId: string
   ): RemoteAccessRequest | null {
     const request = this.pendingRequests.get(requestId);
     if (request?.toUserId !== userId) {

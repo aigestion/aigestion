@@ -74,7 +74,7 @@ const missionSchema = new Schema<IMission>(
     toJSON: {
       virtuals: true,
     },
-  },
+  }
 );
 
 const Mission = mongoose.model<IMission>('Mission', missionSchema);

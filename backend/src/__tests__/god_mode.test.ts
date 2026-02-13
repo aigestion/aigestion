@@ -38,7 +38,7 @@ describe('God Mode Verification', () => {
         mockAnalyticsService as any,
         mockRagService as any,
         mockUsageService as any,
-        mockSemanticCacheService as any,
+        mockSemanticCacheService as any
       );
     });
 

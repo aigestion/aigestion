@@ -10,8 +10,8 @@ export interface ContactFormProps {
 }
 
 export const ContactForm: React.FC<ContactFormProps> = ({
-  title = "INICIAR CONEXIÓN",
-  description = "Completa el protocolo para establecer comunicación con el Nexus.",
+  title = 'INICIAR CONEXIÓN',
+  description = 'Completa el protocolo para establecer comunicación con el Nexus.',
   onSubmit,
   variant = 'glass',
   className = '',
@@ -38,12 +38,16 @@ export const ContactForm: React.FC<ContactFormProps> = ({
     }
   };
 
-  const inputClasses = "w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 outline-none focus:border-nexus-violet transition-all font-orbitron text-sm";
-  const labelClasses = "block text-xs font-orbitron font-bold text-nexus-cyan mb-2 tracking-wider uppercase";
+  const inputClasses =
+    'w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 outline-none focus:border-nexus-violet transition-all font-orbitron text-sm';
+  const labelClasses =
+    'block text-xs font-orbitron font-bold text-nexus-cyan mb-2 tracking-wider uppercase';
 
   if (isSuccess) {
     return (
-      <div className={`p-12 text-center rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md ${className}`}>
+      <div
+        className={`p-12 text-center rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md ${className}`}
+      >
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -70,14 +74,14 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   }
 
   return (
-    <div className={`p-8 md:p-12 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md ${className}`}>
+    <div
+      className={`p-8 md:p-12 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md ${className}`}
+    >
       <div className="mb-10 text-center">
         <h3 className="text-2xl font-orbitron font-black text-white uppercase tracking-widest mb-4">
           {title}
         </h3>
-        <p className="text-gray-400 text-sm max-w-md mx-auto">
-          {description}
-        </p>
+        <p className="text-gray-400 text-sm max-w-md mx-auto">{description}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -90,7 +94,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               required
               className={inputClasses}
               value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              onChange={e => setFormData({ ...formData, name: e.target.value })}
             />
           </div>
           <div>
@@ -101,7 +105,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
               required
               className={inputClasses}
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={e => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
         </div>
@@ -114,19 +118,19 @@ export const ContactForm: React.FC<ContactFormProps> = ({
             required
             className={inputClasses}
             value={formData.subject}
-            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+            onChange={e => setFormData({ ...formData, subject: e.target.value })}
           />
         </div>
 
         <div>
-           <label className={labelClasses}>Mensaje de Datos</label>
+          <label className={labelClasses}>Mensaje de Datos</label>
           <textarea
             required
             rows={4}
             className={inputClasses}
             placeholder="Tu mensaje..."
             value={formData.message}
-            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            onChange={e => setFormData({ ...formData, message: e.target.value })}
           />
         </div>
 

@@ -1,6 +1,7 @@
 ﻿# NEXUS V1 Swarm: "The Hexagon"
 
 ## Overview
+
 The NEXUS V1 Swarm is an autonomous multi-agent system designed to continuously monitor, analyze, and optimize the NEXUS V1 project. It consists of 6 specialized agents working in a feedback loop.
 
 ## Architecture
@@ -36,12 +37,13 @@ python main.py
 ```
 
 ## Current Capabilities
+
 - **Scanning**: Detects large files (>500KB) and "TODO" comments.
 - **Reporting**: Generates a `SWARM_REPORT.md` (mocked implementation) summarizing the actions.
 - **Safety**: Runs in local mode. Editing is currently mocked or limited to generating reports.
 
 ## Roadmap
+
 - [ ] Connect to real LLM (Gemini/OpenAI) for intelligent code generation.
 - [ ] Enable Github PR creation instead of direct file writes.
 - [ ] Add vector database for long-term memory of codebase context.
-

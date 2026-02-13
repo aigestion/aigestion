@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 
 async function test() {
@@ -8,7 +7,7 @@ async function test() {
   try {
     const res = await axios.post(url, {
       language: 'python',
-      code: 'print(sum([i for i in range(10)]))' // 0+..+9 = 45
+      code: 'print(sum([i for i in range(10)]))', // 0+..+9 = 45
     });
     console.log('Success!', res.data);
   } catch (err: any) {

@@ -37,12 +37,14 @@ GEMINI_MAX_TOKENS=2048
 ### ✅ PowerShell Scripts
 
 #### **gemini-pro-service.ps1**
+
 - Servicio principal de Gemini Pro
 - Modo interactivo especializado
 - Análisis de archivos
 - Configuración segura
 
 #### **AIGestion-Gemini-Integration.ps1**
+
 - Script de integración completa
 - Actualización automática de scripts
 - Análisis del sistema
@@ -51,6 +53,7 @@ GEMINI_MAX_TOKENS=2048
 ### ✅ TypeScript/React Service
 
 #### **gemini-service.ts**
+
 - Servicio TypeScript para frontend
 - Integración con componentes React
 - Análisis de código
@@ -69,7 +72,7 @@ GEMINI_MAX_TOKENS=2048
 
 # Comandos disponibles:
 # analizar <componente>    - Analiza componente específico
-# optimizar <script>       - Optimiza script PowerShell  
+# optimizar <script>       - Optimiza script PowerShell
 # ideas <área>            - Genera ideas innovadoras
 # código <descripción>    - Genera código TypeScript/React
 # diagnosticar            - Diagnostica problemas sistema
@@ -98,7 +101,7 @@ import { geminiService } from '../services/gemini-service';
 geminiService.configure({
   apiKey: 'tu_api_key',
   temperature: 0.7,
-  maxTokens: 2048
+  maxTokens: 2048,
 });
 
 // Generar contenido
@@ -218,14 +221,15 @@ El componente CinematicPresentation es el hero principal del website AIGestion..
 
 ### Generación de Código
 
-```powershell
+````powershell
 AIGestion> código crear hook personalizado para analytics con TypeScript
 
 💎 Respuesta de Gemini Pro:
 ```typescript
 import { useEffect, useState } from 'react';
 // ... código completo generado
-```
+````
+
 ### Ideas Innovadoras
 
 ```powershell
@@ -263,12 +267,12 @@ GEMINI_RESPONSE_FORMAT=json
 // Configurar para diferentes casos de uso
 geminiService.configure({
   temperature: 0.2, // Más preciso para código
-  maxTokens: 1024,   // Respuestas cortas
+  maxTokens: 1024, // Respuestas cortas
 });
 
 geminiService.configure({
   temperature: 0.9, // Más creativo para marketing
-  maxTokens: 4096,  // Contenido extenso
+  maxTokens: 4096, // Contenido extenso
 });
 ```
 
@@ -294,4 +298,4 @@ geminiService.configure({
 
 **🔥 GEMINI PRO AIGESTION LISTO PARA USO EXTREMO! 🚀**
 
-*La inteligencia más avanzada de Google ahora potencia tu ecosistema AIGestion*
+_La inteligencia más avanzada de Google ahora potencia tu ecosistema AIGestion_

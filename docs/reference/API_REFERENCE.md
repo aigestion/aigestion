@@ -6,12 +6,12 @@
 
 ## 📋 Información General
 
-| Propiedad | Valor |
-|-----------|-------|
-| **Base URL** | `http://localhost:5000/api/v1` |
-| **Formato** | JSON |
-| **Autenticación** | JWT Bearer Token |
-| **Rate Limiting** | 100 req/15min (general) |
+| Propiedad                 | Valor                            |
+| ------------------------- | -------------------------------- |
+| **Base URL**              | `http://localhost:5000/api/v1`   |
+| **Formato**               | JSON                             |
+| **Autenticación**         | JWT Bearer Token                 |
+| **Rate Limiting**         | 100 req/15min (general)          |
 | **Documentación Swagger** | `http://localhost:5000/api-docs` |
 
 ---
@@ -32,9 +32,11 @@ Content-Type: application/json
 ### 🏥 Health Check
 
 #### GET /health
+
 Verifica el estado de salud del servidor.
 
 **Response:**
+
 ```json
 {
   "status": "ok",
@@ -45,9 +47,11 @@ Verifica el estado de salud del servidor.
 ```
 
 #### GET /ready
+
 Verifica si el servidor está listo para recibir tráfico.
 
 **Response:**
+
 ```json
 {
   "status": "ready",
@@ -61,9 +65,11 @@ Verifica si el servidor está listo para recibir tráfico.
 ### 🔑 Auth (`/api/v1/auth`)
 
 #### POST /auth/register
+
 Registra un nuevo usuario.
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -73,6 +79,7 @@ Registra un nuevo usuario.
 ```
 
 **Response (201):**
+
 ```json
 {
   "success": true,
@@ -88,9 +95,11 @@ Registra un nuevo usuario.
 ```
 
 #### POST /auth/login
+
 Autentica un usuario existente.
 
 **Request Body:**
+
 ```json
 {
   "email": "user@example.com",
@@ -99,6 +108,7 @@ Autentica un usuario existente.
 ```
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -114,11 +124,13 @@ Autentica un usuario existente.
 ```
 
 #### POST /auth/logout
+
 Cierra la sesión del usuario.
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -127,11 +139,13 @@ Cierra la sesión del usuario.
 ```
 
 #### GET /auth/me
+
 Obtiene el perfil del usuario autenticado.
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -150,11 +164,13 @@ Obtiene el perfil del usuario autenticado.
 ### 🤖 AI (`/api/v1/ai`)
 
 #### POST /ai/chat
+
 Envía un mensaje al agente de IA.
 
 **Headers:** `Authorization: Bearer <token>`
 
 **Request Body:**
+
 ```json
 {
   "message": "¿Cómo puedo configurar mi cuenta?",
@@ -166,6 +182,7 @@ Envía un mensaje al agente de IA.
 ```
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -184,9 +201,11 @@ Envía un mensaje al agente de IA.
 ```
 
 #### POST /ai/evaluate
+
 Evalúa la respuesta del agente.
 
 **Request Body:**
+
 ```json
 {
   "conversationId": "conv_123",
@@ -196,6 +215,7 @@ Evalúa la respuesta del agente.
 ```
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -209,11 +229,11 @@ Evalúa la respuesta del agente.
 
 ### Rate Limiting
 
-| Endpoint | Límite | Ventana |
-|----------|--------|---------|
-| General (`/api/*`) | 100 requests | 15 minutos |
-| Auth (`/api/v1/auth/*`) | 20 requests | 15 minutos |
-| AI (`/api/v1/ai/*`) | 50 requests | 15 minutos |
+| Endpoint                | Límite       | Ventana    |
+| ----------------------- | ------------ | ---------- |
+| General (`/api/*`)      | 100 requests | 15 minutos |
+| Auth (`/api/v1/auth/*`) | 20 requests  | 15 minutos |
+| AI (`/api/v1/ai/*`)     | 50 requests  | 15 minutos |
 
 ### Security Headers
 
@@ -244,14 +264,14 @@ El servidor aplica los siguientes headers de seguridad mediante Helmet:
 
 ### Códigos de Error Comunes
 
-| Código HTTP | Error Code | Descripción |
-|-------------|------------|-------------|
-| 400 | `VALIDATION_ERROR` | Datos de entrada inválidos |
-| 401 | `UNAUTHORIZED` | Token inválido o expirado |
-| 403 | `FORBIDDEN` | Sin permisos para esta acción |
-| 404 | `NOT_FOUND` | Recurso no encontrado |
-| 429 | `RATE_LIMIT_EXCEEDED` | Límite de rate excedido |
-| 500 | `INTERNAL_ERROR` | Error interno del servidor |
+| Código HTTP | Error Code            | Descripción                   |
+| ----------- | --------------------- | ----------------------------- |
+| 400         | `VALIDATION_ERROR`    | Datos de entrada inválidos    |
+| 401         | `UNAUTHORIZED`        | Token inválido o expirado     |
+| 403         | `FORBIDDEN`           | Sin permisos para esta acción |
+| 404         | `NOT_FOUND`           | Recurso no encontrado         |
+| 429         | `RATE_LIMIT_EXCEEDED` | Límite de rate excedido       |
+| 500         | `INTERNAL_ERROR`      | Error interno del servidor    |
 
 ---
 
@@ -264,24 +284,24 @@ import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:5000', {
   auth: {
-    token: 'jwt_token_here'
-  }
+    token: 'jwt_token_here',
+  },
 });
 ```
 
 ### Eventos Client → Server
 
-| Evento | Payload | Descripción |
-|--------|---------|-------------|
-| `joinRoom` | `string` (roomId) | Unirse a una sala |
+| Evento      | Payload           | Descripción       |
+| ----------- | ----------------- | ----------------- |
+| `joinRoom`  | `string` (roomId) | Unirse a una sala |
 | `leaveRoom` | `string` (roomId) | Salir de una sala |
 
 ### Eventos Server → Client
 
-| Evento | Payload | Descripción |
-|--------|---------|-------------|
-| `notification` | `{ type, message, data }` | Notificación en tiempo real |
-| `aiResponse` | `{ conversationId, response }` | Respuesta del agente AI |
+| Evento         | Payload                        | Descripción                 |
+| -------------- | ------------------------------ | --------------------------- |
+| `notification` | `{ type, message, data }`      | Notificación en tiempo real |
+| `aiResponse`   | `{ conversationId, response }` | Respuesta del agente AI     |
 
 ---
 
@@ -289,15 +309,16 @@ const socket = io('http://localhost:5000', {
 
 ### Endpoints de Métricas
 
-| Endpoint | Descripción |
-|----------|-------------|
+| Endpoint   | Descripción         |
+| ---------- | ------------------- |
 | `/metrics` | Métricas Prometheus |
-| `/health` | Health check |
-| `/ready` | Readiness check |
+| `/health`  | Health check        |
+| `/ready`   | Readiness check     |
 
 ### OpenTelemetry
 
 Las trazas se exportan a Jaeger:
+
 - **Jaeger UI:** `http://localhost:16686`
 
 ---
@@ -323,6 +344,7 @@ curl -X POST http://localhost:5000/api/v1/ai/chat \
 ```
 
 ### Con Thunder Client (VSCode)
+
 Usar la extensión Thunder Client para testing visual de la API.
 
 ---
@@ -334,6 +356,7 @@ La documentación interactiva de Swagger está disponible en:
 **URL:** `http://localhost:5000/api-docs`
 
 Incluye:
+
 - Todos los endpoints documentados
 - Schemas de request/response
 - Autenticación integrada
@@ -341,5 +364,4 @@ Incluye:
 
 ---
 
-*Documentación de API generada por Antigravity AI Assistant* ⚡
-
+_Documentación de API generada por Antigravity AI Assistant_ ⚡

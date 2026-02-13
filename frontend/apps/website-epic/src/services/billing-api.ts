@@ -12,19 +12,22 @@ interface PortalSessionResponse {
 }
 
 interface PayPalOrderResponse {
-    id: string;
-    status: string;
-    links: any[];
+  id: string;
+  status: string;
+  links: any[];
 }
 
 export const billingApi = {
   // Stripe Methods
-  createCheckoutSession: async (priceId: string, token: string): Promise<CheckoutSessionResponse> => {
+  createCheckoutSession: async (
+    priceId: string,
+    token: string
+  ): Promise<CheckoutSessionResponse> => {
     const response = await fetch(`${API_URL}/billing/checkout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ priceId }),
     });
@@ -41,7 +44,7 @@ export const billingApi = {
     const response = await fetch(`${API_URL}/billing/portal`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -54,47 +57,51 @@ export const billingApi = {
   },
 
   getBillingSnapshot: async (token: string) => {
-      const response = await fetch(`${API_URL}/billing/snapshot`, {
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
-      });
-      if (!response.ok) throw new Error('Failed to fetch billing snapshot');
-      return response.json();
+    const response = await fetch(`${API_URL}/billing/snapshot`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) throw new Error('Failed to fetch billing snapshot');
+    return response.json();
   },
 
   // PayPal Methods
-  createPayPalOrder: async (amount: string, currency: string, token: string): Promise<PayPalOrderResponse> => {
-      const response = await fetch(`${API_URL}/billing/paypal/create-order`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ amount, currency })
-      });
+  createPayPalOrder: async (
+    amount: string,
+    currency: string,
+    token: string
+  ): Promise<PayPalOrderResponse> => {
+    const response = await fetch(`${API_URL}/billing/paypal/create-order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount, currency }),
+    });
 
-      if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.error || 'Failed to create PayPal order');
-      }
-      return response.json();
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to create PayPal order');
+    }
+    return response.json();
   },
 
   capturePayPalOrder: async (orderId: string, token: string) => {
-      const response = await fetch(`${API_URL}/billing/paypal/capture-order`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ orderId })
-      });
+    const response = await fetch(`${API_URL}/billing/paypal/capture-order`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ orderId }),
+    });
 
-      if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.error || 'Failed to capture PayPal order');
-      }
-      return response.json();
-  }
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to capture PayPal order');
+    }
+    return response.json();
+  },
 };

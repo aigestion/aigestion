@@ -156,10 +156,10 @@ export class AnalyticsService {
 
     return {
       cpu: Array.from({ length: 60 }, () =>
-        parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1)),
+        parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1))
       ),
       memory: Array.from({ length: 60 }, () =>
-        parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1)),
+        parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1))
       ),
       network: Array.from({ length: 60 }, () => parseFloat((Math.random() * 10).toFixed(1))),
     };

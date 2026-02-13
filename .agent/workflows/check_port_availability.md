@@ -5,8 +5,10 @@ description: Check if required ports are already in use.
 # Check Port Availability
 
 ## 1. Check Standard Ports
+
 - [ ] Check ports 3000, 4000, 5432, 6379.
-// turbo
+      // turbo
+
 ```bash
 netstat -ano | findstr :3000
 netstat -ano | findstr :4000

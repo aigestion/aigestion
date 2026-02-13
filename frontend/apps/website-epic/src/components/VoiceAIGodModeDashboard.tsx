@@ -6,7 +6,23 @@
 
 import React, { useState, useEffect } from 'react';
 import { voiceAIGodMode, spanishVoiceProfiles } from '../services/voice-ai-godmode';
-import { Phone, MessageCircle, Mic, Volume2, Settings, Zap, TrendingUp, Users, Clock, DollarSign, CheckCircle, AlertCircle, Play, Pause, RefreshCw } from 'lucide-react';
+import {
+  Phone,
+  MessageCircle,
+  Mic,
+  Volume2,
+  Settings,
+  Zap,
+  TrendingUp,
+  Users,
+  Clock,
+  DollarSign,
+  CheckCircle,
+  AlertCircle,
+  Play,
+  Pause,
+  RefreshCw,
+} from 'lucide-react';
 
 interface VoiceStats {
   elevenlabs: {
@@ -48,7 +64,9 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
     overall: 'excellent',
   });
   const [isGenerating, setIsGenerating] = useState(false);
-  const [testText, setTestText] = useState('¡Hola! Soy Daniela, tu asistente inteligente de AIGestion. ¿En qué puedo ayudarte hoy?');
+  const [testText, setTestText] = useState(
+    '¡Hola! Soy Daniela, tu asistente inteligente de AIGestion. ¿En qué puedo ayudarte hoy?'
+  );
 
   useEffect(() => {
     initializeSystem();
@@ -70,17 +88,17 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
       elevenlabs: {
         characters_used: Math.floor(Math.random() * 3000),
         characters_limit: stats.elevenlabs.monthly_limit,
-        cost_saved: Math.floor(Math.random() * 50)
+        cost_saved: Math.floor(Math.random() * 50),
       },
       vapi: {
         calls_made: Math.floor(Math.random() * 50),
         minutes_used: Math.floor(Math.random() * 80),
-        minutes_limit: stats.vapi.free_minutes
+        minutes_limit: stats.vapi.free_minutes,
       },
       twilio: {
         messages_sent: Math.floor(Math.random() * 80),
         messages_limit: stats.twilio.free_sms,
-        cost_saved: Math.floor(Math.random() * 30)
+        cost_saved: Math.floor(Math.random() * 30),
       },
     });
   };
@@ -99,29 +117,42 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'online': return 'text-green-500';
-      case 'offline': return 'text-red-500';
-      case 'limited': return 'text-yellow-500';
-      default: return 'text-gray-500';
+      case 'online':
+        return 'text-green-500';
+      case 'offline':
+        return 'text-red-500';
+      case 'limited':
+        return 'text-yellow-500';
+      default:
+        return 'text-gray-500';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'online': return <CheckCircle className="w-4 h-4" />;
-      case 'offline': return <AlertCircle className="w-4 h-4" />;
-      case 'limited': return <AlertCircle className="w-4 h-4" />;
-      default: return <Clock className="w-4 h-4" />;
+      case 'online':
+        return <CheckCircle className="w-4 h-4" />;
+      case 'offline':
+        return <AlertCircle className="w-4 h-4" />;
+      case 'limited':
+        return <AlertCircle className="w-4 h-4" />;
+      default:
+        return <Clock className="w-4 h-4" />;
     }
   };
 
   const getOverallStatusColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'bg-green-500';
-      case 'good': return 'bg-blue-500';
-      case 'warning': return 'bg-yellow-500';
-      case 'critical': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case 'excellent':
+        return 'bg-green-500';
+      case 'good':
+        return 'bg-blue-500';
+      case 'warning':
+        return 'bg-yellow-500';
+      case 'critical':
+        return 'bg-red-500';
+      default:
+        return 'bg-gray-500';
     }
   };
 
@@ -144,7 +175,9 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
               </p>
             </div>
             <div className="flex items-center space-x-4">
-              <div className={`px-4 py-2 rounded-full ${getOverallStatusColor(systemStatus.overall)} text-white flex items-center space-x-2`}>
+              <div
+                className={`px-4 py-2 rounded-full ${getOverallStatusColor(systemStatus.overall)} text-white flex items-center space-x-2`}
+              >
                 {getStatusIcon(systemStatus.overall)}
                 <span className="font-medium">Sistema {systemStatus.overall}</span>
               </div>
@@ -172,7 +205,9 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
                   <p className="text-sm text-gray-500">Voz española (España)</p>
                 </div>
               </div>
-              <div className={`flex items-center space-x-1 ${getStatusColor(systemStatus.elevenlabs)}`}>
+              <div
+                className={`flex items-center space-x-1 ${getStatusColor(systemStatus.elevenlabs)}`}
+              >
                 {getStatusIcon(systemStatus.elevenlabs)}
               </div>
             </div>
@@ -181,19 +216,26 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Caracteres usados</span>
-                  <span className="font-medium">{voiceStats.elevenlabs.characters_used.toLocaleString()}/{voiceStats.elevenlabs.characters_limit.toLocaleString()}</span>
+                  <span className="font-medium">
+                    {voiceStats.elevenlabs.characters_used.toLocaleString()}/
+                    {voiceStats.elevenlabs.characters_limit.toLocaleString()}
+                  </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-purple-500 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${getUsagePercentage(voiceStats.elevenlabs.characters_used, voiceStats.elevenlabs.characters_limit)}%` }}
+                    style={{
+                      width: `${getUsagePercentage(voiceStats.elevenlabs.characters_used, voiceStats.elevenlabs.characters_limit)}%`,
+                    }}
                   />
                 </div>
               </div>
 
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Ahorro estimado</span>
-                <span className="text-green-600 font-medium">${voiceStats.elevenlabs.cost_saved}</span>
+                <span className="text-green-600 font-medium">
+                  ${voiceStats.elevenlabs.cost_saved}
+                </span>
               </div>
             </div>
           </div>
@@ -219,12 +261,16 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Minutos usados</span>
-                  <span className="font-medium">{voiceStats.vapi.minutes_used}/{voiceStats.vapi.minutes_limit}</span>
+                  <span className="font-medium">
+                    {voiceStats.vapi.minutes_used}/{voiceStats.vapi.minutes_limit}
+                  </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${getUsagePercentage(voiceStats.vapi.minutes_used, voiceStats.vapi.minutes_limit)}%` }}
+                    style={{
+                      width: `${getUsagePercentage(voiceStats.vapi.minutes_used, voiceStats.vapi.minutes_limit)}%`,
+                    }}
                   />
                 </div>
               </div>
@@ -257,12 +303,16 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
               <div>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">SMS enviados</span>
-                  <span className="font-medium">{voiceStats.twilio.messages_sent}/{voiceStats.twilio.messages_limit}</span>
+                  <span className="font-medium">
+                    {voiceStats.twilio.messages_sent}/{voiceStats.twilio.messages_limit}
+                  </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div
                     className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${getUsagePercentage(voiceStats.twilio.messages_sent, voiceStats.twilio.messages_limit)}%` }}
+                    style={{
+                      width: `${getUsagePercentage(voiceStats.twilio.messages_sent, voiceStats.twilio.messages_limit)}%`,
+                    }}
                   />
                 </div>
               </div>
@@ -308,9 +358,7 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    {currentProfile === key && (
-                      <CheckCircle className="w-5 h-5 text-purple-600" />
-                    )}
+                    {currentProfile === key && <CheckCircle className="w-5 h-5 text-purple-600" />}
                   </div>
                 </div>
               ))}
@@ -331,7 +379,7 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
                 </label>
                 <textarea
                   value={testText}
-                  onChange={(e) => setTestText(e.target.value)}
+                  onChange={e => setTestText(e.target.value)}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   rows={3}
                   placeholder="Escribe un texto para generar voz..."
@@ -339,9 +387,7 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
               </div>
 
               <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-500">
-                  Caracteres: {testText.length}/200
-                </div>
+                <div className="text-sm text-gray-500">Caracteres: {testText.length}/200</div>
                 <button
                   onClick={handleGenerateVoice}
                   disabled={isGenerating || !isInitialized}
@@ -368,7 +414,12 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
                       <Volume2 className="w-4 h-4 text-blue-600" />
                     </div>
                     <span className="text-sm text-blue-700">
-                      Generando voz con perfil {spanishVoiceProfiles[currentProfile as keyof typeof spanishVoiceProfiles]?.name}...
+                      Generando voz con perfil{' '}
+                      {
+                        spanishVoiceProfiles[currentProfile as keyof typeof spanishVoiceProfiles]
+                          ?.name
+                      }
+                      ...
                     </span>
                   </div>
                 </div>
@@ -423,7 +474,9 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
             <div className="flex items-center space-x-4 text-sm">
               <div className="flex items-center space-x-1">
                 <DollarSign className="w-4 h-4 text-green-600" />
-                <span className="text-gray-700">Ahorro total: ${voiceStats.elevenlabs.cost_saved + voiceStats.twilio.cost_saved}</span>
+                <span className="text-gray-700">
+                  Ahorro total: ${voiceStats.elevenlabs.cost_saved + voiceStats.twilio.cost_saved}
+                </span>
               </div>
               <div className="flex items-center space-x-1">
                 <Users className="w-4 h-4 text-blue-600" />

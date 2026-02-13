@@ -63,7 +63,7 @@ export const NeuralSignal: React.FC<NeuralSignalProps> = ({ volume }) => {
       canvas.height = canvas.offsetHeight;
       particles = Array.from(
         { length: particleCount },
-        () => new Particle(canvas.width, canvas.height),
+        () => new Particle(canvas.width, canvas.height)
       );
     };
 
@@ -92,7 +92,7 @@ export const NeuralSignal: React.FC<NeuralSignalProps> = ({ volume }) => {
       }
       ctx.stroke();
 
-      particles.forEach((p) => {
+      particles.forEach(p => {
         p.update(canvas.width, canvas.height, volume);
         p.draw(ctx, volume);
       });

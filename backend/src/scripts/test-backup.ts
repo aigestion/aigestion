@@ -38,7 +38,7 @@ async function testDriveAuth() {
     if (error.message.includes('invalid_grant') || error.message.includes('insufficient_scope')) {
       console.log('\n💡 SUGGESTION: Run the following command to fix scopes:');
       console.log(
-        'gcloud auth application-default login --scopes=https://www.googleapis.com/auth/drive,https://www.googleapis.com/auth/cloud-platform',
+        'gcloud auth application-default login --scopes=https://www.googleapis.com/auth/drive,https://www.googleapis.com/auth/cloud-platform'
       );
     }
     process.exit(1);

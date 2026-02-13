@@ -24,7 +24,7 @@ export class WorkerSetup {
         // await emailService.send(to, subject, body);
         logger.info(`Email job completed: ${job.id}`);
       },
-      { connection: redisOptions },
+      { connection: redisOptions }
     );
 
     emailWorker.on('failed', (job, err) => {
@@ -40,7 +40,7 @@ export class WorkerSetup {
         const { SwarmProcessor } = await import('./SwarmProcessor');
         await SwarmProcessor.process(job);
       },
-      { connection: redisOptions },
+      { connection: redisOptions }
     );
 
     swarmWorker.on('failed', (job, err) => {
@@ -58,7 +58,7 @@ export class WorkerSetup {
         await scannerService.cleanupQuarantine();
         logger.info(`Malware quarantine cleanup job completed: ${job.id}`);
       },
-      { connection: redisOptions },
+      { connection: redisOptions }
     );
 
     malwareWorker.on('failed', (job, err) => {
@@ -74,7 +74,7 @@ export class WorkerSetup {
         const { DocumentProcessor } = await import('./DocumentProcessor');
         await DocumentProcessor.process(job);
       },
-      { connection: redisOptions },
+      { connection: redisOptions }
     );
 
     dataWorker.on('failed', (job, err) => {

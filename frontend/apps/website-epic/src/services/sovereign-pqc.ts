@@ -35,9 +35,9 @@ class SovereignPQCService {
       const finalizeRes = await api.post('/sovereign/handshake/finalize', {
         handshakeId,
         clientPublicKey: {
-          classic: this.uint8ArrayToHex(clientClassicKeys.publicKey)
+          classic: this.uint8ArrayToHex(clientClassicKeys.publicKey),
         },
-        clientCiphertext: this.uint8ArrayToHex(ciphertext)
+        clientCiphertext: this.uint8ArrayToHex(ciphertext),
       });
 
       this.sessionToken = finalizeRes.data.sessionToken;

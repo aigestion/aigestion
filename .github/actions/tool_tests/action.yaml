@@ -76,7 +76,7 @@ runs:
         PLUGINS_TEST_CLI_VERSION: ${{ inputs.cli-version }}
         PLUGINS_TEST_CLI_PATH: ${{ env.CLI_PATH }}
         JEST_SUITE_NAME: Tool Tests
-        JEST_JUNIT_SUITE_NAME: "{title} ${{ runner.os }} ${{ inputs.ref-type }}"
+        JEST_JUNIT_SUITE_NAME: '{title} ${{ runner.os }} ${{ inputs.ref-type }}'
 
     - name: Upload prod results
       # TODO(Tyler): Add upload on Windows once the action supports it.

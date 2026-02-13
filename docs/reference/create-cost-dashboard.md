@@ -1,7 +1,11 @@
 # Workflow: Create Cost Monitoring Dashboard in Looker Studio
+
 # ---------------------------------------------------------------
+
 # This workflow guides you through building a premium, dynamic cost‑monitoring dashboard
+
 # that visualises the billing data exported to BigQuery.
+
 # ---------------------------------------------------------------
 
 1. **Open Looker Studio**
@@ -44,4 +48,5 @@
    - Share with `noemisanalex@gmail.com` and any stakeholders (Viewer access).
 
 ---
+
 **Result**: A dynamic, premium‑styled dashboard that updates automatically from the BigQuery export, giving you real‑time visibility into GCP spend and budget health.

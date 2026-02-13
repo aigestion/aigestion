@@ -26,21 +26,21 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
       isSpeaking: false,
       volume: 0,
       error: null,
-      startCall: () => { },
-      stopCall: () => { },
-      toggleMute: () => { },
+      startCall: () => {},
+      stopCall: () => {},
+      toggleMute: () => {},
       isMuted: false,
       duration: 0,
       suggestedActions: [],
       isProcessing: false,
-      startRecording: () => { },
-      stopRecording: () => { }
+      startRecording: () => {},
+      stopRecording: () => {},
     };
   }
 
   const {
     maxDurationSeconds = 120, // 2 minutes max to save credits
-    idleTimeoutSeconds = 30    // 30 seconds of silence to disconnect
+    idleTimeoutSeconds = 30, // 30 seconds of silence to disconnect
   } = options;
 
   const [status, setStatus] = useState<CallStatus>('idle');
@@ -56,7 +56,8 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   useEffect(() => {
     if (typeof window !== 'undefined' && window.Vapi && !vapiRef.current) {
       try {
-        const publicKey = import.meta.env.VITE_VAPI_PUBLIC_KEY || '67c74f53-b26a-4d23-9f5b-91c68e1a6c4b';
+        const publicKey =
+          import.meta.env.VITE_VAPI_PUBLIC_KEY || '67c74f53-b26a-4d23-9f5b-91c68e1a6c4b';
         vapiRef.current = new window.Vapi(publicKey);
         console.log('[Vapi] SDK initialized successfully');
       } catch (err) {
@@ -106,7 +107,9 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   }, []);
 
   const startTotalTimer = () => {
-    if (totalTimerRef.current) { clearTimeout(totalTimerRef.current); }
+    if (totalTimerRef.current) {
+      clearTimeout(totalTimerRef.current);
+    }
     totalTimerRef.current = setTimeout(() => {
       console.log('[VoiceAssistant] Max duration reached. Disconnecting to save credits.');
       stop();
@@ -114,7 +117,9 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   };
 
   const startIdleTimer = () => {
-    if (timerRef.current) { clearTimeout(timerRef.current); }
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
     timerRef.current = setTimeout(() => {
       console.log('[VoiceAssistant] Idle timeout reached. Disconnecting.');
       stop();
@@ -122,12 +127,18 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
   };
 
   const resetIdleTimer = () => {
-    if (timerRef.current) { clearTimeout(timerRef.current); }
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
   };
 
   const stopTimers = () => {
-    if (timerRef.current) { clearTimeout(timerRef.current); }
-    if (totalTimerRef.current) { clearTimeout(totalTimerRef.current); }
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    if (totalTimerRef.current) {
+      clearTimeout(totalTimerRef.current);
+    }
   };
 
   const start = useCallback(async () => {
@@ -143,36 +154,37 @@ export function useVoiceAssistant(options: UseVoiceAssistantOptions = {}) {
     try {
       // Configuration for Daniela - AI Nivel Dios
       const assistantConfig = {
-        name: "Daniela - AIGestion Neural System",
-        firstMessage: "Hola, soy Daniela, tu asistente de inteligencia artificial de AIGestion. ¿En qué puedo ayudarte hoy?",
+        name: 'Daniela - AIGestion Neural System',
+        firstMessage:
+          'Hola, soy Daniela, tu asistente de inteligencia artificial de AIGestion. ¿En qué puedo ayudarte hoy?',
 
         // Deepgram for ultra-fast transcription
         transcriber: {
-          provider: "deepgram",
-          model: "nova-2",
-          language: "es",
+          provider: 'deepgram',
+          model: 'nova-2',
+          language: 'es',
           smartFormat: true,
-          keywords: ["AIGestion", "IA", "Daniela", "soberana", "neural"]
+          keywords: ['AIGestion', 'IA', 'Daniela', 'soberana', 'neural'],
         },
 
         // ElevenLabs for high-quality Spanish voice
         voice: {
-          provider: "elevenlabs",
-          voiceId: import.meta.env.VITE_ELEVENLABS_VOICE_ID || "EXAVITQu4vr4xnSDxMaL",
+          provider: 'elevenlabs',
+          voiceId: import.meta.env.VITE_ELEVENLABS_VOICE_ID || 'EXAVITQu4vr4xnSDxMaL',
           stability: 0.5,
           similarityBoost: 0.75,
-          model: "eleven_multilingual_v2"
+          model: 'eleven_multilingual_v2',
         },
 
         // GPT-4o-mini for intelligent responses
         model: {
-          provider: "openai",
-          model: "gpt-4o-mini",
+          provider: 'openai',
+          model: 'gpt-4o-mini',
           temperature: 0.7,
           maxTokens: 250,
           messages: [
             {
-              role: "system",
+              role: 'system',
               content: `Eres Daniela, la embajadora digital de AIGestion.net - el sistema nervioso de IA más avanzado de América Latina.
 
 IDENTIDAD:
@@ -197,31 +209,26 @@ INSTRUCCIONES:
 - Responde en español de España
 - Sé breve y directa (máximo 50 palabras por respuesta)
 - Haz preguntas para entender mejor las necesidades
-- Menciona casos de éxito cuando sea relevante (legal, retail, manufactura)`
-            }
-          ]
+- Menciona casos de éxito cuando sea relevante (legal, retail, manufactura)`,
+            },
+          ],
         },
 
         // Advanced settings
         recordingEnabled: false,
         hipaaEnabled: false,
         clientMessages: [
-          "transcript",
-          "hang",
-          "function-call",
-          "speech-update",
-          "metadata",
-          "conversation-update"
+          'transcript',
+          'hang',
+          'function-call',
+          'speech-update',
+          'metadata',
+          'conversation-update',
         ],
-        serverMessages: [
-          "end-of-call-report",
-          "status-update",
-          "hang",
-          "function-call"
-        ],
+        serverMessages: ['end-of-call-report', 'status-update', 'hang', 'function-call'],
         silenceTimeoutSeconds: 30,
         maxDurationSeconds: maxDurationSeconds,
-        backgroundSound: "office"
+        backgroundSound: 'office',
       };
 
       await vapiRef.current.start(assistantConfig);
@@ -247,6 +254,6 @@ INSTRUCCIONES:
     error,
     start,
     stop,
-    isConnected: status === 'active'
+    isConnected: status === 'active',
   };
 }

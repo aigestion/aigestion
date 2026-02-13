@@ -13,22 +13,22 @@ router.get('/stats', (req: any, res: any) => userBehaviorMiddleware.getStats(req
 
 // Get user behavior profile
 router.get('/profile/:userId', (req: any, res: any) =>
-  userBehaviorMiddleware.getUserProfile(req as any, res),
+  userBehaviorMiddleware.getUserProfile(req as any, res)
 );
 
 // Get user anomalies
 router.get('/anomalies/:userId', (req: any, res: any) =>
-  userBehaviorMiddleware.getUserAnomalies(req as any, res),
+  userBehaviorMiddleware.getUserAnomalies(req as any, res)
 );
 
 // Get recent anomalies
 router.get('/anomalies', (req: any, res: any) =>
-  userBehaviorMiddleware.getRecentAnomalies(req, res),
+  userBehaviorMiddleware.getRecentAnomalies(req, res)
 );
 
 // Resolve anomaly
 router.post('/anomalies/:anomalyId/resolve', (req: any, res: any) =>
-  userBehaviorMiddleware.resolveAnomaly(req, res),
+  userBehaviorMiddleware.resolveAnomaly(req, res)
 );
 
 // Track custom behavior event
@@ -62,7 +62,7 @@ router.post('/track', async (req: any, res: any) => {
     // Apply behavior tracking
     await new Promise<void>(resolve => {
       userBehaviorMiddleware.trackBehavior(eventType as any)(mockReq as any, mockRes as any, () =>
-        resolve(),
+        resolve()
       );
     });
 

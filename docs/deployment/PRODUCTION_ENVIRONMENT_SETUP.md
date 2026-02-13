@@ -3,6 +3,7 @@
 ## 📋 Variables de Entorno Requeridas
 
 ### Backend Variables
+
 ```bash
 # Server Configuration
 NODE_ENV=production
@@ -61,6 +62,7 @@ VERCEL_ANALYTICS_ID=xxxxxxxx-xxxx-xxxx-xxxxxxxx
 ```
 
 ### Frontend Variables (Vercel)
+
 ```bash
 # Website Epic (Principal)
 VITE_API_BASE_URL=https://aigestion-backend.onrender.com/api/v1
@@ -91,6 +93,7 @@ VITE_DEMO_MODE=true
 ### 1. Configurar Backend
 
 #### Variables de Entorno
+
 ```bash
 # Copiar template
 cp docs/PRODUCTION_ENVIRONMENT_SETUP.md backend/.env.production
@@ -100,6 +103,7 @@ nano backend/.env.production
 ```
 
 #### Actualizar `backend/src/config/env.schema.ts`
+
 ```typescript
 // Asegurar que todas las variables requeridas estén definidas
 const envSchema = z.object({
@@ -116,6 +120,7 @@ const envSchema = z.object({
 ### 2. Configurar Frontend
 
 #### Vercel CLI Setup
+
 ```bash
 # Instalar Vercel CLI
 npm install -g vercel
@@ -131,6 +136,7 @@ vercel env add VITE_ELEVENLABS_VOICE_ID
 ```
 
 #### Para cada aplicación:
+
 ```bash
 # Website Epic
 cd frontend/apps/website-epic
@@ -160,16 +166,19 @@ vercel env add VITE_DEMO_MODE "true"
 ## 🌐 Configuración de Servicios Externos
 
 ### OpenAI Configuration
+
 1. Ve a https://platform.openai.com/api-keys
 2. Crea nueva API key
 3. Copia y pega en `OPENAI_API_KEY`
 
 ### Anthropic Configuration
+
 1. Ve a https://console.anthropic.com/
 2. Crea nueva API key
 3. Copia y pega en `ANTHROPIC_API_KEY`
 
 ### Google Cloud Configuration
+
 1. Crea proyecto en Google Cloud Console
 2. Habilita APIs:
    - Cloud Speech-to-Text
@@ -180,16 +189,19 @@ vercel env add VITE_DEMO_MODE "true"
 5. Guarda como `service-account.json`
 
 ### ElevenLabs Configuration
+
 1. Ve a https://elevenlabs.io/app/settings/api-key
 2. Crea nueva API key
 3. Copia y pega en `ELEVENLABS_API_KEY`
 
 ### MongoDB Atlas Configuration
+
 1. Crea cluster en MongoDB Atlas
 2. Configura IP whitelist
 3. Copia connection string a `MONGODB_URI`
 
 ### Redis Configuration
+
 1. Crea cluster en Redis Cloud
 2. Copia connection string a `REDIS_URL`
 
@@ -198,6 +210,7 @@ vercel env add VITE_DEMO_MODE "true"
 ## 🔒 Configuración de Seguridad
 
 ### JWT Configuration
+
 ```bash
 # Generar JWT secret fuerte
 openssl rand -base64 32
@@ -206,26 +219,30 @@ openssl rand -base64 32
 ```
 
 ### CORS Configuration
+
 ```typescript
 // En backend/src/app.ts
-app.use(cors({
-  origin: [
-    'https://aigestion.net',
-    'https://admin.aigestion.net',
-    'https://client.aigestion.net',
-    'https://demo.aigestion.net'
-  ],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      'https://aigestion.net',
+      'https://admin.aigestion.net',
+      'https://client.aigestion.net',
+      'https://demo.aigestion.net',
+    ],
+    credentials: true,
+  })
+);
 ```
 
 ### Rate Limiting
+
 ```typescript
 // En backend/src/config/rate-limit.config.ts
 export const rateLimitConfig = {
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // requests per window
-  message: 'Too many requests from this IP'
+  message: 'Too many requests from this IP',
 };
 ```
 
@@ -234,6 +251,7 @@ export const rateLimitConfig = {
 ## 📊 Configuración de Monitoreo
 
 ### Sentry Setup
+
 ```bash
 # Instalar Sentry
 npm install @sentry/node
@@ -243,6 +261,7 @@ export SENTRY_DSN=https://xxxxxxxxxxxxx.ingest.sentry.io/xxxxxxx
 ```
 
 ### Google Analytics
+
 ```bash
 # Agregar a frontend
 VITE_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
@@ -256,6 +275,7 @@ VITE_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
 ## 🚀 Deploy en Producción
 
 ### Backend Deploy (Render)
+
 ```bash
 # Instalar Render CLI
 npm install -g @render/cli
@@ -277,6 +297,7 @@ render deploy
 ```
 
 ### Frontend Deploy (Vercel)
+
 ```bash
 # Deploy Website Epic
 cd frontend/apps/website-epic
@@ -300,6 +321,7 @@ vercel --prod --name aigestion-demo
 ## 🌐 Configuración de Dominios
 
 ### Vercel Domain Setup
+
 ```bash
 # Configurar dominio principal
 vercel domains add aigestion.net
@@ -311,6 +333,7 @@ vercel domains add demo.aigestion.net
 ```
 
 ### DNS Configuration
+
 ```
 # A Record para dominio principal
 aigestion.net.     IN  A     76.76.19.19
@@ -326,6 +349,7 @@ demo.aigestion.net.   IN  CNAME  cname.vercel-dns.com
 ## 🔍 Verificación de Configuración
 
 ### Backend Health Check
+
 ```bash
 # Verificar que el backend está corriendo
 curl https://aigestion-backend.onrender.com/api/v1/health
@@ -335,6 +359,7 @@ curl https://aigestion-backend.onrender.com/api/v1/enhanced-voice/config
 ```
 
 ### Frontend Health Check
+
 ```bash
 # Verificar que los sitios están activos
 curl -I https://aigestion.net
@@ -344,6 +369,7 @@ curl -I https://demo.aigestion.net
 ```
 
 ### API Integration Test
+
 ```bash
 # Test de integración completa
 curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/process \
@@ -361,6 +387,7 @@ curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/proces
 ## 📋 Checklist Pre-Deploy
 
 ### Backend Checklist
+
 - [ ] Variables de entorno configuradas
 - [ ] Base de datos conectada
 - [ ] Redis conectado
@@ -372,6 +399,7 @@ curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/proces
 - [ ] Logs configurados
 
 ### Frontend Checklist
+
 - [ ] Variables de entorno configuradas en Vercel
 - [ ] Build exitoso
 - [ ] Rutas SPA configuradas
@@ -381,6 +409,7 @@ curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/proces
 - [ ] Performance optimizado
 
 ### Security Checklist
+
 - [ ] HTTPS habilitado
 - [ ] Headers de seguridad configurados
 - [ ] API keys seguras
@@ -394,6 +423,7 @@ curl -X POST https://aigestion-backend.onrender.com/api/v1/enhanced-voice/proces
 ## 🚨 Troubleshooting Común
 
 ### Problemas de Variables de Entorno
+
 ```bash
 # Verificar variables de entorno
 echo $NODE_ENV
@@ -405,6 +435,7 @@ cat .env.production
 ```
 
 ### Problemas de Conexión
+
 ```bash
 # Verificar conexión a MongoDB
 mongosh "$MONGODB_URI" --eval "db.runCommand({ping: 1})"
@@ -414,6 +445,7 @@ redis-cli -u "$REDIS_URL" ping
 ```
 
 ### Problemas de API
+
 ```bash
 # Verificar API key de OpenAI
 curl -H "Authorization: Bearer $OPENAI_API_KEY" \
@@ -425,6 +457,7 @@ curl -H "xi-api-key: $ELEVENLABS_API_KEY" \
 ```
 
 ### Problemas de Frontend
+
 ```bash
 # Verificar build
 npm run build
@@ -441,6 +474,7 @@ vercel logs
 ## 📞 Soporte y Monitoreo
 
 ### Logs y Monitoreo
+
 - **Backend Logs**: Render dashboard
 - **Frontend Logs**: Vercel dashboard
 - **Error Tracking**: Sentry dashboard
@@ -448,6 +482,7 @@ vercel logs
 - **API Monitoring**: Custom dashboard
 
 ### Alertas Automáticas
+
 - **Uptime Monitoring**: UptimeRobot
 - **Error Rate**: Sentry alerts
 - **Performance**: Lighthouse CI
@@ -458,6 +493,7 @@ vercel logs
 ## 🔄 Mantenimiento Continuo
 
 ### Actualizaciones
+
 ```bash
 # Actualizar dependencias
 npm update
@@ -470,6 +506,7 @@ pnpm update
 ```
 
 ### Backups
+
 ```bash
 # Backup de base de datos
 mongodump --uri="$MONGODB_URI" --out=backup-$(date +%Y%m%d)
@@ -479,6 +516,7 @@ cp .env.production .env.backup-$(date +%Y%m%d)
 ```
 
 ### Monitoreo Continuo
+
 ```bash
 # Health checks automatizados
 curl -f https://aigestion-backend.onrender.com/api/v1/health || echo "Backend down"

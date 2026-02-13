@@ -85,8 +85,8 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
   const [breadcrumbs, setBreadcrumbs] = useState<ErrorReport['breadcrumbs']>([]);
 
   // Generate unique session ID
-  const sessionId = useState(() =>
-    'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+  const sessionId = useState(
+    () => 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
   )[0];
 
   // Generate error fingerprint
@@ -104,7 +104,7 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash;
     }
     return Math.abs(hash).toString(16);
@@ -177,136 +177,140 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
   }, [userId, getDeviceInfo, getNetworkInfo, getMemoryInfo]);
 
   // Add breadcrumb
-  const addBreadcrumb = useCallback((
-    message: string,
-    category: string,
-    level: string = 'info',
-    data?: any
-  ) => {
-    if (!enableBreadcrumbs) return;
+  const addBreadcrumb = useCallback(
+    (message: string, category: string, level: string = 'info', data?: any) => {
+      if (!enableBreadcrumbs) return;
 
-    const breadcrumb = {
-      timestamp: Date.now(),
-      message,
-      category,
-      level,
-      data,
-    };
+      const breadcrumb = {
+        timestamp: Date.now(),
+        message,
+        category,
+        level,
+        data,
+      };
 
-    setBreadcrumbs(prev => {
-      const updated = [...prev, breadcrumb];
-      return updated.slice(-maxBreadcrumbs);
-    });
-  }, [enableBreadcrumbs, maxBreadcrumbs]);
+      setBreadcrumbs(prev => {
+        const updated = [...prev, breadcrumb];
+        return updated.slice(-maxBreadcrumbs);
+      });
+    },
+    [enableBreadcrumbs, maxBreadcrumbs]
+  );
 
   // Check if error should be ignored
-  const shouldIgnoreError = useCallback((error: Error): boolean => {
-    return ignoreErrors.some(pattern => pattern.test(error.message));
-  }, [ignoreErrors]);
+  const shouldIgnoreError = useCallback(
+    (error: Error): boolean => {
+      return ignoreErrors.some(pattern => pattern.test(error.message));
+    },
+    [ignoreErrors]
+  );
 
   // Send error to tracking service
-  const sendError = useCallback(async (errorReport: ErrorReport) => {
-    if (!endpoint || Math.random() > sampleRate) return;
+  const sendError = useCallback(
+    async (errorReport: ErrorReport) => {
+      if (!endpoint || Math.random() > sampleRate) return;
 
-    try {
-      await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(apiKey && { 'Authorization': `Bearer ${apiKey}` }),
-        },
-        body: JSON.stringify(errorReport),
-      });
+      try {
+        await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(apiKey && { Authorization: `Bearer ${apiKey}` }),
+          },
+          body: JSON.stringify(errorReport),
+        });
 
-      if (debugMode) {
-        console.log('Error Tracking: Error sent', errorReport);
+        if (debugMode) {
+          console.log('Error Tracking: Error sent', errorReport);
+        }
+      } catch (err) {
+        if (debugMode) {
+          console.error('Error Tracking: Failed to send error', err);
+        }
       }
-    } catch (err) {
-      if (debugMode) {
-        console.error('Error Tracking: Failed to send error', err);
-      }
-    }
-  }, [endpoint, apiKey, sampleRate, debugMode]);
+    },
+    [endpoint, apiKey, sampleRate, debugMode]
+  );
 
   // Capture JavaScript error
-  const captureError = useCallback((
-    error: Error,
-    level: ErrorReport['level'] = 'error',
-    tags?: string[],
-    customData?: Record<string, any>
-  ) => {
-    if (shouldIgnoreError(error)) return;
+  const captureError = useCallback(
+    (
+      error: Error,
+      level: ErrorReport['level'] = 'error',
+      tags?: string[],
+      customData?: Record<string, any>
+    ) => {
+      if (shouldIgnoreError(error)) return;
 
-    const context = createErrorContext();
-    if (customData) {
-      context.customData = { ...context.customData, ...customData };
-    }
+      const context = createErrorContext();
+      if (customData) {
+        context.customData = { ...context.customData, ...customData };
+      }
 
-    const errorReport: ErrorReport = {
-      id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
-      name: error.name,
-      message: error.message,
-      stack: error.stack,
-      type: 'javascript',
-      level,
-      context,
-      fingerprint: generateFingerprint(error, context),
-      tags,
-      breadcrumbs: [...breadcrumbs],
-    };
+      const errorReport: ErrorReport = {
+        id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+        type: 'javascript',
+        level,
+        context,
+        fingerprint: generateFingerprint(error, context),
+        tags,
+        breadcrumbs: [...breadcrumbs],
+      };
 
-    setErrors(prev => [...prev, errorReport]);
-    sendError(errorReport);
-  }, [shouldIgnoreError, createErrorContext, generateFingerprint, breadcrumbs, sendError]);
+      setErrors(prev => [...prev, errorReport]);
+      sendError(errorReport);
+    },
+    [shouldIgnoreError, createErrorContext, generateFingerprint, breadcrumbs, sendError]
+  );
 
   // Capture network error
-  const captureNetworkError = useCallback((
-    url: string,
-    status: number,
-    error: string,
-    level: ErrorReport['level'] = 'error'
-  ) => {
-    const context = createErrorContext();
+  const captureNetworkError = useCallback(
+    (url: string, status: number, error: string, level: ErrorReport['level'] = 'error') => {
+      const context = createErrorContext();
 
-    const errorReport: ErrorReport = {
-      id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
-      name: 'NetworkError',
-      message: `Network error: ${status} - ${error}`,
-      stack: `URL: ${url}`,
-      type: 'network',
-      level,
-      context,
-      fingerprint: `network_${status}_${url}`,
-      breadcrumbs: [...breadcrumbs],
-    };
+      const errorReport: ErrorReport = {
+        id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
+        name: 'NetworkError',
+        message: `Network error: ${status} - ${error}`,
+        stack: `URL: ${url}`,
+        type: 'network',
+        level,
+        context,
+        fingerprint: `network_${status}_${url}`,
+        breadcrumbs: [...breadcrumbs],
+      };
 
-    setErrors(prev => [...prev, errorReport]);
-    sendError(errorReport);
-  }, [createErrorContext, breadcrumbs, sendError]);
+      setErrors(prev => [...prev, errorReport]);
+      sendError(errorReport);
+    },
+    [createErrorContext, breadcrumbs, sendError]
+  );
 
   // Capture resource error
-  const captureResourceError = useCallback((
-    url: string,
-    error: string,
-    level: ErrorReport['level'] = 'error'
-  ) => {
-    const context = createErrorContext();
+  const captureResourceError = useCallback(
+    (url: string, error: string, level: ErrorReport['level'] = 'error') => {
+      const context = createErrorContext();
 
-    const errorReport: ErrorReport = {
-      id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
-      name: 'ResourceError',
-      message: `Resource error: ${error}`,
-      stack: `URL: ${url}`,
-      type: 'resource',
-      level,
-      context,
-      fingerprint: `resource_${url}`,
-      breadcrumbs: [...breadcrumbs],
-    };
+      const errorReport: ErrorReport = {
+        id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 9),
+        name: 'ResourceError',
+        message: `Resource error: ${error}`,
+        stack: `URL: ${url}`,
+        type: 'resource',
+        level,
+        context,
+        fingerprint: `resource_${url}`,
+        breadcrumbs: [...breadcrumbs],
+      };
 
-    setErrors(prev => [...prev, errorReport]);
-    sendError(errorReport);
-  }, [createErrorContext, breadcrumbs, sendError]);
+      setErrors(prev => [...prev, errorReport]);
+      sendError(errorReport);
+    },
+    [createErrorContext, breadcrumbs, sendError]
+  );
 
   // Setup global error handlers
   useEffect(() => {
@@ -325,7 +329,9 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
 
     // Unhandled promise rejections
     const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
-      const error = new Error(event.reason?.message || event.reason || 'Unhandled Promise Rejection');
+      const error = new Error(
+        event.reason?.message || event.reason || 'Unhandled Promise Rejection'
+      );
       captureError(error, 'error', ['unhandledrejection'], {
         reason: event.reason,
       });
@@ -401,20 +407,29 @@ export function useErrorTracking(config: ErrorTrackingConfig = {}) {
   ]);
 
   // Manual error capture methods
-  const captureException = useCallback((exception: any, tags?: string[]) => {
-    const error = exception instanceof Error ? exception : new Error(String(exception));
-    captureError(error, 'error', tags);
-  }, [captureError]);
+  const captureException = useCallback(
+    (exception: any, tags?: string[]) => {
+      const error = exception instanceof Error ? exception : new Error(String(exception));
+      captureError(error, 'error', tags);
+    },
+    [captureError]
+  );
 
-  const captureMessage = useCallback((message: string, level: ErrorReport['level'] = 'info', tags?: string[]) => {
-    const error = new Error(message);
-    captureError(error, level, tags);
-  }, [captureError]);
+  const captureMessage = useCallback(
+    (message: string, level: ErrorReport['level'] = 'info', tags?: string[]) => {
+      const error = new Error(message);
+      captureError(error, level, tags);
+    },
+    [captureError]
+  );
 
-  const captureUserFeedback = useCallback((feedback: string, rating?: number) => {
-    const error = new Error(`User feedback: ${feedback}`);
-    captureError(error, 'info', ['user-feedback'], { rating });
-  }, [captureError]);
+  const captureUserFeedback = useCallback(
+    (feedback: string, rating?: number) => {
+      const error = new Error(`User feedback: ${feedback}`);
+      captureError(error, 'info', ['user-feedback'], { rating });
+    },
+    [captureError]
+  );
 
   const clearErrors = useCallback(() => {
     setErrors([]);
@@ -521,9 +536,7 @@ export function ErrorBoundary({
           </button>
           {debugMode && (
             <details className="mt-6 text-left">
-              <summary className="cursor-pointer text-sm text-gray-500">
-                Error Details
-              </summary>
+              <summary className="cursor-pointer text-sm text-gray-500">Error Details</summary>
               <pre className="mt-2 p-4 bg-gray-100 dark:bg-gray-800 rounded text-xs overflow-auto">
                 {error.stack}
               </pre>
@@ -559,81 +572,66 @@ export function ErrorTrackingDashboard() {
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
-            {stats.total}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Total Errors
-          </div>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Total Errors</div>
         </div>
 
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-red-600 dark:text-red-400">
             {stats.byLevel.error}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Errors
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Errors</div>
         </div>
 
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
             {stats.byLevel.warning}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Warnings
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Warnings</div>
         </div>
 
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            {stats.recent}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Recent (1h)
-          </div>
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.recent}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Recent (1h)</div>
         </div>
       </div>
 
       {/* Error List */}
       <div>
-        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-          Recent Errors
-        </h3>
+        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Recent Errors</h3>
         <div className="space-y-2 max-h-64 overflow-y-auto">
-          {errors.slice(-10).reverse().map((error, index) => (
-            <div
-              key={error.id}
-              className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
-            >
-              <div className="flex justify-between items-start mb-2">
-                <span className="font-medium text-red-600 dark:text-red-400">
-                  {error.name}
-                </span>
-                <span className="text-xs text-gray-500">
-                  {new Date(error.context.timestamp).toLocaleString()}
-                </span>
-              </div>
-
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                {error.message}
-              </div>
-
-              <div className="flex gap-2 text-xs">
-                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  {error.type}
-                </span>
-                <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                  {error.level}
-                </span>
-                {error.tags?.map(tag => (
-                  <span key={tag} className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded">
-                    {tag}
+          {errors
+            .slice(-10)
+            .reverse()
+            .map((error, index) => (
+              <div
+                key={error.id}
+                className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <span className="font-medium text-red-600 dark:text-red-400">{error.name}</span>
+                  <span className="text-xs text-gray-500">
+                    {new Date(error.context.timestamp).toLocaleString()}
                   </span>
-                ))}
+                </div>
+
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">{error.message}</div>
+
+                <div className="flex gap-2 text-xs">
+                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
+                    {error.type}
+                  </span>
+                  <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
+                    {error.level}
+                  </span>
+                  {error.tags?.map(tag => (
+                    <span key={tag} className="px-2 py-1 bg-blue-100 dark:bg-blue-900 rounded">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           {errors.length === 0 && (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">

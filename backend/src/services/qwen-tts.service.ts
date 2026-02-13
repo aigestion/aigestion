@@ -36,7 +36,7 @@ export class QwenTTSService {
   async textToSpeech(
     text: string,
     outputPath: string,
-    options: QwenTTSOptions = {},
+    options: QwenTTSOptions = {}
   ): Promise<string> {
     try {
       if (!this.apiKey) {
@@ -44,7 +44,7 @@ export class QwenTTSService {
       }
 
       logger.info(
-        `[QwenTTSService] Synthesizing voice (Qwen3-TTS) for: "${text.substring(0, 30)}..."`,
+        `[QwenTTSService] Synthesizing voice (Qwen3-TTS) for: "${text.substring(0, 30)}..."`
       );
 
       const model = options.model || 'qwen3-tts-1.7b';
@@ -74,7 +74,7 @@ export class QwenTTSService {
             'X-DashScope-SSE': 'disable',
           },
           responseType: 'arraybuffer',
-        },
+        }
       );
 
       const buffer = Buffer.from(response.data);

@@ -8,7 +8,11 @@ import { stats } from '../utils/stats';
 
 @injectable()
 export class AnalyticsController {
-  public async getAnalyticsOverview(_req: Request, res: Response, next: NextFunction): Promise<void> {
+  public async getAnalyticsOverview(
+    _req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const cacheKey = 'analytics:overview:real';
       const cachedData = await getCache(cacheKey);
@@ -66,12 +70,14 @@ export class AnalyticsController {
 
       const usage = {
         cpu: Array.from({ length: 60 }, () =>
-          Number.parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1)),
+          Number.parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1))
         ),
         memory: Array.from({ length: 60 }, () =>
-          Number.parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1)),
+          Number.parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1))
         ),
-        network: Array.from({ length: 60 }, () => Number.parseFloat((Math.random() * 10).toFixed(1))),
+        network: Array.from({ length: 60 }, () =>
+          Number.parseFloat((Math.random() * 10).toFixed(1))
+        ),
       };
 
       res.json(usage);
@@ -100,7 +106,20 @@ export class AnalyticsController {
 
   public async getDashboardData(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
       const revenue = months.map(month => ({
         name: month,
         value: Math.floor(Math.random() * 50000) + 20000 + Math.random() * 10000,

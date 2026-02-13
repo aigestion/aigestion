@@ -1,1 +1,27 @@
-{"rustc":2490638836439573635,"features":"[]","declared_features":"[]","target":6254279608901432505,"profile":2040997289075261528,"path":4942398508502643691,"deps":[[6514497278518495359,"ignore",false,16876709149000516250],[7496302899144878737,"clap",false,7268737574836003092],[13548984313718623784,"serde",false,17293791459613741712],[13795362694956882968,"serde_json",false,10943740474673803955],[14807177696891839338,"rayon",false,18241581328197999295],[15622660310229662834,"walkdir",false,12689180027190023586]],"local":[{"CheckDepInfo":{"dep_info":"release\\.fingerprint\\rag-core-3350d243f59fc1e2\\dep-bin-rag-core","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 2490638836439573635,
+  "features": "[]",
+  "declared_features": "[]",
+  "target": 6254279608901432505,
+  "profile": 2040997289075261528,
+  "path": 4942398508502643691,
+  "deps": [
+    [6514497278518495359, "ignore", false, 16876709149000516250],
+    [7496302899144878737, "clap", false, 7268737574836003092],
+    [13548984313718623784, "serde", false, 17293791459613741712],
+    [13795362694956882968, "serde_json", false, 10943740474673803955],
+    [14807177696891839338, "rayon", false, 18241581328197999295],
+    [15622660310229662834, "walkdir", false, 12689180027190023586]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "release\\.fingerprint\\rag-core-3350d243f59fc1e2\\dep-bin-rag-core",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

@@ -25,7 +25,7 @@ export class AgentService {
     const hasCredits = await this.billingService.checkCredits(userId);
     if (!hasCredits) {
       this.logger.warn(`User ${userId} has insufficient credits.`);
-      return "I apologize, but you have insufficient credits to process this request. Please top up your subscription.";
+      return 'I apologize, but you have insufficient credits to process this request. Please top up your subscription.';
     }
 
     // 2. Memory Retrieval

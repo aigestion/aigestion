@@ -22,7 +22,9 @@ async function verifySecurityHandshake() {
     const danielaStatus = await client.getDanielaStatus();
     console.log('✅ Authenticated Daniela Status success:', JSON.stringify(danielaStatus));
   } catch (error) {
-    console.log('❌ Authenticated Daniela Status failed. Verify IA_ENGINE_API_KEY in .env and routes.py');
+    console.log(
+      '❌ Authenticated Daniela Status failed. Verify IA_ENGINE_API_KEY in .env and routes.py'
+    );
     process.exit(1);
   }
 

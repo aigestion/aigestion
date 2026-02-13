@@ -122,7 +122,7 @@ export class SecurityDashboardService {
     this.malwareScanner = container.get<MalwareScannerService>(TYPES.MalwareScannerService);
     this.twoFactorService = container.get<TwoFactorService>(TYPES.TwoFactorService);
     this.threatIntelService = container.get<ThreatIntelligenceService>(
-      TYPES.ThreatIntelligenceService,
+      TYPES.ThreatIntelligenceService
     );
     this.behaviorService = container.get<UserBehaviorService>(UserBehaviorService);
     this.loggingService = container.get<CentralizedLoggingService>(CENTRAL_LOGGING_SERVICE_NAME);
@@ -743,7 +743,7 @@ export class SecurityDashboardService {
       const backupScore = this.calculateCategoryScore(backupStats);
 
       const overall = Math.round(
-        (wafScore + malwareScore + authScore + monitoringScore + backupScore) / 5,
+        (wafScore + malwareScore + authScore + monitoringScore + backupScore) / 5
       );
 
       const recommendations = this.generateRecommendations({
@@ -891,7 +891,7 @@ export class SecurityDashboardService {
         'Backup',
         'Success Rate',
         `${((data.backup.stats.successfulBackups / data.backup.stats.totalBackups) * 100).toFixed(
-          1,
+          1
         )}%`,
         new Date().toISOString(),
         '',

@@ -1,6 +1,7 @@
 # 🚀 AIGestion Development Guide
 
 ## 📋 Table of Contents
+
 - [Quick Start](#quick-start)
 - [Development Environment](#development-environment)
 - [Project Structure](#project-structure)
@@ -16,6 +17,7 @@
 ## ⚡ Quick Start
 
 ### Prerequisites
+
 ```bash
 # Required Software
 - Node.js 22+
@@ -26,6 +28,7 @@
 ```
 
 ### One-Command Setup
+
 ```bash
 # Clone and setup
 git clone https://github.com/aigestion/aigestion-net.git
@@ -38,6 +41,7 @@ pnpm run dev
 ```
 
 ### Environment Setup
+
 ```bash
 # Copy environment template
 cp .env.example .env
@@ -59,6 +63,7 @@ ANTHROPIC_API_KEY=...
 ## 🛠️ Development Environment
 
 ### IDE Configuration
+
 ```json
 // .vscode/settings.json
 {
@@ -76,6 +81,7 @@ ANTHROPIC_API_KEY=...
 ```
 
 ### VS Code Extensions
+
 ```json
 // Recommended Extensions
 [
@@ -90,6 +96,7 @@ ANTHROPIC_API_KEY=...
 ```
 
 ### Docker Development
+
 ```bash
 # Start all services
 docker-compose up -d
@@ -106,6 +113,7 @@ docker-compose down
 ## 📁 Project Structure Deep Dive
 
 ### Monorepo Organization
+
 ```
 aigestion/
 ├── 📁 backend/                 # Node.js API Server
@@ -145,26 +153,27 @@ aigestion/
 ```
 
 ### File Naming Conventions
+
 ```typescript
 // Components: PascalCase
-UserProfile.tsx
-DashboardLayout.tsx
+UserProfile.tsx;
+DashboardLayout.tsx;
 
 // Services: camelCase
-userService.ts
-authService.ts
+userService.ts;
+authService.ts;
 
 // Utilities: camelCase
-formatDate.ts
-validateEmail.ts
+formatDate.ts;
+validateEmail.ts;
 
 // Types: PascalCase
-UserType.ts
-ApiResponse.ts
+UserType.ts;
+ApiResponse.ts;
 
 // Constants: UPPER_SNAKE_CASE
-API_ENDPOINTS.ts
-ERROR_MESSAGES.ts
+API_ENDPOINTS.ts;
+ERROR_MESSAGES.ts;
 ```
 
 ---
@@ -174,6 +183,7 @@ ERROR_MESSAGES.ts
 ### TypeScript Guidelines
 
 #### 1. Strict Type Safety
+
 ```typescript
 // ✅ Good: Explicit types
 interface User {
@@ -188,12 +198,13 @@ const getUser = async (id: string): Promise<User | null> => {
 };
 
 // ❌ Bad: Implicit any
-const getUser = async (id) => {
+const getUser = async id => {
   return await userRepository.findById(id);
 };
 ```
 
 #### 2. Interface vs Type
+
 ```typescript
 // ✅ Use interface for objects
 interface ApiResponse<T> {
@@ -208,6 +219,7 @@ type Id = string | number;
 ```
 
 #### 3. Function Signatures
+
 ```typescript
 // ✅ Descriptive parameter names
 const createUser = async (
@@ -226,6 +238,7 @@ const create = async (data, opts) => {
 ### React/TypeScript Patterns
 
 #### 1. Component Structure
+
 ```typescript
 // ✅ Proper component structure
 interface UserProfileProps {
@@ -273,6 +286,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 ```
 
 #### 2. Custom Hooks
+
 ```typescript
 // ✅ Custom hook pattern
 interface UseUserReturn {
@@ -297,7 +311,8 @@ export const useUser = (userId: string): UseUserReturn => {
   };
 
   useEffect(() => {
-    userService.getById(userId)
+    userService
+      .getById(userId)
       .then(setUser)
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
@@ -310,6 +325,7 @@ export const useUser = (userId: string): UseUserReturn => {
 ### Backend Patterns
 
 #### 1. Controller Structure
+
 ```typescript
 // ✅ Clean controller pattern
 export class UserController {
@@ -330,7 +346,7 @@ export class UserController {
       return {
         data: user,
         status: 200,
-        message: 'User retrieved successfully'
+        message: 'User retrieved successfully',
       };
     } catch (error) {
       this.logger.error('Failed to get user', { id, error });
@@ -339,16 +355,14 @@ export class UserController {
   }
 
   @Post('/')
-  async createUser(
-    @Body() userData: CreateUserRequest
-  ): Promise<ApiResponse<User>> {
+  async createUser(@Body() userData: CreateUserRequest): Promise<ApiResponse<User>> {
     try {
       const user = await this.userService.create(userData);
 
       return {
         data: user,
         status: 201,
-        message: 'User created successfully'
+        message: 'User created successfully',
       };
     } catch (error) {
       this.logger.error('Failed to create user', { userData, error });
@@ -359,6 +373,7 @@ export class UserController {
 ```
 
 #### 2. Service Layer
+
 ```typescript
 // ✅ Service with dependency injection
 export class UserService {
@@ -373,9 +388,7 @@ export class UserService {
     const validatedData = this.validateUserData(userData);
 
     // Check for duplicates
-    const existingUser = await this.userRepository.findByEmail(
-      validatedData.email
-    );
+    const existingUser = await this.userRepository.findByEmail(validatedData.email);
 
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
@@ -386,7 +399,7 @@ export class UserService {
       ...validatedData,
       id: generateId(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
 
     // Send welcome email
@@ -411,6 +424,7 @@ export class UserService {
 ### Unit Testing
 
 #### 1. Test Structure
+
 ```typescript
 // ✅ Organized test file
 describe('UserService', () => {
@@ -422,11 +436,7 @@ describe('UserService', () => {
     mockUserRepository = createMockUserRepository();
     mockEmailService = createMockEmailService();
 
-    userService = new UserService(
-      mockUserRepository,
-      mockEmailService,
-      mockLogger
-    );
+    userService = new UserService(mockUserRepository, mockEmailService, mockLogger);
   });
 
   describe('create', () => {
@@ -435,14 +445,14 @@ describe('UserService', () => {
       const userData: CreateUserRequest = {
         name: 'John Doe',
         email: 'john@example.com',
-        role: 'user'
+        role: 'user',
       };
 
       const expectedUser: User = {
         id: '123',
         ...userData,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       mockUserRepository.findByEmail.mockResolvedValue(null);
@@ -454,13 +464,8 @@ describe('UserService', () => {
       // Assert
       expect(result).toEqual(expectedUser);
       expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(userData.email);
-      expect(mockUserRepository.create).toHaveBeenCalledWith(
-        expect.objectContaining(userData)
-      );
-      expect(mockEmailService.sendWelcomeEmail).toHaveBeenCalledWith(
-        userData.email,
-        userData.name
-      );
+      expect(mockUserRepository.create).toHaveBeenCalledWith(expect.objectContaining(userData));
+      expect(mockEmailService.sendWelcomeEmail).toHaveBeenCalledWith(userData.email, userData.name);
     });
 
     it('should throw ConflictException if user already exists', async () => {
@@ -468,28 +473,27 @@ describe('UserService', () => {
       const userData: CreateUserRequest = {
         name: 'John Doe',
         email: 'john@example.com',
-        role: 'user'
+        role: 'user',
       };
 
       const existingUser: User = {
         id: '123',
         ...userData,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       mockUserRepository.findByEmail.mockResolvedValue(existingUser);
 
       // Act & Assert
-      await expect(userService.create(userData))
-        .rejects
-        .toThrow(ConflictException);
+      await expect(userService.create(userData)).rejects.toThrow(ConflictException);
     });
   });
 });
 ```
 
 #### 2. Mock Utilities
+
 ```typescript
 // test-utils.ts
 export const createMockUserRepository = (): jest.Mocked<UserRepository> => ({
@@ -498,7 +502,7 @@ export const createMockUserRepository = (): jest.Mocked<UserRepository> => ({
   update: jest.fn(),
   delete: jest.fn(),
   findByEmail: jest.fn(),
-  findAll: jest.fn()
+  findAll: jest.fn(),
 });
 
 export const createMockUserService = (): UserService => {
@@ -511,6 +515,7 @@ export const createMockUserService = (): UserService => {
 ### Integration Testing
 
 #### 1. API Testing
+
 ```typescript
 // integration/user.test.ts
 describe('User API', () => {
@@ -535,23 +540,17 @@ describe('User API', () => {
       const userData = {
         name: 'John Doe',
         email: 'john@example.com',
-        role: 'user'
+        role: 'user',
       };
 
-      const response = await request(app)
-        .post('/api/users')
-        .send(userData)
-        .expect(201);
+      const response = await request(app).post('/api/users').send(userData).expect(201);
 
       expect(response.body.data).toMatchObject(userData);
       expect(response.body.data.id).toBeDefined();
     });
 
     it('should validate required fields', async () => {
-      const response = await request(app)
-        .post('/api/users')
-        .send({})
-        .expect(400);
+      const response = await request(app).post('/api/users').send({}).expect(400);
 
       expect(response.body.errors).toContain('name is required');
       expect(response.body.errors).toContain('email is required');
@@ -563,6 +562,7 @@ describe('User API', () => {
 ### Frontend Testing
 
 #### 1. Component Testing
+
 ```typescript
 // UserProfile.test.tsx
 describe('UserProfile', () => {
@@ -620,6 +620,7 @@ describe('UserProfile', () => {
 ## 🌿 Git Workflow
 
 ### Branch Strategy
+
 ```bash
 # Main branches
 main          # Production code
@@ -639,6 +640,7 @@ hotfix/critical-bug
 ```
 
 ### Commit Message Format
+
 ```bash
 # Format: <type>(<scope>): <description>
 
@@ -659,6 +661,7 @@ test(user): add unit tests for UserService
 ```
 
 ### Pull Request Process
+
 ```bash
 # 1. Create feature branch
 git checkout -b feature/new-feature
@@ -684,6 +687,7 @@ git push origin feature/new-feature
 ## 🐛 Debugging
 
 ### Backend Debugging
+
 ```typescript
 // Debug configuration
 {
@@ -701,6 +705,7 @@ git push origin feature/new-feature
 ```
 
 ### Frontend Debugging
+
 ```typescript
 // React DevTools integration
 if (process.env.NODE_ENV === 'development') {
@@ -729,6 +734,7 @@ export class UserService {
 ```
 
 ### Database Debugging
+
 ```typescript
 // Query logging
 import { logger } from './utils/logger';
@@ -751,6 +757,7 @@ export class UserRepository {
 ## ⚡ Performance
 
 ### Frontend Performance
+
 ```typescript
 // Code splitting
 const AdminDashboard = lazy(() => import('./AdminDashboard'));
@@ -785,6 +792,7 @@ const VirtualizedList: React.FC<{ items: Item[] }> = ({ items }) => (
 ```
 
 ### Backend Performance
+
 ```typescript
 // Database connection pooling
 const pool = new Pool({
@@ -831,9 +839,7 @@ export class BatchProcessor {
 
     for (let i = 0; i < items.length; i += batchSize) {
       const batch = items.slice(i, i + batchSize);
-      const batchResults = await Promise.all(
-        batch.map(item => processor(item))
-      );
+      const batchResults = await Promise.all(batch.map(item => processor(item)));
       results.push(...batchResults);
     }
 
@@ -849,6 +855,7 @@ export class BatchProcessor {
 ### Common Issues
 
 #### 1. Build Failures
+
 ```bash
 # Clear all caches
 pnpm run clean
@@ -863,6 +870,7 @@ pnpm run lint
 ```
 
 #### 2. Database Connection Issues
+
 ```bash
 # Check database status
 docker-compose ps db
@@ -875,6 +883,7 @@ pnpm run db:test-connection
 ```
 
 #### 3. Environment Issues
+
 ```bash
 # Validate environment variables
 pnpm run env:validate
@@ -887,6 +896,7 @@ cp .env.example .env
 ```
 
 ### Performance Issues
+
 ```bash
 # Profile Node.js application
 node --prof backend/dist/server.js
@@ -900,6 +910,7 @@ pnpm run memory:profile
 ```
 
 ### Debug Commands
+
 ```bash
 # Health check
 pnpm run health:check
@@ -917,21 +928,24 @@ pnpm run logs:frontend
 ## 📚 Additional Resources
 
 ### Documentation
+
 - [API Documentation](./API.md)
 - [Deployment Guide](./DEPLOYMENT.md)
 - [Security Guidelines](./SECURITY.md)
 
 ### Tools
+
 - [VS Code Configuration](../.vscode/)
 - [ESLint Configuration](../eslint.config.cjs)
 - [Prettier Configuration](../.prettierrc)
 
 ### External Links
+
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 - [React Documentation](https://react.dev/)
 - [Node.js Best Practices](https://github.com/goldbergyoni/nodebestpractices)
 
 ---
 
-*Last Updated: 2025-01-25*
-*Development Guide Version: 2.0.0-GOLD*
+_Last Updated: 2025-01-25_
+_Development Guide Version: 2.0.0-GOLD_

@@ -3,6 +3,7 @@
 ## Design Philosophy
 
 The NEXUS V1 Dashboard system follows a **refined futuristic aesthetic** that is:
+
 - ✨ **Elegant** - Sophisticated and professional
 - 🚀 **Futuristic** - Modern and cutting-edge
 - 📋 **Formal** - Business-appropriate
@@ -15,34 +16,34 @@ The NEXUS V1 Dashboard system follows a **refined futuristic aesthetic** that is
 ### Primary Colors (Softer, More Elegant)
 
 ```css
---color-primary: #60a5fa;    /* Soft Blue - Main accent */
---color-secondary: #22d3ee;  /* Soft Cyan - Secondary accent */
---color-accent: #a78bfa;     /* Soft Purple - Tertiary accent */
+--color-primary: #60a5fa; /* Soft Blue - Main accent */
+--color-secondary: #22d3ee; /* Soft Cyan - Secondary accent */
+--color-accent: #a78bfa; /* Soft Purple - Tertiary accent */
 ```
 
 ### Status Colors
 
 ```css
---color-success: #34d399;    /* Soft Emerald - Success states */
---color-warning: #fbbf24;    /* Soft Amber - Warnings */
---color-error: #f87171;      /* Soft Rose - Errors */
+--color-success: #34d399; /* Soft Emerald - Success states */
+--color-warning: #fbbf24; /* Soft Amber - Warnings */
+--color-error: #f87171; /* Soft Rose - Errors */
 ```
 
 ### Background Colors
 
 ```css
---bg-primary: #0f172a;       /* Deep Slate - Main background */
---bg-secondary: #1e293b;     /* Slate 800 - Cards, panels */
---bg-tertiary: #334155;      /* Slate 700 - Hover states */
+--bg-primary: #0f172a; /* Deep Slate - Main background */
+--bg-secondary: #1e293b; /* Slate 800 - Cards, panels */
+--bg-tertiary: #334155; /* Slate 700 - Hover states */
 ```
 
 ### Text Colors
 
 ```css
---text-primary: #f1f5f9;     /* Slate 100 - Primary text */
---text-secondary: #cbd5e1;   /* Slate 300 - Secondary text */
---text-tertiary: #94a3b8;    /* Slate 400 - Tertiary text */
---text-muted: #64748b;       /* Slate 500 - Muted text */
+--text-primary: #f1f5f9; /* Slate 100 - Primary text */
+--text-secondary: #cbd5e1; /* Slate 300 - Secondary text */
+--text-tertiary: #94a3b8; /* Slate 400 - Tertiary text */
+--text-muted: #64748b; /* Slate 500 - Muted text */
 ```
 
 ---
@@ -52,14 +53,17 @@ The NEXUS V1 Dashboard system follows a **refined futuristic aesthetic** that is
 ### Font Families
 
 **Primary**: Inter (300, 400, 500, 600, 700, 800)
+
 - Clean, modern, highly readable
 - Used for UI elements, body text
 
 **Secondary**: Outfit (300, 400, 500, 600, 700)
+
 - Elegant, geometric
 - Used for headings, special text
 
 **Monospace**: Fira Code (400, 500)
+
 - Used for code, technical data
 
 ### Font Weights
@@ -89,11 +93,11 @@ small: 0.75rem                   /* 12px */
 ## Spacing System
 
 ```css
---spacing-xs: 0.25rem;   /* 4px */
---spacing-sm: 0.5rem;    /* 8px */
---spacing-md: 1rem;      /* 16px */
---spacing-lg: 1.5rem;    /* 24px */
---spacing-xl: 2rem;      /* 32px */
+--spacing-xs: 0.25rem; /* 4px */
+--spacing-sm: 0.5rem; /* 8px */
+--spacing-md: 1rem; /* 16px */
+--spacing-lg: 1.5rem; /* 24px */
+--spacing-xl: 2rem; /* 32px */
 ```
 
 ---
@@ -101,10 +105,10 @@ small: 0.75rem                   /* 12px */
 ## Border Radius
 
 ```css
---radius-sm: 0.5rem;     /* 8px - Small elements */
---radius-md: 0.75rem;    /* 12px - Cards, buttons */
---radius-lg: 1rem;       /* 16px - Large cards */
---radius-xl: 1.5rem;     /* 24px - Hero elements */
+--radius-sm: 0.5rem; /* 8px - Small elements */
+--radius-md: 0.75rem; /* 12px - Cards, buttons */
+--radius-lg: 1rem; /* 16px - Large cards */
+--radius-xl: 1.5rem; /* 24px - Hero elements */
 ```
 
 ---
@@ -149,17 +153,14 @@ small: 0.75rem                   /* 12px */
 ### Cards
 
 ```css
-background: linear-gradient(
-  135deg,
-  rgba(30, 41, 59, 0.4) 0%,
-  rgba(15, 23, 42, 0.6) 100%
-);
+background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
 backdrop-filter: blur(20px);
 border: 1px solid rgba(148, 163, 184, 0.1);
 border-radius: 1rem;
 ```
 
 **Hover State**:
+
 - Subtle lift: `translateY(-2px)`
 - Softer glow: `box-shadow: 0 0 30px rgba(96, 165, 250, 0.15)`
 - Border brightens slightly
@@ -167,17 +168,15 @@ border-radius: 1rem;
 ### Buttons
 
 **Primary Style**:
+
 ```css
-background: linear-gradient(
-  135deg,
-  rgba(96, 165, 250, 0.15) 0%,
-  rgba(34, 211, 238, 0.15) 100%
-);
+background: linear-gradient(135deg, rgba(96, 165, 250, 0.15) 0%, rgba(34, 211, 238, 0.15) 100%);
 border: 1px solid rgba(96, 165, 250, 0.3);
 color: #60a5fa;
 ```
 
 **Hover**:
+
 - Background opacity increases
 - Soft glow appears
 - Slight lift
@@ -194,6 +193,7 @@ text-transform: uppercase;
 ```
 
 **Colors**:
+
 - Success: Emerald with 10% opacity background
 - Warning: Amber with 10% opacity background
 - Error: Rose with 10% opacity background
@@ -213,6 +213,7 @@ text-transform: uppercase;
 ### Common Animations
 
 **Fade In**:
+
 ```css
 @keyframes fadeIn {
   from {
@@ -227,18 +228,30 @@ text-transform: uppercase;
 ```
 
 **Pulse (Very Soft)**:
+
 ```css
 @keyframes pulse-soft {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 ```
 
 **Glow (Subtle)**:
+
 ```css
 @keyframes glow-soft {
-  0%, 100% { box-shadow: 0 0 20px rgba(96, 165, 250, 0.15); }
-  50% { box-shadow: 0 0 30px rgba(96, 165, 250, 0.15); }
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(96, 165, 250, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(96, 165, 250, 0.15);
+  }
 }
 ```
 
@@ -249,12 +262,7 @@ text-transform: uppercase;
 ### Gradient Overlay
 
 ```css
-background: linear-gradient(
-  135deg,
-  #0f172a 0%,
-  #1e293b 50%,
-  #0f172a 100%
-);
+background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
 ```
 
 ### Particle Effects
@@ -275,16 +283,19 @@ background: linear-gradient(
 ## Dashboard-Specific Themes
 
 ### God Admin Dashboard
+
 - **Primary Color**: Soft Blue (#60a5fa)
 - **Accent**: Soft Cyan (#22d3ee)
 - **Feel**: Omniscient, calm, in control
 
 ### Developer Dashboard
+
 - **Primary Color**: Soft Purple (#a78bfa)
 - **Accent**: Soft Pink (#f472b6)
 - **Feel**: Creative, technical, focused
 
 ### Operator Dashboard
+
 - **Primary Color**: Soft Orange (#fb923c)
 - **Accent**: Soft Red (#f87171)
 - **Feel**: Alert, responsive, operational
@@ -364,7 +375,8 @@ When creating new components:
 ### Good Card Design
 
 ```tsx
-<div className="
+<div
+  className="
   bg-gradient-to-br from-slate-800/40 to-slate-900/60
   backdrop-blur-xl
   border border-slate-700/20
@@ -373,7 +385,8 @@ When creating new components:
   hover:border-slate-700/30
   hover:shadow-lg hover:shadow-blue-500/10
   transition-all duration-300
-">
+"
+>
   {/* Content */}
 </div>
 ```
@@ -381,7 +394,8 @@ When creating new components:
 ### Good Button Design
 
 ```tsx
-<button className="
+<button
+  className="
   bg-gradient-to-r from-blue-500/15 to-cyan-500/15
   border border-blue-500/30
   text-blue-400
@@ -392,7 +406,8 @@ When creating new components:
   hover:border-blue-500/50
   hover:shadow-lg hover:shadow-blue-500/20
   transition-all duration-300
-">
+"
+>
   Action
 </button>
 ```
@@ -403,7 +418,6 @@ When creating new components:
 
 ---
 
-
 ---
 
 ## Brand Personas (Avatars)
@@ -411,6 +425,7 @@ When creating new components:
 The visual identity is anchored by two key personas that represent the dual nature of the platform:
 
 ### 1. Daniela – "Beauty & Impact"
+
 - **Role**: Human connection, elegance, accessibility.
 - **Visual Style**:
   - Image: `frontend/assets/daniela.png`
@@ -418,6 +433,7 @@ The visual identity is anchored by two key personas that represent the dual natu
   - Usage: User onboarding, personalized messages, "human" touchpoints.
 
 ### 2. Nexus – "Deep Technology"
+
 - **Role**: Intelligence, processing power, futuristic potential.
 - **Visual Style**:
   - Image: `frontend/assets/nexus.png`
@@ -434,5 +450,4 @@ Use the `<Avatar />` component (`frontend/src/components/Avatar.tsx`) to ensure 
 
 ---
 
-*Last Updated: 2025-12-23*
-
+_Last Updated: 2025-12-23_

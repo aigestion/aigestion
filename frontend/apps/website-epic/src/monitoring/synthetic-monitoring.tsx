@@ -133,124 +133,124 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
   ];
 
   // Execute a single check
-  const executeCheck = useCallback(async (
-    check: SyntheticCheck,
-    location: string = 'default'
-  ): Promise<SyntheticResult> => {
-    const startTime = Date.now();
+  const executeCheck = useCallback(
+    async (check: SyntheticCheck, location: string = 'default'): Promise<SyntheticResult> => {
+      const startTime = Date.now();
 
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), check.timeout);
-
-      const response = await fetch(check.url, {
-        method: check.method,
-        headers: {
-          'User-Agent': 'AIGestion-Synthetic-Monitor/1.0',
-          'X-Location': location,
-          'X-Check-ID': check.id,
-          ...check.headers,
-        },
-        body: check.body,
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-      const responseTime = Date.now() - startTime;
-
-      const responseHeaders: Record<string, string> = {};
-      response.headers.forEach((value, key) => {
-        responseHeaders[key] = value;
-      });
-
-      let responseBody: string | undefined;
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        responseBody = await response.text();
-      }
-
-      const result: SyntheticResult = {
-        checkId: check.id,
-        timestamp: startTime,
-        location,
-        status: response.status === check.expectedStatus ? 'success' : 'failure',
-        responseTime,
-        statusCode: response.status,
-        responseHeaders,
-        responseBody,
-        metadata: {
-          url: check.url,
-          method: check.method,
-          tags: check.tags,
-        },
-      };
-
-      if (enableLogging) {
-        console.log(`Synthetic Check ${check.id} (${location}):`, result);
-      }
-
-      return result;
-    } catch (error) {
-      const responseTime = Date.now() - startTime;
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-
-      const result: SyntheticResult = {
-        checkId: check.id,
-        timestamp: startTime,
-        location,
-        status: 'failure',
-        responseTime,
-        error: errorMessage,
-        metadata: {
-          url: check.url,
-          method: check.method,
-          tags: check.tags,
-        },
-      };
-
-      if (enableLogging) {
-        console.error(`Synthetic Check ${check.id} (${location}) failed:`, result);
-      }
-
-      return result;
-    }
-  }, [enableLogging]);
-
-  // Execute check with retries
-  const executeCheckWithRetries = useCallback(async (
-    check: SyntheticCheck,
-    location: string = 'default'
-  ): Promise<SyntheticResult> => {
-    let lastResult: SyntheticResult | null = null;
-
-    for (let attempt = 1; attempt <= check.retries; attempt++) {
       try {
-        const result = await executeCheck(check, location);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), check.timeout);
 
-        if (result.status === 'success') {
-          return result;
+        const response = await fetch(check.url, {
+          method: check.method,
+          headers: {
+            'User-Agent': 'AIGestion-Synthetic-Monitor/1.0',
+            'X-Location': location,
+            'X-Check-ID': check.id,
+            ...check.headers,
+          },
+          body: check.body,
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+        const responseTime = Date.now() - startTime;
+
+        const responseHeaders: Record<string, string> = {};
+        response.headers.forEach((value, key) => {
+          responseHeaders[key] = value;
+        });
+
+        let responseBody: string | undefined;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          responseBody = await response.text();
         }
 
-        lastResult = result;
+        const result: SyntheticResult = {
+          checkId: check.id,
+          timestamp: startTime,
+          location,
+          status: response.status === check.expectedStatus ? 'success' : 'failure',
+          responseTime,
+          statusCode: response.status,
+          responseHeaders,
+          responseBody,
+          metadata: {
+            url: check.url,
+            method: check.method,
+            tags: check.tags,
+          },
+        };
 
-        if (attempt < check.retries) {
+        if (enableLogging) {
+          console.log(`Synthetic Check ${check.id} (${location}):`, result);
+        }
+
+        return result;
+      } catch (error) {
+        const responseTime = Date.now() - startTime;
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+
+        const result: SyntheticResult = {
+          checkId: check.id,
+          timestamp: startTime,
+          location,
+          status: 'failure',
+          responseTime,
+          error: errorMessage,
+          metadata: {
+            url: check.url,
+            method: check.method,
+            tags: check.tags,
+          },
+        };
+
+        if (enableLogging) {
+          console.error(`Synthetic Check ${check.id} (${location}) failed:`, result);
+        }
+
+        return result;
+      }
+    },
+    [enableLogging]
+  );
+
+  // Execute check with retries
+  const executeCheckWithRetries = useCallback(
+    async (check: SyntheticCheck, location: string = 'default'): Promise<SyntheticResult> => {
+      let lastResult: SyntheticResult | null = null;
+
+      for (let attempt = 1; attempt <= check.retries; attempt++) {
+        try {
+          const result = await executeCheck(check, location);
+
+          if (result.status === 'success') {
+            return result;
+          }
+
+          lastResult = result;
+
+          if (attempt < check.retries) {
+            // Exponential backoff
+            const delay = Math.pow(2, attempt - 1) * 1000;
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+        } catch (error) {
+          if (attempt === check.retries) {
+            throw error;
+          }
+
           // Exponential backoff
           const delay = Math.pow(2, attempt - 1) * 1000;
           await new Promise(resolve => setTimeout(resolve, delay));
         }
-      } catch (error) {
-        if (attempt === check.retries) {
-          throw error;
-        }
-
-        // Exponential backoff
-        const delay = Math.pow(2, attempt - 1) * 1000;
-        await new Promise(resolve => setTimeout(resolve, delay));
       }
-    }
 
-    return lastResult!;
-  }, [executeCheck]);
+      return lastResult!;
+    },
+    [executeCheck]
+  );
 
   // Execute all checks
   const executeAllChecks = useCallback(async () => {
@@ -293,7 +293,6 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
       if (enableNotifications) {
         checkForAlerts(allResults);
       }
-
     } finally {
       setIsRunning(false);
     }
@@ -302,53 +301,59 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
   }, [checks, executeCheckWithRetries, endpoint, enableNotifications]);
 
   // Send results to server
-  const sendResults = useCallback(async (results: SyntheticResult[]) => {
-    if (!endpoint) return;
+  const sendResults = useCallback(
+    async (results: SyntheticResult[]) => {
+      if (!endpoint) return;
 
-    try {
-      await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(apiKey && { 'Authorization': `Bearer ${apiKey}` }),
-        },
-        body: JSON.stringify({
-          results,
-          timestamp: Date.now(),
-          source: 'synthetic-monitoring',
-        }),
-      });
+      try {
+        await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(apiKey && { Authorization: `Bearer ${apiKey}` }),
+          },
+          body: JSON.stringify({
+            results,
+            timestamp: Date.now(),
+            source: 'synthetic-monitoring',
+          }),
+        });
 
-      if (enableLogging) {
-        console.log('Synthetic monitoring results sent:', results.length);
+        if (enableLogging) {
+          console.log('Synthetic monitoring results sent:', results.length);
+        }
+      } catch (error) {
+        if (enableLogging) {
+          console.error('Failed to send synthetic monitoring results:', error);
+        }
       }
-    } catch (error) {
-      if (enableLogging) {
-        console.error('Failed to send synthetic monitoring results:', error);
-      }
-    }
-  }, [endpoint, apiKey, enableLogging]);
+    },
+    [endpoint, apiKey, enableLogging]
+  );
 
   // Check for alerts
-  const checkForAlerts = useCallback((results: SyntheticResult[]) => {
-    const failedResults = results.filter(r => r.status === 'failure');
+  const checkForAlerts = useCallback(
+    (results: SyntheticResult[]) => {
+      const failedResults = results.filter(r => r.status === 'failure');
 
-    if (failedResults.length >= alertThreshold) {
-      // Send notification
-      if ('Notification' in globalThis && Notification.permission === 'granted') {
-        new Notification('AIGestion Alert', {
-          body: `${failedResults.length} synthetic checks failed`,
-          icon: '/icons/icon-192x192.png',
-          tag: 'synthetic-alert',
-        });
-      }
+      if (failedResults.length >= alertThreshold) {
+        // Send notification
+        if ('Notification' in globalThis && Notification.permission === 'granted') {
+          new Notification('AIGestion Alert', {
+            body: `${failedResults.length} synthetic checks failed`,
+            icon: '/icons/icon-192x192.png',
+            tag: 'synthetic-alert',
+          });
+        }
 
-      // Could also send to Slack, email, etc.
-      if (enableLogging) {
-        console.warn(`Synthetic monitoring alert: ${failedResults.length} checks failed`);
+        // Could also send to Slack, email, etc.
+        if (enableLogging) {
+          console.warn(`Synthetic monitoring alert: ${failedResults.length} checks failed`);
+        }
       }
-    }
-  }, [alertThreshold, enableLogging]);
+    },
+    [alertThreshold, enableLogging]
+  );
 
   // Get statistics
   const getStats = useCallback(() => {
@@ -389,9 +394,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
 
   // Update check
   const updateCheck = useCallback((checkId: string, updates: Partial<SyntheticCheck>) => {
-    setChecks(prev => prev.map(c =>
-      c.id === checkId ? { ...c, ...updates } : c
-    ));
+    setChecks(prev => prev.map(c => (c.id === checkId ? { ...c, ...updates } : c)));
   }, []);
 
   // Clear results
@@ -436,30 +439,35 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
 
 // Synthetic Monitoring Dashboard Component
 export function SyntheticMonitoringDashboard() {
-  const { checks, results, isRunning, stats, executeAllChecks, addCheck, removeCheck } = useSyntheticMonitoring();
+  const { checks, results, isRunning, stats, executeAllChecks, addCheck, removeCheck } =
+    useSyntheticMonitoring();
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'success': return 'text-green-600 dark:text-green-400';
-      case 'failure': return 'text-red-600 dark:text-red-400';
-      default: return 'text-gray-600 dark:text-gray-400';
+      case 'success':
+        return 'text-green-600 dark:text-green-400';
+      case 'failure':
+        return 'text-red-600 dark:text-red-400';
+      default:
+        return 'text-gray-600 dark:text-gray-400';
     }
   };
 
   const getStatusBg = (status: string) => {
     switch (status) {
-      case 'success': return 'bg-green-100 dark:bg-green-900';
-      case 'failure': return 'bg-red-100 dark:bg-red-900';
-      default: return 'bg-gray-100 dark:bg-gray-900';
+      case 'success':
+        return 'bg-green-100 dark:bg-green-900';
+      case 'failure':
+        return 'bg-red-100 dark:bg-red-900';
+      default:
+        return 'bg-gray-100 dark:bg-gray-900';
     }
   };
 
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-          Synthetic Monitoring
-        </h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Synthetic Monitoring</h2>
         <div className="flex gap-2">
           <button
             onClick={executeAllChecks}
@@ -481,53 +489,41 @@ export function SyntheticMonitoringDashboard() {
           <div className="text-2xl font-bold text-gray-900 dark:text-white">
             {stats.totalChecks}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Total Checks
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Total Checks</div>
         </div>
 
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-green-600 dark:text-green-400">
             {stats.successfulChecks}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Successful
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Successful</div>
         </div>
 
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-red-600 dark:text-red-400">
             {stats.failedChecks}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Failed
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Failed</div>
         </div>
 
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             {stats.uptime.toFixed(1)}%
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Uptime
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Uptime</div>
         </div>
 
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
             {stats.averageResponseTime.toFixed(0)}ms
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Avg Response
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Avg Response</div>
         </div>
       </div>
 
       {/* Checks List */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-          Active Checks
-        </h3>
+        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Active Checks</h3>
         <div className="space-y-2">
           {checks.map(check => {
             const latestResult = results
@@ -540,12 +536,8 @@ export function SyntheticMonitoringDashboard() {
                 className="flex justify-between items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
               >
                 <div className="flex-1">
-                  <div className="font-medium text-gray-900 dark:text-white">
-                    {check.name}
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {check.url}
-                  </div>
+                  <div className="font-medium text-gray-900 dark:text-white">{check.name}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">{check.url}</div>
                   <div className="flex gap-2 mt-1">
                     {check.tags?.map(tag => (
                       <span
@@ -572,9 +564,7 @@ export function SyntheticMonitoringDashboard() {
                       </div>
                     </>
                   ) : (
-                    <div className="text-gray-500">
-                      Not checked yet
-                    </div>
+                    <div className="text-gray-500">Not checked yet</div>
                   )}
                 </div>
               </div>
@@ -585,42 +575,39 @@ export function SyntheticMonitoringDashboard() {
 
       {/* Recent Results */}
       <div>
-        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-          Recent Results
-        </h3>
+        <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Recent Results</h3>
         <div className="space-y-2 max-h-64 overflow-y-auto">
-          {results.slice(-10).reverse().map((result, index) => (
-            <div
-              key={`${result.checkId}-${result.location}-${index}`}
-              className="flex justify-between items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
-            >
-              <div className="flex-1">
-                <div className="font-medium text-gray-900 dark:text-white">
-                  {result.checkId}
+          {results
+            .slice(-10)
+            .reverse()
+            .map((result, index) => (
+              <div
+                key={`${result.checkId}-${result.location}-${index}`}
+                className="flex justify-between items-center p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+              >
+                <div className="flex-1">
+                  <div className="font-medium text-gray-900 dark:text-white">{result.checkId}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    {result.location} • {result.metadata?.url}
+                  </div>
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {result.location} • {result.metadata?.url}
-                </div>
-              </div>
 
-              <div className="text-right">
-                <div className={`font-medium ${getStatusColor(result.status)}`}>
-                  {result.status.toUpperCase()}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  {result.responseTime}ms
-                </div>
-                <div className="text-xs text-gray-500">
-                  {new Date(result.timestamp).toLocaleTimeString()}
+                <div className="text-right">
+                  <div className={`font-medium ${getStatusColor(result.status)}`}>
+                    {result.status.toUpperCase()}
+                  </div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    {result.responseTime}ms
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {new Date(result.timestamp).toLocaleTimeString()}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           {results.length === 0 && (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              No results yet
-            </div>
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400">No results yet</div>
           )}
         </div>
       </div>

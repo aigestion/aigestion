@@ -9,6 +9,7 @@ This file contains all environment variables needed for AIGestion deployment acr
 ## 🔧 Core Environment Variables
 
 ### Application Settings
+
 ```bash
 # Application
 NODE_ENV=development
@@ -30,6 +31,7 @@ CORS_CREDENTIALS=true
 ```
 
 ### Database Configuration
+
 ```bash
 # PostgreSQL (Primary Database)
 DATABASE_URL=postgresql://username:password@localhost:5432/aigestion
@@ -61,6 +63,7 @@ REDIS_TTL=3600
 ```
 
 ### Authentication & Security
+
 ```bash
 # JWT Configuration
 JWT_SECRET=your-super-secret-jwt-key-here
@@ -81,6 +84,7 @@ ENCRYPTION_ALGORITHM=aes-256-gcm
 ```
 
 ### AI Service Configuration
+
 ```bash
 # OpenAI
 OPENAI_API_KEY=sk-your-openai-api-key
@@ -108,6 +112,7 @@ ELEVENLABS_API_KEY=your-elevenlabs-api-key
 ```
 
 ### External Services
+
 ```bash
 # Email Service
 SMTP_HOST=smtp.gmail.com
@@ -134,6 +139,7 @@ VERCEL_ANALYTICS_ID=your-vercel-analytics-id
 ## 🌍 Environment-Specific Configurations
 
 ### Development (.env.development)
+
 ```bash
 # Development overrides
 NODE_ENV=development
@@ -157,6 +163,7 @@ TEST_DATABASE_URL=postgresql://postgres:password@localhost:5432/aigestion_test
 ```
 
 ### Staging (.env.staging)
+
 ```bash
 # Staging overrides
 NODE_ENV=staging
@@ -180,6 +187,7 @@ SENTRY_DSN=https://staging-sentry-dsn
 ```
 
 ### Production (.env.production)
+
 ```bash
 # Production overrides
 NODE_ENV=production
@@ -213,6 +221,7 @@ NEW_RELIC_LICENSE_KEY=your-newrelic-key
 ## 🔐 Security Configuration
 
 ### Security Headers
+
 ```bash
 # HTTPS
 FORCE_HTTPS=true
@@ -234,6 +243,7 @@ RATE_LIMIT_SKIP_SUCCESSFUL_REQUESTS=false
 ```
 
 ### Session Configuration
+
 ```bash
 # Session Store
 SESSION_STORE=redis
@@ -245,6 +255,7 @@ SESSION_HTTP_ONLY=true
 ```
 
 ### API Keys & Secrets
+
 ```bash
 # API Keys (never commit to version control)
 API_KEY_SECRET=your-api-key-secret
@@ -263,6 +274,7 @@ TELEGRAM_BOT_TOKEN=your-telegram-bot-token
 ## 📊 Monitoring & Analytics
 
 ### Application Monitoring
+
 ```bash
 # Sentry
 SENTRY_DSN=https://your-sentry-dsn
@@ -282,6 +294,7 @@ DATADOG_SITE=datadoghq.com
 ```
 
 ### Analytics
+
 ```bash
 # Google Analytics
 GOOGLE_ANALYTICS_ID=GA-XXXXXXXXX
@@ -296,6 +309,7 @@ ANALYTICS_API_KEY=your-analytics-api-key
 ```
 
 ### Performance Monitoring
+
 ```bash
 # APM
 APM_SERVICE_NAME=aigestion
@@ -312,6 +326,7 @@ PROFILE_SAMPLE_RATE=0.01
 ## 🚀 Deployment Configuration
 
 ### Docker Configuration
+
 ```bash
 # Docker
 DOCKER_REGISTRY=gcr.io
@@ -325,6 +340,7 @@ KUBERNETES_SERVICE_ACCOUNT=aigestion-sa
 ```
 
 ### CI/CD Configuration
+
 ```bash
 # GitHub Actions
 GITHUB_TOKEN=ghp_your-github-token
@@ -338,6 +354,7 @@ BUILD_URL=https://github.com/aigestion/aigestion-net/actions/runs/123
 ```
 
 ### Cloud Provider Configuration
+
 ```bash
 # Google Cloud
 GOOGLE_PROJECT_ID=aigestion-pro
@@ -362,6 +379,7 @@ AZURE_SUBSCRIPTION_ID=your-azure-subscription-id
 ## 🧪 Testing Configuration
 
 ### Unit Testing
+
 ```bash
 # Jest
 NODE_ENV=test
@@ -376,6 +394,7 @@ COVERAGE_DIRECTORY=coverage
 ```
 
 ### Integration Testing
+
 ```bash
 # Test Environment
 TEST_TIMEOUT=30000
@@ -389,6 +408,7 @@ MOCK_FILE_STORAGE=true
 ```
 
 ### E2E Testing
+
 ```bash
 # Playwright/Cypress
 E2E_BASE_URL=http://localhost:3000
@@ -403,6 +423,7 @@ E2E_SLOWMO=1000
 ## 📱 Feature Flags
 
 ### Development Features
+
 ```bash
 # Debug Features
 ENABLE_DEBUG_ROUTES=true
@@ -418,6 +439,7 @@ ENABLE_PROFILER=true
 ```
 
 ### Experimental Features
+
 ```bash
 # AI Features
 ENABLE_GPT4_TURBO=true
@@ -441,6 +463,7 @@ ENABLE_CUSTOM_INTEGRATIONS=false
 ## 🔧 Service Configuration
 
 ### Backend Services
+
 ```bash
 # API Server
 API_PORT=3000
@@ -455,6 +478,7 @@ WS_CORS_ORIGIN=http://localhost:5173
 ```
 
 ### Frontend Services
+
 ```bash
 # Development Server
 DEV_PORT=5173
@@ -468,6 +492,7 @@ BUILD_MINIFY=true
 ```
 
 ### AI Services
+
 ```bash
 # AI Service Configuration
 AI_SERVICE_PORT=5000
@@ -486,6 +511,7 @@ MAX_CONCURRENT_REQUESTS=10
 ## 📝 Environment Validation
 
 ### Required Variables Check
+
 ```bash
 # Core required variables
 REQUIRED_VARS=(
@@ -509,6 +535,7 @@ RECOMMENDED_VARS=(
 ```
 
 ### Validation Script
+
 ```bash
 #!/bin/bash
 # scripts/validate-env.sh
@@ -542,6 +569,7 @@ echo "✅ Environment validation complete!"
 ## 🔄 Environment Switching
 
 ### Development Setup
+
 ```bash
 # Copy environment template
 cp .env.example .env.local
@@ -557,6 +585,7 @@ pnpm run dev
 ```
 
 ### Production Deployment
+
 ```bash
 # Set production environment
 export NODE_ENV=production
@@ -569,6 +598,7 @@ pnpm run deploy:prod
 ```
 
 ### Environment Override
+
 ```bash
 # Override specific variables
 export LOG_LEVEL=debug
@@ -583,6 +613,7 @@ pnpm run dev
 ## 📚 Environment File Templates
 
 ### .env.example
+
 ```bash
 # Copy this file to .env.local and fill in your values
 # Never commit actual environment variables to version control
@@ -622,6 +653,7 @@ ENABLE_SWAGGER=true
 ```
 
 ### .env.test
+
 ```bash
 # Testing environment
 NODE_ENV=test
@@ -647,6 +679,7 @@ MOCK_FILE_STORAGE=true
 ## 🔍 Environment Debugging
 
 ### Debug Commands
+
 ```bash
 # Show current environment
 pnpm run env:show
@@ -665,6 +698,7 @@ pnpm run ai:test-connection
 ```
 
 ### Environment Diagnostics
+
 ```bash
 #!/bin/bash
 # scripts/env-diagnostics.sh
@@ -694,15 +728,17 @@ echo "AI Service: $(pnpm run ai:health)"
 ## 📞 Support
 
 ### Getting Help
+
 - 📧 **Email**: env-support@aigestion.net
 - 📖 **Documentation**: [docs.aigestion.net](https://docs.aigestion.net)
 - 💬 **Discord**: [AIGestion Discord](https://discord.gg/aigestion)
 
 ### Security Issues
+
 - 🔒 **Report Security**: security@aigestion.net
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/aigestion/aigestion-net/issues)
 
 ---
 
-*Last Updated: 2025-01-25*
-*Environment Configuration Version: 2.0.0-GOLD*
+_Last Updated: 2025-01-25_
+_Environment Configuration Version: 2.0.0-GOLD_

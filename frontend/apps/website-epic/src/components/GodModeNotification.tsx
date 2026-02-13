@@ -13,7 +13,7 @@ export const GodModeNotification: React.FC<GodModeNotificationProps> = ({
   title,
   message,
   type = 'info',
-  onClose
+  onClose,
 }) => {
   const icons = {
     info: <Info className="text-nexus-cyan" size={20} />,
@@ -38,18 +38,14 @@ export const GodModeNotification: React.FC<GodModeNotificationProps> = ({
     >
       <div className="relative p-4 flex gap-4">
         {/* Type Icon */}
-        <div className="flex-shrink-0 mt-1">
-          {icons[type]}
-        </div>
+        <div className="flex-shrink-0 mt-1">{icons[type]}</div>
 
         {/* Content */}
         <div className="flex-grow">
           <h4 className="font-orbitron text-xs font-bold text-white tracking-widest uppercase mb-1 drop-shadow-glow">
             {title}
           </h4>
-          <p className="text-nexus-silver/70 text-sm leading-relaxed">
-            {message}
-          </p>
+          <p className="text-nexus-silver/70 text-sm leading-relaxed">{message}</p>
         </div>
 
         {/* Close Button */}

@@ -12,11 +12,11 @@ jobs:
   codespaces-setup:
     name: GitHub Codespaces Configuration
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Codespaces Environment
         uses: ./.github/actions/codespaces-setup@v1
         with:
@@ -28,7 +28,7 @@ jobs:
             kubectl
             gh
             git
-      
+
       - name: Validate Codespaces Configuration
         run: |
           echo "🔍 Validating Codespaces configuration..."
@@ -39,25 +39,25 @@ jobs:
   packages-management:
     name: GitHub Packages Management
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@aigestion'
-      
+
       - name: Publish to GitHub Packages
         run: |
           cd packages/shared
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Publish Docker Images
         run: |
           docker build -t ghcr.io/${{ github.repository }}/aigestion-api:${{ github.sha }} .
@@ -69,21 +69,21 @@ jobs:
   container-registry:
     name: Container Registry Management
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Login to Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Build and Push Images
         run: |
           docker buildx build \
@@ -92,14 +92,14 @@ jobs:
             -t ghcr.io/${{ github.repository }}/aigestion:${{ github.sha }} \
             -t ghcr.io/${{ github.repository }}/aigestion:latest \
             .
-      
+
       - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
           image: ghcr.io/${{ github.repository }}/aigestion:${{ github.sha }}
           format: spdx-json
           output-file: sbom.spdx.json
-      
+
       - name: Upload SBOM
         uses: actions/upload-artifact@v4
         with:
@@ -110,23 +110,23 @@ jobs:
   artifact-management:
     name: Artifact Management
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Build Artifacts
         run: |
           npm run build:all
           tar -czf build-artifacts.tar.gz dist/
-      
+
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: build-artifacts.tar.gz
           retention-days: 30
-      
+
       - name: Create Release Artifacts
         if: github.ref == 'refs/heads/main'
         run: |
@@ -140,11 +140,11 @@ jobs:
   environment-management:
     name: Environment Management
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Environments
         uses: ./.github/actions/env-setup@v1
         with:
@@ -152,7 +152,7 @@ jobs:
             development
             staging
             production
-      
+
       - name: Validate Environment Configuration
         run: |
           echo "🔍 Validating environment configurations..."
@@ -170,11 +170,11 @@ jobs:
   config-management:
     name: Configuration Management
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Validate Configuration
         uses: ./.github/actions/config-validation@v1
         with:
@@ -184,7 +184,7 @@ jobs:
             vite.config.ts
             docker-compose.yml
             .github/workflows/
-      
+
       - name: Sync Configuration
         uses: ./.github/actions/config-sync@v1
         with:
@@ -195,22 +195,22 @@ jobs:
   dependency-management:
     name: Dependency Management
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Update Dependencies
         run: |
           npm update
           npm audit fix
           npm run build
-      
+
       - name: Check for Breaking Changes
         uses: ./.github/actions/breaking-changes@v1
         with:
           target-branch: main
-      
+
       - name: Create Dependency Update PR
         uses: peter-evans/create-pull-request@v5
         with:
@@ -219,17 +219,17 @@ jobs:
           title: '🔄 Dependency Updates'
           body: |
             ## 🔄 Dependency Updates
-            
+
             This PR contains automated dependency updates:
-            
+
             ### 📦 Updated Packages
             - npm packages
             - Docker images
             - GitHub Actions
-            
+
             ### 🧪 Testing
             All tests pass with updated dependencies.
-            
+
             ### 📋 Checklist
             - [ ] Code review completed
             - [ ] Tests pass
@@ -241,11 +241,11 @@ jobs:
   integration-testing:
     name: Integration Testing
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Test Environment
         uses: ./.github/actions/integration-setup@v1
         with:
@@ -254,13 +254,13 @@ jobs:
             redis
             elasticsearch
             minio
-      
+
       - name: Run Integration Tests
         run: |
           npm run test:integration
           npm run test:e2e
           npm run test:api
-      
+
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
         with:
@@ -271,7 +271,7 @@ jobs:
   slack-integration:
     name: Slack Integration
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Notify Slack on Success
         if: success()
@@ -282,7 +282,7 @@ jobs:
           text: '✅ AIGestion deployment successful'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      
+
       - name: Notify Slack on Failure
         if: failure()
         uses: 8398a7/action-slack@v3
@@ -297,7 +297,7 @@ jobs:
   email-integration:
     name: Email Integration
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Send Deployment Email
         uses: dawidd6/action-send-mail@v3
@@ -309,12 +309,12 @@ jobs:
           subject: 'AIGestion Deployment Report'
           body: |
             Deployment completed successfully!
-            
+
             Repository: ${{ github.repository }}
             Branch: ${{ github.ref }}
             Commit: ${{ github.sha }}
             Time: ${{ github.event.head_commit.timestamp }}
-            
+
             View deployment at: https://aigestion.net
           to: ${{ secrets.NOTIFICATION_EMAIL }}
           from: GitHub Actions
@@ -323,20 +323,20 @@ jobs:
   api-integration:
     name: API Integration
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Test API Endpoints
         run: |
           curl -f https://api.aigestion.net/health || exit 1
           curl -f https://api.aigestion.net/status || exit 1
           curl -f https://api.aigestion.net/version || exit 1
-      
+
       - name: Update API Documentation
         uses: ./.github/actions/api-docs-update@v1
         with:
           api-spec: api/openapi.yaml
           output-dir: docs/api
-      
+
       - name: Deploy API Documentation
         uses: peaceiris/actions-gh-pages@v3
         with:

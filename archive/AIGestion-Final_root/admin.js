@@ -1,1 +1,278 @@
-import{Q as e,a as s}from"./index.js";import{j as a,m as t,s as i,t as l,D as r,v as n,w as c,x as d,a as o,Z as x}from"./ui.js";import{a as m}from"./vendor.js";import{a as h}from"./three.js";import{B as j}from"./router.js";import{R as u,L as p,C as b,X as f,Y as g,T as w,a as y,b as N,P as v,c as k,d as S}from"./charts.js";const C=()=>{const e=[{title:"Usuarios Totales",value:"12,543",icon:l,color:"text-blue-400"},{title:"Ingresos Mensuales",value:"$45,678",icon:r,color:"text-green-400"},{title:"Tasa de Crecimiento",value:"+23.5%",icon:n,color:"text-purple-400"},{title:"Actividad del Sistema",value:"98.2%",icon:c,color:"text-orange-400"}],s=[{name:"Desktop",value:400,color:"#8884d8"},{name:"Mobile",value:300,color:"#82ca9d"},{name:"Tablet",value:300,color:"#ffc658"}];return a.jsxs("div",{className:"p-6 space-y-6",children:[a.jsxs(t.div,{initial:{y:-20,opacity:0},animate:{y:0,opacity:1},className:"flex items-center justify-between",children:[a.jsx("h1",{className:"text-4xl font-bold text-white",children:"🏆 Cuartel General Admin"}),a.jsx("div",{className:"flex space-x-4",children:a.jsx("button",{className:"p-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors",children:a.jsx(i,{className:"w-5 h-5 text-white"})})})]}),a.jsx("div",{className:"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",children:e.map((e,s)=>a.jsx(t.div,{initial:{y:20,opacity:0},animate:{y:0,opacity:1},transition:{delay:.1*s},className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:a.jsxs("div",{className:"flex items-center justify-between",children:[a.jsxs("div",{children:[a.jsx("p",{className:"text-white/70 text-sm",children:e.title}),a.jsx("p",{className:"text-2xl font-bold text-white",children:e.value})]}),a.jsx(e.icon,{className:`w-8 h-8 ${e.color}`})]})},s))}),a.jsxs("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-6",children:[a.jsxs(t.div,{initial:{scale:.9,opacity:0},animate:{scale:1,opacity:1},className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[a.jsx("h2",{className:"text-xl font-semibold text-white mb-4",children:"📊 Estadísticas de Usuarios"}),a.jsx(u,{width:"100%",height:300,children:a.jsxs(p,{data:[{name:"Ene",usuarios:4e3,ingresos:2400},{name:"Feb",usuarios:3e3,ingresos:1398},{name:"Mar",usuarios:2e3,ingresos:9800},{name:"Abr",usuarios:2780,ingresos:3908},{name:"May",usuarios:1890,ingresos:4800},{name:"Jun",usuarios:2390,ingresos:3800}],children:[a.jsx(b,{strokeDasharray:"3 3",stroke:"#ffffff20"}),a.jsx(f,{dataKey:"name",stroke:"#ffffff"}),a.jsx(g,{stroke:"#ffffff"}),a.jsx(w,{contentStyle:{backgroundColor:"#1f2937",border:"none"}}),a.jsx(y,{}),a.jsx(N,{type:"monotone",dataKey:"usuarios",stroke:"#8884d8",strokeWidth:2}),a.jsx(N,{type:"monotone",dataKey:"ingresos",stroke:"#82ca9d",strokeWidth:2})]})})]}),a.jsxs(t.div,{initial:{scale:.9,opacity:0},animate:{scale:1,opacity:1},className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[a.jsx("h2",{className:"text-xl font-semibold text-white mb-4",children:"🎯 Distribución de Dispositivos"}),a.jsx(u,{width:"100%",height:300,children:a.jsxs(v,{children:[a.jsx(k,{data:s,cx:"50%",cy:"50%",labelLine:!1,label:({name:e,percent:s})=>`${e} ${(100*s).toFixed(0)}%`,outerRadius:80,fill:"#8884d8",dataKey:"value",children:s.map((e,s)=>a.jsx(S,{fill:e.color},`cell-${s}`))}),a.jsx(w,{contentStyle:{backgroundColor:"#1f2937",border:"none"}})]})})]})]}),a.jsxs(t.div,{initial:{y:20,opacity:0},animate:{y:0,opacity:1},className:"grid grid-cols-1 lg:grid-cols-3 gap-6",children:[a.jsxs("div",{className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[a.jsxs("h3",{className:"text-lg font-semibold text-white mb-4 flex items-center",children:[a.jsx(d,{className:"w-5 h-5 mr-2 text-blue-400"}),"Base de Datos"]}),a.jsxs("div",{className:"space-y-2",children:[a.jsxs("div",{className:"flex justify-between text-white/70",children:[a.jsx("span",{children:"Conexiones Activas"}),a.jsx("span",{className:"text-green-400",children:"24"})]}),a.jsxs("div",{className:"flex justify-between text-white/70",children:[a.jsx("span",{children:"Queries por Segundo"}),a.jsx("span",{className:"text-blue-400",children:"1,247"})]})]})]}),a.jsxs("div",{className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[a.jsxs("h3",{className:"text-lg font-semibold text-white mb-4 flex items-center",children:[a.jsx(o,{className:"w-5 h-5 mr-2 text-green-400"}),"Seguridad"]}),a.jsxs("div",{className:"space-y-2",children:[a.jsxs("div",{className:"flex justify-between text-white/70",children:[a.jsx("span",{children:"Intentos Bloqueados"}),a.jsx("span",{className:"text-red-400",children:"142"})]}),a.jsxs("div",{className:"flex justify-between text-white/70",children:[a.jsx("span",{children:"Sesiones Activas"}),a.jsx("span",{className:"text-green-400",children:"89"})]})]})]}),a.jsxs("div",{className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[a.jsxs("h3",{className:"text-lg font-semibold text-white mb-4 flex items-center",children:[a.jsx(x,{className:"w-5 h-5 mr-2 text-yellow-400"}),"Rendimiento"]}),a.jsxs("div",{className:"space-y-2",children:[a.jsxs("div",{className:"flex justify-between text-white/70",children:[a.jsx("span",{children:"Response Time"}),a.jsx("span",{className:"text-green-400",children:"124ms"})]}),a.jsxs("div",{className:"flex justify-between text-white/70",children:[a.jsx("span",{children:"Uptime"}),a.jsx("span",{className:"text-green-400",children:"99.9%"})]})]})]})]})]})},D=new e({defaultOptions:{queries:{retry:1,refetchOnWindowFocus:!1}}});h(document.getElementById("admin-root")).render(a.jsx(m.StrictMode,{children:a.jsx(s,{client:D,children:a.jsx(j,{children:a.jsx(C,{})})})}));
+import { Q as e, a as s } from './index.js';
+import {
+  j as a,
+  m as t,
+  s as i,
+  t as l,
+  D as r,
+  v as n,
+  w as c,
+  x as d,
+  a as o,
+  Z as x,
+} from './ui.js';
+import { a as m } from './vendor.js';
+import { a as h } from './three.js';
+import { B as j } from './router.js';
+import {
+  R as u,
+  L as p,
+  C as b,
+  X as f,
+  Y as g,
+  T as w,
+  a as y,
+  b as N,
+  P as v,
+  c as k,
+  d as S,
+} from './charts.js';
+const C = () => {
+    const e = [
+        { title: 'Usuarios Totales', value: '12,543', icon: l, color: 'text-blue-400' },
+        { title: 'Ingresos Mensuales', value: '$45,678', icon: r, color: 'text-green-400' },
+        { title: 'Tasa de Crecimiento', value: '+23.5%', icon: n, color: 'text-purple-400' },
+        { title: 'Actividad del Sistema', value: '98.2%', icon: c, color: 'text-orange-400' },
+      ],
+      s = [
+        { name: 'Desktop', value: 400, color: '#8884d8' },
+        { name: 'Mobile', value: 300, color: '#82ca9d' },
+        { name: 'Tablet', value: 300, color: '#ffc658' },
+      ];
+    return a.jsxs('div', {
+      className: 'p-6 space-y-6',
+      children: [
+        a.jsxs(t.div, {
+          initial: { y: -20, opacity: 0 },
+          animate: { y: 0, opacity: 1 },
+          className: 'flex items-center justify-between',
+          children: [
+            a.jsx('h1', {
+              className: 'text-4xl font-bold text-white',
+              children: '🏆 Cuartel General Admin',
+            }),
+            a.jsx('div', {
+              className: 'flex space-x-4',
+              children: a.jsx('button', {
+                className: 'p-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors',
+                children: a.jsx(i, { className: 'w-5 h-5 text-white' }),
+              }),
+            }),
+          ],
+        }),
+        a.jsx('div', {
+          className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6',
+          children: e.map((e, s) =>
+            a.jsx(
+              t.div,
+              {
+                initial: { y: 20, opacity: 0 },
+                animate: { y: 0, opacity: 1 },
+                transition: { delay: 0.1 * s },
+                className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+                children: a.jsxs('div', {
+                  className: 'flex items-center justify-between',
+                  children: [
+                    a.jsxs('div', {
+                      children: [
+                        a.jsx('p', { className: 'text-white/70 text-sm', children: e.title }),
+                        a.jsx('p', {
+                          className: 'text-2xl font-bold text-white',
+                          children: e.value,
+                        }),
+                      ],
+                    }),
+                    a.jsx(e.icon, { className: `w-8 h-8 ${e.color}` }),
+                  ],
+                }),
+              },
+              s
+            )
+          ),
+        }),
+        a.jsxs('div', {
+          className: 'grid grid-cols-1 lg:grid-cols-2 gap-6',
+          children: [
+            a.jsxs(t.div, {
+              initial: { scale: 0.9, opacity: 0 },
+              animate: { scale: 1, opacity: 1 },
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                a.jsx('h2', {
+                  className: 'text-xl font-semibold text-white mb-4',
+                  children: '📊 Estadísticas de Usuarios',
+                }),
+                a.jsx(u, {
+                  width: '100%',
+                  height: 300,
+                  children: a.jsxs(p, {
+                    data: [
+                      { name: 'Ene', usuarios: 4e3, ingresos: 2400 },
+                      { name: 'Feb', usuarios: 3e3, ingresos: 1398 },
+                      { name: 'Mar', usuarios: 2e3, ingresos: 9800 },
+                      { name: 'Abr', usuarios: 2780, ingresos: 3908 },
+                      { name: 'May', usuarios: 1890, ingresos: 4800 },
+                      { name: 'Jun', usuarios: 2390, ingresos: 3800 },
+                    ],
+                    children: [
+                      a.jsx(b, { strokeDasharray: '3 3', stroke: '#ffffff20' }),
+                      a.jsx(f, { dataKey: 'name', stroke: '#ffffff' }),
+                      a.jsx(g, { stroke: '#ffffff' }),
+                      a.jsx(w, { contentStyle: { backgroundColor: '#1f2937', border: 'none' } }),
+                      a.jsx(y, {}),
+                      a.jsx(N, {
+                        type: 'monotone',
+                        dataKey: 'usuarios',
+                        stroke: '#8884d8',
+                        strokeWidth: 2,
+                      }),
+                      a.jsx(N, {
+                        type: 'monotone',
+                        dataKey: 'ingresos',
+                        stroke: '#82ca9d',
+                        strokeWidth: 2,
+                      }),
+                    ],
+                  }),
+                }),
+              ],
+            }),
+            a.jsxs(t.div, {
+              initial: { scale: 0.9, opacity: 0 },
+              animate: { scale: 1, opacity: 1 },
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                a.jsx('h2', {
+                  className: 'text-xl font-semibold text-white mb-4',
+                  children: '🎯 Distribución de Dispositivos',
+                }),
+                a.jsx(u, {
+                  width: '100%',
+                  height: 300,
+                  children: a.jsxs(v, {
+                    children: [
+                      a.jsx(k, {
+                        data: s,
+                        cx: '50%',
+                        cy: '50%',
+                        labelLine: !1,
+                        label: ({ name: e, percent: s }) => `${e} ${(100 * s).toFixed(0)}%`,
+                        outerRadius: 80,
+                        fill: '#8884d8',
+                        dataKey: 'value',
+                        children: s.map((e, s) => a.jsx(S, { fill: e.color }, `cell-${s}`)),
+                      }),
+                      a.jsx(w, { contentStyle: { backgroundColor: '#1f2937', border: 'none' } }),
+                    ],
+                  }),
+                }),
+              ],
+            }),
+          ],
+        }),
+        a.jsxs(t.div, {
+          initial: { y: 20, opacity: 0 },
+          animate: { y: 0, opacity: 1 },
+          className: 'grid grid-cols-1 lg:grid-cols-3 gap-6',
+          children: [
+            a.jsxs('div', {
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                a.jsxs('h3', {
+                  className: 'text-lg font-semibold text-white mb-4 flex items-center',
+                  children: [
+                    a.jsx(d, { className: 'w-5 h-5 mr-2 text-blue-400' }),
+                    'Base de Datos',
+                  ],
+                }),
+                a.jsxs('div', {
+                  className: 'space-y-2',
+                  children: [
+                    a.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        a.jsx('span', { children: 'Conexiones Activas' }),
+                        a.jsx('span', { className: 'text-green-400', children: '24' }),
+                      ],
+                    }),
+                    a.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        a.jsx('span', { children: 'Queries por Segundo' }),
+                        a.jsx('span', { className: 'text-blue-400', children: '1,247' }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            a.jsxs('div', {
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                a.jsxs('h3', {
+                  className: 'text-lg font-semibold text-white mb-4 flex items-center',
+                  children: [a.jsx(o, { className: 'w-5 h-5 mr-2 text-green-400' }), 'Seguridad'],
+                }),
+                a.jsxs('div', {
+                  className: 'space-y-2',
+                  children: [
+                    a.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        a.jsx('span', { children: 'Intentos Bloqueados' }),
+                        a.jsx('span', { className: 'text-red-400', children: '142' }),
+                      ],
+                    }),
+                    a.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        a.jsx('span', { children: 'Sesiones Activas' }),
+                        a.jsx('span', { className: 'text-green-400', children: '89' }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            a.jsxs('div', {
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                a.jsxs('h3', {
+                  className: 'text-lg font-semibold text-white mb-4 flex items-center',
+                  children: [
+                    a.jsx(x, { className: 'w-5 h-5 mr-2 text-yellow-400' }),
+                    'Rendimiento',
+                  ],
+                }),
+                a.jsxs('div', {
+                  className: 'space-y-2',
+                  children: [
+                    a.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        a.jsx('span', { children: 'Response Time' }),
+                        a.jsx('span', { className: 'text-green-400', children: '124ms' }),
+                      ],
+                    }),
+                    a.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        a.jsx('span', { children: 'Uptime' }),
+                        a.jsx('span', { className: 'text-green-400', children: '99.9%' }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    });
+  },
+  D = new e({ defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: !1 } } });
+h(document.getElementById('admin-root')).render(
+  a.jsx(m.StrictMode, {
+    children: a.jsx(s, { client: D, children: a.jsx(j, { children: a.jsx(C, {}) }) }),
+  })
+);

@@ -13,7 +13,7 @@ const WeaponDashboard: React.FC = () => {
       const interval = setInterval(() => {
         setSysStatus(_prev => ({
           cpu: Math.floor(Math.random() * 30) + 10,
-          memory: Math.floor(Math.random() * 20) + 40
+          memory: Math.floor(Math.random() * 20) + 40,
         }));
       }, 2000);
       return () => clearInterval(interval);
@@ -28,7 +28,9 @@ const WeaponDashboard: React.FC = () => {
   }
 
   return (
-    <div className={`weapon-dashboard min-h-screen p-4 bg-nexus-obsidian-deep text-white overflow-hidden relative`}>
+    <div
+      className={`weapon-dashboard min-h-screen p-4 bg-nexus-obsidian-deep text-white overflow-hidden relative`}
+    >
       <header className="flex justify-between items-start mb-8 z-10 relative">
         <div>
           <h1 className="text-3xl font-bold text-nexus-cyan animate-pulse">GOD MODE ACTIVE</h1>

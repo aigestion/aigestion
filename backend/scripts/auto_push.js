@@ -5,7 +5,7 @@ const readline = require('readline');
 
 function askAndPush() {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  rl.question('Do you want to push the repository to GitHub now? (y/N) ', (answer) => {
+  rl.question('Do you want to push the repository to GitHub now? (y/N) ', answer => {
     rl.close();
     if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
       exec(

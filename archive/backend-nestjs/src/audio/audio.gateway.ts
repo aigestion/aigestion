@@ -24,7 +24,7 @@ export class AudioGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
 
   constructor(
     private configService: ConfigService,
-    private agentService: AgentService,
+    private agentService: AgentService
   ) {}
 
   afterInit(server: Server) {
@@ -45,15 +45,15 @@ export class AudioGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
     // In a real Vapi integration, we receive text or specific Vapi payloads
     // For this migration, we assume the client sends a text query or raw audio we transcribe
     // Let's assume 'data' contains { query: string } for the "Thinking Loop" test
-    
+
     const session = this.activeSessions.get(client.id);
     if (session) {
       try {
-        const query = data.query || "Describe the current state of the system.";
-        
+        const query = data.query || 'Describe the current state of the system.';
+
         // Call the Sovereign Agent
         const response = await this.agentService.processQuery(client.id, query);
-        
+
         // Respond to Voice Interface
         client.emit('audio-processing', { status: 'speaking', text: response });
       } catch (error) {
@@ -65,20 +65,20 @@ export class AudioGateway implements OnGatewayInit, OnGatewayConnection, OnGatew
   @SubscribeMessage('start-session')
   async handleStartSession(@ConnectedSocket() client: Socket) {
     this.logger.log(`Starting Vapi Voice Session for: ${client.id}`);
-    
+
     // Simulate Vapi Session Creation
     const vapiPublic = this.configService.get<string>('VAPI_PUBLIC_KEY') || 'mock-key';
     const sessionId = `vapi-${Date.now()}`;
-    
+
     this.activeSessions.set(client.id, { sessionId, startTime: Date.now() });
-    
-    return { 
-      event: 'session-ready', 
-      data: { 
-        sessionId, 
+
+    return {
+      event: 'session-ready',
+      data: {
+        sessionId,
         provider: 'vapi',
-        publicKey: vapiPublic 
-      } 
+        publicKey: vapiPublic,
+      },
     };
   }
 }

@@ -5,12 +5,14 @@
 Tienes razón, me he liado completamente. La situación real es:
 
 ### **✅ Lo que TENEMOS**
+
 - **website-epic completa**: Con todas las funcionalidades
 - **Daniela integrada**: Como parte de la website-epic
 - **Funciones futuristas**: Ya implementadas en el proyecto
 - **Sistema completo**: Login, dashboard, Daniela, etc.
 
 ### **❌ Lo que NO queremos**
+
 - **Landing simple**: El simple-index.html que creé
 - **Conflictos**: Entre la landing y la website-epic
 - **Build errors**: Por archivos de prueba y tests
@@ -20,12 +22,14 @@ Tienes razón, me he liado completamente. La situación real es:
 ## 🛠️ **Solución Inmediata**
 
 ### **Paso 1: Eliminar Landing Simple**
+
 ```bash
 # Eliminar el landing simple que creé
 rm simple-index.html
 ```
 
 ### **Paso 2: Excluir Tests del Build**
+
 ```json
 // tsconfig.json
 {
@@ -36,12 +40,13 @@ rm simple-index.html
 ```
 
 ### **Paso 3: Corregir Imports Rápidos**
+
 ```typescript
 // Corregir imports de @shared
-import { DanielaConversationPanel } from '../components/DanielaConversationPanel'
+import { DanielaConversationPanel } from '../components/DanielaConversationPanel';
 
 // Corregir imports de react-router-dom v5
-import { Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom';
 ```
 
 ---
@@ -49,6 +54,7 @@ import { Redirect } from 'react-router-dom'
 ## 🚀 **Implementación Rápida**
 
 ### **Opción 1: Excluir Tests del Build (Recomendado)**
+
 ```bash
 # Modificar tsconfig.json para excluir tests
 # Mantener solo el código principal
@@ -56,6 +62,7 @@ import { Redirect } from 'react-router-dom'
 ```
 
 ### **Opción 2: Build Simplificado**
+
 ```bash
 # Usar solo src/ sin __tests__
 # Build rápido y limpio
@@ -67,6 +74,7 @@ import { Redirect } from 'react-router-dom'
 ## 📋 **Configuración Final**
 
 ### **tsconfig.json (Excluir Tests)**
+
 ```json
 {
   "compilerOptions": {
@@ -89,17 +97,12 @@ import { Redirect } from 'react-router-dom'
     }
   },
   "include": ["src"],
-  "exclude": [
-    "src/__tests__/**/*",
-    "src/**/*.test.ts",
-    "src/**/*.test.tsx",
-    "node_modules",
-    "dist"
-  ]
+  "exclude": ["src/__tests__/**/*", "src/**/*.test.ts", "src/**/*.test.tsx", "node_modules", "dist"]
 }
 ```
 
 ### **vercel.json (Apuntar a Website-Epic)**
+
 ```json
 {
   "version": 2,
@@ -120,6 +123,7 @@ import { Redirect } from 'react-router-dom'
 ## 🎯 **Resultado Final Esperado**
 
 ### **✅ Website-Epic Funcional**
+
 ```
 🌐 https://website-epic.vercel.app
 ├── 🏠 Landing completa con Daniela
@@ -130,6 +134,7 @@ import { Redirect } from 'react-router-dom'
 ```
 
 ### **❌ Sin Conflictos**
+
 ```
 ❌ Sin landing simple
 ❌ Sin tests en producción
@@ -142,6 +147,7 @@ import { Redirect } from 'react-router-dom'
 ## 🔄 **Plan de Acción Inmediato**
 
 ### **1. Excluir Tests (5 minutos)**
+
 ```bash
 # Modificar tsconfig.json
 # Excluir __tests__ del build
@@ -149,6 +155,7 @@ import { Redirect } from 'react-router-dom'
 ```
 
 ### **2. Corregir Imports (5 minutos)**
+
 ```bash
 # Corregir @shared imports
 # Corregir react-router-dom
@@ -156,6 +163,7 @@ import { Redirect } from 'react-router-dom'
 ```
 
 ### **3. Deploy Limpio (5 minutos)**
+
 ```bash
 # Build sin tests
 # Deploy exitoso

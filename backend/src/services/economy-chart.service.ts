@@ -38,9 +38,11 @@ export class EconomyChartService {
     const change = ((last - first) / first) * 100;
     const emoji = change >= 0 ? '📈' : '📉';
 
-    return `📊 *Tendencia ${symbol} (Últimos 10 días)*\n` +
-           `${sparkline}\n` +
-           `${emoji} Cambio: *${change >= 0 ? '+' : ''}${change.toFixed(2)}%*\n` +
-           `💰 Actual: *$${last.toLocaleString()}*`;
+    return (
+      `📊 *Tendencia ${symbol} (Últimos 10 días)*\n` +
+      `${sparkline}\n` +
+      `${emoji} Cambio: *${change >= 0 ? '+' : ''}${change.toFixed(2)}%*\n` +
+      `💰 Actual: *$${last.toLocaleString()}*`
+    );
   }
 }

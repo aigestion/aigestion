@@ -33,7 +33,7 @@ export class StripeService {
     // Initialize Circuit Breakers - Note: These lambdas will access 'this.stripe' on execution, triggering lazy load of SDK.
     this.createCustomerBreaker = CircuitBreakerFactory.create(
       (email: string, name: string) => this.stripe.customers.create({ email, name }),
-      { name: 'Stripe.createCustomer' },
+      { name: 'Stripe.createCustomer' }
     );
 
     this.createSessionBreaker = CircuitBreakerFactory.create(
@@ -51,13 +51,13 @@ export class StripeService {
             address: 'auto',
           },
         }),
-      { name: 'Stripe.createSubscriptionCheckoutSession' },
+      { name: 'Stripe.createSubscriptionCheckoutSession' }
     );
 
     this.createPortalBreaker = CircuitBreakerFactory.create(
       (customerId: string, returnUrl: string) =>
         this.stripe.billingPortal.sessions.create({ customer: customerId, return_url: returnUrl }),
-      { name: 'Stripe.createPortalSession' },
+      { name: 'Stripe.createPortalSession' }
     );
   }
 
@@ -82,14 +82,14 @@ export class StripeService {
     customerId: string,
     priceId: string,
     successUrl: string,
-    cancelUrl: string,
+    cancelUrl: string
   ): Promise<Stripe.Checkout.Session> {
     try {
       const session = await this.createSessionBreaker.fire(
         customerId,
         priceId,
         successUrl,
-        cancelUrl,
+        cancelUrl
       );
       return session;
     } catch (error) {
@@ -103,7 +103,7 @@ export class StripeService {
    */
   async createPortalSession(
     customerId: string,
-    returnUrl: string,
+    returnUrl: string
   ): Promise<Stripe.BillingPortal.Session> {
     return this.createPortalBreaker.fire(customerId, returnUrl);
   }
@@ -144,7 +144,7 @@ export class StripeService {
           quantity,
           timestamp: Math.floor(Date.now() / 1000),
           action: 'increment',
-        },
+        }
       );
       logger.info(`Stripe usage reported: ${quantity} units for ${subscriptionItemId}`);
       return usageRecord;

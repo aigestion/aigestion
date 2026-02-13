@@ -102,11 +102,11 @@ describe('BackupService', () => {
       // Verify file downloads
       expect(mockDriveService.downloadFile).toHaveBeenCalledWith(
         'file1-id',
-        path.join(targetDir, 'file1.txt'),
+        path.join(targetDir, 'file1.txt')
       );
       expect(mockDriveService.downloadFile).toHaveBeenCalledWith(
         'file2-id',
-        path.join(targetDir, 'subfolder', 'file2.txt'),
+        path.join(targetDir, 'subfolder', 'file2.txt')
       );
     });
 
@@ -114,7 +114,7 @@ describe('BackupService', () => {
       mockDriveService.findFolder.mockResolvedValue(null);
 
       await expect(backupService.restoreDirectory(targetDir, sourceFolder)).rejects.toThrow(
-        `Remote backup folder not found: ${sourceFolder}`,
+        `Remote backup folder not found: ${sourceFolder}`
       );
     });
 
@@ -153,7 +153,7 @@ describe('BackupService', () => {
 
       expect(mockDriveService.downloadFile).toHaveBeenCalledWith(
         'file1-id',
-        path.join(targetDir, 'file1.txt'),
+        path.join(targetDir, 'file1.txt')
       );
     });
   });

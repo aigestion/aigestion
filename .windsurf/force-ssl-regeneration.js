@@ -8,12 +8,12 @@ async function forceSSLRegeneration() {
   try {
     // 1. Forzar rebuild completo de Pages
     console.log('1. 🔄 Forzando rebuild completo...');
-    
+
     // Usar GitHub CLI para forzar rebuild
     try {
-      execSync('gh api repos/:owner/:repo/pages/builds -X POST', { 
+      execSync('gh api repos/:owner/:repo/pages/builds -X POST', {
         stdio: 'inherit',
-        cwd: 'c:\\Users\\Alejandro\\AIGestion'
+        cwd: 'c:\\Users\\Alejandro\\AIGestion',
       });
       console.log('   ✅ Build trigger enviado via GitHub CLI');
     } catch (cliError) {
@@ -22,17 +22,17 @@ async function forceSSLRegeneration() {
 
     // 2. Eliminar y recrear dominio personalizado
     console.log('2. 🗑️ Eliminando dominio personalizado temporalmente...');
-    
+
     const options = {
       hostname: 'api.github.com',
       port: 443,
       path: '/repos/aigestion/aigestion-net/pages/domains/aigestion.net',
       method: 'DELETE',
       headers: {
-        'Authorization': `token ${process.env.GITHUB_TOKEN || 'ghp_YOUR_TOKEN_HERE'}`,
+        Authorization: `token ${process.env.GITHUB_TOKEN || 'ghp_YOUR_TOKEN_HERE'}`,
         'User-Agent': 'AIGestion-SSL-Fixer',
-        'Accept': 'application/vnd.github.v3+json'
-      }
+        Accept: 'application/vnd.github.v3+json',
+      },
     };
 
     // Intentar eliminar dominio
@@ -45,22 +45,22 @@ async function forceSSLRegeneration() {
 
     // 3. Recrear dominio personalizado
     console.log('3. ➕ Recreando dominio personalizado...');
-    
+
     const createOptions = {
       hostname: 'api.github.com',
       port: 443,
       path: '/repos/aigestion/aigestion-net/pages/domains',
       method: 'POST',
       headers: {
-        'Authorization': `token ${process.env.GITHUB_TOKEN || 'ghp_YOUR_TOKEN_HERE'}`,
+        Authorization: `token ${process.env.GITHUB_TOKEN || 'ghp_YOUR_TOKEN_HERE'}`,
         'User-Agent': 'AIGestion-SSL-Fixer',
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      }
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+      },
     };
 
     const domainData = JSON.stringify({
-      domain: 'aigestion.net'
+      domain: 'aigestion.net',
     });
 
     await makeGitHubRequest(createOptions, domainData);
@@ -68,23 +68,23 @@ async function forceSSLRegeneration() {
 
     // 4. Forzar HTTPS enforcement
     console.log('4. 🔒 Forzando HTTPS enforcement...');
-    
+
     const httpsOptions = {
       hostname: 'api.github.com',
       port: 443,
       path: '/repos/aigestion/aigestion-net/pages',
       method: 'PUT',
       headers: {
-        'Authorization': `token ${process.env.GITHUB_TOKEN || 'ghp_YOUR_TOKEN_HERE'}`,
+        Authorization: `token ${process.env.GITHUB_TOKEN || 'ghp_YOUR_TOKEN_HERE'}`,
         'User-Agent': 'AIGestion-SSL-Fixer',
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      }
+        Accept: 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json',
+      },
     };
 
     const httpsData = JSON.stringify({
       https_enforced: true,
-      build_type: 'legacy'
+      build_type: 'legacy',
     });
 
     await makeGitHubRequest(httpsOptions, httpsData);
@@ -96,7 +96,7 @@ async function forceSSLRegeneration() {
 
     console.log('6. 🔍 Verificación final SSL...');
     const sslStatus = await checkSSLStatus();
-    
+
     if (sslStatus.valid) {
       console.log('   🎉 SSL Certificate regenerado exitosamente!');
       console.log(`   📅 Válido hasta: ${sslStatus.expiresAt}`);
@@ -107,7 +107,6 @@ async function forceSSLRegeneration() {
     }
 
     return sslStatus;
-
   } catch (error) {
     console.error(`❌ Error en regeneración SSL: ${error.message}`);
     return { valid: false, error: error.message };
@@ -116,9 +115,9 @@ async function forceSSLRegeneration() {
 
 function makeGitHubRequest(options, data = null) {
   return new Promise((resolve, reject) => {
-    const req = https.request(options, (res) => {
+    const req = https.request(options, res => {
       let body = '';
-      res.on('data', chunk => body += chunk);
+      res.on('data', chunk => (body += chunk));
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve({ status: res.statusCode, body });
@@ -147,10 +146,10 @@ function checkSSLStatus() {
       hostname: 'aigestion.net',
       port: 443,
       method: 'GET',
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     };
 
-    const req = https.request(options, (res) => {
+    const req = https.request(options, res => {
       const cert = res.socket.getPeerCertificate();
       if (Object.keys(cert).length === 0) {
         resolve({ valid: false, error: 'No certificate found' });
@@ -162,11 +161,11 @@ function checkSSLStatus() {
         subject: cert.subject,
         issuer: cert.issuer?.O || 'Unknown',
         expiresAt: new Date(cert.valid_to).toISOString(),
-        daysUntilExpiry: Math.floor((new Date(cert.valid_to) - new Date()) / (1000 * 60 * 60 * 24))
+        daysUntilExpiry: Math.floor((new Date(cert.valid_to) - new Date()) / (1000 * 60 * 60 * 24)),
       });
     });
 
-    req.on('error', (error) => {
+    req.on('error', error => {
       resolve({ valid: false, error: error.message });
     });
     req.setTimeout(5000, () => {

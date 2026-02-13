@@ -12,7 +12,7 @@
   .glass-effect {
     @apply bg-white/10 backdrop-blur-lg border border-white/20;
   }
-  
+
   .gradient-text {
     @apply bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent;
   }

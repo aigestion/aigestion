@@ -60,7 +60,7 @@ export class StripeTool extends BaseTool<{ action: string; userId: string; price
           user.stripeCustomerId,
           priceId,
           successUrl,
-          cancelUrl,
+          cancelUrl
         );
         return { url: session.url };
       }

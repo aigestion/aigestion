@@ -12,8 +12,8 @@ El **Sistema de Auditoría NEXUS V1 v2.0** ha sido completamente implementado, o
 
 ### 📈 Resultados Conseguidos
 
-| Métrica                   | Valor    | Estatus                |
-| ------------------------- | -------- | ---------------------- |
+| Métrica                   | Valor    | Estatus                 |
+| ------------------------- | -------- | ----------------------- |
 | **Implementación**        | 100%     | ✅ Completa             |
 | **Documentación**         | 100%     | ✅ Completa             |
 | **Cobertura de Scripts**  | 7/7      | ✅ Todos Operativos     |
@@ -427,8 +427,8 @@ El sistema está listo para:
 
 ## ✍️ Firmas de Aprobación
 
-| Rol              | Estado             |
-| ---------------- | ------------------ |
+| Rol              | Estado              |
+| ---------------- | ------------------- |
 | Análisis Técnico | ✅ Completado       |
 | Documentación    | ✅ Completa         |
 | Optimización     | ✅ Identificada     |
@@ -444,5 +444,4 @@ El sistema está listo para:
 
 ---
 
-*Este sumario representa el estado completamente optimizado del Sistema de Auditoría NEXUS V1 v2.0 tras análisis profundo y reorganización de documentación.*
-
+_Este sumario representa el estado completamente optimizado del Sistema de Auditoría NEXUS V1 v2.0 tras análisis profundo y reorganización de documentación._

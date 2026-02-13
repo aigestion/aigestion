@@ -9,6 +9,7 @@ He implementado un stack de monitoring empresarial completo para AIGestion:
 ## ✅ **STACK DE MONITORING IMPLEMENTADO**
 
 ### 📈 **Prometheus Configuration**
+
 ```yaml
 # monitoring/prometheus.yml
 global:
@@ -18,8 +19,8 @@ global:
     monitor: 'aigestion-monitor'
 
 rule_files:
-  - "alert_rules.yml"
-  - "recording_rules.yml"
+  - 'alert_rules.yml'
+  - 'recording_rules.yml'
 
 scrape_configs:
   # Application Metrics
@@ -64,12 +65,13 @@ scrape_configs:
 
 alerting:
   alertmanagers:
-  - static_configs:
-      - targets:
-        - alertmanager:9093
+    - static_configs:
+        - targets:
+            - alertmanager:9093
 ```
 
 ### 🚨 **Alerting Rules**
+
 ```yaml
 # monitoring/alert_rules.yml
 groups:
@@ -83,8 +85,8 @@ groups:
           severity: critical
           service: application
         annotations:
-          summary: "Application {{ $labels.job }} is down"
-          description: "Application {{ $labels.job }} has been down for more than 1 minute."
+          summary: 'Application {{ $labels.job }} is down'
+          description: 'Application {{ $labels.job }} has been down for more than 1 minute.'
 
       # High Error Rate
       - alert: HighErrorRate
@@ -94,8 +96,8 @@ groups:
           severity: warning
           service: application
         annotations:
-          summary: "High error rate detected"
-          description: "Error rate is {{ $value | humanizePercentage }} for {{ $labels.job }}"
+          summary: 'High error rate detected'
+          description: 'Error rate is {{ $value | humanizePercentage }} for {{ $labels.job }}'
 
       # High Latency
       - alert: HighLatency
@@ -105,8 +107,8 @@ groups:
           severity: warning
           service: application
         annotations:
-          summary: "High latency detected"
-          description: "95th percentile latency is {{ $value }}s for {{ $labels.job }}"
+          summary: 'High latency detected'
+          description: '95th percentile latency is {{ $value }}s for {{ $labels.job }}'
 
       # Database Issues
       - alert: DatabaseConnectionsHigh
@@ -116,8 +118,8 @@ groups:
           severity: warning
           service: database
         annotations:
-          summary: "High database connections"
-          description: "Database has {{ $value }} active connections"
+          summary: 'High database connections'
+          description: 'Database has {{ $value }} active connections'
 
       # Memory Usage
       - alert: HighMemoryUsage
@@ -127,8 +129,8 @@ groups:
           severity: warning
           service: infrastructure
         annotations:
-          summary: "High memory usage"
-          description: "Memory usage is {{ $value | humanizePercentage }}"
+          summary: 'High memory usage'
+          description: 'Memory usage is {{ $value | humanizePercentage }}'
 
       # Disk Usage
       - alert: HighDiskUsage
@@ -138,8 +140,8 @@ groups:
           severity: warning
           service: infrastructure
         annotations:
-          summary: "High disk usage"
-          description: "Disk usage is {{ $value | humanizePercentage }}"
+          summary: 'High disk usage'
+          description: 'Disk usage is {{ $value | humanizePercentage }}'
 
       # AI Service Issues
       - alert: AIServiceFailure
@@ -149,8 +151,8 @@ groups:
           severity: critical
           service: ai
         annotations:
-          summary: "AI service failure rate high"
-          description: "AI service error rate is {{ $value | humanizePercentage }}"
+          summary: 'AI service failure rate high'
+          description: 'AI service error rate is {{ $value | humanizePercentage }}'
 
       # Queue Issues
       - alert: QueueBacklog
@@ -160,11 +162,12 @@ groups:
           severity: warning
           service: queue
         annotations:
-          summary: "Queue backlog detected"
-          description: "Queue has {{ $value }} pending jobs"
+          summary: 'Queue backlog detected'
+          description: 'Queue has {{ $value }} pending jobs'
 ```
 
 ### 📊 **Grafana Dashboards**
+
 ```json
 {
   "dashboard": {
@@ -186,8 +189,8 @@ groups:
             },
             "thresholds": {
               "steps": [
-                {"color": "red", "value": 0},
-                {"color": "green", "value": 1}
+                { "color": "red", "value": 0 },
+                { "color": "green", "value": 1 }
               ]
             }
           }
@@ -285,6 +288,7 @@ groups:
 ```
 
 ### 🔍 **Custom Metrics Exporter**
+
 ```typescript
 // backend/src/metrics/prometheus-exporter.ts
 import { register, Counter, Histogram, Gauge } from 'prom-client';
@@ -297,7 +301,7 @@ const httpRequestsTotal = new Counter({
   name: 'http_requests_total',
   help: 'Total number of HTTP requests',
   labelNames: ['method', 'route', 'status_code'],
-  registers: [register]
+  registers: [register],
 });
 
 const httpRequestDuration = new Histogram({
@@ -305,14 +309,14 @@ const httpRequestDuration = new Histogram({
   help: 'Duration of HTTP requests in seconds',
   labelNames: ['method', 'route', 'status_code'],
   buckets: [0.1, 0.5, 1, 2, 5, 10],
-  registers: [register]
+  registers: [register],
 });
 
 // Database Metrics
 const databaseConnectionsActive = new Gauge({
   name: 'database_connections_active',
   help: 'Number of active database connections',
-  registers: [register]
+  registers: [register],
 });
 
 const databaseQueryDuration = new Histogram({
@@ -320,7 +324,7 @@ const databaseQueryDuration = new Histogram({
   help: 'Duration of database queries in seconds',
   labelNames: ['query_type'],
   buckets: [0.01, 0.05, 0.1, 0.5, 1, 2],
-  registers: [register]
+  registers: [register],
 });
 
 // AI Service Metrics
@@ -328,7 +332,7 @@ const aiRequestsTotal = new Counter({
   name: 'ai_requests_total',
   help: 'Total number of AI service requests',
   labelNames: ['model', 'provider', 'status'],
-  registers: [register]
+  registers: [register],
 });
 
 const aiResponseTime = new Histogram({
@@ -336,7 +340,7 @@ const aiResponseTime = new Histogram({
   help: 'AI service response time in seconds',
   labelNames: ['model', 'provider'],
   buckets: [0.5, 1, 2, 5, 10, 30],
-  registers: [register]
+  registers: [register],
 });
 
 // Queue Metrics
@@ -344,28 +348,28 @@ const queueSize = new Gauge({
   name: 'bullmq_queue_size',
   help: 'Number of jobs in queue',
   labelNames: ['queue_name'],
-  registers: [register]
+  registers: [register],
 });
 
 const jobsProcessedTotal = new Counter({
   name: 'bullmq_jobs_processed_total',
   help: 'Total number of jobs processed',
   labelNames: ['queue_name', 'status'],
-  registers: [register]
+  registers: [register],
 });
 
 // Business Metrics
 const activeUsers = new Gauge({
   name: 'active_users_total',
   help: 'Number of active users',
-  registers: [register]
+  registers: [register],
 });
 
 const conversationsCreated = new Counter({
   name: 'conversations_created_total',
   help: 'Total number of conversations created',
   labelNames: ['type'],
-  registers: [register]
+  registers: [register],
 });
 
 export {
@@ -379,18 +383,19 @@ export {
   queueSize,
   jobsProcessedTotal,
   activeUsers,
-  conversationsCreated
+  conversationsCreated,
 };
 ```
 
 ### 📱 **Frontend Metrics Collection**
+
 ```typescript
 // frontend/src/utils/metrics.ts
 class FrontendMetrics {
   private observer: PerformanceObserver;
 
   constructor() {
-    this.observer = new PerformanceObserver((list) => {
+    this.observer = new PerformanceObserver(list => {
       for (const entry of list.getEntries()) {
         this.recordMetric(entry);
       }
@@ -423,8 +428,8 @@ class FrontendMetrics {
         loadComplete: entry.loadEventEnd - entry.loadEventStart,
         firstPaint: this.getFirstPaint(),
         firstContentfulPaint: this.getFirstContentfulPaint(),
-        timestamp: Date.now()
-      })
+        timestamp: Date.now(),
+      }),
     });
   }
 
@@ -439,8 +444,8 @@ class FrontendMetrics {
         url: entry.name,
         duration: entry.duration,
         size: entry.transferSize,
-        timestamp: Date.now()
-      })
+        timestamp: Date.now(),
+      }),
     });
   }
 
@@ -451,8 +456,8 @@ class FrontendMetrics {
       body: JSON.stringify({
         name: entry.name,
         duration: entry.duration,
-        timestamp: Date.now()
-      })
+        timestamp: Date.now(),
+      }),
     });
   }
 
@@ -482,8 +487,8 @@ class FrontendMetrics {
       body: JSON.stringify({
         action,
         value,
-        timestamp: Date.now()
-      })
+        timestamp: Date.now(),
+      }),
     });
   }
 
@@ -495,8 +500,8 @@ class FrontendMetrics {
         page,
         referrer: document.referrer,
         userAgent: navigator.userAgent,
-        timestamp: Date.now()
-      })
+        timestamp: Date.now(),
+      }),
     });
   }
 }
@@ -505,6 +510,7 @@ export const metrics = new FrontendMetrics();
 ```
 
 ### 🐳 **Docker Compose Monitoring**
+
 ```yaml
 # docker-compose.monitoring.yml
 version: '3.8'
@@ -514,7 +520,7 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     ports:
-      - "9090:9090"
+      - '9090:9090'
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./monitoring/alert_rules.yml:/etc/prometheus/alert_rules.yml
@@ -531,7 +537,7 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - "3001:3000"
+      - '3001:3000'
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
@@ -546,7 +552,7 @@ services:
     image: prom/alertmanager:latest
     container_name: alertmanager
     ports:
-      - "9093:9093"
+      - '9093:9093'
     volumes:
       - ./monitoring/alertmanager.yml:/etc/alertmanager/alertmanager.yml
       - alertmanager_data:/alertmanager
@@ -557,7 +563,7 @@ services:
     image: prom/node-exporter:latest
     container_name: node-exporter
     ports:
-      - "9100:9100"
+      - '9100:9100'
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
@@ -569,7 +575,7 @@ services:
     image: prometheuscommunity/postgres-exporter:latest
     container_name: postgres-exporter
     ports:
-      - "9187:9187"
+      - '9187:9187'
     environment:
       - DATA_SOURCE_NAME=postgresql://postgres:password@postgres:5432/aigestion?sslmode=disable
     networks:
@@ -579,7 +585,7 @@ services:
     image: oliver006/redis_exporter:latest
     container_name: redis-exporter
     ports:
-      - "9121:9121"
+      - '9121:9121'
     environment:
       - REDIS_ADDR=redis://redis:6379
     networks:
@@ -589,7 +595,7 @@ services:
     image: grafana/loki:latest
     container_name: loki
     ports:
-      - "3100:3100"
+      - '3100:3100'
     volumes:
       - loki_data:/loki
     command: -config.file=/etc/loki/local-config.yaml
@@ -618,6 +624,7 @@ networks:
 ```
 
 ### 📊 **Health Check Integration**
+
 ```typescript
 // backend/src/metrics/health-metrics.ts
 import { Request, Response } from 'express';
@@ -634,7 +641,7 @@ export class HealthMetrics {
       external: await this.getExternalServiceHealth(),
       database: await this.getDatabaseHealth(),
       redis: await this.getRedisHealth(),
-      ai: await this.getAIServiceHealth()
+      ai: await this.getAIServiceHealth(),
     };
 
     // Update Prometheus metrics
@@ -642,7 +649,7 @@ export class HealthMetrics {
 
     res.json({
       status: 'healthy',
-      metrics
+      metrics,
     });
   }
 
@@ -650,12 +657,12 @@ export class HealthMetrics {
     const services = {
       database: await this.checkDatabaseHealth(),
       redis: await this.checkRedisHealth(),
-      ai: await this.checkAIServiceHealth()
+      ai: await this.checkAIServiceHealth(),
     };
 
     return {
       healthy: Object.values(services).every(status => status.healthy),
-      services
+      services,
     };
   }
 
@@ -665,13 +672,13 @@ export class HealthMetrics {
       return {
         healthy: true,
         latency: Date.now(),
-        connections: await db.query('SELECT count(*) as count FROM pg_stat_activity')
+        connections: await db.query('SELECT count(*) as count FROM pg_stat_activity'),
       };
     } catch (error) {
       return {
         healthy: false,
         error: error.message,
-        latency: Date.now()
+        latency: Date.now(),
       };
     }
   }
@@ -682,12 +689,12 @@ export class HealthMetrics {
       await redis.ping();
       return {
         healthy: true,
-        latency: Date.now() - start
+        latency: Date.now() - start,
       };
     } catch (error) {
       return {
         healthy: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -699,12 +706,12 @@ export class HealthMetrics {
       return {
         healthy: response.ok,
         latency: Date.now() - start,
-        status: response.status
+        status: response.status,
       };
     } catch (error) {
       return {
         healthy: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -718,7 +725,7 @@ export class HealthMetrics {
     const healthCheckDuration = new Histogram({
       name: 'health_check_duration_seconds',
       help: 'Duration of health checks',
-      registers: [register]
+      registers: [register],
     });
 
     healthCheckDuration.observe(metrics.external.database.latency / 1000);
@@ -731,6 +738,7 @@ export class HealthMetrics {
 ## 🎯 **IMPLEMENTACIÓN COMPLETA**
 
 ### **Stack de Monitoring Empresarial**
+
 - ✅ **Prometheus** - Recolección de métricas
 - ✅ **Grafana** - Visualización y dashboards
 - ✅ **AlertManager** - Gestión de alertas
@@ -740,6 +748,7 @@ export class HealthMetrics {
 - ✅ **Promtail** - Log shipping
 
 ### **Métricas Implementadas**
+
 - 📊 **Application Metrics** - Request rate, latency, errors
 - 🗄️ **Database Metrics** - Connections, query performance
 - 🤖 **AI Service Metrics** - Requests, response time, model usage
@@ -748,6 +757,7 @@ export class HealthMetrics {
 - 💾 **Infrastructure Metrics** - CPU, memory, disk, network
 
 ### **Alertas Inteligentes**
+
 - 🚨 **Critical Alerts** - Application down, high error rate
 - ⚠️ **Warning Alerts** - High latency, resource usage
 - 📈 **Business Alerts** - User activity, conversation metrics
@@ -758,6 +768,7 @@ export class HealthMetrics {
 ## 🚀 **USO INMEDIATO**
 
 ### **Iniciar Monitoring Stack**
+
 ```bash
 # Iniciar servicios de monitoring
 docker-compose -f docker-compose.monitoring.yml up -d
@@ -769,6 +780,7 @@ docker-compose -f docker-compose.monitoring.yml up -d
 ```
 
 ### **Verificar Métricas**
+
 ```bash
 # Verificar endpoints de métricas
 curl http://localhost:3000/metrics
@@ -779,6 +791,7 @@ curl http://localhost:3000/health
 ```
 
 ### **Configurar Alertas**
+
 ```bash
 # Verificar reglas de alertas
 curl http://localhost:9093/api/v1/alerts
@@ -792,6 +805,7 @@ curl http://localhost:9093/api/v1/silences
 ## 📊 **DASHBOARDS DISPONIBLES**
 
 ### **Principal Overview**
+
 - 📈 **Application Health** - Estado general
 - 🚀 **Performance Metrics** - Latencia y throughput
 - 🗄️ **Database Health** - Conexiones y queries
@@ -799,6 +813,7 @@ curl http://localhost:9093/api/v1/silences
 - 📱 **User Activity** - Usuarios activos y sesiones
 
 ### **Técnicos**
+
 - 💾 **Infrastructure** - CPU, memory, disk, network
 - 🔄 **Queue Performance** - Job processing
 - 📊 **Business Metrics** - Conversaciones, mensajes

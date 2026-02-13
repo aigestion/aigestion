@@ -25,13 +25,18 @@ export function useWebWorker<T = any>(options: UseWebWorkerOptions) {
   const [isReady, setIsReady] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  
+
   const workerRef = useRef<Worker | null>(null);
-  const pendingTasksRef = useRef<Map<string, {
-    resolve: (value: WorkerResult<T>) => void;
-    reject: (error: Error) => void;
-    timeout?: NodeJS.Timeout;
-  }>>(new Map());
+  const pendingTasksRef = useRef<
+    Map<
+      string,
+      {
+        resolve: (value: WorkerResult<T>) => void;
+        reject: (error: Error) => void;
+        timeout?: NodeJS.Timeout;
+      }
+    >
+  >(new Map());
 
   // Initialize worker
   useEffect(() => {
@@ -57,92 +62,101 @@ export function useWebWorker<T = any>(options: UseWebWorkerOptions) {
     }
   }, [options.workerUrl]);
 
-  const handleWorkerMessage = useCallback((event: MessageEvent<WorkerResult<T>>) => {
-    const result = event.data;
-    const pending = pendingTasksRef.current.get(result.id);
+  const handleWorkerMessage = useCallback(
+    (event: MessageEvent<WorkerResult<T>>) => {
+      const result = event.data;
+      const pending = pendingTasksRef.current.get(result.id);
 
-    if (pending) {
-      pendingTasksRef.current.delete(result.id);
-      
-      if (pending.timeout) {
-        clearTimeout(pending.timeout);
-      }
+      if (pending) {
+        pendingTasksRef.current.delete(result.id);
 
-      if (result.error) {
-        const error = new Error(result.error);
-        pending.reject(error);
-        setError(error);
-        options.onError?.(error);
-      } else {
-        pending.resolve(result);
-        options.onSuccess?.(result.result);
-        setError(null);
-      }
-    }
-  }, [options.onError, options.onSuccess]);
+        if (pending.timeout) {
+          clearTimeout(pending.timeout);
+        }
 
-  const handleWorkerError = useCallback((event: ErrorEvent) => {
-    const error = new Error(event.message);
-    setError(error);
-    options.onError?.(error);
-    
-    // Reject all pending tasks
-    pendingTasksRef.current.forEach(pending => {
-      if (pending.timeout) {
-        clearTimeout(pending.timeout);
-      }
-      pending.reject(error);
-    });
-    pendingTasksRef.current.clear();
-  }, [options.onError]);
-
-  const executeTask = useCallback(async (task: WorkerTask<T>): Promise<WorkerResult<T>> => {
-    if (!workerRef.current || !isReady) {
-      throw new Error('Worker is not ready');
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    return new Promise<WorkerResult<T>>((resolve, reject) => {
-      // Set up timeout if specified
-      let timeout: NodeJS.Timeout | undefined;
-      if (options.timeout) {
-        timeout = setTimeout(() => {
-          pendingTasksRef.current.delete(task.id);
-          reject(new Error(`Worker task timed out after ${options.timeout}ms`));
-        }, options.timeout);
-      }
-
-      // Store pending task
-      pendingTasksRef.current.set(task.id, { resolve, reject, timeout });
-
-      // Send task to worker
-      workerRef.current!.postMessage(task);
-    });
-  }, [isReady, options.timeout]);
-
-  const executeTaskWithRetry = useCallback(async (
-    task: WorkerTask<T>,
-    maxRetries: number = 3
-  ): Promise<WorkerResult<T>> => {
-    let lastError: Error | null = null;
-
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        return await executeTask(task);
-      } catch (error) {
-        lastError = error instanceof Error ? error : new Error('Unknown error');
-        
-        if (attempt < maxRetries) {
-          // Exponential backoff
-          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+        if (result.error) {
+          const error = new Error(result.error);
+          pending.reject(error);
+          setError(error);
+          options.onError?.(error);
+        } else {
+          pending.resolve(result);
+          options.onSuccess?.(result.result);
+          setError(null);
         }
       }
-    }
+    },
+    [options.onError, options.onSuccess]
+  );
 
-    throw lastError;
-  }, [executeTask]);
+  const handleWorkerError = useCallback(
+    (event: ErrorEvent) => {
+      const error = new Error(event.message);
+      setError(error);
+      options.onError?.(error);
+
+      // Reject all pending tasks
+      pendingTasksRef.current.forEach(pending => {
+        if (pending.timeout) {
+          clearTimeout(pending.timeout);
+        }
+        pending.reject(error);
+      });
+      pendingTasksRef.current.clear();
+    },
+    [options.onError]
+  );
+
+  const executeTask = useCallback(
+    async (task: WorkerTask<T>): Promise<WorkerResult<T>> => {
+      if (!workerRef.current || !isReady) {
+        throw new Error('Worker is not ready');
+      }
+
+      setIsLoading(true);
+      setError(null);
+
+      return new Promise<WorkerResult<T>>((resolve, reject) => {
+        // Set up timeout if specified
+        let timeout: NodeJS.Timeout | undefined;
+        if (options.timeout) {
+          timeout = setTimeout(() => {
+            pendingTasksRef.current.delete(task.id);
+            reject(new Error(`Worker task timed out after ${options.timeout}ms`));
+          }, options.timeout);
+        }
+
+        // Store pending task
+        pendingTasksRef.current.set(task.id, { resolve, reject, timeout });
+
+        // Send task to worker
+        workerRef.current!.postMessage(task);
+      });
+    },
+    [isReady, options.timeout]
+  );
+
+  const executeTaskWithRetry = useCallback(
+    async (task: WorkerTask<T>, maxRetries: number = 3): Promise<WorkerResult<T>> => {
+      let lastError: Error | null = null;
+
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          return await executeTask(task);
+        } catch (error) {
+          lastError = error instanceof Error ? error : new Error('Unknown error');
+
+          if (attempt < maxRetries) {
+            // Exponential backoff
+            await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+          }
+        }
+      }
+
+      throw lastError;
+    },
+    [executeTask]
+  );
 
   const terminate = useCallback(() => {
     if (workerRef.current) {
@@ -204,11 +218,13 @@ export function useWorkerPool<T = any>(options: {
   const { workerUrl, poolSize = 4, taskTimeout = 30000 } = options;
   const workers = useRef<Array<Worker | null>>([]);
   const availableWorkers = useRef<number[]>([]);
-  const taskQueue = useRef<Array<{
-    task: WorkerTask<T>;
-    resolve: (result: WorkerResult<T>) => void;
-    reject: (error: Error) => void;
-  }>>([]);
+  const taskQueue = useRef<
+    Array<{
+      task: WorkerTask<T>;
+      resolve: (result: WorkerResult<T>) => void;
+      reject: (error: Error) => void;
+    }>
+  >([]);
   const [isReady, setIsReady] = useState(false);
 
   // Initialize worker pool
@@ -223,7 +239,7 @@ export function useWorkerPool<T = any>(options: {
           worker.addEventListener('message', (event: MessageEvent<WorkerResult<T>>) => {
             const result = event.data;
             const taskIndex = taskQueue.current.findIndex(t => t.task.id === result.id);
-            
+
             if (taskIndex !== -1) {
               const task = taskQueue.current[taskIndex];
               taskQueue.current.splice(taskIndex, 1);
@@ -240,7 +256,7 @@ export function useWorkerPool<T = any>(options: {
           console.error(`Failed to initialize worker ${i}:`, error);
         }
       }
-      
+
       setIsReady(true);
     };
 

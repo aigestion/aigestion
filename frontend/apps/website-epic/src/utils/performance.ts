@@ -21,28 +21,28 @@ class PerformanceMonitor {
 
   private initObservers() {
     // First Contentful Paint
-    this.observeEntry('paint', (entries) => {
-      const fcp = entries.find((entry) => entry.name === 'first-contentful-paint');
+    this.observeEntry('paint', entries => {
+      const fcp = entries.find(entry => entry.name === 'first-contentful-paint');
       if (fcp) {
         this.metrics.fcp = fcp.startTime;
       }
     });
 
     // Largest Contentful Paint
-    this.observeEntry('largest-contentful-paint', (entries) => {
+    this.observeEntry('largest-contentful-paint', entries => {
       const lastEntry = entries[entries.length - 1];
       this.metrics.lcp = lastEntry.startTime;
     });
 
     // First Input Delay
-    this.observeEntry('first-input', (entries) => {
+    this.observeEntry('first-input', entries => {
       const firstEntry = entries[0];
       this.metrics.fid = firstEntry.processingStart - firstEntry.startTime;
     });
 
     // Cumulative Layout Shift
     let clsValue = 0;
-    this.observeEntry('layout-shift', (entries) => {
+    this.observeEntry('layout-shift', entries => {
       for (const entry of entries) {
         if (!(entry as any).hadRecentInput) {
           clsValue += (entry as any).value;
@@ -57,7 +57,7 @@ class PerformanceMonitor {
 
   private observeEntry(type: string, callback: (entries: any[]) => void) {
     try {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         callback(list.getEntries());
       });
       observer.observe({ type, buffered: true });
@@ -94,7 +94,7 @@ class PerformanceMonitor {
   }
 
   public disconnect() {
-    this.observers.forEach((observer) => observer.disconnect());
+    this.observers.forEach(observer => observer.disconnect());
     this.observers = [];
   }
 }

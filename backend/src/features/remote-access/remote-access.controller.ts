@@ -133,7 +133,7 @@ export class RemoteAccessController {
       const userIdStr = Array.isArray(userId) ? userId[0] : userId;
 
       const sessions = Array.from(this.activeSessions.values()).filter(
-        session => session.fromUserId === userIdStr || session.toUserId === userIdStr,
+        session => session.fromUserId === userIdStr || session.toUserId === userIdStr
       );
 
       (res as any).status(200).json({

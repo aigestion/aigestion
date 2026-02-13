@@ -6,6 +6,7 @@ NEXUS V1 ahora gestiona **DOS canales de YouTube** independientes:
 
 1. **Canal Personal (nemisanalex@gmail.com)**: DocumentaciÃ³n tÃ©cnica, tutoriales, aprendizaje
 2. **Canal Empresarial (a.fernandez@NEXUS V1.net)**: Marketing, demos, casos de Ã©xito, webinars
+
 - Email: a.fernandez@NEXUS V1.net
 
 ## Arquitectura
@@ -33,11 +34,13 @@ NEXUS V1 ahora gestiona **DOS canales de YouTube** independientes:
 ## Variables de Entorno Requeridas
 
 ### API Key Compartida
+
 ```env
 YOUTUBE_API_KEY=your_youtube_data_api_v3_key
 ```
 
 ### Canal Personal (nemisanalex)
+
 ```env
 YOUTUBE_PERSONAL_CHANNEL_ID=UC...
 YOUTUBE_PERSONAL_EMAIL=nemisanalex@gmail.com
@@ -47,6 +50,7 @@ YOUTUBE_PERSONAL_REFRESH_TOKEN=your_refresh_token
 ```
 
 ### Canal Empresarial (NEXUS V1)
+
 ```env
 YOUTUBE_BUSINESS_CHANNEL_ID=UC...
 YOUTUBE_BUSINESS_EMAIL=a.fernandez@NEXUS V1.net
@@ -102,7 +106,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-rl.question('Enter the code from that page here: ', async (code) => {
+rl.question('Enter the code from that page here: ', async code => {
   const { tokens } = await oauth2Client.getToken(code);
   console.log('Refresh Token:', tokens.refresh_token);
   rl.close();
@@ -110,6 +114,7 @@ rl.question('Enter the code from that page here: ', async (code) => {
 ```
 
 **IMPORTANTE**:
+
 - Ejecuta este proceso **DOS VECES** (una vez logueado con cada cuenta de Gmail)
 - Guarda cada refresh token en las variables de entorno correspondientes
 
@@ -230,11 +235,7 @@ Las ideas estÃ¡n organizadas en `src/data/youtube-content-ideas.ts`:
 ### Uso de Ideas
 
 ```typescript
-import {
-  contentIdeas,
-  getIdeasByChannel,
-  getContentStats
-} from './data/youtube-content-ideas';
+import { contentIdeas, getIdeasByChannel, getContentStats } from './data/youtube-content-ideas';
 
 // Todas las ideas
 console.log(contentIdeas);
@@ -318,27 +319,32 @@ const YOUTUBE_CATEGORIES = {
 ```
 
 **RecomendaciÃ³n**:
+
 - Canal Personal: CategorÃ­a `28` (Science & Technology)
 - Canal Empresarial: CategorÃ­a `28` (Science & Technology) o `27` (Education)
 
 ## Mejores PrÃ¡cticas
 
 ### TÃ­tulos
+
 - **Personal**: TÃ©cnicos y especÃ­ficos ("TypeScript + Node.js: Setup desde cero")
 - **Empresarial**: Orientados a beneficios ("Ahorra 10 horas semanales con automatizaciÃ³n")
 
 ### Descripciones
+
 - Primera lÃ­nea: Hook (por quÃ© ver este video)
 - Timestamps para videos >10 min
 - Links relevantes (docs, GitHub, sitio web)
 - Call to action (suscribirse, probar el producto)
 
 ### Tags
+
 - 10-15 tags por video
 - Mix de tags amplios y especÃ­ficos
 - Incluir nombre del canal/marca
 
 ### Thumbnails
+
 - ResoluciÃ³n: 1280x720 (16:9)
 - Formato: JPG, PNG (< 2MB)
 - Texto grande y legible
@@ -346,6 +352,7 @@ const YOUTUBE_CATEGORIES = {
 - Branding consistente
 
 ### ProgramaciÃ³n
+
 - **Personal**: Martes y Viernes (contenido tÃ©cnico)
 - **Empresarial**: Lunes y Jueves (contenido business)
 - Hora: 9:00 AM - 11:00 AM (mejor engagement)
@@ -377,15 +384,19 @@ const YOUTUBE_CATEGORIES = {
 ## Troubleshooting
 
 ### Error: "OAuth2 credentials incomplete"
+
 **SoluciÃ³n**: Verifica que todas las variables de entorno estÃ©n configuradas para el canal correspondiente.
 
 ### Error: "Refresh token expired"
+
 **SoluciÃ³n**: Los refresh tokens pueden expirar si no se usan por 6 meses. Regenera el token siguiendo el proceso de OAuth2.
 
 ### Error: "Quota exceeded"
+
 **SoluciÃ³n**: YouTube API tiene lÃ­mites diarios (10,000 units/dÃ­a). Un upload usa ~1,600 units. Programa uploads para distribuir la cuota.
 
 ### Error: "Invalid video file"
+
 **SoluciÃ³n**: Formatos soportados: MP4, AVI, FLV, MOV, WMV. TamaÃ±o mÃ¡x: 256 GB o 12 horas.
 
 ## Recursos Adicionales
@@ -410,7 +421,7 @@ const YOUTUBE_CATEGORIES = {
 ## Soporte
 
 Para cualquier duda o problema con la integraciÃ³n de YouTube:
+
 - Email: a.fernandez@NEXUS V1.net
 - DocumentaciÃ³n interna: `/docs/youtube/`
 - Logs del servicio: `src/utils/youtube-channel.service.ts`
-

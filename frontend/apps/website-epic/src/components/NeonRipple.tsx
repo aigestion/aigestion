@@ -15,14 +15,14 @@ export const NeonRipple: React.FC = () => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    setRipples((prev) => [...prev, { x, y, id: Date.now() }]);
+    setRipples(prev => [...prev, { x, y, id: Date.now() }]);
   };
 
   // Automatically cleanup old ripples
   useLayoutEffect(() => {
     if (ripples.length > 0) {
       const timer = setTimeout(() => {
-        setRipples((prev) => prev.slice(1));
+        setRipples(prev => prev.slice(1));
       }, 1000);
       return () => clearTimeout(timer);
     }
@@ -31,7 +31,7 @@ export const NeonRipple: React.FC = () => {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-auto" onClick={addRipple}>
       <AnimatePresence>
-        {ripples.map((ripple) => (
+        {ripples.map(ripple => (
           <motion.span
             key={ripple.id}
             initial={{ scale: 0, opacity: 0.5 }}

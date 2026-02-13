@@ -57,7 +57,7 @@ describe('EmailService', () => {
           to: 'test@example.com',
           subject: 'Test Subject',
           html: 'Test Body',
-        }),
+        })
       );
     });
 

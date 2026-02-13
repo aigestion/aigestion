@@ -10,7 +10,7 @@ describe('Exit Email API', () => {
     expect(res.body.data).toHaveProperty('templates');
     expect(Array.isArray(res.body.data.templates)).toBe(true);
     expect(res.body.data.templates).toEqual(
-      expect.arrayContaining(['formal', 'friendly', 'brief', 'creative']),
+      expect.arrayContaining(['formal', 'friendly', 'brief', 'creative'])
     );
   });
 

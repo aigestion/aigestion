@@ -11,13 +11,13 @@ import { AgentModule } from './agent/agent.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    SystemModule, 
-    AuthModule, 
-    AudioModule, 
+    SystemModule,
+    AuthModule,
+    AudioModule,
     DiagnosticModule,
     VectorModule,
     BillingModule,
-    AgentModule
+    AgentModule,
   ],
   controllers: [],
   providers: [],

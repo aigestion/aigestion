@@ -26,8 +26,8 @@ healthRouter.get('/', (req: Request, res: Response) => {
         version: config.apiDocs.version || '1.0.0',
       },
       200,
-      requestId,
-    ),
+      requestId
+    )
   );
 });
 

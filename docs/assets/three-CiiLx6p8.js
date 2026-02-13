@@ -1,4 +1,4 @@
-import { r as reactExports, a as reactDomExports } from "./vendor-MmfpvJAE.js";
+import { r as reactExports, a as reactDomExports } from './vendor-MmfpvJAE.js';
 var jsxRuntime = { exports: {} };
 var reactJsxRuntime_production_min = {};
 /**
@@ -10,14 +10,22 @@ var reactJsxRuntime_production_min = {};
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-var f = reactExports, k = Symbol.for("react.element"), l = Symbol.for("react.fragment"), m$1 = Object.prototype.hasOwnProperty, n = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner, p = { key: true, ref: true, __self: true, __source: true };
+var f = reactExports,
+  k = Symbol.for('react.element'),
+  l = Symbol.for('react.fragment'),
+  m$1 = Object.prototype.hasOwnProperty,
+  n = f.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+  p = { key: true, ref: true, __self: true, __source: true };
 function q(c, a, g) {
-  var b, d = {}, e = null, h = null;
-  void 0 !== g && (e = "" + g);
-  void 0 !== a.key && (e = "" + a.key);
+  var b,
+    d = {},
+    e = null,
+    h = null;
+  void 0 !== g && (e = '' + g);
+  void 0 !== a.key && (e = '' + a.key);
   void 0 !== a.ref && (h = a.ref);
   for (b in a) m$1.call(a, b) && !p.hasOwnProperty(b) && (d[b] = a[b]);
-  if (c && c.defaultProps) for (b in a = c.defaultProps, a) void 0 === d[b] && (d[b] = a[b]);
+  if (c && c.defaultProps) for (b in ((a = c.defaultProps), a)) void 0 === d[b] && (d[b] = a[b]);
   return { $$typeof: k, type: c, key: e, ref: h, props: d, _owner: n.current };
 }
 reactJsxRuntime_production_min.Fragment = l;
@@ -33,7 +41,4 @@ var m = reactDomExports;
   client.createRoot = m.createRoot;
   client.hydrateRoot = m.hydrateRoot;
 }
-export {
-  client as c,
-  jsxRuntimeExports as j
-};
+export { client as c, jsxRuntimeExports as j };

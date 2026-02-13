@@ -69,7 +69,7 @@ export class VoiceAIGodMode {
     this.config.twilio.messaging.optimization.max_length = 160;
     this.config.twilio.voice.call_routing.business_hours.sunday = {
       start: 'closed',
-      end: 'closed'
+      end: 'closed',
     };
   }
 
@@ -95,7 +95,7 @@ export class VoiceAIGodMode {
         greeting: '¡Hola! Soy Daniela, tu asistente de AIGestion. ¿En qué puedo ayudarte?',
         help: 'Puedo ayudarte con análisis de datos, automatización y optimización.',
         thanks: '¡Gracias por usar AIGestion! Estoy aquí para lo que necesites.',
-      }
+      },
     };
   }
 
@@ -115,7 +115,7 @@ export class VoiceAIGodMode {
         free_sms: 100,
         cost_per_sms: 0.0079,
         cost_per_minute: 0.013,
-      }
+      },
     };
   }
 }
