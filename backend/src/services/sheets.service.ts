@@ -75,7 +75,7 @@ export class SheetsService {
       const headers = data[0];
       const rows = data.slice(1);
       const records = rows.map((row: any[]) =>
-        Object.fromEntries(headers.map((h, i) => [h, row[i]])),
+        Object.fromEntries(headers.map((h, i) => [h, row[i]]))
       );
 
       // Usar Daniela AI para análisis
@@ -87,7 +87,7 @@ export class SheetsService {
           JSON.stringify(records),
           'sheet-analysis',
           'system',
-          'user',
+          'user'
         ),
         summary: {
           dataPoints: rows.length,

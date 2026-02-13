@@ -4,7 +4,6 @@ import { Search, Map, CreditCard, User, Box, Shield, Zap } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 
-
 interface CommandItem {
   id: string;
   icon: React.ReactNode;
@@ -61,8 +60,8 @@ export const CommandPalette: React.FC = () => {
     },
   ];
 
-  const filteredCommands = commands.filter((cmd) =>
-    cmd.title.toLowerCase().includes(query.toLowerCase()),
+  const filteredCommands = commands.filter(cmd =>
+    cmd.title.toLowerCase().includes(query.toLowerCase())
   );
 
   useEffect(() => {
@@ -71,7 +70,7 @@ export const CommandPalette: React.FC = () => {
         e.preventDefault();
         if (!isOpen) playHover();
         else playClick();
-        setIsOpen((prev) => !prev);
+        setIsOpen(prev => !prev);
       }
       if (e.key === 'Escape') {
         setIsOpen(false);
@@ -121,15 +120,15 @@ export const CommandPalette: React.FC = () => {
                 type="text"
                 placeholder="Escribe un comando o busca..."
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
+                onChange={e => setQuery(e.target.value)}
+                onKeyDown={e => {
                   if (e.key === 'ArrowDown') {
                     e.preventDefault();
-                    setSelectedIndex((prev) => Math.min(prev + 1, filteredCommands.length - 1));
+                    setSelectedIndex(prev => Math.min(prev + 1, filteredCommands.length - 1));
                   }
                   if (e.key === 'ArrowUp') {
                     e.preventDefault();
-                    setSelectedIndex((prev) => Math.max(prev - 1, 0));
+                    setSelectedIndex(prev => Math.max(prev - 1, 0));
                   }
                   if (e.key === 'Enter') {
                     handleSelect(selectedIndex);

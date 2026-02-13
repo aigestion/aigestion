@@ -203,7 +203,7 @@ export class ThreatIntelligenceMiddleware {
   public comprehensiveThreatCheck = async (
     req: ThreatRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     try {
       req.threatCheck = { riskScore: 0, action: 'allow' };

@@ -6,12 +6,12 @@
 
 ## 📋 Servicios que Usaremos
 
-| Servicio | Uso | Límite Gratuito |
-|----------|-----|-----------------|
-| **Vercel** | Frontend (Landing + Dashboard) | Ilimitado |
-| **Railway** | Backend API | 500 horas/mes |
-| **Supabase** | Base de datos PostgreSQL | 500MB |
-| **Cloudflare** | DNS + CDN | Ilimitado |
+| Servicio       | Uso                            | Límite Gratuito |
+| -------------- | ------------------------------ | --------------- |
+| **Vercel**     | Frontend (Landing + Dashboard) | Ilimitado       |
+| **Railway**    | Backend API                    | 500 horas/mes   |
+| **Supabase**   | Base de datos PostgreSQL       | 500MB           |
+| **Cloudflare** | DNS + CDN                      | Ilimitado       |
 
 **Costo Total**: **$0/mes** ✅
 
@@ -22,6 +22,7 @@
 ### 1.1 Crear archivos de configuración
 
 **Vercel** - Frontend Dashboard:
+
 ```json
 // frontend/apps/dashboard/vercel.json
 {
@@ -37,6 +38,7 @@
 ```
 
 **Vercel** - Frontend Landing:
+
 ```json
 // frontend/apps/landing-host/vercel.json
 {
@@ -49,6 +51,7 @@
 ```
 
 **Railway** - Backend:
+
 ```json
 // server/railway.json
 {
@@ -282,6 +285,7 @@ CNAME api        NEXUS V1-backend.up.railway.app
 ### 6.1 Actualizar variables de entorno
 
 **Dashboard**:
+
 ```bash
 cd frontend/apps/dashboard
 
@@ -293,6 +297,7 @@ vercel --prod
 ```
 
 **Landing**:
+
 ```bash
 cd frontend/apps/landing-host
 
@@ -310,15 +315,17 @@ vercel --prod
 
 import cors from 'cors';
 
-app.use(cors({
-  origin: [
-    'https://NEXUS V1-landing.vercel.app',
-    'https://NEXUS V1-dashboard.vercel.app',
-    'http://localhost:5173',
-    'http://localhost:4001'
-  ],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: [
+      'https://NEXUS V1-landing.vercel.app',
+      'https://NEXUS V1-dashboard.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:4001',
+    ],
+    credentials: true,
+  })
+);
 ```
 
 ---
@@ -380,22 +387,22 @@ railway logs --follow
 
 ### Tier Gratuito (0-10 clientes)
 
-| Servicio | Costo | Límite |
-|----------|-------|--------|
-| Vercel | $0 | Ilimitado |
-| Railway | $0 | 500h/mes |
-| Supabase | $0 | 500MB DB |
-| Cloudflare | $0 | Ilimitado |
-| **TOTAL** | **$0/mes** | ✅ |
+| Servicio   | Costo      | Límite    |
+| ---------- | ---------- | --------- |
+| Vercel     | $0         | Ilimitado |
+| Railway    | $0         | 500h/mes  |
+| Supabase   | $0         | 500MB DB  |
+| Cloudflare | $0         | Ilimitado |
+| **TOTAL**  | **$0/mes** | ✅        |
 
 ### Cuando Crecer (10+ clientes)
 
-| Servicio | Costo | Capacidad |
-|----------|-------|-----------|
-| Railway Pro | $5/mes | 500h + $0.01/h extra |
-| Supabase Pro | $25/mes | 8GB DB |
-| Vercel Pro | $20/mes | Más builds |
-| **TOTAL** | **~$50/mes** | 50+ clientes |
+| Servicio     | Costo        | Capacidad            |
+| ------------ | ------------ | -------------------- |
+| Railway Pro  | $5/mes       | 500h + $0.01/h extra |
+| Supabase Pro | $25/mes      | 8GB DB               |
+| Vercel Pro   | $20/mes      | Más builds           |
+| **TOTAL**    | **~$50/mes** | 50+ clientes         |
 
 ---
 
@@ -441,9 +448,11 @@ psql "postgresql://..."
 
 ```typescript
 // Agregar dominio a CORS
-app.use(cors({
-  origin: ['https://tu-dominio.vercel.app']
-}));
+app.use(
+  cors({
+    origin: ['https://tu-dominio.vercel.app'],
+  })
+);
 ```
 
 ---
@@ -514,7 +523,6 @@ Después del deploy:
 
 **¡Listo para deploy! 🚀**
 
-*Tiempo estimado: 30-60 minutos*
-*Costo: $0*
-*Resultado: Sistema en producción*
-
+_Tiempo estimado: 30-60 minutos_
+_Costo: $0_
+_Resultado: Sistema en producción_

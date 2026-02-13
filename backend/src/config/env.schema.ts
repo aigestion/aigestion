@@ -11,7 +11,7 @@ if (process.env.NODE_ENV === 'test') {
     console.error(`[DEBUG] Error loading .env: ${result.error.message}`);
   } else {
     console.log(
-      `[DEBUG] .env loaded successfully. MONGODB_URI: ${process.env.MONGODB_URI ? 'Defined' : 'UNDEFINED'}`,
+      `[DEBUG] .env loaded successfully. MONGODB_URI: ${process.env.MONGODB_URI ? 'Defined' : 'UNDEFINED'}`
     );
   }
 }
@@ -330,7 +330,7 @@ const envSchema = z.object({
       val
         .split(',')
         .map(s => s.trim())
-        .filter(s => s.length > 0),
+        .filter(s => s.length > 0)
     )
     .describe('Comma‑separated list of additional company Gmail addresses for OAuth2'),
 
@@ -480,7 +480,7 @@ function validateEnv(): Env {
       console.error('❌ Environment validation failed:\n');
       console.error(errorMessages.join('\n'));
       console.error(
-        '\nPlease check your .env file and ensure all required variables are set correctly.\n',
+        '\nPlease check your .env file and ensure all required variables are set correctly.\n'
       );
 
       process.exit(1);

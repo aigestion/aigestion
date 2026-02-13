@@ -16,11 +16,13 @@ It features a modular architecture using InversifyJS for Dependency Injection an
 ### Installation
 
 1.  Navigate to the backend directory:
+
     ```bash
     cd backend
     ```
 
 2.  Install dependencies:
+
     ```bash
     pnpm install
     ```
@@ -30,13 +32,14 @@ It features a modular architecture using InversifyJS for Dependency Injection an
     - Fill in the required values (DB URI, Stripe Keys, etc.)
 
 ### Technical Documentation
+
 For detailed architecture and development guides, please refer to:
+
 - [Backend Architecture Guide](src/docs/backend_architecture.md)
 - [AI Integration & RAG Guide](src/docs/ai_integration_guide.md)
 - [API Documentation](src/docs/api_documentation.md) (If available)
 
 ## Development
-
 
 Start the development server with hot-reload:
 
@@ -62,7 +65,9 @@ The server runs on `http://localhost:3000` by default.
 - **Logging**: `winston` + `morgan` for HTTP logging.
 
 ## 🛠️ Linters
+
 The project uses the following linters and formatters:
+
 - ESLint: Code linting
 - Prettier: Code formatting
 - Stylelint: CSS linting
@@ -93,9 +98,11 @@ docker run -p 3000:3000 --env-file .env nexus-backend
   ```bash
   stripe listen --forward-to localhost:3000/api/v1/stripe/webhook
   ```
+
 ## 🔒 Security & Secret Management
 
 ### Google Cloud Secret Manager
+
 The backend is configured to fetch critical secrets from **GCP Secret Manager** on startup in production.
 
 - **Bootstrap**: The app uses `src/bootstrap.ts` as the entry point to handle async secret loading before the Express server starts.
@@ -105,11 +112,14 @@ The backend is configured to fetch critical secrets from **GCP Secret Manager** 
   - Ensure you have run `gcloud auth application-default login`.
 
 ### Required Secrets
+
 Ensure the following are created in Secret Manager:
+
 - `GEMINI_API_KEY`
 - `MONGO_ROOT_PASSWORD`
 - `JWT_SECRET`
 - `STRIPE_SECRET_KEY`
 
 ### 🚫 Redaction Policy
+
 Wait! Do **NOT** commit actual API keys to `.env` files. Use the provided placeholders and rely on Secret Manager for all production-grade credentials.

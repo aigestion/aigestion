@@ -1,8 +1,4 @@
-import {
-    Box,
-    Plane,
-    Sphere
-} from '@react-three/drei';
+import { Box, Plane, Sphere } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
@@ -42,7 +38,7 @@ function useLOD(levels: LODLevel[], camera: THREE.Camera) {
 function InstancedObjects({
   count,
   positions,
-  colors
+  colors,
 }: {
   readonly count: number;
   readonly positions: Float32Array;
@@ -55,11 +51,7 @@ function InstancedObjects({
     if (!meshRef.current) return;
 
     for (let i = 0; i < count; i++) {
-      dummy.position.set(
-        positions[i * 3],
-        positions[i * 3 + 1],
-        positions[i * 3 + 2]
-      );
+      dummy.position.set(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
       dummy.updateMatrix();
       meshRef.current.setMatrixAt(i, dummy.matrix);
     }
@@ -68,11 +60,7 @@ function InstancedObjects({
   });
 
   return (
-    <instancedMesh
-      ref={meshRef}
-      args={[undefined, undefined, count]}
-      frustumCulled
-    >
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]} frustumCulled>
       <sphereGeometry args={[0.1, 8, 6]} />
       <meshBasicMaterial vertexColors />
     </instancedMesh>
@@ -82,7 +70,7 @@ function InstancedObjects({
 // Frustum culling component
 function FrustumCulledObject({
   children,
-  position
+  position,
 }: {
   readonly children: React.ReactNode;
   readonly position: [number, number, number];
@@ -182,7 +170,7 @@ export function OptimizedThreeScene({
   const sceneRef = useRef<THREE.Scene>();
 
   // Performance monitoring
-  useFrame((state) => {
+  useFrame(state => {
     if (onPerformanceUpdate) {
       const renderer = state.gl;
       const memory = (renderer as any).info.memory;
@@ -272,11 +260,7 @@ export function OptimizedThreeScene({
         )}
 
         {/* Ground plane with optimization */}
-        <Plane
-          args={[100, 100]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          position={[0, -5, 0]}
-        >
+        <Plane args={[100, 100]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -5, 0]}>
           <meshBasicMaterial color="#1a1a1a" />
         </Plane>
       </Canvas>
@@ -298,14 +282,14 @@ export function useThreeOptimization() {
 
   const optimizeScene = useCallback(() => {
     // Enable frustum culling
-    scene.traverse((object) => {
+    scene.traverse(object => {
       if (object instanceof THREE.Mesh) {
         object.frustumCulled = true;
       }
     });
 
     // Optimize material settings
-    scene.traverse((object) => {
+    scene.traverse(object => {
       if (object instanceof THREE.Mesh && object.material) {
         const material = object.material as THREE.Material;
         material.transparent = false; // Disable transparency if not needed
@@ -315,7 +299,7 @@ export function useThreeOptimization() {
     });
 
     // Optimize geometry
-    scene.traverse((object) => {
+    scene.traverse(object => {
       if (object instanceof THREE.Mesh && object.geometry) {
         object.geometry.computeBoundingSphere();
         object.geometry.computeBoundingBox();
@@ -328,7 +312,7 @@ export function useThreeOptimization() {
     gl.shadowMap.type = THREE.PCFSoftShadowMap;
 
     // Optimize shadow camera
-    scene.traverse((object) => {
+    scene.traverse(object => {
       if (object instanceof THREE.Light && object.castShadow) {
         if (object instanceof THREE.DirectionalLight) {
           object.shadow.camera.near = 0.1;

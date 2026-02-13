@@ -36,23 +36,23 @@ export function usePWA() {
     const checkPWACapabilities = () => {
       const userAgent = navigator.userAgent;
       const platform = navigator.platform || 'unknown';
-      
+
       // Check if running as PWA
-      const isStandalone = 
+      const isStandalone =
         (globalThis as any).matchMedia?.('(display-mode: standalone)')?.matches ||
         (globalThis as any).matchMedia?.('(display-mode: minimal-ui)')?.matches ||
         (globalThis as any).navigator?.standalone === true ||
         document.referrer.includes('android-app://');
 
       // Check if installed (iOS specific)
-      const isInstalled = 
-        isStandalone && 
-        (/iphone|ipad|ipod/.test(userAgent.toLowerCase()) || 
-         document.referrer.includes('android-app://'));
+      const isInstalled =
+        isStandalone &&
+        (/iphone|ipad|ipod/.test(userAgent.toLowerCase()) ||
+          document.referrer.includes('android-app://'));
 
       // Check if supports install
-      const supportsInstall = 'BeforeInstallPromptEvent' in globalThis || 
-                             'onbeforeinstallprompt' in globalThis;
+      const supportsInstall =
+        'BeforeInstallPromptEvent' in globalThis || 'onbeforeinstallprompt' in globalThis;
 
       setPwaInfo({
         isInstallable: !!installPrompt || supportsInstall,
@@ -81,7 +81,7 @@ export function usePWA() {
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
       const promptEvent = event as BeforeInstallPromptEvent;
-      
+
       setInstallPrompt({
         prompt: () => promptEvent.prompt(),
         userChoice: promptEvent.userChoice,
@@ -95,7 +95,7 @@ export function usePWA() {
     };
 
     globalThis.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    
+
     return () => {
       globalThis.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
@@ -110,7 +110,7 @@ export function usePWA() {
     try {
       await installPrompt.prompt();
       const { outcome } = await installPrompt.userChoice;
-      
+
       if (outcome === 'accepted') {
         setInstallPrompt(null);
         setPwaInfo(prev => ({
@@ -120,7 +120,7 @@ export function usePWA() {
         }));
         return true;
       }
-      
+
       return false;
     } catch (error) {
       console.error('PWA installation failed:', error);
@@ -141,15 +141,17 @@ export function usePWA() {
   const checkIOSInstall = useCallback((): boolean => {
     // iOS doesn't have a reliable way to check if PWA is installed
     // This is a heuristic based on standalone mode and referrer
-    return pwaInfo.isStandalone && 
-           (/iphone|ipad|ipod/.test(pwaInfo.userAgent.toLowerCase())) &&
-           !document.referrer.includes('http');
+    return (
+      pwaInfo.isStandalone &&
+      /iphone|ipad|ipod/.test(pwaInfo.userAgent.toLowerCase()) &&
+      !document.referrer.includes('http')
+    );
   }, [pwaInfo]);
 
   // Get install instructions based on platform
   const getInstallInstructions = useCallback(() => {
     const { userAgent, platform } = pwaInfo;
-    
+
     if (/iphone|ipad|ipod/.test(userAgent.toLowerCase())) {
       return {
         title: 'Install on iOS',
@@ -161,7 +163,7 @@ export function usePWA() {
         icon: '🍎',
       };
     }
-    
+
     if (/android/.test(userAgent.toLowerCase())) {
       return {
         title: 'Install on Android',
@@ -173,7 +175,7 @@ export function usePWA() {
         icon: '🤖',
       };
     }
-    
+
     if (/chrome/.test(userAgent.toLowerCase())) {
       return {
         title: 'Install on Desktop',
@@ -185,7 +187,7 @@ export function usePWA() {
         icon: '💻',
       };
     }
-    
+
     return {
       title: 'Install PWA',
       steps: [
@@ -223,7 +225,7 @@ export function usePWAUpdates() {
         globalThis.location.reload();
       });
 
-      navigator.serviceWorker.addEventListener('message', (event) => {
+      navigator.serviceWorker.addEventListener('message', event => {
         if (event.data && event.data.type === 'SW_UPDATE_AVAILABLE') {
           setUpdateAvailable(true);
         }
@@ -241,12 +243,12 @@ export function usePWAUpdates() {
 
     try {
       const registration = await navigator.serviceWorker.ready;
-      
+
       if (registration.waiting) {
         registration.waiting.postMessage({ type: 'SKIP_WAITING' });
         return true;
       }
-      
+
       return false;
     } catch (error) {
       setUpdateError(error instanceof Error ? error.message : 'Update failed');
@@ -277,7 +279,7 @@ export function usePWANotifications() {
   useEffect(() => {
     const supported = 'Notification' in globalThis && 'serviceWorker' in navigator;
     setIsSupported(supported);
-    
+
     if (supported) {
       setPermission(Notification.permission);
     }
@@ -298,34 +300,34 @@ export function usePWANotifications() {
     }
   }, [isSupported]);
 
-  const showNotification = useCallback(async (
-    title: string,
-    options?: NotificationOptions
-  ): Promise<boolean> => {
-    if (!isSupported || permission !== 'granted') {
-      return false;
-    }
-
-    try {
-      await navigator.serviceWorker.ready;
-      
-      if ('showNotification' in Notification) {
-        new Notification(title, options);
-      } else {
-        // Fallback for older browsers
-        await navigator.serviceWorker.controller?.postMessage({
-          type: 'SHOW_NOTIFICATION',
-          title,
-          options,
-        });
+  const showNotification = useCallback(
+    async (title: string, options?: NotificationOptions): Promise<boolean> => {
+      if (!isSupported || permission !== 'granted') {
+        return false;
       }
-      
-      return true;
-    } catch (error) {
-      console.error('Failed to show notification:', error);
-      return false;
-    }
-  }, [isSupported, permission]);
+
+      try {
+        await navigator.serviceWorker.ready;
+
+        if ('showNotification' in Notification) {
+          new Notification(title, options);
+        } else {
+          // Fallback for older browsers
+          await navigator.serviceWorker.controller?.postMessage({
+            type: 'SHOW_NOTIFICATION',
+            title,
+            options,
+          });
+        }
+
+        return true;
+      } catch (error) {
+        console.error('Failed to show notification:', error);
+        return false;
+      }
+    },
+    [isSupported, permission]
+  );
 
   return {
     permission,
@@ -341,27 +343,29 @@ export function usePWABackgroundSync() {
   const [isSupported, setIsSupported] = useState(false);
 
   useEffect(() => {
-    const supported = 'serviceWorker' in navigator && 
-                     'SyncManager' in globalThis &&
-                     'serviceWorker' in navigator;
-    
+    const supported =
+      'serviceWorker' in navigator && 'SyncManager' in globalThis && 'serviceWorker' in navigator;
+
     setIsSupported(supported);
   }, []);
 
-  const registerSync = useCallback(async (tag: string): Promise<boolean> => {
-    if (!isSupported) {
-      return false;
-    }
+  const registerSync = useCallback(
+    async (tag: string): Promise<boolean> => {
+      if (!isSupported) {
+        return false;
+      }
 
-    try {
-      const registration = await navigator.serviceWorker.ready;
-      await registration.sync.register(tag);
-      return true;
-    } catch (error) {
-      console.error('Background sync registration failed:', error);
-      return false;
-    }
-  }, [isSupported]);
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        await registration.sync.register(tag);
+        return true;
+      } catch (error) {
+        console.error('Background sync registration failed:', error);
+        return false;
+      }
+    },
+    [isSupported]
+  );
 
   return {
     isSupported,
@@ -372,7 +376,7 @@ export function usePWABackgroundSync() {
 // PWA install prompt component
 export function PWAInstallPrompt() {
   const { installPrompt, install, dismissInstall, getInstallInstructions, canInstall } = usePWA();
-  
+
   if (!canInstall || !installPrompt) {
     return null;
   }
@@ -391,13 +395,11 @@ export function PWAInstallPrompt() {
       <div className="flex items-start space-x-3">
         <div className="text-2xl">{instructions.icon}</div>
         <div className="flex-1">
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-            {instructions.title}
-          </h3>
+          <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{instructions.title}</h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
             Install this app for a better experience
           </p>
-          
+
           <div className="space-y-2">
             <button
               onClick={handleInstall}
@@ -405,7 +407,7 @@ export function PWAInstallPrompt() {
             >
               Install App
             </button>
-            
+
             <button
               onClick={dismissInstall}
               className="w-full text-gray-600 dark:text-gray-400 px-4 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -414,7 +416,7 @@ export function PWAInstallPrompt() {
             </button>
           </div>
         </div>
-        
+
         <button
           onClick={dismissInstall}
           className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
@@ -447,16 +449,14 @@ export function PWAUpdateBanner() {
         <div className="text-xl">🔄</div>
         <div className="flex-1">
           <h3 className="font-semibold mb-1">Update Available</h3>
-          <p className="text-sm opacity-90 mb-3">
-            A new version of the app is available
-          </p>
-          
+          <p className="text-sm opacity-90 mb-3">A new version of the app is available</p>
+
           {updateError && (
             <div className="text-xs bg-red-500 bg-opacity-20 rounded p-2 mb-3">
               Error: {updateError}
             </div>
           )}
-          
+
           <div className="flex space-x-2">
             <button
               onClick={handleUpdate}
@@ -465,7 +465,7 @@ export function PWAUpdateBanner() {
             >
               {isUpdating ? 'Updating...' : 'Update Now'}
             </button>
-            
+
             <button
               onClick={dismissUpdate}
               className="text-white opacity-75 hover:opacity-100 px-3 py-1 rounded text-sm transition-opacity"
@@ -474,11 +474,8 @@ export function PWAUpdateBanner() {
             </button>
           </div>
         </div>
-        
-        <button
-          onClick={dismissUpdate}
-          className="text-white opacity-75 hover:opacity-100"
-        >
+
+        <button onClick={dismissUpdate} className="text-white opacity-75 hover:opacity-100">
           ×
         </button>
       </div>

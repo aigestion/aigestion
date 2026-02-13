@@ -18,7 +18,6 @@ async function test() {
     console.log('Testing generateContent...');
     const response = await ai.generateContent('Hello Nexus');
     console.log('Response:', response);
-
   } catch (err) {
     console.error('❌ Resolution Failed:', err);
     process.exit(1);

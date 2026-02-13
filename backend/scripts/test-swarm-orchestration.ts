@@ -37,7 +37,7 @@ async function testSwarmOrchestration() {
     console.log('-------------------');
 
     console.log(
-      '\n💎 ORCHESTRATION VERIFIED: Autonomous Research -> Graph Persistence loop is active.',
+      '\n💎 ORCHESTRATION VERIFIED: Autonomous Research -> Graph Persistence loop is active.'
     );
   } catch (error) {
     console.error('\n❌ E2E Orchestration Test failed:', error);

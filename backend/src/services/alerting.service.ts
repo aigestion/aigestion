@@ -15,7 +15,7 @@ export class AlertingService {
 
   constructor(
     @inject(TYPES.SystemMetricsService) private metricsService: SystemMetricsService,
-    @inject(TYPES.TelegramService) private telegramService: TelegramService,
+    @inject(TYPES.TelegramService) private telegramService: TelegramService
   ) {}
 
   /**

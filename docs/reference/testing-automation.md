@@ -1,6 +1,7 @@
 # Performance, Accessibility, and Contract Testing Automation
 
 This project automates:
+
 - **Performance testing:** Lighthouse CI (already integrated)
 - **Accessibility testing:** axe-core (GitHub Actions)
 - **Contract/API testing:** OpenAPI/Swagger validation (GitHub Actions)
@@ -22,6 +23,7 @@ This project automates:
 ---
 
 ## Example: Accessibility Workflow
+
 ```yaml
 name: Accessibility
 on: [push, pull_request]
@@ -41,6 +43,7 @@ jobs:
 ```
 
 ## Example: Contract Test Workflow
+
 ```yaml
 name: Contract Test
 on: [push, pull_request]
@@ -65,6 +68,7 @@ jobs:
 - For more advanced contract tests, use `jest` or `dredd` with your API endpoints.
 
 ## References
+
 - [axe-core](https://github.com/dequelabs/axe-core)
 - [pa11y](https://github.com/pa11y/pa11y)
 - [swagger-cli](https://github.com/APIDevTools/swagger-cli)

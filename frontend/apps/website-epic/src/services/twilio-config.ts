@@ -171,7 +171,8 @@ export const twilioGodModeConfig: TwilioGodModeConfig = {
     personalization: {
       company_name: 'AIGestion',
       sender_name: 'Daniela IA',
-      signature: '\n\n---\n🤖 Daniela IA\nAIGestion - Inteligencia Artificial para tu Negocio\n🌐 aigestion.net',
+      signature:
+        '\n\n---\n🤖 Daniela IA\nAIGestion - Inteligencia Artificial para tu Negocio\n🌐 aigestion.net',
       language: 'es',
     },
 
@@ -218,7 +219,8 @@ export const twilioGodModeConfig: TwilioGodModeConfig = {
       website: 'https://aigestion.net',
     },
     templates: {
-      welcome: '¡Hola! Bienvenido a AIGestion. Soy Daniela IA, tu asistente personal. ¿En qué ayudarte?',
+      welcome:
+        '¡Hola! Bienvenido a AIGestion. Soy Daniela IA, tu asistente personal. ¿En qué ayudarte?',
       support: 'Hola de AIGestion. ¿Cómo puedo ayudarte hoy?',
       notification: 'Notificación importante de AIGestion: {message}',
     },
@@ -482,7 +484,9 @@ export class TwiMLBuilder {
   }
 
   static buildSupportMessage(issue?: string): string {
-    const issueText = issue ? `Entiendo que tienes un problema con ${issue}.` : 'Entiendo que necesitas ayuda.';
+    const issueText = issue
+      ? `Entiendo que tienes un problema con ${issue}.`
+      : 'Entiendo que necesitas ayuda.';
     return `
       <Response>
         <Say language="es-ES" voice="woman">

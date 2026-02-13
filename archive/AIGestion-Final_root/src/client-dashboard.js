@@ -97,13 +97,13 @@ function ClientDashboard() {
         </div>
       </div>
     </div>
-  `
+  `;
 }
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
-  const root = document.getElementById('client-root')
+  const root = document.getElementById('client-root');
   if (root) {
-    root.innerHTML = ClientDashboard()
+    root.innerHTML = ClientDashboard();
   }
-})
+});

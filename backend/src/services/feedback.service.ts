@@ -27,19 +27,19 @@ export class FeedbackService {
           ...data,
           processed: false,
         },
-        { ttl: 604800 },
+        { ttl: 604800 }
       ); // Store for 7 days
 
       logger.info(
         { messageId: data.messageId, isPositive: data.isPositive },
-        'AI Feedback collected successfully',
+        'AI Feedback collected successfully'
       );
 
       // 2. Proactive Alerting if negative
       if (!data.isPositive) {
         logger.warn(
           { messageId: data.messageId },
-          'NEGATIVE AI Feedback received - Flagged for review',
+          'NEGATIVE AI Feedback received - Flagged for review'
         );
       }
 

@@ -153,7 +153,7 @@ export class EconomyService {
 
     try {
       const res = await axios.get(
-        `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${this.alphaVantageKey}`,
+        `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${this.alphaVantageKey}`
       );
       const sentiment = res.data.feed?.[0]?.overall_sentiment_label || 'NEUTRAL';
       const result = sentiment.toUpperCase();
@@ -222,7 +222,7 @@ export class EconomyService {
         yieldData.wallets.forEach((w: any) => {
           if (w.apy > 5) {
             opportunities.push(
-              `💎 *Oportunidad DeFi*: ${w.asset} está rindiendo un *${w.apy}% APY*. Estrategia sugerida: *${w.recommendation}*.`,
+              `💎 *Oportunidad DeFi*: ${w.asset} está rindiendo un *${w.apy}% APY*. Estrategia sugerida: *${w.recommendation}*.`
             );
           }
         });
@@ -236,22 +236,22 @@ export class EconomyService {
       const changeNum = parseFloat(p.changePercent.replace('%', ''));
       if (changeNum < -3) {
         opportunities.push(
-          `🔥 *${p.symbol}* ha bajado un ${p.changePercent}. Podría ser una oportunidad de compra si mantienes a largo plazo.`,
+          `🔥 *${p.symbol}* ha bajado un ${p.changePercent}. Podría ser una oportunidad de compra si mantienes a largo plazo.`
         );
       } else if (changeNum > 5) {
         opportunities.push(
-          `🚀 *${p.symbol}* está en rally (+${p.changePercent}). Considera proteger ganancias con stops dinámicos.`,
+          `🚀 *${p.symbol}* está en rally (+${p.changePercent}). Considera proteger ganancias con stops dinámicos.`
         );
       }
     });
 
     if (sentiment === 'BULLISH' || sentiment === 'SOMEWHAT_BULLISH') {
       opportunities.push(
-        '🌟 El sentimiento general es alcista. Buen momento para mantener posiciones fuertes en NVDA y GOOGL.',
+        '🌟 El sentimiento general es alcista. Buen momento para mantener posiciones fuertes en NVDA y GOOGL.'
       );
     } else if (sentiment === 'BEARISH' || sentiment === 'SOMEWHAT_BEARISH') {
       opportunities.push(
-        '⚠️ Alerta: El sentimiento de noticias es bajista. Considera aumentar liquidez o buscar activos refugio como el Oro.',
+        '⚠️ Alerta: El sentimiento de noticias es bajista. Considera aumentar liquidez o buscar activos refugio como el Oro.'
       );
     }
 
@@ -308,7 +308,7 @@ export class EconomyService {
     }
 
     const script = `${intro} ${sentimentText} ${geoText} ${opportunitiesText} ${clean(
-      data.advice.split('\n').pop() || '',
+      data.advice.split('\n').pop() || ''
     )}`;
 
     return script;
@@ -330,7 +330,7 @@ export class EconomyService {
     await setCache(cacheKey, existing, 0); // No expiry for user alerts
 
     logger.info(
-      `[EconomyService] Alert added for ${alert.userId}: ${alert.symbol} ${condition} ${alert.targetPrice}`,
+      `[EconomyService] Alert added for ${alert.userId}: ${alert.symbol} ${condition} ${alert.targetPrice}`
     );
     return fullAlert;
   }
@@ -385,7 +385,7 @@ export class EconomyService {
     userId: string,
     symbol: string,
     amount: number,
-    entryPrice: number,
+    entryPrice: number
   ): Promise<void> {
     const cacheKey = `economy:portfolio:${userId}`;
     const portfolio: any[] = (await getCache(cacheKey)) || [];

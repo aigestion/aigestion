@@ -12,10 +12,10 @@ async function testDanielaEnhanced() {
 
     console.log('Step 1: Testing "Browse" Intent Delegation...');
     const message = 'Daniela, puedes navegar a https://aigestion.net y decirme qué ves?';
-    
+
     // This should trigger handleBrowseRequest and call Python /daniela/browse
     const response = await danielaService.processMessage(1337, message, 'TestUser', 'user_123');
-    
+
     console.log('\n🤖 Daniela Response:');
     console.log('-------------------');
     console.log(response);
@@ -26,7 +26,6 @@ async function testDanielaEnhanced() {
     } else {
       console.log('\n⚠️ Integration returned a fallback or error. Check IA Engine logs.');
     }
-
   } catch (error) {
     console.error('❌ E2E Integration Test failed:', error);
     process.exit(1);

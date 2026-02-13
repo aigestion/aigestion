@@ -35,7 +35,7 @@ export function Skeleton({
     'bg-gray-200 dark:bg-gray-700',
     variantClasses[variant],
     animationClasses[animation],
-    className,
+    className
   );
 
   const style = {

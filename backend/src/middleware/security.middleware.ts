@@ -28,42 +28,42 @@ export const rateLimiters = {
   free: createRateLimiter(
     15 * 60 * 1000, // 15 minutes
     100,
-    'Free tier limit exceeded. Upgrade to Pro for higher limits.',
+    'Free tier limit exceeded. Upgrade to Pro for higher limits.'
   ),
 
   // Pro tier - 1000 requests per 15 minutes
   pro: createRateLimiter(
     15 * 60 * 1000, // 15 minutes
     1000,
-    'Pro tier rate limit exceeded.',
+    'Pro tier rate limit exceeded.'
   ),
 
   // Enterprise tier - 10000 requests per 15 minutes
   enterprise: createRateLimiter(
     15 * 60 * 1000, // 15 minutes
     10000,
-    'Enterprise tier rate limit exceeded.',
+    'Enterprise tier rate limit exceeded.'
   ),
 
   // Authentication endpoints - stricter limits
   auth: createRateLimiter(
     15 * 60 * 1000, // 15 minutes
     5,
-    'Too many authentication attempts. Please try again later.',
+    'Too many authentication attempts. Please try again later.'
   ),
 
   // AI endpoints - moderate limits
   ai: createRateLimiter(
     1 * 60 * 1000, // 1 minute
     10,
-    'AI service rate limit exceeded. Please wait before making another request.',
+    'AI service rate limit exceeded. Please wait before making another request.'
   ),
 
   // File upload endpoints - very strict limits
   upload: createRateLimiter(
     60 * 60 * 1000, // 1 hour
     10,
-    'Upload rate limit exceeded. Please wait before uploading more files.',
+    'Upload rate limit exceeded. Please wait before uploading more files.'
   ),
 };
 

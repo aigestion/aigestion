@@ -15,7 +15,7 @@ export class Verify2FALoginUseCase {
   constructor(
     @inject(TYPES.TwoFactorService) private twoFactorService: TwoFactorService,
     @inject(TYPES.RateLimitService) private rateLimitService: RateLimitService,
-    @inject(TYPES.UserRepository) private userRepository: IUserRepository,
+    @inject(TYPES.UserRepository) private userRepository: IUserRepository
   ) {}
 
   async execute(data: { userId: string; token: string; ip?: string; userAgent?: string }) {

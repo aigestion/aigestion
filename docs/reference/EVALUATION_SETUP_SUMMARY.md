@@ -6,11 +6,11 @@ Se ha agregado un **framework de evaluación completo** para la integración de 
 
 ### Métricas Implementadas
 
-| Métrica | Tipo | Descripción | Escala |
-|---------|------|-------------|--------|
-| **Coherence** | AI-assisted | Mide naturalidad y fluidez del texto | 1-5 |
-| **Fluency** | AI-assisted | Evalúa corrección gramatical y sintaxis | 1-5 |
-| **Relevance** | AI-assisted | Determina relevancia de la respuesta | 1-5 |
+| Métrica       | Tipo        | Descripción                             | Escala |
+| ------------- | ----------- | --------------------------------------- | ------ |
+| **Coherence** | AI-assisted | Mide naturalidad y fluidez del texto    | 1-5    |
+| **Fluency**   | AI-assisted | Evalúa corrección gramatical y sintaxis | 1-5    |
+| **Relevance** | AI-assisted | Determina relevancia de la respuesta    | 1-5    |
 
 ### Archivos Creados
 
@@ -78,9 +78,9 @@ Los resultados se guardan en `results/evaluation_results.json` con:
 ```json
 {
   "metrics": {
-    "coherence": 4.25,      // Promedio de coherencia
-    "fluency": 4.50,        // Promedio de fluidez
-    "relevance": 4.75       // Promedio de relevancia
+    "coherence": 4.25, // Promedio de coherencia
+    "fluency": 4.5, // Promedio de fluidez
+    "relevance": 4.75 // Promedio de relevancia
   },
   "rows": [
     {
@@ -123,6 +123,7 @@ cat evaluation/NEXUS V1/README.md
 ```
 
 Incluye:
+
 - Explicación detallada de cada métrica
 - Ejemplos de interpretación de resultados
 - Uso avanzado con datasets personalizados
@@ -131,6 +132,7 @@ Incluye:
 ## 🔗 Integración con NEXUS V1
 
 El framework evalúa el endpoint existente:
+
 - **Endpoint:** `POST /api/ai/generate`
 - **Controlador:** `server/src/controllers/ai.controller.ts`
 - **Modelo:** `gemini-pro` (Google Generative AI)
@@ -154,4 +156,3 @@ No requiere cambios en el código de NEXUS V1, solo necesita el servidor corrien
 
 **Fecha de implementación:** 2025-12-05
 **Status:** ✅ Framework completo y funcional
-

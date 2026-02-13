@@ -1,6 +1,7 @@
 ---
 description: Development workflow for rapid iteration
 ---
+
 # Development Workflow
 
 This workflow provides a set of commands to quickly set up the development environment, run linting, tests, and start the server. It is stored in `.agent/workflows/dev_workflow.md` and can be invoked by the user or integrated into CI.
@@ -8,21 +9,25 @@ This workflow provides a set of commands to quickly set up the development envir
 ## Steps
 
 1. **Install dependencies**
+
    ```sh
    npm install
    ```
 
 2. **Run lint** (using the updated ESLint config with ignores)
+
    ```sh
    npm run lint
    ```
 
 3. **Run unit tests** (fast mode)
+
    ```sh
    npm test
    ```
 
 4. **Run tests with open‑handle detection** (useful when debugging flaky tests)
+
    ```sh
    npm run test:detect
    ```

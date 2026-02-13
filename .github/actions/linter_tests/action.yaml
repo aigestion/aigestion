@@ -3,8 +3,7 @@ description: Run tests against plugin linters
 
 inputs:
   linter-version:
-    description:
-      Versions of linters to run tests against. One of KnownGoodVersion | Latest | Snapshots
+    description: Versions of linters to run tests against. One of KnownGoodVersion | Latest | Snapshots
     required: false
   cli-version:
     description: Trunk cli version to run test against. Mutually exclusive with `cli-path`
@@ -112,8 +111,7 @@ runs:
         # Debug recurrent eslint circular JSON errors
         DEBUG: Driver:eslint:*,Driver:nixpkgs-fmt:*,Driver:trunk-toolbox:*
         JEST_SUITE_NAME: Linter Tests
-        JEST_JUNIT_SUITE_NAME:
-          "{title} ${{ runner.os }} ${{ inputs.ref-type }} ${{ inputs.linter-version }}"
+        JEST_JUNIT_SUITE_NAME: '{title} ${{ runner.os }} ${{ inputs.ref-type }} ${{ inputs.linter-version }}'
 
     - name: Upload prod results
       # TODO(Tyler): Add upload on Windows once the action supports it.

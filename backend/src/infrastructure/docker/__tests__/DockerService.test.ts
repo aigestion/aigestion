@@ -47,7 +47,7 @@ describe('DockerService', () => {
 
     expect(mockExec).toHaveBeenCalledWith(
       expect.stringContaining('docker ps'),
-      expect.any(Function),
+      expect.any(Function)
     );
     expect(result).toEqual([container]);
     expect(redisUtils.setCache).toHaveBeenCalled();
@@ -70,7 +70,7 @@ describe('DockerService', () => {
 
     expect(mockExec).toHaveBeenCalledWith(
       expect.stringContaining('docker stats'),
-      expect.any(Function),
+      expect.any(Function)
     );
     expect(result).toEqual(stats);
   });
@@ -80,7 +80,7 @@ describe('DockerService', () => {
     await dockerService.startContainer('123');
     expect(mockExec).toHaveBeenCalledWith(
       expect.stringContaining('docker start 123'),
-      expect.any(Function),
+      expect.any(Function)
     );
   });
 
@@ -89,7 +89,7 @@ describe('DockerService', () => {
     await dockerService.stopContainer('123');
     expect(mockExec).toHaveBeenCalledWith(
       expect.stringContaining('docker stop 123'),
-      expect.any(Function),
+      expect.any(Function)
     );
   });
 });

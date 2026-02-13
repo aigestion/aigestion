@@ -9,7 +9,7 @@ import { logger } from '../utils/logger';
 export class NotificationService {
   constructor(
     @inject(TYPES.NotificationRepository) private notificationRepo: INotificationRepository,
-    @inject(TYPES.SocketService) private socketService: SocketService,
+    @inject(TYPES.SocketService) private socketService: SocketService
   ) {}
 
   /**
@@ -20,7 +20,7 @@ export class NotificationService {
     type: NotificationType,
     title: string,
     message: string,
-    data?: any,
+    data?: any
   ): Promise<INotification> {
     logger.info(`[NotificationService] Creating notification for user ${userId}: ${title}`);
 

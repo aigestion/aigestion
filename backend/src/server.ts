@@ -176,7 +176,9 @@ export async function initializeAndStart() {
     // Socket.IO connection handling
     io.on(
       'connection',
-      (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>) => {
+      (
+        socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>
+      ) => {
         logger.info('New WebSocket connection');
 
         socket.on('joinRoom', (room: string) => {
@@ -192,7 +194,7 @@ export async function initializeAndStart() {
         socket.on('disconnect', () => {
           logger.info('Client disconnected');
         });
-      },
+      }
     );
 
     // 1. Data Source (Optional for dev)
@@ -200,7 +202,9 @@ export async function initializeAndStart() {
       const { connectToDatabase } = await import('./config/database');
       await connectToDatabase();
     } catch (dbErr) {
-      logger.warn('⚠️ [Database] Failed to connect. Running in degraded mode: ' + (dbErr as Error).message);
+      logger.warn(
+        '⚠️ [Database] Failed to connect. Running in degraded mode: ' + (dbErr as Error).message
+      );
     }
 
     const port = process.env.PORT || config.port || 5000;
@@ -228,7 +232,7 @@ export async function initializeAndStart() {
             repeat: {
               pattern: '0 0 * * *', // Every day at midnight
             },
-          },
+          }
         );
       } catch (err) {
         logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
@@ -239,7 +243,7 @@ export async function initializeAndStart() {
         const credManager = container.get<CredentialManagerService>(TYPES.CredentialManagerService);
         const report = await credManager.verifyAll();
         if (report.criticalFailures > 0) {
-           logger.error('⚠️ Critical credentials missing. System may be unstable.');
+          logger.error('⚠️ Critical credentials missing. System may be unstable.');
         }
       } catch (e) {}
 
@@ -248,7 +252,6 @@ export async function initializeAndStart() {
 
       logger.info('✅ Background services initialization completed');
     });
-
   } catch (error) {
     console.error('❌ [DEBUG] Critical startup failure:', error);
     logger.error('Critical failure during startup:', error);

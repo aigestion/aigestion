@@ -11,9 +11,9 @@ export async function sovereignMiddleware(req: Request, res: Response, next: Nex
 
   if (!token) {
     logger.warn(`[SovereignMiddleware] Missing token from ${req.ip}`);
-    return res.status(403).json({ 
-      error: 'SOVEREIGN_ACCESS_DENIED', 
-      message: 'This endpoint requires hardware-validated Sovereign Identity.' 
+    return res.status(403).json({
+      error: 'SOVEREIGN_ACCESS_DENIED',
+      message: 'This endpoint requires hardware-validated Sovereign Identity.',
     });
   }
 
@@ -22,9 +22,10 @@ export async function sovereignMiddleware(req: Request, res: Response, next: Nex
 
     if (!symmetricKey) {
       logger.warn(`[SovereignMiddleware] Expired or invalid token: ${token}`);
-      return res.status(401).json({ 
-        error: 'SOVEREIGN_SESSION_EXPIRED', 
-        message: 'Your Sovereign session has expired. Please re-authenticate with your hardware key.' 
+      return res.status(401).json({
+        error: 'SOVEREIGN_SESSION_EXPIRED',
+        message:
+          'Your Sovereign session has expired. Please re-authenticate with your hardware key.',
       });
     }
 

@@ -12,7 +12,7 @@ export class NewsService {
 
   constructor(
     @inject(TYPES.AIService) private aiService: AIService,
-    @inject(TYPES.RagService) private ragService: RagService,
+    @inject(TYPES.RagService) private ragService: RagService
   ) {}
 
   async ingestNews(urls: string[]): Promise<NewsItem[]> {
@@ -67,8 +67,8 @@ export class NewsService {
         logger.warn(
           `[NewsService] AI response was not valid JSON, raw text: ${responseText.substring(
             0,
-            100,
-          )}...`,
+            100
+          )}...`
         );
         this.updateNewsItem(id, {
           title: 'Processed News',

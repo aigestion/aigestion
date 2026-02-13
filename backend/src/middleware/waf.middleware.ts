@@ -213,7 +213,7 @@ class WebApplicationFirewall {
 
   private analyzeString(
     input: string,
-    context: string,
+    context: string
   ): { blocked: boolean; warnings: string[]; matchedRules: string[] } {
     const warnings: string[] = [];
     const matchedRules: string[] = [];

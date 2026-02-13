@@ -65,9 +65,7 @@ export const PlasmaButton: React.FC<PlasmaButtonProps> = ({
         }`}
         animate={{
           boxShadow: [
-            isSecondary
-              ? '0 0 0 0 rgba(255, 255, 255, 0.7)'
-              : '0 0 0 0 rgba(0, 245, 255, 0.7)',
+            isSecondary ? '0 0 0 0 rgba(255, 255, 255, 0.7)' : '0 0 0 0 rgba(0, 245, 255, 0.7)',
             isSecondary
               ? '0 0 20px 10px rgba(255, 255, 255, 0)'
               : '0 0 20px 10px rgba(0, 245, 255, 0)',

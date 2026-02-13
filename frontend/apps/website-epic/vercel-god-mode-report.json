@@ -566,24 +566,9 @@
         "Permissions-Policy"
       ],
       "cors": {
-        "origins": [
-          "https://aigestion.net",
-          "https://www.aigestion.net"
-        ],
-        "methods": [
-          "GET",
-          "POST",
-          "PUT",
-          "DELETE",
-          "PATCH",
-          "OPTIONS"
-        ],
-        "headers": [
-          "X-Requested-With",
-          "Content-Type",
-          "Authorization",
-          "Cache-Control"
-        ]
+        "origins": ["https://aigestion.net", "https://www.aigestion.net"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        "headers": ["X-Requested-With", "Content-Type", "Authorization", "Cache-Control"]
       }
     },
     "analytics": {

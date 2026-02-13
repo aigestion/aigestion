@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: 'com.aigestion.frontend',
   appName: 'AIGestion',
   webDir: 'frontend/apps/website-epic/dist',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
 };
 
 export default config;

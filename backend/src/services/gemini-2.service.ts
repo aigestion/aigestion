@@ -140,7 +140,7 @@ export class Gemini2Service {
       name: string;
       description: string;
       parameters: any;
-    }>,
+    }>
   ) {
     try {
       const model = this.client.getGenerativeModel({
@@ -201,7 +201,7 @@ export class Gemini2Service {
   async classifyContent(text: string, categories: string[]) {
     try {
       const prompt = `Classify the following text into one of these categories: ${categories.join(
-        ', ',
+        ', '
       )}\n\nText: ${text}`;
 
       return await this.generateText(prompt);

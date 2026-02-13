@@ -8,19 +8,19 @@ const router = Router();
 const controller = container.get<AnalyticsController>(TYPES.AnalyticsController);
 
 router.get('/overview', cacheMiddleware(600), (req, res, next) =>
-  controller.getAnalyticsOverview(req, res, next),
+  controller.getAnalyticsOverview(req, res, next)
 );
 router.get('/user-activity', cacheMiddleware(300), (req, res, next) =>
-  controller.getUserActivity(req, res, next),
+  controller.getUserActivity(req, res, next)
 );
 router.get('/system-usage', cacheMiddleware(120), (req, res, next) =>
-  controller.getSystemUsage(req, res, next),
+  controller.getSystemUsage(req, res, next)
 );
 router.get('/error-rates', cacheMiddleware(60), (req, res, next) =>
-  controller.getErrorRates(req, res, next),
+  controller.getErrorRates(req, res, next)
 );
 router.get('/dashboard-data', cacheMiddleware(300), (req, res, next) =>
-  controller.getDashboardData(req, res, next),
+  controller.getDashboardData(req, res, next)
 );
 router.get('/export', (req, res, next) => controller.exportReport(req, res, next));
 

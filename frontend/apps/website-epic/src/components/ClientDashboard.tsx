@@ -1,12 +1,40 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { Target, TrendingUp, Users, Award, Briefcase, Star, Zap, CheckCircle, Activity, AlertCircle, DollarSign, Settings, Database, Shield } from 'lucide-react'
-import { api, SystemHealth } from '../services/api'
+import React from 'react';
+import { motion } from 'framer-motion';
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+import {
+  Target,
+  TrendingUp,
+  Users,
+  Award,
+  Briefcase,
+  Star,
+  Zap,
+  CheckCircle,
+  Activity,
+  AlertCircle,
+  DollarSign,
+  Settings,
+  Database,
+  Shield,
+} from 'lucide-react';
+import { api, SystemHealth } from '../services/api';
 
 const ClientDashboard = () => {
   const [health, setHealth] = React.useState<SystemHealth | null>(null);
-  const [connectionStatus, setConnectionStatus] = React.useState<'checking' | 'connected' | 'error'>('checking');
+  const [connectionStatus, setConnectionStatus] = React.useState<
+    'checking' | 'connected' | 'error'
+  >('checking');
 
   React.useEffect(() => {
     const checkConnection = async () => {
@@ -27,7 +55,7 @@ const ClientDashboard = () => {
     { title: 'Tasa de Éxito', value: '94.2%', icon: Target, color: 'text-blue-400' },
     { title: 'Clientes Satisfechos', value: '156', icon: Users, color: 'text-purple-400' },
     { title: 'Logros Conseguidos', value: '23', icon: Award, color: 'text-orange-400' },
-  ]
+  ];
 
   const progressData = [
     { name: 'Ene', completado: 65, objetivo: 80 },
@@ -36,14 +64,14 @@ const ClientDashboard = () => {
     { name: 'Abr', completado: 91, objetivo: 95 },
     { name: 'May', completado: 88, objetivo: 92 },
     { name: 'Jun', completado: 95, objetivo: 98 },
-  ]
+  ];
 
   const achievements = [
     { title: '🚀 Primer Proyecto', description: 'Completado con éxito', unlocked: true },
     { title: '⭐ Cliente Feliz', description: '5 estrellas de satisfacción', unlocked: true },
     { title: '🎯 Meta Mensual', description: 'Alcanzado el objetivo', unlocked: true },
     { title: '💎 Experto Nivel 5', description: 'En progreso...', unlocked: false },
-  ]
+  ];
 
   return (
     <div className="p-6 space-y-6">
@@ -66,11 +94,15 @@ const ClientDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center space-x-2 mb-4"
       >
-        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${
-          connectionStatus === 'connected' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
-          connectionStatus === 'error' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
-          'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-        }`}>
+        <div
+          className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${
+            connectionStatus === 'connected'
+              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+              : connectionStatus === 'error'
+                ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+          }`}
+        >
           {connectionStatus === 'connected' ? (
             <>
               <Activity className="w-3 h-3" />
@@ -89,10 +121,9 @@ const ClientDashboard = () => {
           )}
         </div>
         {health?.data?.version && (
-           <span className="text-xs text-white/30">v{health.data.version}</span>
+          <span className="text-xs text-white/30">v{health.data.version}</span>
         )}
       </motion.div>
-
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
@@ -129,7 +160,13 @@ const ClientDashboard = () => {
               <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: 'none' }} />
               <Legend />
               <Line type="monotone" dataKey="completado" stroke="#10b981" strokeWidth={2} />
-              <Line type="monotone" dataKey="objetivo" stroke="#3b82f6" strokeWidth={2} strokeDasharray="5 5" />
+              <Line
+                type="monotone"
+                dataKey="objetivo"
+                stroke="#3b82f6"
+                strokeWidth={2}
+                strokeDasharray="5 5"
+              />
             </LineChart>
           </ResponsiveContainer>
         </motion.div>
@@ -155,13 +192,21 @@ const ClientDashboard = () => {
               >
                 <div className="flex items-center space-x-3">
                   <div className={`text-2xl ${achievement.unlocked ? '' : 'opacity-50'}`}>
-                    {achievement.unlocked ? <CheckCircle className="w-6 h-6 text-emerald-400" /> : '🔒'}
+                    {achievement.unlocked ? (
+                      <CheckCircle className="w-6 h-6 text-emerald-400" />
+                    ) : (
+                      '🔒'
+                    )}
                   </div>
                   <div className="flex-1">
-                    <h3 className={`font-semibold ${achievement.unlocked ? 'text-white' : 'text-gray-400'}`}>
+                    <h3
+                      className={`font-semibold ${achievement.unlocked ? 'text-white' : 'text-gray-400'}`}
+                    >
                       {achievement.title}
                     </h3>
-                    <p className={`text-sm ${achievement.unlocked ? 'text-white/70' : 'text-gray-500'}`}>
+                    <p
+                      className={`text-sm ${achievement.unlocked ? 'text-white/70' : 'text-gray-500'}`}
+                    >
                       {achievement.description}
                     </p>
                   </div>
@@ -229,7 +274,7 @@ const ClientDashboard = () => {
         </div>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export { ClientDashboard }
+export { ClientDashboard };

@@ -8,7 +8,7 @@ import { TYPES } from '../types';
 export class AgentService {
   constructor(
     @inject(TYPES.VectorService) private vectorService: VectorService,
-    @inject(TYPES.SemanticRouterService) private semanticRouter: SemanticRouterService,
+    @inject(TYPES.SemanticRouterService) private semanticRouter: SemanticRouterService
   ) {}
 
   public async processQuery(userId: string, query: string, context?: any): Promise<any> {

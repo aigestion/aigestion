@@ -4,12 +4,12 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { 
-  Mic, 
-  MicOff, 
-  Phone, 
-  PhoneOff, 
-  MessageSquare, 
+import {
+  Mic,
+  MicOff,
+  Phone,
+  PhoneOff,
+  MessageSquare,
   Volume2,
   Play,
   Download,
@@ -19,14 +19,14 @@ import {
   Activity,
   CheckCircle,
   AlertCircle,
-  XCircle
+  XCircle,
 } from 'lucide-react';
 
-import { 
-  voiceAIIntegration, 
-  VoiceMessage, 
+import {
+  voiceAIIntegration,
+  VoiceMessage,
   VoiceCallSession,
-  VoiceAIConfig 
+  VoiceAIConfig,
 } from '../services/voice-ai-integration';
 
 interface SystemStats {
@@ -68,7 +68,9 @@ const VoiceAIDashboard: React.FC = () => {
       setIsInitialized(true);
       setSuccess('✅ Voice AI System initialized successfully');
     } catch (error) {
-      setError(`❌ Failed to initialize Voice AI: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setError(
+        `❌ Failed to initialize Voice AI: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -97,13 +99,15 @@ const VoiceAIDashboard: React.FC = () => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const voiceMessage = await voiceAIIntegration.textToSpeech(textToConvert);
       setVoiceMessages(prev => [voiceMessage, ...prev]);
       setSuccess('✅ Text converted to speech successfully');
       setTextToConvert('');
     } catch (error) {
-      setError(`❌ Failed to convert text to speech: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setError(
+        `❌ Failed to convert text to speech: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -118,13 +122,15 @@ const VoiceAIDashboard: React.FC = () => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const session = await voiceAIIntegration.startVoiceCall(phoneNumber);
       setSuccess(`✅ Call started to ${phoneNumber}`);
       setPhoneNumber('');
       loadActiveSessions();
     } catch (error) {
-      setError(`❌ Failed to start call: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setError(
+        `❌ Failed to start call: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -137,7 +143,9 @@ const VoiceAIDashboard: React.FC = () => {
       setSuccess('✅ Call ended successfully');
       loadActiveSessions();
     } catch (error) {
-      setError(`❌ Failed to end call: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setError(
+        `❌ Failed to end call: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     } finally {
       setIsLoading(false);
     }
@@ -149,7 +157,9 @@ const VoiceAIDashboard: React.FC = () => {
       await voiceAIIntegration.playVoiceMessage(voiceMessage);
       setCurrentPlayingId(null);
     } catch (error) {
-      setError(`❌ Failed to play voice message: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setError(
+        `❌ Failed to play voice message: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
       setCurrentPlayingId(null);
     }
   };
@@ -159,7 +169,9 @@ const VoiceAIDashboard: React.FC = () => {
       voiceAIIntegration.downloadVoiceMessage(voiceMessage);
       setSuccess('✅ Voice message downloaded');
     } catch (error) {
-      setError(`❌ Failed to download voice message: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      setError(
+        `❌ Failed to download voice message: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     }
   };
 
@@ -228,11 +240,17 @@ const VoiceAIDashboard: React.FC = () => {
 
           {/* Notifications */}
           {(error || success) && (
-            <div className={`p-4 rounded-lg mb-4 flex items-center justify-between ${
-              error ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'
-            }`}>
+            <div
+              className={`p-4 rounded-lg mb-4 flex items-center justify-between ${
+                error ? 'bg-red-50 border border-red-200' : 'bg-green-50 border border-green-200'
+              }`}
+            >
               <div className="flex items-center space-x-2">
-                {error ? <XCircle className="w-5 h-5 text-red-600" /> : <CheckCircle className="w-5 h-5 text-green-600" />}
+                {error ? (
+                  <XCircle className="w-5 h-5 text-red-600" />
+                ) : (
+                  <CheckCircle className="w-5 h-5 text-green-600" />
+                )}
                 <span className={error ? 'text-red-800' : 'text-green-800'}>
                   {error || success}
                 </span>
@@ -250,7 +268,9 @@ const VoiceAIDashboard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-purple-600 text-sm font-medium">ElevenLabs</p>
-                    <p className="text-2xl font-bold text-purple-900">{systemStats.elevenLabs.voicesAvailable}</p>
+                    <p className="text-2xl font-bold text-purple-900">
+                      {systemStats.elevenLabs.voicesAvailable}
+                    </p>
                     <p className="text-purple-600 text-xs">Voices Available</p>
                   </div>
                   <Volume2 className="w-8 h-8 text-purple-500" />
@@ -261,7 +281,9 @@ const VoiceAIDashboard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-blue-600 text-sm font-medium">Vapi</p>
-                    <p className="text-2xl font-bold text-blue-900">{systemStats.vapi.assistantsCount}</p>
+                    <p className="text-2xl font-bold text-blue-900">
+                      {systemStats.vapi.assistantsCount}
+                    </p>
                     <p className="text-blue-600 text-xs">Assistants</p>
                   </div>
                   <Users className="w-8 h-8 text-blue-500" />
@@ -272,7 +294,9 @@ const VoiceAIDashboard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-green-600 text-sm font-medium">Twilio</p>
-                    <p className="text-2xl font-bold text-green-900">{systemStats.twilio.phoneNumbersCount}</p>
+                    <p className="text-2xl font-bold text-green-900">
+                      {systemStats.twilio.phoneNumbersCount}
+                    </p>
                     <p className="text-green-600 text-xs">Phone Numbers</p>
                   </div>
                   <Phone className="w-8 h-8 text-green-500" />
@@ -283,7 +307,9 @@ const VoiceAIDashboard: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-orange-600 text-sm font-medium">Active Sessions</p>
-                    <p className="text-2xl font-bold text-orange-900">{systemStats.integration.activeSessions}</p>
+                    <p className="text-2xl font-bold text-orange-900">
+                      {systemStats.integration.activeSessions}
+                    </p>
                     <p className="text-orange-600 text-xs">Calls in Progress</p>
                   </div>
                   <Activity className="w-8 h-8 text-orange-500" />
@@ -308,7 +334,7 @@ const VoiceAIDashboard: React.FC = () => {
                 </label>
                 <textarea
                   value={textToConvert}
-                  onChange={(e) => setTextToConvert(e.target.value)}
+                  onChange={e => setTextToConvert(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                   rows={4}
                   placeholder="Type your message here..."
@@ -339,8 +365,11 @@ const VoiceAIDashboard: React.FC = () => {
               <div className="mt-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Generated Voices</h3>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {voiceMessages.map((message) => (
-                    <div key={message.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  {voiceMessages.map(message => (
+                    <div
+                      key={message.id}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-gray-900 truncate">{message.text}</p>
                         <p className="text-xs text-gray-500">
@@ -382,13 +411,11 @@ const VoiceAIDashboard: React.FC = () => {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Phone Number
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
                 <input
                   type="tel"
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={e => setPhoneNumber(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   placeholder="+1234567890"
                 />
@@ -418,7 +445,7 @@ const VoiceAIDashboard: React.FC = () => {
               <div className="mt-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Active Sessions</h3>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {activeSessions.map((session) => (
+                  {activeSessions.map(session => (
                     <div key={session.id} className="p-3 bg-gray-50 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
@@ -427,7 +454,9 @@ const VoiceAIDashboard: React.FC = () => {
                             {session.phoneNumber}
                           </span>
                         </div>
-                        <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(session.status)}`}>
+                        <span
+                          className={`px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(session.status)}`}
+                        >
                           {session.status}
                         </span>
                       </div>

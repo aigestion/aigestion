@@ -49,11 +49,7 @@ export function useUserProfile(userId: string) {
     ['user-profile', userId],
     async () => {
       if (!supabase) throw new Error('Supabase client not initialized');
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
 
       if (error) throw error;
       return data;
@@ -93,7 +89,8 @@ export function useUserSubscription(userId: string) {
         .eq('user_id', userId)
         .single();
 
-      if (error && error.code !== 'PGRST116') { // Not found error
+      if (error && error.code !== 'PGRST116') {
+        // Not found error
         throw error;
       }
       return data;

@@ -62,7 +62,7 @@ export class CloudFailoverService {
   private triggerFailover(to: CloudProvider) {
     if (this.currentProvider !== to) {
       logger.warn(
-        `[CloudFailover] 🚨 SWITCHING CLOUD PROVIDER: ${this.currentProvider.toUpperCase()} -> ${to.toUpperCase()}`,
+        `[CloudFailover] 🚨 SWITCHING CLOUD PROVIDER: ${this.currentProvider.toUpperCase()} -> ${to.toUpperCase()}`
       );
       this.currentProvider = to;
     }

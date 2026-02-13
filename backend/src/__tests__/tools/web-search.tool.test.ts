@@ -29,7 +29,7 @@ describe('SearchWebTool', () => {
     delete process.env.TAVILY_API_KEY;
     const tool = new SearchWebTool();
     await expect(tool.execute({ query: 'test' })).rejects.toThrow(
-      'TAVILY_API_KEY environment variable is not set.',
+      'TAVILY_API_KEY environment variable is not set.'
     );
   });
 

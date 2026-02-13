@@ -16,7 +16,7 @@ if (typeof TextEncoder === 'undefined') {
       Object.defineProperty(AsyncGeneratorFunctionPrototype, 'prototype', {
         value: AsyncGeneratorPrototype,
         writable: true,
-        configurable: true
+        configurable: true,
       });
       // And the prototype of that prototype
       const AsyncIteratorPrototype = Object.create(Object.prototype);

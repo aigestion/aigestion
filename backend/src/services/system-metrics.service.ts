@@ -27,7 +27,7 @@ export class SystemMetricsService {
   private lastNetworkStats: { rx: number; tx: number; time: number } | null = null;
 
   constructor(
-    @inject(TYPES.CredentialManagerService) private credentialManager: CredentialManagerService,
+    @inject(TYPES.CredentialManagerService) private credentialManager: CredentialManagerService
   ) {}
 
   /**
@@ -120,7 +120,7 @@ export class SystemMetricsService {
     try {
       if (os.platform() === 'win32') {
         const { stdout } = await execAsync(
-          'powershell -Command "Get-NetAdapterStatistics | Select-Object -ExpandProperty ReceivedBytes"',
+          'powershell -Command "Get-NetAdapterStatistics | Select-Object -ExpandProperty ReceivedBytes"'
         );
         totalBytes = stdout.split('\n').reduce((acc, val) => acc + (parseInt(val.trim()) || 0), 0);
       } else {
@@ -149,7 +149,7 @@ export class SystemMetricsService {
   async getDockerContainerCount(): Promise<number> {
     try {
       const { stdout } = await execAsync(
-        'docker ps -q | Measure-Object | Select-Object -ExpandProperty Count',
+        'docker ps -q | Measure-Object | Select-Object -ExpandProperty Count'
       );
       return parseInt(stdout.trim()) || 0;
     } catch {

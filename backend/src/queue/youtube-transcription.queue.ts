@@ -31,7 +31,7 @@ export class YoutubeTranscriptionQueue {
     }
     try {
       this.connection = (await amqplib.connect(
-        process.env.RABBITMQ_URL || 'amqp://localhost',
+        process.env.RABBITMQ_URL || 'amqp://localhost'
       )) as any;
       this.channel = await this.connection.createChannel();
       await this.channel.assertQueue(this.queueName, { durable: true });
@@ -82,7 +82,7 @@ export class YoutubeTranscriptionQueue {
           this.channel.nack(msg, false, false); // discard bad message
         }
       },
-      { noAck: false },
+      { noAck: false }
     );
     logger.info('YoutubeTranscriptionQueue consumer started');
   }

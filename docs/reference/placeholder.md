@@ -1,19 +1,22 @@
 ﻿---
-description: "God‑level optimized workflow template"
+description: 'God‑level optimized workflow template'
 ---
 
 // turbo-all
 
 # Overview
+
 This workflow provides a **premium, production‑ready** scaffold for automating complex tasks within the NEXUS V1 project. It follows best practices for clarity, maintainability, and automation.
 
 ## Structure
+
 1. **Preparation** – Set up environment, validate prerequisites.
 2. **Execution** – Run the core commands with optional `// turbo` annotations for auto‑execution.
 3. **Verification** – Validate results and perform cleanup.
 4. **Post‑process** – Notify stakeholders, archive logs, etc.
 
 ## Steps
+
 1. **Check prerequisites**
    // turbo
    ```bash
@@ -53,5 +56,4 @@ This workflow provides a **premium, production‑ready** scaffold for automating
 
 ---
 
-*Feel free to customize each step, add more `// turbo` annotations, or insert additional commands as needed.*
-
+_Feel free to customize each step, add more `// turbo` annotations, or insert additional commands as needed._

@@ -60,7 +60,7 @@ describe('AuthService', () => {
       mockUserRepository as any,
       mockRegisterUseCase as any,
       mockLoginUseCase as any,
-      mockVerify2FAUseCase as any,
+      mockVerify2FAUseCase as any
     );
   });
 
@@ -141,7 +141,7 @@ describe('AuthService', () => {
       });
 
       await expect(authService.refreshToken('invalid-string', 'ip', 'agent')).rejects.toThrow(
-        'INVALID_REFRESH_TOKEN',
+        'INVALID_REFRESH_TOKEN'
       );
     });
 
@@ -166,7 +166,7 @@ describe('AuthService', () => {
       mockUserRepository.update.mockResolvedValue({});
 
       await expect(authService.refreshToken(validToken, 'ip', 'agent')).rejects.toThrow(
-        'REFRESH_TOKEN_REUSE_DETECTED',
+        'REFRESH_TOKEN_REUSE_DETECTED'
       );
 
       // Expect invalidation
@@ -197,7 +197,7 @@ describe('AuthService', () => {
       mockUserRepository.removeRefreshToken.mockResolvedValue({});
 
       await expect(authService.refreshToken(expiredToken, 'ip', 'agent')).rejects.toThrow(
-        'REFRESH_TOKEN_EXPIRED',
+        'REFRESH_TOKEN_EXPIRED'
       );
 
       expect(mockUserRepository.removeRefreshToken).toHaveBeenCalledWith(expiredToken);

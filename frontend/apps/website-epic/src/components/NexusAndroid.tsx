@@ -49,7 +49,6 @@ export const NexusAndroid: React.FC = () => {
 
   return (
     <section className="relative py-32 smooth-mesh-bg overflow-hidden">
-
       {/* Background Decor */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-nexus-cyan/5 blur-[150px] rounded-full" />
@@ -219,7 +218,7 @@ export const NexusAndroid: React.FC = () => {
                 "Instala Nexus en tu Android y toma las riendas de tu vida digital. Privacidad
                 extrema sin necesidad de ser un experto."
               </p>
-              <button 
+              <button
                 onClick={() => setIsContactModalOpen(true)}
                 className="btn-enterprise mt-8 w-full group"
               >

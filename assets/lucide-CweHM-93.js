@@ -1,1 +1,1 @@
-import "./vendor-MmfpvJAE.js";
+import './vendor-MmfpvJAE.js';

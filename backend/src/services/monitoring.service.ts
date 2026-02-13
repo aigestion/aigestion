@@ -92,7 +92,7 @@ export class MonitoringService {
     value: number,
     tags: { [key: string]: string } = {},
     unit = '',
-    type: Metric['type'] = 'gauge',
+    type: Metric['type'] = 'gauge'
   ): Promise<void> {
     try {
       const metric: Metric = {
@@ -146,7 +146,7 @@ export class MonitoringService {
     duration: number,
     endpoint: string,
     method: string,
-    statusCode: number,
+    statusCode: number
   ): void {
     this.recordMetric(
       'response_time',
@@ -157,7 +157,7 @@ export class MonitoringService {
         status_code: statusCode.toString(),
       },
       'ms',
-      'timer',
+      'timer'
     );
 
     // Record request count
@@ -170,7 +170,7 @@ export class MonitoringService {
         status_code: statusCode.toString(),
       },
       '',
-      'counter',
+      'counter'
     );
 
     // Record error if applicable
@@ -184,7 +184,7 @@ export class MonitoringService {
           status_code: statusCode.toString(),
         },
         '',
-        'counter',
+        'counter'
       );
     }
   }
@@ -201,7 +201,7 @@ export class MonitoringService {
         success: success.toString(),
       },
       'ms',
-      'timer',
+      'timer'
     );
 
     if (!success) {
@@ -212,7 +212,7 @@ export class MonitoringService {
           query_type: queryType,
         },
         '',
-        'counter',
+        'counter'
       );
     }
   }
@@ -232,7 +232,7 @@ export class MonitoringService {
         type: 'heap',
       },
       '%',
-      'gauge',
+      'gauge'
     );
 
     this.recordMetric(
@@ -242,7 +242,7 @@ export class MonitoringService {
         type: 'heap_used',
       },
       'bytes',
-      'gauge',
+      'gauge'
     );
 
     // Node.js process.cpuUsage() returns microseconds.
@@ -258,7 +258,7 @@ export class MonitoringService {
         type: 'total_seconds',
       },
       's',
-      'gauge',
+      'gauge'
     );
   }
 
@@ -266,7 +266,7 @@ export class MonitoringService {
    * Get performance metrics
    */
   public async getPerformanceMetrics(
-    timeRange: 'minute' | 'hour' | 'day' = 'hour',
+    timeRange: 'minute' | 'hour' | 'day' = 'hour'
   ): Promise<PerformanceMetrics> {
     try {
       const now = Date.now();
@@ -329,7 +329,7 @@ export class MonitoringService {
   public async getMetricsInRange(
     name: string,
     startTime: number,
-    endTime: number,
+    endTime: number
   ): Promise<Metric[]> {
     try {
       // Check Redis connection before using it
@@ -445,7 +445,7 @@ export class MonitoringService {
       const queryTimeMetrics = await this.getMetricsInRange(
         'db_query_time',
         Date.now() - 60000,
-        Date.now(),
+        Date.now()
       );
       const queryTimes = queryTimeMetrics.map(m => m.value);
       const slowQueries = queryTimeMetrics.filter(m => m.value > 1000).length;
@@ -547,7 +547,7 @@ export class MonitoringService {
    * Create alert
    */
   private createAlert(
-    alertData: Omit<Alert, 'id' | 'timestamp' | 'resolved' | 'resolvedAt'>,
+    alertData: Omit<Alert, 'id' | 'timestamp' | 'resolved' | 'resolvedAt'>
   ): void {
     try {
       const alert: Alert = {
@@ -623,7 +623,7 @@ export class MonitoringService {
         await this.redis.setEx(
           `alert:${alertId}`,
           this.alertRetention / 1000,
-          JSON.stringify(updatedAlert),
+          JSON.stringify(updatedAlert)
         );
       }
 
@@ -651,7 +651,7 @@ export class MonitoringService {
     try {
       const totalMetrics = Array.from(this.metrics.values()).reduce(
         (sum, metrics) => sum + metrics.length,
-        0,
+        0
       );
       const activeAlerts = this.alerts.filter(a => !a.resolved).length;
 
@@ -737,7 +737,7 @@ export class MonitoringService {
       () => {
         this.cleanupOldMetrics();
       },
-      60 * 60 * 1000,
+      60 * 60 * 1000
     );
   }
 

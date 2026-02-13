@@ -39,9 +39,7 @@ export const ScrollProgressIndicator: React.FC = () => {
           exit={{ opacity: 0, scale: 0.8 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          onClick={() =>
-            window.scrollTo({ top: 0, behavior: 'smooth' })
-          }
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-nexus-violet/20 border border-nexus-cyan/50 flex items-center justify-center text-nexus-cyan z-40 hover:bg-nexus-violet/40 transition-colors"
         >
           <span className="text-xl">↑</span>
@@ -60,10 +58,7 @@ interface StaggeredGridProps {
   columns?: number;
 }
 
-export const StaggeredGrid: React.FC<StaggeredGridProps> = ({
-  children,
-  columns = 3,
-}) => {
+export const StaggeredGrid: React.FC<StaggeredGridProps> = ({ children, columns = 3 }) => {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -95,7 +90,7 @@ export const StaggeredGrid: React.FC<StaggeredGridProps> = ({
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
     >
-      {React.Children.map(children, (child) => (
+      {React.Children.map(children, child => (
         <motion.div variants={itemVariants}>{child}</motion.div>
       ))}
     </motion.div>
@@ -112,11 +107,7 @@ interface FeatureProps {
   description: string;
 }
 
-export const FeatureShowcase: React.FC<FeatureProps> = ({
-  icon,
-  title,
-  description,
-}) => {
+export const FeatureShowcase: React.FC<FeatureProps> = ({ icon, title, description }) => {
   return (
     <motion.div
       className="space-y-4 p-6 rounded-lg bg-nexus-obsidian/40 backdrop-blur-sm border border-white/5 hover:border-nexus-cyan/30 transition-colors"
@@ -172,11 +163,7 @@ export const SkeletonLoader: React.FC<{ count?: number; variant?: 'card' | 'text
         <motion.div
           key={i}
           className={`bg-gradient-to-r from-nexus-obsidian via-nexus-violet/10 to-nexus-obsidian rounded-lg overflow-hidden ${
-            variant === 'card'
-              ? 'h-64'
-              : variant === 'title'
-                ? 'h-8 w-48'
-                : 'h-4 w-full'
+            variant === 'card' ? 'h-64' : variant === 'title' ? 'h-8 w-48' : 'h-4 w-full'
           }`}
           animate={{
             backgroundPosition: ['0% 0%', '100% 0%', '0% 0%'],
@@ -205,11 +192,7 @@ interface CounterProps {
   suffix?: string;
 }
 
-export const AnimatedCounter: React.FC<CounterProps> = ({
-  end,
-  label,
-  suffix = '',
-}) => {
+export const AnimatedCounter: React.FC<CounterProps> = ({ end, label, suffix = '' }) => {
   const [count, setCount] = React.useState(0);
 
   React.useEffect(() => {
@@ -256,10 +239,7 @@ interface GradientTextProps {
   className?: string;
 }
 
-export const GradientText: React.FC<GradientTextProps> = ({
-  text,
-  className = '',
-}) => {
+export const GradientText: React.FC<GradientTextProps> = ({ text, className = '' }) => {
   return (
     <motion.div
       className={`relative inline-block ${className}`}
@@ -270,7 +250,7 @@ export const GradientText: React.FC<GradientTextProps> = ({
       <span className="bg-gradient-to-r from-nexus-violet via-nexus-cyan to-nexus-gold bg-clip-text text-transparent">
         {text}
       </span>
-      
+
       {/* Animated underline */}
       <motion.div
         className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-nexus-violet to-nexus-cyan rounded-full"
@@ -299,10 +279,7 @@ export function SuccessToast({ message }: SuccessToastProps) {
       exit={{ opacity: 0, x: 20, y: -20 }}
       className="fixed top-6 right-6 bg-green-500/20 border border-green-500/50 text-green-400 px-4 py-3 rounded-lg font-orbitron text-sm flex items-center gap-2 z-50"
     >
-      <motion.div
-        animate={{ scale: [1, 1.2, 1] }}
-        transition={{ duration: 0.5 }}
-      >
+      <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.5 }}>
         ✓
       </motion.div>
       {message}

@@ -82,7 +82,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         decoded.fingerprint.userAgent !== currentUserAgent
       ) {
         logger.warn(
-          `UA Mismatch: ${decoded.id}. Token: ${decoded.fingerprint.userAgent} vs Req: ${currentUserAgent}`,
+          `UA Mismatch: ${decoded.id}. Token: ${decoded.fingerprint.userAgent} vs Req: ${currentUserAgent}`
         );
         (res as any).status(401).json({ success: false, message: 'Sesión inválida.' });
         return;
@@ -91,7 +91,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
       // Device Posture Check
       if (decoded.fingerprint.deviceId) {
         const devicePostureService = container.get<DevicePostureService>(
-          TYPES.DevicePostureService,
+          TYPES.DevicePostureService
         );
         const postureCheck = await devicePostureService.verifyDevice(decoded.id, {
           deviceId: decoded.fingerprint.deviceId,
@@ -161,7 +161,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         stack: error.stack,
         token: token?.substring(0, 10) + '...', // Log only start of token for security
       },
-      'Auth Middleware Error',
+      'Auth Middleware Error'
     );
     (res as any).status(401).json({
       success: false,
@@ -169,7 +169,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
     });
     return;
   }
-};;
+};
 
 // Middleware para verificar roles de usuario
 export const authorize = (...roles: string[]) => {

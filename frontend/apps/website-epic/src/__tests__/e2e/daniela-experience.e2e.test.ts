@@ -27,7 +27,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Wait for response
     await expect(page.getByText(/¡Hola! Estoy excelente/)).toBeVisible({
-      timeout: 5000
+      timeout: 5000,
     });
 
     // Check that both messages are displayed
@@ -49,7 +49,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
     // Simulate voice input (mock)
     await page.evaluate(() => {
       const event = new CustomEvent('voice-input', {
-        detail: { text: 'Hola Daniela por voz' }
+        detail: { text: 'Hola Daniela por voz' },
       });
       window.dispatchEvent(event);
     });
@@ -59,7 +59,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Wait for response
     await expect(page.getByText(/Hola Daniela por voz/)).toBeVisible({
-      timeout: 5000
+      timeout: 5000,
     });
   });
 
@@ -70,7 +70,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Wait for emotional analysis
     await expect(page.getByText('ANÁLISIS EMOCIONAL')).toBeVisible({
-      timeout: 3000
+      timeout: 3000,
     });
 
     // Check emotional indicators
@@ -86,7 +86,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Wait for suggested actions
     await expect(page.getByText('SUGERENCIAS RÁPIDAS:')).toBeVisible({
-      timeout: 3000
+      timeout: 3000,
     });
 
     // Check for dashboard-related suggestions
@@ -105,7 +105,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
     const messages = [
       'Hola Daniela',
       '¿Cómo funciona el análisis emocional?',
-      'Muéstrame un ejemplo'
+      'Muéstrame un ejemplo',
     ];
 
     for (const message of messages) {
@@ -137,7 +137,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Should show error message
     await expect(page.getByText(/error/i)).toBeVisible({
-      timeout: 5000
+      timeout: 5000,
     });
 
     // Should allow retry
@@ -172,7 +172,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Wait for response
     await expect(page.getByText(/¡Hola!/)).toBeVisible({
-      timeout: 5000
+      timeout: 5000,
     });
   });
 
@@ -189,7 +189,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Should remember the context
     await expect(page.getByText(/Alejandro/)).toBeVisible({
-      timeout: 5000
+      timeout: 5000,
     });
   });
 
@@ -250,9 +250,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
   test('should handle accessibility features', async ({ page }) => {
     // Check ARIA labels
-    await expect(page.getByRole('button', { name: /micrófono/i })).toHaveAttribute(
-      'aria-label'
-    );
+    await expect(page.getByRole('button', { name: /micrófono/i })).toHaveAttribute('aria-label');
 
     // Check semantic structure
     await expect(page.getByRole('main')).toBeVisible();
@@ -303,7 +301,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Should show offline indicator
     await expect(page.getByText(/desconectado/i)).toBeVisible({
-      timeout: 3000
+      timeout: 3000,
     });
 
     // Reconnect
@@ -311,7 +309,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Should show reconnected state
     await expect(page.getByText(/conectado/i)).toBeVisible({
-      timeout: 5000
+      timeout: 5000,
     });
   });
 
@@ -322,9 +320,9 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
         play() {
           return Promise.resolve();
         }
-        pause() { }
-        addEventListener() { }
-        removeEventListener() { }
+        pause() {}
+        addEventListener() {}
+        removeEventListener() {}
       };
     });
 
@@ -334,7 +332,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Check for audio controls
     await expect(page.locator('[data-testid="audio-controls"]')).toBeVisible({
-      timeout: 3000
+      timeout: 3000,
     });
 
     // Test audio controls
@@ -354,7 +352,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Should restore conversation
     await expect(page.getByText('Mensaje inicial')).toBeVisible({
-      timeout: 5000
+      timeout: 5000,
     });
   });
 
@@ -374,9 +372,9 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
             data: {
               response: 'Recuperado exitosamente',
               suggestedActions: [],
-              context: { messages: [], emotionalHistory: [], clientProfile: {} }
-            }
-          })
+              context: { messages: [], emotionalHistory: [], clientProfile: {} },
+            },
+          }),
         });
       }
     });
@@ -387,7 +385,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Should show error
     await expect(page.getByText(/error/i)).toBeVisible({
-      timeout: 3000
+      timeout: 3000,
     });
 
     // Retry should work
@@ -395,7 +393,7 @@ test.describe('Daniela AI Futurista - E2E Experience', () => {
 
     // Should succeed
     await expect(page.getByText('Recuperado exitosamente')).toBeVisible({
-      timeout: 5000
+      timeout: 5000,
     });
   });
 });

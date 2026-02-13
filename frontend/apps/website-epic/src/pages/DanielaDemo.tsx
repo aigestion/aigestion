@@ -5,7 +5,7 @@ import { DanielaWebsite } from '../components/DanielaWebsite';
 
 export const DanielaDemo: React.FC = () => {
   const [demoMode, setDemoMode] = useState<'conversation' | 'features' | 'analytics'>(
-    'conversation',
+    'conversation'
   );
   const [variant, setVariant] = useState<'widget' | 'assistant' | 'advisor'>('assistant');
   const [context, setContext] = useState<'homepage' | 'contact' | 'pricing' | 'about'>('homepage');
@@ -141,7 +141,7 @@ export const DanielaDemo: React.FC = () => {
               <div className="flex justify-center gap-4 mb-6">
                 <div className="flex gap-2">
                   <span className="text-sm text-nexus-silver/60 py-2">Variante:</span>
-                  {(['widget', 'assistant', 'advisor'] as const).map((v) => (
+                  {(['widget', 'assistant', 'advisor'] as const).map(v => (
                     <motion.button
                       key={v}
                       whileHover={{ scale: 1.05 }}
@@ -160,7 +160,7 @@ export const DanielaDemo: React.FC = () => {
 
                 <div className="flex gap-2">
                   <span className="text-sm text-nexus-silver/60 py-2">Contexto:</span>
-                  {(['homepage', 'contact', 'pricing', 'about'] as const).map((c) => (
+                  {(['homepage', 'contact', 'pricing', 'about'] as const).map(c => (
                     <motion.button
                       key={c}
                       whileHover={{ scale: 1.05 }}

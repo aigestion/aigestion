@@ -50,7 +50,7 @@ describe('Verify2FALoginUseCase', () => {
     verify2FALoginUseCase = new Verify2FALoginUseCase(
       mockTwoFactorService as any,
       mockRateLimitService as any,
-      mockUserRepository as any,
+      mockUserRepository as any
     );
   });
 
@@ -66,7 +66,7 @@ describe('Verify2FALoginUseCase', () => {
     mockUserRepository.findById.mockResolvedValue(null);
 
     await expect(verify2FALoginUseCase.execute(validPayload)).rejects.toThrow(
-      new AppError('User not found', 404, 'USER_NOT_FOUND'),
+      new AppError('User not found', 404, 'USER_NOT_FOUND')
     );
   });
 
@@ -77,7 +77,7 @@ describe('Verify2FALoginUseCase', () => {
     });
 
     await expect(verify2FALoginUseCase.execute(validPayload)).rejects.toThrow(
-      '2FA not enabled for user',
+      '2FA not enabled for user'
     );
   });
 
@@ -105,7 +105,7 @@ describe('Verify2FALoginUseCase', () => {
     expect(mockRateLimitService.incrementAndCheck).toHaveBeenCalledWith(
       `login_2fa:${userId}`,
       5,
-      900,
+      900
     );
     expect(mockRateLimitService.reset).toHaveBeenCalledWith(`login_2fa:${userId}`);
   });
@@ -148,16 +148,16 @@ describe('Verify2FALoginUseCase', () => {
     // Use a token long enough to trigger backup code check attempt, otherwise it throws 'Invalid 2FA code' without checking backup
     const longToken = '1234567';
     await expect(
-      verify2FALoginUseCase.execute({ ...validPayload, token: longToken }),
+      verify2FALoginUseCase.execute({ ...validPayload, token: longToken })
     ).rejects.toThrow(new AppError('Invalid 2FA code', 401, 'INVALID_2FA_CODE'));
   });
 
   it('should verify rate limit is checked', async () => {
     mockRateLimitService.incrementAndCheck.mockRejectedValue(
-      new AppError('Rate limit exceeded', 429, 'RATE_LIMIT_EXCEEDED'),
+      new AppError('Rate limit exceeded', 429, 'RATE_LIMIT_EXCEEDED')
     );
     await expect(verify2FALoginUseCase.execute(validPayload)).rejects.toThrow(
-      'Rate limit exceeded',
+      'Rate limit exceeded'
     );
     expect(mockUserRepository.findById).not.toHaveBeenCalled();
   });

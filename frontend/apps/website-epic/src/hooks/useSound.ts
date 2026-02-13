@@ -29,5 +29,4 @@ export const useSound = () => {
     playError,
     playMenu,
   };
-
 };

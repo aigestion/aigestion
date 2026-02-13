@@ -21,9 +21,9 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
 
   override async create(
     idOrItem: string | Partial<IUser>,
-    maybeItem?: Partial<IUser>,
+    maybeItem?: Partial<IUser>
   ): Promise<IUser> {
-    const data = typeof idOrItem === 'string' ? maybeItem ?? {} : idOrItem;
+    const data = typeof idOrItem === 'string' ? (maybeItem ?? {}) : idOrItem;
     const user = new User(data as any);
     return await user.save();
   }
@@ -56,7 +56,7 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   async removeRefreshToken(token: string): Promise<void> {
     await User.updateOne(
       { 'refreshTokens.token': token },
-      { $pull: { refreshTokens: { token: token } } },
+      { $pull: { refreshTokens: { token: token } } }
     ).exec();
   }
 }

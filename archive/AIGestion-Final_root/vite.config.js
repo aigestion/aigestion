@@ -1,6 +1,6 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
 export default defineConfig({
   plugins: [react()],
@@ -15,7 +15,7 @@ export default defineConfig({
         admin: resolve(__dirname, 'admin.html'),
         client: resolve(__dirname, 'client.html'),
         demo: resolve(__dirname, 'demo.html'),
-        main: resolve(__dirname, 'index.html')
+        main: resolve(__dirname, 'index.html'),
       },
       output: {
         entryFileNames: '[name].js',
@@ -34,4 +34,4 @@ export default defineConfig({
     port: 3000,
     host: true,
   },
-})
+});

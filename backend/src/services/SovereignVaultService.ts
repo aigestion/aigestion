@@ -52,7 +52,7 @@ export class SovereignVaultService {
   private async queryLocal(
     text: string,
     embedding: number[],
-    limit: number,
+    limit: number
   ): Promise<VaultResult[]> {
     try {
       // Direct call to ChromaDB Port 8000
@@ -72,7 +72,7 @@ export class SovereignVaultService {
   private async queryCloud(
     text: string,
     embedding: number[],
-    limit: number,
+    limit: number
   ): Promise<VaultResult[]> {
     try {
       // Pinecone search using pre-generated embeddings could be optimized,
@@ -94,7 +94,7 @@ export class SovereignVaultService {
   private async querySovereign(
     text: string,
     embedding: number[],
-    limit: number,
+    limit: number
   ): Promise<VaultResult[]> {
     try {
       // Supabase Hybrid Search using real embeddings

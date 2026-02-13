@@ -49,7 +49,7 @@ const notificationSchema = new Schema<INotification>(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 // Add index for fetching unread notifications or recent notifications

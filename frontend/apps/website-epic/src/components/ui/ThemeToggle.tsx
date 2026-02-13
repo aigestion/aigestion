@@ -34,9 +34,7 @@ export function ThemeToggle() {
       >
         <div className="flex items-center space-x-2">
           {getCurrentIcon()}
-          <span className="text-xs font-medium">
-            {getCurrentLabel()}
-          </span>
+          <span className="text-xs font-medium">{getCurrentLabel()}</span>
         </div>
       </Button>
 
@@ -50,7 +48,7 @@ export function ThemeToggle() {
         >
           <Sun className="w-3 h-3" />
         </Button>
-        
+
         <Button
           variant={themeMode === 'dark' ? 'primary' : 'ghost'}
           size="sm"
@@ -59,7 +57,7 @@ export function ThemeToggle() {
         >
           <Moon className="w-3 h-3" />
         </Button>
-        
+
         <Button
           variant={themeMode === 'system' ? 'primary' : 'ghost'}
           size="sm"
@@ -108,29 +106,25 @@ export function AnimatedThemeToggle() {
       className="relative overflow-hidden group"
     >
       <div className="relative flex items-center justify-center w-6 h-6">
-        <Sun 
+        <Sun
           className={`absolute w-4 h-4 transition-all duration-300 ${
-            themeMode === 'light' 
-              ? 'opacity-100 rotate-0 scale-100' 
-              : 'opacity-0 rotate-90 scale-0'
-          }`} 
+            themeMode === 'light' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 rotate-90 scale-0'
+          }`}
         />
-        <Moon 
+        <Moon
           className={`absolute w-4 h-4 transition-all duration-300 ${
-            themeMode === 'dark' 
-              ? 'opacity-100 rotate-0 scale-100' 
-              : 'opacity-0 -rotate-90 scale-0'
-          }`} 
+            themeMode === 'dark' ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'
+          }`}
         />
-        <Monitor 
+        <Monitor
           className={`absolute w-4 h-4 transition-all duration-300 ${
-            themeMode === 'system' 
-              ? 'opacity-100 rotate-0 scale-100' 
+            themeMode === 'system'
+              ? 'opacity-100 rotate-0 scale-100'
               : 'opacity-0 rotate-180 scale-0'
-          }`} 
+          }`}
         />
       </div>
-      
+
       {/* Animated background */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded" />
     </Button>

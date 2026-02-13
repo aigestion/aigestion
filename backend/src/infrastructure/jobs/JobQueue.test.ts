@@ -50,7 +50,7 @@ describe('JobQueue', () => {
         subject: 'Test',
         body: 'Body',
       },
-      undefined,
+      undefined
     );
   });
 });

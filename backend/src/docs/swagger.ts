@@ -37,6 +37,6 @@ export function setupSwagger(app: Express): void {
   });
 
   console.log(
-    '📚 API Documentation available at http://localhost:${process.env.PORT || 3000}/api-docs',
+    '📚 API Documentation available at http://localhost:${process.env.PORT || 3000}/api-docs'
   );
 }

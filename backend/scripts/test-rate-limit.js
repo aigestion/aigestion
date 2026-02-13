@@ -32,9 +32,9 @@ function makeRequest(path, method = 'POST', body = null) {
       },
     };
 
-    const req = http.request(options, (res) => {
+    const req = http.request(options, res => {
       let data = '';
-      res.on('data', (chunk) => {
+      res.on('data', chunk => {
         data += chunk;
       });
       res.on('end', () => {
@@ -46,7 +46,7 @@ function makeRequest(path, method = 'POST', body = null) {
       });
     });
 
-    req.on('error', (err) => {
+    req.on('error', err => {
       reject(err);
     });
 
@@ -85,11 +85,13 @@ async function testGeneralRateLimit() {
       } else if (response.status === 200) {
         console.log(`${colors.green}✓ Request ${i} succeeded${colors.reset}`);
       } else {
-        console.log(`${colors.yellow}? Request ${i} returned status ${response.status}${colors.reset}`);
+        console.log(
+          `${colors.yellow}? Request ${i} returned status ${response.status}${colors.reset}`
+        );
       }
 
       // Small delay between requests
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
     } catch (err) {
       console.error(`${colors.red}Error on request ${i}:${colors.reset}`, err.message);
     }
@@ -115,13 +117,17 @@ async function testAuthRateLimit() {
         console.log(`${colors.red}✗ Request ${i} was rate limited!${colors.reset}`);
         console.log(`Response: ${response.body}`);
       } else if (response.status === 400 || response.status === 401) {
-        console.log(`${colors.green}✓ Request ${i} processed (expected auth failure)${colors.reset}`);
+        console.log(
+          `${colors.green}✓ Request ${i} processed (expected auth failure)${colors.reset}`
+        );
       } else {
-        console.log(`${colors.yellow}? Request ${i} returned status ${response.status}${colors.reset}`);
+        console.log(
+          `${colors.yellow}? Request ${i} returned status ${response.status}${colors.reset}`
+        );
       }
 
       // Small delay between requests
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
     } catch (err) {
       console.error(`${colors.red}Error on request ${i}:${colors.reset}`, err.message);
     }
@@ -145,11 +151,13 @@ async function testAIRateLimit() {
       if (response.status === 429) {
         console.log(`${colors.red}✗ Request ${i} was rate limited!${colors.reset}`);
       } else {
-        console.log(`${colors.green}✓ Request ${i} processed (status ${response.status})${colors.reset}`);
+        console.log(
+          `${colors.green}✓ Request ${i} processed (status ${response.status})${colors.reset}`
+        );
       }
 
       // Small delay between requests
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
     } catch (err) {
       console.error(`${colors.red}Error on request ${i}:${colors.reset}`, err.message);
     }
@@ -189,4 +197,3 @@ async function main() {
 
 // Run the tests
 main();
-

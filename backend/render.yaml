@@ -4,8 +4,8 @@ services:
     name: aigestion-backend
     env: node
     plan: starter
-    buildCommand: "npm install && npm run build"
-    startCommand: "npm start"
+    buildCommand: 'npm install && npm run build'
+    startCommand: 'npm start'
     healthCheckPath: /api/v1/health
     autoDeploy: true
 
@@ -20,17 +20,17 @@ services:
       - key: CORS_ORIGIN
         value: https://aigestion.net,https://admin.aigestion.net,https://client.aigestion.net,https://demo.aigestion.net
       - key: DANIELA_SYSTEM_PROMPT
-        value: "Eres Daniela, una asistente de IA futurista y empática de AIGestion. Tu objetivo es ayudar a los usuarios a entender cómo la IA soberana y la arquitectura de AIGestion pueden transformar sus empresas. Eres profesional, futurista, amable y experta en tecnología. Mantén tus respuestas concisas y claras."
+        value: 'Eres Daniela, una asistente de IA futurista y empática de AIGestion. Tu objetivo es ayudar a los usuarios a entender cómo la IA soberana y la arquitectura de AIGestion pueden transformar sus empresas. Eres profesional, futurista, amable y experta en tecnología. Mantén tus respuestas concisas y claras.'
       - key: ELEVENLABS_VOICE_ID
         value: EXAVITQu4vr4xnSDxMaL
       - key: JWT_SECRET
         generateValue: true
       - key: BCRYPT_ROUNDS
-        value: "12"
+        value: '12'
       - key: RATE_LIMIT_WINDOW_MS
-        value: "900000"
+        value: '900000'
       - key: RATE_LIMIT_MAX_REQUESTS
-        value: "100"
+        value: '100'
       - key: LOG_LEVEL
         value: info
 
@@ -57,7 +57,7 @@ services:
         - src/**/*.spec.ts
 
 # Global Configuration
-version: "1"
+version: '1'
 build:
   packages:
     - type: npm

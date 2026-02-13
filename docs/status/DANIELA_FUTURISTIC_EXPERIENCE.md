@@ -16,6 +16,7 @@ Daniela es la asistente de voz futurista de AIGestion diseñada para ofrecer una
 ### Backend Services
 
 #### VoiceService (`backend/src/services/voice.service.ts`)
+
 - **Integración Vapi**: Procesamiento de mensajes de voz
 - **Configuración Daniela**:
   - Modelo: GPT-4o
@@ -26,6 +27,7 @@ Daniela es la asistente de voz futurista de AIGestion diseñada para ofrecer una
   - `get_metaverse_office_status`: Estado de oficinas virtuales
 
 #### AIService (`backend/src/services/ai.service.ts`)
+
 - **Multi-proveedor**: OpenAI, Anthropic, Gemini
 - **Streaming**: Respuestas en tiempo real
 - **Tools Avanzados**: Analytics, búsqueda web, gestión de suscripciones
@@ -33,11 +35,13 @@ Daniela es la asistente de voz futurista de AIGestion diseñada para ofrecer una
 ### Frontend Components
 
 #### VoiceToAction (`frontend/shared/src/components/VoiceToAction.tsx`)
+
 - **Interfaz Visual**: Botón animado con indicadores de estado
 - **Feedback Visual**: Ondas de audio cuando está escuchando
 - **Ejemplos de Comandos**: Interface guía para usuarios
 
 #### useVoiceAssistant Hook (`frontend/apps/website-epic/src/hooks/useVoiceAssistant.ts`)
+
 - **Vapi Integration**: SDK para comunicación de voz
 - **Configuración Dinámica**:
   - Transcriber: Deepgram Nova-2 (español)
@@ -60,6 +64,7 @@ interface ConversationPanel {
 ```
 
 **Características:**
+
 - Transcripción en tiempo real
 - Edición de texto para correcciones
 - Análisis emocional del cliente
@@ -74,16 +79,19 @@ interface ConversationPanel {
 ### 3. Modos de Interacción
 
 #### Modo Estándar
+
 - Conversación natural voz-a-voz
 - Transcripción en segundo plano
 - Respuestas contextuales
 
 #### Modo Experto
+
 - Panel completo de conversación
 - Edición y corrección en tiempo real
 - Integración con sistemas empresariales
 
 #### Modo Presentación
+
 - Interface minimizada para demostraciones
 - Respuestas pre-configuradas
 - Visualización de datos en tiempo real
@@ -113,7 +121,7 @@ class EnhancedVoiceService {
       emotionalState,
       response,
       audioResponse,
-      suggestedActions: await this.generateSuggestions(transcription)
+      suggestedActions: await this.generateSuggestions(transcription),
     };
   }
 }
@@ -142,21 +150,25 @@ const ConversationPanel: React.FC = () => {
 ## 💡 Características Innovadoras
 
 ### 1. Inteligencia Emocional
+
 - Detección de sentimiento en tiempo real
 - Adaptación de tono y respuestas
 - Feedback visual de estado emocional
 
 ### 2. Memoria Contextual
+
 - Historial completo de conversaciones
 - Preferencias del cliente
 - Contexto empresarial integrado
 
 ### 3. Acciones Proactivas
+
 - Sugerencias basadas en contexto
 - Automatización de tareas comunes
 - Integración con sistemas CRM
 
 ### 4. Realidad Aumentada
+
 - Visualización de datos en 3D
 - Interacciones gestuales
 - Interface holográfica
@@ -164,16 +176,19 @@ const ConversationPanel: React.FC = () => {
 ## 🎯 Casos de Uso
 
 ### 1. Ventas y Consultas
+
 - Presentación de productos
 - Respuestas a preguntas técnicas
 - Cierre de ventas asistido
 
 ### 2. Soporte Técnico
+
 - Diagnóstico de problemas
 - Guías paso a paso
 - Escalado inteligente
 
 ### 3. Relaciones Públicas
+
 - Presentaciones corporativas
 - Demostraciones de productos
 - Eventos virtuales
@@ -181,21 +196,25 @@ const ConversationPanel: React.FC = () => {
 ## 🚀 Roadmap de Implementación
 
 ### Fase 1: Foundation (2 semanas)
+
 - [ ] Enhanced VoiceService backend
 - [ ] ConversationPanel frontend
 - [ ] Integración emocional básica
 
 ### Fase 2: Intelligence (3 semanas)
+
 - [ ] Análisis emocional avanzado
 - [ ] Memoria contextual
 - [ ] Sugerencias proactivas
 
 ### Fase 3: Experience (4 semanas)
+
 - [ ] Avatar 3D de Daniela
 - [ ] Efectos visuales futuristas
 - [ ] Realidad aumentada
 
 ### Fase 4: Integration (2 semanas)
+
 - [ ] Integración CRM completa
 - [ ] Analytics avanzados
 - [ ] Modos multi-interfaz
@@ -203,15 +222,18 @@ const ConversationPanel: React.FC = () => {
 ## 💰 Inversión vs Publicidad
 
 **Inversión en Daniela:**
+
 - Desarrollo: ~$15,000
 - Infraestructura mensual: ~$500
 - ROI: Experiencia única diferenciadora
 
 **Publicidad Tradicional:**
+
 - Costo mensual promedio: $2,000-5,000
 - ROI variable y temporal
 
 **Ventajas de Daniela:**
+
 - Activo permanente
 - Escalable ilimitadamente
 - Experiencia memorable
@@ -220,16 +242,19 @@ const ConversationPanel: React.FC = () => {
 ## 🎨 Diseño Visual
 
 ### Paleta de Colores
+
 - **Primario**: Cian neón (#00F5FF)
 - **Secundario**: Violeta futurista (#A855F7)
 - **Acento**: Dorado tecnológico (#FFD700)
 - **Fondo**: Negro profundo (#0A0A0A)
 
 ### Tipografía
+
 - **Principal**: Orbitron (futurista)
 - **Secundaria**: JetBrains Mono (técnica)
 
 ### Efectos Visuales
+
 - Partículas flotantes
 - Líneas de conexión neuronales
 - Efectos holográficos

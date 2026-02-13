@@ -9,6 +9,7 @@ Eliminar los proyectos duplicados y crear una nueva `website-epic` limpia con lo
 ## 📋 **Estado Actual Detectado**
 
 ### **Proyectos en la Cuenta**
+
 ```
 📁 aigestions-projects
 ├── 🏢 aigestion-website-epic (8m ago) ❌ DUPLICADO 1
@@ -19,6 +20,7 @@ Eliminar los proyectos duplicados y crear una nueva `website-epic` limpia con lo
 ```
 
 ### **Problemas Identificados**
+
 - **2 proyectos duplicados**: `aigestion-website-epic` y `website-epic`
 - **Confusión**: No se sabe cuál es el correcto
 - **Dominio perdido**: `aigestion.net` no está en esta cuenta
@@ -29,6 +31,7 @@ Eliminar los proyectos duplicados y crear una nueva `website-epic` limpia con lo
 ## 🧹 **Estrategia de Limpieza Completa**
 
 ### **Fase 1: Eliminar Proyectos Duplicados**
+
 ```bash
 # Desde Vercel dashboard, eliminar:
 ❌ aigestion-website-website-epic
@@ -36,6 +39,7 @@ Eliminar los proyectos duplicados y crear una nueva `website-epic` limpia con lo
 ```
 
 ### **Fase 2: Crear Nuevo Proyecto Limpio**
+
 ```bash
 # Crear nuevo proyecto "aigestion-website"
 # Con código actualizado de website-epic
@@ -43,6 +47,7 @@ Eliminar los proyectos duplicados y crear una nueva `website-epic` limpia con lo
 ```
 
 ### **Fase 3: Migrar Datos**
+
 ```bash
 # Migrar configuración
 # Migrar variables de entorno
@@ -54,6 +59,7 @@ Eliminar los proyectos duplicados y crear una nueva `website-epic` limpia con lo
 ## 🗑️ **Paso 1: Eliminar Proyectos Duplicados**
 
 ### **Desde Vercel Dashboard**
+
 1. Ve a https://vercel.com/dashboard
 2. Inicia sesión con cuenta `aigestion`
 3. Ve a "Projects"
@@ -65,6 +71,7 @@ Eliminar los proyectos duplicados y crear una nueva `website-epic` limpia con lo
    - Confirmar: `website-epic`
 
 ### **Verificación**
+
 ```bash
 npx vercel projects ls
 # Ya no deben aparecer los duplicados
@@ -75,6 +82,7 @@ npx vercel projects ls
 ## 🆕 **Paso 2: Crear Nuevo Proyecto Limpio**
 
 ### **Preparar Código**
+
 ```bash
 # Asegurarse que el código está en el lugar correcto
 cd frontend/apps/website-epic
@@ -83,6 +91,7 @@ ls -la
 ```
 
 ### **Crear Nuevo Proyecto**
+
 ```bash
 # Limpiar configuración local
 rm -rf .vercel
@@ -96,6 +105,7 @@ npx vercel
 ```
 
 ### **Configurar Dominio**
+
 ```bash
 # Agregar dominio principal
 npx vercel domains add aigestion.net
@@ -111,6 +121,7 @@ npx vercel domains add demo.aigestion.net
 ## 🔄 **Paso 3: Migrar Configuración**
 
 ### **Variables de Entorno**
+
 ```bash
 # Configurar variables de entorno
 npx vercel env add VITE_API_BASE_URL "https://aigestion-backend.onrender.com/api/v1"
@@ -122,6 +133,7 @@ npx vercel env add VITE_ENVIRONMENT "production"
 ```
 
 ### **Configuración de Build**
+
 ```bash
 # Verificar vercel.json
 cat vercel.json
@@ -141,6 +153,7 @@ cat vercel.json
 ## 🚀 **Paso 4: Deploy Limpio**
 
 ### **Limpiar Cache**
+
 ```bash
 # Limpiar dependencias
 rm -rf node_modules package-lock.json
@@ -150,12 +163,14 @@ pnpm install
 ```
 
 ### **Deploy**
+
 ```bash
 # Deploy a producción
 npx vercel --prod
 ```
 
 ### **Verificación**
+
 ```bash
 # Verificar deploy
 npx vercel ls
@@ -177,6 +192,7 @@ curl -I https://demo.aigestion.net
 ## 📋 **Estructura Final Deseada**
 
 ### **Proyectos Limpios**
+
 ```
 📁 aigestions-projects
 ├── 🏢 aigestion-website (nuevo)
@@ -190,6 +206,7 @@ curl -I https://demo.aigestion.net
 ```
 
 ### **URLs Finales**
+
 ```
 ✅ https://aigestion.net → Website principal con Daniela
 ✅ https://admin.aigestion.net → Panel administrativo
@@ -202,6 +219,7 @@ curl -I https://demo.aigestion.net
 ## 🔧 **Configuración de Archivos**
 
 ### **vercel.json (website principal)**
+
 ```json
 {
   "version": 2,
@@ -242,6 +260,7 @@ curl -I https://demo.aigestion.net
 ```
 
 ### **package.json**
+
 ```json
 {
   "name": "website-epic",
@@ -260,24 +279,28 @@ curl -I https://demo.aigestion.net
 ## 📊 **Timeline de Ejecución**
 
 ### **Fase 1: Limpieza (5 minutos)**
+
 - [ ] Acceder a Vercel dashboard
 - [ ] Eliminar aigestion-website-epic
 - [ ] Eliminar website-epic
 - [ ] Verificar eliminación
 
 ### **Fase 2: Creación (10 minutos)**
+
 - [ ] Limpiar configuración local
 - [ ] Crear proyecto aigestion-website
 - [ ] Configurar dominios
 - [ ] Configurar variables de entorno
 
 ### **Fase 3: Deploy (10 minutos)**
+
 - [ ] Limpiar dependencias
 - [ ] Instalar dependencias
 - [ ] Deploy a producción
 - [ ] Verificar URLs
 
 ### **Fase 4: Verificación (5 minutos)**
+
 - [ ] Test todas las URLs
 - [ ] Verificar dominios
 - [ ] Test funcionalidad completa
@@ -288,6 +311,7 @@ curl -I https://demo.aigestion.net
 ## 🎯 **Resultado Final**
 
 ### **✅ Sistema Limpio y Organizado**
+
 ```
 🌐 aigestion.net → Website principal con Daniela AI
 🏢 admin.aigestion.net → Panel administrativo
@@ -298,6 +322,7 @@ Sin duplicados, sin conflictos, sin confusión.
 ```
 
 ### **✅ Beneficios**
+
 - **URLs limpias**: Sin .vercel.app largas
 - **Dominios propios**: Control total
 - **Organización clara**: Cada proyecto con su función
@@ -309,6 +334,7 @@ Sin duplicados, sin conflictos, sin confusión.
 ## 🚨 **Comandos de Ejecución**
 
 ### **Script Completo de Migración**
+
 ```bash
 #!/bin/bash
 
@@ -372,6 +398,7 @@ echo "🎉 Migración completada exitosamente!"
 ## 🎉 **ESTADO FINAL**
 
 ### **🟢 Sistema Limpio y Listo**
+
 - ✅ Sin proyectos duplicados
 - ✅ Proyectos organizados por función
 - ✅ URLs limpias y profesionales

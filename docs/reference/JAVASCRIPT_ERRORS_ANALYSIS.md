@@ -5,11 +5,13 @@
 ### **📋 Lista de Errores**
 
 #### **1. 🚨 Error Crítico: exports is not defined**
+
 ```javascript
 Uncaught ReferenceError: exports is not defined
 ```
 
 #### **2. 🚨 Error Crítico: Cannot read properties of null (reading 'useContext')**
+
 ```javascript
 Uncaught TypeError: Cannot read properties of null (reading 'useContext')
     at gt.useContext (index-ZUqhsmLb.js:9:44785)
@@ -18,16 +20,19 @@ Uncaught TypeError: Cannot read properties of null (reading 'useContext')
 ```
 
 #### **3. 🚨 Error: Service Worker Registration Failed**
+
 ```javascript
 Error registrando Service Worker. SecurityError: Failed to register a ServiceWorker for scope ('https://www.aigestion.net/') with script ('https://www.aigestion.net/sw.js'): The script has an unsupported MIME type ('text/html').
 ```
 
 #### **4. ⚠️ Warning: Deprecated Meta Tag**
+
 ```html
-<meta name="apple-mobile-web-app-capable" content="yes"> is deprecated.
+<meta name="apple-mobile-web-app-capable" content="yes" /> is deprecated.
 ```
 
 #### **5. ⚠️ Warning: Manifest Icon Error**
+
 ```javascript
 Error while trying to use the following icon from the Manifest: https://www.aigestion.net/icons/icon-192x192.png (Download error or resource isn't a valid image)
 ```
@@ -39,11 +44,13 @@ Error while trying to use the following icon from the Manifest: https://www.aige
 ### **🚨 Error 1: exports is not defined**
 
 #### **Causa**
+
 - **Module System Conflict**: El código está intentando usar `exports` (CommonJS) en un entorno ES Module
 - **Build Configuration**: Vite está generando código con conflictos de módulos
 - **TypeScript Configuration**: Configuración incorrecta en `tsconfig.json`
 
 #### **Solución**
+
 ```json
 // tsconfig.json
 {
@@ -59,11 +66,13 @@ Error while trying to use the following icon from the Manifest: https://www.aige
 ### **🚨 Error 2: Cannot read properties of null (reading 'useContext')**
 
 #### **Causa**
+
 - **React Context**: `useContext` está siendo llamado en un contexto nulo
 - **Component Lifecycle**: El componente se está renderizando antes de que el Provider esté disponible
 - **Import Issues**: Posible import incorrecto de React hooks
 
 #### **Solución**
+
 ```typescript
 // Asegurar que el Provider esté envolviendo la aplicación
 import { Provider } from 'react-redux'; // o el provider que uses
@@ -82,11 +91,13 @@ function App() {
 ### **🚨 Error 3: Service Worker Registration Failed**
 
 #### **Causa**
+
 - **MIME Type Error**: El servidor está sirviendo `sw.js` como `text/html` en lugar de `application/javascript`
 - **Missing File**: El archivo `sw.js` no existe o está en la ubicación incorrecta
 - **Vercel Configuration**: Las rutas estáticas están interfiriendo
 
 #### **Solución**
+
 ```json
 // vercel.json
 {
@@ -110,26 +121,30 @@ function App() {
 ### **⚠️ Warning 4: Deprecated Meta Tag**
 
 #### **Causa**
+
 - **Apple Web App**: La meta tag `apple-mobile-web-app-capable` está deprecated
 - **Modern Standard**: Debe usar `mobile-web-app-capable`
 
 #### **Solución**
+
 ```html
 <!-- Cambiar -->
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes" />
 
 <!-- Por -->
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes" />
 ```
 
 ### **⚠️ Warning 5: Manifest Icon Error**
 
 #### **Causa**
+
 - **Missing Icon**: El archivo `/icons/icon-192x192.png` no existe
 - **Path Incorrect**: La ruta en el manifest.json no coincide con los archivos reales
 - **Build Process**: Los assets no se están copiando correctamente
 
 #### **Solución**
+
 ```json
 // manifest.json
 {
@@ -148,6 +163,7 @@ function App() {
 ## 🛠️ **Plan de Acción Inmediato**
 
 ### **Paso 1: Corregir Configuración de Módulos**
+
 ```json
 // tsconfig.app.json
 {
@@ -168,6 +184,7 @@ function App() {
 ```
 
 ### **Paso 2: Simplificar App Component**
+
 ```typescript
 // App-basic.tsx - Versión simplificada
 import React from 'react';
@@ -192,6 +209,7 @@ export default App;
 ```
 
 ### **Paso 3: Corregir Vercel Configuration**
+
 ```json
 // vercel.json
 {
@@ -220,9 +238,10 @@ export default App;
 ```
 
 ### **Paso 4: Actualizar HTML y Manifest**
+
 ```html
 <!-- index.html -->
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes" />
 <link rel="icon" type="image/png" href="/images/brand/icon.png" />
 ```
 
@@ -231,6 +250,7 @@ export default App;
 ## 🎯 **Solución Rápida (Mínima)**
 
 ### **Crear App-super-simple.tsx**
+
 ```typescript
 import React from 'react';
 
@@ -282,6 +302,7 @@ export default App;
 ```
 
 ### **Actualizar main.tsx**
+
 ```typescript
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -299,11 +320,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 ## 📊 **Prioridad de Solución**
 
 ### **🚨 Alta Prioridad (Crítico)**
+
 1. **exports is not defined** - Rompe toda la aplicación
 2. **useContext null** - Impide renderizado
 3. **Service Worker** - Causa errores de seguridad
 
 ### **⚠️ Media Prioridad (Funcional)**
+
 4. **Meta tags** - Afecta PWA y SEO
 5. **Manifest icons** - Afecta experiencia de usuario
 
@@ -312,6 +335,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 ## 🎯 **Resultado Esperado**
 
 ### **✅ Después de la Solución**
+
 ```
 🌐 https://website-epic.vercel.app
 ├── ✅ Sin errores JavaScript críticos

@@ -33,7 +33,7 @@ export const NexusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => clearTimeout(timer);
   }, []);
 
-  const toggleReduceMotion = () => setReduceMotion((prev) => !prev);
+  const toggleReduceMotion = () => setReduceMotion(prev => !prev);
 
   const value = React.useMemo(
     () => ({
@@ -42,7 +42,7 @@ export const NexusProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       reduceMotion,
       toggleReduceMotion,
     }),
-    [godMode, reduceMotion],
+    [godMode, reduceMotion]
   );
 
   return <NexusContext.Provider value={value}>{children}</NexusContext.Provider>;

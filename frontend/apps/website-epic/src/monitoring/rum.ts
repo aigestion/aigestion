@@ -98,7 +98,7 @@ export function useRUM(config: RUMConfig = {}) {
     }
 
     return new Promise((resolve, reject) => {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         const entries = list.getEntries();
 
         const vitals: WebVitals = {
@@ -233,50 +233,53 @@ export function useRUM(config: RUMConfig = {}) {
   }, [isSupported]);
 
   // Calculate performance scores
-  const calculateScores = useCallback((
-    metrics: RUMMetric[]
-  ): {
-    fcp: number;
-    lcp: number;
-    cls: number;
-    fid: number;
-    inp: number;
-    ttfb: number;
-  } => {
-    const scores = {
-      fcp: 0,
-      lcp: 0,
-      cls: 0,
-      fid: 0,
-      inp: 0,
-      ttfb: 0,
-    };
+  const calculateScores = useCallback(
+    (
+      metrics: RUMMetric[]
+    ): {
+      fcp: number;
+      lcp: number;
+      cls: number;
+      fid: number;
+      inp: number;
+      ttfb: number;
+    } => {
+      const scores = {
+        fcp: 0,
+        lcp: 0,
+        cls: 0,
+        fid: 0,
+        inp: 0,
+        ttfb: 0,
+      };
 
-    metrics.forEach(metric => {
-      switch (metric.name) {
-        case 'fcp':
-          scores.fcp = calculateFCPScore(metric.value);
-          break;
-        case 'lcp':
-          scores.lcp = calculateLCPScore(metric.value);
-          break;
-        case 'cls':
-          scores.cls = calculateCLSScore(metric.value);
-          break;
-        case 'fid':
-          scores.fid = calculateFIDScore(metric.value);
-          break;
-        case 'inp':
-          scores.inp = calculateINPScore(metric.value);
-          break;
-        case 'ttfb':
-          scores.ttfb = calculateTTFBScore(metric.value);
-          break;
-      }
-    });
+      metrics.forEach(metric => {
+        switch (metric.name) {
+          case 'fcp':
+            scores.fcp = calculateFCPScore(metric.value);
+            break;
+          case 'lcp':
+            scores.lcp = calculateLCPScore(metric.value);
+            break;
+          case 'cls':
+            scores.cls = calculateCLSScore(metric.value);
+            break;
+          case 'fid':
+            scores.fid = calculateFIDScore(metric.value);
+            break;
+          case 'inp':
+            scores.inp = calculateINPScore(metric.value);
+            break;
+          case 'ttfb':
+            scores.ttfb = calculateTTFBScore(metric.value);
+            break;
+        }
+      });
 
-    return scores;
-  }, []);
+      return scores;
+    },
+    []
+  );
 
   // Core Web Vitals scoring functions
   const calculateFCPScore = (value: number): number => {
@@ -333,38 +336,41 @@ export function useRUM(config: RUMConfig = {}) {
   };
 
   // Send metrics to beacon endpoint
-  const sendToBeacon = useCallback((metrics: RUMMetric[]) => {
-    if (!config.beaconEndpoint || !metrics.length) return;
+  const sendToBeacon = useCallback(
+    (metrics: RUMMetric[]) => {
+      if (!config.beaconEndpoint || !metrics.length) return;
 
-    const payload = {
-      metrics,
-      user: {
-        agent: navigator.userAgent,
-        device: getDeviceType(),
-        connection: getConnectionType(),
-      },
-      timestamp: Date.now(),
-      url: globalThis.location.href,
-    };
-
-    if (navigator.sendBeacon) {
-      const blob = new Blob([JSON.stringify(payload)], {
-        type: 'application/json',
-      });
-
-      navigator.sendBeacon(config.beaconEndpoint, blob);
-    } else {
-      // Fallback to fetch
-      fetch(config.beaconEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const payload = {
+        metrics,
+        user: {
+          agent: navigator.userAgent,
+          device: getDeviceType(),
+          connection: getConnectionType(),
         },
-        body: JSON.stringify(payload),
-        keepalive: true,
-      });
-    }
-  }, [config.beaconEndpoint]);
+        timestamp: Date.now(),
+        url: globalThis.location.href,
+      };
+
+      if (navigator.sendBeacon) {
+        const blob = new Blob([JSON.stringify(payload)], {
+          type: 'application/json',
+        });
+
+        navigator.sendBeacon(config.beaconEndpoint, blob);
+      } else {
+        // Fallback to fetch
+        fetch(config.beaconEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        });
+      }
+    },
+    [config.beaconEndpoint]
+  );
 
   // Main RUM collection function
   const collectMetrics = useCallback(async (): Promise<RUMReport> => {
@@ -375,7 +381,8 @@ export function useRUM(config: RUMConfig = {}) {
     setIsCollecting(true);
 
     try {
-      const { navigation, resources, userTimings, longTasks, vitals } = await collectPerformanceMetrics();
+      const { navigation, resources, userTimings, longTasks, vitals } =
+        await collectPerformanceMetrics();
 
       // Process and categorize metrics
       const processedMetrics: RUMMetric[] = [];
@@ -396,7 +403,7 @@ export function useRUM(config: RUMConfig = {}) {
 
       // Add Resource Timing metrics
       if (trackResources) {
-        resources.forEach((resource) => {
+        resources.forEach(resource => {
           processedMetrics.push({
             name: 'resource-timing',
             value: resource.responseEnd - resource.requestStart,
@@ -412,7 +419,7 @@ export function useRUM(config: RUMConfig = {}) {
 
       // Add User Timing metrics
       if (trackUserTiming) {
-        userTimings.forEach((timing) => {
+        userTimings.forEach(timing => {
           processedMetrics.push({
             name: 'user-timing',
             value: timing.duration || 0,
@@ -428,7 +435,7 @@ export function useRUM(config: RUMConfig = {}) {
 
       // Add Long Task metrics
       if (trackLongTasks) {
-        longTasks.forEach((task) => {
+        longTasks.forEach(task => {
           processedMetrics.push({
             name: 'long-task',
             value: task.duration || 0,
@@ -443,9 +450,10 @@ export function useRUM(config: RUMConfig = {}) {
       }
 
       // Apply sampling
-      const sampledMetrics = sampleRate >= 1
-        ? processedMetrics
-        : processedMetrics.filter(() => Math.random() < sampleRate);
+      const sampledMetrics =
+        sampleRate >= 1
+          ? processedMetrics
+          : processedMetrics.filter(() => Math.random() < sampleRate);
 
       setMetrics(sampledMetrics);
 
@@ -591,7 +599,7 @@ export function useCLS() {
     // Removed unused updateCLS function
 
     // Monitor CLS continuously
-    const observer = new PerformanceObserver((list) => {
+    const observer = new PerformanceObserver(list => {
       const entries = list.getEntries();
       const clsValue = entries.reduce((sum, entry: any) => sum + (entry.value || 0), 0);
       setCLS(clsValue);
@@ -622,7 +630,13 @@ export function useFID() {
     };
 
     // Collect FID on first interaction
-    globalThis.addEventListener('pointerdown', () => { updateFID(); }, { once: true });
+    globalThis.addEventListener(
+      'pointerdown',
+      () => {
+        updateFID();
+      },
+      { once: true }
+    );
   }, [isSupported, collectWebVitals]);
 
   return { fid, isSupported };
@@ -645,7 +659,13 @@ export function useINP() {
     };
 
     // Collect INP on interaction
-    globalThis.addEventListener('pointerdown', () => { updateINP(); }, { once: true });
+    globalThis.addEventListener(
+      'pointerdown',
+      () => {
+        updateINP();
+      },
+      { once: true }
+    );
   }, [isSupported, collectWebVitals]);
 
   return { inp, isSupported };

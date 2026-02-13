@@ -69,7 +69,7 @@ async function runHealer() {
     logger.info('✅ Nexus Healer: System Healthy');
   } else {
     logger.error(
-      `❌ Nexus Healer: System Issues Detected. DB: ${dbOk}, Redis: ${redisOk}, API: ${apiOk}`,
+      `❌ Nexus Healer: System Issues Detected. DB: ${dbOk}, Redis: ${redisOk}, API: ${apiOk}`
     );
     // In a real V2, we would trigger self-healing actions here
     // e.g., restart docker containers, flush redis, etc.

@@ -23,7 +23,11 @@ async function ensureStub(moduleName: string) {
     await fs.mkdir(moduleDir, { recursive: true });
     const stubContent = `module.exports = (obj) => JSON.stringify(obj);\n`;
     await fs.writeFile(indexPath, stubContent, 'utf8');
-    const pkgContent = JSON.stringify({ name: moduleName, version: '1.0.0', main: 'index.js' }, null, 2);
+    const pkgContent = JSON.stringify(
+      { name: moduleName, version: '1.0.0', main: 'index.js' },
+      null,
+      2
+    );
     await fs.writeFile(pkgPath, pkgContent, 'utf8');
     console.log(`Created stub for missing module: ${moduleName}`);
   }
@@ -35,7 +39,7 @@ async function main() {
   }
 }
 
-main().catch((err) => {
+main().catch(err => {
   console.error('Error creating stubs:', err);
   process.exit(1);
 });

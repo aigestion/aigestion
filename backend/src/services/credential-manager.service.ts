@@ -135,7 +135,7 @@ export class CredentialManagerService {
   private report(
     provider: string,
     status: CredentialStatus['status'],
-    message?: string,
+    message?: string
   ): CredentialStatus {
     return {
       provider,

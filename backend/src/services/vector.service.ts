@@ -31,7 +31,7 @@ export class VectorService {
           ...doc,
           indexedAt: Date.now(),
         },
-        { ttl: 0 },
+        { ttl: 0 }
       ); // Circular persistence
 
       return true;

@@ -1,30 +1,30 @@
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { useDaniela } from "../DanielaProvider";
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useDaniela } from '../DanielaProvider';
 
 interface DanielaAvatarProps {
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   onClick?: () => void;
   className?: string;
 }
 
 export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
-  size = "md",
+  size = 'md',
   onClick,
-  className = "",
+  className = '',
 }) => {
   const { state } = useDaniela();
 
   const sizeClasses = {
-    sm: "w-12 h-12",
-    md: "w-24 h-24", 
-    lg: "w-48 h-48",
-    xl: "w-64 h-64",
+    sm: 'w-12 h-12',
+    md: 'w-24 h-24',
+    lg: 'w-48 h-48',
+    xl: 'w-64 h-64',
   };
 
   // Dynamic glow based on volume
-  const glowScale = 1 + (state.volume * 0.8);
-  const glowOpacity = 0.1 + (state.volume * 0.5);
+  const glowScale = 1 + state.volume * 0.8;
+  const glowOpacity = 0.1 + state.volume * 0.5;
 
   return (
     <div className={`daniela-avatar ${className}`} onClick={onClick}>
@@ -38,7 +38,7 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
               opacity: glowOpacity,
             }}
             exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 15 }}
             className="avatar-glow"
           />
         )}
@@ -51,12 +51,12 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
             alt="Daniela"
             className="w-full h-full object-cover rounded-full"
           />
-          
+
           {/* Holographic scanning effect overlay */}
           <motion.div
             className="avatar-scan"
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+            animate={{ y: ['-100%', '100%'] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
           />
 
           {/* Animated speaking indicator with reactive bars */}
@@ -66,7 +66,7 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
                 <motion.div
                   key={idx}
                   animate={{
-                    height: [4, 4 + (state.volume * 16 * (i / 4)), 4],
+                    height: [4, 4 + state.volume * 16 * (i / 4), 4],
                   }}
                   transition={{
                     duration: 0.15,
@@ -82,7 +82,7 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
 
         {/* Status indicator */}
         <div className="status-indicator">
-          <div className={`status-dot ${state.isConnected ? "online" : "offline"}`} />
+          <div className={`status-dot ${state.isConnected ? 'online' : 'offline'}`} />
         </div>
       </div>
 

@@ -8,9 +8,7 @@ import { setCache, getCache } from '../cache/redis';
 
 @controller('/auth/sovereign/biometrics')
 export class SovereignBiometricsController {
-  constructor(
-    @inject(TYPES.VoiceBiometricsService) private voiceService: VoiceBiometricsService
-  ) {}
+  constructor(@inject(TYPES.VoiceBiometricsService) private voiceService: VoiceBiometricsService) {}
 
   /**
    * Enrolls a user's voiceprint.
@@ -34,7 +32,7 @@ export class SovereignBiometricsController {
       return res.json({
         success: true,
         message: 'Voiceprint enrolled and locked in vault.',
-        voiceHash: voiceHash.substring(0, 10) + '...'
+        voiceHash: voiceHash.substring(0, 10) + '...',
       });
     } catch (error) {
       logger.error('[SovereignBiometrics] Enrollment failed:', error);
@@ -65,7 +63,7 @@ export class SovereignBiometricsController {
 
       return res.json({
         success: true,
-        message: 'Voice identity verified.'
+        message: 'Voice identity verified.',
       });
     } catch (error) {
       logger.error('[SovereignBiometrics] Verification failed:', error);

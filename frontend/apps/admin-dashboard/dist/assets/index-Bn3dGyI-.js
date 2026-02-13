@@ -1,2 +1,400 @@
-import{j as e,m as n,S as N,A as m,C as S,U as C,D as k,T as R,a as A,b as D,Z as T}from"./ui-DfGyY5vc.js";import{b as E,a as x}from"./vendor-DjL-6nTd.js";import{Q as L,a as P}from"./state-BxQevGYb.js";import{R as O,a as h,B as $}from"./router-Co20_e4D.js";import{R as j,L as F,C as I,X as U,Y as M,T as b,a as B,b as g,P as H,c as K,d as q}from"./charts-DJwAb7Dv.js";(function(){const c=document.createElement("link").relList;if(c&&c.supports&&c.supports("modulepreload"))return;for(const t of document.querySelectorAll('link[rel="modulepreload"]'))d(t);new MutationObserver(t=>{for(const r of t)if(r.type==="childList")for(const l of r.addedNodes)l.tagName==="LINK"&&l.rel==="modulepreload"&&d(l)}).observe(document,{childList:!0,subtree:!0});function o(t){const r={};return t.integrity&&(r.integrity=t.integrity),t.referrerPolicy&&(r.referrerPolicy=t.referrerPolicy),t.crossOrigin==="use-credentials"?r.credentials="include":t.crossOrigin==="anonymous"?r.credentials="omit":r.credentials="same-origin",r}function d(t){if(t.ep)return;t.ep=!0;const r=o(t);fetch(t.href,r)}})();var v,y=E;v=y.createRoot,y.hydrateRoot;const w="/api",Q={getSystemHealth:async()=>{try{const s=await fetch(`${w}/system/health`);if(!s.ok)throw new Error(`HTTP error! status: ${s.status}`);return await s.json()}catch(s){throw console.error("Error fetching system health:",s),s}},getSystemDiagnostic:async()=>{try{const s=await fetch(`${w}/system/diagnostic`);if(!s.ok)throw new Error(`HTTP error! status: ${s.status}`);return await s.json()}catch(s){throw console.error("Error fetching system diagnostics:",s),s}}},u=()=>{var p;const[s,c]=x.useState(null),[o,d]=x.useState("checking");x.useEffect(()=>{const a=async()=>{try{const f=await Q.getSystemHealth();c(f),d("connected")}catch{d("error")}};a();const i=setInterval(a,3e4);return()=>clearInterval(i)},[]);const t=[{title:"Usuarios Totales",value:"12,543",icon:C,color:"text-blue-400"},{title:"Ingresos Mensuales",value:"$45,678",icon:k,color:"text-green-400"},{title:"Tasa de Crecimiento",value:"+23.5%",icon:R,color:"text-purple-400"},{title:"Actividad del Sistema",value:"98.2%",icon:m,color:"text-orange-400"}],r=[{name:"Ene",usuarios:4e3,ingresos:2400},{name:"Feb",usuarios:3e3,ingresos:1398},{name:"Mar",usuarios:2e3,ingresos:9800},{name:"Abr",usuarios:2780,ingresos:3908},{name:"May",usuarios:1890,ingresos:4800},{name:"Jun",usuarios:2390,ingresos:3800}],l=[{name:"Desktop",value:400,color:"#8884d8"},{name:"Mobile",value:300,color:"#82ca9d"},{name:"Tablet",value:300,color:"#ffc658"}];return e.jsxs("div",{className:"p-6 space-y-6",children:[e.jsxs(n.div,{initial:{y:-20,opacity:0},animate:{y:0,opacity:1},className:"flex items-center justify-between",children:[e.jsx("h1",{className:"text-4xl font-bold text-white",children:"🏆 Cuartel General Admin"}),e.jsx("div",{className:"flex space-x-4",children:e.jsx("button",{className:"p-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors",children:e.jsx(N,{className:"w-5 h-5 text-white"})})})]}),e.jsxs(n.div,{initial:{opacity:0,y:-10},animate:{opacity:1,y:0},className:"flex items-center space-x-2 mb-4",children:[e.jsx("div",{className:`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${o==="connected"?"bg-emerald-500/20 text-emerald-300 border border-emerald-500/30":o==="error"?"bg-red-500/20 text-red-300 border border-red-500/30":"bg-blue-500/20 text-blue-300 border border-blue-500/30"}`,children:o==="connected"?e.jsxs(e.Fragment,{children:[e.jsx(m,{className:"w-3 h-3"}),e.jsx("span",{children:"System Online"})]}):o==="error"?e.jsxs(e.Fragment,{children:[e.jsx(S,{className:"w-3 h-3"}),e.jsx("span",{children:"System Offline"})]}):e.jsxs(e.Fragment,{children:[e.jsx(m,{className:"w-3 h-3 animate-pulse"}),e.jsx("span",{children:"Connecting..."})]})}),((p=s==null?void 0:s.data)==null?void 0:p.version)&&e.jsxs("span",{className:"text-xs text-white/30",children:["v",s.data.version]})]}),e.jsx("div",{className:"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",children:t.map((a,i)=>e.jsx(n.div,{initial:{y:20,opacity:0},animate:{y:0,opacity:1},transition:{delay:i*.1},className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:e.jsxs("div",{className:"flex items-center justify-between",children:[e.jsxs("div",{children:[e.jsx("p",{className:"text-white/70 text-sm",children:a.title}),e.jsx("p",{className:"text-2xl font-bold text-white",children:a.value})]}),e.jsx(a.icon,{className:`w-8 h-8 ${a.color}`})]})},i))}),e.jsxs("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-6",children:[e.jsxs(n.div,{initial:{scale:.9,opacity:0},animate:{scale:1,opacity:1},className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[e.jsx("h2",{className:"text-xl font-semibold text-white mb-4",children:"📊 Estadísticas de Usuarios"}),e.jsx(j,{width:"100%",height:300,children:e.jsxs(F,{data:r,children:[e.jsx(I,{strokeDasharray:"3 3",stroke:"#ffffff20"}),e.jsx(U,{dataKey:"name",stroke:"#ffffff"}),e.jsx(M,{stroke:"#ffffff"}),e.jsx(b,{contentStyle:{backgroundColor:"#1f2937",border:"none"}}),e.jsx(B,{}),e.jsx(g,{type:"monotone",dataKey:"usuarios",stroke:"#8884d8",strokeWidth:2}),e.jsx(g,{type:"monotone",dataKey:"ingresos",stroke:"#82ca9d",strokeWidth:2})]})})]}),e.jsxs(n.div,{initial:{scale:.9,opacity:0},animate:{scale:1,opacity:1},className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[e.jsx("h2",{className:"text-xl font-semibold text-white mb-4",children:"🎯 Distribución de Dispositivos"}),e.jsx(j,{width:"100%",height:300,children:e.jsxs(H,{children:[e.jsx(K,{data:l,cx:"50%",cy:"50%",labelLine:!1,label:({name:a,percent:i})=>`${a} ${(i*100).toFixed(0)}%`,outerRadius:80,fill:"#8884d8",dataKey:"value",children:l.map((a,i)=>e.jsx(q,{fill:a.color},`cell-${i}`))}),e.jsx(b,{contentStyle:{backgroundColor:"#1f2937",border:"none"}})]})})]})]}),e.jsxs(n.div,{initial:{y:20,opacity:0},animate:{y:0,opacity:1},className:"grid grid-cols-1 lg:grid-cols-3 gap-6",children:[e.jsxs("div",{className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[e.jsxs("h3",{className:"text-lg font-semibold text-white mb-4 flex items-center",children:[e.jsx(A,{className:"w-5 h-5 mr-2 text-blue-400"}),"Base de Datos"]}),e.jsxs("div",{className:"space-y-2",children:[e.jsxs("div",{className:"flex justify-between text-white/70",children:[e.jsx("span",{children:"Conexiones Activas"}),e.jsx("span",{className:"text-green-400",children:"24"})]}),e.jsxs("div",{className:"flex justify-between text-white/70",children:[e.jsx("span",{children:"Queries por Segundo"}),e.jsx("span",{className:"text-blue-400",children:"1,247"})]})]})]}),e.jsxs("div",{className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[e.jsxs("h3",{className:"text-lg font-semibold text-white mb-4 flex items-center",children:[e.jsx(D,{className:"w-5 h-5 mr-2 text-green-400"}),"Seguridad"]}),e.jsxs("div",{className:"space-y-2",children:[e.jsxs("div",{className:"flex justify-between text-white/70",children:[e.jsx("span",{children:"Intentos Bloqueados"}),e.jsx("span",{className:"text-red-400",children:"142"})]}),e.jsxs("div",{className:"flex justify-between text-white/70",children:[e.jsx("span",{children:"Sesiones Activas"}),e.jsx("span",{className:"text-green-400",children:"89"})]})]})]}),e.jsxs("div",{className:"bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20",children:[e.jsxs("h3",{className:"text-lg font-semibold text-white mb-4 flex items-center",children:[e.jsx(T,{className:"w-5 h-5 mr-2 text-yellow-400"}),"Rendimiento"]}),e.jsxs("div",{className:"space-y-2",children:[e.jsxs("div",{className:"flex justify-between text-white/70",children:[e.jsx("span",{children:"Response Time"}),e.jsx("span",{className:"text-green-400",children:"124ms"})]}),e.jsxs("div",{className:"flex justify-between text-white/70",children:[e.jsx("span",{children:"Uptime"}),e.jsx("span",{className:"text-green-400",children:"99.9%"})]})]})]})]})]})};function W(){return e.jsx(n.div,{initial:{opacity:0},animate:{opacity:1},transition:{duration:.5},className:"min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900",children:e.jsxs(O,{children:[e.jsx(h,{path:"/",element:e.jsx(u,{})}),e.jsx(h,{path:"/dashboard",element:e.jsx(u,{})}),e.jsx(h,{path:"*",element:e.jsx(u,{})})]})})}const G=new L({defaultOptions:{queries:{retry:1,refetchOnWindowFocus:!1}}});v(document.getElementById("root")).render(e.jsx(x.StrictMode,{children:e.jsx(P,{client:G,children:e.jsx($,{children:e.jsx(W,{})})})}));
+import {
+  j as e,
+  m as n,
+  S as N,
+  A as m,
+  C as S,
+  U as C,
+  D as k,
+  T as R,
+  a as A,
+  b as D,
+  Z as T,
+} from './ui-DfGyY5vc.js';
+import { b as E, a as x } from './vendor-DjL-6nTd.js';
+import { Q as L, a as P } from './state-BxQevGYb.js';
+import { R as O, a as h, B as $ } from './router-Co20_e4D.js';
+import {
+  R as j,
+  L as F,
+  C as I,
+  X as U,
+  Y as M,
+  T as b,
+  a as B,
+  b as g,
+  P as H,
+  c as K,
+  d as q,
+} from './charts-DJwAb7Dv.js';
+(function () {
+  const c = document.createElement('link').relList;
+  if (c && c.supports && c.supports('modulepreload')) return;
+  for (const t of document.querySelectorAll('link[rel="modulepreload"]')) d(t);
+  new MutationObserver(t => {
+    for (const r of t)
+      if (r.type === 'childList')
+        for (const l of r.addedNodes) l.tagName === 'LINK' && l.rel === 'modulepreload' && d(l);
+  }).observe(document, { childList: !0, subtree: !0 });
+  function o(t) {
+    const r = {};
+    return (
+      t.integrity && (r.integrity = t.integrity),
+      t.referrerPolicy && (r.referrerPolicy = t.referrerPolicy),
+      t.crossOrigin === 'use-credentials'
+        ? (r.credentials = 'include')
+        : t.crossOrigin === 'anonymous'
+          ? (r.credentials = 'omit')
+          : (r.credentials = 'same-origin'),
+      r
+    );
+  }
+  function d(t) {
+    if (t.ep) return;
+    t.ep = !0;
+    const r = o(t);
+    fetch(t.href, r);
+  }
+})();
+var v,
+  y = E;
+((v = y.createRoot), y.hydrateRoot);
+const w = '/api',
+  Q = {
+    getSystemHealth: async () => {
+      try {
+        const s = await fetch(`${w}/system/health`);
+        if (!s.ok) throw new Error(`HTTP error! status: ${s.status}`);
+        return await s.json();
+      } catch (s) {
+        throw (console.error('Error fetching system health:', s), s);
+      }
+    },
+    getSystemDiagnostic: async () => {
+      try {
+        const s = await fetch(`${w}/system/diagnostic`);
+        if (!s.ok) throw new Error(`HTTP error! status: ${s.status}`);
+        return await s.json();
+      } catch (s) {
+        throw (console.error('Error fetching system diagnostics:', s), s);
+      }
+    },
+  },
+  u = () => {
+    var p;
+    const [s, c] = x.useState(null),
+      [o, d] = x.useState('checking');
+    x.useEffect(() => {
+      const a = async () => {
+        try {
+          const f = await Q.getSystemHealth();
+          (c(f), d('connected'));
+        } catch {
+          d('error');
+        }
+      };
+      a();
+      const i = setInterval(a, 3e4);
+      return () => clearInterval(i);
+    }, []);
+    const t = [
+        { title: 'Usuarios Totales', value: '12,543', icon: C, color: 'text-blue-400' },
+        { title: 'Ingresos Mensuales', value: '$45,678', icon: k, color: 'text-green-400' },
+        { title: 'Tasa de Crecimiento', value: '+23.5%', icon: R, color: 'text-purple-400' },
+        { title: 'Actividad del Sistema', value: '98.2%', icon: m, color: 'text-orange-400' },
+      ],
+      r = [
+        { name: 'Ene', usuarios: 4e3, ingresos: 2400 },
+        { name: 'Feb', usuarios: 3e3, ingresos: 1398 },
+        { name: 'Mar', usuarios: 2e3, ingresos: 9800 },
+        { name: 'Abr', usuarios: 2780, ingresos: 3908 },
+        { name: 'May', usuarios: 1890, ingresos: 4800 },
+        { name: 'Jun', usuarios: 2390, ingresos: 3800 },
+      ],
+      l = [
+        { name: 'Desktop', value: 400, color: '#8884d8' },
+        { name: 'Mobile', value: 300, color: '#82ca9d' },
+        { name: 'Tablet', value: 300, color: '#ffc658' },
+      ];
+    return e.jsxs('div', {
+      className: 'p-6 space-y-6',
+      children: [
+        e.jsxs(n.div, {
+          initial: { y: -20, opacity: 0 },
+          animate: { y: 0, opacity: 1 },
+          className: 'flex items-center justify-between',
+          children: [
+            e.jsx('h1', {
+              className: 'text-4xl font-bold text-white',
+              children: '🏆 Cuartel General Admin',
+            }),
+            e.jsx('div', {
+              className: 'flex space-x-4',
+              children: e.jsx('button', {
+                className: 'p-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors',
+                children: e.jsx(N, { className: 'w-5 h-5 text-white' }),
+              }),
+            }),
+          ],
+        }),
+        e.jsxs(n.div, {
+          initial: { opacity: 0, y: -10 },
+          animate: { opacity: 1, y: 0 },
+          className: 'flex items-center space-x-2 mb-4',
+          children: [
+            e.jsx('div', {
+              className: `px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${o === 'connected' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : o === 'error' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'}`,
+              children:
+                o === 'connected'
+                  ? e.jsxs(e.Fragment, {
+                      children: [
+                        e.jsx(m, { className: 'w-3 h-3' }),
+                        e.jsx('span', { children: 'System Online' }),
+                      ],
+                    })
+                  : o === 'error'
+                    ? e.jsxs(e.Fragment, {
+                        children: [
+                          e.jsx(S, { className: 'w-3 h-3' }),
+                          e.jsx('span', { children: 'System Offline' }),
+                        ],
+                      })
+                    : e.jsxs(e.Fragment, {
+                        children: [
+                          e.jsx(m, { className: 'w-3 h-3 animate-pulse' }),
+                          e.jsx('span', { children: 'Connecting...' }),
+                        ],
+                      }),
+            }),
+            ((p = s == null ? void 0 : s.data) == null ? void 0 : p.version) &&
+              e.jsxs('span', {
+                className: 'text-xs text-white/30',
+                children: ['v', s.data.version],
+              }),
+          ],
+        }),
+        e.jsx('div', {
+          className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6',
+          children: t.map((a, i) =>
+            e.jsx(
+              n.div,
+              {
+                initial: { y: 20, opacity: 0 },
+                animate: { y: 0, opacity: 1 },
+                transition: { delay: i * 0.1 },
+                className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+                children: e.jsxs('div', {
+                  className: 'flex items-center justify-between',
+                  children: [
+                    e.jsxs('div', {
+                      children: [
+                        e.jsx('p', { className: 'text-white/70 text-sm', children: a.title }),
+                        e.jsx('p', {
+                          className: 'text-2xl font-bold text-white',
+                          children: a.value,
+                        }),
+                      ],
+                    }),
+                    e.jsx(a.icon, { className: `w-8 h-8 ${a.color}` }),
+                  ],
+                }),
+              },
+              i
+            )
+          ),
+        }),
+        e.jsxs('div', {
+          className: 'grid grid-cols-1 lg:grid-cols-2 gap-6',
+          children: [
+            e.jsxs(n.div, {
+              initial: { scale: 0.9, opacity: 0 },
+              animate: { scale: 1, opacity: 1 },
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                e.jsx('h2', {
+                  className: 'text-xl font-semibold text-white mb-4',
+                  children: '📊 Estadísticas de Usuarios',
+                }),
+                e.jsx(j, {
+                  width: '100%',
+                  height: 300,
+                  children: e.jsxs(F, {
+                    data: r,
+                    children: [
+                      e.jsx(I, { strokeDasharray: '3 3', stroke: '#ffffff20' }),
+                      e.jsx(U, { dataKey: 'name', stroke: '#ffffff' }),
+                      e.jsx(M, { stroke: '#ffffff' }),
+                      e.jsx(b, { contentStyle: { backgroundColor: '#1f2937', border: 'none' } }),
+                      e.jsx(B, {}),
+                      e.jsx(g, {
+                        type: 'monotone',
+                        dataKey: 'usuarios',
+                        stroke: '#8884d8',
+                        strokeWidth: 2,
+                      }),
+                      e.jsx(g, {
+                        type: 'monotone',
+                        dataKey: 'ingresos',
+                        stroke: '#82ca9d',
+                        strokeWidth: 2,
+                      }),
+                    ],
+                  }),
+                }),
+              ],
+            }),
+            e.jsxs(n.div, {
+              initial: { scale: 0.9, opacity: 0 },
+              animate: { scale: 1, opacity: 1 },
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                e.jsx('h2', {
+                  className: 'text-xl font-semibold text-white mb-4',
+                  children: '🎯 Distribución de Dispositivos',
+                }),
+                e.jsx(j, {
+                  width: '100%',
+                  height: 300,
+                  children: e.jsxs(H, {
+                    children: [
+                      e.jsx(K, {
+                        data: l,
+                        cx: '50%',
+                        cy: '50%',
+                        labelLine: !1,
+                        label: ({ name: a, percent: i }) => `${a} ${(i * 100).toFixed(0)}%`,
+                        outerRadius: 80,
+                        fill: '#8884d8',
+                        dataKey: 'value',
+                        children: l.map((a, i) => e.jsx(q, { fill: a.color }, `cell-${i}`)),
+                      }),
+                      e.jsx(b, { contentStyle: { backgroundColor: '#1f2937', border: 'none' } }),
+                    ],
+                  }),
+                }),
+              ],
+            }),
+          ],
+        }),
+        e.jsxs(n.div, {
+          initial: { y: 20, opacity: 0 },
+          animate: { y: 0, opacity: 1 },
+          className: 'grid grid-cols-1 lg:grid-cols-3 gap-6',
+          children: [
+            e.jsxs('div', {
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                e.jsxs('h3', {
+                  className: 'text-lg font-semibold text-white mb-4 flex items-center',
+                  children: [
+                    e.jsx(A, { className: 'w-5 h-5 mr-2 text-blue-400' }),
+                    'Base de Datos',
+                  ],
+                }),
+                e.jsxs('div', {
+                  className: 'space-y-2',
+                  children: [
+                    e.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        e.jsx('span', { children: 'Conexiones Activas' }),
+                        e.jsx('span', { className: 'text-green-400', children: '24' }),
+                      ],
+                    }),
+                    e.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        e.jsx('span', { children: 'Queries por Segundo' }),
+                        e.jsx('span', { className: 'text-blue-400', children: '1,247' }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            e.jsxs('div', {
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                e.jsxs('h3', {
+                  className: 'text-lg font-semibold text-white mb-4 flex items-center',
+                  children: [e.jsx(D, { className: 'w-5 h-5 mr-2 text-green-400' }), 'Seguridad'],
+                }),
+                e.jsxs('div', {
+                  className: 'space-y-2',
+                  children: [
+                    e.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        e.jsx('span', { children: 'Intentos Bloqueados' }),
+                        e.jsx('span', { className: 'text-red-400', children: '142' }),
+                      ],
+                    }),
+                    e.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        e.jsx('span', { children: 'Sesiones Activas' }),
+                        e.jsx('span', { className: 'text-green-400', children: '89' }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            e.jsxs('div', {
+              className: 'bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20',
+              children: [
+                e.jsxs('h3', {
+                  className: 'text-lg font-semibold text-white mb-4 flex items-center',
+                  children: [
+                    e.jsx(T, { className: 'w-5 h-5 mr-2 text-yellow-400' }),
+                    'Rendimiento',
+                  ],
+                }),
+                e.jsxs('div', {
+                  className: 'space-y-2',
+                  children: [
+                    e.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        e.jsx('span', { children: 'Response Time' }),
+                        e.jsx('span', { className: 'text-green-400', children: '124ms' }),
+                      ],
+                    }),
+                    e.jsxs('div', {
+                      className: 'flex justify-between text-white/70',
+                      children: [
+                        e.jsx('span', { children: 'Uptime' }),
+                        e.jsx('span', { className: 'text-green-400', children: '99.9%' }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    });
+  };
+function W() {
+  return e.jsx(n.div, {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.5 },
+    className: 'min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900',
+    children: e.jsxs(O, {
+      children: [
+        e.jsx(h, { path: '/', element: e.jsx(u, {}) }),
+        e.jsx(h, { path: '/dashboard', element: e.jsx(u, {}) }),
+        e.jsx(h, { path: '*', element: e.jsx(u, {}) }),
+      ],
+    }),
+  });
+}
+const G = new L({ defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: !1 } } });
+v(document.getElementById('root')).render(
+  e.jsx(x.StrictMode, {
+    children: e.jsx(P, { client: G, children: e.jsx($, { children: e.jsx(W, {}) }) }),
+  })
+);
 //# sourceMappingURL=index-Bn3dGyI-.js.map

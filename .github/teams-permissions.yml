@@ -5,7 +5,7 @@
 # ===========================================
 
 core-team:
-  description: "Core development team with full repository access"
+  description: 'Core development team with full repository access'
   members:
     - nemisanalex
     - admin@aigestion.net
@@ -20,7 +20,7 @@ core-team:
     - maintain
 
 security-team:
-  description: "Security team responsible for security policies and incident response"
+  description: 'Security team responsible for security policies and incident response'
   members:
     - security-lead@aigestion.net
     - security-engineer@aigestion.net
@@ -35,7 +35,7 @@ security-team:
     - maintain
 
 devops-team:
-  description: "DevOps team responsible for CI/CD and infrastructure"
+  description: 'DevOps team responsible for CI/CD and infrastructure'
   members:
     - devops-lead@aigestion.net
     - devops-engineer@aigestion.net
@@ -54,7 +54,7 @@ devops-team:
 # ===========================================
 
 frontend-team:
-  description: "Frontend development team"
+  description: 'Frontend development team'
   members:
     - frontend-lead@aigestion.net
     - frontend-dev1@aigestion.net
@@ -68,7 +68,7 @@ frontend-team:
     - write
 
 backend-team:
-  description: "Backend development team"
+  description: 'Backend development team'
   members:
     - backend-lead@aigestion.net
     - backend-dev1@aigestion.net
@@ -82,7 +82,7 @@ backend-team:
     - write
 
 ai-team:
-  description: "AI/ML development team"
+  description: 'AI/ML development team'
   members:
     - ai-lead@aigestion.net
     - ai-engineer@aigestion.net
@@ -99,7 +99,7 @@ ai-team:
 # ===========================================
 
 release-team:
-  description: "Release management team"
+  description: 'Release management team'
   members:
     - release-manager@aigestion.net
     - devops-lead@aigestion.net
@@ -114,7 +114,7 @@ release-team:
     - maintain
 
 qa-team:
-  description: "Quality assurance team"
+  description: 'Quality assurance team'
   members:
     - qa-lead@aigestion.net
     - qa-engineer1@aigestion.net
@@ -128,7 +128,7 @@ qa-team:
     - write
 
 compliance-team:
-  description: "Compliance and audit team"
+  description: 'Compliance and audit team'
   members:
     - compliance-officer@aigestion.net
     - audit-lead@aigestion.net
@@ -144,7 +144,7 @@ compliance-team:
 # ===========================================
 
 code-reviewers:
-  description: "Code review team with review permissions"
+  description: 'Code review team with review permissions'
   members:
     - senior-dev1@aigestion.net
     - senior-dev2@aigestion.net
@@ -157,7 +157,7 @@ code-reviewers:
     - read
 
 security-reviewers:
-  description: "Security review team for security-related changes"
+  description: 'Security review team for security-related changes'
   members:
     - security-lead@aigestion.net
     - security-engineer@aigestion.net
@@ -174,7 +174,7 @@ security-reviewers:
 # ===========================================
 
 contractors:
-  description: "External contractors and consultants"
+  description: 'External contractors and consultants'
   members:
     - contractor1@external.com
     - contractor2@external.com
@@ -186,7 +186,7 @@ contractors:
     - read
 
 partners:
-  description: "Partner organizations"
+  description: 'Partner organizations'
   members:
     - partner1@partner.com
     - partner2@partner.com
@@ -202,7 +202,7 @@ partners:
 # ===========================================
 
 github-bots:
-  description: "GitHub bots and automation"
+  description: 'GitHub bots and automation'
   members:
     - github-actions[bot]
     - dependabot[bot]
@@ -230,7 +230,7 @@ permission_matrix:
       - branch protection
       - webhook management
       - secret management
-  
+
   maintain:
     teams:
       - core-team
@@ -243,7 +243,7 @@ permission_matrix:
       - pull request management
       - project management
       - release management
-  
+
   write:
     teams:
       - core-team
@@ -259,7 +259,7 @@ permission_matrix:
       - issue creation
       - pull request creation
       - project contribution
-  
+
   read:
     teams:
       - all teams
@@ -286,7 +286,7 @@ branch_access:
       - security-team
       - devops-team
       - code-reviewers
-  
+
   develop:
     push:
       - core-team
@@ -300,7 +300,7 @@ branch_access:
       - core-team
       - dev-team
       - code-reviewers
-  
+
   staging:
     push:
       - core-team
@@ -313,7 +313,7 @@ branch_access:
       - core-team
       - devops-team
       - security-team
-  
+
   feature/*:
     push:
       - core-team
@@ -328,7 +328,7 @@ branch_access:
       - core-team
       - dev-team
       - code-reviewers
-  
+
   hotfix/*:
     push:
       - core-team
@@ -344,7 +344,7 @@ branch_access:
       - security-team
       - devops-team
       - security-reviewers
-  
+
   release/*:
     push:
       - core-team

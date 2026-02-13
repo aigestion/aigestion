@@ -3,5 +3,4 @@
 [Bad link](#bad-header)
 [Bad link](https://nowhere.com/bad-link)
 
-
 ## test-header

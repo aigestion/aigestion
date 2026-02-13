@@ -93,8 +93,8 @@ export const clearConversation = [
         buildResponse(
           { message: 'Conversation cleared successfully' },
           200,
-          (req as any).requestId || 'unknown',
-        ),
+          (req as any).requestId || 'unknown'
+        )
       );
     } catch (err) {
       next(err);

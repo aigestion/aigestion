@@ -6,7 +6,8 @@
 export const typography = {
   // Font Families
   fonts: {
-    primary: '"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    primary:
+      '"Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
     secondary: '"Space Grotesk", "Inter", system-ui, sans-serif',
     mono: '"JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace',
     display: '"Clash Display", "Inter", system-ui, sans-serif',
@@ -15,19 +16,19 @@ export const typography = {
 
   // Font Sizes
   sizes: {
-    xs: '0.75rem',    // 12px
-    sm: '0.875rem',   // 14px
-    base: '1rem',     // 16px
-    lg: '1.125rem',   // 18px
-    xl: '1.25rem',    // 20px
-    '2xl': '1.5rem',  // 24px
+    xs: '0.75rem', // 12px
+    sm: '0.875rem', // 14px
+    base: '1rem', // 16px
+    lg: '1.125rem', // 18px
+    xl: '1.25rem', // 20px
+    '2xl': '1.5rem', // 24px
     '3xl': '1.875rem', // 30px
     '4xl': '2.25rem', // 36px
-    '5xl': '3rem',    // 48px
+    '5xl': '3rem', // 48px
     '6xl': '3.75rem', // 60px
-    '7xl': '4.5rem',  // 72px
-    '8xl': '6rem',    // 96px
-    '9xl': '8rem',    // 128px
+    '7xl': '4.5rem', // 72px
+    '8xl': '6rem', // 96px
+    '9xl': '8rem', // 128px
   },
 
   // Font Weights
@@ -235,7 +236,7 @@ export const typography = {
       desktop: '1rem',
     },
   },
-}
+};
 
 // Typography utilities
 export const typographyUtils = {
@@ -249,51 +250,56 @@ export const typographyUtils = {
       '@media (min-width: 1024px)': {
         fontSize: baseSize,
       },
-    }
+    };
   },
 
   // Clamp function for fluid typography
-  fluid: (minSize: string, maxSize: string, minViewport: string = '320px', maxViewport: string = '1200px') => {
-    return `clamp(${minSize}, ${minSize} + (${parseInt(maxSize) - parseInt(minSize)} * 100) / (${parseInt(maxViewport) - parseInt(minViewport)} * 100) * (100vw - ${minViewport}) / 100, ${maxSize})`
+  fluid: (
+    minSize: string,
+    maxSize: string,
+    minViewport: string = '320px',
+    maxViewport: string = '1200px'
+  ) => {
+    return `clamp(${minSize}, ${minSize} + (${parseInt(maxSize) - parseInt(minSize)} * 100) / (${parseInt(maxViewport) - parseInt(minViewport)} * 100) * (100vw - ${minViewport}) / 100, ${maxSize})`;
   },
 
   // Get text style by name
   getTextStyle: (styleName: keyof typeof typography.textStyles) => {
-    return typography.textStyles[styleName]
+    return typography.textStyles[styleName];
   },
 
   // Generate CSS custom properties
   generateCSSVars: () => {
-    const vars: Record<string, string> = {}
-    
+    const vars: Record<string, string> = {};
+
     // Font families
     Object.entries(typography.fonts).forEach(([key, value]) => {
-      vars[`--font-${key}`] = value
-    })
+      vars[`--font-${key}`] = value;
+    });
 
     // Font sizes
     Object.entries(typography.sizes).forEach(([key, value]) => {
-      vars[`--text-${key}`] = value
-    })
+      vars[`--text-${key}`] = value;
+    });
 
     // Font weights
     Object.entries(typography.weights).forEach(([key, value]) => {
-      vars[`--font-weight-${key}`] = value.toString()
-    })
+      vars[`--font-weight-${key}`] = value.toString();
+    });
 
     // Line heights
     Object.entries(typography.lineHeights).forEach(([key, value]) => {
-      vars[`--leading-${key}`] = value.toString()
-    })
+      vars[`--leading-${key}`] = value.toString();
+    });
 
     // Letter spacings
     Object.entries(typography.letterSpacings).forEach(([key, value]) => {
-      vars[`--tracking-${key}`] = value
-    })
+      vars[`--tracking-${key}`] = value;
+    });
 
-    return vars
+    return vars;
   },
-}
+};
 
 // CSS Custom Properties
 export const cssTypography = {
@@ -305,6 +311,6 @@ export const cssTypography = {
     '--font-display': typography.fonts.display,
     '--font-gaming': typography.fonts.gaming,
   },
-}
+};
 
-export default typography
+export default typography;

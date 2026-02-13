@@ -1,4 +1,3 @@
-
 const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
 const fs = require('fs');
 const path = require('path');
@@ -6,22 +5,22 @@ const path = require('path');
 async function fetchSecrets() {
   const saPath = 'C:/Users/Alejandro/AIGestion/backend/credentials/aigestion-ai-sa.json';
   const projectId = 'aigestion-pro-2026';
-  
+
   process.env.GOOGLE_APPLICATION_CREDENTIALS = saPath;
-  
+
   const client = new SecretManagerServiceClient();
-  
+
   const secretNames = [
     'GEMINI_API_KEY',
     'MONGO_ROOT_PASSWORD',
     'JWT_SECRET',
     'STRIPE_SECRET_KEY',
     'MONGODB_URI',
-    'DATABASE_URL'
+    'DATABASE_URL',
   ];
-  
+
   console.log(`--- FETCHING SECRETS FROM PROJECT: ${projectId} ---`);
-  
+
   for (const name of secretNames) {
     try {
       const [version] = await client.accessSecretVersion({

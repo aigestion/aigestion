@@ -18,6 +18,7 @@
 ## 🏗️ Arquitectura General
 
 ### Sistema Monolito Modular
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    AIGestion Ecosystem                      │
@@ -46,6 +47,7 @@
 ```
 
 ### Flujo de Datos
+
 ```
 User Input → Frontend → API Gateway → Enhanced Voice Service → AI Providers
                 ↓
@@ -57,28 +59,41 @@ Response ← Frontend ← API Gateway ← Enhanced Voice Service ← AI Provider
 ## 🔧 Backend Services
 
 ### Enhanced Voice Service
+
 **Location**: `backend/src/services/enhanced-voice.service.ts`
 
 #### Core Features
+
 - **Análisis Emocional**: Detección en tiempo real de sentimientos
 - **Memoria Contextual**: Historial completo de conversaciones
 - **Multi-provider IA**: OpenAI, Anthropic, Gemini
 - **Procesamiento de Voz**: Text-to-speech y Speech-to-text
 
 #### Key Methods
+
 ```typescript
 class EnhancedVoiceService {
-  async processConversation(payload: ConversationPayload): Promise<ConversationResponse>
-  async analyzeEmotion(text: string, context: ConversationContext): Promise<EmotionalAnalysis>
-  async generateContextualResponse(text: string, analysis: EmotionalAnalysis, context: ConversationContext): Promise<string>
-  async generateSuggestedActions(text: string, analysis: EmotionalAnalysis, context: ConversationContext): Promise<SuggestedAction[]>
+  async processConversation(payload: ConversationPayload): Promise<ConversationResponse>;
+  async analyzeEmotion(text: string, context: ConversationContext): Promise<EmotionalAnalysis>;
+  async generateContextualResponse(
+    text: string,
+    analysis: EmotionalAnalysis,
+    context: ConversationContext
+  ): Promise<string>;
+  async generateSuggestedActions(
+    text: string,
+    analysis: EmotionalAnalysis,
+    context: ConversationContext
+  ): Promise<SuggestedAction[]>;
 }
 ```
 
 ### AI Service Router
+
 **Location**: `backend/src/services/ai.service.ts`
 
 #### Provider Configuration
+
 ```typescript
 interface ModelConfig {
   provider: 'openai' | 'anthropic' | 'gemini';
@@ -90,14 +105,16 @@ interface ModelConfig {
 const AIModelTier = {
   STANDARD: 'gemini-pro',
   PREMIUM: 'gpt-4o',
-  ULTRA: 'claude-3.5-sonnet'
+  ULTRA: 'claude-3.5-sonnet',
 } as const;
 ```
 
 ### Analytics Service
+
 **Location**: `backend/src/services/analytics.service.ts`
 
 #### Metrics Tracked
+
 - Conversations per session
 - Emotional analysis trends
 - Response times
@@ -109,15 +126,18 @@ const AIModelTier = {
 ## 🎨 Frontend Components
 
 ### Daniela Conversation Panel
+
 **Location**: `frontend/shared/src/components/DanielaConversationPanel.tsx`
 
 #### Features
+
 - **Real-time Conversation**: Chat con transcripción editable
 - **Emotional Indicators**: Visualización del estado emocional
 - **Voice Integration**: Grabación y reproducción de voz
 - **Suggested Actions**: Acciones contextuales inteligentes
 
 #### Props Interface
+
 ```typescript
 interface DanielaConversationPanelProps {
   sessionId?: string;
@@ -130,26 +150,32 @@ interface DanielaConversationPanelProps {
 ```
 
 ### Daniela Demo Page
+
 **Location**: `frontend/apps/website-epic/src/pages/DanielaDemo.tsx`
 
 #### Demo Modes
+
 1. **Conversation Mode**: Interacción directa con Daniela
 2. **Features Mode**: Showcase de capacidades
 3. **Analytics Mode**: Métricas y visualización de datos
 
 ### Admin Daniela Panel
+
 **Location**: `frontend/apps/admindashboard/src/components/AdminDanielaPanel.tsx`
 
 #### Admin Features
+
 - **System Monitoring**: Estado en tiempo real
 - **Configuration Management**: Ajustes de IA y voz
 - **Analytics Dashboard**: Métricas avanzadas
 - **User Management**: Gestión de sesiones
 
 ### Daniela Widget
+
 **Location**: `frontend/apps/website-epic/src/components/DanielaWidget.tsx`
 
 #### Widget Features
+
 - **Floating Interface**: Botón flotante animado
 - **Quick Actions**: Acciones rápidas predefinidas
 - **Responsive Design**: Adaptación a todos los dispositivos
@@ -162,9 +188,11 @@ interface DanielaConversationPanelProps {
 ### Enhanced Voice Endpoints
 
 #### POST /api/v1/enhanced-voice/process
+
 **Description**: Process conversation with Daniela
 
 **Request Body**:
+
 ```json
 {
   "sessionId": "string",
@@ -175,6 +203,7 @@ interface DanielaConversationPanelProps {
 ```
 
 **Response**:
+
 ```json
 {
   "transcription": "string",
@@ -204,15 +233,19 @@ interface DanielaConversationPanelProps {
 ```
 
 #### GET /api/v1/enhanced-voice/history
+
 **Description**: Get conversation history
 
 **Query Parameters**:
+
 - `sessionId`: string (required)
 
 #### POST /api/v1/enhanced-voice/clear
+
 **Description**: Clear conversation session
 
 **Request Body**:
+
 ```json
 {
   "sessionId": "string"
@@ -220,7 +253,9 @@ interface DanielaConversationPanelProps {
 ```
 
 ### Authentication
+
 All endpoints require JWT authentication:
+
 ```http
 Authorization: Bearer <jwt_token>
 ```
@@ -230,6 +265,7 @@ Authorization: Bearer <jwt_token>
 ## 🗄️ Database Schema
 
 ### Conversations Collection
+
 ```typescript
 interface ConversationDocument {
   _id: ObjectId;
@@ -248,6 +284,7 @@ interface ConversationDocument {
 ```
 
 ### Analytics Collection
+
 ```typescript
 interface AnalyticsDocument {
   _id: ObjectId;
@@ -265,6 +302,7 @@ interface AnalyticsDocument {
 ```
 
 ### Users Collection
+
 ```typescript
 interface UserDocument {
   _id: ObjectId;
@@ -290,18 +328,21 @@ interface UserDocument {
 ## 🔒 Security Implementation
 
 ### Authentication & Authorization
+
 - **JWT Tokens**: Access y refresh tokens
 - **Role-based Access**: Admin, Client, Demo roles
 - **Rate Limiting**: 30 requests/minute por usuario
 - **CORS Configuration**: Orígenes permitidos configurados
 
 ### Data Protection
+
 - **Encryption**: Datos sensibles encriptados en reposo
 - **API Key Rotation**: Rotación automática de claves
 - **Input Validation**: Sanitización de todos los inputs
 - **SQL Injection Prevention**: Parámetros preparados
 
 ### Privacy Compliance
+
 - **GDPR Compliance**: Derecho al olvido implementado
 - **Data Minimization**: Solo datos necesarios recolectados
 - **Consent Management**: Consentimiento explícito requerido
@@ -312,18 +353,21 @@ interface UserDocument {
 ## ⚡ Performance Optimization
 
 ### Frontend Optimization
+
 - **Code Splitting**: Lazy loading de componentes
 - **Tree Shaking**: Eliminación de código no utilizado
 - **Image Optimization**: WebP format con lazy loading
 - **Bundle Analysis**: Monitoring de tamaño de bundle
 
 ### Backend Optimization
+
 - **Caching Strategy**: Redis para sesiones y caché
 - **Database Indexing**: Índices optimizados para queries
 - **Connection Pooling**: Pool de conexiones a BD
 - **Response Compression**: Gzip compression activado
 
 ### CDN Integration
+
 - **Static Assets**: Servidos desde CDN global
 - **Edge Caching**: Cache en puntos de presencia
 - **Geo-routing**: Enrutamiento geográfico
@@ -334,6 +378,7 @@ interface UserDocument {
 ## 🧪 Testing Strategy
 
 ### Unit Tests
+
 ```typescript
 // Enhanced Voice Service Tests
 describe('EnhancedVoiceService', () => {
@@ -346,6 +391,7 @@ describe('EnhancedVoiceService', () => {
 ```
 
 ### Integration Tests
+
 ```typescript
 // API Endpoint Tests
 describe('Enhanced Voice API', () => {
@@ -361,6 +407,7 @@ describe('Enhanced Voice API', () => {
 ```
 
 ### E2E Tests
+
 ```typescript
 // Daniela Conversation Flow
 describe('Daniela Conversation Flow', () => {
@@ -374,6 +421,7 @@ describe('Daniela Conversation Flow', () => {
 ```
 
 ### Performance Tests
+
 - **Load Testing**: Artillery para pruebas de carga
 - **Stress Testing**: Límites del sistema
 - **Monitoring**: Real-time performance metrics
@@ -383,6 +431,7 @@ describe('Daniela Conversation Flow', () => {
 ## 🚀 Deployment Architecture
 
 ### Production Environment
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    Production Infrastructure                  │
@@ -418,6 +467,7 @@ describe('Daniela Conversation Flow', () => {
 ```
 
 ### CI/CD Pipeline
+
 ```yaml
 # GitHub Actions Workflow
 name: Deploy Daniela AI
@@ -446,24 +496,28 @@ jobs:
 ## 📊 Monitoring & Analytics
 
 ### Application Monitoring
+
 - **Health Checks**: `/api/v1/health` endpoint
 - **Performance Metrics**: Response times, error rates
 - **Resource Usage**: CPU, memory, disk usage
 - **Error Tracking**: Sentry integration
 
 ### Business Analytics
+
 - **User Engagement**: Session duration, interaction rates
 - **Feature Adoption**: Usage patterns per feature
 - **Conversion Metrics**: Demo to paid conversion
 - **Customer Satisfaction**: NPS scores and feedback
 
 ### Daniela Specific Metrics
+
 - **Conversation Quality**: Emotional analysis accuracy
 - **Response Relevance**: User satisfaction scores
 - **Voice Recognition**: Speech-to-text accuracy
 - **System Performance**: Real-time processing metrics
 
 ### Alerting System
+
 ```typescript
 // Alert Configuration
 const alerts = {
@@ -479,6 +533,7 @@ const alerts = {
 ## 🔧 Development Workflow
 
 ### Local Development Setup
+
 ```bash
 # Backend Development
 cd backend
@@ -495,12 +550,14 @@ docker-compose up -d mongodb redis
 ```
 
 ### Code Quality Standards
+
 - **TypeScript**: Strict mode enabled
 - **ESLint**: Custom rules for consistency
 - **Prettier**: Code formatting standards
 - **Husky**: Pre-commit hooks
 
 ### Git Workflow
+
 ```
 main (production)
 ├── develop (staging)
@@ -514,22 +571,25 @@ main (production)
 ## 📚 API Reference
 
 ### Error Codes
-| Code | Description | HTTP Status |
-|------|-------------|-------------|
-| D001 | Invalid session ID | 400 |
-| D002 | Audio processing failed | 500 |
-| D003 | AI provider error | 502 |
-| D004 | Rate limit exceeded | 429 |
-| D005 | Authentication required | 401 |
+
+| Code | Description             | HTTP Status |
+| ---- | ----------------------- | ----------- |
+| D001 | Invalid session ID      | 400         |
+| D002 | Audio processing failed | 500         |
+| D003 | AI provider error       | 502         |
+| D004 | Rate limit exceeded     | 429         |
+| D005 | Authentication required | 401         |
 
 ### Rate Limits
+
 | Endpoint | Requests/Minute | Burst |
-|----------|-----------------|-------|
-| /process | 30 | 5 |
-| /history | 60 | 10 |
-| /clear | 10 | 2 |
+| -------- | --------------- | ----- |
+| /process | 30              | 5     |
+| /history | 60              | 10    |
+| /clear   | 10              | 2     |
 
 ### Response Format
+
 ```typescript
 interface APIResponse<T> {
   success: boolean;
@@ -552,18 +612,21 @@ interface APIResponse<T> {
 ## 🚀 Future Enhancements
 
 ### Roadmap Q1 2026
+
 - **Multilingual Support**: 10+ languages
 - **Advanced Analytics**: Predictive insights
 - **Mobile Apps**: Native iOS/Android apps
 - **API V2**: Enhanced capabilities
 
 ### Roadmap Q2 2026
+
 - **Video Calling**: Face-to-face interaction
 - **AR Integration**: Augmented reality features
 - **Enterprise Features**: Advanced admin tools
 - **Marketplace**: Third-party integrations
 
 ### Technical Debt
+
 - **Microservices Migration**: Split monolith
 - **GraphQL API**: Replace REST endpoints
 - **Event-Driven Architecture**: Async processing
@@ -574,18 +637,21 @@ interface APIResponse<T> {
 ## 📞 Support & Maintenance
 
 ### Monitoring Dashboard
+
 - **System Health**: Real-time status
 - **Performance Metrics**: Live graphs
 - **Error Tracking**: Detailed logs
 - **User Analytics**: Behavior insights
 
 ### Maintenance Procedures
+
 - **Weekly Updates**: Security patches
 - **Monthly Reports**: Performance analysis
 - **Quarterly Reviews**: Architecture assessment
 - **Annual Planning**: Technology roadmap
 
 ### Emergency Response
+
 - **On-call Rotation**: 24/7 coverage
 - **Incident Response**: SOP documentation
 - **Communication**: Stakeholder notifications

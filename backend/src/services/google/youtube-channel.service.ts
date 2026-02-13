@@ -77,7 +77,7 @@ export class YouTubeChannelService {
 
     if (!clientId || !clientSecret || !refreshToken) {
       throw new Error(
-        `OAuth2 credentials incomplete for ${channelType} channel. Please configure CLIENT_ID, CLIENT_SECRET, and REFRESH_TOKEN.`,
+        `OAuth2 credentials incomplete for ${channelType} channel. Please configure CLIENT_ID, CLIENT_SECRET, and REFRESH_TOKEN.`
       );
     }
 
@@ -253,7 +253,7 @@ export class YouTubeChannelService {
     channelType: ChannelType,
     title: string,
     description: string,
-    privacyStatus: 'public' | 'private' | 'unlisted' = 'public',
+    privacyStatus: 'public' | 'private' | 'unlisted' = 'public'
   ): Promise<string> {
     if (!this.isChannelConfigured(channelType)) {
       throw new Error(`${channelType} channel is not properly configured`);
@@ -292,7 +292,7 @@ export class YouTubeChannelService {
     try {
       const playlists = await this.listPlaylists(channelType);
       const found = playlists.find(p =>
-        p.snippet?.title.toLowerCase().includes(name.toLowerCase()),
+        p.snippet?.title.toLowerCase().includes(name.toLowerCase())
       );
       return found?.id || null;
     } catch (error) {
@@ -307,7 +307,7 @@ export class YouTubeChannelService {
   async findOrCreatePlaylist(
     channelType: ChannelType,
     title: string,
-    description: string,
+    description: string
   ): Promise<string> {
     const existing = await this.findPlaylistByName(channelType, title);
     if (existing) {
@@ -322,7 +322,7 @@ export class YouTubeChannelService {
   async addVideoToPlaylist(
     channelType: ChannelType,
     videoId: string,
-    playlistId: string,
+    playlistId: string
   ): Promise<void> {
     if (!this.isChannelConfigured(channelType)) {
       throw new Error(`${channelType} channel is not properly configured`);
@@ -386,7 +386,7 @@ export class YouTubeChannelService {
         const id = await this.findOrCreatePlaylist(
           'business',
           playlist.title,
-          playlist.description,
+          playlist.description
         );
         results.push(`${playlist.title} (${id})`);
       } catch (error: any) {
@@ -408,7 +408,7 @@ export class YouTubeChannelService {
       description?: string;
       tags?: string[];
       categoryId?: string;
-    },
+    }
   ): Promise<void> {
     if (!this.isChannelConfigured(channelType)) {
       throw new Error(`${channelType} channel is not properly configured`);

@@ -40,7 +40,7 @@ export class PineconeService {
    */
   async upsertDocBatch(
     documents: { id: string; text: string; metadata: any }[],
-    namespace: string = 'default',
+    namespace: string = 'default'
   ): Promise<void> {
     if (!this.client) {
       logger.warn('[PineconeService] Client not initialized. Skipping batch upsert.');
@@ -67,7 +67,7 @@ export class PineconeService {
               timestamp: new Date().toISOString(),
             },
           } as any;
-        }),
+        })
       );
 
       if (records.length > 0) {
@@ -78,7 +78,7 @@ export class PineconeService {
           await ns.upsert(batch);
         }
         logger.info(
-          `[PineconeService] Successfully upserted ${records.length} documents into namespace: ${namespace}`,
+          `[PineconeService] Successfully upserted ${records.length} documents into namespace: ${namespace}`
         );
       }
     } catch (error) {
@@ -94,7 +94,7 @@ export class PineconeService {
     queryText: string,
     topK: number = 5,
     namespace: string = 'default',
-    filter?: object,
+    filter?: object
   ): Promise<any[]> {
     if (!this.client) {
       logger.warn('[PineconeService] Client not initialized. Returning empty results.');

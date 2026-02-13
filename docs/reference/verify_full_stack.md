@@ -1,6 +1,7 @@
 ---
 description: Verify full stack - run all tests and build
 ---
+
 1. Run all tests for both server and frontend
    ```
    npx turbo run test --parallel
@@ -13,4 +14,4 @@ description: Verify full stack - run all tests and build
    ```
    echo "Full stack verification completed successfully"
    ```
-// turbo-all
+   // turbo-all

@@ -85,7 +85,7 @@ stripeRouter.post('/checkout', async (req: any, res: any) => {
       customerId,
       priceId,
       successUrl,
-      cancelUrl,
+      cancelUrl
     );
 
     return res.json(buildResponse({ sessionId: session.id, url: session.url }, 200, requestId));

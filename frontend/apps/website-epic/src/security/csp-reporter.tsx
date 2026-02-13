@@ -108,9 +108,7 @@ export function CSPReportDashboard() {
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-          CSP Security Report
-        </h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">CSP Security Report</h2>
         <button
           onClick={clearViolations}
           className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
@@ -125,24 +123,18 @@ export function CSPReportDashboard() {
           <div className="text-2xl font-bold text-gray-900 dark:text-white">
             {report.stats.total}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Total Violations
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Total Violations</div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-gray-900 dark:text-white">
             {report.stats.recent}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Last 60 Minutes
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Last 60 Minutes</div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Last Updated
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Last Updated</div>
           <div className="text-sm font-mono text-gray-900 dark:text-white">
             {new Date(report.lastUpdated).toLocaleString()}
           </div>
@@ -160,12 +152,8 @@ export function CSPReportDashboard() {
               key={directive}
               className={`flex justify-between items-center p-3 rounded-lg ${getSeverityBg(count)}`}
             >
-              <span className="font-medium text-gray-900 dark:text-white">
-                {directive}
-              </span>
-              <span className={`font-bold ${getSeverityColor(count)}`}>
-                {count}
-              </span>
+              <span className="font-medium text-gray-900 dark:text-white">{directive}</span>
+              <span className={`font-bold ${getSeverityColor(count)}`}>{count}</span>
             </div>
           ))}
         </div>
@@ -177,39 +165,42 @@ export function CSPReportDashboard() {
           Recent Violations
         </h3>
         <div className="space-y-2 max-h-64 overflow-y-auto">
-          {report.violations.slice(-10).reverse().map((violation, index) => (
-            <div
-              key={index}
-              className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
-            >
-              <div className="flex justify-between items-start mb-2">
-                <span className="font-medium text-red-600 dark:text-red-400">
-                  {violation.violatedDirective}
-                </span>
-                <span className="text-xs text-gray-500">
-                  {new Date(violation.timestamp || '').toLocaleString()}
-                </span>
-              </div>
-              
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                <strong>Blocked URI:</strong> {violation.blockedURI}
-              </div>
-              
-              {violation.documentURI && (
+          {report.violations
+            .slice(-10)
+            .reverse()
+            .map((violation, index) => (
+              <div
+                key={index}
+                className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <span className="font-medium text-red-600 dark:text-red-400">
+                    {violation.violatedDirective}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {new Date(violation.timestamp || '').toLocaleString()}
+                  </span>
+                </div>
+
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                  <strong>Document:</strong> {violation.documentURI}
+                  <strong>Blocked URI:</strong> {violation.blockedURI}
                 </div>
-              )}
-              
-              {violation.lineNumber && (
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  <strong>Line:</strong> {violation.lineNumber}
-                  {violation.columnNumber && `:${violation.columnNumber}`}
-                </div>
-              )}
-            </div>
-          ))}
-          
+
+                {violation.documentURI && (
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    <strong>Document:</strong> {violation.documentURI}
+                  </div>
+                )}
+
+                {violation.lineNumber && (
+                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <strong>Line:</strong> {violation.lineNumber}
+                    {violation.columnNumber && `:${violation.columnNumber}`}
+                  </div>
+                )}
+              </div>
+            ))}
+
           {report.violations.length === 0 && (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               No CSP violations reported
@@ -233,30 +224,29 @@ export function CSPViolationAlert() {
   const hasHighSeverity = Object.values(report.stats.byDirective).some(count => count > 10);
 
   return (
-    <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg max-w-sm ${
-      hasHighSeverity 
-        ? 'bg-red-50 border-red-200 dark:bg-red-900 dark:border-red-700' 
-        : hasRecentViolations
-        ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900 dark:border-yellow-700'
-        : 'bg-blue-50 border-blue-200 dark:bg-blue-900 dark:border-blue-700'
-    }`}>
+    <div
+      className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg max-w-sm ${
+        hasHighSeverity
+          ? 'bg-red-50 border-red-200 dark:bg-red-900 dark:border-red-700'
+          : hasRecentViolations
+            ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900 dark:border-yellow-700'
+            : 'bg-blue-50 border-blue-200 dark:bg-blue-900 dark:border-blue-700'
+      }`}
+    >
       <div className="flex items-start space-x-3">
-        <div className="text-xl">
-          {hasHighSeverity ? '🚨' : hasRecentViolations ? '⚠️' : 'ℹ️'}
-        </div>
+        <div className="text-xl">{hasHighSeverity ? '🚨' : hasRecentViolations ? '⚠️' : 'ℹ️'}</div>
         <div className="flex-1">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-            {hasHighSeverity 
-              ? 'High Severity CSP Violations' 
-              : hasRecentViolations 
-              ? 'CSP Violations Detected' 
-              : 'CSP Violations'
-            }
+            {hasHighSeverity
+              ? 'High Severity CSP Violations'
+              : hasRecentViolations
+                ? 'CSP Violations Detected'
+                : 'CSP Violations'}
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             {report.stats.total} total violations ({report.stats.recent} in last hour)
           </p>
-          
+
           <button
             onClick={() => {
               // Scroll to CSP report or show modal
@@ -270,7 +260,7 @@ export function CSPViolationAlert() {
             View Details
           </button>
         </div>
-        
+
         <button
           onClick={() => {
             const element = document.getElementById('csp-report-alert');

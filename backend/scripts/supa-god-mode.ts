@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 import { env } from '../src/config/env.schema';
 import * as fs from 'fs';
@@ -6,7 +5,8 @@ import * as path from 'path';
 
 // Manual override for God Mode if env not loaded
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://jhvtjyfmgncrrbzqpbkt.supabase.co';
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'MISSING_SERVICE_ROLE_KEY'; // User provided anon key, but we might need service role for admin tasks.
+const SUPABASE_SERVICE_ROLE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 'MISSING_SERVICE_ROLE_KEY'; // User provided anon key, but we might need service role for admin tasks.
 // Note: Using the ANON key provided for now, but for table creation we typically need SQL editor or Service Role.
 // However, the provided key 'sb_publishable...' is likely ANON.
 // IF WE CAN'T RUN SQL via Client, we might just output the SQL for the user to run in the Supabase Dashboard SQL Editor.
@@ -77,11 +77,13 @@ create policy "Users can view project documents" on public.documents for select 
 );
 `;
 
-console.log("----------------------------------------------------------------");
-console.log("🌌 SUPABASE GOD MODE SQL SCRIPT 🌌");
-console.log("----------------------------------------------------------------");
-console.log("Since we are using the Client SDK, we cannot create tables directly unless we use RPC or have the Service Role Key.");
-console.log("Please COPY AND PASTE the SQL below into your Supabase Dashboard -> SQL Editor:");
-console.log("----------------------------------------------------------------");
+console.log('----------------------------------------------------------------');
+console.log('🌌 SUPABASE GOD MODE SQL SCRIPT 🌌');
+console.log('----------------------------------------------------------------');
+console.log(
+  'Since we are using the Client SDK, we cannot create tables directly unless we use RPC or have the Service Role Key.'
+);
+console.log('Please COPY AND PASTE the SQL below into your Supabase Dashboard -> SQL Editor:');
+console.log('----------------------------------------------------------------');
 console.log(SCHEMA_SQL);
-console.log("----------------------------------------------------------------");
+console.log('----------------------------------------------------------------');

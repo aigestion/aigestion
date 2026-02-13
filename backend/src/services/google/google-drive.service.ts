@@ -117,7 +117,7 @@ export class GoogleDriveService {
     fileName: string,
     parentId: string,
     mimeType: string,
-    hash: string,
+    hash: string
   ): Promise<void> {
     if (!this.drive) {
       throw new Error('Drive client not initialized');
@@ -213,7 +213,7 @@ export class GoogleDriveService {
    * Lists contents of a folder for restore purposes
    */
   async listFolderContents(
-    folderId: string,
+    folderId: string
   ): Promise<{ id: string; name: string; mimeType: string; localHash?: string }[]> {
     if (!this.drive) {
       throw new Error('Drive client not initialized');

@@ -6,12 +6,26 @@ async function verify() {
 
   // 1. Test Parallel Batch Upsert
   const mockDocs = [
-    { id: 'test-1', text: 'This is a test document about artificial intelligence.', metadata: { category: 'tech' } },
-    { id: 'test-2', text: 'Pinecone is a vector database for machine learning.', metadata: { category: 'database' } },
-    { id: 'test-3', text: 'Vertex AI provides powerful embedding models.', metadata: { category: 'tech' } },
+    {
+      id: 'test-1',
+      text: 'This is a test document about artificial intelligence.',
+      metadata: { category: 'tech' },
+    },
+    {
+      id: 'test-2',
+      text: 'Pinecone is a vector database for machine learning.',
+      metadata: { category: 'database' },
+    },
+    {
+      id: 'test-3',
+      text: 'Vertex AI provides powerful embedding models.',
+      metadata: { category: 'tech' },
+    },
   ];
 
-  logger.info('Testing parallel embedding generation and batch upsert (Namespace: test-verification)...');
+  logger.info(
+    'Testing parallel embedding generation and batch upsert (Namespace: test-verification)...'
+  );
   try {
     // This will attempt real API calls if PINECONE_API_KEY is present
     await pineconeService.upsertDocBatch(mockDocs, 'test-verification');

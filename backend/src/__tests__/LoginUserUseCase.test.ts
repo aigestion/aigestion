@@ -43,7 +43,7 @@ describe('LoginUserUseCase', () => {
     mockUserRepository.findByEmail.mockResolvedValue(null);
 
     await expect(loginUserUseCase.execute({ email, password, ip, userAgent })).rejects.toThrow(
-      new AppError('Credenciales inválidas', 401, 'AUTH_ERROR'),
+      new AppError('Credenciales inválidas', 401, 'AUTH_ERROR')
     );
   });
 
@@ -58,7 +58,7 @@ describe('LoginUserUseCase', () => {
     mockUserRepository.update.mockResolvedValue({});
 
     await expect(loginUserUseCase.execute({ email, password, ip, userAgent })).rejects.toThrow(
-      new AppError('Credenciales inválidas', 401, 'AUTH_ERROR'),
+      new AppError('Credenciales inválidas', 401, 'AUTH_ERROR')
     );
 
     expect(mockUserRepository.update).toHaveBeenCalled();

@@ -3,11 +3,13 @@
 ## 🔍 **Estado Actual Detectado**
 
 ### **✅ Cuenta Correcta Identificada**
+
 - **Usuario**: `aigestion` (correcto)
 - **Scope**: `aigestions-projects`
 - **Autenticación**: ✅ Confirmada
 
 ### **📋 Proyectos en la Cuenta**
+
 ```
 📁 aigestions-projects
 ├── 🏢 aigestion-website-epic (3m ago)
@@ -27,6 +29,7 @@
 ## 🚨 **Problemas Detectados**
 
 ### **❌ Duplicación de Proyectos**
+
 ```
 🔄 website-epic vs aigestion-website-epic
 ├── website-epic (9h ago) → https://iagestion.net
@@ -34,6 +37,7 @@
 ```
 
 ### **❌ Build Errors**
+
 ```
 ❌ ERR_PNPM_META_FETCH_FAIL
 ❌ Error: Command "pnpm install" exited with 1
@@ -41,6 +45,7 @@
 ```
 
 ### **❌ Dominio No Asignado**
+
 ```
 ❌ 0 Domains found under aigestions-projects
 ❌ aigestion.net está asignado a otro proyecto
@@ -52,12 +57,14 @@
 ## 🎯 **Análisis de la Situación**
 
 ### **✅ Lo que está Bien**
+
 - **Cuenta correcta**: `aigestion` es el usuario correcto
 - **Proyectos creados**: 5 proyectos en la cuenta
 - **Autenticación**: Funciona correctamente
 - **Build system**: Configurado correctamente
 
 ### **❌ Lo que está Mal**
+
 - **Duplicación**: `website-epic` duplicado
 - **Build fallando**: Problemas con pnpm install
 - **Dominio perdido**: `aigestion.net` no está en esta cuenta
@@ -68,14 +75,17 @@
 ## 🔧 **Diagnóstico del Problema de Duplicación**
 
 ### **¿Es normal tener website-epic duplicada?**
+
 **❌ NO, no es normal.**
 
 **Problema:**
+
 - Tienes 2 proyectos con funcionalidad similar
 - `website-epic` (9h ago) tiene el dominio `aigestion.net`
 - `aigestion-website-epic` (3m ago) es una copia duplicada
 
 **Causa probable:**
+
 - Creaste `aigestion-website-epic` cuando el dominio ya estaba en uso
 - No te diste cuenta de que ya existía `website-epic`
 - Ahora tienes 2 proyectos compitiendo
@@ -85,6 +95,7 @@
 ## 🛠️ **Solución Recomendada**
 
 ### **Opción 1: Usar Proyecto Existente (Recomendado)**
+
 ```bash
 # Usar website-epic (que ya tiene aigestion.net)
 cd frontend/apps/website-epic
@@ -93,6 +104,7 @@ npx vercel --prod
 ```
 
 ### **Opción 2: Migrar a Nuevo Proyecto**
+
 ```bash
 # Eliminar aigestion-website-epic
 # Usar website-epic existente
@@ -100,6 +112,7 @@ npx vercel --prod
 ```
 
 ### **Opción 3: Limpiar y Reorganizar**
+
 ```bash
 # 1. Eliminar proyecto duplicado
 # 2. Usar proyecto principal
@@ -112,6 +125,7 @@ npx vercel --prod
 ## 🚀 **Plan de Acción Inmediato**
 
 ### **Paso 1: Identificar Proyecto Correcto**
+
 ```bash
 # Verificar qué proyecto tiene el dominio
 npx vercel projects ls
@@ -119,6 +133,7 @@ npx vercel projects ls
 ```
 
 ### **Paso 2: Usar Proyecto Principal**
+
 ```bash
 cd frontend/apps/website-epic
 rm -rf .vercel
@@ -126,6 +141,7 @@ npx vercel link website-epic
 ```
 
 ### **Paso 3: Solucionar Build Issues**
+
 ```bash
 # Limpiar cache y dependencias
 rm -rf node_modules package-lock.json
@@ -133,6 +149,7 @@ pnpm install
 ```
 
 ### **Paso 4: Deploy Correcto**
+
 ```bash
 npx vercel --prod
 ```
@@ -142,18 +159,21 @@ npx vercel --prod
 ## 📋 **Checklist de Verificación**
 
 ### **✅ Antes de Continuar**
+
 - [ ] Confirmar que `website-epic` tiene `aigestion.net`
 - [ ] Eliminar proyecto duplicado `aigestion-website-epic`
 - [ ] Limpiar cache local
 - [ ] Verificar dependencias
 
 ### **⏳ Durante el Proceso**
+
 - [ ] Link al proyecto correcto
 - [ ] Build exitoso sin errores
 - [ ] Deploy exitoso
 - [ ] URL funcional
 
 ### **✅ Después del Deploy**
+
 - [ ] aigestion.net funciona correctamente
 - [ ] Login y dashboard funcionan
 - [ ] Daniela integrada funciona
@@ -164,15 +184,18 @@ npx vercel --prod
 ## 🎯 **Respuesta a tu Pregunta**
 
 ### **¿Es normal tener website-epic duplicada?**
+
 **❌ NO, no es normal.**
 
 **Explicación:**
+
 - Tienes 2 proyectos con nombres similares
 - Solo uno debería existir
 - La duplicación causa conflictos
 - El dominio está asignado al proyecto equivocado
 
 **Solución:**
+
 - Usar `website-epic` (el que tiene el dominio)
 - Eliminar `aigestion-website-epic` (el duplicado)
 - Configurar correctamente el proyecto principal
@@ -182,6 +205,7 @@ npx vercel --prod
 ## 🔄 **Estado Actual vs Estado Deseado**
 
 ### **🔴 Estado Actual (Problemático)**
+
 ```
 ❌ Duplicación: website-epic + aigestion-website-epic
 ❌ Build errors: pnpm install falla
@@ -191,6 +215,7 @@ npx vercel --prod
 ```
 
 ### **🟢 Estado Deseado (Limpio)**
+
 ```
 ✅ Un solo proyecto: website-epic
 ✅ Dominio asignado: aigestion.net
@@ -206,6 +231,7 @@ npx vercel --prod
 **NO es normal tener website-epic duplicada.**
 
 **Debes:**
+
 1. **Eliminar el proyecto duplicado** `aigestion-website-epic`
 2. **Usar el proyecto principal** `website-epic`
 3. **Solucionar los build errors**

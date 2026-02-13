@@ -23,7 +23,7 @@ class AnalyticsService {
       window.addEventListener('load', () => {
         this.track('PERFORMANCE', 'page_load', {
           timing: window.performance?.timing?.toJSON?.() || {},
-          navigator: navigator.userAgent
+          navigator: navigator.userAgent,
         });
       });
     }
@@ -39,7 +39,7 @@ class AnalyticsService {
       name,
       data,
       timestamp: new Date().toISOString(),
-      url: window.location.href
+      url: window.location.href,
     };
 
     this.queue.push(event);

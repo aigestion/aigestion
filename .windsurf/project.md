@@ -1,11 +1,13 @@
 # AIGestion.net - Windsurf Configuration
 
 ## Project Structure
+
 - **Root**: c:\Users\Alejandro\AIGestion
 - **Frontend**: c:\Users\Alejandro\AIGestion\frontend
 - **Backend**: c:\Users\Alejandro\AIGestion\backend
 
 ## Development URLs
+
 - **Main Website**: http://localhost:5173
 - **Admin Dashboard**: http://localhost:5175
 - **Client Dashboard**: http://localhost:5174
@@ -13,17 +15,20 @@
 - **Backend API**: http://localhost:3000
 
 ## Environment Configuration
+
 - **Project**: aigestion-net
 - **Google Cloud Project**: aigestion-net
 - **Region**: us-central1
 - **Supabase URL**: https://jhvtjyfmgncrrbzqpbkt.supabase.co
 
 ## Git Configuration
+
 - **Repository**: https://github.com/aigestion/aigestion-net.git
 - **Main Branch**: main
 - **Remote**: origin
 
 ## Build & Deploy Commands
+
 ```bash
 # Start all services
 cd frontend && npm run dev:all
@@ -39,6 +44,7 @@ npm run deploy:production
 ```
 
 ## Key Features
+
 - TypeScript + React + Node.js
 - Monorepo structure with workspaces
 - Multiple dashboards (Admin, Client, Demo)
@@ -48,6 +54,7 @@ npm run deploy:production
 - Real-time updates
 
 ## Development Notes
+
 - All dashboards have audio wuaw effects enabled
 - Mock components used to avoid @shared dependencies
 - Each dashboard runs on different port

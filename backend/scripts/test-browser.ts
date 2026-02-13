@@ -19,7 +19,7 @@ async function main() {
   console.log('\n[Test 1] Navigate and Extract (example.com)');
   const result1 = await tool.executeTask([
     { action: 'navigate', url: 'https://example.com' },
-    { action: 'extract' } // Should get title/text
+    { action: 'extract' }, // Should get title/text
   ]);
 
   if (result1.success) {
@@ -34,7 +34,7 @@ async function main() {
   const result2 = await tool.executeTask([
     { action: 'navigate', url: 'https://www.google.com' },
     { action: 'type', selector: 'textarea[name="q"]', text: 'Browserless Rocks' },
-    { action: 'screenshot' }
+    { action: 'screenshot' },
   ]);
 
   if (result2.success) {

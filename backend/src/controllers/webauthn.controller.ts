@@ -139,7 +139,7 @@ export class WebAuthnController {
 
       // Find the authenticator used
       const authenticator = user.authenticators.find(
-        auth => Buffer.from(auth.credentialID).toString('base64url') === body.id,
+        auth => Buffer.from(auth.credentialID).toString('base64url') === body.id
       );
 
       if (!authenticator) {

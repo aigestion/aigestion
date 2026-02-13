@@ -99,7 +99,7 @@ async function warmCache() {
         version: '3.0.0',
         environment: process.env.NODE_ENV || 'development',
       },
-      { ttl: 3600, tags: ['config'] },
+      { ttl: 3600, tags: ['config'] }
     );
 
     await cache.set(
@@ -108,7 +108,7 @@ async function warmCache() {
         timestamp: new Date().toISOString(),
         status: 'ready',
       },
-      { ttl: 300, tags: ['stats'] },
+      { ttl: 300, tags: ['stats'] }
     );
     console.log(chalk.green('  ✅ Cache warmed successfully'));
 

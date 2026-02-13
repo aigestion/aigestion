@@ -82,7 +82,7 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
     setTimeLeft(60);
     setCanResend(false);
     const interval = setInterval(() => {
-      setTimeLeft((prev) => {
+      setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(interval);
           setCanResend(true);
@@ -132,7 +132,7 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
               Tu número de teléfono ha sido verificado exitosamente.
             </p>
             <button
-              onClick={() => window.location.href = '/dashboard/client'}
+              onClick={() => (window.location.href = '/dashboard/client')}
               className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full font-bold text-white hover:scale-105 transition-all"
             >
               Ir a mi Panel
@@ -163,14 +163,11 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
           <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center">
             <Phone className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Verifica tu Teléfono
-          </h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Verifica tu Teléfono</h1>
           <p className="text-gray-300 text-sm">
-            {step === 'phone' 
+            {step === 'phone'
               ? 'Ingresa tu número de teléfono para proteger tu cuenta'
-              : 'Enviamos un código de verificación a tu teléfono'
-            }
+              : 'Enviamos un código de verificación a tu teléfono'}
           </p>
         </div>
 
@@ -187,7 +184,7 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
                   <input
                     type="tel"
                     value={formatPhoneNumber(phone)}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    onChange={e => setPhone(e.target.value.replace(/\D/g, ''))}
                     placeholder="+1 (555) 123-4567"
                     className="w-full pl-10 pr-3 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     maxLength={15}
@@ -195,9 +192,7 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
                 </div>
               </div>
 
-              {error && (
-                <div className="text-red-400 text-sm">{error}</div>
-              )}
+              {error && <div className="text-red-400 text-sm">{error}</div>}
 
               <button
                 type="submit"
@@ -216,7 +211,7 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
                 <input
                   type="text"
                   value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
+                  onChange={e => setCode(e.target.value.replace(/\D/g, ''))}
                   placeholder="000000"
                   className="w-full px-3 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center text-2xl tracking-widest"
                   maxLength={6}
@@ -226,9 +221,7 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
                 </p>
               </div>
 
-              {error && (
-                <div className="text-red-400 text-sm">{error}</div>
-              )}
+              {error && <div className="text-red-400 text-sm">{error}</div>}
 
               <button
                 type="submit"
@@ -245,10 +238,7 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
                   disabled={!canResend || loading}
                   className="text-sm text-blue-400 hover:text-blue-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {canResend 
-                    ? 'Reenviar código' 
-                    : `Reenviar en ${timeLeft}s`
-                  }
+                  {canResend ? 'Reenviar código' : `Reenviar en ${timeLeft}s`}
                 </button>
               </div>
             </form>
@@ -261,8 +251,8 @@ export const VerifyPhone: React.FC<VerifyPhonePageProps> = ({ onVerifyPhone, onS
               <div className="text-xs text-blue-300">
                 <p className="font-semibold mb-1">🔒 Protección Anti-Fraude</p>
                 <p>
-                  Esta verificación ayuda a proteger tu cuenta contra accesos no autorizados. 
-                  Tu número de teléfono solo se usa para fines de seguridad.
+                  Esta verificación ayuda a proteger tu cuenta contra accesos no autorizados. Tu
+                  número de teléfono solo se usa para fines de seguridad.
                 </p>
               </div>
             </div>

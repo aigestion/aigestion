@@ -54,7 +54,7 @@ export class SemanticRouterService {
     if (complexity === ModelComplexity.COMPLEX || hasLongTermContext) {
       logger.debug(
         { complexity, hasLongTermContext },
-        'Routing to high-intelligence model (GPT-4/Claude-3)',
+        'Routing to high-intelligence model (GPT-4/Claude-3)'
       );
       return {
         model: process.env.AI_MODEL_COMPLEX || 'gpt-4-turbo-preview',

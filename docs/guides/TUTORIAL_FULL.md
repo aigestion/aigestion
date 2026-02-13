@@ -5,6 +5,7 @@
 ---
 
 ## 📦 Tabla de contenidos
+
 1. [Requisitos previos](#requisitos-previos)
 2. [Estructura del repositorio](#estructura-del-repositorio)
 3. [Configuración del entorno local](#configuración-del-entorno-local)
@@ -28,6 +29,7 @@
 ---
 
 ## 1️⃣ Requisitos previos
+
 | Herramienta          | Versión mínima          | Instalación (PowerShell)              |
 | -------------------- | ----------------------- | ------------------------------------- |
 | **Node.js**          | 18.x (Recomendado 20.x) | `winget install OpenJS.Nodejs`        |
@@ -40,6 +42,7 @@
 ---
 
 ## 2️⃣ Estructura del repositorio
+
 ```text
 AIGestion/
 ├─ backend/                # Express + Inversify (Inyección de dependencias)
@@ -56,6 +59,7 @@ AIGestion/
 ---
 
 ## 3️⃣ Configuración del entorno local
+
 1. **Clonar e instalar**:
    ```powershell
    git clone https://github.com/your-org/AIGestion.git
@@ -71,9 +75,11 @@ AIGestion/
 ---
 
 ## 4️⃣ Backend – Express + Inversify
+
 A diferencia de otros stacks, usamos **Express** con **InversifyJS** para una inyección de dependencias robusta y una arquitectura limpia.
 
 ### Scripts clave:
+
 - `pnpm dev`: Inicia con `ts-node-dev`.
 - `pnpm build`: Compila con `tsc`.
 - `pnpm nexus:doctor`: Ejecuta un diagnóstico de salud del sistema.
@@ -81,13 +87,17 @@ A diferencia de otros stacks, usamos **Express** con **InversifyJS** para una in
 ---
 
 ## 5️⃣ Frontend – React + Vite
+
 NEXUS UI utiliza un diseño premium basado en **Glassmorphism**.
+
 - **Acceso**: `http://localhost:5173` (Dev) o `http://localhost:8080` (Docker).
 
 ---
 
 ## 6️⃣ Bases de Datos y Caching (Políglota)
+
 El sistema utiliza una arquitectura políglota para máxima eficiencia:
+
 1. **MongoDB**: Almacenamiento de documentos y datos no estructurados (Mongoose).
 2. **PostgreSQL**: Datos relacionales y transaccionales (Prisma).
 3. **Redis**: Caching de alta velocidad y colas (BullMQ / ioredis).
@@ -95,12 +105,15 @@ El sistema utiliza una arquitectura políglota para máxima eficiencia:
 ---
 
 ## 7️⃣ Automatización con Browserless
+
 Utilizamos **Browserless (Chrome)** para tareas de scraping, generación de PDFs y automatización web.
+
 - **Acceso local**: `http://localhost:3001`
 
 ---
 
 ## 10️⃣ Estrategia de pruebas
+
 | Tipo           | Herramienta          | Comando                           |
 | -------------- | -------------------- | --------------------------------- |
 | **Unitarias**  | Jest / Vitest        | `pnpm test`                       |
@@ -110,11 +123,15 @@ Utilizamos **Browserless (Chrome)** para tareas de scraping, generación de PDFs
 ---
 
 ## 17️⃣ Docker‑Compose (Ecosistema completo)
+
 Levanta todos los servicios, bases de datos y herramientas de monitoreo:
+
 ```powershell
 docker-compose up -d --build
 ```
+
 Servicios incluidos:
+
 - `backend`: API Nexus.
 - `frontend`: Dashboard UI.
 - `ml-service`: Engine de IA.
@@ -125,4 +142,4 @@ Servicios incluidos:
 
 ---
 
-*Para detalles específicos de despliegue y seguridad, consulta los apartados correspondientes en este documento.*
+_Para detalles específicos de despliegue y seguridad, consulta los apartados correspondientes en este documento._

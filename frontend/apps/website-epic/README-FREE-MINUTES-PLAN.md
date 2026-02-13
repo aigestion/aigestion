@@ -55,6 +55,7 @@ Plan de Minutos Gratis
 ## 🎯 Servicios Gratuitos Configurados
 
 ### 🥇 Google Voice (Prioridad 1)
+
 - **Minutos**: Ilimitados para EE.UU. y Canadá
 - **Bono registro**: 0 minutos
 - **Bono referidos**: 10 minutos por referencia
@@ -62,6 +63,7 @@ Plan de Minutos Gratis
 - **Limitaciones**: Solo EE.UU. y Canadá
 
 ### 🥈 Skype (Prioridad 2)
+
 - **Minutos**: 100 llamadas Skype a Skype
 - **Bono registro**: 15 minutos
 - **Bono referidos**: 5 minutos por referencia
@@ -69,6 +71,7 @@ Plan de Minutos Gratis
 - **Limitaciones**: Solo Skype a Skype gratis
 
 ### 🥉 Discord (Prioridad 3)
+
 - **Minutos**: Ilimitados
 - **Bono registro**: 0 minutos
 - **Bono referidos**: 0 minutos
@@ -76,6 +79,7 @@ Plan de Minutos Gratis
 - **Limitaciones**: Requiere aplicación Discord
 
 ### 🏅 WhatsApp (Prioridad 4)
+
 - **Minutos**: Ilimitados
 - **Bono registro**: 0 minutos
 - **Bono referidos**: 0 minutos
@@ -83,6 +87,7 @@ Plan de Minutos Gratis
 - **Limitaciones**: Máximo 2 horas por llamada
 
 ### 🏅 Signal (Prioridad 5)
+
 - **Minutos**: Ilimitados
 - **Bono registro**: 0 minutos
 - **Bono referidos**: 0 minutos
@@ -90,6 +95,7 @@ Plan de Minutos Gratis
 - **Limitaciones**: Máximo 3 horas por llamada
 
 ### 🏅 Telegram (Prioridad 6)
+
 - **Minutos**: Ilimitados
 - **Bono registro**: 0 minutos
 - **Bono referidos**: 0 minutos
@@ -97,12 +103,14 @@ Plan de Minutos Gratis
 - **Limitaciones**: Requiere aplicación Telegram
 
 ### 🏅 Vapi Trial (Prioridad 7)
+
 - **Minutos**: 100 por mes + 30 bono
 - **Bono referidos**: 20 minutos por referencia
 - **Ventajas**: IA integrada, transcripción
 - **Limitaciones**: Requiere tarjeta, 10 min máx
 
 ### 🏅 Twilio Trial (Prioridad 8)
+
 - **Minutos**: 100 por mes + 15 bono
 - **Bono referidos**: 10 minutos por referencia
 - **Ventajas**: API completa, grabación
@@ -113,24 +121,28 @@ Plan de Minutos Gratis
 ## 🤖 Estrategias de Enrutamiento Inteligente
 
 ### 🎯 Llamadas Nacionales (España)
+
 1. **Discord** - Si el contacto tiene Discord
 2. **Telegram** - Si el contacto tiene Telegram
 3. **WhatsApp** - Si el contacto tiene WhatsApp
 4. **Signal** - Como alternativa segura
 
 ### 🌍 Llamadas Internacionales
+
 1. **Discord** - Global y sin límites
 2. **Telegram** - Global con conferencias
 3. **WhatsApp** - Global y masivo
 4. **Signal** - Global y seguro
 
 ### 💼 Llamadas de Negocios
+
 1. **Vapi Trial** - Con IA y transcripción
 2. **Twilio Trial** - API profesional
 3. **Skype** - Video conferencias
 4. **Google Voice** - Si es EE.UU./Canadá
 
 ### 🕐 Fuera de Horario Laboral
+
 1. **Discord** - Siempre disponible
 2. **Telegram** - 24/7
 3. **WhatsApp** - 24/7
@@ -141,6 +153,7 @@ Plan de Minutos Gratis
 ## 💰 Estrategias de Maximización de Ahorro
 
 ### 🎯 Registro en Múltiples Servicios
+
 ```bash
 # Servicios que requieren registro
 ✅ Google Voice - Requiere número EE.UU.
@@ -154,12 +167,14 @@ Plan de Minutos Gratis
 ```
 
 ### 🎁 Programa de Referidos
+
 - **Google Voice**: 10 minutos por referencia
 - **Skype**: 5 minutos por referencia
 - **Vapi Trial**: 20 minutos por referencia
 - **Twilio Trial**: 10 minutos por referencia
 
 ### 📊 Gestión Inteligente de Minutos
+
 - **Priorización**: Servicios sin tarjeta primero
 - **Rotación**: Distribuir uso entre servicios
 - **Monitoreo**: Alertas antes de agotar minutos
@@ -170,6 +185,7 @@ Plan de Minutos Gratis
 ## 📈 Métricas de Ahorro Esperadas
 
 ### 💰 Ahorro Mensual Estimado
+
 ```
 Llamadas Nacionales (España):
 ├── 50 llamadas × 10 min = 500 min
@@ -194,6 +210,7 @@ Ahorro Anual: $2,220.00
 ```
 
 ### 📊 Eficiencia del Sistema
+
 - **Uso de minutos gratuitos**: 95%
 - **Reducción de costos**: 100%
 - **Satisfacción del usuario**: 98%
@@ -204,18 +221,21 @@ Ahorro Anual: $2,220.00
 ## 🎛️ Panel de Control
 
 ### 📊 Dashboard Principal
+
 - **Estado en tiempo real** de todos los servicios
 - **Minutos disponibles** por servicio
 - **Ahorro acumulado** del mes
 - **Recomendaciones** de optimización
 
 ### 🎯 Simulador de Llamadas
+
 - **Selección automática** del mejor servicio
 - **Estimación de ahorro** por llamada
 - **Análisis de factores** (tipo, duración, importancia)
 - **Historial de llamadas** realizadas
 
 ### 📈 Reportes Detallados
+
 - **Uso por servicio** y patrones
 - **Tendencias de consumo**
 - **Predicciones de uso futuro**
@@ -226,6 +246,7 @@ Ahorro Anual: $2,220.00
 ## 🔧 Configuración Técnica
 
 ### 📦 Instalación
+
 ```bash
 # Instalar dependencias
 npm install @types/node lucide-react
@@ -236,6 +257,7 @@ import { FreeMinutesDashboard } from './components/FreeMinutesDashboard';
 ```
 
 ### ⚙️ Configuración Inicial
+
 ```typescript
 // Inicializar el gestor de minutos
 const manager = new FreeMinutesManager();
@@ -250,11 +272,12 @@ const result = await manager.initiateCall({
   estimated_duration: 10,
   importance: 'medium',
   call_type: 'business',
-  time_of_day: 'business_hours'
+  time_of_day: 'business_hours',
 });
 ```
 
 ### 🔄 Automatización
+
 ```typescript
 // Habilitar enrutamiento automático
 manager.enableAutoRouting();
@@ -263,14 +286,14 @@ manager.enableAutoRouting();
 manager.setAlerts({
   lowMinutes: 20, // Alertar con 20 min restantes
   dailyUsage: true,
-  weeklyReport: true
+  weeklyReport: true,
 });
 
 // Programar reportes
 manager.scheduleReports({
   frequency: 'weekly',
   recipients: ['admin@aigestion.net'],
-  includeRecommendations: true
+  includeRecommendations: true,
 });
 ```
 
@@ -279,22 +302,26 @@ manager.scheduleReports({
 ## 🎯 Casos de Uso
 
 ### 👤 Usuario Personal
+
 - **Llamadas familiares**: WhatsApp, Signal
 - **Llamadas internacionales**: Discord, Telegram
 - **Ahorro mensual**: $30-50
 
 ### 👥 Pequeña Empresa
+
 - **Llamadas clientes**: Vapi Trial, Twilio Trial
 - **Reuniones equipo**: Skype, Discord
 - **Ahorro mensual**: $100-200
 
 ### 🏢 Empresa Mediana
+
 - **Llamadas ventas**: WhatsApp, Telegram
 - **Soporte técnico**: Discord, Signal
 - **Conferencias**: Skype, Telegram
 - **Ahorro mensual**: $500-1000
 
 ### 🌐 Startup Global
+
 - **Llamadas internacionales**: Discord, Telegram
 - **Desarrollo equipo**: Discord, Slack
 - **Ventas globales**: WhatsApp, Signal
@@ -305,6 +332,7 @@ manager.scheduleReports({
 ## 🚀 Optimización Avanzada
 
 ### 🎯 Estrategias de Referidos
+
 ```bash
 # Programa de referidos masivo
 1. Crear cuentas en todos los servicios
@@ -317,12 +345,14 @@ Resultado potencial: 200+ minutos extra por mes
 ```
 
 ### 📊 Análisis Predictivo
+
 - **Patrones de uso** por hora/día
 - **Predicción de consumo** mensual
 - **Recomendaciones proactivas**
 - **Optimización automática**
 
 ### 🔄 Rotación Inteligente
+
 - **Balance de carga** entre servicios
 - **Prevención de agotamiento** de minutos
 - **Maximización de bonos** de registro
@@ -333,6 +363,7 @@ Resultado potencial: 200+ minutos extra por mes
 ## 📚 Guías de Configuración
 
 ### 📱 Configuración de Servicios
+
 1. **Google Voice**: Obtener número EE.UU. con VPN
 2. **Skype**: Crear cuenta Microsoft
 3. **Discord**: Registrar con email
@@ -343,6 +374,7 @@ Resultado potencial: 200+ minutos extra por mes
 8. **Twilio Trial**: Registrarse con tarjeta virtual
 
 ### 🔗 Integración con AIGestion
+
 ```typescript
 // Integración con Voice AI God Mode
 import { voiceAIGodMode } from './voice-ai-godmode';
@@ -351,12 +383,12 @@ import { voiceAIGodMode } from './voice-ai-godmode';
 const enhancedCall = async (details: CallDetails) => {
   // 1. Encontrar servicio gratuito
   const freeService = await freeMinutesManager.findBestServiceForCall(details);
-  
+
   // 2. Si no hay minutos gratis, usar Voice AI
   if (!freeService) {
     return await voiceAIGodMode.generateSpanishCall(details);
   }
-  
+
   // 3. Usar servicio gratuito
   return await freeMinutesManager.initiateCall(details);
 };
@@ -367,18 +399,21 @@ const enhancedCall = async (details: CallDetails) => {
 ## 🎉 Resultados Esperados
 
 ### 💰 Impacto Financiero
+
 - **Ahorro inmediato**: 100% en costos de llamadas
 - **ROI**: Infinito (inversión cero)
 - **Recuperación**: Instantánea
 - **Escalabilidad**: Ilimitada
 
 ### ⚡ Beneficios Operativos
+
 - **Configuración**: 2 horas iniciales
 - **Mantenimiento**: 5 minutos/semana
 - **Monitoreo**: Automático
 - **Optimización**: Continua
 
 ### 🎯 Ventajas Competitivas
+
 - **Costo cero** en comunicaciones
 - **Calidad profesional** en llamadas
 - **Flexibilidad total** de uso
@@ -389,12 +424,14 @@ const enhancedCall = async (details: CallDetails) => {
 ## 🔮 Roadmap Futuro
 
 ### 🚀 Próximas Funcionalidades
+
 - **IA predictiva** para optimización avanzada
 - **Integración** con más servicios gratuitos
 - **Automatización** completa de referidos
 - **Dashboard móvil** para gestión remota
 
 ### 🌟 Expansión Global
+
 - **Servicios regionales** por continente
 - **Optimización** por país y regulación
 - **Integración** con operadores locales
@@ -405,12 +442,14 @@ const enhancedCall = async (details: CallDetails) => {
 ## 📞 Soporte y Contacto
 
 ### 🛠️ Asistencia Técnica
+
 - **Documentación**: Completa y actualizada
 - **Tutoriales**: Paso a paso
 - **FAQ**: Preguntas frecuentes
 - **Foro**: Comunidad de usuarios
 
 ### 📧 Contacto
+
 - **Email**: soporte@aigestion.net
 - **WhatsApp**: +34 600 000 000
 - **Telegram**: @aigestion_support
@@ -427,4 +466,4 @@ El **Plan de Minutos Gratis** transforma completamente la gestión de comunicaci
 **📊 Control total: Dashboard completo y reportes detallados**
 **🚀 Escalabilidad ilimitada: Sin límites de crecimiento**
 
-*El futuro de las comunicaciones empresariales gratuitas ha llegado.*
+_El futuro de las comunicaciones empresariales gratuitas ha llegado._

@@ -222,8 +222,8 @@ describe('DanielaConversationPanel', () => {
       await waitFor(() => {
         // Find edit button for client message
         const editButtons = screen.getAllByRole('button');
-        const editButton = editButtons.find(btn =>
-          btn.querySelector('svg')?.getAttribute('data-lucide') === 'edit-3'
+        const editButton = editButtons.find(
+          btn => btn.querySelector('svg')?.getAttribute('data-lucide') === 'edit-3'
         );
 
         expect(editButton).toBeInTheDocument();
@@ -778,7 +778,7 @@ describe('DanielaConversationPanel', () => {
       const manyMessages = Array.from({ length: 100 }, (_, i) => ({
         id: `msg_${i}`,
         text: `Message ${i}`,
-        speaker: i % 2 === 0 ? 'client' as const : 'daniela' as const,
+        speaker: i % 2 === 0 ? ('client' as const) : ('daniela' as const),
         timestamp: new Date(),
         emotion: 'neutral' as const,
       }));

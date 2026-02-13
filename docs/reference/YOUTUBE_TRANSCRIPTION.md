@@ -35,6 +35,7 @@ YOUTUBE_TRANSCRIPTION_EMAIL=destinatario@example.com
 ```
 
 > **Nota para Gmail**: Necesitas usar una "Contraseña de aplicación" en lugar de tu contraseña normal:
+>
 > 1. Ve a tu [Cuenta de Google](https://myaccount.google.com/)
 > 2. Seguridad → Verificación en 2 pasos (actívala si no lo está)
 > 3. Contraseñas de aplicaciones → Generar nueva
@@ -43,11 +44,13 @@ YOUTUBE_TRANSCRIPTION_EMAIL=destinatario@example.com
 ### 2. Iniciar el sistema
 
 Con Docker:
+
 ```bash
 docker-compose up -d
 ```
 
 Sin Docker (desarrollo local):
+
 ```bash
 cd server
 npm run dev
@@ -62,6 +65,7 @@ npm run dev
 **Ejemplo:**
 
 Archivo: `youtube/Videos.Transcripcion/tutorial-interesante.txt`
+
 ```
 https://www.youtube.com/watch?v=dQw4w9WgXcQ
 ```
@@ -69,6 +73,7 @@ https://www.youtube.com/watch?v=dQw4w9WgXcQ
 ### 4. ¡Listo! 🎉
 
 El sistema automáticamente:
+
 1. 🔍 Detectará el nuevo archivo
 2. 📥 Extraerá la transcripción del video
 3. 📧 Enviará el email con la transcripción
@@ -79,6 +84,7 @@ El sistema automáticamente:
 ## 📧 Formato del Email
 
 El email incluye:
+
 - **Título del video**
 - **URL del video**
 - **Miniatura del video**
@@ -160,21 +166,25 @@ NEXUS V1/
 ## 🔧 Servicios implementados
 
 ### 1. **YoutubeTranscriptionService**
+
 - Extrae ID de video desde URLs de YouTube
 - Descarga transcripciones en español
 - Formatea texto para mejor legibilidad
 
 ### 2. **EmailService**
+
 - Envía emails con Nodemailer
 - Plantillas HTML profesionales
 - Soporte para attachments
 
 ### 3. **YoutubeWatcherService**
+
 - Monitorea carpeta con Chokidar
 - Detecta nuevos archivos .txt
 - Mueve archivos procesados
 
 ### 4. **YoutubeTranscriptionQueue**
+
 - Gestiona cola RabbitMQ
 - Procesamiento asíncrono
 - Manejo de errores y reintentos
@@ -183,14 +193,14 @@ NEXUS V1/
 
 ## ⚙️ Variables de entorno
 
-| Variable | Descripción | Ejemplo |
-|----------|-------------|---------|
-| `EMAIL_HOST` | Servidor SMTP | `smtp.gmail.com` |
-| `EMAIL_PORT` | Puerto SMTP | `587` |
-| `EMAIL_USERNAME` | Usuario del email | `tu-email@gmail.com` |
-| `EMAIL_PASSWORD` | Contraseña de aplicación | `abcd efgh ijkl mnop` |
-| `EMAIL_FROM` | Email del remitente | `noreply@NEXUS V1.com` |
-| `YOUTUBE_TRANSCRIPTION_EMAIL` | Email del destinatario | `destinatario@example.com` |
+| Variable                      | Descripción              | Ejemplo                    |
+| ----------------------------- | ------------------------ | -------------------------- |
+| `EMAIL_HOST`                  | Servidor SMTP            | `smtp.gmail.com`           |
+| `EMAIL_PORT`                  | Puerto SMTP              | `587`                      |
+| `EMAIL_USERNAME`              | Usuario del email        | `tu-email@gmail.com`       |
+| `EMAIL_PASSWORD`              | Contraseña de aplicación | `abcd efgh ijkl mnop`      |
+| `EMAIL_FROM`                  | Email del remitente      | `noreply@NEXUS V1.com`     |
+| `YOUTUBE_TRANSCRIPTION_EMAIL` | Email del destinatario   | `destinatario@example.com` |
 
 ---
 
@@ -226,16 +236,19 @@ NEXUS V1/
 ## 📊 Monitoreo
 
 ### Ver logs del sistema
+
 ```bash
 docker-compose logs -f app
 ```
 
 ### Ver estadísticas de RabbitMQ
+
 ```bash
 docker-compose exec rabbitmq rabbitmqctl list_queues
 ```
 
 ### Verificar archivos procesados
+
 ```bash
 ls youtube/Videos.Transcripcion/processed/
 ```
@@ -247,6 +260,7 @@ ls youtube/Videos.Transcripcion/processed/
 Para probar el sistema:
 
 1. Guarda este archivo como `test-video.txt`:
+
 ```
 https://www.youtube.com/watch?v=dQw4w9WgXcQ
 ```
@@ -254,6 +268,7 @@ https://www.youtube.com/watch?v=dQw4w9WgXcQ
 2. Cópialo a `youtube/Videos.Transcripcion/`
 
 3. Observa los logs:
+
 ```bash
 docker-compose logs -f app | grep -i "youtube\|transcription\|email"
 ```
@@ -320,6 +335,7 @@ docker-compose logs -f app | grep -i "youtube\|transcription\|email"
 ## 🤝 Soporte
 
 Si tienes problemas:
+
 1. Revisa los logs: `docker-compose logs -f app`
 2. Verifica las configuraciones de email
 3. Comprueba que RabbitMQ esté corriendo
@@ -328,4 +344,3 @@ Si tienes problemas:
 ---
 
 **¡Disfruta de tus transcripciones automáticas! 🎉**
-

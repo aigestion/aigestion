@@ -125,7 +125,7 @@ export class GoogleCalendarService {
       maxResults?: number;
       singleEvents?: boolean;
       orderBy?: 'startTime' | 'updated';
-    },
+    }
   ): Promise<any[]> {
     const calendar = await this.getCalendarClient();
 
@@ -171,7 +171,7 @@ export class GoogleCalendarService {
   async updateEvent(
     calendarId: string,
     eventId: string,
-    updates: Partial<CalendarEvent>,
+    updates: Partial<CalendarEvent>
   ): Promise<void> {
     const calendar = await this.getCalendarClient();
 
@@ -260,7 +260,7 @@ export class GoogleCalendarService {
   async createRecurringEvent(
     calendarId: string,
     event: CalendarEvent,
-    recurrenceRule: string,
+    recurrenceRule: string
   ): Promise<string> {
     const calendar = await this.getCalendarClient();
 

@@ -5,157 +5,157 @@ version: 2
 
 updates:
   # Backend NPM dependencies
-  - package-ecosystem: "npm"
-    directory: "/backend"
+  - package-ecosystem: 'npm'
+    directory: '/backend'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Madrid"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Madrid'
     open-pull-requests-limit: 10
     reviewers:
-      - "backend-team"
+      - 'backend-team'
     labels:
-      - "dependencies"
-      - "backend"
-      - "automated"
+      - 'dependencies'
+      - 'backend'
+      - 'automated'
     commit-message:
-      prefix: "chore(deps)"
-      include: "scope"
+      prefix: 'chore(deps)'
+      include: 'scope'
     # Group updates
     groups:
       types-dependencies:
         patterns:
-          - "@types/*"
+          - '@types/*'
       google-cloud:
         patterns:
-          - "@google-cloud/*"
+          - '@google-cloud/*'
       security:
         patterns:
-          - "helmet"
-          - "xss-clean"
-          - "hpp"
-          - "cors"
+          - 'helmet'
+          - 'xss-clean'
+          - 'hpp'
+          - 'cors'
     # Security updates have higher priority
     allow:
-      - dependency-type: "all"
+      - dependency-type: 'all'
     ignore:
       # Ignore major version updates for now
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   # Frontend NPM dependencies
-  - package-ecosystem: "npm"
-    directory: "/frontend"
+  - package-ecosystem: 'npm'
+    directory: '/frontend'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Madrid"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Madrid'
     open-pull-requests-limit: 10
     reviewers:
-      - "frontend-team"
+      - 'frontend-team'
     labels:
-      - "dependencies"
-      - "frontend"
-      - "automated"
+      - 'dependencies'
+      - 'frontend'
+      - 'automated'
     commit-message:
-      prefix: "chore(deps)"
-      include: "scope"
+      prefix: 'chore(deps)'
+      include: 'scope'
     groups:
       react:
         patterns:
-          - "react"
-          - "react-dom"
+          - 'react'
+          - 'react-dom'
       vite:
         patterns:
-          - "vite"
-          - "@vitejs/*"
+          - 'vite'
+          - '@vitejs/*'
       testing:
         patterns:
-          - "vitest"
-          - "@vitest/*"
-          - "@testing-library/*"
+          - 'vitest'
+          - '@vitest/*'
+          - '@testing-library/*'
 
   # Root NPM dependencies
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "Europe/Madrid"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'Europe/Madrid'
     open-pull-requests-limit: 5
     labels:
-      - "dependencies"
-      - "root"
-      - "automated"
+      - 'dependencies'
+      - 'root'
+      - 'automated'
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'
 
   # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "10:00"
-      timezone: "Europe/Madrid"
+      interval: 'weekly'
+      day: 'monday'
+      time: '10:00'
+      timezone: 'Europe/Madrid'
     open-pull-requests-limit: 5
     reviewers:
-      - "devops-team"
+      - 'devops-team'
     labels:
-      - "dependencies"
-      - "github-actions"
-      - "automated"
+      - 'dependencies'
+      - 'github-actions'
+      - 'automated'
     commit-message:
-      prefix: "ci"
+      prefix: 'ci'
 
   # Docker
-  - package-ecosystem: "docker"
-    directory: "/docker"
+  - package-ecosystem: 'docker'
+    directory: '/docker'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "11:00"
-      timezone: "Europe/Madrid"
+      interval: 'weekly'
+      day: 'monday'
+      time: '11:00'
+      timezone: 'Europe/Madrid'
     open-pull-requests-limit: 3
     reviewers:
-      - "devops-team"
+      - 'devops-team'
     labels:
-      - "dependencies"
-      - "docker"
-      - "automated"
+      - 'dependencies'
+      - 'docker'
+      - 'automated'
     commit-message:
-      prefix: "chore(docker)"
+      prefix: 'chore(docker)'
 
   # Python (ML Service & Legacy Core)
-  - package-ecosystem: "pip"
-    directory: "/ml-service"
+  - package-ecosystem: 'pip'
+    directory: '/ml-service'
     schedule:
-      interval: "weekly"
-      day: "tuesday"
-      time: "09:00"
-      timezone: "Europe/Madrid"
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:00'
+      timezone: 'Europe/Madrid'
     open-pull-requests-limit: 5
     labels:
-      - "dependencies"
-      - "python"
-      - "ml-service"
+      - 'dependencies'
+      - 'python'
+      - 'ml-service'
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'
 
-  - package-ecosystem: "pip"
-    directory: "/backend/legacy-python-core"
+  - package-ecosystem: 'pip'
+    directory: '/backend/legacy-python-core'
     schedule:
-      interval: "weekly"
-      day: "tuesday"
-      time: "09:00"
-      timezone: "Europe/Madrid"
+      interval: 'weekly'
+      day: 'tuesday'
+      time: '09:00'
+      timezone: 'Europe/Madrid'
     open-pull-requests-limit: 5
     labels:
-      - "dependencies"
-      - "python"
-      - "legacy"
+      - 'dependencies'
+      - 'python'
+      - 'legacy'
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'

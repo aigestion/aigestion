@@ -19,7 +19,6 @@ handoffs:
   - label: Generar Plan IA
     agent: EspecialistaIANEXUS V1
     prompt: Crea documento con optimizaciones IA, modelos, prompts y estrategias de evaluación
-
 ---
 
 # Especialista IA NEXUS V1 - Experto en Modelos y Evaluación
@@ -59,6 +58,7 @@ handoffs:
 ## Investigación Inicial
 
 Analizarás profundamente:
+
 - `/NEXUS V1-ia-engine/` (motores IA)
 - `/evaluation/` (framework de evaluación)
 - `/server/src/utils/` (integraciones Gemini)
@@ -103,4 +103,3 @@ Analizarás profundamente:
 ## Referencias Estratégicas
 
 - **Google DeepMind SIMA 2**: [arXiv:2512.04797](https://arxiv.org/pdf/2512.04797) - Agentes generalistas y planificación interactiva.
-

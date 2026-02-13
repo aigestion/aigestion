@@ -9,6 +9,7 @@
 ## 📊 Situación Actual
 
 ### **Recursos Disponibles**
+
 - ✅ Mini PC (recursos limitados)
 - ✅ Sistema NEXUS V1 Dashboard funcional
 - ✅ Landing page profesional
@@ -16,6 +17,7 @@
 - ❌ Sin presupuesto para infraestructura
 
 ### **Objetivo**
+
 1. **Fase 0-10 clientes**: Todo gratis, optimizado, mínimo viable
 2. **Fase 10+ clientes**: Migración a nube, profesionalización, escalado
 
@@ -97,7 +99,7 @@ services:
   backend:
     build: ./server
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - DB_TYPE=sqlite
@@ -117,8 +119,8 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     volumes:
       - ./frontend/dist:/usr/share/nginx/html:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
@@ -142,18 +144,18 @@ services:
 
 ### **Servicios Gratuitos a Usar**
 
-| Servicio | Plan Gratuito | Uso |
-|----------|---------------|-----|
-| **Vercel** | Ilimitado | Frontend (Dashboard + Landing) |
-| **Netlify** | 100GB/mes | Backup frontend |
-| **Supabase** | 500MB DB | Base de datos PostgreSQL |
-| **Cloudflare** | Ilimitado | CDN, DNS, SSL |
-| **GitHub** | Ilimitado | Código + Pages |
-| **Gmail** | 500 emails/día | Email transaccional |
-| **Google Analytics** | Ilimitado | Métricas web |
-| **Calendly** | 1 evento | Agendamiento demos |
-| **Notion** | Personal gratis | Documentación interna |
-| **Canva** | Gratis | Diseño marketing |
+| Servicio             | Plan Gratuito   | Uso                            |
+| -------------------- | --------------- | ------------------------------ |
+| **Vercel**           | Ilimitado       | Frontend (Dashboard + Landing) |
+| **Netlify**          | 100GB/mes       | Backup frontend                |
+| **Supabase**         | 500MB DB        | Base de datos PostgreSQL       |
+| **Cloudflare**       | Ilimitado       | CDN, DNS, SSL                  |
+| **GitHub**           | Ilimitado       | Código + Pages                 |
+| **Gmail**            | 500 emails/día  | Email transaccional            |
+| **Google Analytics** | Ilimitado       | Métricas web                   |
+| **Calendly**         | 1 evento        | Agendamiento demos             |
+| **Notion**           | Personal gratis | Documentación interna          |
+| **Canva**            | Gratis          | Diseño marketing               |
 
 **Costo Total Fase 1**: **$0/mes** ✅
 
@@ -179,6 +181,7 @@ vercel deploy
 ```
 
 **Ventajas**:
+
 - ✅ Sin costo
 - ✅ Sin mantener Mini PC 24/7
 - ✅ SSL automático
@@ -194,11 +197,13 @@ vercel deploy
 ```
 
 **Ventajas**:
+
 - ✅ Control total del backend
 - ✅ Sin límites de procesamiento
 - ✅ Datos locales
 
 **Desventajas**:
+
 - ❌ Mini PC debe estar 24/7
 - ❌ Consumo eléctrico
 - ❌ Dependencia de internet local
@@ -210,6 +215,7 @@ vercel deploy
 ### **Semana 1: Optimización**
 
 **Día 1-2: Optimizar Docker**
+
 ```bash
 # Detener servicios no esenciales
 docker-compose down
@@ -222,6 +228,7 @@ docker-compose -f docker-compose.minimal.yml up -d
 ```
 
 **Día 3-4: Migrar a SQLite**
+
 ```bash
 # Cambiar de MongoDB a SQLite
 npm install better-sqlite3
@@ -231,6 +238,7 @@ npm install better-sqlite3
 ```
 
 **Día 5-7: Deploy a Nube Gratuita**
+
 ```bash
 # Deploy frontend a Vercel
 cd frontend/apps/landing-host
@@ -248,12 +256,14 @@ railway up
 ### **Semana 2: Marketing y Captación**
 
 **Día 1-2: Preparar Material**
+
 - ✅ Video demo (Loom gratis)
 - ✅ Presentación (Canva)
 - ✅ Casos de uso
 - ✅ Pricing page
 
 **Día 3-4: Canales de Captación**
+
 - ✅ LinkedIn (posts orgánicos)
 - ✅ Twitter/X (hilos técnicos)
 - ✅ Reddit (r/webdev, r/startups)
@@ -261,6 +271,7 @@ railway up
 - ✅ Indie Hackers
 
 **Día 5-7: Outreach Directo**
+
 - ✅ Lista de 50 prospectos
 - ✅ Email personalizado
 - ✅ LinkedIn DMs
@@ -271,6 +282,7 @@ railway up
 **Objetivo**: 3-5 clientes
 
 **Estrategia**:
+
 1. Ofrecer **3 meses gratis** a cambio de feedback
 2. Testimonios y casos de estudio
 3. Referidos (1 mes gratis por referido)
@@ -282,6 +294,7 @@ railway up
 ### **1. Perfil de Cliente Ideal (ICP)**
 
 **Características**:
+
 - Startups/SaaS pequeñas (1-10 personas)
 - Necesitan dashboard de monitoreo
 - Presupuesto limitado ($0-$50/mes)
@@ -289,6 +302,7 @@ railway up
 - Buscan soluciones modernas
 
 **Dónde encontrarlos**:
+
 - LinkedIn (hashtags: #startup, #saas, #devops)
 - Twitter/X (tech Twitter)
 - Reddit (r/startups, r/SaaS)
@@ -298,10 +312,12 @@ railway up
 ### **2. Propuesta de Valor**
 
 **Mensaje Principal**:
+
 > "Dashboard profesional de monitoreo para startups.
 > Configura en 5 minutos. Primeros 3 meses gratis."
 
 **Beneficios Clave**:
+
 - ✅ Setup en minutos
 - ✅ Diseño profesional
 - ✅ Real-time monitoring
@@ -311,6 +327,7 @@ railway up
 ### **3. Canales de Adquisición (Gratis)**
 
 **Contenido Orgánico** (80% esfuerzo):
+
 - Posts en LinkedIn (3x semana)
 - Hilos en Twitter (2x semana)
 - Artículos en Medium/Dev.to
@@ -318,6 +335,7 @@ railway up
 - Respuestas en Reddit/Stack Overflow
 
 **Outreach Directo** (20% esfuerzo):
+
 - 10 emails personalizados/día
 - 5 LinkedIn DMs/día
 - Participar en comunidades
@@ -341,6 +359,7 @@ Cliente Activo
 ```
 
 **Métricas Objetivo**:
+
 - 100 visitas → 10 signups → 3 demos → 1 cliente
 
 ---
@@ -396,6 +415,7 @@ npm run build -- --analyze
 ### **Estrategia de Precios**
 
 **Tier 1: Early Adopter** (Primeros 10 clientes)
+
 - **Precio**: $0/mes (3 meses)
 - **Después**: $29/mes (50% descuento de por vida)
 - **Incluye**:
@@ -405,6 +425,7 @@ npm run build -- --analyze
   - Updates gratis
 
 **Tier 2: Startup** (Clientes 11-50)
+
 - **Precio**: $49/mes
 - **Incluye**:
   - Todo de Early Adopter
@@ -413,6 +434,7 @@ npm run build -- --analyze
   - Custom branding
 
 **Tier 3: Growth** (Clientes 50+)
+
 - **Precio**: $99/mes
 - **Incluye**:
   - Todo de Startup
@@ -427,6 +449,7 @@ npm run build -- --analyze
 ### **Cuándo Escalar**
 
 **Triggers**:
+
 - ✅ 10 clientes pagando
 - ✅ $500+ MRR (Monthly Recurring Revenue)
 - ✅ Feedback positivo consistente
@@ -435,6 +458,7 @@ npm run build -- --analyze
 ### **Plan de Escalado**
 
 **Infraestructura**:
+
 ```
 Migrar a:
 ├── AWS/GCP/Azure (créditos startup)
@@ -446,11 +470,13 @@ Migrar a:
 ```
 
 **Equipo**:
+
 - Contratar desarrollador part-time
 - Contratar soporte part-time
 - Marketing freelance
 
 **Presupuesto Estimado Fase 2**:
+
 - Infraestructura: $200-500/mes
 - Equipo: $2,000-3,000/mes
 - Marketing: $500-1,000/mes
@@ -488,21 +514,25 @@ Breakeven: ~60 clientes
 ## 🎯 Métricas de Éxito
 
 ### **Semana 1-2**
+
 - [ ] Sistema optimizado y en nube
 - [ ] Material de marketing listo
 - [ ] 100 visitas al landing
 
 ### **Semana 3-4**
+
 - [ ] 10 signups
 - [ ] 3 demos realizadas
 - [ ] 1 cliente activo
 
 ### **Mes 2**
+
 - [ ] 5 clientes activos
 - [ ] $150+ MRR
 - [ ] 2 testimonios
 
 ### **Mes 3**
+
 - [ ] 10 clientes activos
 - [ ] $500+ MRR
 - [ ] Preparar Fase 2
@@ -512,6 +542,7 @@ Breakeven: ~60 clientes
 ## 💡 Tips de Optimización
 
 ### **Docker**
+
 ```bash
 # Limpiar todo regularmente
 docker system prune -a --volumes -f
@@ -527,6 +558,7 @@ COPY --from=builder /app/dist ./dist
 ```
 
 ### **Base de Datos**
+
 ```bash
 # SQLite es suficiente para 10-100 clientes
 # Ventajas:
@@ -537,6 +569,7 @@ COPY --from=builder /app/dist ./dist
 ```
 
 ### **Monitoreo**
+
 ```bash
 # PM2 para mantener Node.js vivo
 npm install -g pm2
@@ -550,12 +583,14 @@ pm2 save
 ## 📚 Recursos Gratuitos
 
 ### **Aprendizaje**
+
 - YouTube (tutoriales)
 - Indie Hackers (comunidad)
 - Reddit r/startups
 - Twitter tech threads
 
 ### **Herramientas**
+
 - Canva (diseño)
 - Loom (videos)
 - Notion (docs)
@@ -563,6 +598,7 @@ pm2 save
 - Mailchimp Free (email)
 
 ### **Hosting**
+
 - Vercel (frontend)
 - Railway (backend)
 - Supabase (DB)
@@ -573,6 +609,7 @@ pm2 save
 ## 🎉 Conclusión
 
 **Plan de Acción**:
+
 1. **Optimizar** recursos (esta semana)
 2. **Deploy** a nube gratuita (esta semana)
 3. **Marketing** orgánico (próxima semana)
@@ -587,6 +624,5 @@ pm2 save
 
 ---
 
-*Creado: 2025-12-13*
-*Versión: 1.0*
-
+_Creado: 2025-12-13_
+_Versión: 1.0_

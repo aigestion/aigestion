@@ -59,7 +59,7 @@ export class SovereignHandshakeController {
         myKeys.classic.private,
         clientPublicKey.classic,
         myKeys.pqc.private,
-        clientCiphertext, // Client should have encapsulated for us
+        clientCiphertext // Client should have encapsulated for us
       );
 
       // Store the final session secret for this Sovereign Session

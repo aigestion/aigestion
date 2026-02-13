@@ -1,1 +1,408 @@
-import{Y as e,j as s,m as t}from"./ui.js";import{r as a}from"./vendor.js";import{u as i}from"./main.js";import"./index.js";import"./three.js";import"./router.js";const r=({value:e,suffix:t="",prefix:i="",duration:r=2})=>{const[l,n]=a.useState(0),o=a.useRef(0),c=a.useRef(null);return a.useEffect(()=>{const s=t=>{c.current||(c.current=t);const a=Math.min((t-c.current)/(1e3*r),1);o.current=Math.floor(a*e),n(o.current),a<1&&requestAnimationFrame(s)};requestAnimationFrame(s)},[e,r]),s.jsxs("span",{className:"font-mono font-bold",children:[i,l.toLocaleString(),t]})},l=({value:e,size:a,strokeWidth:i,color:r,backgroundColor:l="rgba(255, 255, 255, 0.1)"})=>{const n=(a-i)/2,o=2*n*Math.PI,c=o-e/100*o;return s.jsxs("svg",{width:a,height:a,className:"transform -rotate-90",children:[s.jsx("circle",{cx:a/2,cy:a/2,r:n,stroke:l,strokeWidth:i,fill:"none"}),s.jsx(t.circle,{cx:a/2,cy:a/2,r:n,stroke:r,strokeWidth:i,fill:"none",strokeDasharray:o,initial:{strokeDashoffset:o},animate:{strokeDashoffset:c},transition:{duration:2,ease:"easeInOut"},strokeLinecap:"round"})]})},n=()=>{const[n,o]=a.useState(0),{playHover:c}=i(),d=a.useRef(null),x=e(d),m=[{label:"Procesamiento Neuronal",value:98.7,color:"text-nexus-cyan-glow",icon:"🧠",trend:"up"},{label:"Automatización Tareas",value:94.2,color:"text-nexus-violet-glow",icon:"⚡",trend:"up"},{label:"Precisión Decisiones",value:99.1,color:"text-nexus-gold",icon:"🎯",trend:"stable"},{label:"Reducción Costos",value:87.3,color:"text-green-400",icon:"💰",trend:"up"},{label:"Satisfacción Cliente",value:96.8,color:"text-pink-400",icon:"😊",trend:"up"}],u=[{time:"00:00",requests:1234,response:.12},{time:"04:00",requests:892,response:.08},{time:"08:00",requests:3456,response:.15},{time:"12:00",requests:5678,response:.22},{time:"16:00",requests:4321,response:.18},{time:"20:00",requests:2345,response:.14},{time:"23:59",requests:1567,response:.11}];return a.useEffect(()=>{const e=setInterval(()=>{o(e=>(e+1)%m.length)},3e3);return()=>clearInterval(e)},[]),s.jsxs("div",{ref:d,className:"py-20 px-6 bg-nexus-obsidian-deep relative overflow-hidden",children:[s.jsx("div",{className:"absolute inset-0 opacity-10",children:s.jsx("div",{className:"absolute inset-0 bg-[linear-gradient(rgba(0,245,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,245,255,0.1)_1px,transparent_1px)] bg-[size:30px_30px]"})}),s.jsxs("div",{className:"max-w-7xl mx-auto relative z-10",children:[s.jsxs(t.div,{initial:{opacity:0,y:30},animate:x?{opacity:1,y:0}:{},transition:{duration:.8},className:"text-center mb-16",children:[s.jsx("h2",{className:"text-4xl md:text-6xl font-black font-orbitron mb-6",children:s.jsx("span",{className:"bg-clip-text text-transparent bg-gradient-to-r from-nexus-cyan-glow to-nexus-violet-glow",children:"MÉTRICAS EN TIEMPO REAL"})}),s.jsx("p",{className:"text-xl text-nexus-silver/80 max-w-3xl mx-auto",children:"Monitoreo continuo del rendimiento del sistema con análisis predictivo avanzado"})]}),s.jsx("div",{className:"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16",children:m.map((e,a)=>s.jsxs(t.div,{initial:{opacity:0,scale:.8},animate:x?{opacity:1,scale:1}:{},transition:{duration:.5,delay:.1*a},whileHover:{scale:1.05,y:-5},onMouseEnter:c,className:"premium-glass p-6 rounded-2xl border transition-all duration-300 cursor-pointer "+(n===a?"border-nexus-cyan/50 shadow-[0_0_30px_rgba(0,245,255,0.3)]":"border-white/10"),onClick:()=>o(a),children:[s.jsxs("div",{className:"flex items-center justify-between mb-4",children:[s.jsx("span",{className:"text-3xl",children:e.icon}),s.jsxs("div",{className:"flex items-center gap-2",children:["up"===e.trend&&s.jsx("span",{className:"text-green-400 text-sm",children:"↑"}),"down"===e.trend&&s.jsx("span",{className:"text-red-400 text-sm",children:"↓"}),"stable"===e.trend&&s.jsx("span",{className:"text-yellow-400 text-sm",children:"→"})]})]}),s.jsx("h3",{className:`text-sm font-orbitron tracking-wider mb-2 ${e.color}`,children:e.label}),s.jsx("div",{className:"flex items-end gap-2 mb-4",children:s.jsx("span",{className:`text-3xl font-black ${e.color}`,children:x&&s.jsx(r,{value:e.value,suffix:"%"})})}),s.jsx("div",{className:"w-full bg-white/10 rounded-full h-2 overflow-hidden",children:s.jsx(t.div,{className:"h-full bg-gradient-to-r from-nexus-cyan to-nexus-violet rounded-full",initial:{width:0},animate:x?{width:`${e.value}%`}:{},transition:{duration:1.5,delay:.5+.1*a}})})]},e.label))}),s.jsxs(t.div,{initial:{opacity:0,y:50},animate:x?{opacity:1,y:0}:{},transition:{duration:.8,delay:.5},className:"premium-glass p-8 rounded-3xl border border-white/10 mb-16",children:[s.jsx("h3",{className:"text-2xl font-bold font-orbitron mb-8 text-nexus-cyan-glow",children:"RENDIMIENTO DEL SISTEMA - ÚLTIMAS 24 HORAS"}),s.jsxs("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-8",children:[s.jsxs("div",{children:[s.jsx("h4",{className:"text-sm font-orbitron tracking-wider text-nexus-silver/60 mb-4",children:"Solicitudes Procesadas"}),s.jsxs("div",{className:"relative h-48",children:[s.jsx("div",{className:"absolute bottom-0 left-0 right-0 flex items-end justify-between h-full gap-2",children:u.map((e,a)=>s.jsx(t.div,{className:"flex-1 bg-gradient-to-t from-nexus-cyan to-nexus-violet rounded-t-lg relative group cursor-pointer",initial:{height:0},animate:x?{height:e.requests/6e3*100+"%"}:{},transition:{duration:.8,delay:.8+.05*a},onMouseEnter:c,children:s.jsx("div",{className:"absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap",children:e.requests.toLocaleString()})},e.time))}),s.jsx("div",{className:"absolute -bottom-6 left-0 right-0 flex justify-between text-xs text-nexus-silver/40 font-mono",children:u.map(e=>s.jsx("span",{className:"hidden sm:block",children:e.time},e.time))})]})]}),s.jsxs("div",{children:[s.jsx("h4",{className:"text-sm font-orbitron tracking-wider text-nexus-silver/60 mb-4",children:"Tiempo de Respuesta (ms)"}),s.jsx("div",{className:"relative h-48",children:s.jsxs("svg",{className:"w-full h-full",viewBox:"0 0 400 200",children:[s.jsx(t.path,{d:`M ${u.map((e,s)=>`${s/(u.length-1)*400},${200-500*e.response}`).join(" L ")}`,stroke:"url(#gradient)",strokeWidth:"3",fill:"none",initial:{pathLength:0},animate:x?{pathLength:1}:{},transition:{duration:2,delay:1}}),s.jsx("defs",{children:s.jsxs("linearGradient",{id:"gradient",x1:"0%",y1:"0%",x2:"100%",y2:"0%",children:[s.jsx("stop",{offset:"0%",stopColor:"#8A2BE2"}),s.jsx("stop",{offset:"100%",stopColor:"#00F5FF"})]})})]})})]})]})]}),s.jsx(t.div,{initial:{opacity:0,scale:.9},animate:x?{opacity:1,scale:1}:{},transition:{duration:.8,delay:.7},className:"grid grid-cols-1 md:grid-cols-4 gap-6",children:[{label:"CPU",value:67,color:"from-nexus-cyan to-blue-500"},{label:"Memory",value:82,color:"from-nexus-violet to-purple-500"},{label:"Storage",value:45,color:"from-nexus-gold to-yellow-500"},{label:"Network",value:91,color:"from-green-400 to-emerald-500"}].map((e,a)=>s.jsxs("div",{className:"premium-glass p-6 rounded-2xl border border-white/10",children:[s.jsxs("div",{className:"flex items-center justify-between mb-4",children:[s.jsx("h4",{className:"text-sm font-orbitron tracking-wider text-nexus-silver/60",children:e.label}),s.jsxs("div",{className:"relative w-16 h-16",children:[s.jsx(l,{value:e.value,size:64,strokeWidth:4,color:`url(#gradient-${a})`}),s.jsx("defs",{children:s.jsxs("linearGradient",{id:`gradient-${a}`,x1:"0%",y1:"0%",x2:"100%",y2:"0%",children:[s.jsx("stop",{offset:"0%",stopColor:e.color.split(" ")[0].replace("from-","")}),s.jsx("stop",{offset:"100%",stopColor:e.color.split(" ")[1].replace("to-","")})]})}),s.jsx("div",{className:"absolute inset-0 flex items-center justify-center",children:s.jsx("span",{className:"text-xs font-bold text-white",children:x&&s.jsx(r,{value:e.value,suffix:"%"})})})]})]}),s.jsx("div",{className:"w-full bg-white/10 rounded-full h-2",children:s.jsx(t.div,{className:`h-full bg-gradient-to-r ${e.color} rounded-full`,initial:{width:0},animate:x?{width:`${e.value}%`}:{},transition:{duration:1.5,delay:1+.1*a}})})]},e.label))})]})]})};export{n as DataVisualization};
+import { Y as e, j as s, m as t } from './ui.js';
+import { r as a } from './vendor.js';
+import { u as i } from './main.js';
+import './index.js';
+import './three.js';
+import './router.js';
+const r = ({ value: e, suffix: t = '', prefix: i = '', duration: r = 2 }) => {
+    const [l, n] = a.useState(0),
+      o = a.useRef(0),
+      c = a.useRef(null);
+    return (
+      a.useEffect(() => {
+        const s = t => {
+          c.current || (c.current = t);
+          const a = Math.min((t - c.current) / (1e3 * r), 1);
+          ((o.current = Math.floor(a * e)), n(o.current), a < 1 && requestAnimationFrame(s));
+        };
+        requestAnimationFrame(s);
+      }, [e, r]),
+      s.jsxs('span', { className: 'font-mono font-bold', children: [i, l.toLocaleString(), t] })
+    );
+  },
+  l = ({
+    value: e,
+    size: a,
+    strokeWidth: i,
+    color: r,
+    backgroundColor: l = 'rgba(255, 255, 255, 0.1)',
+  }) => {
+    const n = (a - i) / 2,
+      o = 2 * n * Math.PI,
+      c = o - (e / 100) * o;
+    return s.jsxs('svg', {
+      width: a,
+      height: a,
+      className: 'transform -rotate-90',
+      children: [
+        s.jsx('circle', { cx: a / 2, cy: a / 2, r: n, stroke: l, strokeWidth: i, fill: 'none' }),
+        s.jsx(t.circle, {
+          cx: a / 2,
+          cy: a / 2,
+          r: n,
+          stroke: r,
+          strokeWidth: i,
+          fill: 'none',
+          strokeDasharray: o,
+          initial: { strokeDashoffset: o },
+          animate: { strokeDashoffset: c },
+          transition: { duration: 2, ease: 'easeInOut' },
+          strokeLinecap: 'round',
+        }),
+      ],
+    });
+  },
+  n = () => {
+    const [n, o] = a.useState(0),
+      { playHover: c } = i(),
+      d = a.useRef(null),
+      x = e(d),
+      m = [
+        {
+          label: 'Procesamiento Neuronal',
+          value: 98.7,
+          color: 'text-nexus-cyan-glow',
+          icon: '🧠',
+          trend: 'up',
+        },
+        {
+          label: 'Automatización Tareas',
+          value: 94.2,
+          color: 'text-nexus-violet-glow',
+          icon: '⚡',
+          trend: 'up',
+        },
+        {
+          label: 'Precisión Decisiones',
+          value: 99.1,
+          color: 'text-nexus-gold',
+          icon: '🎯',
+          trend: 'stable',
+        },
+        {
+          label: 'Reducción Costos',
+          value: 87.3,
+          color: 'text-green-400',
+          icon: '💰',
+          trend: 'up',
+        },
+        {
+          label: 'Satisfacción Cliente',
+          value: 96.8,
+          color: 'text-pink-400',
+          icon: '😊',
+          trend: 'up',
+        },
+      ],
+      u = [
+        { time: '00:00', requests: 1234, response: 0.12 },
+        { time: '04:00', requests: 892, response: 0.08 },
+        { time: '08:00', requests: 3456, response: 0.15 },
+        { time: '12:00', requests: 5678, response: 0.22 },
+        { time: '16:00', requests: 4321, response: 0.18 },
+        { time: '20:00', requests: 2345, response: 0.14 },
+        { time: '23:59', requests: 1567, response: 0.11 },
+      ];
+    return (
+      a.useEffect(() => {
+        const e = setInterval(() => {
+          o(e => (e + 1) % m.length);
+        }, 3e3);
+        return () => clearInterval(e);
+      }, []),
+      s.jsxs('div', {
+        ref: d,
+        className: 'py-20 px-6 bg-nexus-obsidian-deep relative overflow-hidden',
+        children: [
+          s.jsx('div', {
+            className: 'absolute inset-0 opacity-10',
+            children: s.jsx('div', {
+              className:
+                'absolute inset-0 bg-[linear-gradient(rgba(0,245,255,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(0,245,255,0.1)_1px,transparent_1px)] bg-[size:30px_30px]',
+            }),
+          }),
+          s.jsxs('div', {
+            className: 'max-w-7xl mx-auto relative z-10',
+            children: [
+              s.jsxs(t.div, {
+                initial: { opacity: 0, y: 30 },
+                animate: x ? { opacity: 1, y: 0 } : {},
+                transition: { duration: 0.8 },
+                className: 'text-center mb-16',
+                children: [
+                  s.jsx('h2', {
+                    className: 'text-4xl md:text-6xl font-black font-orbitron mb-6',
+                    children: s.jsx('span', {
+                      className:
+                        'bg-clip-text text-transparent bg-gradient-to-r from-nexus-cyan-glow to-nexus-violet-glow',
+                      children: 'MÉTRICAS EN TIEMPO REAL',
+                    }),
+                  }),
+                  s.jsx('p', {
+                    className: 'text-xl text-nexus-silver/80 max-w-3xl mx-auto',
+                    children:
+                      'Monitoreo continuo del rendimiento del sistema con análisis predictivo avanzado',
+                  }),
+                ],
+              }),
+              s.jsx('div', {
+                className: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16',
+                children: m.map((e, a) =>
+                  s.jsxs(
+                    t.div,
+                    {
+                      initial: { opacity: 0, scale: 0.8 },
+                      animate: x ? { opacity: 1, scale: 1 } : {},
+                      transition: { duration: 0.5, delay: 0.1 * a },
+                      whileHover: { scale: 1.05, y: -5 },
+                      onMouseEnter: c,
+                      className:
+                        'premium-glass p-6 rounded-2xl border transition-all duration-300 cursor-pointer ' +
+                        (n === a
+                          ? 'border-nexus-cyan/50 shadow-[0_0_30px_rgba(0,245,255,0.3)]'
+                          : 'border-white/10'),
+                      onClick: () => o(a),
+                      children: [
+                        s.jsxs('div', {
+                          className: 'flex items-center justify-between mb-4',
+                          children: [
+                            s.jsx('span', { className: 'text-3xl', children: e.icon }),
+                            s.jsxs('div', {
+                              className: 'flex items-center gap-2',
+                              children: [
+                                'up' === e.trend &&
+                                  s.jsx('span', {
+                                    className: 'text-green-400 text-sm',
+                                    children: '↑',
+                                  }),
+                                'down' === e.trend &&
+                                  s.jsx('span', {
+                                    className: 'text-red-400 text-sm',
+                                    children: '↓',
+                                  }),
+                                'stable' === e.trend &&
+                                  s.jsx('span', {
+                                    className: 'text-yellow-400 text-sm',
+                                    children: '→',
+                                  }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        s.jsx('h3', {
+                          className: `text-sm font-orbitron tracking-wider mb-2 ${e.color}`,
+                          children: e.label,
+                        }),
+                        s.jsx('div', {
+                          className: 'flex items-end gap-2 mb-4',
+                          children: s.jsx('span', {
+                            className: `text-3xl font-black ${e.color}`,
+                            children: x && s.jsx(r, { value: e.value, suffix: '%' }),
+                          }),
+                        }),
+                        s.jsx('div', {
+                          className: 'w-full bg-white/10 rounded-full h-2 overflow-hidden',
+                          children: s.jsx(t.div, {
+                            className:
+                              'h-full bg-gradient-to-r from-nexus-cyan to-nexus-violet rounded-full',
+                            initial: { width: 0 },
+                            animate: x ? { width: `${e.value}%` } : {},
+                            transition: { duration: 1.5, delay: 0.5 + 0.1 * a },
+                          }),
+                        }),
+                      ],
+                    },
+                    e.label
+                  )
+                ),
+              }),
+              s.jsxs(t.div, {
+                initial: { opacity: 0, y: 50 },
+                animate: x ? { opacity: 1, y: 0 } : {},
+                transition: { duration: 0.8, delay: 0.5 },
+                className: 'premium-glass p-8 rounded-3xl border border-white/10 mb-16',
+                children: [
+                  s.jsx('h3', {
+                    className: 'text-2xl font-bold font-orbitron mb-8 text-nexus-cyan-glow',
+                    children: 'RENDIMIENTO DEL SISTEMA - ÚLTIMAS 24 HORAS',
+                  }),
+                  s.jsxs('div', {
+                    className: 'grid grid-cols-1 lg:grid-cols-2 gap-8',
+                    children: [
+                      s.jsxs('div', {
+                        children: [
+                          s.jsx('h4', {
+                            className:
+                              'text-sm font-orbitron tracking-wider text-nexus-silver/60 mb-4',
+                            children: 'Solicitudes Procesadas',
+                          }),
+                          s.jsxs('div', {
+                            className: 'relative h-48',
+                            children: [
+                              s.jsx('div', {
+                                className:
+                                  'absolute bottom-0 left-0 right-0 flex items-end justify-between h-full gap-2',
+                                children: u.map((e, a) =>
+                                  s.jsx(
+                                    t.div,
+                                    {
+                                      className:
+                                        'flex-1 bg-gradient-to-t from-nexus-cyan to-nexus-violet rounded-t-lg relative group cursor-pointer',
+                                      initial: { height: 0 },
+                                      animate: x ? { height: (e.requests / 6e3) * 100 + '%' } : {},
+                                      transition: { duration: 0.8, delay: 0.8 + 0.05 * a },
+                                      onMouseEnter: c,
+                                      children: s.jsx('div', {
+                                        className:
+                                          'absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap',
+                                        children: e.requests.toLocaleString(),
+                                      }),
+                                    },
+                                    e.time
+                                  )
+                                ),
+                              }),
+                              s.jsx('div', {
+                                className:
+                                  'absolute -bottom-6 left-0 right-0 flex justify-between text-xs text-nexus-silver/40 font-mono',
+                                children: u.map(e =>
+                                  s.jsx(
+                                    'span',
+                                    { className: 'hidden sm:block', children: e.time },
+                                    e.time
+                                  )
+                                ),
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      s.jsxs('div', {
+                        children: [
+                          s.jsx('h4', {
+                            className:
+                              'text-sm font-orbitron tracking-wider text-nexus-silver/60 mb-4',
+                            children: 'Tiempo de Respuesta (ms)',
+                          }),
+                          s.jsx('div', {
+                            className: 'relative h-48',
+                            children: s.jsxs('svg', {
+                              className: 'w-full h-full',
+                              viewBox: '0 0 400 200',
+                              children: [
+                                s.jsx(t.path, {
+                                  d: `M ${u.map((e, s) => `${(s / (u.length - 1)) * 400},${200 - 500 * e.response}`).join(' L ')}`,
+                                  stroke: 'url(#gradient)',
+                                  strokeWidth: '3',
+                                  fill: 'none',
+                                  initial: { pathLength: 0 },
+                                  animate: x ? { pathLength: 1 } : {},
+                                  transition: { duration: 2, delay: 1 },
+                                }),
+                                s.jsx('defs', {
+                                  children: s.jsxs('linearGradient', {
+                                    id: 'gradient',
+                                    x1: '0%',
+                                    y1: '0%',
+                                    x2: '100%',
+                                    y2: '0%',
+                                    children: [
+                                      s.jsx('stop', { offset: '0%', stopColor: '#8A2BE2' }),
+                                      s.jsx('stop', { offset: '100%', stopColor: '#00F5FF' }),
+                                    ],
+                                  }),
+                                }),
+                              ],
+                            }),
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+              s.jsx(t.div, {
+                initial: { opacity: 0, scale: 0.9 },
+                animate: x ? { opacity: 1, scale: 1 } : {},
+                transition: { duration: 0.8, delay: 0.7 },
+                className: 'grid grid-cols-1 md:grid-cols-4 gap-6',
+                children: [
+                  { label: 'CPU', value: 67, color: 'from-nexus-cyan to-blue-500' },
+                  { label: 'Memory', value: 82, color: 'from-nexus-violet to-purple-500' },
+                  { label: 'Storage', value: 45, color: 'from-nexus-gold to-yellow-500' },
+                  { label: 'Network', value: 91, color: 'from-green-400 to-emerald-500' },
+                ].map((e, a) =>
+                  s.jsxs(
+                    'div',
+                    {
+                      className: 'premium-glass p-6 rounded-2xl border border-white/10',
+                      children: [
+                        s.jsxs('div', {
+                          className: 'flex items-center justify-between mb-4',
+                          children: [
+                            s.jsx('h4', {
+                              className:
+                                'text-sm font-orbitron tracking-wider text-nexus-silver/60',
+                              children: e.label,
+                            }),
+                            s.jsxs('div', {
+                              className: 'relative w-16 h-16',
+                              children: [
+                                s.jsx(l, {
+                                  value: e.value,
+                                  size: 64,
+                                  strokeWidth: 4,
+                                  color: `url(#gradient-${a})`,
+                                }),
+                                s.jsx('defs', {
+                                  children: s.jsxs('linearGradient', {
+                                    id: `gradient-${a}`,
+                                    x1: '0%',
+                                    y1: '0%',
+                                    x2: '100%',
+                                    y2: '0%',
+                                    children: [
+                                      s.jsx('stop', {
+                                        offset: '0%',
+                                        stopColor: e.color.split(' ')[0].replace('from-', ''),
+                                      }),
+                                      s.jsx('stop', {
+                                        offset: '100%',
+                                        stopColor: e.color.split(' ')[1].replace('to-', ''),
+                                      }),
+                                    ],
+                                  }),
+                                }),
+                                s.jsx('div', {
+                                  className: 'absolute inset-0 flex items-center justify-center',
+                                  children: s.jsx('span', {
+                                    className: 'text-xs font-bold text-white',
+                                    children: x && s.jsx(r, { value: e.value, suffix: '%' }),
+                                  }),
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        s.jsx('div', {
+                          className: 'w-full bg-white/10 rounded-full h-2',
+                          children: s.jsx(t.div, {
+                            className: `h-full bg-gradient-to-r ${e.color} rounded-full`,
+                            initial: { width: 0 },
+                            animate: x ? { width: `${e.value}%` } : {},
+                            transition: { duration: 1.5, delay: 1 + 0.1 * a },
+                          }),
+                        }),
+                      ],
+                    },
+                    e.label
+                  )
+                ),
+              }),
+            ],
+          }),
+        ],
+      })
+    );
+  };
+export { n as DataVisualization };

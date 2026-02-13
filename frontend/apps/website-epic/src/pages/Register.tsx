@@ -14,7 +14,7 @@ export const Register: React.FC = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,22 +54,24 @@ export const Register: React.FC = () => {
       >
         <div className="premium-glass p-8 rounded-2xl neon-border neon-glow-violet">
           <div className="text-center mb-8">
-             <motion.h1
-               className="text-3xl font-orbitron font-black text-white mb-2 tracking-wider"
-               initial={{ y: -20 }}
-               animate={{ y: 0 }}
-             >
-               NUEVA CUENTA
-             </motion.h1>
-             <p className="text-nexus-silver/60 text-sm">
-               Accede al sistema de inteligencia soberana
-             </p>
+            <motion.h1
+              className="text-3xl font-orbitron font-black text-white mb-2 tracking-wider"
+              initial={{ y: -20 }}
+              animate={{ y: 0 }}
+            >
+              NUEVA CUENTA
+            </motion.h1>
+            <p className="text-nexus-silver/60 text-sm">
+              Accede al sistema de inteligencia soberana
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div className="space-y-1">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Nombre</label>
+              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
+                Nombre
+              </label>
               <div className="relative group">
                 <User className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40 group-focus-within:text-nexus-cyan transition-colors" />
                 <input
@@ -86,7 +88,9 @@ export const Register: React.FC = () => {
 
             {/* Email */}
             <div className="space-y-1">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Email</label>
+              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
+                Email
+              </label>
               <div className="relative group">
                 <Mail className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40 group-focus-within:text-nexus-cyan transition-colors" />
                 <input
@@ -103,7 +107,9 @@ export const Register: React.FC = () => {
 
             {/* Password */}
             <div className="space-y-1">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Contraseña</label>
+              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
+                Contraseña
+              </label>
               <div className="relative group">
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40 group-focus-within:text-nexus-cyan transition-colors" />
                 <input
@@ -119,8 +125,10 @@ export const Register: React.FC = () => {
             </div>
 
             {/* Confirm Password */}
-             <div className="space-y-1">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Confirmar</label>
+            <div className="space-y-1">
+              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
+                Confirmar
+              </label>
               <div className="relative group">
                 <Lock className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40 group-focus-within:text-nexus-cyan transition-colors" />
                 <input
@@ -155,18 +163,22 @@ export const Register: React.FC = () => {
                 <span className="animate-pulse">PROCESANDO...</span>
               ) : (
                 <>
-                  REGISTRARSE <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  REGISTRARSE{' '}
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
             </button>
 
             <div className="text-center mt-6">
-                <p className="text-nexus-silver/40 text-xs">
-                    ¿Ya tienes cuenta?{' '}
-                    <Link to="/login" className="text-nexus-cyan hover:text-white transition-colors underline decoration-nexus-cyan/30 underline-offset-4">
-                        Iniciar Sesión
-                    </Link>
-                </p>
+              <p className="text-nexus-silver/40 text-xs">
+                ¿Ya tienes cuenta?{' '}
+                <Link
+                  to="/login"
+                  className="text-nexus-cyan hover:text-white transition-colors underline decoration-nexus-cyan/30 underline-offset-4"
+                >
+                  Iniciar Sesión
+                </Link>
+              </p>
             </div>
           </form>
         </div>

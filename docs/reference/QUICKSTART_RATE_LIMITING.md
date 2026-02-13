@@ -5,6 +5,7 @@ Esta guía te ayudará a verificar que el sistema de rate limiting está funcion
 ## Pre-requisitos
 
 1. **Redis debe estar corriendo**:
+
 ```bash
 # Opción 1: Docker Compose
 docker-compose up -d redis
@@ -17,6 +18,7 @@ redis-server
 ```
 
 2. **Verificar que Redis está corriendo**:
+
 ```bash
 # Desde PowerShell/CMD
 docker ps | Select-String redis
@@ -63,6 +65,7 @@ npm run dev
 ```
 
 Deberías ver en los logs:
+
 ```
 ✓ Connected to Redis
 ✓ Rate limiter using Redis store
@@ -78,6 +81,7 @@ npm run test:rate-limit
 ```
 
 Este script hará múltiples requests y mostrará:
+
 - Límites configurados
 - Requests restantes
 - Cuándo se bloquean las requests
@@ -85,6 +89,7 @@ Este script hará múltiples requests y mostrará:
 ### Opción 2: Prueba Manual con curl
 
 **Test General Rate Limit:**
+
 ```bash
 # PowerShell
 for ($i=1; $i -le 15; $i++) {
@@ -95,6 +100,7 @@ for ($i=1; $i -le 15; $i++) {
 ```
 
 **Test Auth Rate Limit:**
+
 ```bash
 # Bash/Git Bash
 for i in {1..12}; do
@@ -107,6 +113,7 @@ done
 ```
 
 **Test AI Rate Limit:**
+
 ```bash
 # PowerShell
 for ($i=1; $i -le 35; $i++) {
@@ -172,9 +179,11 @@ Los logs del servidor mostrarán:
 ### ❌ Problemas Comunes
 
 #### Redis no conecta
+
 **Síntoma**: Logs dicen "rate limiter using memory store"
 
 **Solución**:
+
 ```bash
 # Verificar que Redis esté corriendo
 docker ps | Select-String redis
@@ -187,18 +196,22 @@ docker-compose logs redis
 ```
 
 #### No se aplican límites
+
 **Síntoma**: Puedes hacer 1000+ requests sin bloqueo
 
 **Solución**:
+
 1. Verifica que `.env` tenga las variables correctas
 2. Reinicia el servidor después de cambiar `.env`
 3. Verifica que el middleware está aplicado en las rutas
 
 #### Límites muy estrictos
+
 **Síntoma**: Te bloquean con muy pocas requests
 
 **Solución**:
 Ajusta los valores en `.env`:
+
 ```env
 # Aumentar límites para desarrollo
 RATE_LIMIT_MAX=1000
@@ -230,6 +243,7 @@ curl -X GET http://localhost:5000/api/v1/auth/me \
 ### Test Dynamic Role Limiter
 
 Necesitas crear usuarios con diferentes roles y verificar que:
+
 - **Guest**: 30 req / 15 min
 - **Authenticated**: 100 req / 15 min
 - **Premium**: 300 req / 15 min
@@ -251,6 +265,7 @@ FLUSHDB
 ## Métricas de Éxito
 
 ✅ **Funcionando Correctamente**:
+
 - [ ] Redis conectado ("Rate limiter using Redis store" en logs)
 - [ ] Headers `RateLimit-*` presentes en respuestas
 - [ ] Status 429 después de exceder límites
@@ -278,8 +293,8 @@ Una vez que el rate limiting funciona:
 ## Soporte
 
 Si encuentras problemas:
+
 1. Revisa los logs del servidor
 2. Revisa los logs de Redis
 3. Verifica las variables de entorno
 4. Consulta la sección Troubleshooting en `RATE_LIMITING.md`
-

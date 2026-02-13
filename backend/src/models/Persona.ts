@@ -35,7 +35,7 @@ const PersonaSchema: Schema = new Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 // Indexes for search and marketplace filtering

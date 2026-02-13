@@ -33,16 +33,16 @@ export interface ElevenLabsGodModeConfig {
   };
   voice_settings: {
     // Configuración para voz española perfecta
-    stability: number;        // 0.0-1.0 - Consistencia de voz
+    stability: number; // 0.0-1.0 - Consistencia de voz
     similarity_boost: number; // 0.0-1.0 - Claridad y precisión
-    style: number;           // 0.0-1.0 - Expresividad y emoción
+    style: number; // 0.0-1.0 - Expresividad y emoción
     use_speaker_boost: boolean; // Mejora de calidad de audio
   };
   optimization: {
     // Optimización para uso gratuito
     output_format: 'mp3_22050_32'; // Balance calidad/tamaño
-    compression: 'high';       // Máxima compresión gratuita
-    caching: boolean;         // Cache inteligente
+    compression: 'high'; // Máxima compresión gratuita
+    caching: boolean; // Cache inteligente
     batch_processing: boolean; // Procesamiento por lotes
   };
   limits: {
@@ -60,8 +60,8 @@ export const elevenLabsGodModeConfig: ElevenLabsGodModeConfig = {
 
   model: {
     default: 'eleven_multilingual_v2', // Mejor para español
-    turbo: 'eleven_turbo_v2',          // Más rápido y económico
-    flash: 'eleven_flash_v2',          // Ultra rápido
+    turbo: 'eleven_turbo_v2', // Más rápido y económico
+    flash: 'eleven_flash_v2', // Ultra rápido
   },
 
   voices: {
@@ -132,24 +132,24 @@ export const elevenLabsGodModeConfig: ElevenLabsGodModeConfig = {
 
   // Configuración perfecta para voz española
   voice_settings: {
-    stability: 0.75,        // Alta consistencia para voz clara
+    stability: 0.75, // Alta consistencia para voz clara
     similarity_boost: 0.85, // Alta claridad y precisión en español
-    style: 0.65,           // Expresividad optimista pero elegante
+    style: 0.65, // Expresividad optimista pero elegante
     use_speaker_boost: true, // Máxima calidad de audio
   },
 
   optimization: {
     output_format: 'mp3_22050_32', // Balance perfecto calidad/tamaño
-    compression: 'high',             // Máxima compresión para plan gratuito
-    caching: true,                   // Cache inteligente para ahorrar caracteres
-    batch_processing: true,          // Procesar múltiples textos juntos
+    compression: 'high', // Máxima compresión para plan gratuito
+    caching: true, // Cache inteligente para ahorrar caracteres
+    batch_processing: true, // Procesar múltiples textos juntos
   },
 
   limits: {
-    characters_per_month: 10000,    // Límite plan gratuito
-    characters_per_request: 2500,   // Máximo por request
-    max_voice_clones: 0,            // No disponible en plan gratuito
-    custom_voices: 0,               // No disponibles en plan gratuito
+    characters_per_month: 10000, // Límite plan gratuito
+    characters_per_request: 2500, // Máximo por request
+    max_voice_clones: 0, // No disponible en plan gratuito
+    custom_voices: 0, // No disponibles en plan gratuito
   },
 };
 
@@ -165,7 +165,8 @@ export const elevenLabsUseCases = {
       use_speaker_boost: true,
     },
     prompts: {
-      greeting: '¡Hola! Soy Daniela, tu asistente inteligente de AIGestion. ¿En qué puedo ayudarte hoy?',
+      greeting:
+        '¡Hola! Soy Daniela, tu asistente inteligente de AIGestion. ¿En qué puedo ayudarte hoy?',
       help: 'Estoy aquí para ayudarte con gestión empresarial, análisis de datos y automatización.',
       thanks: '¡Gracias por usar AIGestion! Estoy aquí para lo que necesites.',
       error: 'Lo siento, ha ocurrido un error. Por favor, intenta nuevamente.',
@@ -242,11 +243,11 @@ export const elevenLabsFreeOptimization = {
   character_saving: {
     // Abreviaciones inteligentes
     abbreviations: {
-      'AIGestion': 'AI',
+      AIGestion: 'AI',
       'inteligencia artificial': 'IA',
-      'administración': 'admón',
-      'gestión': 'gest.',
-      'análisis': 'anál.',
+      administración: 'admón',
+      gestión: 'gest.',
+      análisis: 'anál.',
     },
 
     // Textos cortos y efectivos
@@ -263,13 +264,7 @@ export const elevenLabsFreeOptimization = {
     cache_duration: 3600, // 1 hora
 
     // Textos comunes para cache
-    common_texts: [
-      'Hola',
-      'Gracias',
-      'Adiós',
-      'Bienvenido',
-      '¿En qué puedo ayudarte?',
-    ],
+    common_texts: ['Hola', 'Gracias', 'Adiós', 'Bienvenido', '¿En qué puedo ayudarte?'],
   },
 
   // Procesamiento por lotes

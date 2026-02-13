@@ -22,7 +22,7 @@ export class SwarmProcessor {
   public static async process(job: Job): Promise<void> {
     const { objective, userId, missionId, context } = job.data;
     logger.info(
-      `[SwarmProcessor] Starting mission [${job.id} / ${missionId}] for user ${userId}: ${objective}`,
+      `[SwarmProcessor] Starting mission [${job.id} / ${missionId}] for user ${userId}: ${objective}`
     );
 
     try {
@@ -52,7 +52,7 @@ export class SwarmProcessor {
 
                 Respond only with the technical plan.
             `,
-        userId,
+        userId
       );
 
       await missionRepo.update(missionId, {
@@ -63,7 +63,7 @@ export class SwarmProcessor {
 
       // 2. Execution & Autonomous Research
       logger.info(
-        `[SwarmProcessor] [${job.id}] Phase 2: Executing strategy & autonomous research...`,
+        `[SwarmProcessor] [${job.id}] Phase 2: Executing strategy & autonomous research...`
       );
 
       let specializedResearch = '';
@@ -76,7 +76,7 @@ export class SwarmProcessor {
         lowerObjective.includes('competidor')
       ) {
         logger.info(
-          `[SwarmProcessor] [${job.id}] Autonomous decision: Triggering Swarm Engine Research.`,
+          `[SwarmProcessor] [${job.id}] Autonomous decision: Triggering Swarm Engine Research.`
         );
 
         try {
@@ -92,7 +92,7 @@ export class SwarmProcessor {
         } catch (researchError) {
           logger.warn(
             `[SwarmProcessor] [${job.id}] Autonomous research failed (using internal fallback):`,
-            researchError,
+            researchError
           );
           specializedResearch = 'Mission proceeded with internal knowledge context.';
         }
@@ -111,16 +111,18 @@ export class SwarmProcessor {
                 Generate a final summary of results and recommendations for the user.
                 Express why this mission strengthens the AIGestion ecosystem.
             `,
-        userId,
+        userId
       );
 
       // 3.1 Sovereign Guardrails: Anomaly Detection
       const estimatedTokens = (plan?.length || 0) / 4 + (report?.length || 0) / 4;
       if (estimatedTokens > TOKEN_SAFETY_LIMIT) {
-        logger.warn(`[SwarmProcessor] [${job.id}] Sovereign Guardrail triggered: Excessive resource usage detected (${estimatedTokens} tokens). Freezing mission.`);
-        await missionRepo.update(missionId, { 
-          status: MissionStatus.FAILED, 
-          error: 'SOVEREIGN_RESOURCE_GUARD: Excessive tokens detected. Mission frozen for audit.' 
+        logger.warn(
+          `[SwarmProcessor] [${job.id}] Sovereign Guardrail triggered: Excessive resource usage detected (${estimatedTokens} tokens). Freezing mission.`
+        );
+        await missionRepo.update(missionId, {
+          status: MissionStatus.FAILED,
+          error: 'SOVEREIGN_RESOURCE_GUARD: Excessive tokens detected. Mission frozen for audit.',
         });
         throw new Error('SOVEREIGN_GUARD_FREEZE');
       }
@@ -156,7 +158,7 @@ export class SwarmProcessor {
         NotificationType.MISSION_COMPLETED,
         'Mission Completed',
         `Mission "${objective}" completed successfully.`,
-        { missionId, resultPreview: report.substring(0, 100) },
+        { missionId, resultPreview: report.substring(0, 100) }
       );
 
       logger.info(`[SwarmProcessor] Mission [${job.id}] completed successfully.`);
@@ -188,12 +190,12 @@ export class SwarmProcessor {
           `Mission "${objective}" failed: ${
             error instanceof Error ? error.message : 'Unknown error'
           }`,
-          { missionId, error: error instanceof Error ? error.message : 'Unknown error' },
+          { missionId, error: error instanceof Error ? error.message : 'Unknown error' }
         );
       } catch (repoError) {
         logger.error(
           '[SwarmProcessor] Failed to update mission failure status/notification:',
-          repoError,
+          repoError
         );
       }
 

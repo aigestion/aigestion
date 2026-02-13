@@ -112,7 +112,7 @@ Verify that the NEXUS V1 system (after consolidation and merge) meets the follow
 
 ### 3.2 Kubernetes Configuration
 
-- [ ] Validate k8s/*.yaml files
+- [ ] Validate k8s/\*.yaml files
 - [ ] Check resource limits and requests
 - [ ] Verify Pod security policies
 - [ ] Check ConfigMaps and Secrets
@@ -301,7 +301,7 @@ npm run verify-config
 ✅ System deemed **Production Ready** when:
 
 - [ ] 0 high/critical security vulnerabilities
-- [ ] >80% test coverage for critical paths
+- [ ] > 80% test coverage for critical paths
 - [ ] All linting errors resolved
 - [ ] All infrastructure validations pass
 - [ ] Documentation complete and up-to-date
@@ -342,4 +342,3 @@ npm run verify-config
 **Audit Version:** 1.0
 **Status:** Ready for Execution
 **Prepared by:** NEXUS V1 Audit System
-

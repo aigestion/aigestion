@@ -31,10 +31,12 @@ ADMIN_EMAIL = admin@aigestion.net
 ## ⚡ PASO 2: CONFIGURAR GOOGLE CLOUD (10 MINUTOS)
 
 ### 2.1 Crear Proyecto
+
 - Ve a: https://console.cloud.google.com/
 - Crea proyecto: `aigestion-prod`
 
 ### 2.2 Habilitar APIs
+
 ```bash
 gcloud services enable run.googleapis.com
 gcloud services enable aiplatform.googleapis.com
@@ -43,6 +45,7 @@ gcloud services enable artifactregistry.googleapis.com
 ```
 
 ### 2.3 Crear Service Account
+
 ```bash
 gcloud iam service-accounts create aigestion-prod --display-name="AIGestion Professional"
 
@@ -61,6 +64,7 @@ gcloud iam service-accounts keys create key.json \
 ## ⚡ PASO 3: ACTIVAR GITHUB PAGES (1 MINUTO)
 
 **URL**: https://github.com/aigestion/aigestion/settings/pages
+
 - Source: "GitHub Actions"
 - Custom domain: `aigestion.net` (después del primer despliegue)
 
@@ -74,14 +78,17 @@ git push
 ## 🎯 RESULTADOS ESPERADOS
 
 ### ✅ Después de 5 minutos:
+
 - GitHub Pages: https://aigestion.github.io/aigestion/
 - Website funcional con todos los dashboards accesibles
 
 ### ✅ Después de 10 minutos:
+
 - Dominio personalizado: https://aigestion.net
 - Todos los workflows ejecutándose exitosamente
 
 ### ✅ Después de 15 minutos:
+
 - Monitoreo interno activo
 - Alerts configuradas
 - Backup automático programado
@@ -89,6 +96,7 @@ git push
 ## 🚨 VERIFICACIÓN
 
 ### URLs a probar:
+
 1. **Website**: https://aigestion.github.io/aigestion/
 2. **Dashboards**: Botones "🎛️ Admin", "👤 Client", "🚀 Demo"
 3. **Health Check**: /health/index.html
@@ -97,10 +105,12 @@ git push
 ## 📞 SOPORTE
 
 Si algo falla:
+
 1. Revisa los secrets en GitHub
 2. Verifica la configuración de Google Cloud
 3. Revisa los logs en GitHub Actions
 4. Contacta: admin@aigestion.net
 
 ---
+
 **⚡ EJECUTA ESTOS PASOS AHORA PARA DESPLIEGUE COMPLETO!**

@@ -34,7 +34,7 @@ export class JobQueue {
   public async addJob<T extends JobName>(
     name: T,
     data: IJobPayloads[T],
-    opts?: any,
+    opts?: any
   ): Promise<void> {
     const queue = this.queues.get(name as string);
     if (!queue) {

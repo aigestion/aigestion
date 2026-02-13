@@ -15,9 +15,9 @@ export const NexusGuardianWidget: React.FC = () => {
       const newMem = Math.floor(Math.random() * (45 - 38) + 38);
       setCpuLoad(newCpu);
       setMemoryLoad(newMem);
-      
+
       // Dynamic sanity score based on load
-      const sanity = 100 - (newCpu / 4) - (newMem / 8);
+      const sanity = 100 - newCpu / 4 - newMem / 8;
       setSanityScore(Math.floor(sanity));
     }, 3000);
     return () => clearInterval(interval);
@@ -44,7 +44,9 @@ export const NexusGuardianWidget: React.FC = () => {
           </div>
         </div>
         <div className="flex flex-col items-end">
-          <span className={`text-xl font-orbitron font-black ${sanityScore > 80 ? 'text-nexus-cyan-glow' : 'text-yellow-400'}`}>
+          <span
+            className={`text-xl font-orbitron font-black ${sanityScore > 80 ? 'text-nexus-cyan-glow' : 'text-yellow-400'}`}
+          >
             {sanityScore}%
           </span>
           <span className="text-[8px] text-nexus-silver/40 uppercase tracking-tighter">
@@ -57,7 +59,9 @@ export const NexusGuardianWidget: React.FC = () => {
         {/* CPU Tracker */}
         <div className="space-y-1">
           <div className="flex justify-between text-[10px] font-orbitron text-nexus-silver/50 uppercase">
-            <span className="flex items-center gap-2"><Cpu className="w-3 h-3" /> CPU LOAD</span>
+            <span className="flex items-center gap-2">
+              <Cpu className="w-3 h-3" /> CPU LOAD
+            </span>
             <span>{cpuLoad}%</span>
           </div>
           <div className="h-1 bg-white/5 rounded-full overflow-hidden">
@@ -71,7 +75,9 @@ export const NexusGuardianWidget: React.FC = () => {
         {/* Memory Tracker */}
         <div className="space-y-1">
           <div className="flex justify-between text-[10px] font-orbitron text-nexus-silver/50 uppercase">
-            <span className="flex items-center gap-2"><Activity className="w-3 h-3" /> MEMORY</span>
+            <span className="flex items-center gap-2">
+              <Activity className="w-3 h-3" /> MEMORY
+            </span>
             <span>{memoryLoad}%</span>
           </div>
           <div className="h-1 bg-white/5 rounded-full overflow-hidden">
@@ -94,7 +100,7 @@ export const NexusGuardianWidget: React.FC = () => {
             RITUAL RÁPIDO
           </span>
         </motion.button>
-        
+
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}

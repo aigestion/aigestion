@@ -72,7 +72,7 @@ export const getRedisClient = (): RedisClientType => {
           reconnectStrategy: retries => {
             if (retries > 50) {
               logger.error(
-                `Redis reconnection GAVE UP after 50 attempts. Manual intervention required.`,
+                `Redis reconnection GAVE UP after 50 attempts. Manual intervention required.`
               );
               return new Error('Redis reconnection failed');
             }
@@ -100,7 +100,7 @@ export const getRedisClient = (): RedisClientType => {
         try {
           await redisClient?.connect();
           logger.info(
-            clusterNodes ? 'Connected to Redis Cluster' : 'Connected to Redis Standalone',
+            clusterNodes ? 'Connected to Redis Cluster' : 'Connected to Redis Standalone'
           );
         } catch (err) {
           logger.error(err, 'Failed to connect to Redis:');

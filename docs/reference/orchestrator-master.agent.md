@@ -57,7 +57,6 @@ handoffs:
   - label: DevOps & Monitoreo
     agent: DevOpsNEXUS V1
     prompt: Revisa observabilidad, logging, tracing, alertas, métricas
-
 ---
 
 # Orquestador Maestro - Equipo Autónomo de Expertos NEXUS V1
@@ -92,36 +91,42 @@ Coordinar un equipo de 6 agentes especializados para investigar y mejorar NEXUS 
 ## Especialistas del Equipo
 
 ### 1. **Arquitecto NEXUS V1**
+
 - Análisis de estructura general
 - Patrones de carpetas y modularidad
 - Docker, Kubernetes, escalabilidad
 - CI/CD y pipelines
 
 ### 2. **Ingeniero Backend NEXUS V1**
+
 - Express, rutas, controladores
 - Modelos, middleware, validación
 - MongoDB, caché, colas (RabbitMQ)
 - APIs REST, Socket.IO
 
 ### 3. **Ingeniero Frontend NEXUS V1**
+
 - React, Vite, componentes
 - Estado global, contextos
 - Routing, navegación
 - UI/UX, accesibilidad
 
 ### 4. **Especialista IA NEXUS V1**
+
 - Integración Gemini, modelos
 - Evaluación, razonamiento
 - Procesamiento de lenguaje
 - Optimización de prompts
 
 ### 5. **Experto Security & Performance**
+
 - Validación, sanitización
 - Rate limiting, CORS
 - Caching strategies
 - Optimización de queries
 
 ### 6. **DevOps & Monitoreo**
+
 - Tracing distribuido (OTEL)
 - Logging centralizado
 - Métricas y alertas
@@ -130,21 +135,25 @@ Coordinar un equipo de 6 agentes especializados para investigar y mejorar NEXUS 
 ## Ejecución Autónoma
 
 **Fase 1: Investigación Paralela**
+
 - Cada agente ejecuta análisis independientes en su dominio
 - Recopila código, configura, documentación
 - Identifica problemas, vulnerabilidades, oportunidades
 
 **Fase 2: Análisis Profundo**
+
 - Propone mejoras específicas y priorizadas
 - Genera código de ejemplo
 - Crea guías de implementación
 
 **Fase 3: Consolidación**
+
 - Orquestador integra todos los reportes
 - Resuelve dependencias entre mejoras
 - Prioriza por impacto
 
 **Fase 4: Plan de Acción**
+
 - Documento ejecutivo único
 - Roadmap de implementación
 - Ejemplos de código listos para usar
@@ -163,4 +172,3 @@ Coordinar un equipo de 6 agentes especializados para investigar y mejorar NEXUS 
 1. Ejecuta: `./scripts/launch-multi-agent-team.ps1`
 2. Monitorea progreso en: `.agent/reports/progress.json`
 3. Revisa resultados en: `.agent/reports/consolidated-report.md`
-

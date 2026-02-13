@@ -1,6 +1,7 @@
 # 🏗️ AIGestion Architecture Documentation
 
 ## 📋 Table of Contents
+
 - [System Overview](#system-overview)
 - [Architecture Patterns](#architecture-patterns)
 - [Component Diagram](#component-diagram)
@@ -16,6 +17,7 @@
 AIGestion is a **hyper-automated AI orchestration platform** built with a microservices architecture pattern.
 
 ### Core Components
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Frontend UI    │    │   Backend API    │    │   AI Engine     │
@@ -40,12 +42,14 @@ AIGestion is a **hyper-automated AI orchestration platform** built with a micros
 ## 🏛️ Architecture Patterns
 
 ### 1. **Microservices Pattern**
+
 - **Frontend**: React-based UI with multiple specialized apps
 - **Backend**: Node.js/TypeScript API Gateway
 - **AI Engine**: Python-based ML services
 - **Shared Packages**: Common utilities and types
 
 ### 2. **Event-Driven Architecture**
+
 ```typescript
 // Event Bus Pattern
 interface EventBus {
@@ -64,6 +68,7 @@ type UserInteractionEvent = {
 ```
 
 ### 3. **CQRS Pattern**
+
 ```typescript
 // Command Query Responsibility Segregation
 interface CommandHandler<T extends Command> {
@@ -76,6 +81,7 @@ interface QueryHandler<T extends Query, R> {
 ```
 
 ### 4. **Repository Pattern**
+
 ```typescript
 // Abstract Repository
 interface Repository<T, ID> {
@@ -91,6 +97,7 @@ interface Repository<T, ID> {
 ## 🔄 Data Flow Architecture
 
 ### Request Flow
+
 ```
 1. User Request → Frontend App
 2. Frontend → API Gateway (Backend)
@@ -102,6 +109,7 @@ interface Repository<T, ID> {
 ```
 
 ### AI Processing Flow
+
 ```
 1. User Input → Frontend
 2. Frontend → Backend API
@@ -113,6 +121,7 @@ interface Repository<T, ID> {
 ```
 
 ### Background Processing
+
 ```
 1. Events → Message Queue (BullMQ)
 2. Queue → Worker Processes
@@ -127,6 +136,7 @@ interface Repository<T, ID> {
 ## 🛠️ Technology Stack Details
 
 ### Frontend Layer
+
 ```typescript
 // Core Technologies
 {
@@ -148,6 +158,7 @@ interface Repository<T, ID> {
 ```
 
 ### Backend Layer
+
 ```typescript
 // Core Technologies
 {
@@ -170,6 +181,7 @@ interface Repository<T, ID> {
 ```
 
 ### AI/ML Layer
+
 ```python
 # Core Technologies
 {
@@ -182,6 +194,7 @@ interface Repository<T, ID> {
 ```
 
 ### Data Layer
+
 ```typescript
 // Primary Databases
 {
@@ -198,6 +211,7 @@ interface Repository<T, ID> {
 ## 🔐 Security Architecture
 
 ### Authentication Flow
+
 ```
 1. User Login → Frontend
 2. Frontend → Auth Service
@@ -207,27 +221,29 @@ interface Repository<T, ID> {
 ```
 
 ### Security Layers
+
 ```typescript
 // Security Middleware Stack
 interface SecurityLayers {
-  authentication: "JWT + OAuth2";
-  authorization: "RBAC + ABAC";
-  rateLimit: "Sliding Window Algorithm";
-  encryption: "AES-256 + TLS 1.3";
-  audit: "Comprehensive Logging";
-  monitoring: "Real-time Threat Detection";
+  authentication: 'JWT + OAuth2';
+  authorization: 'RBAC + ABAC';
+  rateLimit: 'Sliding Window Algorithm';
+  encryption: 'AES-256 + TLS 1.3';
+  audit: 'Comprehensive Logging';
+  monitoring: 'Real-time Threat Detection';
 }
 ```
 
 ### Data Protection
+
 ```typescript
 // Encryption Strategy
 interface DataProtection {
-  atRest: "AES-256 encryption";
-  inTransit: "TLS 1.3";
-  keys: "KMS rotation";
-  pii: "Field-level encryption";
-  backup: "Encrypted snapshots";
+  atRest: 'AES-256 encryption';
+  inTransit: 'TLS 1.3';
+  keys: 'KMS rotation';
+  pii: 'Field-level encryption';
+  backup: 'Encrypted snapshots';
 }
 ```
 
@@ -236,6 +252,7 @@ interface DataProtection {
 ## 📈 Scalability Design
 
 ### Horizontal Scaling
+
 ```yaml
 # Kubernetes Deployment Strategy
 apiVersion: apps/v1
@@ -250,36 +267,38 @@ spec:
   template:
     spec:
       containers:
-      - name: backend
-        image: aigestion/backend:latest
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: backend
+          image: aigestion/backend:latest
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
 ```
 
 ### Caching Strategy
+
 ```typescript
 // Multi-Level Caching
 interface CacheStrategy {
-  level1: "Browser Cache (1 hour)";
-  level2: "CDN Cache (24 hours)";
-  level3: "Redis Cache (15 minutes)";
-  level4: "Database Query Cache";
+  level1: 'Browser Cache (1 hour)';
+  level2: 'CDN Cache (24 hours)';
+  level3: 'Redis Cache (15 minutes)';
+  level4: 'Database Query Cache';
 }
 ```
 
 ### Load Balancing
+
 ```typescript
 // Load Balancer Configuration
 interface LoadBalancerConfig {
-  algorithm: "Round Robin + Health Checks";
-  stickySessions: "User-based routing";
-  failover: "Automatic failover";
-  healthChecks: "HTTP + TCP checks";
+  algorithm: 'Round Robin + Health Checks';
+  stickySessions: 'User-based routing';
+  failover: 'Automatic failover';
+  healthChecks: 'HTTP + TCP checks';
 }
 ```
 
@@ -288,6 +307,7 @@ interface LoadBalancerConfig {
 ## 🔧 Development Architecture
 
 ### Monorepo Structure
+
 ```
 aigestion/
 ├── backend/              # Node.js API
@@ -302,6 +322,7 @@ aigestion/
 ```
 
 ### Build System
+
 ```json
 // Turbo Configuration
 {
@@ -322,22 +343,23 @@ aigestion/
 ```
 
 ### Development Workflow
+
 ```yaml
 # Git Workflow
 branches:
-  main: "Production deployments"
-  develop: "Integration testing"
-  feature/*: "Feature development"
-  hotfix/*: "Emergency fixes"
+  main: 'Production deployments'
+  develop: 'Integration testing'
+  feature/*: 'Feature development'
+  hotfix/*: 'Emergency fixes'
 
 # CI/CD Pipeline
 stages:
-  - "lint + format"
-  - "unit tests"
-  - "integration tests"
-  - "security scan"
-  - "build"
-  - "deploy"
+  - 'lint + format'
+  - 'unit tests'
+  - 'integration tests'
+  - 'security scan'
+  - 'build'
+  - 'deploy'
 ```
 
 ---
@@ -345,31 +367,34 @@ stages:
 ## 📊 Monitoring & Observability
 
 ### Metrics Collection
+
 ```typescript
 // Prometheus Metrics
 interface Metrics {
-  http: "Request count, latency, error rate";
-  business: "User interactions, conversions";
-  system: "CPU, memory, disk usage";
-  custom: "AI model performance";
+  http: 'Request count, latency, error rate';
+  business: 'User interactions, conversions';
+  system: 'CPU, memory, disk usage';
+  custom: 'AI model performance';
 }
 ```
 
 ### Logging Strategy
+
 ```typescript
 // Structured Logging
 interface LogStructure {
-  timestamp: "ISO 8601";
-  level: "DEBUG | INFO | WARN | ERROR";
-  service: "Service name";
-  traceId: "Request correlation";
-  userId: "User identifier";
-  message: "Log message";
-  metadata: "Contextual data";
+  timestamp: 'ISO 8601';
+  level: 'DEBUG | INFO | WARN | ERROR';
+  service: 'Service name';
+  traceId: 'Request correlation';
+  userId: 'User identifier';
+  message: 'Log message';
+  metadata: 'Contextual data';
 }
 ```
 
 ### Alerting
+
 ```yaml
 # Alert Rules
 groups:
@@ -381,7 +406,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "High error rate detected"
+          summary: 'High error rate detected'
 
       - alert: HighLatency
         expr: p95_latency > 1000
@@ -395,25 +420,27 @@ groups:
 ## 🚀 Performance Optimization
 
 ### Frontend Optimization
+
 ```typescript
 // Performance Strategies
 interface FrontendOptimization {
-  codeSplitting: "Route-based + component-based";
-  lazyLoading: "Dynamic imports";
-  caching: "Service worker + HTTP cache";
-  compression: "Brotli + Gzip";
-  images: "WebP + responsive loading";
+  codeSplitting: 'Route-based + component-based';
+  lazyLoading: 'Dynamic imports';
+  caching: 'Service worker + HTTP cache';
+  compression: 'Brotli + Gzip';
+  images: 'WebP + responsive loading';
 }
 ```
 
 ### Backend Optimization
+
 ```typescript
 // Backend Performance
 interface BackendOptimization {
-  database: "Connection pooling + indexing";
-  caching: "Multi-level cache strategy";
-  queries: "Query optimization + pagination";
-  concurrency: "Worker threads + async processing";
+  database: 'Connection pooling + indexing';
+  caching: 'Multi-level cache strategy';
+  queries: 'Query optimization + pagination';
+  concurrency: 'Worker threads + async processing';
 }
 ```
 
@@ -422,31 +449,33 @@ interface BackendOptimization {
 ## 🔄 Deployment Architecture
 
 ### Environments
+
 ```yaml
 environments:
   development:
-    - "Local development"
-    - "Feature branches"
+    - 'Local development'
+    - 'Feature branches'
 
   staging:
-    - "Integration testing"
-    - "Performance testing"
-    - "Security testing"
+    - 'Integration testing'
+    - 'Performance testing'
+    - 'Security testing'
 
   production:
-    - "Blue-green deployment"
-    - "Canary releases"
-    - "Multi-region"
+    - 'Blue-green deployment'
+    - 'Canary releases'
+    - 'Multi-region'
 ```
 
 ### Infrastructure as Code
+
 ```typescript
 // Terraform Structure
 interface Infrastructure {
-  network: "VPC + subnets + security groups";
-  compute: "Kubernetes cluster + auto-scaling";
-  storage: "Databases + object storage";
-  monitoring: "Prometheus + Grafana + alerting";
+  network: 'VPC + subnets + security groups';
+  compute: 'Kubernetes cluster + auto-scaling';
+  storage: 'Databases + object storage';
+  monitoring: 'Prometheus + Grafana + alerting';
 }
 ```
 
@@ -455,18 +484,21 @@ interface Infrastructure {
 ## 📚 Best Practices
 
 ### Code Quality
+
 - ✅ **TypeScript strict mode**
 - ✅ **ESLint + Prettier**
 - ✅ **SonarQube quality gates**
 - ✅ **Automated testing**
 
 ### Security
+
 - ✅ **Zero-trust architecture**
 - ✅ **Regular security audits**
 - ✅ **Dependency scanning**
 - ✅ **Penetration testing**
 
 ### Performance
+
 - ✅ **Performance budgets**
 - ✅ **Real user monitoring**
 - ✅ **Load testing**
@@ -477,6 +509,7 @@ interface Infrastructure {
 ## 🎯 Future Architecture Evolution
 
 ### Planned Enhancements
+
 1. **Event Sourcing** for audit trails
 2. **CQRS** for complex queries
 3. **Microservices** decomposition
@@ -484,6 +517,7 @@ interface Infrastructure {
 5. **AI Model** optimization
 
 ### Technology Roadmap
+
 ```mermaid
 gantt
     title AIGestion Architecture Evolution
@@ -506,21 +540,24 @@ gantt
 ## 📞 Architecture Decision Records (ADRs)
 
 ### ADR-001: Monorepo Strategy
+
 **Status**: Accepted
 **Decision**: Use pnpm workspaces with Turbo for monorepo management
 **Rationale**: Simplifies dependency management and build orchestration
 
 ### ADR-002: Database Selection
+
 **Status**: Accepted
 **Decision**: MongoDB for documents, PostgreSQL for transactions
 **Rationale**: Polyglot persistence for optimal performance
 
 ### ADR-003: AI Architecture
+
 **Status**: Accepted
 **Decision**: Separate Python service for AI processing
 **Rationale**: Isolation of AI dependencies and optimized performance
 
 ---
 
-*Last Updated: 2025-01-25*
-*Architecture Version: 2.0.0-GOLD*
+_Last Updated: 2025-01-25_
+_Architecture Version: 2.0.0-GOLD_

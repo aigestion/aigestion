@@ -150,7 +150,8 @@ export const colors = {
     accent: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
     success: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
     dark: 'linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #16213e 100%)',
-    cosmic: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)',
+    cosmic:
+      'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)',
   },
 
   // Gaming Theme Colors
@@ -171,44 +172,44 @@ export const colors = {
       warning: '#ffaa00',
     },
   },
-}
+};
 
 // Color utilities
 export const colorUtils = {
   // Get color by path
   getColor: (path: string): string => {
-    const keys = path.split('.')
-    let value: any = colors
-    
+    const keys = path.split('.');
+    let value: any = colors;
+
     for (const key of keys) {
-      value = value[key]
-      if (!value) return '#000000'
+      value = value[key];
+      if (!value) return '#000000';
     }
-    
-    return value
+
+    return value;
   },
 
   // Get contrast color
   getContrast: (bgColor: string): string => {
     // Simple contrast calculation
-    const hex = bgColor.replace('#', '')
-    const r = parseInt(hex.substr(0, 2), 16)
-    const g = parseInt(hex.substr(2, 2), 16)
-    const b = parseInt(hex.substr(4, 2), 16)
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000
-    
-    return brightness > 128 ? '#000000' : '#ffffff'
+    const hex = bgColor.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    return brightness > 128 ? '#000000' : '#ffffff';
   },
 
   // Check if color is light
   isLight: (color: string): boolean => {
-    const hex = color.replace('#', '')
-    const r = parseInt(hex.substr(0, 2), 16)
-    const g = parseInt(hex.substr(2, 2), 16)
-    const b = parseInt(hex.substr(4, 2), 16)
-    const brightness = (r * 299 + g * 587 + b * 114) / 1000
-    
-    return brightness > 128
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+
+    return brightness > 128;
   },
 
   // Generate color palette variations
@@ -218,37 +219,46 @@ export const colorUtils = {
       light: colorUtils.lighten(baseColor, 20),
       base: baseColor,
       dark: colorUtils.darken(baseColor, 20),
-    }
+    };
   },
 
   // Lighten color
   lighten: (color: string, percent: number): string => {
-    const num = parseInt(color.replace('#', ''), 16)
-    const amt = Math.round(2.55 * percent)
-    const R = (num >> 16) + amt
-    const G = (num >> 8 & 0x00FF) + amt
-    const B = (num & 0x0000FF) + amt
-    
-    return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-      (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-      (B < 255 ? B < 1 ? 0 : B : 255))
-      .toString(16).slice(1)
+    const num = parseInt(color.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) + amt;
+    const G = ((num >> 8) & 0x00ff) + amt;
+    const B = (num & 0x0000ff) + amt;
+
+    return (
+      '#' +
+      (
+        0x1000000 +
+        (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+        (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+        (B < 255 ? (B < 1 ? 0 : B) : 255)
+      )
+        .toString(16)
+        .slice(1)
+    );
   },
 
   // Darken color
   darken: (color: string, percent: number): string => {
-    const num = parseInt(color.replace('#', ''), 16)
-    const amt = Math.round(2.55 * percent)
-    const R = (num >> 16) - amt
-    const G = (num >> 8 & 0x00FF) - amt
-    const B = (num & 0x0000FF) - amt
-    
-    return '#' + (0x1000000 + (R > 0 ? R : 0) * 0x10000 +
-      (G > 0 ? G : 0) * 0x100 +
-      (B > 0 ? B : 0))
-      .toString(16).slice(1)
+    const num = parseInt(color.replace('#', ''), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) - amt;
+    const G = ((num >> 8) & 0x00ff) - amt;
+    const B = (num & 0x0000ff) - amt;
+
+    return (
+      '#' +
+      (0x1000000 + (R > 0 ? R : 0) * 0x10000 + (G > 0 ? G : 0) * 0x100 + (B > 0 ? B : 0))
+        .toString(16)
+        .slice(1)
+    );
   },
-}
+};
 
 // CSS Custom Properties
 export const cssColors = {
@@ -283,6 +293,6 @@ export const cssColors = {
     '--gradient-dark': colors.gradients.dark,
     '--gradient-cosmic': colors.gradients.cosmic,
   },
-}
+};
 
-export default colors
+export default colors;

@@ -44,7 +44,7 @@ describe('ErrorHandler Middleware', () => {
           message: 'Test Error',
           requestId: 'test-request-id',
         }),
-      }),
+      })
     );
   });
 
@@ -59,7 +59,7 @@ describe('ErrorHandler Middleware', () => {
         error: expect.objectContaining({
           code: 'NOT_FOUND',
         }),
-      }),
+      })
     );
   });
 

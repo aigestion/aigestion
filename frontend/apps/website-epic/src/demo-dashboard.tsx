@@ -1,9 +1,9 @@
-import React from 'react'
-import { createRoot } from 'react-dom/client'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter } from 'react-router-dom'
-import { DemoDashboard } from './components/DemoDashboard'
-import './index.css'
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { BrowserRouter } from 'react-router-dom';
+import { DemoDashboard } from './components/DemoDashboard';
+import './index.css';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,7 +12,7 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
     },
   },
-})
+});
 
 createRoot(document.getElementById('demo-root')!).render(
   <React.StrictMode>
@@ -21,5 +21,5 @@ createRoot(document.getElementById('demo-root')!).render(
         <DemoDashboard />
       </BrowserRouter>
     </QueryClientProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

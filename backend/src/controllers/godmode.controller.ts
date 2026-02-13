@@ -12,7 +12,7 @@ import { logger } from '../utils/logger';
 @injectable()
 export class GodModeController {
   constructor(
-    @inject(TYPES.GodNotificationService) private notificationService: GodNotificationService,
+    @inject(TYPES.GodNotificationService) private notificationService: GodNotificationService
   ) {}
 
   // PROJECTS
@@ -63,7 +63,7 @@ export class GodModeController {
         query,
         embedding,
         threshold || 0.5,
-        limit || 5,
+        limit || 5
       );
 
       res.json({ success: true, data: results });
@@ -113,7 +113,6 @@ export class GodModeController {
         .order('created_at', { ascending: false })
         .limit(50);
 
-
       if (error) throw error;
       res.json({ success: true, data });
     } catch (error: any) {
@@ -129,7 +128,7 @@ export class GodModeController {
       await this.notificationService.broadcastGodAlert(
         title || 'Prueba de Sistema Soberano',
         message || 'Este es un mensaje de prueba verificado por Daniela.',
-        urgency || 'medium',
+        urgency || 'medium'
       );
 
       res.json({ success: true, message: 'Broadcast successful' });

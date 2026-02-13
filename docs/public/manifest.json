@@ -69,27 +69,21 @@
       "short_name": "Dashboard",
       "description": "Acceso rápido al panel principal",
       "url": "/dashboard",
-      "icons": [
-        { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
-      ]
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "War Room",
       "short_name": "War Room",
       "description": "Centro de control estratégico",
       "url": "/war-room",
-      "icons": [
-        { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
-      ]
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
     },
     {
       "name": "IA Assistant",
       "short_name": "Daniela",
       "description": "Asistente de IA conversacional",
       "url": "/daniela",
-      "icons": [
-        { "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }
-      ]
+      "icons": [{ "src": "/icons/icon-96x96.png", "sizes": "96x96", "type": "image/png" }]
     }
   ],
   "screenshots": [

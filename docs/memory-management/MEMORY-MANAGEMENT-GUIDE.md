@@ -3,6 +3,7 @@
 ## 🚀 AUTOMATED MEMORY MANAGEMENT SYSTEM
 
 ### 📁 Files Created:
+
 - `scripts/memory-monitor.ps1` - Real-time memory monitoring
 - `scripts/auto-memory-manager.ps1` - Automatic memory management
 - `scripts/memory-commands.ps1` - Quick command aliases
@@ -13,11 +14,13 @@
 ## 🎯 QUICK START
 
 ### 1. Load Memory Commands (Run once per session)
+
 ```powershell
 Import-Module .\scripts\memory-commands.ps1
 ```
 
 ### 2. Monitor Memory Usage
+
 ```powershell
 # One-time check
 mem
@@ -30,6 +33,7 @@ memkill -ThresholdMB 300
 ```
 
 ### 3. Auto Memory Management
+
 ```powershell
 # Monitor only (safe mode)
 Start-AutoMemoryManager -MaxMemoryPerProcess 300 -MaxTotalMemory 1024
@@ -39,6 +43,7 @@ Start-AutoMemoryManager -EnableAutoKill -MaxMemoryPerProcess 300
 ```
 
 ### 4. Setup Scheduled Task
+
 ```powershell
 # Create monitoring task (safe)
 .\scripts\setup-memory-task.ps1 -CreateTask
@@ -51,11 +56,13 @@ Start-AutoMemoryManager -EnableAutoKill -MaxMemoryPerProcess 300
 ```
 
 ### 5. Web Dashboard
+
 Open `dashboard/memory-dashboard.html` in your browser for real-time monitoring
 
 ## ⚙️ CONFIGURATION
 
 Edit `config/memory-config.psd1` to customize:
+
 - Memory thresholds
 - Monitoring intervals
 - Auto-kill settings
@@ -65,6 +72,7 @@ Edit `config/memory-config.psd1` to customize:
 ## 🔧 COMMANDS REFERENCE
 
 ### Memory Commands (after importing module)
+
 ```powershell
 mem                    # Quick memory report
 memkill                # Kill high memory processes
@@ -74,6 +82,7 @@ Show-MemoryStatus      # Detailed memory monitoring
 ```
 
 ### Direct Script Execution
+
 ```powershell
 # Memory monitoring
 .\scripts\memory-monitor.ps1 -Continuous -Interval 10
@@ -88,6 +97,7 @@ Show-MemoryStatus      # Detailed memory monitoring
 ## 📊 FEATURES
 
 ### ✅ MONITORING
+
 - Real-time Node.js process tracking
 - Memory usage per process
 - System memory statistics
@@ -95,6 +105,7 @@ Show-MemoryStatus      # Detailed memory monitoring
 - Web dashboard visualization
 
 ### ✅ AUTO-MANAGEMENT
+
 - Configurable memory thresholds
 - Automatic process termination
 - Graceful shutdown attempts
@@ -102,6 +113,7 @@ Show-MemoryStatus      # Detailed memory monitoring
 - System resource protection
 
 ### ✅ NOTIFICATIONS
+
 - Desktop alerts
 - Email notifications (configurable)
 - Telegram bot integration
@@ -109,6 +121,7 @@ Show-MemoryStatus      # Detailed memory monitoring
 - Real-time dashboard updates
 
 ### ✅ SCHEDULING
+
 - Windows Task Scheduler integration
 - Boot-time startup
 - Recurring monitoring
@@ -118,12 +131,14 @@ Show-MemoryStatus      # Detailed memory monitoring
 ## 🚨 SAFETY SETTINGS
 
 ### SAFE MODE (Default)
+
 - Monitoring only
 - Manual kill commands
 - Warnings and alerts
 - No automatic termination
 
 ### AUTO-KILL MODE (⚠️ DANGER)
+
 - Automatic process termination
 - Configurable thresholds
 - Graceful shutdown attempts
@@ -132,12 +147,14 @@ Show-MemoryStatus      # Detailed memory monitoring
 ## 📈 THRESHOLDS
 
 ### Default Memory Limits:
+
 - **Warning**: 200MB per process, 800MB total
 - **Critical**: 300MB per process, 1024MB total
 - **Maximum**: 400MB per process, 1536MB total
 - **Process Count**: Maximum 15 Node.js processes
 
 ### System Protection:
+
 - Minimum 1GB free system memory
 - Maximum 80% CPU usage
 - Minimum 100MB disk space
@@ -145,6 +162,7 @@ Show-MemoryStatus      # Detailed memory monitoring
 ## 🔄 AUTOMATION SETUP
 
 ### Complete Automation (Recommended)
+
 ```powershell
 # 1. Load commands
 Import-Module .\scripts\memory-commands.ps1
@@ -160,6 +178,7 @@ Show-MemoryStatus -Continuous -Interval 10
 ```
 
 ### Full Auto-Kill Setup (⚠️ ADVANCED USERS ONLY)
+
 ```powershell
 # 1. Enable auto-kill in config
 # Edit config/memory-config.psd1: AutoManagement.EnableAutoKill = $true
@@ -174,11 +193,13 @@ Start-AutoMemoryManager -EnableAutoKill
 ## 📝 LOGGING
 
 ### Log Files Location:
+
 - `logs/memory-manager.log` - Main activity log
 - `logs/memory-monitor.log` - Monitoring data
 - `logs/auto-kill.log` - Process termination log
 
 ### Log Retention:
+
 - Default: 30 days
 - Configurable in memory-config.psd1
 - Automatic cleanup
@@ -186,18 +207,21 @@ Start-AutoMemoryManager -EnableAutoKill
 ## 🌐 DASHBOARD FEATURES
 
 ### Real-time Monitoring:
+
 - Live process list
 - Memory usage charts
 - System statistics
 - Historical trends
 
 ### Interactive Controls:
+
 - Manual refresh
 - Auto-refresh toggle
 - Process termination
 - Memory optimization
 
 ### Visual Indicators:
+
 - Color-coded status
 - Animated alerts
 - Progress bars
@@ -206,12 +230,14 @@ Start-AutoMemoryManager -EnableAutoKill
 ## 🛠️ TROUBLESHOOTING
 
 ### Common Issues:
+
 1. **PowerShell Execution Policy**: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 2. **Module Import**: Ensure scripts are in correct directory
 3. **Permissions**: Run as Administrator for auto-kill features
 4. **Task Scheduler**: Check Windows Task Scheduler for task status
 
 ### Debug Mode:
+
 ```powershell
 # Enable verbose logging
 $VerbosePreference = "Continue"
@@ -221,6 +247,7 @@ $VerbosePreference = "Continue"
 ## 📞 SUPPORT
 
 ### Monitoring Commands:
+
 ```powershell
 # Check task status
 .\scripts\setup-memory-task.ps1
@@ -248,6 +275,7 @@ Get-Content .\config\memory-config.psd1 | ConvertFrom-Json
 Your automated memory management system is now ready!
 
 **Next Steps:**
+
 1. Import the memory commands module
 2. Run a memory check with `mem`
 3. Open the web dashboard

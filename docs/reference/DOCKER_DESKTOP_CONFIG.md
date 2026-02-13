@@ -2,14 +2,14 @@
 
 ## 📊 Resumen de Configuración Recomendada
 
-| Configuración | Recomendado | Mínimo | Actual (Usuario) |
-|--------------|-------------|--------|------------------|
-| CPU | 6 cores | 4 cores | - |
-| Memory | 10 GB | 8 GB | - |
-| Swap | 2 GB | 1 GB | - |
-| Disk Image Size | 100 GB | 60 GB | - |
-| WSL 2 | ✅ Habilitado | ✅ Requerido | - |
-| Kubernetes | ✅ Habilitado | ❌ Opcional | - |
+| Configuración   | Recomendado   | Mínimo       | Actual (Usuario) |
+| --------------- | ------------- | ------------ | ---------------- |
+| CPU             | 6 cores       | 4 cores      | -                |
+| Memory          | 10 GB         | 8 GB         | -                |
+| Swap            | 2 GB          | 1 GB         | -                |
+| Disk Image Size | 100 GB        | 60 GB        | -                |
+| WSL 2           | ✅ Habilitado | ✅ Requerido | -                |
+| Kubernetes      | ✅ Habilitado | ❌ Opcional  | -                |
 
 ## 🔧 Configuración Paso a Paso
 
@@ -28,6 +28,7 @@
 ```
 
 **Justificación:**
+
 - **6 CPUs**: NEXUS V1 ejecuta 6 contenedores simultáneos (app, mongodb, rabbitmq, redis, jaeger, evaluation)
 - **10 GB RAM**:
   - app: 2 GB
@@ -71,6 +72,7 @@
 ```
 
 **Optimizaciones clave:**
+
 - ✅ **BuildKit habilitado**: Builds 50% más rápidos, cache eficiente
 - ✅ **Garbage Collection automático**: Mantiene solo 20GB de caché
 - ✅ **Log rotation**: 3 archivos × 10MB máximo (previene disk full)
@@ -86,6 +88,7 @@ Kubernetes context: docker-desktop
 ```
 
 **Comandos de verificación:**
+
 ```powershell
 # Verificar contexto
 kubectl config current-context  # Debe mostrar: docker-desktop
@@ -131,6 +134,7 @@ firewall=true
 ```
 
 **Reiniciar WSL:**
+
 ```powershell
 wsl --shutdown
 # Esperar 10 segundos
@@ -196,6 +200,7 @@ docker system df
 Abrir: **Docker Desktop → Dashboard → Containers**
 
 Métricas clave a monitorear:
+
 - **CPU %**: No debe exceder 80% sostenido
 - **Memory**: No debe llegar al límite configurado
 - **Disk I/O**: Picos indican necesidad de más IOPS
@@ -222,7 +227,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     ports:
-      - "9090:9090"
+      - '9090:9090'
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
@@ -233,7 +238,7 @@ services:
   grafana:
     image: grafana/grafana:latest
     ports:
-      - "3001:3000"
+      - '3001:3000'
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
@@ -246,12 +251,14 @@ services:
 ### Problema: "Docker Desktop is slow"
 
 **Solución 1: Verificar WSL 2 backend**
+
 ```powershell
 docker info | Select-String -Pattern "Operating System"
 # Debe mostrar: WSL 2
 ```
 
 **Solución 2: Aumentar recursos**
+
 ```powershell
 # Ver uso actual
 Get-Process "Docker Desktop" | Format-List CPU, WorkingSet64
@@ -260,6 +267,7 @@ Get-Process "Docker Desktop" | Format-List CPU, WorkingSet64
 ```
 
 **Solución 3: Deshabilitar extensiones innecesarias**
+
 ```
 Docker Desktop → Settings → Extensions → Deshabilitar extensiones no usadas
 ```
@@ -267,6 +275,7 @@ Docker Desktop → Settings → Extensions → Deshabilitar extensiones no usada
 ### Problema: "Cannot start service X: port already in use"
 
 **Solución:**
+
 ```powershell
 # Encontrar proceso usando el puerto
 netstat -ano | findstr :3000
@@ -280,6 +289,7 @@ Stop-Process -Id <PID> -Force
 ### Problema: "Out of disk space"
 
 **Solución:**
+
 ```powershell
 # Ver uso de disco
 docker system df
@@ -293,6 +303,7 @@ docker system prune -a --volumes -f
 ### Problema: "Build fails with network timeout"
 
 **Solución:**
+
 ```powershell
 # Configurar DNS alternativo en Docker Engine settings
 {
@@ -380,4 +391,3 @@ docker-compose logs -f app
 **Última actualización:** 2025-12-XX
 **Versión:** 1.0.0
 **Mantenedor:** NEXUS V1 DevOps Team
-

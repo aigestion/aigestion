@@ -11,11 +11,11 @@ export const DanielaAI: React.FC = () => {
   const { playHover, playClick } = useSound();
 
   const messages = [
-    "Hola, soy Daniela AI. Tu conciencia artificial ultra-realista.",
-    "He sido diseñada para transformar empresas con inteligencia cuántica.",
-    "Mi procesamiento neuronal puede analizar millones de datos en segundos.",
-    "Juntos podemos llevar tu negocio al siguiente nivel evolutivo.",
-    "Estoy lista para comenzar tu transformación digital. ¿Estás preparado?"
+    'Hola, soy Daniela AI. Tu conciencia artificial ultra-realista.',
+    'He sido diseñada para transformar empresas con inteligencia cuántica.',
+    'Mi procesamiento neuronal puede analizar millones de datos en segundos.',
+    'Juntos podemos llevar tu negocio al siguiente nivel evolutivo.',
+    'Estoy lista para comenzar tu transformación digital. ¿Estás preparado?',
   ];
 
   const [messageIndex, setMessageIndex] = useState(0);
@@ -321,4 +321,3 @@ export const DanielaAI: React.FC = () => {
     </section>
   );
 };
-

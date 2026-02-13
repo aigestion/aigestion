@@ -23,10 +23,10 @@ export class VectorService {
   async upsert(doc: VectorDocument) {
     try {
       this.logger.log(`Upserting to Vector Memory [Provider: ${this.provider}, DocID: ${doc.id}]`);
-      
+
       // 1. Generate Embedding (Simulated for this jump)
       // In production: const embedding = await openAI.createEmbedding(doc.text);
-      
+
       // 2. Storage Logic (Simulated for initial scaffold)
       // We would use a real Redis or Vector DB client here injected via DI
       // For now, we just log success to verify flow
@@ -45,7 +45,7 @@ export class VectorService {
   async search(query: string, limit: number = 5) {
     try {
       this.logger.log(`Searching Vector Memory for: "${query}" (Limit: ${limit})`);
-      
+
       // In production: perform cosine similarity search in Pinecone/Weaviate
       // For now, we return a symbolic context hit
       return [
@@ -53,8 +53,8 @@ export class VectorService {
           id: 'ref-Q1-milestones',
           text: 'The Q1 2026 Roadmap focused on NestJS and Atomic Design System v2.',
           score: 0.98,
-          metadata: { source: 'roadmap' }
-        }
+          metadata: { source: 'roadmap' },
+        },
       ];
     } catch (error) {
       this.logger.error(`Error searching Vector Memory: ${error.message}`, error.stack);

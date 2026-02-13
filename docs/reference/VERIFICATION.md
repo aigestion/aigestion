@@ -3,6 +3,7 @@
 ## ✅ Verificaciones Inmediatas
 
 ### 1. Verificar Configuración de VS Code
+
 ```powershell
 # Listar archivos de configuración
 Get-ChildItem .vscode
@@ -15,11 +16,13 @@ Get-ChildItem .vscode
 ```
 
 ### 2. Instalar Extensiones Recomendadas
+
 1. Presiona `Ctrl+Shift+P`
 2. Escribe "Extensions: Show Recommended Extensions"
 3. Instala todas las extensiones recomendadas
 
 ### 3. Verificar TypeScript
+
 ```powershell
 # Compilar código
 npm run build
@@ -31,6 +34,7 @@ npm run build
 ```
 
 ### 4. Verificar Linting
+
 ```powershell
 # Ejecutar ESLint
 npm run lint
@@ -40,6 +44,7 @@ npm run lint -- --fix
 ```
 
 ### 5. Verificar Formatting
+
 ```powershell
 # Formatear todo el código
 npm run format
@@ -50,6 +55,7 @@ npm run format
 ## 🔧 Comandos de Desarrollo
 
 ### Desarrollo Normal
+
 ```powershell
 # Iniciar servidor en modo desarrollo con hot reload
 npm run dev
@@ -59,6 +65,7 @@ npm run build -- --watch
 ```
 
 ### Testing
+
 ```powershell
 # Ejecutar todos los tests
 npm test
@@ -71,6 +78,7 @@ npm test -- --coverage
 ```
 
 ### Debug
+
 1. Presiona `F5` en VS Code
 2. Selecciona "Launch Server" para debug normal
 3. O "Jest Current File" para debug de un test específico
@@ -78,6 +86,7 @@ npm test -- --coverage
 ## 📊 Verificar Calidad del Código
 
 ### Gemini Analysis Service
+
 ```powershell
 # El archivo debe estar sin errores
 code src/utils/gemini-analysis.service.ts
@@ -88,6 +97,7 @@ code src/utils/gemini-analysis.service.ts
 ```
 
 ### Email Service
+
 ```powershell
 # Revisar imports
 code src/utils/email.service.ts
@@ -100,6 +110,7 @@ code src/utils/email.service.ts
 ## 🎯 Configuraciones Activas
 
 ### TypeScript
+
 - ✅ Strict mode activado
 - ✅ No implicit any
 - ✅ Strict null checks
@@ -108,6 +119,7 @@ code src/utils/email.service.ts
 - ✅ No fallthrough cases
 
 ### ESLint
+
 - ✅ TypeScript parser
 - ✅ Recommended rules
 - ✅ Type-aware linting
@@ -115,6 +127,7 @@ code src/utils/email.service.ts
 - ✅ Auto-fix on save
 
 ### Prettier
+
 - ✅ Single quotes
 - ✅ Semicolons
 - ✅ 100 character line width
@@ -122,6 +135,7 @@ code src/utils/email.service.ts
 - ✅ Format on save
 
 ### cSpell
+
 - ✅ Inglés + Español
 - ✅ Diccionario técnico ampliado
 - ✅ Ignora node_modules, dist, coverage
@@ -129,6 +143,7 @@ code src/utils/email.service.ts
 ## 🐛 Troubleshooting
 
 ### Error: "Cannot find module"
+
 ```powershell
 # Reinstalar dependencias
 Remove-Item node_modules -Recurse -Force
@@ -137,6 +152,7 @@ npm install
 ```
 
 ### Error: TypeScript compilation
+
 ```powershell
 # Limpiar build
 Remove-Item dist -Recurse -Force
@@ -144,6 +160,7 @@ npm run build
 ```
 
 ### Error: ESLint no funciona
+
 ```powershell
 # Verificar instalación
 npm list eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
@@ -153,6 +170,7 @@ npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslin
 ```
 
 ### cSpell marca muchas palabras en español
+
 - Las palabras comunes ya están en el diccionario
 - Para añadir más: Ctrl+Shift+P → "cSpell: Add Word to User Dictionary"
 
@@ -171,6 +189,7 @@ npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslin
 ## 🎓 Mejores Prácticas Aplicadas
 
 ### Type Safety
+
 ```typescript
 // ✅ BIEN - Type aliases reutilizables
 type Sentiment = 'positive' | 'neutral' | 'negative';
@@ -180,6 +199,7 @@ sentiment: 'positive' | 'neutral' | 'negative';
 ```
 
 ### Readonly Properties
+
 ```typescript
 // ✅ BIEN - Propiedades que no cambian
 private readonly model: GenerativeModel | null;
@@ -189,6 +209,7 @@ private model: GenerativeModel | null;
 ```
 
 ### Type Guards
+
 ```typescript
 // ✅ BIEN - Type guard personalizado
 private isValidComplexity(value: string): value is Complexity {
@@ -200,6 +221,7 @@ return complexity as Complexity;
 ```
 
 ### Error Handling
+
 ```typescript
 // ✅ BIEN - Helper method que lanza error
 private getModel(): GenerativeModel {
@@ -237,4 +259,3 @@ if (!this.model) throw new Error(...);
 
 **Documentación completa**: Ver `OPTIMIZATIONS.md`
 **Fecha**: 7 de diciembre de 2025
-

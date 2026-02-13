@@ -54,7 +54,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-rl.question('Pega el código de autorización aquí: ', async (code) => {
+rl.question('Pega el código de autorización aquí: ', async code => {
   try {
     const { tokens } = await oauth2Client.getToken(code);
 

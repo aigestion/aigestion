@@ -39,59 +39,62 @@ export const InteractiveShowcase: React.FC = () => {
       id: 'daniela-ai',
       title: 'DANIELA AI',
       category: 'Asistente Virtual',
-      description: 'Inteligencia artificial conversacional avanzada con procesamiento de lenguaje natural y aprendizaje contextual.',
+      description:
+        'Inteligencia artificial conversacional avanzada con procesamiento de lenguaje natural y aprendizaje contextual.',
       image: '/images/daniela/lab.png',
       features: [
         'Procesamiento NLP avanzado',
         'Aprendizaje contextual continuo',
         'Multilingüe en tiempo real',
-        'Integración omnicanal'
+        'Integración omnicanal',
       ],
       stats: [
         { label: 'Idiomas', value: '50+' },
         { label: 'Precisión', value: '99.7%' },
-        { label: 'Respuesta', value: '<100ms' }
+        { label: 'Respuesta', value: '<100ms' },
       ],
-      color: 'from-nexus-violet to-purple-600'
+      color: 'from-nexus-violet to-purple-600',
     },
     {
       id: 'nexus-control',
       title: 'NEXUS CONTROL',
       category: 'Sistema Operativo',
-      description: 'Plataforma central de automatización y control de infraestructura con capacidades de auto-optimización.',
+      description:
+        'Plataforma central de automatización y control de infraestructura con capacidades de auto-optimización.',
       image: '/images/nexus/collaboration.png',
       features: [
         'Orquestación automática',
         'Predicción de fallos',
         'Escalado elástico',
-        'Recuperación automática'
+        'Recuperación automática',
       ],
       stats: [
         { label: 'Tareas/hora', value: '10K+' },
         { label: 'Uptime', value: '99.99%' },
-        { label: 'Eficiencia', value: '300%' }
+        { label: 'Eficiencia', value: '300%' },
       ],
-      color: 'from-nexus-cyan to-blue-600'
+      color: 'from-nexus-cyan to-blue-600',
     },
     {
       id: 'metaverse-hub',
       title: 'METAVERSE HUB',
       category: 'Realidad Virtual',
-      description: 'Espacios virtuales colaborativos con interfaces holográficas y experiencias inmersivas 3D.',
+      description:
+        'Espacios virtuales colaborativos con interfaces holográficas y experiencias inmersivas 3D.',
       image: '/images/nexus/hero.png',
       features: [
         'Mundos virtuales persistentes',
         'Avatares personalizados',
         'Colaboración real-time',
-        'Integración blockchain'
+        'Integración blockchain',
       ],
       stats: [
         { label: 'Usuarios', value: '100K+' },
         { label: 'Mundos', value: '500+' },
-        { label: 'Transacciones/s', value: '10K' }
+        { label: 'Transacciones/s', value: '10K' },
       ],
-      color: 'from-nexus-gold to-yellow-600'
-    }
+      color: 'from-nexus-gold to-yellow-600',
+    },
   ];
 
   useEffect(() => {
@@ -103,12 +106,12 @@ export const InteractiveShowcase: React.FC = () => {
       vx: (Math.random() - 0.5) * 0.5,
       vy: (Math.random() - 0.5) * 0.5,
       size: Math.random() * 3 + 1,
-      color: Math.random() > 0.5 ? '#8A2BE2' : '#00F5FF'
+      color: Math.random() > 0.5 ? '#8A2BE2' : '#00F5FF',
     }));
     setParticles(newParticles);
 
     const interval = setInterval(() => {
-      setActiveItem((prev) => (prev + 1) % showcaseItems.length);
+      setActiveItem(prev => (prev + 1) % showcaseItems.length);
     }, 5000);
 
     return () => clearInterval(interval);
@@ -116,17 +119,19 @@ export const InteractiveShowcase: React.FC = () => {
 
   useEffect(() => {
     const animateParticles = () => {
-      setParticles(prev => prev.map(particle => {
-        let { x, y, vx, vy } = particle;
+      setParticles(prev =>
+        prev.map(particle => {
+          let { x, y, vx, vy } = particle;
 
-        x += vx;
-        y += vy;
+          x += vx;
+          y += vy;
 
-        if (x <= 0 || x >= 100) vx = -vx;
-        if (y <= 0 || y >= 100) vy = -vy;
+          if (x <= 0 || x >= 100) vx = -vx;
+          if (y <= 0 || y >= 100) vy = -vy;
 
-        return { ...particle, x, y, vx, vy };
-      }));
+          return { ...particle, x, y, vx, vy };
+        })
+      );
     };
 
     const interval = setInterval(animateParticles, 50);
@@ -155,7 +160,7 @@ export const InteractiveShowcase: React.FC = () => {
     >
       {/* Animated Particles Background */}
       <div className="absolute inset-0 pointer-events-none">
-        {particles.map((particle) => (
+        {particles.map(particle => (
           <motion.div
             key={particle.id}
             className="absolute rounded-full"
@@ -165,7 +170,7 @@ export const InteractiveShowcase: React.FC = () => {
               width: particle.size,
               height: particle.size,
               backgroundColor: particle.color,
-              opacity: isInteracting ? 0.8 : 0.3
+              opacity: isInteracting ? 0.8 : 0.3,
             }}
             animate={{
               scale: isInteracting ? [1, 1.5, 1] : [1, 1.2, 1],
@@ -173,7 +178,7 @@ export const InteractiveShowcase: React.FC = () => {
             transition={{
               duration: 2 + Math.random(),
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
         ))}
@@ -186,7 +191,7 @@ export const InteractiveShowcase: React.FC = () => {
           background: 'radial-gradient(circle, rgba(138,43,226,0.1) 0%, transparent 70%)',
           x: springX,
           y: springY,
-          transform: 'translate(-50%, -50%)'
+          transform: 'translate(-50%, -50%)',
         }}
       />
 
@@ -204,7 +209,8 @@ export const InteractiveShowcase: React.FC = () => {
             </span>
           </h2>
           <p className="text-xl text-nexus-silver/80 max-w-3xl mx-auto">
-            Explora nuestro universo de soluciones inteligentes diseñadas para transformar tu empresa
+            Explora nuestro universo de soluciones inteligentes diseñadas para transformar tu
+            empresa
           </p>
         </motion.div>
 
@@ -224,16 +230,17 @@ export const InteractiveShowcase: React.FC = () => {
                   setActiveItem(index);
                   playClick();
                 }}
-                className={`premium-glass p-6 rounded-2xl border cursor-pointer transition-all duration-300 ${activeItem === index
-                  ? 'border-nexus-cyan/50 shadow-[0_0_40px_rgba(0,245,255,0.3)]'
-                  : 'border-white/10 hover:border-white/20'
-                  }`}
+                className={`premium-glass p-6 rounded-2xl border cursor-pointer transition-all duration-300 ${
+                  activeItem === index
+                    ? 'border-nexus-cyan/50 shadow-[0_0_40px_rgba(0,245,255,0.3)]'
+                    : 'border-white/10 hover:border-white/20'
+                }`}
               >
                 <div className="flex items-start gap-4">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center flex-shrink-0`}>
-                    <span className="text-white font-bold text-lg">
-                      {item.title.charAt(0)}
-                    </span>
+                  <div
+                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center flex-shrink-0`}
+                  >
+                    <span className="text-white font-bold text-lg">{item.title.charAt(0)}</span>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
@@ -280,12 +287,12 @@ export const InteractiveShowcase: React.FC = () => {
                     <motion.div
                       animate={{
                         rotate: [0, 10, -10, 0],
-                        scale: [1, 1.1, 1]
+                        scale: [1, 1.1, 1],
                       }}
                       transition={{
                         duration: 4,
                         repeat: Infinity,
-                        ease: "easeInOut"
+                        ease: 'easeInOut',
                       }}
                       className={`w-32 h-32 rounded-2xl bg-gradient-to-br ${currentItem.color} flex items-center justify-center`}
                     >
@@ -299,12 +306,12 @@ export const InteractiveShowcase: React.FC = () => {
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
                     animate={{
-                      opacity: [0.3, 0.6, 0.3]
+                      opacity: [0.3, 0.6, 0.3],
                     }}
                     transition={{
                       duration: 3,
                       repeat: Infinity,
-                      ease: "easeInOut"
+                      ease: 'easeInOut',
                     }}
                   />
                 </div>
@@ -358,7 +365,7 @@ export const InteractiveShowcase: React.FC = () => {
                 transition={{
                   duration: 2 + index * 0.5,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: 'easeInOut',
                 }}
               />
             ))}
@@ -375,10 +382,9 @@ export const InteractiveShowcase: React.FC = () => {
                 playClick();
               }}
               onMouseEnter={playHover}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${activeItem === index
-                ? 'bg-nexus-cyan-glow w-12'
-                : 'bg-white/20 hover:bg-white/40'
-                }`}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                activeItem === index ? 'bg-nexus-cyan-glow w-12' : 'bg-white/20 hover:bg-white/40'
+              }`}
             />
           ))}
         </div>

@@ -50,16 +50,20 @@ export class VerifyEmailUseCase {
     // Let's check `IUserRepository` definition first.
 
     if (user.emailVerificationCode !== code) {
-         // Fallback if field is hidden: we might need to query explicitly.
-         // Since I can't see the repository implementation right now, I'll proceed with logic that assumes availability.
-         // If it fails during testing, I'll update the Repository.
+      // Fallback if field is hidden: we might need to query explicitly.
+      // Since I can't see the repository implementation right now, I'll proceed with logic that assumes availability.
+      // If it fails during testing, I'll update the Repository.
 
-       if (!user.emailVerificationCode) {
-           // Try to re-fetch with secrets if we were inside the repo, but here we are in UseCase.
-           // We might need to Throw if we can't verify.
-           throw new AppError('Código de verificación inválido o expirado (System Error: Field not loaded)', 400, 'INVALID_CODE');
-       }
-       throw new AppError('Código de verificación inválido', 400, 'INVALID_CODE');
+      if (!user.emailVerificationCode) {
+        // Try to re-fetch with secrets if we were inside the repo, but here we are in UseCase.
+        // We might need to Throw if we can't verify.
+        throw new AppError(
+          'Código de verificación inválido o expirado (System Error: Field not loaded)',
+          400,
+          'INVALID_CODE'
+        );
+      }
+      throw new AppError('Código de verificación inválido', 400, 'INVALID_CODE');
     }
 
     if (user.emailVerificationExpires && user.emailVerificationExpires < new Date()) {

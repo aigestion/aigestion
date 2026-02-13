@@ -24,14 +24,14 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     (title: string, message: string, type: Notification['type'] = 'info') => {
       const id = Math.random().toString(36).substr(2, 9);
       playPop();
-      setNotifications((prev) => [...prev, { id, title, message, type }]);
+      setNotifications(prev => [...prev, { id, title, message, type }]);
 
       // Auto remove
       setTimeout(() => {
-        setNotifications((prev) => prev.filter((n) => n.id !== id));
+        setNotifications(prev => prev.filter(n => n.id !== id));
       }, 5000);
     },
-    [playPop],
+    [playPop]
   );
 
   return (
@@ -39,13 +39,13 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
       {children}
       <div className="fixed bottom-8 right-8 z-[9999] flex flex-col gap-4 pointer-events-none">
         <AnimatePresence>
-          {notifications.map((n) => (
+          {notifications.map(n => (
             <GodModeNotification
               key={n.id}
               title={n.title}
               message={n.message}
               type={n.type}
-              onClose={() => setNotifications((prev) => prev.filter((item) => item.id !== n.id))}
+              onClose={() => setNotifications(prev => prev.filter(item => item.id !== n.id))}
             />
           ))}
         </AnimatePresence>

@@ -61,7 +61,7 @@ export class PredictiveHealingService {
 
   private activateShieldProtocol() {
     logger.warn(
-      'Protocolo Escudo Activo: Limitando conexiones entrantes y priorizando procesos de core.',
+      'Protocolo Escudo Activo: Limitando conexiones entrantes y priorizando procesos de core.'
     );
   }
 
@@ -83,7 +83,7 @@ export class PredictiveHealingService {
 
     if (metrics.cpuUsage > 95) {
       logger.info(
-        'Acción: Suspendiendo tareas de fondo no críticas y reduciendo frecuencia de telemetría.',
+        'Acción: Suspendiendo tareas de fondo no críticas y reduciendo frecuencia de telemetría.'
       );
     }
   }

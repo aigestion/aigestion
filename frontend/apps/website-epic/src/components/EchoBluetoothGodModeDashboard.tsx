@@ -5,7 +5,42 @@
 
 import React, { useState, useEffect } from 'react';
 import { echoBluetoothGodMode } from '../services/echo-bluetooth-godmode';
-import { Bluetooth, Wifi, WifiOff, Battery, BatteryLow, Settings, Volume2, Headphones, Smartphone, Laptop, Tablet, Tv, Speaker, Phone, Music, Mic, Zap, Shield, TrendingUp, AlertCircle, CheckCircle, Play, Pause, SkipForward, SkipBack, MoreVertical, ChevronRight, Star, Signal, Radio, Activity, Clock, BarChart3, PieChart } from 'lucide-react';
+import {
+  Bluetooth,
+  Wifi,
+  WifiOff,
+  Battery,
+  BatteryLow,
+  Settings,
+  Volume2,
+  Headphones,
+  Smartphone,
+  Laptop,
+  Tablet,
+  Tv,
+  Speaker,
+  Phone,
+  Music,
+  Mic,
+  Zap,
+  Shield,
+  TrendingUp,
+  AlertCircle,
+  CheckCircle,
+  Play,
+  Pause,
+  SkipForward,
+  SkipBack,
+  MoreVertical,
+  ChevronRight,
+  Star,
+  Signal,
+  Radio,
+  Activity,
+  Clock,
+  BarChart3,
+  PieChart,
+} from 'lucide-react';
 
 interface BluetoothDevice {
   device_id: string;
@@ -55,12 +90,12 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
   const loadBluetoothData = async () => {
     try {
       await echoBluetoothGodMode.initialize();
-      
+
       const pairedDevices = echoBluetoothGodMode.getPairedDevices();
       const connections = echoBluetoothGodMode.getActiveConnections();
       const profiles = echoBluetoothGodMode.getAudioProfiles();
       const diagnostics = echoBluetoothGodMode.getDiagnostics();
-      
+
       setDevices(pairedDevices);
       setActiveConnections(connections);
       setAudioProfiles(profiles);
@@ -74,26 +109,41 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
 
   const getDeviceIcon = (deviceType: string) => {
     switch (deviceType) {
-      case 'headphones': return <Headphones className="w-5 h-5" />;
-      case 'speaker': return <Speaker className="w-5 h-5" />;
-      case 'phone': return <Phone className="w-5 h-5" />;
-      case 'tablet': return <Tablet className="w-5 h-5" />;
-      case 'laptop': return <Laptop className="w-5 h-5" />;
-      case 'smartwatch': return <Activity className="w-5 h-5" />;
-      case 'car_audio': return <Radio className="w-5 h-5" />;
-      case 'tv': return <Tv className="w-5 h-5" />;
-      case 'gaming_console': return <Play className="w-5 h-5" />;
-      default: return <Bluetooth className="w-5 h-5" />;
+      case 'headphones':
+        return <Headphones className="w-5 h-5" />;
+      case 'speaker':
+        return <Speaker className="w-5 h-5" />;
+      case 'phone':
+        return <Phone className="w-5 h-5" />;
+      case 'tablet':
+        return <Tablet className="w-5 h-5" />;
+      case 'laptop':
+        return <Laptop className="w-5 h-5" />;
+      case 'smartwatch':
+        return <Activity className="w-5 h-5" />;
+      case 'car_audio':
+        return <Radio className="w-5 h-5" />;
+      case 'tv':
+        return <Tv className="w-5 h-5" />;
+      case 'gaming_console':
+        return <Play className="w-5 h-5" />;
+      default:
+        return <Bluetooth className="w-5 h-5" />;
     }
   };
 
   const getQualityColor = (quality: string) => {
     switch (quality) {
-      case 'excellent': return 'text-green-600 bg-green-50';
-      case 'good': return 'text-blue-600 bg-blue-50';
-      case 'fair': return 'text-yellow-600 bg-yellow-50';
-      case 'poor': return 'text-red-600 bg-red-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'excellent':
+        return 'text-green-600 bg-green-50';
+      case 'good':
+        return 'text-blue-600 bg-blue-50';
+      case 'fair':
+        return 'text-yellow-600 bg-yellow-50';
+      case 'poor':
+        return 'text-red-600 bg-red-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
@@ -222,7 +272,9 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-purple-100 text-sm">Datos Transferidos</p>
-                  <p className="text-3xl font-bold">{stats.total_data_transferred_gb.toFixed(1)} GB</p>
+                  <p className="text-3xl font-bold">
+                    {stats.total_data_transferred_gb.toFixed(1)} GB
+                  </p>
                   <p className="text-purple-200 text-xs">Total</p>
                 </div>
                 <BarChart3 className="w-8 h-8 text-purple-200" />
@@ -249,7 +301,7 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
             Perfil de Audio
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-            {audioProfiles.map((profile) => (
+            {audioProfiles.map(profile => (
               <div
                 key={profile.profile_name}
                 onClick={() => handleApplyProfile(profile.profile_name)}
@@ -292,15 +344,22 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
             Dispositivos Emparejados
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {devices.map((device) => {
+            {devices.map(device => {
               const signal = getSignalStrength(device.rssi_signal);
-              const isConnected = activeConnections.some(conn => conn.device_id === device.device_id);
-              
+              const isConnected = activeConnections.some(
+                conn => conn.device_id === device.device_id
+              );
+
               return (
-                <div key={device.device_id} className="border rounded-lg p-4 hover:shadow-md transition-all">
+                <div
+                  key={device.device_id}
+                  className="border rounded-lg p-4 hover:shadow-md transition-all"
+                >
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-lg ${isConnected ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}>
+                      <div
+                        className={`p-2 rounded-lg ${isConnected ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600'}`}
+                      >
                         {getDeviceIcon(device.device_type)}
                       </div>
                       <div>
@@ -308,11 +367,13 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
                         <p className="text-sm text-gray-500">{device.device_type}</p>
                       </div>
                     </div>
-                    <div className={`px-2 py-1 rounded-full text-xs font-medium ${isConnected ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                    <div
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${isConnected ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}
+                    >
                       {isConnected ? 'Conectado' : 'Desconectado'}
                     </div>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Señal:</span>
@@ -330,13 +391,15 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
                         <span className="text-xs">{device.rssi_signal} dBm</span>
                       </div>
                     </div>
-                    
+
                     {device.battery_level !== undefined && (
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">Batería:</span>
                         <div className="flex items-center space-x-1">
                           {device.battery_level > 20 ? (
-                            <Battery className={`w-4 h-4 ${getBatteryColor(device.battery_level)}`} />
+                            <Battery
+                              className={`w-4 h-4 ${getBatteryColor(device.battery_level)}`}
+                            />
                           ) : (
                             <BatteryLow className="w-4 h-4 text-red-600" />
                           )}
@@ -346,20 +409,22 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
                         </div>
                       </div>
                     )}
-                    
+
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">Calidad:</span>
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${getQualityColor(device.connection_quality)}`}>
+                      <div
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getQualityColor(device.connection_quality)}`}
+                      >
                         {device.connection_quality}
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-600">MAC:</span>
                       <span className="text-xs font-mono">{device.mac_address}</span>
                     </div>
                   </div>
-                  
+
                   <div className="mt-4 flex justify-between">
                     <div className="flex space-x-2">
                       <button
@@ -401,11 +466,14 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
             Conexiones Activas
           </h3>
           <div className="space-y-4">
-            {activeConnections.map((connection) => {
+            {activeConnections.map(connection => {
               const device = devices.find(d => d.device_id === connection.device_id);
-              
+
               return (
-                <div key={`${connection.device_id}-${connection.profile}`} className="border rounded-lg p-4">
+                <div
+                  key={`${connection.device_id}-${connection.profile}`}
+                  className="border rounded-lg p-4"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div className="flex items-center space-x-2">
@@ -416,7 +484,7 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center space-x-4 text-sm">
                       <div className="text-right">
                         <p className="text-gray-600">Codec</p>
@@ -432,14 +500,16 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
                       </div>
                       <div className="text-right">
                         <p className="text-gray-600">Datos</p>
-                        <p className="font-medium">{formatDataSize(connection.data_transferred_mb)}</p>
+                        <p className="font-medium">
+                          {formatDataSize(connection.data_transferred_mb)}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
               );
             })}
-            
+
             {activeConnections.length === 0 && (
               <div className="text-center py-8 text-gray-500">
                 <Bluetooth className="w-12 h-12 mx-auto mb-3 text-gray-400" />
@@ -460,7 +530,7 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Buscar nuevos dispositivos</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Music className="w-5 h-5 text-purple-600" />
               <div className="text-left">
@@ -468,7 +538,7 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Ajustar calidad y codec</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Shield className="w-5 h-5 text-green-600" />
               <div className="text-left">
@@ -476,7 +546,7 @@ export const EchoBluetoothGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Verificar conexiones</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Settings className="w-5 h-5 text-orange-600" />
               <div className="text-left">

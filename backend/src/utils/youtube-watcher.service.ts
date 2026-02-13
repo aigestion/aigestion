@@ -26,7 +26,7 @@ export class YoutubeWatcherService {
     @inject(TYPES.YoutubeTranscriptionQueue)
     private youtubeTranscriptionQueue: YoutubeTranscriptionQueue,
     @inject(TYPES.YoutubeChannelService) private youtubeChannelService: YouTubeChannelService,
-    @inject(TYPES.TelegramService) private telegramService: TelegramService,
+    @inject(TYPES.TelegramService) private telegramService: TelegramService
   ) {
     // La carpeta a vigilar está en la raíz del proyecto NEXUS V1
     const projectRoot = path.resolve(__dirname, '../../../../');
@@ -180,7 +180,7 @@ export class YoutubeWatcherService {
       // 2. Añadir a la lista de Tutoriales
       const playlistId = await this.youtubeChannelService.findPlaylistByName(
         'business',
-        'Tutoriales',
+        'Tutoriales'
       );
       if (playlistId) {
         await this.youtubeChannelService.addVideoToPlaylist('business', videoId, playlistId);

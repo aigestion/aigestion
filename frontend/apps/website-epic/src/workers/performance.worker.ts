@@ -73,9 +73,7 @@ function processData(data: any[]): any {
 function calculateMedian(values: number[]): number {
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
-  return sorted.length % 2 === 0
-    ? (sorted[mid - 1] + sorted[mid]) / 2
-    : sorted[mid];
+  return sorted.length % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
 }
 
 function calculateStandardDeviation(values: number[]): number {
@@ -282,8 +280,4 @@ self.addEventListener('message', (event: MessageEvent<CalculationTask>) => {
 });
 
 // Export for testing
-export {
-  calculateAnalytics,
-  optimizeRendering,
-  processData
-};
+export { calculateAnalytics, optimizeRendering, processData };

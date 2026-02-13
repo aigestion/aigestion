@@ -35,4 +35,5 @@ Una vez desplegado, realiza estas pruebas de humo:
 - El backend tiene CORS configurado para aceptar solo tus dominios autorizados.
 
 ---
+
 **¿Deseas que profundicemos en la configuración de algún servicio específico (Redis, RabbitMQ)?**

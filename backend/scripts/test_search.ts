@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import dotenv from 'dotenv';
 import path from 'path';
 
-import { container, TYPES  } from '../src/config/inversify.config';
+import { container, TYPES } from '../src/config/inversify.config';
 import { SearchService } from '../src/services/search.service';
 
 // Load .env manually
@@ -31,14 +31,14 @@ async function testSearch() {
     const searchService = new SearchService();
 
     console.log('Searching for "Nexus AIGestion"...');
-    const results = await searchService.search("Nexus AIGestion", 1);
+    const results = await searchService.search('Nexus AIGestion', 1);
 
     console.log('Results:', JSON.stringify(results, null, 2));
 
     if (results.length > 0) {
-        console.log('✅ Search Verify: SUCCESS');
+      console.log('✅ Search Verify: SUCCESS');
     } else {
-        console.log('⚠️ Search Verify: PROBABLY SUCCESS (No results but no error)');
+      console.log('⚠️ Search Verify: PROBABLY SUCCESS (No results but no error)');
     }
   } catch (error) {
     console.error('❌ Search Verify: FAILED', error);

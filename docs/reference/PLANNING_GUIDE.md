@@ -38,18 +38,21 @@ Execute immediate work to unblock progress, fix critical issues, and maintain mo
 ### 🔍 What to Include
 
 **Priority 1 - MUST DO (Critical)**
+
 - Blocking issues that prevent other work
 - Security vulnerabilities
 - Production outages
 - Customer escalations
 
 **Priority 2 - SHOULD DO (High)**
+
 - High-priority features
 - Important bug fixes
 - Technical debt that blocks progress
 - Dependencies for future work
 
 **Priority 3 - NICE TO DO (Medium)**
+
 - Feature enhancements
 - Code quality improvements
 - Documentation updates
@@ -58,12 +61,14 @@ Execute immediate work to unblock progress, fix critical issues, and maintain mo
 ### 🎪 Sprint Planning Meeting
 
 **Before Sprint Starts:**
+
 1. Review completed tasks from last sprint
 2. Check velocity (tasks/week)
 3. Identify blockers from previous sprint
 4. Select 15 highest priority items
 
 **Sprint Checklist:**
+
 - [ ] All critical issues included
 - [ ] High priority items prioritized
 - [ ] Dependencies identified
@@ -87,11 +92,13 @@ Success: All critical & high priority done
 ### ⏰ Sprint Tracking
 
 **Daily Standup Questions:**
+
 - What did I complete yesterday?
 - What am I working on today?
 - What's blocking me?
 
 **Weekly Check-in:**
+
 - Completed 25%? (3-4 tasks)
 - On track for 15?
 - Any blockers to escalate?
@@ -115,24 +122,28 @@ Strategic feature delivery, major initiatives, and capability building.
 ### 🔍 What to Include
 
 **Strategic Initiatives (40%)**
+
 - Major feature releases
 - Platform improvements
 - Infrastructure upgrades
 - Customer-requested enhancements
 
 **Quality & Sustainability (30%)**
+
 - Technical debt reduction
 - Performance optimization
 - Security hardening
 - Code refactoring
 
 **Operations & Support (20%)**
+
 - Bug fixes and patches
 - Documentation
 - Maintenance work
 - Support tasks
 
 **Innovation (10%)**
+
 - Research & exploration
 - Experiments
 - Learning/development
@@ -172,12 +183,14 @@ Total: 50 tasks | Timeline: Jan 1 - Mar 31
 ### 📊 Quarterly Review Questions
 
 **Mid-Quarter (Week 6):**
+
 - Are we on track? (Should be ~50% done)
 - Which items are blocked?
 - Do we need to adjust scope?
 - What's the velocity looking like?
 
 **End of Quarter:**
+
 - Did we complete ~90% of planned work?
 - What surprised us?
 - What went well?
@@ -201,18 +214,21 @@ Set strategic direction, plan major capabilities, and align with vision.
 ### 🔍 What to Include
 
 **Major Initiatives (50%)**
+
 - New platform features
 - Market expansion
 - Architecture overhaul
 - Significant capability additions
 
 **Sustainability (30%)**
+
 - Technical foundation
 - Security & compliance
 - Performance & reliability
 - Team capabilities
 
 **Support & Evolution (20%)**
+
 - Operational improvements
 - Customer requests
 - Market feedback
@@ -259,16 +275,19 @@ Impact: Data-driven insights
 ### 🎯 Roadmap Principles
 
 **Alignment:**
+
 - ✓ Tied to business strategy
 - ✓ Clear customer value
 - ✓ Technical feasibility
 
 **Flexibility:**
+
 - ✓ Adjust for market feedback
 - ✓ Responsive to priorities
 - ✓ Account for unknowns
 
 **Communication:**
+
 - ✓ Published to stakeholders
 - ✓ Updated quarterly
 - ✓ Rationale documented
@@ -356,20 +375,24 @@ Average Velocity: 5 tasks/week
 ### Using Velocity for Planning
 
 **Sprint (14 days = 2 weeks):**
+
 - 5 tasks/week × 2 weeks = **10 tasks capacity**
 - Realistically add 1-2 more = **11-12 tasks to plan**
 
 **Quarter (90 days = ~13 weeks):**
+
 - 5 tasks/week × 13 weeks = **65 tasks capacity**
 - Realistically: **50 tasks to plan** (leaving buffer)
 
 **Year (365 days = 52 weeks):**
+
 - 5 tasks/week × 52 weeks = **260 tasks capacity**
 - Realistically: **200 tasks to plan** (leaving buffer)
 
 ### Accounting for Reality
 
 **Factors that reduce capacity:**
+
 - Team meetings: -10%
 - Firefighting/bugs: -15%
 - Support issues: -10%
@@ -484,4 +507,3 @@ All planning artifacts stored in: `task/`
 
 **Last Updated:** December 7, 2025
 **Part of:** NEXUS V1 Task Management System v1.0
-

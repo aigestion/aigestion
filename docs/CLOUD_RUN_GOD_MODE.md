@@ -41,24 +41,28 @@ This document provides comprehensive guidance for deploying and managing the AIG
 ## Configuration Summary
 
 ### Resource Limits (God Mode)
+
 - **CPU**: 4 vCPU (4000m)
 - **Memory**: 8Gi
 - **CPU Boost**: Enabled (faster cold starts)
 - **Execution Environment**: Gen2
 
 ### Autoscaling
+
 - **Min Instances**: 1 (always warm, no cold starts)
 - **Max Instances**: 100 (handle traffic spikes)
 - **Concurrency**: 80 requests per instance
 - **Target CPU**: 70% utilization
 
 ### Timeout & Networking
+
 - **Request Timeout**: 300 seconds (5 minutes)
 - **Port**: 8080
 - **Ingress**: All traffic (public)
 - **VPC Connector**: Optional (for private services)
 
 ### Health Checks
+
 - **Startup Probe**: `/api/v1/health`
   - Initial delay: 5s
   - Timeout: 30s
@@ -142,6 +146,7 @@ gcloud run deploy backend-aigestion \
 ### Cloud Monitoring Dashboard
 
 A custom dashboard has been created at `monitoring/cloud-run-dashboard.json` with:
+
 - Request rate and latency (p50, p95, p99)
 - Error rates (4xx, 5xx)
 - Container instance count
@@ -149,6 +154,7 @@ A custom dashboard has been created at `monitoring/cloud-run-dashboard.json` wit
 - Cold start frequency
 
 **To deploy the dashboard:**
+
 ```bash
 gcloud monitoring dashboards create --config-from-file=monitoring/cloud-run-dashboard.json
 ```
@@ -156,6 +162,7 @@ gcloud monitoring dashboards create --config-from-file=monitoring/cloud-run-dash
 ### Alert Policies
 
 Alert policies are defined in `monitoring/alerts.yaml`:
+
 - High error rate (>5% for 5 min)
 - High latency (p95 > 2s)
 - Low availability (<99.5%)
@@ -164,6 +171,7 @@ Alert policies are defined in `monitoring/alerts.yaml`:
 - Frequent cold starts (>10 in 5 min)
 
 **To create alerts:**
+
 ```bash
 # First, create notification channels in Cloud Console
 # Then deploy alert policies
@@ -173,6 +181,7 @@ gcloud alpha monitoring policies create --policy-from-file=monitoring/alerts.yam
 ### Logging
 
 View logs in real-time:
+
 ```bash
 # All logs
 gcloud run services logs read backend-aigestion --region=us-central1 --follow
@@ -186,6 +195,7 @@ gcloud run services logs read backend-aigestion --region=us-central1 --log-filte
 ### Secret Manager Integration
 
 Store sensitive data in Secret Manager:
+
 ```bash
 # Create secret
 echo -n "your-secret-value" | gcloud secrets create database-url --data-file=-
@@ -204,6 +214,7 @@ gcloud run services update backend-aigestion \
 ### Service Account
 
 Create a dedicated service account with minimal permissions:
+
 ```bash
 # Create service account
 gcloud iam service-accounts create backend-sa \
@@ -223,17 +234,21 @@ gcloud run services update backend-aigestion \
 ## Performance Optimization
 
 ### Cold Start Mitigation
+
 - **Min instances = 1**: Service is always warm
 - **CPU boost enabled**: Faster container startup
 - **Gen2 execution environment**: Better performance
 
 ### Autoscaling Strategy
+
 - **70% CPU target**: Balance between cost and responsiveness
 - **80 concurrency**: Optimal for Node.js event loop
 - **1-100 instances**: Handle traffic from 80 to 8,000 req/s
 
 ### Cost Optimization
+
 If cost is a concern, consider:
+
 - Reduce CPU to 2 vCPU (`--cpu 2`)
 - Reduce memory to 4Gi (`--memory 4Gi`)
 - Set min-instances to 0 (accept cold starts)
@@ -242,6 +257,7 @@ If cost is a concern, consider:
 ## Troubleshooting
 
 ### Service Not Responding
+
 ```bash
 # Check service status
 gcloud run services describe backend-aigestion --region=us-central1
@@ -254,6 +270,7 @@ curl https://backend-aigestion-xxx-uc.a.run.app/api/v1/health
 ```
 
 ### High Error Rate
+
 ```bash
 # Filter error logs
 gcloud run services logs read backend-aigestion --region=us-central1 \
@@ -265,12 +282,14 @@ gcloud run services describe backend-aigestion --region=us-central1 \
 ```
 
 ### Slow Performance
+
 - Check Cloud Monitoring dashboard for CPU/Memory usage
 - Review autoscaling settings
 - Consider increasing CPU or memory
 - Check for cold starts (increase min-instances)
 
 ### Deployment Failed
+
 ```bash
 # Check Cloud Build logs
 gcloud builds list --limit=10
@@ -289,11 +308,13 @@ gcloud run services update-traffic backend-aigestion \
 Based on God Mode configuration (approximate monthly costs):
 
 **High Traffic Scenario** (1M requests/month, avg 100ms latency)
+
 - Compute: ~$150-200/month
 - Network: ~$10-20/month
 - **Total**: ~$160-220/month
 
 **Medium Traffic Scenario** (100K requests/month, avg 100ms latency)
+
 - Compute: ~$50-70/month
 - Network: ~$2-5/month
 - **Total**: ~$52-75/month
@@ -322,6 +343,7 @@ Based on God Mode configuration (approximate monthly costs):
 ## Support
 
 For issues or questions:
+
 - Check Cloud Run logs
 - Review Cloud Monitoring dashboard
 - Consult Google Cloud documentation

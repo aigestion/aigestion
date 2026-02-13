@@ -42,12 +42,12 @@ export class PayPalService {
     // Initialize Circuit Breakers
     this.createOrderBreaker = CircuitBreakerFactory.create(
       (amount: string, currency: string) => this.createOrderInternal(amount, currency),
-      { name: 'PayPal.createOrder' },
+      { name: 'PayPal.createOrder' }
     );
 
     this.captureOrderBreaker = CircuitBreakerFactory.create(
       (orderId: string) => this.captureOrderInternal(orderId),
-      { name: 'PayPal.captureOrder' },
+      { name: 'PayPal.captureOrder' }
     );
   }
 
@@ -67,7 +67,7 @@ export class PayPalService {
             Authorization: `Basic ${auth}`,
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-        },
+        }
       );
 
       this.accessToken = response.data.access_token;
@@ -85,7 +85,7 @@ export class PayPalService {
 
   private async createOrderInternal(
     amount: string,
-    currency: string,
+    currency: string
   ): Promise<CreateOrderResponse> {
     const token = await this.getAccessToken();
 
@@ -108,7 +108,7 @@ export class PayPalService {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-        },
+        }
       );
 
       return response.data;
@@ -134,7 +134,7 @@ export class PayPalService {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-        },
+        }
       );
 
       return response.data;

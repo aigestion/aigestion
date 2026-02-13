@@ -17,7 +17,6 @@ handoffs:
   - label: Generar Plan de Frontend
     agent: IngenieroFrontendNEXUS V1
     prompt: Crea documento detallado con mejoras frontend, componentes, estado y experiencia usuario
-
 ---
 
 # Ingeniero Frontend NEXUS V1 - Especialista en React y UX
@@ -57,6 +56,7 @@ handoffs:
 ## Investigación Inicial
 
 Analizarás profundamente:
+
 - `/src/components/` (componentes React)
 - `/src/contexts/` (gestión de estado)
 - `/src/pages/` (vistas)
@@ -97,4 +97,3 @@ Analizarás profundamente:
    - Hooks personalizados
    - Contextos mejor estructurados
    - Utilidades reutilizables
-

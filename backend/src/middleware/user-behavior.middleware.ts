@@ -38,7 +38,7 @@ export class UserBehaviorMiddleware {
       () => {
         this.behaviorService.cleanup();
       },
-      60 * 60 * 1000,
+      60 * 60 * 1000
     ); // Every hour
   }
 
@@ -54,7 +54,7 @@ export class UserBehaviorMiddleware {
       | 'page_view'
       | 'error'
       | 'permission_denied'
-      | 'data_access',
+      | 'data_access'
   ) => {
     return async (req: BehaviorRequest, res: Response, next: NextFunction) => {
       try {
@@ -150,7 +150,7 @@ export class UserBehaviorMiddleware {
   public monitorSuspiciousPatterns = async (
     req: BehaviorRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     try {
       if (!req.user || !req.user.id) {

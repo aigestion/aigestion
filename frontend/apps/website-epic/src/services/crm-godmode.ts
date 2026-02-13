@@ -45,7 +45,14 @@ export interface CRMContact extends GoogleContact {
   whatsapp?: WhatsAppContact;
   crm_data: {
     lead_score: number; // 0-100
-    deal_stage: 'new' | 'contacted' | 'qualified' | 'proposal' | 'negotiation' | 'closed_won' | 'closed_lost';
+    deal_stage:
+      | 'new'
+      | 'contacted'
+      | 'qualified'
+      | 'proposal'
+      | 'negotiation'
+      | 'closed_won'
+      | 'closed_lost';
     deal_value?: number;
     follow_up_date?: Date;
     tags: string[];
@@ -115,17 +122,22 @@ export const crmGodModeSettings: CRMSettings = {
   whatsapp: {
     business_number: '+34618779308',
     auto_reply_enabled: true,
-    welcome_message: '¡Hola! Soy Alejandro de AIGestion. Gracias por contactarnos. ¿En qué puedo ayudarte hoy?',
+    welcome_message:
+      '¡Hola! Soy Alejandro de AIGestion. Gracias por contactarnos. ¿En qué puedo ayudarte hoy?',
     business_hours: {
       monday_friday: { start: '09:00', end: '18:00' },
       saturday: { start: '10:00', end: '14:00' },
       sunday: { start: 'closed', end: 'closed' },
     },
     templates: {
-      welcome: '¡Hola {name}! Bienvenido a AIGestion. Soy Alejandro y estoy aquí para ayudarte con soluciones de IA para tu negocio.',
-      follow_up: 'Hola {name}, ¿cómo va todo con {previous_topic}? Quería saber si necesitas algo más de nuestra parte.',
-      promotion: '🎉 Oferta especial para {name}! 30% de descuento en nuestros servicios de IA. ¡Contáctame!',
-      support: 'Hola {name}, he recibido tu consulta sobre {issue}. Estoy revisando y te respondo en breve.',
+      welcome:
+        '¡Hola {name}! Bienvenido a AIGestion. Soy Alejandro y estoy aquí para ayudarte con soluciones de IA para tu negocio.',
+      follow_up:
+        'Hola {name}, ¿cómo va todo con {previous_topic}? Quería saber si necesitas algo más de nuestra parte.',
+      promotion:
+        '🎉 Oferta especial para {name}! 30% de descuento en nuestros servicios de IA. ¡Contáctame!',
+      support:
+        'Hola {name}, he recibido tu consulta sobre {issue}. Estoy revisando y te respondo en breve.',
     },
   },
 
@@ -219,7 +231,9 @@ export class CRMGodMode {
     // Agregar a la lista de contactos
     this.contacts.push(aigestionContact);
 
-    console.log(`👤 Contacto AIGestion configurado: ${aigestionContact.name} - ${aigestionContact.phone}`);
+    console.log(
+      `👤 Contacto AIGestion configurado: ${aigestionContact.name} - ${aigestionContact.phone}`
+    );
   }
 
   /**
@@ -338,8 +352,8 @@ export class CRMGodMode {
   private async mergeContacts(googleContacts: GoogleContact[]): Promise<void> {
     for (const googleContact of googleContacts) {
       // Verificar si ya existe
-      const existingContact = this.contacts.find(c =>
-        c.email === googleContact.email || c.phone === googleContact.phone
+      const existingContact = this.contacts.find(
+        c => c.email === googleContact.email || c.phone === googleContact.phone
       );
 
       if (!existingContact) {
@@ -374,7 +388,10 @@ export class CRMGodMode {
       } else {
         // Actualizar contacto existente
         (existingContact as any).updated_at = new Date();
-        if (googleContact.last_contact && googleContact.last_contact > (existingContact.last_contact || new Date(0))) {
+        if (
+          googleContact.last_contact &&
+          googleContact.last_contact > (existingContact.last_contact || new Date(0))
+        ) {
           existingContact.last_contact = googleContact.last_contact;
         }
       }
@@ -397,7 +414,8 @@ export class CRMGodMode {
 
     // Puntos por empresa
     if (contact.company) {
-      if (contact.company.includes('Corporation') || contact.company.includes('Global')) score += 20;
+      if (contact.company.includes('Corporation') || contact.company.includes('Global'))
+        score += 20;
       else if (contact.company.includes('SL') || contact.company.includes('Ltd')) score += 15;
       else score += 10;
     }
@@ -413,7 +431,9 @@ export class CRMGodMode {
 
     // Puntos por contacto reciente
     if (contact.last_contact) {
-      const daysSinceContact = Math.floor((new Date().getTime() - contact.last_contact.getTime()) / (1000 * 60 * 60 * 24));
+      const daysSinceContact = Math.floor(
+        (new Date().getTime() - contact.last_contact.getTime()) / (1000 * 60 * 60 * 24)
+      );
       if (daysSinceContact < 7) score += 15;
       else if (daysSinceContact < 30) score += 10;
       else if (daysSinceContact < 90) score += 5;
@@ -513,7 +533,10 @@ export class CRMGodMode {
         return false;
       }
 
-      if (criteria.company && !contact.company?.toLowerCase().includes(criteria.company.toLowerCase())) {
+      if (
+        criteria.company &&
+        !contact.company?.toLowerCase().includes(criteria.company.toLowerCase())
+      ) {
         return false;
       }
 
