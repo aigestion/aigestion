@@ -74,8 +74,9 @@ export const EnhancedNavigation: React.FC = () => {
   return (
     <>
       <motion.nav
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
-          }`}
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          isScrolled ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'
+        }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -144,18 +145,21 @@ export const EnhancedNavigation: React.FC = () => {
               >
                 <div className="w-6 h-5 flex flex-col justify-center gap-1">
                   <motion.span
-                    className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''
-                      }`}
+                    className={`w-full h-0.5 bg-white transition-all duration-300 ${
+                      isMobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''
+                    }`}
                     animate={{ rotate: isMobileMenuOpen ? 45 : 0, y: isMobileMenuOpen ? 6 : 0 }}
                   />
                   <motion.span
-                    className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0' : ''
-                      }`}
+                    className={`w-full h-0.5 bg-white transition-all duration-300 ${
+                      isMobileMenuOpen ? 'opacity-0' : ''
+                    }`}
                     animate={{ opacity: isMobileMenuOpen ? 0 : 1 }}
                   />
                   <motion.span
-                    className={`w-full h-0.5 bg-white transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''
-                      }`}
+                    className={`w-full h-0.5 bg-white transition-all duration-300 ${
+                      isMobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''
+                    }`}
                     animate={{ rotate: isMobileMenuOpen ? -45 : 0, y: isMobileMenuOpen ? -6 : 0 }}
                   />
                 </div>
@@ -179,10 +183,11 @@ export const EnhancedNavigation: React.FC = () => {
                   <motion.button
                     key={item.path}
                     onClick={() => handleNavClick(item.path)}
-                    className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 ${activeSection === item.path.slice(1)
+                    className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 ${
+                      activeSection === item.path.slice(1)
                         ? 'bg-nexus-violet/20 text-nexus-cyan'
                         : 'text-gray-300 hover:text-white hover:bg-white/5'
-                      }`}
+                    }`}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
@@ -236,4 +241,3 @@ function useScrollProgress() {
 
   return progress;
 }
-

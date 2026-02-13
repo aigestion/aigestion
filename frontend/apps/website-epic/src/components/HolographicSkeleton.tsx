@@ -19,7 +19,8 @@ export const HolographicSkeleton: React.FC<HolographicSkeletonProps> = ({ classN
           ease: 'linear',
         }}
         style={{
-          background: 'linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.05), rgba(138, 43, 226, 0.1), rgba(0, 245, 255, 0.05), transparent)',
+          background:
+            'linear-gradient(90deg, transparent, rgba(0, 245, 255, 0.05), rgba(138, 43, 226, 0.1), rgba(0, 245, 255, 0.05), transparent)',
         }}
       />
       {/* Static Grain for texture */}

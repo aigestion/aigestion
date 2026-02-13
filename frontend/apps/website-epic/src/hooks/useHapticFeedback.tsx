@@ -41,7 +41,7 @@ export function useHapticFeedback() {
     const checkSupport = () => {
       const supported = 'vibrate' in navigator;
       setIsSupported(supported);
-      
+
       // Also check for iOS device which has limited haptic support
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       if (isIOS) {
@@ -65,7 +65,7 @@ export function useHapticFeedback() {
 
     if (nextVibration) {
       nextVibration();
-      
+
       // Reset flag after vibration completes
       setTimeout(() => {
         isVibrating.current = false;
@@ -84,16 +84,12 @@ export function useHapticFeedback() {
   const vibrate = (options: HapticOptions = {}) => {
     if (!isSupported || !isEnabled) return;
 
-    const {
-      intensity = 'medium',
-      duration = 10,
-      pattern,
-    } = options;
+    const { intensity = 'medium', duration = 10, pattern } = options;
 
     const vibrationFunc = () => {
       if (pattern) {
         // Pattern-based vibration
-        const adjustedPattern = pattern.pattern.map(value => 
+        const adjustedPattern = pattern.pattern.map(value =>
           Math.round(value * INTENSITY_MAP[intensity])
         );
         navigator.vibrate(adjustedPattern);
@@ -150,7 +146,7 @@ export function useHapticFeedback() {
     if (!isSupported || !isEnabled) return;
 
     const continuousPattern = [50, 50]; // On-off pattern
-    const adjustedPattern = continuousPattern.map(value => 
+    const adjustedPattern = continuousPattern.map(value =>
       Math.round(value * INTENSITY_MAP[intensity])
     );
 
@@ -260,7 +256,7 @@ export function useProgressHaptics() {
         break;
       }
     }
-    
+
     setLastProgress(progress);
   };
 

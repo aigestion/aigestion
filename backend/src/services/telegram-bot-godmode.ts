@@ -38,7 +38,7 @@ export class TelegramBotHandlerGodMode {
     @inject(EconomyService) private economyService: EconomyService,
     @inject(EconomyChartService) private chartService: EconomyChartService,
     @inject(EnhancedVoiceService) private voiceService: EnhancedVoiceService,
-    @inject(SystemMetricsService) private metricsService?: SystemMetricsService,
+    @inject(SystemMetricsService) private metricsService?: SystemMetricsService
   ) {
     this.daniela = daniela;
     this.initialize();
@@ -97,7 +97,7 @@ export class TelegramBotHandlerGodMode {
         logger.info(
           `[TELEGRAM] ${username} (${userId}): ${
             ctx.message && 'text' in ctx.message ? ctx.message.text : 'interaction'
-          }`,
+          }`
         );
       }
 
@@ -133,7 +133,7 @@ export class TelegramBotHandlerGodMode {
           `/settings - Configuración\n\n` +
           `${isAdmin ? `/admin - Panel de administración\n` : ''}` +
           `¿Cómo puedo ayudarte?`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -168,7 +168,7 @@ export class TelegramBotHandlerGodMode {
               : ''
           }` +
           `💡 *Tip:* Usa /settings para personalizar tu experiencia.`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -189,7 +189,7 @@ export class TelegramBotHandlerGodMode {
             `💾 RAM: ${metrics?.memory || '0'}MB\n` +
             `📈 Uptime: ${Math.floor((Date.now() - (metrics?.uptime || 0)) / 1000 / 3600)}h\n\n` +
             `🕐 Última actualización: ${new Date().toLocaleString('es-ES')}`,
-          { parse_mode: 'Markdown' },
+          { parse_mode: 'Markdown' }
         );
       } catch (error) {
         logger.error('Error in /status', error);
@@ -205,7 +205,7 @@ export class TelegramBotHandlerGodMode {
           `🟢 Cache: Saludable\n` +
           `🟢 Servicios: Saludables\n\n` +
           `✅ Todo está funcionando perfectamente`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -243,7 +243,7 @@ export class TelegramBotHandlerGodMode {
       } catch (error) {
         logger.error('Error in /economy_voice', error);
         await ctx.reply(
-          '❌ Error generando audio. Verifica que DASHSCOPE_API_KEY esté configurada.',
+          '❌ Error generando audio. Verifica que DASHSCOPE_API_KEY esté configurada.'
         );
       }
     });
@@ -274,7 +274,7 @@ export class TelegramBotHandlerGodMode {
           `✅ Alerta configurada: Te avisaré cuando *${symbol}* esté ${
             alert.condition === 'above' ? 'por encima de' : 'por debajo de'
           } *$${targetPrice}*`,
-          { parse_mode: 'Markdown' },
+          { parse_mode: 'Markdown' }
         );
       } catch (error) {
         logger.error('Error in /alert', error);
@@ -290,7 +290,7 @@ export class TelegramBotHandlerGodMode {
         if (stats.length === 0) {
           return ctx.reply(
             '📭 Tu cartera está vacía. Usa `/portfolio_add <SIMBOLO> <CANTIDAD> <PRECIO_ENTRADA>`',
-            { parse_mode: 'Markdown' },
+            { parse_mode: 'Markdown' }
           );
         }
 
@@ -323,7 +323,7 @@ export class TelegramBotHandlerGodMode {
         if (parts.length < 4) {
           return ctx.reply(
             '📖 Uso: `/portfolio_add <SIMBOLO> <CANTIDAD> <PRECIO>`\nEjemplo: `/portfolio_add NVDA 10 850`',
-            { parse_mode: 'Markdown' },
+            { parse_mode: 'Markdown' }
           );
         }
 
@@ -405,7 +405,7 @@ export class TelegramBotHandlerGodMode {
           `📈 +23% de productividad\n` +
           `📊 +15% de entregas a tiempo\n` +
           `👥 +8% de colaboración`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -431,7 +431,7 @@ export class TelegramBotHandlerGodMode {
           `   Equipo: 6 personas\n` +
           `   Deadline: Mar 1\n\n` +
           `📌 Ver detalles: /projects_detail`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -455,7 +455,7 @@ export class TelegramBotHandlerGodMode {
           `├─ QA: 2\n` +
           `└─ Support: 1\n\n` +
           `Total: 18 miembros activos`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -473,7 +473,7 @@ export class TelegramBotHandlerGodMode {
           `*Completadas hoy: 8*\n` +
           `*Completadas esta semana: 42*\n\n` +
           `Productividad: 92% 📈`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -499,7 +499,7 @@ export class TelegramBotHandlerGodMode {
           `• Dashboard redesign\n` +
           `• Database optimization\n` +
           `• Team standup`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -552,7 +552,7 @@ export class TelegramBotHandlerGodMode {
         message,
         ctx.from?.first_name || 'User',
         ctx.from?.id.toString() || 'unknown',
-        ctx.from?.is_bot ? 'bot' : 'user',
+        ctx.from?.is_bot ? 'bot' : 'user'
       );
 
       await ctx.reply(response, { parse_mode: 'Markdown' });
@@ -576,7 +576,7 @@ export class TelegramBotHandlerGodMode {
             cleanMessage,
             ctx.from?.first_name || 'User',
             ctx.from?.id.toString() || 'unknown',
-            ctx.from?.is_bot ? 'bot' : 'user',
+            ctx.from?.is_bot ? 'bot' : 'user'
           );
 
           await ctx.reply(response, { parse_mode: 'Markdown' });
@@ -618,7 +618,7 @@ export class TelegramBotHandlerGodMode {
                 [{ text: '❌ Cerrar', callback_data: 'close' }],
               ],
             },
-          },
+          }
         );
       });
     }
@@ -687,7 +687,7 @@ export class TelegramBotHandlerGodMode {
           `[INFO] Backup completado\n` +
           `[INFO] Notificaciones enviadas: 23\n\n` +
           `Ver logs completos: /logs_full`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
 
@@ -709,7 +709,7 @@ export class TelegramBotHandlerGodMode {
           `🟢 Cache: Running\n` +
           `🟢 Workers: Running (4 activos)\n\n` +
           `⚡ Performance: Excelente`,
-        { parse_mode: 'Markdown' },
+        { parse_mode: 'Markdown' }
       );
     });
   }
@@ -733,14 +733,14 @@ export class TelegramBotHandlerGodMode {
                 `📊 Analytics actualizadas\n` +
                 `👥 3 nuevos miembros en el equipo\n\n` +
                 `Usa /report para detalles completos.`,
-              { parse_mode: 'Markdown' },
+              { parse_mode: 'Markdown' }
             );
           } catch (error) {
             logger.warn(`Failed to send notification to ${session.chatId}`, error);
           }
         }
       },
-      6 * 60 * 60 * 1000,
+      6 * 60 * 60 * 1000
     ); // 6 horas
 
     // Economía - Cada 4 horas si hay un canal configurado
@@ -761,14 +761,14 @@ export class TelegramBotHandlerGodMode {
             });
 
             logger.info(
-              `[TELEGRAM] Periodic economy report and advice sent to ${economyChannelId}`,
+              `[TELEGRAM] Periodic economy report and advice sent to ${economyChannelId}`
             );
           } catch (error) {
             logger.warn(`Failed to send economy report to ${economyChannelId}`, error);
           }
         }
       },
-      4 * 60 * 60 * 1000,
+      4 * 60 * 60 * 1000
     );
 
     // Alertas de Precio - Cada 15 minutos
@@ -788,7 +788,7 @@ export class TelegramBotHandlerGodMode {
           logger.error('Error checking price alerts in background', error);
         }
       },
-      15 * 60 * 1000,
+      15 * 60 * 1000
     );
 
     // Morning Briefing God Mode - Diariamente a las 8:00 AM
@@ -807,7 +807,7 @@ export class TelegramBotHandlerGodMode {
               await this.bot?.telegram.sendMessage(
                 economyChannelId,
                 '🌅 *Morning Briefing God Mode*',
-                { parse_mode: 'Markdown' },
+                { parse_mode: 'Markdown' }
               );
               await this.bot?.telegram.sendVoice(economyChannelId, { source: audioBuffer });
             } catch (error) {
@@ -816,7 +816,7 @@ export class TelegramBotHandlerGodMode {
           }
         }
       },
-      15 * 60 * 1000,
+      15 * 60 * 1000
     ); // Check every 15 mins
   }
 

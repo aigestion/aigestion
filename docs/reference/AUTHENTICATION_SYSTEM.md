@@ -11,10 +11,11 @@ Se ha implementado un sistema completo de autenticación con redirección autom�
 ### Componentes Principales
 
 1. **Landing Host** (`http://localhost:4001`)
-  - Página de aterrizaje con información de NEXUS V1
-   - Modal de login con diseño cyberpunk
-   - Servicio de autenticación
-   - Redirección automática post-login
+
+- Página de aterrizaje con información de NEXUS V1
+- Modal de login con diseño cyberpunk
+- Servicio de autenticación
+- Redirección automática post-login
 
 2. **Dashboard** (`http://localhost:5173`)
    - 6 dashboards especializados por rol
@@ -45,13 +46,13 @@ Usuario → Landing Host → Click "Iniciar Sesión" → Login Modal
 
 ## 👥 Usuarios de Demostración
 
-| Rol       | Email              | Password    | Dashboard URL                                    | Icono |
-|-----------|-------------------|-------------|--------------------------------------------------|-------|
-| Admin     | admin@NEXUS V1.net      | admin123    | http://localhost:5173/god-mode                   | 👑    |
-| Developer | dev@NEXUS V1.net        | dev123      | http://localhost:5173/dashboard?role=developer   | 💻    |
-| Analyst   | analyst@NEXUS V1.net    | analyst123  | http://localhost:5173/dashboard?role=analyst     | 📊    |
-| Operator  | ops@NEXUS V1.net        | ops123      | http://localhost:5173/dashboard?role=operator    | 🔧    |
-| Demo      | demo@NEXUS V1.net       | demo123     | http://localhost:5173/dashboard?role=demo        | 🌟    |
+| Rol       | Email                | Password   | Dashboard URL                                  | Icono |
+| --------- | -------------------- | ---------- | ---------------------------------------------- | ----- |
+| Admin     | admin@NEXUS V1.net   | admin123   | http://localhost:5173/god-mode                 | 👑    |
+| Developer | dev@NEXUS V1.net     | dev123     | http://localhost:5173/dashboard?role=developer | 💻    |
+| Analyst   | analyst@NEXUS V1.net | analyst123 | http://localhost:5173/dashboard?role=analyst   | 📊    |
+| Operator  | ops@NEXUS V1.net     | ops123     | http://localhost:5173/dashboard?role=operator  | 🔧    |
+| Demo      | demo@NEXUS V1.net    | demo123    | http://localhost:5173/dashboard?role=demo      | 🌟    |
 
 ---
 
@@ -60,16 +61,19 @@ Usuario → Landing Host → Click "Iniciar Sesión" → Login Modal
 ### Landing Host (`frontend/apps/landing-host`)
 
 #### Nuevos Archivos:
+
 - `src/components/LoginModal.tsx` - Componente modal de login
 - `src/components/LoginModal.css` - Estilos cyberpunk del modal
 - `src/services/authService.ts` - Servicio de autenticación
 
 #### Modificados:
+
 - `src/App.tsx` - Integración del LoginModal
 
 ### Dashboard (`frontend/apps/dashboard`)
 
 #### Modificados:
+
 - `src/context/RoleContext.tsx` - Carga automática de usuario autenticado
 - `src/App.tsx` - Limpieza de componentes de ejemplo
 
@@ -78,6 +82,7 @@ Usuario → Landing Host → Click "Iniciar Sesión" → Login Modal
 ## 🎨 Características del Login Modal
 
 ### Diseño
+
 - ✨ Tema cyberpunk con gradientes neón
 - 🌟 Efectos de glassmorphism
 - 💫 Animaciones suaves de entrada/salida
@@ -85,6 +90,7 @@ Usuario → Landing Host → Click "Iniciar Sesión" → Login Modal
 - 🎭 Efectos hover interactivos
 
 ### Funcionalidad
+
 - 📝 Formulario de email/password
 - 🎯 Tarjetas de usuarios demo para testing rápido
 - ⚠️ Manejo de errores con mensajes visuales
@@ -233,26 +239,31 @@ Response:
 ## 📊 Dashboards por Rol
 
 ### Admin (God Mode)
+
 - **Ruta**: `/god-mode`
 - **Características**: Vista omnisciente del sistema
 - **Componentes**: System Vitals, IA Agents, Live Logs, God Actions
 
 ### Developer
+
 - **Ruta**: `/dashboard?role=developer`
 - **Características**: Herramientas de desarrollo
 - **Componentes**: Build Status, Code Stats, Terminal, API Health, Git Activity
 
 ### Analyst
+
 - **Ruta**: `/dashboard?role=analyst`
 - **Características**: Análisis de datos y métricas
 - **Componentes**: Data visualizations, Reports, Analytics
 
 ### Operator
+
 - **Ruta**: `/dashboard?role=operator`
 - **Características**: Operaciones y monitoreo
 - **Componentes**: Server Status, Docker Containers, Live Logs, Alerts, Network Stats
 
 ### Demo
+
 - **Ruta**: `/dashboard?role=demo`
 - **Características**: Vista demo para clientes
 - **Componentes**: Overview general del sistema
@@ -301,16 +312,19 @@ const DEMO_USERS: Record<string, { password: string; user: User }> = {
 ## 🐛 Troubleshooting
 
 ### El modal no se abre
+
 - Verificar que los imports estén correctos en `App.tsx`
 - Revisar consola del navegador por errores
 - Confirmar que `LoginModal.css` se está cargando
 
 ### No redirige al dashboard
+
 - Verificar que ambos servidores estén corriendo
 - Revisar que las URLs en `DASHBOARD_URLS` sean correctas
 - Confirmar que `sessionStorage` tiene el usuario
 
 ### Usuario no se carga en dashboard
+
 - Verificar que `RoleContext` esté envolviendo la app
 - Revisar `sessionStorage` en DevTools
 - Confirmar que el formato del usuario sea correcto
@@ -339,6 +353,5 @@ El sistema de autenticación está **completamente funcional** y listo para usar
 
 ---
 
-*Documentación generada: 2025-12-13*
-*Versión: 1.0.0*
-
+_Documentación generada: 2025-12-13_
+_Versión: 1.0.0_

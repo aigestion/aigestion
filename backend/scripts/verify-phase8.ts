@@ -32,9 +32,9 @@ async function verifyHandshake() {
     const finalizeRes = await axios.post(`${API_BASE}/sovereign/handshake/finalize`, {
       handshakeId,
       clientPublicKey: {
-        classic: Buffer.from(clientKeys.publicKey).toString('hex')
+        classic: Buffer.from(clientKeys.publicKey).toString('hex'),
       },
-      clientCiphertext: Buffer.from(clientCiphertext).toString('hex')
+      clientCiphertext: Buffer.from(clientCiphertext).toString('hex'),
     });
 
     const { sessionToken } = finalizeRes.data;

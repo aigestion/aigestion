@@ -68,7 +68,11 @@ class ErrorLoggerService {
   /**
    * Log React component errors
    */
-  logComponentError(error: Error, componentStack?: string, context?: Record<string, unknown>): void {
+  logComponentError(
+    error: Error,
+    componentStack?: string,
+    context?: Record<string, unknown>
+  ): void {
     const errorLog: ErrorLog = {
       message: error.message,
       stack: error.stack || undefined,
@@ -100,24 +104,18 @@ class ErrorLoggerService {
    * Handle global window errors
    */
   private handleGlobalError(event: ErrorEvent): void {
-    this.logError(
-      new Error(event.message),
-      'error',
-      {
-        filename: event.filename,
-        lineno: event.lineno,
-        colno: event.colno,
-      }
-    );
+    this.logError(new Error(event.message), 'error', {
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+    });
   }
 
   /**
    * Handle unhandled promise rejections
    */
   private handleUnhandledRejection(event: PromiseRejectionEvent): void {
-    const error = event.reason instanceof Error
-      ? event.reason
-      : new Error(String(event.reason));
+    const error = event.reason instanceof Error ? event.reason : new Error(String(event.reason));
 
     this.logError(error, 'error', { type: 'unhandled-promise-rejection' });
   }
@@ -203,5 +201,8 @@ export const logWarning = (error: Error, context?: Record<string, unknown>) =>
 export const logInfo = (error: Error, context?: Record<string, unknown>) =>
   errorLogger.logError(error, 'info', context);
 
-export const logComponentError = (error: Error, componentStack?: string, context?: Record<string, unknown>) =>
-  errorLogger.logComponentError(error, componentStack, context);
+export const logComponentError = (
+  error: Error,
+  componentStack?: string,
+  context?: Record<string, unknown>
+) => errorLogger.logComponentError(error, componentStack, context);

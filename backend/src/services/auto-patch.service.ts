@@ -132,7 +132,7 @@ export class AutoPatchService {
         backupBeforePatch: true,
         testAfterPatch: true,
         rollbackOnError: true,
-      },
+      }
     );
 
     logger.info('Default patch policies initialized', {
@@ -251,7 +251,7 @@ export class AutoPatchService {
         let auditResults: any = {};
         try {
           const { stdout: auditOutput } = await execAsync(
-            'pip-audit --format=json --requirement=requirements.txt',
+            'pip-audit --format=json --requirement=requirements.txt'
           );
           auditResults = JSON.parse(auditOutput || '{}');
         } catch {
@@ -337,7 +337,7 @@ export class AutoPatchService {
   public async createPatchJob(
     packageName: string,
     type: 'npm' | 'pip' | 'system',
-    targetVersion?: string,
+    targetVersion?: string
   ): Promise<PatchJob> {
     try {
       const packages = await this.scanOutdatedPackages();
@@ -466,7 +466,7 @@ export class AutoPatchService {
 
       // Verify update
       const { stdout: versionOutput } = await execAsync(
-        `npm list ${job.packageName} --depth=0 --json`,
+        `npm list ${job.packageName} --depth=0 --json`
       );
       const packageInfo = JSON.parse(versionOutput);
       const updatedVersion =
@@ -752,14 +752,14 @@ export class AutoPatchService {
         completedJobs.length > 0
           ? completedJobs.reduce(
               (sum, job) => sum + (job.endTime!.getTime() - job.startTime.getTime()),
-              0,
+              0
             ) / completedJobs.length
           : 0;
 
       const packagesPatched = new Set(this.patchJobs.map(job => job.packageName)).size;
       const vulnerabilitiesFixed = this.patchJobs.reduce(
         (sum, job) => sum + (job.metadata.vulnerabilities || 0),
-        0,
+        0
       );
 
       const recentJobs = this.patchJobs

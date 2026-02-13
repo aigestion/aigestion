@@ -9,12 +9,14 @@ Perfecto! He creado la configuración óptima para España con clusters en las m
 ## ✅ **CLUSTERS ACTIVOS**
 
 ### 🌍 **Regiones Europeas Configuradas**
+
 - ✅ **`europe-west1`** - **Irland** (Cluster principal)
 - ✅ **`europe-west2`** - **Londres** (UK)
 - ✅ **`europe-west3`** **Frankfurt** (Alemania)
 - ✅ **`europe-north1`** **Finlandia** (Norte Europa)
 
 ### 🚀 **Configuración Élite**
+
 - 🎯 **Machine Type**: `e2-medium` (2 vCPU, 4GB RAM)
 - 📊 **Auto-scaling**: 1-3 nodos por cluster
 - 💾 **Disco**: 30GB SSD balanceado
@@ -26,30 +28,33 @@ Perfecto! He creado la configuración óptima para España con clusters en las m
 
 ## 📊 **ESTADO DE CLUSTERS**
 
-| Cluster | Región | Status | Nodos | IP Maestra |
-|---------|--------|--------|--------|------------|
-| `europe-west1` | Irland | PROVISIONING | 6 | 34.52.145.83 |
-| `europe-west2` | Londres | PROVISIONING | 6 | - |
-| `europe-west3` | Frankfurt | PROVISIONING | 6 | - |
-| `europe-north1` | Finlandia | PROVISIONING | 6 | - |
+| Cluster         | Región    | Status       | Nodos | IP Maestra   |
+| --------------- | --------- | ------------ | ----- | ------------ |
+| `europe-west1`  | Irland    | PROVISIONING | 6     | 34.52.145.83 |
+| `europe-west2`  | Londres   | PROVISIONING | 6     | -            |
+| `europe-west3`  | Frankfurt | PROVISIONING | 6     | -            |
+| `europe-north1` | Finlandia | PROVISIONING | 6     | -            |
 
 ---
 
 ## 🌍 **VENTAJAS DE ESTA CONFIGURACIÓN**
 
 ### ⚡ **Performance para España**
+
 - 🎯 **Latencia mínima** - < 50ms desde Madrid
 - 🔄 **Alta disponibilidad** - 99.99% uptime
 - 📊 **Auto-scaling** - Escala automática
 - 🛡️ **Seguridad mejorada** - Shielded nodes
 
 ### 💰 **Costos Optimizados**
+
 - 💸 **e2-medium** - Balance costo/performance
 - 📊 **Auto-scaling** - Pago por uso real
 - 🔄 **1-3 nodos** - Escala eficiente
 - 💾 **30GB disco** - Almacenamiento optimizado
 
 ### 🌐 **Cobertura Europea**
+
 - 🇪🇸 **España** - Acceso ultra rápido
 - 🇬🇧 **Reino Unido** - Mercado principal
 - 🇩🇪 **Alemania** - Centro de datos
@@ -60,12 +65,14 @@ Perfecto! He creado la configuración óptima para España con clusters en las m
 ## 🚀 **CONFIGURACIÓN DEPLOY MULTI-REGION ESPAÑA**
 
 ### **🎯 Región Principal**
+
 - **`europe-west1`** - Irland (cluster principal)
 - **IP**: 34.52.145.83
 - **Status**: PROVISIONING
 - **Zonas**: europe-west1-b, europe-west1-c, europe-west1-d
 
 ### **🔄 Regiones Secundarias**
+
 - **`europe-west2`** - Londres (backup)
 - **`europe-west3`** - Frankfurt (backup)
 - **`europe-north1`** - Finlandia (backup)
@@ -75,6 +82,7 @@ Perfecto! He creado la configuración óptima para España con clusters en las m
 ## 📋 **COMANDOS DE VERIFICACIÓN**
 
 ### **Verificar Estado**
+
 ```bash
 # Verificar todos los clusters
 gcloud container clusters list --project aigestion-pro
@@ -88,6 +96,7 @@ kubectl get nodes
 ```
 
 ### **Deploy Multi-Region España**
+
 ```bash
 # Configurar kubectl para España
 gcloud container clusters get-credentials aigestion-pro-europe-west1 --region=europe-west1
@@ -101,6 +110,7 @@ pnpm run deploy:multi-region europe-west1,europe-west2,europe-west3,europe-north
 ## 🎯 **CONFIGURACIÓN DNS GLOBAL ESPAÑA**
 
 ### **🌍 URLs de Acceso**
+
 - 🇪🇸 **Principal**: https://aigestion.net
 - 🇪🇸 **España**: https://es.aigestion.net
 - 🇬🇧 **UK**: https://uk.aigestion.net
@@ -108,6 +118,7 @@ pnpm run deploy:multi-region europe-west1,europe-west2,europe-west3,europe-north
 - 🇫🇮 **Norte**: https://nord.aigestion.net
 
 ### **📊 Load Balancing**
+
 - 🎯 **Latency-based routing** - Usuario más cercano
 - 🔄 **Failover automático** - Si región falla
 - 📈 **Health checks** - Monitoreo continuo
@@ -120,6 +131,7 @@ pnpm run deploy:multi-region europe-west1,europe-west2,europe-west3,europe-north
 **🎉 ¡Configuración Multi-Region España completada! 🎉**
 
 ### ✅ **Logros Alcanzados**
+
 - 🌍 **4 clusters europeos** - Cobertura completa
 - 🎯 **Configuración óptima** - Performance máxima
 - 💰 **Costos optimizados** - Eficiencia máxima
@@ -127,6 +139,7 @@ pnpm run deploy:multi-region europe-west1,europe-west2,europe-west3,europe-north
 - 📊 **Auto-scaling** - Escala inteligente
 
 ### 🚀 **Próximo Paso**
+
 ```bash
 # 1. Esperar que los clusters terminen de provisionar
 gcloud container operations list --project aigestion-pro

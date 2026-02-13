@@ -14,7 +14,7 @@ export class NotificationRepository
   implements INotificationRepository
 {
   override async create(idOrItem: any, maybeItem?: any): Promise<INotification> {
-    const data = typeof idOrItem === 'string' ? maybeItem ?? {} : idOrItem;
+    const data = typeof idOrItem === 'string' ? (maybeItem ?? {}) : idOrItem;
     const notification = new Notification(data as any);
     return await notification.save();
   }

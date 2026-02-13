@@ -3,6 +3,7 @@
 Este documento detalla 50 mejoras estratégicas para transformar la capa cognitiva de NEXUS V1 en un sistema de recuperación y generación de alto rendimiento, precisión y seguridad.
 
 ## 1. 🎯 Calidad de Indexación y Recuperación
+
 1.  **Búsqueda Híbrida (Hybrid Search)**: Combinar BM25 (palabras clave) con búsqueda vectorial (semántica) usando Reciprocal Rank Fusion (RRF).
 2.  **Re-ranking con Cross-Encoders**: Implementar una fase de re-clasificación de los Top-K resultados para mejorar la precisión final.
 3.  **Filtrado en Base de Datos**: Mover el filtrado de metadatos de la lógica de aplicación (Python) a la consulta nativa de ChromaDB para mayor eficiencia.
@@ -15,6 +16,7 @@ Este documento detalla 50 mejoras estratégicas para transformar la capa cogniti
 10. **Re-indexación Periódica**: Programar tareas para actualizar vectores de documentos que han sido modificados.
 
 ## 2. ⚡ Rendimiento y Escalabilidad
+
 11. **Caché de Consultas Frecuentes**: Usar Redis para almacenar resultados de búsquedas comunes y evitar ejecuciones repetitivas.
 12. **Cuantización de Vectores (PQ/SQ)**: Reducir el tamaño de los vectores para ahorrar memoria y acelerar la búsqueda.
 13. **Búsqueda de Vecinos Cercanos Aproximados (ANN)**: Optimizar HNSW en ChromaDB para búsquedas en sub-milisegundos en colecciones grandes.
@@ -27,6 +29,7 @@ Este documento detalla 50 mejoras estratégicas para transformar la capa cogniti
 20. **Asincronía Total**: Asegurar que la ingesta de RAG no bloquee los hilos principales del backend.
 
 ## 3. 🛡️ Seguridad y Privacidad
+
 21. **ACLs por Documento**: Respetar los permisos de usuario en los resultados de búsqueda (un usuario solo ve lo que tiene permiso de ver).
 22. **Sanitización de Consultas**: Prevenir inyecciones de prompts en las búsquedas semánticas.
 23. **Cifrado de Vectores**: Encriptar la base de datos de ChromaDB en reposo.
@@ -39,6 +42,7 @@ Este documento detalla 50 mejoras estratégicas para transformar la capa cogniti
 30. **Borrado Seguro**: Implementar "derecho al olvido" eliminando vectores y sus orígenes de forma irreversible.
 
 ## 4. 🧠 Lógica de Generación y Hallucinación
+
 31. **Prompting con Citaciones Forzadas**: Instrucciones estrictas para que el modelo incluya IDs de documentos en sus respuestas.
 32. **Self-Correction Loop**: Validar la respuesta generada contra los fragmentos originales antes de mostrarla al usuario.
 33. **Puntuación de Veracidad (Groundedness)**: Medir cuánto de la respuesta está realmente sustentado por el contexto recuperado.
@@ -51,6 +55,7 @@ Este documento detalla 50 mejoras estratégicas para transformar la capa cogniti
 40. **Voting Mechanism**: Generar múltiples respuestas y elegir la que tenga mayor consenso de hechos.
 
 ## 5. 🛠️ Integración y UX
+
 41. **Previsualización de Fuentes**: Mostrar al usuario mini-ventanas con el texto original recuperado.
 42. **Feedback del Usuario**: Botones de "útil/no útil" para ajustar los pesos del ranking en el futuro.
 43. **Soporte Multimodal**: RAG capaz de recuperar y razonar sobre imágenes y tablas (Vision-RAG).

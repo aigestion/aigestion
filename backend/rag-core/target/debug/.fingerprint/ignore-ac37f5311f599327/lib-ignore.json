@@ -1,1 +1,29 @@
-{"rustc":2490638836439573635,"features":"[]","declared_features":"[\"simd-accel\"]","target":12334212417946013711,"profile":15657897354478470176,"path":15252501314920600117,"deps":[[198136567835728122,"memchr",false,8903542440061397135],[3030539787503978792,"regex_automata",false,539686749141458715],[5785418864289862565,"winapi_util",false,13062515518779438711],[10630857666389190470,"log",false,11336979814409446974],[11781824977070132858,"same_file",false,11362238109818680058],[12921325478209092965,"globset",false,14017263883008164834],[15622660310229662834,"walkdir",false,5182549467959782554],[17472578983440242455,"crossbeam_deque",false,3022275520977453430]],"local":[{"CheckDepInfo":{"dep_info":"debug\\.fingerprint\\ignore-ac37f5311f599327\\dep-lib-ignore","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 2490638836439573635,
+  "features": "[]",
+  "declared_features": "[\"simd-accel\"]",
+  "target": 12334212417946013711,
+  "profile": 15657897354478470176,
+  "path": 15252501314920600117,
+  "deps": [
+    [198136567835728122, "memchr", false, 8903542440061397135],
+    [3030539787503978792, "regex_automata", false, 539686749141458715],
+    [5785418864289862565, "winapi_util", false, 13062515518779438711],
+    [10630857666389190470, "log", false, 11336979814409446974],
+    [11781824977070132858, "same_file", false, 11362238109818680058],
+    [12921325478209092965, "globset", false, 14017263883008164834],
+    [15622660310229662834, "walkdir", false, 5182549467959782554],
+    [17472578983440242455, "crossbeam_deque", false, 3022275520977453430]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug\\.fingerprint\\ignore-ac37f5311f599327\\dep-lib-ignore",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

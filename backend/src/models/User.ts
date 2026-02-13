@@ -180,7 +180,7 @@ const userSchema = new Schema<IUser>(
         return ret;
       },
     },
-  },
+  }
 );
 
 // Método para comparar contraseñas

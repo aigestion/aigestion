@@ -1,4 +1,3 @@
-
 import 'reflect-metadata';
 import { container, TYPES } from '../config/inversify.config';
 import { CredentialManagerService } from '../services/credential-manager.service';
@@ -17,14 +16,13 @@ async function runCheck() {
 
     console.log('\n--- Credential Verification Results ---');
     results.forEach(result => {
-        const icon = result.status === 'valid' ? '✅' : '❌';
-        console.log(`${icon} ${result.provider}: ${result.status}`);
-        if (result.message) {
-            console.log(`   Message: ${result.message}`);
-        }
+      const icon = result.status === 'valid' ? '✅' : '❌';
+      console.log(`${icon} ${result.provider}: ${result.status}`);
+      if (result.message) {
+        console.log(`   Message: ${result.message}`);
+      }
     });
     console.log('---------------------------------------\n');
-
   } catch (error) {
     console.error('Error running credential check:', error);
   }

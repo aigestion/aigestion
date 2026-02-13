@@ -6,7 +6,25 @@
 
 import React, { useState, useEffect } from 'react';
 import { freeMinutesManager, freeMinutesServices } from '../services/free-minutes-plan';
-import { Phone, DollarSign, TrendingUp, Users, Clock, Zap, Award, AlertCircle, CheckCircle, BarChart3, Target, Gift, Calendar, Settings, RefreshCw, Play, Pause } from 'lucide-react';
+import {
+  Phone,
+  DollarSign,
+  TrendingUp,
+  Users,
+  Clock,
+  Zap,
+  Award,
+  AlertCircle,
+  CheckCircle,
+  BarChart3,
+  Target,
+  Gift,
+  Calendar,
+  Settings,
+  RefreshCw,
+  Play,
+  Pause,
+} from 'lucide-react';
 
 interface ServiceStatus {
   name: string;
@@ -55,25 +73,27 @@ export const FreeMinutesDashboard: React.FC = () => {
     setSavingsReport(report);
 
     // Procesar estado de servicios
-    const services = Object.entries(budget.services_breakdown).map(([name, data]: [string, any]) => ({
-      name,
-      allocated: data.allocated,
-      used: data.used,
-      remaining: data.remaining,
-      percentage: data.allocated > 0 ? (data.used / data.allocated) * 100 : 0,
-      color: getColorForService(name),
-    }));
+    const services = Object.entries(budget.services_breakdown).map(
+      ([name, data]: [string, any]) => ({
+        name,
+        allocated: data.allocated,
+        used: data.used,
+        remaining: data.remaining,
+        percentage: data.allocated > 0 ? (data.used / data.allocated) * 100 : 0,
+        color: getColorForService(name),
+      })
+    );
     setServicesStatus(services);
   };
 
   const getColorForService = (serviceName: string): string => {
     const colors: Record<string, string> = {
       'Google Voice': 'bg-blue-500',
-      'Skype': 'bg-purple-500',
-      'Discord': 'bg-indigo-500',
-      'WhatsApp': 'bg-green-500',
-      'Signal': 'bg-yellow-500',
-      'Telegram': 'bg-blue-400',
+      Skype: 'bg-purple-500',
+      Discord: 'bg-indigo-500',
+      WhatsApp: 'bg-green-500',
+      Signal: 'bg-yellow-500',
+      Telegram: 'bg-blue-400',
       'Vapi Trial': 'bg-pink-500',
       'Twilio Trial': 'bg-red-500',
     };
@@ -87,9 +107,11 @@ export const FreeMinutesDashboard: React.FC = () => {
     }
 
     const result = await freeMinutesManager.initiateCall(callDetails);
-    
+
     if (result.success) {
-      alert(`✅ Llamada iniciada con ${result.service?.name}\nMotivo: ${result.reason}\nAhorro: $${result.cost_saving?.toFixed(2)}`);
+      alert(
+        `✅ Llamada iniciada con ${result.service?.name}\nMotivo: ${result.reason}\nAhorro: $${result.cost_saving?.toFixed(2)}`
+      );
       loadDashboardData(); // Actualizar dashboard
     } else {
       alert(`❌ No se pudo iniciar la llamada: ${result.reason}`);
@@ -98,19 +120,27 @@ export const FreeMinutesDashboard: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high': return 'text-red-600 bg-red-50';
-      case 'medium': return 'text-yellow-600 bg-yellow-50';
-      case 'low': return 'text-green-600 bg-green-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'high':
+        return 'text-red-600 bg-red-50';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-50';
+      case 'low':
+        return 'text-green-600 bg-green-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case 'high': return <AlertCircle className="w-4 h-4" />;
-      case 'medium': return <Clock className="w-4 h-4" />;
-      case 'low': return <CheckCircle className="w-4 h-4" />;
-      default: return <Target className="w-4 h-4" />;
+      case 'high':
+        return <AlertCircle className="w-4 h-4" />;
+      case 'medium':
+        return <Clock className="w-4 h-4" />;
+      case 'low':
+        return <CheckCircle className="w-4 h-4" />;
+      default:
+        return <Target className="w-4 h-4" />;
     }
   };
 
@@ -132,9 +162,7 @@ export const FreeMinutesDashboard: React.FC = () => {
               <button
                 onClick={() => setIsAutoRouting(!isAutoRouting)}
                 className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${
-                  isAutoRouting 
-                    ? 'bg-green-100 text-green-700' 
-                    : 'bg-gray-100 text-gray-700'
+                  isAutoRouting ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
                 }`}
               >
                 <Settings className="w-4 h-4" />
@@ -167,7 +195,9 @@ export const FreeMinutesDashboard: React.FC = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-100 text-sm">Dinero Ahorrado</p>
-                  <p className="text-3xl font-bold">${savingsReport.total_money_saved.toFixed(2)}</p>
+                  <p className="text-3xl font-bold">
+                    ${savingsReport.total_money_saved.toFixed(2)}
+                  </p>
                 </div>
                 <DollarSign className="w-8 h-8 text-blue-200" />
               </div>
@@ -203,9 +233,9 @@ export const FreeMinutesDashboard: React.FC = () => {
               <BarChart3 className="w-5 h-5 mr-2 text-blue-600" />
               Estado de Servicios
             </h3>
-            
+
             <div className="space-y-4">
-              {servicesStatus.map((service) => (
+              {servicesStatus.map(service => (
                 <div key={service.name} className="border rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium text-gray-800">{service.name}</h4>
@@ -213,15 +243,17 @@ export const FreeMinutesDashboard: React.FC = () => {
                       {service.remaining} min restantes
                     </span>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Uso: {service.used}/{service.allocated}</span>
+                      <span className="text-gray-600">
+                        Uso: {service.used}/{service.allocated}
+                      </span>
                       <span className="text-gray-600">{service.percentage.toFixed(1)}%</span>
                     </div>
-                    
+
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
+                      <div
                         className={`${service.color} h-2 rounded-full transition-all duration-300`}
                         style={{ width: `${Math.min(service.percentage, 100)}%` }}
                       />
@@ -238,15 +270,16 @@ export const FreeMinutesDashboard: React.FC = () => {
               <Target className="w-5 h-5 mr-2 text-green-600" />
               Recomendaciones de Ahorro
             </h3>
-            
+
             <div className="space-y-3">
               {recommendations.length > 0 ? (
                 recommendations.map((rec, index) => (
-                  <div key={index} className={`p-4 rounded-lg border ${getPriorityColor(rec.priority)}`}>
+                  <div
+                    key={index}
+                    className={`p-4 rounded-lg border ${getPriorityColor(rec.priority)}`}
+                  >
                     <div className="flex items-start space-x-3">
-                      <div className="mt-1">
-                        {getPriorityIcon(rec.priority)}
-                      </div>
+                      <div className="mt-1">{getPriorityIcon(rec.priority)}</div>
                       <div className="flex-1">
                         <h4 className="font-medium text-gray-800">{rec.title}</h4>
                         <p className="text-sm text-gray-600 mt-1">{rec.description}</p>
@@ -254,7 +287,9 @@ export const FreeMinutesDashboard: React.FC = () => {
                           <span className="text-sm font-medium">
                             Ahorro potencial: ${rec.potential_savings}
                           </span>
-                          <span className={`text-xs px-2 py-1 rounded ${getPriorityColor(rec.priority)}`}>
+                          <span
+                            className={`text-xs px-2 py-1 rounded ${getPriorityColor(rec.priority)}`}
+                          >
                             {rec.priority.toUpperCase()}
                           </span>
                         </div>
@@ -278,17 +313,15 @@ export const FreeMinutesDashboard: React.FC = () => {
             <Phone className="w-5 h-5 mr-2 text-purple-600" />
             Simulador de Llamadas Inteligentes
           </h3>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Destinatario
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Destinatario</label>
                 <input
                   type="text"
                   value={callDetails.recipient}
-                  onChange={(e) => setCallDetails({...callDetails, recipient: e.target.value})}
+                  onChange={e => setCallDetails({ ...callDetails, recipient: e.target.value })}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   placeholder="+34 600 000 000"
                 />
@@ -300,7 +333,9 @@ export const FreeMinutesDashboard: React.FC = () => {
                 </label>
                 <select
                   value={callDetails.recipient_country}
-                  onChange={(e) => setCallDetails({...callDetails, recipient_country: e.target.value})}
+                  onChange={e =>
+                    setCallDetails({ ...callDetails, recipient_country: e.target.value })
+                  }
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 >
                   <option value="ES">España</option>
@@ -318,7 +353,9 @@ export const FreeMinutesDashboard: React.FC = () => {
                 <input
                   type="number"
                   value={callDetails.estimated_duration}
-                  onChange={(e) => setCallDetails({...callDetails, estimated_duration: parseInt(e.target.value)})}
+                  onChange={e =>
+                    setCallDetails({ ...callDetails, estimated_duration: parseInt(e.target.value) })
+                  }
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   min="1"
                   max="60"
@@ -333,7 +370,9 @@ export const FreeMinutesDashboard: React.FC = () => {
                 </label>
                 <select
                   value={callDetails.call_type}
-                  onChange={(e) => setCallDetails({...callDetails, call_type: e.target.value as any})}
+                  onChange={e =>
+                    setCallDetails({ ...callDetails, call_type: e.target.value as any })
+                  }
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 >
                   <option value="business">Negocios</option>
@@ -343,12 +382,12 @@ export const FreeMinutesDashboard: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Importancia
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Importancia</label>
                 <select
                   value={callDetails.importance}
-                  onChange={(e) => setCallDetails({...callDetails, importance: e.target.value as any})}
+                  onChange={e =>
+                    setCallDetails({ ...callDetails, importance: e.target.value as any })
+                  }
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 >
                   <option value="low">Baja</option>
@@ -364,7 +403,9 @@ export const FreeMinutesDashboard: React.FC = () => {
                 </label>
                 <select
                   value={callDetails.time_of_day}
-                  onChange={(e) => setCallDetails({...callDetails, time_of_day: e.target.value as any})}
+                  onChange={e =>
+                    setCallDetails({ ...callDetails, time_of_day: e.target.value as any })
+                  }
                   className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 >
                   <option value="business_hours">Horario Laboral</option>
@@ -392,9 +433,9 @@ export const FreeMinutesDashboard: React.FC = () => {
             <Gift className="w-5 h-5 mr-2 text-purple-600" />
             Servicios con Minutos Gratis Disponibles
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {freeMinutesServices.map((service) => (
+            {freeMinutesServices.map(service => (
               <div key={service.name} className="bg-white rounded-lg p-4 border border-gray-200">
                 <h4 className="font-medium text-gray-800 mb-2">{service.name}</h4>
                 <div className="space-y-1 text-sm text-gray-600">
@@ -408,7 +449,9 @@ export const FreeMinutesDashboard: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span>Requiere tarjeta:</span>
-                    <span className={`font-medium ${service.limitations.require_credit_card ? 'text-red-600' : 'text-green-600'}`}>
+                    <span
+                      className={`font-medium ${service.limitations.require_credit_card ? 'text-red-600' : 'text-green-600'}`}
+                    >
                       {service.limitations.require_credit_card ? 'Sí' : 'No'}
                     </span>
                   </div>

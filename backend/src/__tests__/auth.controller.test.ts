@@ -101,7 +101,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           data: expect.objectContaining({ token: 'access-token' }),
           status: 201,
-        }),
+        })
       );
     });
 
@@ -124,7 +124,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           data: { mfaRequired: true, userId: 'user-id' },
           status: 200,
-        }),
+        })
       );
       expect(res.cookie).not.toHaveBeenCalled();
     });
@@ -145,7 +145,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           data: expect.objectContaining({ token: 'access-token' }),
           status: 200,
-        }),
+        })
       );
     });
 
@@ -174,14 +174,14 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           userId: 'user-id',
           token: '123456',
-        }),
+        })
       );
       expect(res.cookie).toHaveBeenCalledWith('refresh_token', 'refresh-token', expect.any(Object));
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           data: expect.objectContaining({ token: 'access-token' }),
           status: 200,
-        }),
+        })
       );
     });
 
@@ -211,7 +211,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           data: result,
           status: 200,
-        }),
+        })
       );
     });
 
@@ -240,7 +240,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           data: { success: true },
           status: 200,
-        }),
+        })
       );
     });
 
@@ -272,7 +272,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           data: { accessToken: 'new-at' },
           status: 200,
-        }),
+        })
       );
     });
 
@@ -294,7 +294,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           data: { message: 'Logged out successfully' },
           status: 200,
-        }),
+        })
       );
     });
   });
@@ -310,7 +310,7 @@ describe('Auth Controller', () => {
         expect.objectContaining({
           data: mockUser,
           status: 200,
-        }),
+        })
       );
     });
 

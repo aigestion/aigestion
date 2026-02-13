@@ -14,7 +14,7 @@ async function generateCriticalCSS() {
     publicPath: '/',
     preload: 'swap',
     pruneSource: false, // Keep original CSS for non-critical styles
-    logLevel: 'info'
+    logLevel: 'info',
   });
 
   try {

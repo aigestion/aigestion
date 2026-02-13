@@ -12,7 +12,7 @@ interface DanielaWidgetProps {
 export const DanielaWidget: React.FC<DanielaWidgetProps> = ({
   position = 'bottom-right',
   theme = 'dark',
-  size = 'compact'
+  size = 'compact',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -85,16 +85,22 @@ export const DanielaWidget: React.FC<DanielaWidgetProps> = ({
             className={`relative ${size === 'full' ? 'w-[800px] h-[600px]' : 'w-[400px] h-[500px]'} ${getThemeClasses()} backdrop-blur-3xl border rounded-3xl shadow-2xl overflow-hidden`}
           >
             {/* Header */}
-            <div className={`flex items-center justify-between p-4 border-b ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}>
+            <div
+              className={`flex items-center justify-between p-4 border-b ${theme === 'dark' ? 'border-white/10' : 'border-black/10'}`}
+            >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-linear-to-br from-nexus-cyan to-nexus-violet flex items-center justify-center">
                   <Brain className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h3 className={`font-orbitron font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                  <h3
+                    className={`font-orbitron font-bold ${theme === 'dark' ? 'text-white' : 'text-black'}`}
+                  >
                     DANIELA
                   </h3>
-                  <p className={`text-xs ${theme === 'dark' ? 'text-nexus-silver/60' : 'text-black/60'}`}>
+                  <p
+                    className={`text-xs ${theme === 'dark' ? 'text-nexus-silver/60' : 'text-black/60'}`}
+                  >
                     Asistente IA Futurista
                   </p>
                 </div>
@@ -137,10 +143,14 @@ export const DanielaWidget: React.FC<DanielaWidgetProps> = ({
                       {/* Compact version */}
                       <div className="text-center py-8">
                         <Sparkles className="w-12 h-12 text-nexus-cyan-glow mx-auto mb-4" />
-                        <h4 className={`font-orbitron font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+                        <h4
+                          className={`font-orbitron font-bold mb-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}
+                        >
                           Daniela está lista
                         </h4>
-                        <p className={`text-sm ${theme === 'dark' ? 'text-nexus-silver/60' : 'text-black/60'} mb-6`}>
+                        <p
+                          className={`text-sm ${theme === 'dark' ? 'text-nexus-silver/60' : 'text-black/60'} mb-6`}
+                        >
                           Haz clic en el micrófono para comenzar una conversación
                         </p>
 
@@ -149,7 +159,7 @@ export const DanielaWidget: React.FC<DanielaWidgetProps> = ({
                           {[
                             'Hola Daniela, ¿cómo estás?',
                             'Muéstrame el dashboard',
-                            'Analiza mis métricas'
+                            'Analiza mis métricas',
                           ].map((suggestion, index) => (
                             <motion.button
                               key={index}

@@ -25,16 +25,14 @@ export const useWebVitals = (): WebVitalsHookReturn => {
 
   useEffect(() => {
     // Check if Web Vitals are supported
-    const supported =
-      'PerformanceObserver' in window &&
-      'PerformanceNavigationTiming' in window;
+    const supported = 'PerformanceObserver' in window && 'PerformanceNavigationTiming' in window;
 
     setIsSupported(supported);
 
     if (!supported) return;
 
     // Largest Contentful Paint (LCP)
-    const observeLCP = new PerformanceObserver((entryList) => {
+    const observeLCP = new PerformanceObserver(entryList => {
       const entries = entryList.getEntries();
       const lastEntry = entries[entries.length - 1];
       setMetrics(prev => ({ ...prev, lcp: lastEntry.startTime }));
@@ -42,7 +40,7 @@ export const useWebVitals = (): WebVitalsHookReturn => {
     observeLCP.observe({ entryTypes: ['largest-contentful-paint'] });
 
     // First Input Delay (FID)
-    const observeFID = new PerformanceObserver((entryList) => {
+    const observeFID = new PerformanceObserver(entryList => {
       const entries = entryList.getEntries();
       const firstEntry = entries[0] as any;
       if (firstEntry) {
@@ -53,7 +51,7 @@ export const useWebVitals = (): WebVitalsHookReturn => {
 
     // Cumulative Layout Shift (CLS)
     let clsValue = 0;
-    const observeCLS = new PerformanceObserver((entryList) => {
+    const observeCLS = new PerformanceObserver(entryList => {
       for (const entry of entryList.getEntries()) {
         const layoutShiftEntry = entry as any;
         if (!layoutShiftEntry.hadRecentInput) {
@@ -65,7 +63,7 @@ export const useWebVitals = (): WebVitalsHookReturn => {
     observeCLS.observe({ entryTypes: ['layout-shift'] });
 
     // First Contentful Paint (FCP)
-    const observeFCP = new PerformanceObserver((entryList) => {
+    const observeFCP = new PerformanceObserver(entryList => {
       const entries = entryList.getEntries();
       const fcpEntry = entries.find(entry => entry.name === 'first-contentful-paint');
       if (fcpEntry) {
@@ -75,7 +73,7 @@ export const useWebVitals = (): WebVitalsHookReturn => {
     observeFCP.observe({ entryTypes: ['paint'] });
 
     // Time to First Byte (TTFB)
-    const observeNavigation = new PerformanceObserver((entryList) => {
+    const observeNavigation = new PerformanceObserver(entryList => {
       const entries = entryList.getEntries();
       const navEntry = entries[0] as PerformanceNavigationTiming;
       if (navEntry) {

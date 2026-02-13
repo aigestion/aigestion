@@ -11,13 +11,16 @@ Los 3 scripts de documentación han sido optimizados al máximo nivel de producc
 ### Optimizaciones Implementadas
 
 **1. Exclusión Inteligente**
+
 ```powershell
 $ExcludePatterns = @("node_modules", ".git", ".venv", "proyectos", "packages", "apps", "node")
 ```
+
 - Evita escanear directorios ignorados
 - Reducción de 70% en tiempo de búsqueda
 
 **2. Reglas de Categorización**
+
 ```powershell
 $Rules = @{
     "server"   = @("server", "api", "rest", "endpoint")
@@ -25,21 +28,26 @@ $Rules = @{
     "guides"   = @("guide", "tutorial", "how-to")
 }
 ```
+
 - Matching fuzzy en nombres
 - Fallback automático si no hay coincidencia
 
 **3. Dry-Run Mode**
+
 ```powershell
 param([switch]$DryRun)
 ```
+
 - Preview de cambios sin afectar archivos
 - 100% seguro para usar en CI/CD
 
 **4. Error Handling**
+
 ```powershell
 $ErrorActionPreference = "Stop"
 -ErrorAction SilentlyContinue
 ```
+
 - Recuperación graceful de errores
 - Validación de destinos
 
@@ -68,6 +76,7 @@ Optimizado:
 ### Optimizaciones Implementadas
 
 **1. Generación de Índice**
+
 ```powershell
 Get-ChildItem -Path $DocsRoot -Directory | ForEach-Object {
     # Procesa cada categoría
@@ -76,20 +85,25 @@ Get-ChildItem -Path $DocsRoot -Directory | ForEach-Object {
     }
 }
 ```
+
 - Itera eficientemente por categorías
 - Evita recursión innecesaria
 
 **2. Metadata Extraction**
+
 ```powershell
 $index += "- [$($_.BaseName)]($($_.FullName.Replace('\', '/')))`n"
 ```
+
 - Extrae metadata del sistema de archivos
 - Generación de links automática
 
 **3. Timestamp Tracking**
+
 ```powershell
 Updated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
 ```
+
 - Marca siempre la actualización más reciente
 - Validación en CI/CD
 
@@ -119,30 +133,36 @@ Optimizado:
 ### Optimizaciones Implementadas
 
 **1. Visualización Recursiva Eficiente**
+
 ```powershell
 function ShowTree([string]$Path, [string]$Prefix="") {
     $items = @(Get-ChildItem -Path $Path -ErrorAction SilentlyContinue)
     # Renderiza árbol con conectores ASCII
 }
 ```
+
 - Single-pass recursion
 - Memoria O(n) constante
 - Sin almacenar árbol completo
 
 **2. Formato Unicode Elegante**
+
 ```powershell
 $icon = $item.PSIsContainer ? "📁" : "📄"
 $conn = [char]10522  # └──
 ```
+
 - Emojis para claridad visual
 - Box-drawing characters para estructura
 - Color coding inteligente
 
 **3. Estadísticas en Tiempo Real**
+
 ```powershell
 $docs = Get-ChildItem -Path $DocsRoot -Filter "*.md" -Recurse
 $size = [math]::Round($docs | Measure-Object -Property Length -Sum).Sum/1MB
 ```
+
 - Calcula tamaños sobre la marcha
 - Cuenta documentos por categoría
 - Mide tiempo de ejecución
@@ -170,11 +190,13 @@ Optimizado:
 ## Técnicas Avanzadas Utilizadas
 
 ### 1. PowerShell 7+ Features
+
 - `$_` piping eficiente
 - Ternary operators (`?`)
 - String interpolation optimizada
 
 ### 2. Error Handling
+
 ```powershell
 $ErrorActionPreference = "Stop"
 -ErrorAction SilentlyContinue
@@ -182,12 +204,14 @@ try { } catch { }
 ```
 
 ### 3. Path Optimization
+
 ```powershell
 [System.IO.Path]::GetRelativePath()  # Paths cortos
 $_.FullName.Replace('\', '/')        # Links portables
 ```
 
 ### 4. Resource Management
+
 - Evita cargar en memoria innecesariamente
 - Streaming de output
 - Cleanup automático de handles
@@ -221,6 +245,7 @@ $_.FullName.Replace('\', '/')        # Links portables
 ## Integración con CI/CD
 
 ### GitHub Actions
+
 ```yaml
 - name: Organize docs
   run: npm run docs:organize
@@ -233,12 +258,14 @@ $_.FullName.Replace('\', '/')        # Links portables
 ```
 
 ### Pre-commit Hooks
+
 ```powershell
 # .husky/pre-commit-docs
 npm run docs:tree:stats
 ```
 
 ### Docker
+
 ```dockerfile
 RUN npm run docs:full
 ```
@@ -248,16 +275,19 @@ RUN npm run docs:full
 ## Recomendaciones Futuras
 
 ### v2.5 (Próximo)
+
 - [ ] Caching persistente en disco
 - [ ] Parallelización con ForEach-Object -Parallel
 - [ ] Smart diffs para actualizaciones incrementales
 
 ### v3.0 (Mid-term)
+
 - [ ] WebUI dashboard para visualización
 - [ ] API GraphQL para queries
 - [ ] Integración con AI para auto-categorización
 
 ### v3.5+ (Long-term)
+
 - [ ] Distributed processing
 - [ ] Real-time sync con plataformas externas
 - [ ] Machine learning para optimal categorization
@@ -267,11 +297,13 @@ RUN npm run docs:full
 ## Testing
 
 Ejecutar tests:
+
 ```powershell
 npm test  # Si existen tests definidos
 ```
 
 Validación manual:
+
 ```powershell
 npm run docs:organize:dry
 npm run docs:tree:stats

@@ -39,7 +39,7 @@ export const SoundProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       // Implementation will be handled by specific hooks to avoid heavy preloading in context
       console.log(`[SoundContext] Playing: ${sound}`);
     },
-    [isMuted],
+    [isMuted]
   );
 
   return (

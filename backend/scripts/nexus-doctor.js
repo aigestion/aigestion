@@ -8,7 +8,7 @@ const COLORS = {
   red: '\x1b[31m',
   yellow: '\x1b[33m',
   cyan: '\x1b[36m',
-  bold: '\x1b[1m'
+  bold: '\x1b[1m',
 };
 
 function log(msg, color = COLORS.reset) {
@@ -64,7 +64,10 @@ function check() {
     process.exit(0);
   } else {
     log(`⚠ FOUND ${issues} ISSUES.`, COLORS.yellow + COLORS.bold);
-    log('💡 Recommendation: Run "npm run nexus:heal" to fix everything automatically.', COLORS.cyan);
+    log(
+      '💡 Recommendation: Run "npm run nexus:heal" to fix everything automatically.',
+      COLORS.cyan
+    );
     process.exit(1);
   }
 }

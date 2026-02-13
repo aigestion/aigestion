@@ -17,7 +17,6 @@ handoffs:
   - label: Generar Plan de Seguridad & Performance
     agent: ExpertoSecurityPerfNEXUS V1
     prompt: Crea documento con auditoría de seguridad, validación, caching y optimizaciones
-
 ---
 
 # Experto Security & Performance NEXUS V1 - Seguridad y Optimización
@@ -58,6 +57,7 @@ handoffs:
 ## Investigación Inicial
 
 Analizarás profundamente:
+
 - `/server/src/middleware/` (seguridad middleware)
 - `/server/src/utils/` (validación y sanitización)
 - `/server/src/cache/` (estrategias de cache)
@@ -98,4 +98,3 @@ Analizarás profundamente:
    - Funciones de validación
    - Estrategias de caching
    - Ejemplo de query optimizada
-

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { Button } from './Button'
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
   title: 'Design System/Button',
@@ -11,7 +11,20 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'accent', 'outline', 'ghost', 'link', 'success', 'warning', 'error', 'info', 'gaming', 'neon'],
+      options: [
+        'primary',
+        'secondary',
+        'accent',
+        'outline',
+        'ghost',
+        'link',
+        'success',
+        'warning',
+        'error',
+        'info',
+        'gaming',
+        'neon',
+      ],
     },
     size: {
       control: 'select',
@@ -27,17 +40,17 @@ const meta: Meta<typeof Button> = {
       control: 'boolean',
     },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 // Default
 export const Default: Story = {
   args: {
     children: 'Button',
   },
-}
+};
 
 // Variants
 export const Primary: Story = {
@@ -45,77 +58,77 @@ export const Primary: Story = {
     variant: 'primary',
     children: 'Primary Button',
   },
-}
+};
 
 export const Secondary: Story = {
   args: {
     variant: 'secondary',
     children: 'Secondary Button',
   },
-}
+};
 
 export const Accent: Story = {
   args: {
     variant: 'accent',
     children: 'Accent Button',
   },
-}
+};
 
 export const Outline: Story = {
   args: {
     variant: 'outline',
     children: 'Outline Button',
   },
-}
+};
 
 export const Ghost: Story = {
   args: {
     variant: 'ghost',
     children: 'Ghost Button',
   },
-}
+};
 
 export const Success: Story = {
   args: {
     variant: 'success',
     children: 'Success Button',
   },
-}
+};
 
 export const Warning: Story = {
   args: {
     variant: 'warning',
     children: 'Warning Button',
   },
-}
+};
 
 export const Error: Story = {
   args: {
     variant: 'error',
     children: 'Error Button',
   },
-}
+};
 
 export const Info: Story = {
   args: {
     variant: 'info',
     children: 'Info Button',
   },
-}
+};
 
 export const Gaming: Story = {
   args: {
     variant: 'gaming',
     children: '🎮 Gaming Button',
   },
-}
+};
 
 export const Neon: Story = {
   args: {
     variant: 'neon',
     children: '🔮 Neon Button',
   },
-}
+};
 
 // Sizes
 export const Sizes: Story = {
@@ -128,7 +141,7 @@ export const Sizes: Story = {
       <Button size="xl">Extra Large</Button>
     </div>
   ),
-}
+};
 
 // States
 export const States: Story = {
@@ -139,7 +152,7 @@ export const States: Story = {
       <Button disabled>Disabled</Button>
     </div>
   ),
-}
+};
 
 // With Icons
 export const WithIcons: Story = {
@@ -152,7 +165,7 @@ export const WithIcons: Story = {
       </Button>
     </div>
   ),
-}
+};
 
 // Full Width
 export const FullWidth: Story = {
@@ -160,7 +173,7 @@ export const FullWidth: Story = {
     fullWidth: true,
     children: 'Full Width Button',
   },
-}
+};
 
 // Link Button
 export const LinkButton: Story = {
@@ -169,35 +182,29 @@ export const LinkButton: Story = {
     href: '#',
     children: 'Link Button',
   },
-}
+};
 
 // Interactive
 export const Interactive: Story = {
   render: () => (
     <div className="space-y-4">
-      <Button 
-        variant="primary" 
-        animation={{ whileHover: { scale: 1.1 } }}
-      >
+      <Button variant="primary" animation={{ whileHover: { scale: 1.1 } }}>
         Hover Me
       </Button>
-      <Button 
-        variant="gaming"
-        animation={{ whileTap: { scale: 0.95 } }}
-      >
+      <Button variant="gaming" animation={{ whileTap: { scale: 0.95 } }}>
         Press Me
       </Button>
-      <Button 
+      <Button
         variant="neon"
-        animation={{ 
-          whileHover: { 
+        animation={{
+          whileHover: {
             scale: 1.05,
-            boxShadow: '0 0 30px rgb(6 182 212 / 0.8)'
-          } 
+            boxShadow: '0 0 30px rgb(6 182 212 / 0.8)',
+          },
         }}
       >
         Glow Effect
       </Button>
     </div>
   ),
-}
+};

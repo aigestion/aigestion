@@ -33,7 +33,7 @@ export class TwoFactorMiddleware {
   public requireTwoFactor = async (
     req: AuthenticatedRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     try {
       if (!req.user || !req.user.id) {
@@ -83,7 +83,7 @@ export class TwoFactorMiddleware {
   public optionalTwoFactor = async (
     req: AuthenticatedRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     try {
       if (!req.user || !req.user.id) {
@@ -190,7 +190,7 @@ export class TwoFactorMiddleware {
   public sendTwoFactorCode = async (
     req: AuthenticatedRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     try {
       const { method, destination } = req.body;
@@ -261,7 +261,7 @@ export class TwoFactorMiddleware {
   public clearTwoFactorVerification = (
     req: AuthenticatedRequest,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     try {
       if (req.session) {

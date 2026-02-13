@@ -38,7 +38,7 @@ export class DoraMetricsService {
     // Average calculation would be more complex, but here's a simple store
     await client.lPush(`${this.METRICS_KEY}:restoration_durations`, restorationDuration.toString());
     logger.info(
-      `[DoraMetrics] Failure recorded. Restoration took ${restorationDuration.toFixed(2)} hours.`,
+      `[DoraMetrics] Failure recorded. Restoration took ${restorationDuration.toFixed(2)} hours.`
     );
   }
 

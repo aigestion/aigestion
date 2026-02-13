@@ -1,7 +1,7 @@
-import React from 'react'
-import { Routes, Route } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { AdminDashboard } from './components/AdminDashboard'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { AdminDashboard } from './components/AdminDashboard';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
         <Route path="*" element={<AdminDashboard />} />
       </Routes>
     </motion.div>
-  )
+  );
 }
 
-export default App
+export default App;

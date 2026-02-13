@@ -1,4 +1,3 @@
-
 import path from 'path';
 import dotenv from 'dotenv';
 import { z } from 'zod';
@@ -18,7 +17,7 @@ async function checkEnv() {
     { key: 'PAYPAL_CLIENT_ID', label: 'Reference Payment Provider' },
     { key: 'FIGMA_ACCESS_TOKEN', label: 'Design Integration' },
     { key: 'METAMASK_WALLET_ADDRESS', label: 'Web3 Wallet Security' },
-    { key: 'PINE_API_KEY', label: 'Vector Database Identity' }
+    { key: 'PINE_API_KEY', label: 'Vector Database Identity' },
   ];
 
   let warnings = 0;
@@ -27,13 +26,19 @@ async function checkEnv() {
   // We can check strictly if some optionals are missing but recommended.
 
   // Check for known placeholders
-  const placeholders = ['your-wallet-address', 'your-secret-recovery-phrase', 'your-firebase-project-id'];
+  const placeholders = [
+    'your-wallet-address',
+    'your-secret-recovery-phrase',
+    'your-firebase-project-id',
+  ];
 
   Object.entries(env).forEach(([key, value]) => {
-     if (typeof value === 'string' && placeholders.some(p => value.includes(p))) {
-         console.warn(`⚠️  WARNING: ${key} appears to contain a placeholder/default value: "${value}"`);
-         warnings++;
-     }
+    if (typeof value === 'string' && placeholders.some(p => value.includes(p))) {
+      console.warn(
+        `⚠️  WARNING: ${key} appears to contain a placeholder/default value: "${value}"`
+      );
+      warnings++;
+    }
   });
 
   console.log('\n=======================================');
@@ -43,9 +48,11 @@ async function checkEnv() {
   console.log('=======================================');
 
   if (warnings > 0) {
-      console.log('Advice: Please rotate placeholders with real credentials for production deployment.');
+    console.log(
+      'Advice: Please rotate placeholders with real credentials for production deployment.'
+    );
   } else {
-      console.log('Status: GREEN. Ready for deployment.');
+    console.log('Status: GREEN. Ready for deployment.');
   }
 }
 

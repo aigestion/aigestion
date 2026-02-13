@@ -21,7 +21,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
   suffix = '',
   prefix = '',
-  duration = 2
+  duration = 2,
 }) => {
   const [count, setCount] = useState(0);
   const countRef = useRef(0);
@@ -45,7 +45,9 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 
   return (
     <span className="font-mono font-bold">
-      {prefix}{count.toLocaleString()}{suffix}
+      {prefix}
+      {count.toLocaleString()}
+      {suffix}
     </span>
   );
 };
@@ -63,7 +65,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
   size,
   strokeWidth,
   color,
-  backgroundColor = 'rgba(255, 255, 255, 0.1)'
+  backgroundColor = 'rgba(255, 255, 255, 0.1)',
 }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
@@ -89,7 +91,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         strokeDasharray={circumference}
         initial={{ strokeDashoffset: circumference }}
         animate={{ strokeDashoffset: offset }}
-        transition={{ duration: 2, ease: "easeInOut" }}
+        transition={{ duration: 2, ease: 'easeInOut' }}
         strokeLinecap="round"
       />
     </svg>
@@ -104,55 +106,55 @@ export const DataVisualization: React.FC = () => {
 
   const metrics: DataPoint[] = [
     {
-      label: "Procesamiento Neuronal",
+      label: 'Procesamiento Neuronal',
       value: 98.7,
-      color: "text-nexus-cyan-glow",
-      icon: "🧠",
-      trend: "up"
+      color: 'text-nexus-cyan-glow',
+      icon: '🧠',
+      trend: 'up',
     },
     {
-      label: "Automatización Tareas",
+      label: 'Automatización Tareas',
       value: 94.2,
-      color: "text-nexus-violet-glow",
-      icon: "⚡",
-      trend: "up"
+      color: 'text-nexus-violet-glow',
+      icon: '⚡',
+      trend: 'up',
     },
     {
-      label: "Precisión Decisiones",
+      label: 'Precisión Decisiones',
       value: 99.1,
-      color: "text-nexus-gold",
-      icon: "🎯",
-      trend: "stable"
+      color: 'text-nexus-gold',
+      icon: '🎯',
+      trend: 'stable',
     },
     {
-      label: "Reducción Costos",
+      label: 'Reducción Costos',
       value: 87.3,
-      color: "text-green-400",
-      icon: "💰",
-      trend: "up"
+      color: 'text-green-400',
+      icon: '💰',
+      trend: 'up',
     },
     {
-      label: "Satisfacción Cliente",
+      label: 'Satisfacción Cliente',
       value: 96.8,
-      color: "text-pink-400",
-      icon: "😊",
-      trend: "up"
-    }
+      color: 'text-pink-400',
+      icon: '😊',
+      trend: 'up',
+    },
   ];
 
   const realTimeData = [
-    { time: "00:00", requests: 1234, response: 0.12 },
-    { time: "04:00", requests: 892, response: 0.08 },
-    { time: "08:00", requests: 3456, response: 0.15 },
-    { time: "12:00", requests: 5678, response: 0.22 },
-    { time: "16:00", requests: 4321, response: 0.18 },
-    { time: "20:00", requests: 2345, response: 0.14 },
-    { time: "23:59", requests: 1567, response: 0.11 }
+    { time: '00:00', requests: 1234, response: 0.12 },
+    { time: '04:00', requests: 892, response: 0.08 },
+    { time: '08:00', requests: 3456, response: 0.15 },
+    { time: '12:00', requests: 5678, response: 0.22 },
+    { time: '16:00', requests: 4321, response: 0.18 },
+    { time: '20:00', requests: 2345, response: 0.14 },
+    { time: '23:59', requests: 1567, response: 0.11 },
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveMetric((prev) => (prev + 1) % metrics.length);
+      setActiveMetric(prev => (prev + 1) % metrics.length);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -192,8 +194,11 @@ export const DataVisualization: React.FC = () => {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ scale: 1.05, y: -5 }}
               onMouseEnter={playHover}
-              className={`premium-glass p-6 rounded-2xl border transition-all duration-300 cursor-pointer ${activeMetric === index ? 'border-nexus-cyan/50 shadow-[0_0_30px_rgba(0,245,255,0.3)]' : 'border-white/10'
-                }`}
+              className={`premium-glass p-6 rounded-2xl border transition-all duration-300 cursor-pointer ${
+                activeMetric === index
+                  ? 'border-nexus-cyan/50 shadow-[0_0_30px_rgba(0,245,255,0.3)]'
+                  : 'border-white/10'
+              }`}
               onClick={() => setActiveMetric(index)}
             >
               <div className="flex items-center justify-between mb-4">
@@ -265,7 +270,7 @@ export const DataVisualization: React.FC = () => {
                 </div>
                 {/* Time labels */}
                 <div className="absolute -bottom-6 left-0 right-0 flex justify-between text-xs text-nexus-silver/40 font-mono">
-                  {realTimeData.map((data) => (
+                  {realTimeData.map(data => (
                     <span key={data.time} className="hidden sm:block">
                       {data.time}
                     </span>
@@ -283,9 +288,12 @@ export const DataVisualization: React.FC = () => {
                 {/* Line Chart Simulation */}
                 <svg className="w-full h-full" viewBox="0 0 400 200">
                   <motion.path
-                    d={`M ${realTimeData.map((data, index) =>
-                      `${(index / (realTimeData.length - 1)) * 400},${200 - (data.response * 500)}`
-                    ).join(' L ')}`}
+                    d={`M ${realTimeData
+                      .map(
+                        (data, index) =>
+                          `${(index / (realTimeData.length - 1)) * 400},${200 - data.response * 500}`
+                      )
+                      .join(' L ')}`}
                     stroke="url(#gradient)"
                     strokeWidth="3"
                     fill="none"
@@ -313,12 +321,15 @@ export const DataVisualization: React.FC = () => {
           className="grid grid-cols-1 md:grid-cols-4 gap-6"
         >
           {[
-            { label: "CPU", value: 67, color: "from-nexus-cyan to-blue-500" },
-            { label: "Memory", value: 82, color: "from-nexus-violet to-purple-500" },
-            { label: "Storage", value: 45, color: "from-nexus-gold to-yellow-500" },
-            { label: "Network", value: 91, color: "from-green-400 to-emerald-500" }
+            { label: 'CPU', value: 67, color: 'from-nexus-cyan to-blue-500' },
+            { label: 'Memory', value: 82, color: 'from-nexus-violet to-purple-500' },
+            { label: 'Storage', value: 45, color: 'from-nexus-gold to-yellow-500' },
+            { label: 'Network', value: 91, color: 'from-green-400 to-emerald-500' },
           ].map((system, index) => (
-            <div key={system.label} className="premium-glass p-6 rounded-2xl border border-white/10">
+            <div
+              key={system.label}
+              className="premium-glass p-6 rounded-2xl border border-white/10"
+            >
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-sm font-orbitron tracking-wider text-nexus-silver/60">
                   {system.label}
@@ -332,8 +343,14 @@ export const DataVisualization: React.FC = () => {
                   />
                   <defs>
                     <linearGradient id={`gradient-${index}`} x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor={system.color.split(' ')[0].replace('from-', '')} />
-                      <stop offset="100%" stopColor={system.color.split(' ')[1].replace('to-', '')} />
+                      <stop
+                        offset="0%"
+                        stopColor={system.color.split(' ')[0].replace('from-', '')}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor={system.color.split(' ')[1].replace('to-', '')}
+                      />
                     </linearGradient>
                   </defs>
                   <div className="absolute inset-0 flex items-center justify-center">

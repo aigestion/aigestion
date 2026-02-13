@@ -5,6 +5,7 @@ This project supports advanced bundle analysis and caching for optimal performan
 ---
 
 ## Bundle Analysis
+
 - Use `vite-plugin-analyzer` for Vite projects or `webpack-bundle-analyzer` for Webpack.
 - Add a script to generate bundle reports after build.
 - Example (Vite):
@@ -13,12 +14,13 @@ This project supports advanced bundle analysis and caching for optimal performan
      ```ts
      import { visualizer } from 'vite-plugin-analyzer';
      export default defineConfig({
-       plugins: [visualizer()]
+       plugins: [visualizer()],
      });
      ```
   3. Run: `pnpm build` and open the generated report.
 
 ## Advanced Caching
+
 - Use HTTP cache headers (CDN, Vercel, NGINX, etc.)
 - Add service worker for offline and asset caching (e.g., Workbox)
 - Use CI cache for dependencies and build artifacts (see GitHub Actions docs)
@@ -26,6 +28,7 @@ This project supports advanced bundle analysis and caching for optimal performan
 ---
 
 ## References
+
 - [vite-plugin-analyzer](https://github.com/vitejs/vite-plugin-analyzer)
 - [webpack-bundle-analyzer](https://github.com/webpack-contrib/webpack-bundle-analyzer)
 - [Workbox](https://developer.chrome.com/docs/workbox/)

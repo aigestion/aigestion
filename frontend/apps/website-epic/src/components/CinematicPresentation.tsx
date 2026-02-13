@@ -6,7 +6,6 @@ import { useSound } from '../services/audio-service';
 import { MagneticButton } from './MagneticButton';
 import { useAppContext } from '../contexts/AppContext';
 
-
 interface Slide {
   id: string;
   speaker: string;
@@ -98,7 +97,6 @@ export const CinematicPresentation: React.FC = () => {
   const { colors } = useSentimentUI();
   const { setIsContactModalOpen } = useAppContext();
 
-
   const mouseX = useSpring(0, { damping: 30, stiffness: 100 });
   const mouseY = useSpring(0, { damping: 30, stiffness: 100 });
 
@@ -186,7 +184,7 @@ export const CinematicPresentation: React.FC = () => {
             }}
             transition={{ duration: 1.5 }}
           />
-          
+
           {/* Sovereign Scanlines */}
           <div className="absolute inset-0 pointer-events-none z-2 overflow-hidden opacity-10">
             <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%]" />
@@ -195,7 +193,6 @@ export const CinematicPresentation: React.FC = () => {
           <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black" />
         </motion.div>
       </AnimatePresence>
-
 
       {/* Content Layer */}
       <div

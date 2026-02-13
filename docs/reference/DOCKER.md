@@ -50,7 +50,6 @@ docker-compose --version  # Should be 2.0+
 ### System Requirements
 
 - **Development:**
-
   - 8GB RAM minimum (16GB recommended)
   - 20GB free disk space
   - CPU: 4 cores (8 cores recommended)
@@ -754,4 +753,3 @@ Add Prometheus + Grafana (see [Monitoring](#monitoring) section) or use cloud so
 **Last Updated:** November 17, 2025
 **Maintained by:** NEXUS V1 Team
 **Status:** 🟢 Production Ready - Nivel Dios
-

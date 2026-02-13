@@ -151,7 +151,7 @@ export class BackupRestoreService {
             path: path.join(this.backupDir, 'files'),
           },
         ],
-      },
+      }
     );
 
     logger.info('Default backup configurations initialized', {
@@ -164,7 +164,7 @@ export class BackupRestoreService {
    */
   public async createBackup(
     configName: string,
-    customOptions?: Partial<BackupConfig>,
+    customOptions?: Partial<BackupConfig>
   ): Promise<BackupJob> {
     try {
       const config = this.backupConfigs.find(c => c.name === configName);
@@ -503,7 +503,7 @@ export class BackupRestoreService {
   private async storeBackupLocal(
     job: BackupJob,
     files: string[],
-    destinationPath: string,
+    destinationPath: string
   ): Promise<void> {
     try {
       await fs.mkdir(destinationPath, { recursive: true });
@@ -525,8 +525,8 @@ export class BackupRestoreService {
             storedAt: new Date(),
           },
           null,
-          2,
-        ),
+          2
+        )
       );
 
       logger.info('Backup stored locally', { destination: destinationPath, files: files.length });
@@ -542,7 +542,7 @@ export class BackupRestoreService {
   private async storeBackupS3(
     job: BackupJob,
     files: string[],
-    destination: BackupDestination,
+    destination: BackupDestination
   ): Promise<void> {
     // Implementation would use AWS SDK
     logger.info('S3 backup storage not implemented', { destination });
@@ -554,7 +554,7 @@ export class BackupRestoreService {
   private async storeBackupGCS(
     job: BackupJob,
     files: string[],
-    destination: BackupDestination,
+    destination: BackupDestination
   ): Promise<void> {
     // Implementation would use Google Cloud SDK
     logger.info('GCS backup storage not implemented', { destination });
@@ -566,7 +566,7 @@ export class BackupRestoreService {
   private async storeBackupAzure(
     job: BackupJob,
     files: string[],
-    destination: BackupDestination,
+    destination: BackupDestination
   ): Promise<void> {
     // Implementation would use Azure SDK
     logger.info('Azure backup storage not implemented', { destination });

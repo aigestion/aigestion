@@ -33,7 +33,7 @@ export class AIService {
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.RagService) private ragService: RagService,
     @inject(TYPES.UsageService) private usageService: UsageService,
-    @inject(TYPES.SemanticCacheService) private semanticCache: SemanticCacheService,
+    @inject(TYPES.SemanticCacheService) private semanticCache: SemanticCacheService
   ) {
     // Breakers initialized with async lambdas that will call getModel() on execution
     this.generateContentBreaker = CircuitBreakerFactory.create(
@@ -41,12 +41,12 @@ export class AIService {
         const model = await this.getModel();
         return model.generateContent(prompt);
       },
-      { name: 'Gemini.generateContent', timeout: 10000 }, // Higher timeout for AI
+      { name: 'Gemini.generateContent', timeout: 10000 } // Higher timeout for AI
     );
 
     this.chatStreamBreaker = CircuitBreakerFactory.create(
       async (prompt: string, chatSession: any) => chatSession.sendMessageStream(prompt),
-      { name: 'Gemini.sendMessageStream', timeout: 10000 },
+      { name: 'Gemini.sendMessageStream', timeout: 10000 }
     );
   }
 
@@ -191,7 +191,7 @@ export class AIService {
                 stream,
                 params,
                 this.ragService,
-                this.analyticsService,
+                this.analyticsService
               );
             }
           }
@@ -225,7 +225,7 @@ export class AIService {
   public async generateContent(
     prompt: string,
     userId: string = 'anonymous',
-    userRole: string = 'user',
+    userRole: string = 'user'
   ): Promise<string> {
     try {
       // God Mode: Force PREMIUM tier for admin/god
@@ -296,7 +296,7 @@ export class AIService {
     stream: Readable,
     params: AIStreamParams,
     ragService: RagService,
-    analyticsService: AnalyticsService,
+    analyticsService: AnalyticsService
   ) {
     const name = call.name;
     const args = call.args;
@@ -312,7 +312,7 @@ export class AIService {
           type: 'a2ui',
           component: 'chart',
           props: { title: 'Revenue Overview', type: 'area', data: data.revenue },
-        })}\n\n`,
+        })}\n\n`
       );
     } else if (name === 'get_user_growth') {
       const data = await analyticsService.getDashboardData();
@@ -322,7 +322,7 @@ export class AIService {
           type: 'a2ui',
           component: 'chart',
           props: { title: 'User Growth', type: 'bar', data: data.users },
-        })}\n\n`,
+        })}\n\n`
       );
     } else if (name === 'search_web') {
       const query = args.query;
@@ -330,7 +330,7 @@ export class AIService {
         `data: ${JSON.stringify({
           type: 'text',
           content: `\n\nSearching web for: "${query}"...\n\n`,
-        })}\n\n`,
+        })}\n\n`
       );
       const searchTool = new SearchWebTool();
       const results = await searchTool.execute({ query });
@@ -340,7 +340,7 @@ export class AIService {
         `data: ${JSON.stringify({
           type: 'text',
           content: `\n\nReading codebase context for: "${args.query}"...\n\n`,
-        })}\n\n`,
+        })}\n\n`
       );
       const context = await ragService.getProjectContext(args.query);
       toolResult = context;
@@ -349,7 +349,7 @@ export class AIService {
         `data: ${JSON.stringify({
           type: 'text',
           content: `\n\nAccessing subscription data...\n\n`,
-        })}\n\n`,
+        })}\n\n`
       );
       const stripeTool = new StripeTool();
       const toolInput = { ...args, userId: params.userId };

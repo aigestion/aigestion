@@ -82,7 +82,7 @@ export class GeminiAnalysisService {
   async analyzeTranscript(
     transcript: string,
     videoTitle: string,
-    videoUrl: string,
+    videoUrl: string
   ): Promise<VideoAnalysis> {
     const model = this.getModel();
 
@@ -326,7 +326,7 @@ ${transcript.substring(0, 5000)}
    */
   async generateSEOMetadata(
     transcript: string,
-    currentTitle: string,
+    currentTitle: string
   ): Promise<{
     title: string;
     description: string;

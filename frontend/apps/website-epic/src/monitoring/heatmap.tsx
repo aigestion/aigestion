@@ -88,17 +88,17 @@ export function useHeatmap(config: HeatmapConfig = {}) {
   // Check if element should be ignored
   function shouldIgnoreElement(element: Element): boolean {
     if (!element) return true;
-    
+
     const tagName = element.tagName.toLowerCase();
     if (ignoreElements.includes(tagName)) return true;
-    
+
     // Check if element or its parents have data-no-heatmap attribute
     let current = element;
     while (current && current !== document.body) {
       if (current.hasAttribute('data-no-heatmap')) return true;
       current = current.parentElement;
     }
-    
+
     return false;
   }
 
@@ -111,59 +111,62 @@ export function useHeatmap(config: HeatmapConfig = {}) {
   }
 
   // Add point to heatmap
-  const addPoint = useCallback((
-    x: number,
-    y: number,
-    type: HeatmapPoint['type'],
-    element?: string,
-    value?: number
-  ) => {
-    if (Math.random() > sampleRate) return;
+  const addPoint = useCallback(
+    (x: number, y: number, type: HeatmapPoint['type'], element?: string, value?: number) => {
+      if (Math.random() > sampleRate) return;
 
-    const point: HeatmapPoint = {
-      x,
-      y,
-      timestamp: Date.now(),
-      type,
-      element,
-      value,
-      sessionId: sessionId.current,
-      userId,
-    };
+      const point: HeatmapPoint = {
+        x,
+        y,
+        timestamp: Date.now(),
+        type,
+        element,
+        value,
+        sessionId: sessionId.current,
+        userId,
+      };
 
-    setPoints(prev => {
-      const updated = [...prev, point];
-      return updated.slice(-maxPoints);
-    });
+      setPoints(prev => {
+        const updated = [...prev, point];
+        return updated.slice(-maxPoints);
+      });
 
-    if (debugMode) {
-      console.log('Heatmap point added:', point);
-    }
-  }, [sampleRate, maxPoints, debugMode, userId]);
+      if (debugMode) {
+        console.log('Heatmap point added:', point);
+      }
+    },
+    [sampleRate, maxPoints, debugMode, userId]
+  );
 
   // Handle click events
-  const handleClick = useCallback((event: MouseEvent) => {
-    if (!enableClickTracking || shouldIgnoreElement(event.target as Element)) return;
+  const handleClick = useCallback(
+    (event: MouseEvent) => {
+      if (!enableClickTracking || shouldIgnoreElement(event.target as Element)) return;
 
-    const element = event.target as Element;
-    const selector = getElementSelector(element);
-    
-    addPoint(event.clientX, event.clientY, 'click', selector);
-  }, [enableClickTracking, addPoint]);
+      const element = event.target as Element;
+      const selector = getElementSelector(element);
+
+      addPoint(event.clientX, event.clientY, 'click', selector);
+    },
+    [enableClickTracking, addPoint]
+  );
 
   // Handle mouse move events
-  const handleMouseMove = useCallback((event: MouseEvent) => {
-    if (!enableMoveTracking || shouldIgnoreElement(event.target as Element)) return;
+  const handleMouseMove = useCallback(
+    (event: MouseEvent) => {
+      if (!enableMoveTracking || shouldIgnoreElement(event.target as Element)) return;
 
-    const now = Date.now();
-    if (now - lastMoveTime.current < throttleMs) return;
-    lastMoveTime.current = now;
+      const now = Date.now();
+      if (now - lastMoveTime.current < throttleMs) return;
+      lastMoveTime.current = now;
 
-    const element = event.target as Element;
-    const selector = getElementSelector(element);
-    
-    addPoint(event.clientX, event.clientY, 'move', selector);
-  }, [enableMoveTracking, throttleMs, addPoint]);
+      const element = event.target as Element;
+      const selector = getElementSelector(element);
+
+      addPoint(event.clientX, event.clientY, 'move', selector);
+    },
+    [enableMoveTracking, throttleMs, addPoint]
+  );
 
   // Handle scroll events
   const handleScroll = useCallback(() => {
@@ -175,23 +178,26 @@ export function useHeatmap(config: HeatmapConfig = {}) {
 
     const scrollX = globalThis.scrollX;
     const scrollY = globalThis.scrollY;
-    
+
     addPoint(scrollX, scrollY, 'scroll');
   }, [enableScrollTracking, throttleMs, addPoint]);
 
   // Handle hover events
-  const handleMouseOver = useCallback((event: MouseEvent) => {
-    if (!enableHoverTracking || shouldIgnoreElement(event.target as Element)) return;
+  const handleMouseOver = useCallback(
+    (event: MouseEvent) => {
+      if (!enableHoverTracking || shouldIgnoreElement(event.target as Element)) return;
 
-    const now = Date.now();
-    if (now - lastHoverTime.current < throttleMs) return;
-    lastHoverTime.current = now;
+      const now = Date.now();
+      if (now - lastHoverTime.current < throttleMs) return;
+      lastHoverTime.current = now;
 
-    const element = event.target as Element;
-    const selector = getElementSelector(element);
-    
-    addPoint(event.clientX, event.clientY, 'hover', selector);
-  }, [enableHoverTracking, throttleMs, addPoint]);
+      const element = event.target as Element;
+      const selector = getElementSelector(element);
+
+      addPoint(event.clientX, event.clientY, 'hover', selector);
+    },
+    [enableHoverTracking, throttleMs, addPoint]
+  );
 
   // Create session
   const createSession = useCallback(() => {
@@ -229,28 +235,31 @@ export function useHeatmap(config: HeatmapConfig = {}) {
   }, [session, points]);
 
   // Send session to server
-  const sendSession = useCallback(async (sessionData: HeatmapSession) => {
-    if (!endpoint) return;
+  const sendSession = useCallback(
+    async (sessionData: HeatmapSession) => {
+      if (!endpoint) return;
 
-    try {
-      await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(apiKey && { 'Authorization': `Bearer ${apiKey}` }),
-        },
-        body: JSON.stringify(sessionData),
-      });
+      try {
+        await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(apiKey && { Authorization: `Bearer ${apiKey}` }),
+          },
+          body: JSON.stringify(sessionData),
+        });
 
-      if (debugMode) {
-        console.log('Heatmap session sent:', sessionData);
+        if (debugMode) {
+          console.log('Heatmap session sent:', sessionData);
+        }
+      } catch (err) {
+        if (debugMode) {
+          console.error('Heatmap: Failed to send session', err);
+        }
       }
-    } catch (err) {
-      if (debugMode) {
-        console.error('Heatmap: Failed to send session', err);
-      }
-    }
-  }, [endpoint, apiKey, debugMode]);
+    },
+    [endpoint, apiKey, debugMode]
+  );
 
   // Start recording
   const startRecording = useCallback(() => {
@@ -314,14 +323,7 @@ export function useHeatmap(config: HeatmapConfig = {}) {
         globalThis.removeEventListener('mouseover', throttledMouseOver);
       };
     }
-  }, [
-    isRecording,
-    handleClick,
-    handleMouseMove,
-    handleScroll,
-    handleMouseOver,
-    throttleMs,
-  ]);
+  }, [isRecording, handleClick, handleMouseMove, handleScroll, handleMouseOver, throttleMs]);
 
   // Auto-start recording on mount
   useEffect(() => {
@@ -439,9 +441,7 @@ export function HeatmapDashboard() {
   return (
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-          Heatmap Analytics
-        </h2>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Heatmap Analytics</h2>
         <div className="flex gap-2">
           <button
             onClick={isRecording ? stopRecording : startRecording}
@@ -465,48 +465,32 @@ export function HeatmapDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="text-2xl font-bold text-gray-900 dark:text-white">
-            {stats.total}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Total Points
-          </div>
+          <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.total}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Total Points</div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            {stats.clicks}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Clicks
-          </div>
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.clicks}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Clicks</div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-          <div className="text-2xl font-bold text-green-600 dark:text-green-400">
-            {stats.moves}
-          </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Moves
-          </div>
+          <div className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.moves}</div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Moves</div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
             {stats.hovers}
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Hovers
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Hovers</div>
         </div>
-        
+
         <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
             {Math.floor(stats.duration / 1000)}s
           </div>
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            Duration
-          </div>
+          <div className="text-sm text-gray-600 dark:text-gray-400">Duration</div>
         </div>
       </div>
 
@@ -534,33 +518,21 @@ export function HeatmapDashboard() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span className="font-medium text-gray-700 dark:text-gray-300">
-                Session ID:
-              </span>{' '}
-              <span className="text-gray-900 dark:text-white">
-                {session.id}
-              </span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">Session ID:</span>{' '}
+              <span className="text-gray-900 dark:text-white">{session.id}</span>
             </div>
             <div>
-              <span className="font-medium text-gray-700 dark:text-gray-300">
-                URL:
-              </span>{' '}
-              <span className="text-gray-900 dark:text-white truncate">
-                {session.url}
-              </span>
+              <span className="font-medium text-gray-700 dark:text-gray-300">URL:</span>{' '}
+              <span className="text-gray-900 dark:text-white truncate">{session.url}</span>
             </div>
             <div>
-              <span className="font-medium text-gray-700 dark:text-gray-300">
-                Viewport:
-              </span>{' '}
+              <span className="font-medium text-gray-700 dark:text-gray-300">Viewport:</span>{' '}
               <span className="text-gray-900 dark:text-white">
                 {session.viewport.width}x{session.viewport.height}
               </span>
             </div>
             <div>
-              <span className="font-medium text-gray-700 dark:text-gray-300">
-                User Agent:
-              </span>{' '}
+              <span className="font-medium text-gray-700 dark:text-gray-300">User Agent:</span>{' '}
               <span className="text-gray-900 dark:text-white truncate">
                 {session.userAgent.split(' ')[0]}
               </span>

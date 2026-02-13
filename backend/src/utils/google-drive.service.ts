@@ -57,7 +57,7 @@ export class GoogleDriveService {
     }
 
     throw new Error(
-      'No se encontraron credenciales válidas para Google Drive (Service Account o OAuth2)',
+      'No se encontraron credenciales válidas para Google Drive (Service Account o OAuth2)'
     );
   }
 
@@ -336,7 +336,7 @@ export class GoogleDriveService {
   async shareFile(
     fileId: string,
     emailAddress: string,
-    role: 'reader' | 'writer' | 'commenter' = 'reader',
+    role: 'reader' | 'writer' | 'commenter' = 'reader'
   ): Promise<void> {
     const drive = await this.getDriveClient();
 

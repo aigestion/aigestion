@@ -3,7 +3,6 @@ import { Building2, Home, CheckCircle2, ChevronRight } from 'lucide-react';
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 
-
 type PlanCategory = 'familias' | 'empresas';
 
 const categoryData = {

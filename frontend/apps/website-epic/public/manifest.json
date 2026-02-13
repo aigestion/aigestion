@@ -33,30 +33,21 @@
       "short_name": "Dashboard",
       "description": "Acceso rápido al panel principal",
       "url": "/dashboard",
-      "icons": [
-        { "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }
-
-      ]
+      "icons": [{ "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }]
     },
     {
       "name": "War Room",
       "short_name": "War Room",
       "description": "Centro de control estratégico",
       "url": "/war-room",
-      "icons": [
-        { "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }
-
-      ]
+      "icons": [{ "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }]
     },
     {
       "name": "IA Assistant",
       "short_name": "Daniela",
       "description": "Asistente de IA conversacional",
       "url": "/daniela",
-      "icons": [
-        { "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }
-
-      ]
+      "icons": [{ "src": "/vite.svg", "sizes": "any", "type": "image/svg+xml" }]
     }
   ],
   "screenshots": [],

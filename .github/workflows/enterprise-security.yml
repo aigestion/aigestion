@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main, develop]
   schedule:
-    - cron: '0 4 * * *'  # Daily at 4 AM UTC
+    - cron: '0 4 * * *' # Daily at 4 AM UTC
   workflow_dispatch:
 
 permissions:
@@ -20,28 +20,28 @@ jobs:
   advanced-security:
     name: Advanced Security Analysis
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
           languages: javascript, typescript, python
           queries: security-extended,security-and-quality
           build-mode: manual
-      
+
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
-      
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:
-          category: "/language:javascript"
-      
+          category: '/language:javascript'
+
       - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
         with:
@@ -50,12 +50,12 @@ jobs:
             p/owasp-top-ten
             p/secrets
             p/cwe-top-25
-      
+
       - name: Run Bandit (Python Security)
         run: |
           pip install bandit[toml]
           bandit -r backend/ -f json -o bandit-report.json || true
-      
+
       - name: Run ESLint Security Plugin
         run: |
           cd frontend
@@ -66,16 +66,16 @@ jobs:
   dependency-security:
     name: Dependency Security Management
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Run Dependabot Security Scan
         uses: github/dependabot-action@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Run Snyk Security Scan
         uses: snyk/actions/node@master
         continue-on-error: true
@@ -83,7 +83,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           args: --severity-threshold=high --all-projects
-      
+
       - name: Run OWASP Dependency Check
         uses: dependency-check/Dependency-Check_Action@main
         with:
@@ -91,7 +91,7 @@ jobs:
           path: '.'
           format: 'HTML'
           out: 'dependency-check-report'
-      
+
       - name: Upload Dependency Report
         uses: actions/upload-artifact@v4
         with:
@@ -102,19 +102,19 @@ jobs:
   secret-management:
     name: Secret Management & Scanning
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
-      
+
       - name: Run TruffleHog
         uses: trufflesecurity/trufflehog@main
         with:
@@ -122,12 +122,12 @@ jobs:
           base: ${{ github.event.repository.default_branch }}
           head: HEAD
           extra_args: --debug --only-verified
-      
+
       - name: Scan for Hardcoded Secrets
         uses: pre-commit/action@v3.0.0
         with:
           extra_args: --all-files
-      
+
       - name: Validate Environment Variables
         run: |
           echo "🔍 Validating environment variable security..."
@@ -144,33 +144,33 @@ jobs:
   compliance:
     name: Compliance & Governance
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Run GDPR Compliance Check
         uses: ./.github/actions/gdpr-compliance@v1
         with:
           config-file: .github/compliance/gdpr-config.json
-      
+
       - name: Run SOC2 Compliance Check
         uses: ./.github/actions/soc2-compliance@v1
         with:
           config-file: .github/compliance/soc2-config.json
-      
+
       - name: Run HIPAA Compliance Check
         uses: ./.github/actions/hipaa-compliance@v1
         with:
           config-file: .github/compliance/hipaa-config.json
-      
+
       - name: Generate Compliance Report
         run: |
           echo "📋 Generating compliance report..."
           echo "✅ GDPR Compliance: $(cat gdpr-status.txt)"
           echo "✅ SOC2 Compliance: $(cat soc2-status.txt)"
           echo "✅ HIPAA Compliance: $(cat hipaa-status.txt)"
-      
+
       - name: Upload Compliance Report
         uses: actions/upload-artifact@v4
         with:
@@ -181,11 +181,11 @@ jobs:
   policy-enforcement:
     name: Security Policy Enforcement
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Enforce Branch Protection
         uses: actions/github-script@v6
         with:
@@ -212,19 +212,19 @@ jobs:
                 teams: ['core-team', 'security-team']
               }
             };
-            
+
             github.rest.repos.updateBranchProtection({
               owner: context.repo.owner,
               repo: context.repo.repo,
               branch: 'main',
               protection: protection
             });
-      
+
       - name: Validate Commit Signatures
         run: |
           echo "🔐 Validating commit signatures..."
           git log --show-signature -1 main
-      
+
       - name: Check Code Owner Approvals
         uses: actions/github-script@v6
         with:
@@ -234,18 +234,18 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
-            
+
             const reviews = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
-            
+
             const codeOwners = reviews.data.filter(review => 
               review.user.login.includes('owner') || 
               review.user.login.includes('maintainer')
             );
-            
+
             if (codeOwners.length < 1) {
               core.setFailed('❌ Code owner approval required');
             } else {
@@ -257,7 +257,7 @@ jobs:
     name: Security Incident Response
     runs-on: ubuntu-latest
     if: failure() && github.event_name == 'push'
-    
+
     steps:
       - name: Create Security Issue
         uses: actions/github-script@v6
@@ -292,7 +292,7 @@ jobs:
               labels: ['security', 'incident', 'urgent'],
               assignees: ['security-team']
             });
-      
+
       - name: Notify Security Team
         uses: 8398a7/action-slack@v3
         with:

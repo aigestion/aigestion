@@ -139,7 +139,7 @@ export class DanielaEnhancedService {
           await this.redisClient.setEx(
             `daniela:conversation:${userId}`,
             3600, // 1 hour
-            JSON.stringify(this.messages),
+            JSON.stringify(this.messages)
           );
         }
 

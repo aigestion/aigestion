@@ -10,22 +10,24 @@ Go to **Settings → Secrets and variables → Actions** and add:
 
 | Secret Name      | Description                              | Required |
 | ---------------- | ---------------------------------------- | -------- |
-| `GEMINI_API_KEY` | Google Gemini API key                    | ✅ Yes    |
-| `MONGODB_URI`    | MongoDB connection string                | ✅ Yes    |
-| `JWT_SECRET`     | JWT secret for authentication            | ✅ Yes    |
-| `GITHUB_TOKEN`   | Automatically provided by GitHub Actions | ✅ Auto   |
+| `GEMINI_API_KEY` | Google Gemini API key                    | ✅ Yes   |
+| `MONGODB_URI`    | MongoDB connection string                | ✅ Yes   |
+| `JWT_SECRET`     | JWT secret for authentication            | ✅ Yes   |
+| `GITHUB_TOKEN`   | Automatically provided by GitHub Actions | ✅ Auto  |
 
 ### 2. Enable Workflows
 
 The following workflows are now available:
 
 #### 📊 **ai-evaluation.yml** - PR Quality Checks
+
 - **Trigger:** Every pull request to `main`
 - **Purpose:** Evaluate AI response quality before merging
 - **Cost:** FREE (uses GitHub Models)
 - **Duration:** ~2-3 minutes
 
 **What it does:**
+
 1. Starts NEXUS V1 server
 2. Collects responses from Gemini API
 3. Evaluates with GPT-4o (GitHub Models)
@@ -33,12 +35,14 @@ The following workflows are now available:
 5. Comments results on PR
 
 #### 📅 **ai-monitoring.yml** - Weekly Quality Monitoring
+
 - **Trigger:** Every Monday at 9:00 AM UTC
 - **Purpose:** Track AI quality trends over time
 - **Cost:** FREE (uses GitHub Models)
 - **Duration:** ~2-3 minutes
 
 **What it does:**
+
 1. Runs full evaluation suite
 2. Checks quality thresholds
 3. Creates issue if quality degraded
@@ -54,8 +58,7 @@ Triggers:
   - Changes to server/src/** or test_dataset.jsonl
   - Manual dispatch
 
-Steps:
-  1. Setup Python 3.11 + Node.js 20
+Steps: 1. Setup Python 3.11 + Node.js 20
   2. Install dependencies
   3. Start NEXUS V1 server with secrets
   4. Collect AI responses (collect_responses.py)
@@ -66,6 +69,7 @@ Steps:
 ```
 
 **Example PR Comment:**
+
 ```markdown
 ## 🤖 AI Quality Evaluation Results
 
@@ -76,9 +80,9 @@ Steps:
 
 | Metric    | Score  | Status |
 | --------- | ------ | ------ |
-| Coherence | 4.75/5 | ✅      |
-| Fluency   | 4.88/5 | ✅      |
-| Relevance | 4.62/5 | ✅      |
+| Coherence | 4.75/5 | ✅     |
+| Fluency   | 4.88/5 | ✅     |
+| Relevance | 4.62/5 | ✅     |
 
 **Overall:** ✅ PASSED
 
@@ -100,22 +104,25 @@ Steps:
 ```
 
 **Example Issue Created:**
+
 ```markdown
 ⚠️ AI Quality Alert: Evaluation thresholds not met
 
 ## Weekly AI Quality Evaluation Failed
 
 ### Scores
+
 | Metric    | Score  | Threshold | Status |
 | --------- | ------ | --------- | ------ |
-| Coherence | 3.75/5 | 4.0       | ❌      |
-| Fluency   | 4.25/5 | 4.0       | ✅      |
-| Relevance | 3.88/5 | 4.0       | ❌      |
+| Coherence | 3.75/5 | 4.0       | ❌     |
+| Fluency   | 4.25/5 | 4.0       | ✅     |
+| Relevance | 3.88/5 | 4.0       | ❌     |
 
 ### Recommended Actions
+
 1. Review recent changes to Gemini API integration
 2. Check if prompt templates have been modified
-...
+   ...
 ```
 
 ## 🎯 Quality Thresholds
@@ -141,7 +148,7 @@ Edit `.github/workflows/ai-monitoring.yml`:
 ```yaml
 on:
   schedule:
-    - cron: '0 9 * * 1'  # Every Monday at 9 AM UTC
+    - cron: '0 9 * * 1' # Every Monday at 9 AM UTC
     # Examples:
     # - cron: '0 */6 * * *'   # Every 6 hours
     # - cron: '0 0 * * *'     # Daily at midnight
@@ -181,15 +188,18 @@ Add secrets: `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_KEY`
 ## 📊 Viewing Results
 
 ### In Pull Requests
+
 Results appear automatically as a comment on every PR.
 
 ### In Actions Tab
+
 1. Go to **Actions** tab
 2. Click on workflow run
 3. Download **evaluation-results** artifact
 4. Extract and view `evaluation_results.json`
 
 ### Weekly Monitoring
+
 1. Issues created automatically when quality drops
 2. Artifacts stored for 90 days in Actions tab
 3. Label: `ai-quality`, `automated-alert`
@@ -197,22 +207,29 @@ Results appear automatically as a comment on every PR.
 ## 🚨 Troubleshooting
 
 ### Workflow fails: "GEMINI_API_KEY not set"
+
 **Solution:** Add `GEMINI_API_KEY` to repository secrets.
 
 ### Workflow fails: "Rate limit exceeded (429)"
+
 **Solution:**
+
 - GitHub Models has rate limits
 - Switch to AWS Bedrock or Azure OpenAI
 - Add delays in `evaluate_gemini_github.py`
 
 ### Workflow fails: "Server not responding"
+
 **Solution:**
+
 - Increase `sleep` time in workflow (default: 30s)
 - Check `MONGODB_URI` is correct
 - Verify `JWT_SECRET` is set
 
 ### No PR comment appears
+
 **Solution:**
+
 - Check workflow has `pull_request` trigger
 - Verify `GITHUB_TOKEN` permissions
 - Review Actions logs for errors
@@ -244,4 +261,3 @@ Once workflows are running:
 ---
 
 **Questions?** Open an issue with label `ai-evaluation`
-

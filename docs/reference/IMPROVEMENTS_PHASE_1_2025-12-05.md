@@ -362,10 +362,10 @@ $env:AUDIT_EMAIL_PASSWORD = "your-app-password"
 
 | #   | Mejora           | Impacto | Complejidad | Esfuerzo | Prioridad |
 | --- | ---------------- | ------- | ----------- | -------- | --------- |
-| 1   | Pre-commit Hooks | 40%     | Baja        | 1-2h     | 🔴 HIGH    |
-| 2   | Secret Reports   | 50%     | Media       | 2h       | 🔴 HIGH    |
-| 3   | Excel Export     | 60%     | Baja        | 2h       | 🟠 MEDIUM  |
-| 4   | Email Notif      | 70%     | Media       | 2h       | 🟠 MEDIUM  |
+| 1   | Pre-commit Hooks | 40%     | Baja        | 1-2h     | 🔴 HIGH   |
+| 2   | Secret Reports   | 50%     | Media       | 2h       | 🔴 HIGH   |
+| 3   | Excel Export     | 60%     | Baja        | 2h       | 🟠 MEDIUM |
+| 4   | Email Notif      | 70%     | Media       | 2h       | 🟠 MEDIUM |
 
 ---
 
@@ -459,4 +459,3 @@ Una vez completadas estas 4 mejoras, la Fase 2 incluirá:
 **Estado:** 📋 Listo para Implementación
 **Aprobado Por:** Sistema de Auditoría Inteligente
 **Fecha:** 5 Diciembre 2025
-

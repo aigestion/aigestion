@@ -13,6 +13,7 @@
 ## 🎯 OBJETIVOS ESTRATÉGICOS
 
 ### Principios Core
+
 1. **ZERO TRUST ARCHITECTURE** - Nunca confiar, siempre verificar
 2. **DEFENSE IN DEPTH** - Múltiples capas de seguridad
 3. **ASSUME BREACH** - Asumir que ya están dentro
@@ -132,6 +133,7 @@
 ### 1. Web Application Firewall (WAF) Multi-Capa
 
 **Capa 1: CloudFlare WAF**
+
 ```yaml
 # cloudflare-waf-rules.yaml
 rules:
@@ -179,6 +181,7 @@ rules:
 ```
 
 **Capa 2: Azure WAF**
+
 ```json
 {
   "wafPolicy": {
@@ -189,7 +192,7 @@ rules:
         "ruleType": "MatchRule",
         "matchConditions": [
           {
-            "matchVariables": [{"variableName": "RequestHeaders", "selector": "User-Agent"}],
+            "matchVariables": [{ "variableName": "RequestHeaders", "selector": "User-Agent" }],
             "operator": "Contains",
             "matchValues": ["sqlmap", "nikto", "nmap", "masscan", "metasploit"]
           }
@@ -202,7 +205,7 @@ rules:
         "ruleType": "MatchRule",
         "matchConditions": [
           {
-            "matchVariables": [{"variableName": "RequestHeaders", "selector": "Authorization"}],
+            "matchVariables": [{ "variableName": "RequestHeaders", "selector": "Authorization" }],
             "operator": "Equal",
             "matchValues": [""],
             "negateCondition": true
@@ -231,6 +234,7 @@ rules:
 ### 2. Network Intrusion Detection System (NIDS)
 
 **Azure Sentinel + Custom Analytics**
+
 ```kql
 // Advanced Threat Detection Query
 SecurityEvent
@@ -262,6 +266,7 @@ SecurityEvent
 ### 3. Host Intrusion Detection (HIDS)
 
 **Instalación de OSSEC en todos los nodos**
+
 ```bash
 #!/bin/bash
 # install-ossec.sh
@@ -315,6 +320,7 @@ systemctl start ossec
 ### 4. Container Security Scanning
 
 **Trivy + Snyk + Aqua Security**
+
 ```yaml
 # .github/workflows/container-security.yml
 name: Container Security Scan
@@ -325,7 +331,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '0 */6 * * *'  # Cada 6 horas
+    - cron: '0 */6 * * *' # Cada 6 horas
 
 jobs:
   trivy-scan:
@@ -340,7 +346,7 @@ jobs:
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
-          exit-code: '1'  # Falla el build si encuentra vulnerabilidades críticas
+          exit-code: '1' # Falla el build si encuentra vulnerabilidades críticas
 
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v2
@@ -426,6 +432,7 @@ SecurityEvent
 ### 2. Behavioral Analytics con Machine Learning
 
 **Detección de Anomalías con Azure ML**
+
 ```python
 # anomaly_detection_model.py
 import numpy as np
@@ -523,6 +530,7 @@ for anomaly in anomalies:
 ### 3. Threat Intelligence Integration
 
 **Integración con feeds de amenazas globales**
+
 ```python
 # threat_intelligence.py
 import requests
@@ -941,6 +949,7 @@ class ThreatHunter:
 ### 1. Encriptación en Reposo (Encryption at Rest)
 
 **Azure Disk Encryption + Customer-Managed Keys**
+
 ```bash
 #!/bin/bash
 # setup-encryption-at-rest.sh
@@ -987,6 +996,7 @@ az postgres server update \
 ### 2. Encriptación en Tránsito (Encryption in Transit)
 
 **TLS 1.3 + Perfect Forward Secrecy**
+
 ```nginx
 # nginx-tls13.conf
 server {
@@ -1033,6 +1043,7 @@ server {
 ### 3. Encriptación End-to-End en Aplicación
 
 **Implementación de E2EE**
+
 ```typescript
 // e2e-encryption.ts
 import * as crypto from 'crypto';
@@ -1047,7 +1058,7 @@ export class E2EEncryption {
     const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
       modulusLength: 4096,
       publicKeyEncoding: { type: 'spki', format: 'pem' },
-      privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
     });
 
     this.publicKey = crypto.createPublicKey(publicKey);
@@ -1074,7 +1085,7 @@ export class E2EEncryption {
       {
         key: this.publicKey,
         padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-        oaepHash: 'sha256'
+        oaepHash: 'sha256',
       },
       aesKey
     );
@@ -1085,7 +1096,7 @@ export class E2EEncryption {
       encryptedKey: encryptedKey.toString('base64'),
       iv: iv.toString('base64'),
       authTag: authTag.toString('base64'),
-      algorithm: 'RSA-4096-OAEP + AES-256-GCM'
+      algorithm: 'RSA-4096-OAEP + AES-256-GCM',
     });
   }
 
@@ -1098,7 +1109,7 @@ export class E2EEncryption {
       {
         key: this.privateKey,
         padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-        oaepHash: 'sha256'
+        oaepHash: 'sha256',
       },
       Buffer.from(payload.encryptedKey, 'base64')
     );
@@ -1158,7 +1169,7 @@ app.post('/api/secure-endpoint', async (req, res) => {
 
   res.json({
     encryptedPayload: encryptedResponse,
-    signature: responseSignature
+    signature: responseSignature,
   });
 });
 ```
@@ -1170,6 +1181,7 @@ app.post('/api/secure-endpoint', async (req, res) => {
 ### 1. Zero Trust Network Access (ZTNA)
 
 **Implementación completa**
+
 ```yaml
 # ztna-policy.yaml
 apiVersion: security.NEXUS V1.net/v1
@@ -1198,10 +1210,10 @@ spec:
 
     # Re-autenticación para operaciones sensibles
     stepUp:
-      - resource: "/api/admin/*"
+      - resource: '/api/admin/*'
         requireMFA: true
         maxAge: 15m
-      - resource: "/api/payments/*"
+      - resource: '/api/payments/*'
         requireMFA: true
         maxAge: 5m
 
@@ -1217,9 +1229,9 @@ spec:
 
     rules:
       # Solo desde dispositivos corporativos
-      - condition: "deviceTrust.managed == false"
+      - condition: 'deviceTrust.managed == false'
         action: DENY
-        resources: ["/api/internal/*"]
+        resources: ['/api/internal/*']
 
       # Bloquear acceso desde países de alto riesgo
       - condition: "location.country in ['CN', 'RU', 'KP', 'IR']"
@@ -1229,32 +1241,32 @@ spec:
       # Requerir VPN fuera de horario laboral
       - condition: "timeOfDay.hour not between (8, 18) AND networkType != 'VPN'"
         action: DENY
-        resources: ["/api/production/*"]
+        resources: ['/api/production/*']
 
       # Bloquear si el risk score es alto
-      - condition: "riskScore > 80"
+      - condition: 'riskScore > 80'
         action: BLOCK_AND_NOTIFY
 
   # Micro-segmentación
   networkSegmentation:
     - segment: DMZ
-      allowedSources: ["internet"]
-      allowedDestinations: ["app-tier"]
+      allowedSources: ['internet']
+      allowedDestinations: ['app-tier']
       allowedPorts: [443]
 
     - segment: app-tier
-      allowedSources: ["DMZ", "admin-network"]
-      allowedDestinations: ["data-tier"]
+      allowedSources: ['DMZ', 'admin-network']
+      allowedDestinations: ['data-tier']
       allowedPorts: [5432, 6379]
 
     - segment: data-tier
-      allowedSources: ["app-tier"]
+      allowedSources: ['app-tier']
       allowedDestinations: []
       allowedPorts: []
 
   # Least privilege
   leastPrivilege:
-    defaultRole: "read-only"
+    defaultRole: 'read-only'
     privilegeEscalation:
       requireApproval: true
       maxDuration: 1h
@@ -1563,6 +1575,7 @@ class ComplianceFramework:
 **[CONTINÚA EN PARTE 2 - Siguiente mensaje]**
 
 El documento es muy extenso. ¿Quieres que continúe con:
+
 - Incident Response Plan
 - Security Operations Center (SOC)
 - Implementación por Fases
@@ -1570,4 +1583,3 @@ El documento es muy extenso. ¿Quieres que continúe con:
 - Configuración de herramientas
 
 O prefieres que genere el documento completo ahora?
-

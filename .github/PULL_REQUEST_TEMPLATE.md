@@ -1,12 +1,15 @@
 ## 🚀 AIGestion Pull Request - God Mode
 
 ## 📝 Description
+
 <!-- Provide a clear and concise description of the changes in this PR -->
 
 ## 🔗 Related Issues
+
 <!-- Link to related issues (e.g., Fixes #123, Closes #456) -->
 
 ## 🎯 Type of Change
+
 - [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
 - [ ] 🚀 New feature (non-breaking change which adds functionality)
 - [ ] 🛠️ Refactoring (code changes that neither fix a bug nor add a feature)
@@ -17,6 +20,7 @@
 - [ ] 🎨 UI/UX enhancement
 
 ## 🧪 Testing
+
 - [ ] 🧪 Unit tests pass
 - [ ] 🎭 Component tests pass
 - [ ] 🌐 E2E tests pass
@@ -26,12 +30,14 @@
 - [ ] 🔒 Security tests pass
 
 ## 📊 Quality Metrics
+
 - **Test Coverage:** <!-- e.g., 85% -->
 - **Bundle Size Impact:** <!-- e.g., +2.3KB -->
 - **Performance Impact:** <!-- e.g., -100ms load time -->
 - **Accessibility Score:** <!-- e.g., 95/100 -->
 
 ## 🛡️ Security & Performance
+
 - [ ] 🔒 No new security vulnerabilities
 - [ ] 📊 Performance budget maintained
 - [ ] 🌐 SEO best practices followed
@@ -39,6 +45,7 @@
 - [ ] ♿ Accessibility compliant
 
 ## 📋 Code Quality Checklist
+
 - [ ] ✨ Code follows project style guidelines
 - [ ] 🔍 Self-review completed
 - [ ] 💬 Code commented in complex areas
@@ -48,6 +55,7 @@
 - [ ] 🔄 Existing tests still pass
 
 ## 🚀 Deployment Checklist
+
 - [ ] 🏗️ Build passes in all environments
 - [ ] 🌐 Preview deployment successful
 - [ ] 📊 Performance audit passed
@@ -55,18 +63,23 @@
 - [ ] 📱 Cross-browser testing completed
 
 ## 📸 Visual Proof
+
 <!-- Add screenshots, videos, or Lighthouse reports -->
 
 ## 🔄 Rollback Plan
+
 <!-- Describe how to rollback if issues arise -->
 
 ## 📊 Additional Context
+
 <!-- Any additional information, metrics, or context -->
 
 ---
 
 ## 🤖 Automated Checks Status
+
 This PR will automatically run:
+
 - ✅ Code Quality Checks
 - ✅ Security Scanning
 - ✅ Performance Testing
@@ -74,4 +87,4 @@ This PR will automatically run:
 - ✅ E2E Testing
 - ✅ Accessibility Audit
 
-*Powered by GitHub Actions God Mode*
+_Powered by GitHub Actions God Mode_

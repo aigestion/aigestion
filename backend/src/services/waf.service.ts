@@ -143,7 +143,7 @@ export class WAFService {
 
     // Find or create current hour entry
     let currentData = this.timeSeriesData.find(
-      d => d.timestamp.getTime() === currentHour.getTime(),
+      d => d.timestamp.getTime() === currentHour.getTime()
     );
 
     if (!currentData) {
@@ -157,7 +157,7 @@ export class WAFService {
 
       // Keep only last 24 hours
       this.timeSeriesData = this.timeSeriesData.filter(
-        d => d.timestamp.getTime() > now.getTime() - 24 * 60 * 60 * 1000,
+        d => d.timestamp.getTime() > now.getTime() - 24 * 60 * 60 * 1000
       );
     }
 
@@ -408,7 +408,7 @@ export class WAFService {
           }
           return acc;
         },
-        [] as Array<{ country: string; count: number }>,
+        [] as Array<{ country: string; count: number }>
       )
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);

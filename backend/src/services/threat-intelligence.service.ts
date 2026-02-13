@@ -108,7 +108,7 @@ export class ThreatIntelligenceService {
       async () => {
         await this.updateAllFeeds();
       },
-      5 * 60 * 1000,
+      5 * 60 * 1000
     ); // Every 5 minutes
 
     // Initial update
@@ -469,7 +469,7 @@ export class ThreatIntelligenceService {
     }
 
     const entries = feedData.data.filter(
-      (entry: any) => entry.url === value || entry.url.includes(value),
+      (entry: any) => entry.url === value || entry.url.includes(value)
     );
 
     return entries.map((entry: any) => ({
@@ -586,7 +586,7 @@ export class ThreatIntelligenceService {
       await this.redis.setEx(
         `alert:${alert.id}`,
         24 * 60 * 60, // 24 hours
-        JSON.stringify(alert),
+        JSON.stringify(alert)
       );
 
       // Add to alerts list
@@ -691,7 +691,7 @@ export class ThreatIntelligenceService {
    * Add custom threat indicator
    */
   public async addCustomIndicator(
-    indicator: Omit<ThreatIndicator, 'firstSeen' | 'lastSeen' | 'isActive'>,
+    indicator: Omit<ThreatIndicator, 'firstSeen' | 'lastSeen' | 'isActive'>
   ): Promise<boolean> {
     try {
       const fullIndicator: ThreatIndicator = {

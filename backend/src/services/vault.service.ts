@@ -11,7 +11,7 @@ export class VaultService {
    */
   async encrypt(
     data: string,
-    secret: string,
+    secret: string
   ): Promise<{ iv: string; ciphertext: string; tag: string }> {
     try {
       // Derive a 32-byte key from the secret (e.g., user hardware key or system secret)
@@ -41,7 +41,7 @@ export class VaultService {
     ivHex: string,
     ciphertext: string,
     tagHex: string,
-    secret: string,
+    secret: string
   ): Promise<string> {
     try {
       const key = crypto.createHash('sha256').update(secret).digest();
@@ -69,7 +69,7 @@ export class VaultService {
     ivHex: string,
     ciphertext: string,
     tagHex: string,
-    sovereignSessionToken: string,
+    sovereignSessionToken: string
   ): Promise<string> {
     const { getCache } = require('../cache/redis');
     const secret = await getCache(`sovereign:session:${sovereignSessionToken}`);

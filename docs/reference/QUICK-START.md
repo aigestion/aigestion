@@ -36,29 +36,37 @@ NEXUS V1/.agent/reports/
 ## 🎯 Próximos Pasos (En Orden)
 
 ### 1️⃣ **Revisa el Reporte Consolidado** (15 min)
+
 ```powershell
 code c:\Users\Alejandro\NEXUS V1\.agent\reports\consolidated-report.md
 ```
+
 Esto te mostrará:
+
 - Resumen ejecutivo de 48 recomendaciones
 - Problemas encontrados en cada dominio
 - Código de ejemplo listo para copiar/pegar
 - Plan de implementación por fases
 
 ### 2️⃣ **Profundiza en tu Dominio** (10 min)
+
 Si eres Backend → `IngenieroBackendNEXUS V1_report.md`
 Si eres Frontend → `IngenieroFrontendNEXUS V1_report.md`
 Si eres DevOps → `DevOpsNEXUS V1_report.md`
-*Y así con los demás...*
+_Y así con los demás..._
 
 ### 3️⃣ **Prioriza por Tu Contexto** (5 min)
+
 Las recomendaciones están etiquetadas:
+
 - 🔴 **CRÍTICO** → Implementa esta semana (rate limiting!)
 - 🟡 **ALTO** → Implementa en 2 semanas
 - 🟢 **MEDIO** → Implementa en 4 semanas
 
 ### 4️⃣ **Copia el Código de Ejemplo** (10 min)
+
 Todos los ejemplos están listos para usar:
+
 ```typescript
 // Copiar directamente de consolidated-report.md
 // Adaptar según tu setup
@@ -66,6 +74,7 @@ Todos los ejemplos están listos para usar:
 ```
 
 ### 5️⃣ **Crea Issues en GitHub** (10 min)
+
 ```powershell
 # Ejemplo: crear issue de seguridad
 gh issue create --title "🔒 Seguridad: Implementar Rate Limiting" \
@@ -74,6 +83,7 @@ gh issue create --title "🔒 Seguridad: Implementar Rate Limiting" \
 ```
 
 ### 6️⃣ **Ejecuta en Sprints** (4-6 semanas)
+
 **Semana 1**: CRÍTICO (rate limiting, validación, índices BD)
 **Semana 2-3**: ALTO (Dockerfile, middleware, Zustand)
 **Semana 4**: MEDIO (tracing, lazy loading, caching)
@@ -83,6 +93,7 @@ gh issue create --title "🔒 Seguridad: Implementar Rate Limiting" \
 ## 🔥 Lo Más Importante
 
 ### 🔴 **CRÍTICO - Hazlo YA**
+
 ```
 1. Rate limiting en Express (ExpertoSecurityPerfNEXUS V1)
    → Sin esto, tu app puede ser atacada
@@ -96,6 +107,7 @@ gh issue create --title "🔒 Seguridad: Implementar Rate Limiting" \
 ```
 
 ### 🟡 **ALTO - Próximas 2 Semanas**
+
 ```
 3. Multi-stage Dockerfile (Arquitecto)
 4. Middleware de errores centralizado (Backend)
@@ -104,6 +116,7 @@ gh issue create --title "🔒 Seguridad: Implementar Rate Limiting" \
 ```
 
 ### 🟢 **MEDIO - Próximas 4 Semanas**
+
 ```
 7. Tracing OTEL completo (DevOps)
 8. Lazy loading de rutas (Frontend)
@@ -116,15 +129,20 @@ gh issue create --title "🔒 Seguridad: Implementar Rate Limiting" \
 ## 💡 Consejos Rápidos
 
 ### Para Ejecutar Nuevamente
+
 Si quieres que los agentes re-analicen NEXUS V1:
+
 ```powershell
 cd c:\Users\Alejandro\NEXUS V1
 .\scripts\launch-multi-agent-team.ps1
 ```
+
 (Tarda ~1 minuto, genera nuevos reportes)
 
 ### Para Agregar un Nuevo Agente
+
 Crea `.agent/tuNombre.agent.md` con:
+
 ```yaml
 ---
 name: TuAgente
@@ -133,13 +151,14 @@ tools:
   - edit
   - search
 ---
-
 # Tu Agente
 ...
 ```
 
 ### Para Personalizar
+
 Edita los archivos `.agent/*.agent.md` directamente para cambiar:
+
 - Qué analiza cada agente
 - Qué herramientas usa
 - Cómo se ejecutan
@@ -179,6 +198,7 @@ code c:\Users\Alejandro\NEXUS V1\.agent\reports\consolidated-report.md
 ```
 
 Luego:
+
 - Lee la sección "Resumen Ejecutivo"
 - Ve sección por sección (Arquitectura, Backend, etc.)
 - Copia los códigos de ejemplo que necesites
@@ -221,6 +241,7 @@ R: Claro, están en markdown y listos para compartir en GitHub/Confluence.
 ## 📞 Soporte Técnico
 
 Si necesitas:
+
 - **Modificar un agente** → Edita `.agent/[nombre].agent.md`
 - **Agregar herramientas** → Modifica sección `tools:`
 - **Cambiar prompts** → Edita la sección de descripción
@@ -233,4 +254,3 @@ Si necesitas:
 Creado: 2025-12-07
 Sistema: Agentes IA Autónomos para NEXUS V1
 Versión: 1.0.0
-

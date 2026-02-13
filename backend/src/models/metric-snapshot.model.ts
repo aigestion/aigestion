@@ -18,5 +18,5 @@ const MetricSnapshotSchema = new Schema<IMetricSnapshot>({
 
 export const MetricSnapshot = mongoose.model<IMetricSnapshot>(
   'MetricSnapshot',
-  MetricSnapshotSchema,
+  MetricSnapshotSchema
 );

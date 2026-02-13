@@ -40,7 +40,7 @@ export const dynamicRateLimiter = rateLimit({
   handler: (req: Request | any, res: Response | any, _next: any, options: any) => {
     const user = req.user;
     logger.warn(
-      `Rate limit exceeded for ${user ? `user ${user.id} (${user.role})` : `IP ${req.ip}`}`,
+      `Rate limit exceeded for ${user ? `user ${user.id} (${user.role})` : `IP ${req.ip}`}`
     );
     res.status(options.statusCode).json({
       status: 'error',

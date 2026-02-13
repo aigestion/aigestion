@@ -1,12 +1,12 @@
 steps:
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    echo "Current identity:"
-    gcloud auth list
-    echo "Project ID:"
-    gcloud config get-value project
-    echo "Testing secret manager access..."
-    gcloud secrets list
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Current identity:"
+        gcloud auth list
+        echo "Project ID:"
+        gcloud config get-value project
+        echo "Testing secret manager access..."
+        gcloud secrets list

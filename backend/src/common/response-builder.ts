@@ -37,7 +37,7 @@ export function buildError(
   code: string,
   statusCode = 400,
   requestId: string,
-  details?: Record<string, any>,
+  details?: Record<string, any>
 ): ApiError {
   return {
     status: statusCode,

@@ -65,7 +65,7 @@ export class TwoFactorService {
             used: false,
             createdAt: new Date(),
           })),
-        }),
+        })
       );
 
       logger.info('TOTP secret generated', { userId, email });
@@ -159,7 +159,7 @@ export class TwoFactorService {
         JSON.stringify({
           secret: JSON.parse(storedData).secret,
           backupCodes,
-        }),
+        })
       );
 
       logger.info('Backup code used successfully', { userId });
@@ -189,7 +189,7 @@ export class TwoFactorService {
       await this.redis.setEx(
         `2fa:sms:${userId}`,
         this.codeExpiry / 1000,
-        JSON.stringify(verificationData),
+        JSON.stringify(verificationData)
       );
 
       // Send SMS (integrate with your SMS service)
@@ -227,7 +227,7 @@ export class TwoFactorService {
       await this.redis.setEx(
         `2fa:email:${userId}`,
         this.codeExpiry / 1000,
-        JSON.stringify(verificationData),
+        JSON.stringify(verificationData)
       );
 
       // Send email (integrate with your email service)
@@ -281,7 +281,7 @@ export class TwoFactorService {
         await this.redis.setEx(
           key,
           Math.ceil((verificationData.expiresAt.getTime() - Date.now()) / 1000),
-          JSON.stringify(verificationData),
+          JSON.stringify(verificationData)
         );
 
         logger.warn('Invalid verification code', {
@@ -309,7 +309,7 @@ export class TwoFactorService {
   public async enableTwoFactor(
     userId: string,
     method: 'totp' | 'sms' | 'email',
-    details?: any,
+    details?: any
   ): Promise<boolean> {
     try {
       const twoFactorData = {
@@ -323,7 +323,7 @@ export class TwoFactorService {
       await this.redis.setEx(
         `2fa:user:${userId}`,
         365 * 24 * 60 * 60, // 1 year
-        JSON.stringify(twoFactorData),
+        JSON.stringify(twoFactorData)
       );
 
       logger.info('2FA enabled for user', { userId, method });
@@ -413,7 +413,7 @@ export class TwoFactorService {
             used: false,
             createdAt: new Date(),
           })),
-        }),
+        })
       );
 
       logger.info('Backup codes regenerated', { userId });
@@ -560,7 +560,7 @@ export class TwoFactorService {
       // Count recent verifications (last hour)
       const recentKeys = await this.redis.keys('2fa:*');
       const recentVerifications = recentKeys.filter(
-        key => key.includes('sms:') || key.includes('email:'),
+        key => key.includes('sms:') || key.includes('email:')
       ).length;
 
       return {

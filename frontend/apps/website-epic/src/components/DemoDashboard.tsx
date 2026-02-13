@@ -12,19 +12,21 @@ import {
   Lock,
   Globe,
   Database,
-  BarChart3
+  BarChart3,
 } from 'lucide-react';
 import { api, SystemHealth } from '../services/api';
 
 const DemoDashboard = () => {
   const [health, setHealth] = useState<SystemHealth | null>(null);
-  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking');
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>(
+    'checking'
+  );
   const [activeTab, setActiveTab] = useState('overview');
   const [metrics, setMetrics] = useState({
     cpu: 24,
     ram: 42,
     net: 120,
-    daniela: 98
+    daniela: 98,
   });
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const DemoDashboard = () => {
             cpu: analytics.data.cpuUsage || analytics.data.cpu || prev.cpu,
             ram: analytics.data.memoryUsage || analytics.data.memory || prev.ram,
             net: analytics.data.networkTraffic || analytics.data.traffic || prev.net,
-            daniela: analytics.data.danielaEfficiency || analytics.data.efficiency || prev.daniela
+            daniela: analytics.data.danielaEfficiency || analytics.data.efficiency || prev.daniela,
           }));
         }
       } catch (error) {
@@ -63,7 +65,6 @@ const DemoDashboard = () => {
 
     return () => clearInterval(interval);
   }, []);
-
 
   const features = [
     { id: 'overview', name: 'Control Central', icon: Layout, color: 'text-nexus-cyan' },
@@ -86,31 +87,34 @@ const DemoDashboard = () => {
               Sovereign <span className="text-nexus-cyan">Workspace</span>
             </h2>
             <p className="text-nexus-silver/60 max-w-xl text-lg font-light leading-relaxed">
-              Experimente la arquitectura de orquestación neural. Un entorno diseñado para la soberanía operativa y el control total de sus activos digitales.
+              Experimente la arquitectura de orquestación neural. Un entorno diseñado para la
+              soberanía operativa y el control total de sus activos digitales.
             </p>
           </div>
           <div className="flex gap-4">
-             <div className="px-6 py-4 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 text-right">
-                <div className="text-[10px] text-nexus-silver/40 uppercase tracking-widest mb-1">Status</div>
-                <div className="flex items-center gap-2 text-nexus-cyan font-bold">
-                  <div className="w-2 h-2 rounded-full bg-nexus-cyan animate-pulse" />
-                  ONLINE
-                </div>
-             </div>
+            <div className="px-6 py-4 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 text-right">
+              <div className="text-[10px] text-nexus-silver/40 uppercase tracking-widest mb-1">
+                Status
+              </div>
+              <div className="flex items-center gap-2 text-nexus-cyan font-bold">
+                <div className="w-2 h-2 rounded-full bg-nexus-cyan animate-pulse" />
+                ONLINE
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="grid lg:grid-cols-12 gap-8 min-h-[600px]">
           {/* Navigation Sidebar Simulation */}
           <div className="lg:col-span-3 space-y-4">
-            {features.map((f) => (
+            {features.map(f => (
               <button
                 key={f.id}
                 onClick={() => setActiveTab(f.id)}
                 className={`w-full flex items-center gap-4 px-6 py-5 rounded-2xl transition-all duration-500 border ${
                   activeTab === f.id
-                  ? 'bg-white/10 border-nexus-cyan/50 text-white shadow-[0_0_20px_rgba(0,245,255,0.1)]'
-                  : 'bg-transparent border-white/5 text-nexus-silver/40 hover:bg-white/5 hover:border-white/10'
+                    ? 'bg-white/10 border-nexus-cyan/50 text-white shadow-[0_0_20px_rgba(0,245,255,0.1)]'
+                    : 'bg-transparent border-white/5 text-nexus-silver/40 hover:bg-white/5 hover:border-white/10'
                 }`}
               >
                 <f.icon className={`w-5 h-5 ${activeTab === f.id ? f.color : ''}`} />
@@ -120,12 +124,15 @@ const DemoDashboard = () => {
 
             <div className="mt-12 p-6 bg-linear-to-br from-nexus-violet/20 to-nexus-cyan/20 rounded-2xl border border-white/10">
               <div className="flex items-center gap-2 mb-4 text-white text-[10px] font-bold tracking-widest">
-                <span className="text-nexus-gold"><Zap size={16} /></span>
+                <span className="text-nexus-gold">
+                  <Zap size={16} />
+                </span>
                 POWERED BY DANIELA
               </div>
 
               <p className="text-[10px] text-nexus-silver/40 leading-relaxed uppercase">
-                Optimización de recursos activa en un 98.4%. No se requieren intervenciones manuales detectadas.
+                Optimización de recursos activa en un 98.4%. No se requieren intervenciones manuales
+                detectadas.
               </p>
             </div>
           </div>
@@ -162,25 +169,47 @@ const DemoDashboard = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="grid grid-cols-1 md:grid-cols-3 gap-6"
                     >
-                      <StatCard label="Carga de CPU" value={`${metrics.cpu}%`} icon={Cpu} color="text-nexus-cyan" />
-                      <StatCard label="Memoria Buffer" value={`${metrics.ram}%`} icon={Database} color="text-nexus-violet" />
-                      <StatCard label="Eficiencia Daniela" value={`${metrics.daniela}%`} icon={Brain} color="text-nexus-gold" />
+                      <StatCard
+                        label="Carga de CPU"
+                        value={`${metrics.cpu}%`}
+                        icon={Cpu}
+                        color="text-nexus-cyan"
+                      />
+                      <StatCard
+                        label="Memoria Buffer"
+                        value={`${metrics.ram}%`}
+                        icon={Database}
+                        color="text-nexus-violet"
+                      />
+                      <StatCard
+                        label="Eficiencia Daniela"
+                        value={`${metrics.daniela}%`}
+                        icon={Brain}
+                        color="text-nexus-gold"
+                      />
 
                       <div className="md:col-span-3 bg-white/5 rounded-2xl p-8 border border-white/5 mt-4">
                         <div className="flex items-center justify-between mb-8">
-                          <h4 className="text-[10px] font-bold tracking-[0.4em] uppercase text-nexus-silver/60">Flujo de Tráfico Neural</h4>
+                          <h4 className="text-[10px] font-bold tracking-[0.4em] uppercase text-nexus-silver/60">
+                            Flujo de Tráfico Neural
+                          </h4>
                           <Globe className="w-4 h-4 text-nexus-cyan animate-pulse" />
                         </div>
                         <div className="h-48 flex items-end gap-2 px-4">
-                           {Array.from({length: 24}).map((_, i) => (
-                             <motion.div
-                               key={i}
-                               initial={{ height: 0 }}
-                               animate={{ height: `${Math.random() * 80 + 20}%` }}
-                               transition={{ duration: 1, repeat: Infinity, repeatType: 'reverse', delay: i * 0.05 }}
-                               className="flex-1 bg-linear-to-t from-nexus-cyan/40 to-nexus-violet/40 rounded-t-sm"
-                             />
-                           ))}
+                          {Array.from({ length: 24 }).map((_, i) => (
+                            <motion.div
+                              key={i}
+                              initial={{ height: 0 }}
+                              animate={{ height: `${Math.random() * 80 + 20}%` }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                repeatType: 'reverse',
+                                delay: i * 0.05,
+                              }}
+                              className="flex-1 bg-linear-to-t from-nexus-cyan/40 to-nexus-violet/40 rounded-t-sm"
+                            />
+                          ))}
                         </div>
                       </div>
                     </motion.div>
@@ -195,19 +224,27 @@ const DemoDashboard = () => {
                       <div className="bg-nexus-violet/5 rounded-2xl p-8 border border-nexus-violet/20 flex gap-6">
                         <div className="w-16 h-16 rounded-full bg-linear-to-br from-nexus-violet to-nexus-cyan p-[1px]">
                           <div className="w-full h-full bg-black rounded-full flex items-center justify-center overflow-hidden">
-                             <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Daniela" alt="Daniela" className="w-10 h-10" />
+                            <img
+                              src="https://api.dicebear.com/7.x/bottts/svg?seed=Daniela"
+                              alt="Daniela"
+                              className="w-10 h-10"
+                            />
                           </div>
                         </div>
                         <div className="flex-1">
-                          <div className="text-[10px] text-nexus-violet font-bold tracking-[0.2em] mb-2">DANIELA COGNITIVE v2.4</div>
+                          <div className="text-[10px] text-nexus-violet font-bold tracking-[0.2em] mb-2">
+                            DANIELA COGNITIVE v2.4
+                          </div>
                           <p className="text-white text-lg font-light leading-relaxed italic">
-                            "Infraestructura optimizada. He reducido la latencia en un 12% mediante el re-ruteo predictivo de paquetes. ¿Desea ejecutar el reporte de rentabilidad trimestral?"
+                            "Infraestructura optimizada. He reducido la latencia en un 12% mediante
+                            el re-ruteo predictivo de paquetes. ¿Desea ejecutar el reporte de
+                            rentabilidad trimestral?"
                           </p>
                         </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4">
-                         <ActionCard label="Generar Reporte ROI" icon={BarChart3} />
-                         <ActionCard label="Optimizar Carga" icon={Zap} />
+                        <ActionCard label="Generar Reporte ROI" icon={BarChart3} />
+                        <ActionCard label="Optimizar Carga" icon={Zap} />
                       </div>
                     </motion.div>
                   )}
@@ -224,7 +261,9 @@ const DemoDashboard = () => {
 const StatCard = ({ label, value, icon: Icon, color }: any) => (
   <div className="bg-white/[0.03] border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-colors group">
     <div className="flex items-center justify-between mb-4">
-      <span className="text-[10px] text-nexus-silver/40 font-bold tracking-widest uppercase">{label}</span>
+      <span className="text-[10px] text-nexus-silver/40 font-bold tracking-widest uppercase">
+        {label}
+      </span>
       <Icon className={`w-4 h-4 ${color} opacity-40 group-hover:opacity-100 transition-opacity`} />
     </div>
     <div className="text-3xl font-black text-white">{value}</div>

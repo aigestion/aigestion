@@ -67,7 +67,7 @@ describe('MonitoringService', () => {
       expect(alertSpy).not.toHaveBeenCalledWith(
         expect.objectContaining({
           severity: 'critical',
-        }),
+        })
       );
     });
 
@@ -84,7 +84,7 @@ describe('MonitoringService', () => {
         expect.objectContaining({
           name: 'memory_usage critical',
           severity: 'critical',
-        }),
+        })
       );
     });
   });

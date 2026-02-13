@@ -32,6 +32,7 @@ docs/
 ## 🛠️ Scripts Creados
 
 ### 1. **organize-docs.ps1**
+
 Organiza automáticamente archivos .md según 20+ reglas predefinidas.
 
 ```powershell
@@ -46,6 +47,7 @@ npm run docs:organize:dry
 ```
 
 ### 2. **generate-docs-index.ps1**
+
 Genera `INDEX.md` con enlaces a todos los documentos organizados por categoría.
 
 ```powershell
@@ -53,6 +55,7 @@ npm run docs:index
 ```
 
 ### 3. **show-docs-tree.ps1**
+
 Muestra árbol visual de la documentación con estadísticas.
 
 ```powershell
@@ -64,17 +67,20 @@ npm run docs:tree
 ### GitHub Actions (`.github/workflows/docs-validation.yml`)
 
 #### En Pull Requests:
+
 - ✅ Detecta archivos .md fuera de `docs/`
 - ⚠️ Genera warnings automáticos
 - 🔗 Valida links rotos (opcional)
 - 📋 Verifica INDEX.md
 
 #### En Push a Main:
+
 - 🔄 Organiza documentos automáticamente
 - 📝 Regenera INDEX.md
 - 💾 Commitea cambios con `[skip ci]`
 
 ### Git Hooks (`.husky/pre-commit-docs`)
+
 - Valida archivos .md antes de commit
 - Sugiere ejecutar organización si necesario
 
@@ -115,6 +121,7 @@ npm run docs:tree
 ## 🚀 Uso Diario
 
 ### Desarrollador
+
 ```bash
 # Crear documentos donde sea
 # Al hacer push, se organizan automáticamente
@@ -124,6 +131,7 @@ git push
 ```
 
 ### Mantenimiento Manual
+
 ```bash
 # Si hay muchos archivos dispersos
 npm run docs:full
@@ -136,6 +144,7 @@ npm run docs:organize:dry
 ```
 
 ### Validación
+
 ```bash
 # Antes de PR
 npm run docs:validate
@@ -176,12 +185,14 @@ npm run docs:index
 ## 🎯 Impacto
 
 ### Antes
+
 - ❌ Documentos dispersos en 10+ carpetas
 - ❌ Difícil encontrar información
 - ❌ Sin índice centralizado
 - ❌ Organización manual propensa a errores
 
 ### Después
+
 - ✅ Todo en `docs/` organizado por categoría
 - ✅ Índice maestro auto-generado
 - ✅ Búsqueda rápida por categoría
@@ -192,6 +203,7 @@ npm run docs:index
 ## 🙏 Mantenimiento
 
 El sistema es **auto-mantenible**:
+
 1. Los desarrolladores crean documentos donde sea
 2. GitHub Actions organiza en cada push
 3. INDEX.md se regenera automáticamente
@@ -229,4 +241,3 @@ npm run docs:organize:dry
 **Documentos organizados**: 42 archivos movidos
 **Tiempo de implementación**: ~30 minutos
 **Mantenimiento requerido**: Automático ✅
-

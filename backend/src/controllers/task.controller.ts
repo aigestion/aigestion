@@ -65,7 +65,7 @@ async function writeTasksData(data: TaskData): Promise<void> {
     data.metadata.totalTasks = data.tasks.length;
     data.metadata.completedTasks = data.tasks.filter(t => t.status === 'done').length;
     data.metadata.activeTasks = data.tasks.filter(
-      t => t.status !== 'done' && t.status !== 'cancelled',
+      t => t.status !== 'done' && t.status !== 'cancelled'
     ).length;
 
     await fs.writeFile(TASKS_FILE_PATH, JSON.stringify(data, null, 2), 'utf-8');

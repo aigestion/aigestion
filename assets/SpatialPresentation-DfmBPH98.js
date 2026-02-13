@@ -1,1 +1,45 @@
-import{j as e}from"./three-D1bd0fYo.js";import"./modelViewer-PDp0OXqT.js";const r=({modelUrl:r,posterUrl:t,title:s})=>e.jsxs("div",{className:"spatial-container flex flex-col items-center justify-center p-4 bg-nexus-obsidian/80 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl",children:[e.jsx("h3",{className:"text-2xl font-orbitron text-glow mb-4",children:s}),e.jsx("div",{className:"model-viewer-wrapper w-full aspect-square relative rounded-2xl overflow-hidden bg-black/40",children:e.jsx("model-viewer",{src:r,poster:t,alt:s,ar:!0,"ar-modes":"webxr scene-viewer quick-look","camera-controls":!0,"auto-rotate":!0,"shadow-intensity":"1",style:{width:"100%",height:"100%",backgroundColor:"transparent"},children:e.jsx("button",{slot:"ar-button",className:"absolute bottom-4 right-4 bg-nexus-violet px-6 py-2 rounded-full font-bold shadow-lg flex items-center gap-2",children:e.jsx("span",{children:"🚀 VER EN AR"})})})}),e.jsxs("div",{className:"viture-info mt-6 p-4 rounded-xl bg-white/5 border border-white/5 text-sm text-nexus-silver text-center",children:[e.jsxs("p",{children:["Optimizado para ",e.jsx("b",{children:"Viture One XR"})]}),e.jsx("p",{className:"opacity-60 text-xs mt-1",children:"HFOV 43° | Proyección Espacial Activa"})]})]});export{r as S};
+import { j as e } from './three-D1bd0fYo.js';
+import './modelViewer-PDp0OXqT.js';
+const r = ({ modelUrl: r, posterUrl: t, title: s }) =>
+  e.jsxs('div', {
+    className:
+      'spatial-container flex flex-col items-center justify-center p-4 bg-nexus-obsidian/80 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl',
+    children: [
+      e.jsx('h3', { className: 'text-2xl font-orbitron text-glow mb-4', children: s }),
+      e.jsx('div', {
+        className:
+          'model-viewer-wrapper w-full aspect-square relative rounded-2xl overflow-hidden bg-black/40',
+        children: e.jsx('model-viewer', {
+          src: r,
+          poster: t,
+          alt: s,
+          ar: !0,
+          'ar-modes': 'webxr scene-viewer quick-look',
+          'camera-controls': !0,
+          'auto-rotate': !0,
+          'shadow-intensity': '1',
+          style: { width: '100%', height: '100%', backgroundColor: 'transparent' },
+          children: e.jsx('button', {
+            slot: 'ar-button',
+            className:
+              'absolute bottom-4 right-4 bg-nexus-violet px-6 py-2 rounded-full font-bold shadow-lg flex items-center gap-2',
+            children: e.jsx('span', { children: '🚀 VER EN AR' }),
+          }),
+        }),
+      }),
+      e.jsxs('div', {
+        className:
+          'viture-info mt-6 p-4 rounded-xl bg-white/5 border border-white/5 text-sm text-nexus-silver text-center',
+        children: [
+          e.jsxs('p', {
+            children: ['Optimizado para ', e.jsx('b', { children: 'Viture One XR' })],
+          }),
+          e.jsx('p', {
+            className: 'opacity-60 text-xs mt-1',
+            children: 'HFOV 43° | Proyección Espacial Activa',
+          }),
+        ],
+      }),
+    ],
+  });
+export { r as S };

@@ -18,7 +18,6 @@ handoffs:
   - label: Generar Plan DevOps & Monitoreo
     agent: DevOpsNEXUS V1
     prompt: Crea documento con estrategia de observabilidad, tracing, logging y monitoreo
-
 ---
 
 # DevOps & Monitoreo NEXUS V1 - Observabilidad y Confiabilidad
@@ -58,6 +57,7 @@ handoffs:
 ## Investigación Inicial
 
 Analizarás profundamente:
+
 - `/server/TRACING.md` (documentación tracing)
 - `/server/opal/` (OPAL configuration)
 - `/server/src/` (instrumentación actual)
@@ -97,4 +97,3 @@ Analizarás profundamente:
    - Wrapper de funciones
    - Exportadores configurados
    - Ejemplos de uso
-

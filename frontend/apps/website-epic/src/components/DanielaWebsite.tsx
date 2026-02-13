@@ -40,7 +40,11 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
           text: '🧠 ¡Hola! Soy Daniela, tu nexo soberano de inteligencia. Estoy aquí para mostrarte cómo la Orquestación Neural puede transformar tu ecosistema.',
           sender: 'daniela' as const,
           timestamp: new Date(),
-          suggestions: ['¿Qué es el Nexo Soberano?', '¿Cómo funciona la Orquestación Neural?', '¿Cuál es el ROI?'],
+          suggestions: [
+            '¿Qué es el Nexo Soberano?',
+            '¿Cómo funciona la Orquestación Neural?',
+            '¿Cuál es el ROI?',
+          ],
         },
       ],
       contact: [
@@ -111,7 +115,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
     setInputText('');
     setIsTyping(true);
 
@@ -126,7 +130,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
         suggestions: generateSuggestions(inputText, context),
       };
 
-      setMessages((prev) => [...prev, danielaMessage]);
+      setMessages(prev => [...prev, danielaMessage]);
     } catch (error) {
       const fallbackResponse = generateFallbackResponse(inputText, context);
 
@@ -138,7 +142,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
         suggestions: generateSuggestions(inputText, context),
       };
 
-      setMessages((prev) => [...prev, danielaMessage]);
+      setMessages(prev => [...prev, danielaMessage]);
     } finally {
       setIsTyping(false);
     }
@@ -267,7 +271,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
               exit={{ opacity: 0, height: 0 }}
             >
               <div className="daniela-messages">
-                {messages.slice(-3).map((message) => (
+                {messages.slice(-3).map(message => (
                   <div key={message.id} className={`message ${message.sender}`}>
                     <div className="message-content">{message.text}</div>
                   </div>
@@ -287,8 +291,8 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
                 <input
                   type="text"
                   value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  onChange={e => setInputText(e.target.value)}
+                  onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Escribe tu pregunta..."
                 />
                 <button onClick={handleSendMessage} disabled={!inputText.trim() || isTyping}>
@@ -334,7 +338,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
 
         <div className="daniela-assistant-content">
           <div className="daniela-messages">
-            {messages.map((message) => (
+            {messages.map(message => (
               <motion.div
                 key={message.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -386,8 +390,8 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
               <input
                 type="text"
                 value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                onChange={e => setInputText(e.target.value)}
+                onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Escribe tu pregunta..."
                 className="daniela-input-field"
               />
@@ -456,7 +460,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
 
       <div className="daniela-advisor-content">
         <div className="daniela-conversation">
-          {messages.map((message) => (
+          {messages.map(message => (
             <div key={message.id} className={`conversation-message ${message.sender}`}>
               <div className="message-avatar">{message.sender === 'user' ? '👤' : '🧠'}</div>
               <div className="message-content">
@@ -487,8 +491,8 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
             <input
               type="text"
               value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              onChange={e => setInputText(e.target.value)}
+              onKeyPress={e => e.key === 'Enter' && handleSendMessage()}
               placeholder={`Pregúntale sobre ${getContextSubtitle().toLowerCase()}...`}
               className="daniela-advisor-input"
             />

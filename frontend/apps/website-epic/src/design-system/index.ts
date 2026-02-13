@@ -4,15 +4,22 @@
  */
 
 // Tokens
-export { default as colors, colorUtils, cssColors } from './tokens/colors'
-export { default as typography, typographyUtils, cssTypography } from './tokens/typography'
-export { default as spacing, spacingUtils, cssSpacing } from './tokens/spacing'
+export { default as colors, colorUtils, cssColors } from './tokens/colors';
+export { default as typography, typographyUtils, cssTypography } from './tokens/typography';
+export { default as spacing, spacingUtils, cssSpacing } from './tokens/spacing';
 
 // Components
-export { default as Button } from './components/Button/Button'
-export type { ButtonProps, ButtonVariant, ButtonSize } from './components/Button/Button'
-export { default as Card, CardHeader, CardBody, CardFooter } from './components/Card/Card'
-export type { CardProps, CardHeaderProps, CardBodyProps, CardFooterProps, CardVariant, CardSize } from './components/Card/Card'
+export { default as Button } from './components/Button/Button';
+export type { ButtonProps, ButtonVariant, ButtonSize } from './components/Button/Button';
+export { default as Card, CardHeader, CardBody, CardFooter } from './components/Card/Card';
+export type {
+  CardProps,
+  CardHeaderProps,
+  CardBodyProps,
+  CardFooterProps,
+  CardVariant,
+  CardSize,
+} from './components/Card/Card';
 
 // Theme
 export const theme = {
@@ -57,7 +64,8 @@ export const theme = {
       accent: 'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
       success: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
       dark: 'linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #16213e 100%)',
-      cosmic: 'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)',
+      cosmic:
+        'linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%)',
     },
   },
   typography: {
@@ -138,7 +146,7 @@ export const theme = {
       easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
     },
   },
-}
+};
 
 // CSS Custom Properties
 export const cssTheme = {
@@ -229,6 +237,6 @@ export const cssTheme = {
     '--ease-easeOut': theme.animation.easing.easeOut,
     '--ease-easeInOut': theme.animation.easing.easeInOut,
   },
-}
+};
 
-export default theme
+export default theme;

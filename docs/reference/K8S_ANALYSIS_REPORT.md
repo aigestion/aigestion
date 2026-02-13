@@ -10,16 +10,17 @@
 
 ### Estado General: ✅ BUENO (85/100)
 
-| Categoría | Estado | Puntuación |
-|-----------|--------|------------|
-| Resource Management | ✅ Excelente | 95/100 |
-| High Availability | ✅ Excelente | 90/100 |
-| Security | ⚠️ Bueno | 80/100 |
-| Observability | ⚠️ Mejorable | 75/100 |
-| Networking | ✅ Excelente | 90/100 |
-| Storage | ✅ Bueno | 85/100 |
+| Categoría           | Estado       | Puntuación |
+| ------------------- | ------------ | ---------- |
+| Resource Management | ✅ Excelente | 95/100     |
+| High Availability   | ✅ Excelente | 90/100     |
+| Security            | ⚠️ Bueno     | 80/100     |
+| Observability       | ⚠️ Mejorable | 75/100     |
+| Networking          | ✅ Excelente | 90/100     |
+| Storage             | ✅ Bueno     | 85/100     |
 
 **Hallazgos clave:**
+
 - ✅ Resource limits/requests correctamente configurados
 - ✅ PodDisruptionBudgets implementados para alta disponibilidad
 - ✅ HPA configurado con métricas múltiples (CPU + Memory)
@@ -47,10 +48,12 @@ metadata:
 ```
 
 **Fortalezas:**
+
 - Labels correctamente configurados
 - Simple y efectivo
 
 **Recomendaciones (opcionales):**
+
 - Considerar agregar annotations para políticas de red por defecto
 - Agregar label de owner/team para multi-tenancy
 
@@ -61,6 +64,7 @@ metadata:
 **Estado:** 90/100 - Bien configurado, mejoras menores
 
 **Fortalezas:**
+
 - ✅ Resource requests/limits definidos (512Mi-2Gi RAM, 250m-1000m CPU)
 - ✅ Health checks (liveness + readiness) configurados correctamente
 - ✅ Pod anti-affinity para distribución en nodos
@@ -84,7 +88,7 @@ metadata:
       name: otlp-http
   env:
     - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://jaeger-collector:4317"
+      value: 'http://jaeger-collector:4317'
   resources:
     requests:
       memory: '128Mi'
@@ -106,7 +110,7 @@ readinessProbe:
   periodSeconds: 5
   timeoutSeconds: 3
   failureThreshold: 3
-  successThreshold: 1  # ← AGREGAR: requiere 1 éxito para marcar como ready
+  successThreshold: 1 # ← AGREGAR: requiere 1 éxito para marcar como ready
 ```
 
 #### 2.3. Agregar startupProbe (para apps con startup lento)
@@ -119,7 +123,7 @@ startupProbe:
   initialDelaySeconds: 0
   periodSeconds: 10
   timeoutSeconds: 3
-  failureThreshold: 30  # 30 * 10s = 5 minutos max startup
+  failureThreshold: 30 # 30 * 10s = 5 minutos max startup
 ```
 
 #### 2.4. Security Context (best practice)
@@ -149,6 +153,7 @@ securityContext:
 **Estado:** 95/100 - Muy bien configurado
 
 **Fortalezas:**
+
 - ✅ StatefulSet correcto para base de datos
 - ✅ Headless service (clusterIP: None)
 - ✅ PersistentVolumeClaims (20Gi data + config)
@@ -169,7 +174,7 @@ metadata:
   name: mongodb-backup
   namespace: NEXUS V1
 spec:
-  schedule: "0 2 * * *"  # Diario a las 2 AM
+  schedule: '0 2 * * *' # Diario a las 2 AM
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
   jobTemplate:
@@ -226,7 +231,7 @@ volumeClaimTemplates:
       name: mongodb-data
     spec:
       accessModes: ['ReadWriteOnce']
-      storageClassName: fast-ssd  # ← Usar SSD para performance
+      storageClassName: fast-ssd # ← Usar SSD para performance
       resources:
         requests:
           storage: 20Gi
@@ -239,6 +244,7 @@ volumeClaimTemplates:
 **Estado:** 95/100 - Muy bien configurado
 
 **Fortalezas:**
+
 - ✅ Password protection configurado
 - ✅ Custom ConfigMap para redis.conf
 - ✅ Health checks con redis-cli
@@ -293,6 +299,7 @@ data:
 **Estado:** 90/100 - Bien configurado
 
 **Fortalezas:**
+
 - ✅ Management UI expuesto (port 15672)
 - ✅ Credentials via Secrets
 - ✅ Health checks con rabbitmq-diagnostics
@@ -368,7 +375,7 @@ livenessProbe:
       - rabbitmq-diagnostics
       - -q
       - ping
-  initialDelaySeconds: 90  # ← Cambiar de 60 a 90
+  initialDelaySeconds: 90 # ← Cambiar de 60 a 90
   periodSeconds: 30
   timeoutSeconds: 10
   failureThreshold: 3
@@ -381,6 +388,7 @@ livenessProbe:
 **Estado:** 95/100 - Configuración avanzada y correcta
 
 **Fortalezas:**
+
 - ✅ Múltiples métricas (CPU 70%, Memory 80%)
 - ✅ Comportamiento de scaling configurado (scaleDown + scaleUp)
 - ✅ Stabilization windows (300s down, 0s up)
@@ -412,7 +420,7 @@ metrics:
         name: http_requests_per_second
       target:
         type: AverageValue
-        averageValue: "1000"  # Scale si >1000 req/s por pod
+        averageValue: '1000' # Scale si >1000 req/s por pod
 ```
 
 #### 6.2. Validar que Metrics Server esté instalado
@@ -432,6 +440,7 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 **Estado:** 100/100 - Perfecto
 
 **Fortalezas:**
+
 - ✅ PDBs para app, evaluation, mongodb, rabbitmq, redis
 - ✅ minAvailable: 1 para deployments (permite rolling updates)
 - ✅ maxUnavailable: 0 para StatefulSets (protege datos)
@@ -446,6 +455,7 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 **Estado:** 95/100 - Muy bien configurado
 
 **Fortalezas:**
+
 - ✅ Límites de CPU (20 requests, 40 limits)
 - ✅ Límites de Memory (40Gi requests, 80Gi limits)
 - ✅ Límites de storage (200Gi, 10 PVCs)
@@ -460,10 +470,10 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 # Si la carga es mayor, aumentar:
 spec:
   hard:
-    requests.cpu: '30'      # ← De 20 a 30
-    requests.memory: 60Gi   # ← De 40Gi a 60Gi
-    limits.cpu: '60'        # ← De 40 a 60
-    limits.memory: 120Gi    # ← De 80Gi a 120Gi
+    requests.cpu: '30' # ← De 20 a 30
+    requests.memory: 60Gi # ← De 40Gi a 60Gi
+    limits.cpu: '60' # ← De 40 a 60
+    limits.memory: 120Gi # ← De 80Gi a 120Gi
 ```
 
 #### 8.2. Monitorear usage
@@ -483,6 +493,7 @@ kubectl top pods -n NEXUS V1
 **Estado:** 95/100 - Seguridad de red bien implementada
 
 **Fortalezas:**
+
 - ✅ Ingress policies para app, mongodb, rabbitmq, redis
 - ✅ Egress policies limitadas (least privilege)
 - ✅ DNS permitido (puerto 53)
@@ -497,7 +508,7 @@ kubectl top pods -n NEXUS V1
 # Algunos CNIs soportan logging de drops
 metadata:
   annotations:
-    net.beta.kubernetes.io/network-policy-log: "true"
+    net.beta.kubernetes.io/network-policy-log: 'true'
 ```
 
 #### 9.2. Considerar Calico para features avanzadas
@@ -587,7 +598,7 @@ spec:
               protocol: TCP
           env:
             - name: COLLECTOR_ZIPKIN_HOST_PORT
-              value: ":9411"
+              value: ':9411'
           resources:
             requests:
               memory: '256Mi'
@@ -661,14 +672,14 @@ kubectl apply -f https://raw.githubusercontent.com/kubecost/cost-analyzer-helm-c
 
 ### KPIs a Monitorear
 
-| Métrica | Target | Actual | Estado |
-|---------|--------|--------|--------|
-| Pod Availability | >99.9% | - | ⏳ Medir |
-| Deployment Success Rate | >95% | - | ⏳ Medir |
-| Avg Pod Startup Time | <30s | - | ⏳ Medir |
-| Resource Utilization | 60-80% | - | ⏳ Medir |
-| HPA Scale Events/day | <10 | - | ⏳ Medir |
-| NetworkPolicy Drops | <100/day | - | ⏳ Medir |
+| Métrica                 | Target   | Actual | Estado   |
+| ----------------------- | -------- | ------ | -------- |
+| Pod Availability        | >99.9%   | -      | ⏳ Medir |
+| Deployment Success Rate | >95%     | -      | ⏳ Medir |
+| Avg Pod Startup Time    | <30s     | -      | ⏳ Medir |
+| Resource Utilization    | 60-80%   | -      | ⏳ Medir |
+| HPA Scale Events/day    | <10      | -      | ⏳ Medir |
+| NetworkPolicy Drops     | <100/day | -      | ⏳ Medir |
 
 ### Comandos de Monitoreo
 
@@ -695,24 +706,28 @@ kubectl describe resourcequota -n NEXUS V1
 ## 🚀 Plan de Acción Inmediato
 
 ### Semana 1: Observabilidad
+
 - [ ] Deploy Jaeger a Kubernetes
 - [ ] Agregar OpenTelemetry sidecar a app
 - [ ] Configurar Prometheus scraping
 - [ ] Crear dashboards básicos en Grafana
 
 ### Semana 2: Backups
+
 - [ ] Implementar MongoDB backup CronJob
 - [ ] Configurar retention policy (30 días)
 - [ ] Testar restore procedure
 - [ ] Documentar DR runbook
 
 ### Semana 3: Security Hardening
+
 - [ ] Agregar Security Contexts a todos los pods
 - [ ] Implementar Pod Security Standards
 - [ ] Configurar RBAC más granular
 - [ ] Auditar secrets management
 
 ### Semana 4: Testing & Validation
+
 - [ ] Load testing con k6
 - [ ] Chaos engineering con Chaos Mesh
 - [ ] Validar HPA scaling behavior
@@ -733,4 +748,3 @@ kubectl describe resourcequota -n NEXUS V1
 **Última actualización:** 6 de diciembre de 2025
 **Próxima revisión:** 13 de diciembre de 2025
 **Responsable:** NEXUS V1 DevOps Team
-

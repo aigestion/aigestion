@@ -75,7 +75,7 @@ export function VirtualList<T>({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const resizeObserver = new ResizeObserver((entries) => {
+    const resizeObserver = new ResizeObserver(entries => {
       const entry = entries[0];
       if (entry) {
         setContainerSize({
@@ -144,7 +144,7 @@ export function VirtualList<T>({
         <div style={{ height: totalHeight, position: 'relative' }}>
           {/* Virtual items */}
           <AnimatePresence>
-            {virtualItems.map((virtualItem) => {
+            {virtualItems.map(virtualItem => {
               const item = items[virtualItem.index];
               const key = getItemKey(item, virtualItem.index);
 
@@ -237,7 +237,16 @@ export function useDynamicVirtualList<T>({
       start: Math.max(0, startIndex - overscan),
       end: Math.min(items.length, endIndex + overscan),
     };
-  }, [scrollTop, containerHeight, findItemIndex, getItemOffset, itemSizes, estimatedItemHeight, items.length, overscan]);
+  }, [
+    scrollTop,
+    containerHeight,
+    findItemIndex,
+    getItemOffset,
+    itemSizes,
+    estimatedItemHeight,
+    items.length,
+    overscan,
+  ]);
 
   const totalHeight = useMemo(() => {
     let height = 0;
@@ -248,7 +257,7 @@ export function useDynamicVirtualList<T>({
   }, [itemSizes, estimatedItemHeight, items.length]);
 
   const updateItemSize = useCallback((index: number, size: number) => {
-    setItemSizes((prev) => new Map(prev).set(index, size));
+    setItemSizes(prev => new Map(prev).set(index, size));
   }, []);
 
   return {

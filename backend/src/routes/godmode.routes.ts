@@ -14,10 +14,10 @@ const router = Router();
  *     tags: [God Mode]
  */
 router.get('/projects', (req, res, next) =>
-  container.get<GodModeController>(TYPES.GodModeController).listProjects(req, res, next),
+  container.get<GodModeController>(TYPES.GodModeController).listProjects(req, res, next)
 );
 router.post('/projects', (req, res, next) =>
-  container.get<GodModeController>(TYPES.GodModeController).createProject(req, res, next),
+  container.get<GodModeController>(TYPES.GodModeController).createProject(req, res, next)
 );
 
 /**
@@ -28,7 +28,7 @@ router.post('/projects', (req, res, next) =>
  *     tags: [God Mode]
  */
 router.post('/search', (req, res, next) =>
-  container.get<GodModeController>(TYPES.GodModeController).hybridSearch(req, res, next),
+  container.get<GodModeController>(TYPES.GodModeController).hybridSearch(req, res, next)
 );
 
 /**
@@ -39,7 +39,7 @@ router.post('/search', (req, res, next) =>
  *     tags: [God Mode]
  */
 router.get('/prompts', (req, res, next) =>
-  container.get<GodModeController>(TYPES.GodModeController).listPrompts(req, res, next),
+  container.get<GodModeController>(TYPES.GodModeController).listPrompts(req, res, next)
 );
 
 /**
@@ -50,7 +50,7 @@ router.get('/prompts', (req, res, next) =>
  *     tags: [God Mode]
  */
 router.get('/prompts/:name', (req, res, next) =>
-  container.get<GodModeController>(TYPES.GodModeController).getPrompt(req, res, next),
+  container.get<GodModeController>(TYPES.GodModeController).getPrompt(req, res, next)
 );
 
 /**
@@ -61,7 +61,7 @@ router.get('/prompts/:name', (req, res, next) =>
  *     tags: [God Mode]
  */
 router.get('/audit', (req, res, next) =>
-  container.get<GodModeController>(TYPES.GodModeController).getAuditLogs(req, res, next),
+  container.get<GodModeController>(TYPES.GodModeController).getAuditLogs(req, res, next)
 );
 
 /**
@@ -72,7 +72,7 @@ router.get('/audit', (req, res, next) =>
  *     tags: [God Mode]
  */
 router.post('/test-notification', (req, res, next) =>
-  container.get<GodModeController>(TYPES.GodModeController).testNotification(req, res, next),
+  container.get<GodModeController>(TYPES.GodModeController).testNotification(req, res, next)
 );
 
 export default router;

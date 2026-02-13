@@ -44,13 +44,13 @@ export class PQCCommService {
     myKyberSK: string,
     theirCiphertext?: string, // If they encapsulated for us
     myKyberPK?: string, // If we need to encapsulate for them
-    theirKyberPK?: string,
+    theirKyberPK?: string
   ): Promise<string> {
     try {
       // 1. Classic Shared Secret
       const classicSS = nacl.box.before(
         Buffer.from(theirClassicPK, 'hex'),
-        Buffer.from(myClassicSK, 'hex'),
+        Buffer.from(myClassicSK, 'hex')
       );
 
       let kyberSS: Uint8Array;
@@ -59,7 +59,7 @@ export class PQCCommService {
         // They encapsulated for us, we decrypt
         kyberSS = kyber.Decrypt768(
           Buffer.from(theirCiphertext, 'hex'),
-          Buffer.from(myKyberSK, 'hex'),
+          Buffer.from(myKyberSK, 'hex')
         );
       } else if (theirKyberPK) {
         // We encapsulate for them (this usually happens on one side)

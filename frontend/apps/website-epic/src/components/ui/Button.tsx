@@ -48,10 +48,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'border-2 border-white/20 bg-transparent text-white hover:bg-white/10 hover:border-white/40',
         'focus:ring-nexus-cyan',
       ],
-      ghost: [
-        'text-white hover:bg-white/10',
-        'focus:ring-nexus-cyan',
-      ],
+      ghost: ['text-white hover:bg-white/10', 'focus:ring-nexus-cyan'],
       destructive: [
         'bg-red-600 text-white hover:bg-red-700',
         'focus:ring-red-500',
@@ -66,12 +63,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       xl: 'px-8 py-4 text-xl',
     };
 
-    const classes = cn(
-      ...baseClasses,
-      ...variantClasses[variant],
-      sizeClasses[size],
-      className
-    );
+    const classes = cn(...baseClasses, ...variantClasses[variant], sizeClasses[size], className);
 
     const renderIcon = () => {
       if (loading) {
@@ -99,12 +91,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <button
-        ref={ref}
-        className={classes}
-        disabled={disabled || loading}
-        {...props}
-      >
+      <button ref={ref} className={classes} disabled={disabled || loading} {...props}>
         {renderContent()}
       </button>
     );

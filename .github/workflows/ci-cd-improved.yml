@@ -2,9 +2,9 @@ name: 🚀 CI/CD Pipeline Mejorado
 
 on:
   push:
-    branches: [ main, develop, staging]
+    branches: [main, develop, staging]
   pull_request:
-    branches: [ main, develop]
+    branches: [main, develop]
   release:
     types: [published]
 

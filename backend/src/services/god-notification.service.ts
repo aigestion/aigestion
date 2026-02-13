@@ -12,7 +12,7 @@ export class GodNotificationService {
   constructor(
     @inject(TYPES.TelegramService) private telegram: TelegramService,
     @inject(TYPES.WhatsAppService) private whatsapp: WhatsAppService,
-    @inject(TYPES.EmailService) private email: EmailService,
+    @inject(TYPES.EmailService) private email: EmailService
   ) {}
 
   /**
@@ -21,7 +21,7 @@ export class GodNotificationService {
   async broadcastGodAlert(
     title: string,
     message: string,
-    urgency: 'low' | 'medium' | 'high' = 'medium',
+    urgency: 'low' | 'medium' | 'high' = 'medium'
   ) {
     const formattedMessage = this.formatMessage(title, message, urgency);
 

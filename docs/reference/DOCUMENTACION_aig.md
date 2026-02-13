@@ -1,6 +1,7 @@
 ﻿# Documentación Completa NEXUS V1 Agent
 
 ## Índice
+
 1. Descripción General
 2. Despliegue
 3. Entrenamiento
@@ -13,7 +14,9 @@
 ---
 
 ## 1. Descripción General
+
 Agente NEXUS V1 profesional para automatización, consulta y análisis. Incluye:
+
 - Prompt personalizado y multilingüe
 - Feedback automático
 - Logging avanzado
@@ -36,6 +39,7 @@ Agente NEXUS V1 profesional para automatización, consulta y análisis. Incluye:
 ---
 
 ## 2. Despliegue
+
 - **Docker**: Usa `Dockerfile` y `docker-compose.yml`.
 - **Variables de entorno**: Configura en `.env`:
   - `NEXUS V1_USER_TONE`, `NEXUS V1_LANG`, `NEXUS V1_ROLE`, `OPENWEATHER_API_KEY`
@@ -49,6 +53,7 @@ Agente NEXUS V1 profesional para automatización, consulta y análisis. Incluye:
 ---
 
 ## 3. Entrenamiento
+
 - **Dataset**: `retrain_data.json` (feedback + satisfacción).
 - **Frameworks**: HuggingFace, Azure ML, etc.
 - **Ejemplo**:
@@ -60,6 +65,7 @@ Agente NEXUS V1 profesional para automatización, consulta y análisis. Incluye:
 ---
 
 ## 4. Evaluación y Métricas
+
 - **Scripts**: `semantic_validation.py`, `auto_evaluation.py`, `export_semantic_csv.py`
 - **Dashboards**: Usa `semantic_metrics.csv` para Grafana/Kibana.
 - **Reporte**: `audit_report.md` generado automáticamente.
@@ -67,18 +73,21 @@ Agente NEXUS V1 profesional para automatización, consulta y análisis. Incluye:
 ---
 
 ## 5. Integración y APIs
+
 - **Clima real**: Configura `OPENWEATHER_API_KEY` para datos reales.
 - **Slack/Teams**: Usa `notify_quality.py` y variable `NEXUS V1_SLACK_WEBHOOK`.
 
 ---
 
 ## 6. Roles y Seguridad
+
 - **roles.json**: Define permisos para `admin`, `user`, `guest`.
 - **Variable**: `NEXUS V1_ROLE` controla acciones permitidas.
 
 ---
 
 ## 7. Automatización y CI/CD
+
 - **Workflows**: `.github/workflows/agent-evaluation.yml` para validación automática.
 - **Autoevaluación**: `auto_evaluation.py` alerta si la calidad baja.
 - **Retraining**: `retrain_agent.py` genera dataset para reentrenar.
@@ -86,15 +95,16 @@ Agente NEXUS V1 profesional para automatización, consulta y análisis. Incluye:
 ---
 
 ## 8. Mejoras y Extensiones
+
 - Prompt avanzado, feedback, logging, validación, tests, contexto, satisfacción, retraining, notificaciones, explicaciones, sugerencias, semántica, dashboards, auditoría, roles, robustez, autoevaluación, APIs externas, rendimiento.
 - Extiende el agente agregando nuevas herramientas, integraciones o métricas según necesidades del proyecto.
 
 ---
 
 ## Referencias y Archivos Clave
+
 - `agente_base.py`, `retrain_agent.py`, `semantic_validation.py`, `auto_evaluation.py`, `notify_quality.py`, `roles.json`, `audit_report.md`, `DOCUMENTACION_NEXUS V1.md`
 
 ---
 
 **Actualizado: 8 de diciembre de 2025**
-

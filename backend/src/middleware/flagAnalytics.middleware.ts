@@ -12,7 +12,7 @@ export const flagAnalytics = (req: Request, _res: Response, next: NextFunction) 
   if (flags) {
     logger.info(
       { flags, path: (req as any).path, method: (req as any).method },
-      'Feature flags attached to request',
+      'Feature flags attached to request'
     );
     // If Sentry is initialized, add flags to the current scope
     try {

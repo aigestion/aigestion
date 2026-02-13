@@ -13,7 +13,7 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
   // Simulate live data updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setData((prev) => ({
+      setData(prev => ({
         revenue: prev.revenue + Math.floor(Math.random() * 100),
         users: prev.users + Math.floor(Math.random() * 5),
         security: Math.min(100, Math.max(90, prev.security + (Math.random() - 0.5))),
@@ -57,7 +57,7 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
               { id: 'users', icon: <Users className="w-4 h-4" />, label: 'Usuarios Activos' },
               { id: 'security', icon: <Shield className="w-4 h-4" />, label: 'Seguridad' },
               { id: 'ai', icon: <Zap className="w-4 h-4" />, label: 'Daniela AI' },
-            ].map((item) => (
+            ].map(item => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}

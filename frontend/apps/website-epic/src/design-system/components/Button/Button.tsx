@@ -3,15 +3,15 @@
  * Componente Button reutilizable para AIGestion Design System
  */
 
-import React, { forwardRef } from 'react'
-import { motion, MotionProps } from 'framer-motion'
-import { cn } from 'clsx'
-import { colors } from '../../tokens/colors'
-import { typography } from '../../tokens/typography'
-import { spacing } from '../../tokens/spacing'
+import React, { forwardRef } from 'react';
+import { motion, MotionProps } from 'framer-motion';
+import { cn } from 'clsx';
+import { colors } from '../../tokens/colors';
+import { typography } from '../../tokens/typography';
+import { spacing } from '../../tokens/spacing';
 
 // Button variants
-export type ButtonVariant = 
+export type ButtonVariant =
   | 'primary'
   | 'secondary'
   | 'accent'
@@ -23,22 +23,22 @@ export type ButtonVariant =
   | 'error'
   | 'info'
   | 'gaming'
-  | 'neon'
+  | 'neon';
 
-export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'size'> {
-  variant?: ButtonVariant
-  size?: ButtonSize
-  loading?: boolean
-  disabled?: boolean
-  fullWidth?: boolean
-  leftIcon?: React.ReactNode
-  rightIcon?: React.ReactNode
-  animation?: MotionProps
-  href?: string
-  target?: string
-  rel?: string
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  loading?: boolean;
+  disabled?: boolean;
+  fullWidth?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  animation?: MotionProps;
+  href?: string;
+  target?: string;
+  rel?: string;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -77,7 +77,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       'disabled:opacity-50',
       'disabled:cursor-not-allowed',
       'disabled:pointer-events-none',
-    ]
+    ];
 
     // Size classes
     const sizeClasses = {
@@ -86,7 +86,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       md: ['px-4', 'py-2', 'text-sm', 'min-h-[40px]'],
       lg: ['px-6', 'py-3', 'text-base', 'min-h-[48px]'],
       xl: ['px-8', 'py-4', 'text-lg', 'min-h-[56px]'],
-    }
+    };
 
     // Variant classes
     const variantClasses = {
@@ -132,12 +132,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'hover:border-blue-600',
         'focus:ring-blue-500',
       ],
-      ghost: [
-        'text-blue-600',
-        'bg-transparent',
-        'hover:bg-blue-50',
-        'focus:ring-blue-500',
-      ],
+      ghost: ['text-blue-600', 'bg-transparent', 'hover:bg-blue-50', 'focus:ring-blue-500'],
       link: [
         'text-blue-600',
         'bg-transparent',
@@ -220,7 +215,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         'font-mono',
         'uppercase',
       ],
-    }
+    };
 
     // Combine classes
     const classes = cn(
@@ -229,7 +224,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ...variantClasses[variant],
       fullWidth && 'w-full',
       className
-    )
+    );
 
     // Loading spinner
     const LoadingSpinner = () => (
@@ -253,19 +248,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
         />
       </svg>
-    )
+    );
 
     // Motion component
-    const MotionComponent = motion.button
+    const MotionComponent = motion.button;
 
     // Default animation
     const defaultAnimation: MotionProps = {
       whileHover: { scale: 1.02 },
       whileTap: { scale: 0.98 },
       transition: { duration: 0.2 },
-    }
+    };
 
-    const mergedAnimation = { ...defaultAnimation, ...animation }
+    const mergedAnimation = { ...defaultAnimation, ...animation };
 
     // Render as link if href is provided
     if (href) {
@@ -289,7 +284,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           {children}
           {rightIcon && <span className="ml-2">{rightIcon}</span>}
         </motion.a>
-      )
+      );
     }
 
     return (
@@ -305,10 +300,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {children}
         {rightIcon && <span className="ml-2">{rightIcon}</span>}
       </MotionComponent>
-    )
+    );
   }
-)
+);
 
-Button.displayName = 'Button'
+Button.displayName = 'Button';
 
-export default Button
+export default Button;

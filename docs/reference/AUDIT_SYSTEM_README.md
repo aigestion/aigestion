@@ -5,6 +5,7 @@
 ## 🎯 Descripción General
 
 El **NEXUS V1 Auto-Audit System** es una solución integral de monitoreo y análisis de calidad que:
+
 - ✅ **Automatiza** auditorías semanales del proyecto
 - 🧠 **Aprende** de datos históricos y detecta patrones
 - 🚨 **Alerta** sobre anomalías y cambios significativos
@@ -86,17 +87,20 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
 ### 3️⃣ **Recolección de Datos**
 
 La primera auditoría generará:
+
 - `audit-data/audit-history.json` - Datos históricos
 - `audit-data/reports/WEEKLY_AUDIT_2025-XX.md` - Reporte semanal
 
 ### 4️⃣ **Análisis y Predicciones**
 
 Después de 2+ semanas de datos:
+
 ```powershell
 .\audit-control-center.ps1 analyze
 ```
 
 Mostrará:
+
 - 🏥 **Índice de Salud**: Puntuaciones para cada área
 - 📈 **Tendencias**: Predicciones basadas en histórico
 - 🚨 **Anomalías**: Cambios significativos detectados
@@ -105,24 +109,28 @@ Mostrará:
 ## 📊 Métricas Monitoreadas
 
 ### 🔐 Seguridad
+
 - Total de vulnerabilidades
 - Vulnerabilidades críticas y altas
 - Secretos expuestos detectados
 - Archivos sensibles en repositorio
 
 ### ✨ Calidad de Código
+
 - Archivos TypeScript y JavaScript
 - Cobertura de documentación
 - Commits recientes
 - Total de archivos del proyecto
 
 ### 🐙 Salud del Repositorio
+
 - Archivos sin sincronizar
 - Rama y commit actual
 - Estado general del git
 - Últimas actualizaciones
 
 ### 📦 Performance
+
 - Dependencias de producción
 - Dependencias de desarrollo
 - Cambios en dependencias
@@ -131,6 +139,7 @@ Mostrará:
 ## 🧠 Sistema Inteligente de Aprendizaje
 
 ### Detección de Anomalías
+
 ```
 Anomalía 1: ⬆️ Vulnerabilidades
   - Compara semana actual vs histórico
@@ -146,6 +155,7 @@ Anomalía 3: 📦 Cambios en dependencias
 ```
 
 ### Análisis de Tendencias
+
 ```
 Tendencia 1: 🔐 Trayectoria de seguridad
   - Regresión lineal de vulnerabilidades
@@ -161,6 +171,7 @@ Tendencia 3: 🐙 Actividad del repositorio
 ```
 
 ### Índice de Salud
+
 ```
 Fórmula: (Seguridad + Calidad + Repo + Performance) / 4
 
@@ -174,10 +185,13 @@ Rango de Puntuación:
 ## 📋 Comandos Disponibles
 
 ### Control Center Interactivo
+
 ```powershell
 .\audit-control-center.ps1
 ```
+
 Abre menú interactivo con opciones de:
+
 1. Ejecutar auditoría
 2. Ver análisis predictivo
 3. Visualizar dashboard
@@ -188,6 +202,7 @@ Abre menú interactivo con opciones de:
 8. Salir
 
 ### Comandos Directos
+
 ```powershell
 # Ejecutar auditoría completa
 .\audit-control-center.ps1 run
@@ -217,6 +232,7 @@ Abre menú interactivo con opciones de:
 ## 🎯 Casos de Uso
 
 ### Caso 1: Monitoreo Semanal Automático
+
 ```
 Cada lunes 8:00 AM:
   1. ✅ Auditoría automática recolecta métricas
@@ -227,6 +243,7 @@ Cada lunes 8:00 AM:
 ```
 
 ### Caso 2: Análisis Predictivo
+
 ```
 Preguntas que responde:
   • "¿Aumentarán nuestras vulnerabilidades?"
@@ -236,6 +253,7 @@ Preguntas que responde:
 ```
 
 ### Caso 3: Evaluación de Cambios
+
 ```
 Cuando ocurre un cambio significativo:
   1. Sistema detecta anomalía
@@ -245,6 +263,7 @@ Cuando ocurre un cambio significativo:
 ```
 
 ### Caso 4: Seguimiento de Mejoras
+
 ```
 Después de implementar mejoras:
   1. Ver tendencia positiva
@@ -255,29 +274,34 @@ Después de implementar mejoras:
 ## 📈 Interpretación de Reportes
 
 ### Ejemplo: Reporte Semanal
+
 ```markdown
 # WEEKLY AUDIT REPORT - 2025-01
 
 ## 🏥 ÍNDICE DE SALUD: 8.2/10 ✅ GOOD
 
 ### 🔐 SEGURIDAD: 9/10 ✅
+
 - Vulnerabilidades: 1 (⬇️ -2 desde semana pasada)
 - Secretos expuestos: 0 ✅
 - Status: CLEAN
 
 ### ✨ CALIDAD: 8/10 ✅
+
 - Archivos TS: 245 (⬆️ +5 nuevos)
 - Archivos JS: 89
 - Documentación: 3/3 ✅
 - Commits recientes: 8
 
 ### 🐙 REPOSITORIO: 8/10 ✅
+
 - Archivos sin syncronizar: 0 ✅
 - Rama: main
 - Último commit: hace 2 horas
 - Status: CLEAN
 
 ### 📦 PERFORMANCE: 7/10 🟡
+
 - Dependencias prod: 145 (⬆️ +3)
 - Dependencias dev: 67
 - Tendencia: Crecimiento gradual
@@ -286,6 +310,7 @@ Después de implementar mejoras:
 ## ⚙️ Configuración Avanzada
 
 ### Cambiar Horario de Agendador
+
 ```powershell
 # Editar manualmente en Task Scheduler o:
 $task = Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
@@ -293,7 +318,9 @@ $task = Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
 ```
 
 ### Personalizar Métricas
+
 Editar en `weekly-auto-audit.ps1`:
+
 ```powershell
 # Agregar colección de nuevas métricas
 [void] CollectCustomMetric([string]$root) {
@@ -304,6 +331,7 @@ Editar en `weekly-auto-audit.ps1`:
 ```
 
 ### Exportar Datos
+
 ```powershell
 # Exportar histórico a CSV
 $history | ConvertTo-Csv | Out-File "audit-history.csv"
@@ -315,6 +343,7 @@ Get-ChildItem audit-data/reports/ -Filter "*.md"
 ## 🔍 Troubleshooting
 
 ### Error: "Script no encontrado"
+
 ```powershell
 # Verificar rutas
 ls c:\Users\Alejandro\NEXUS V1\scripts\
@@ -324,6 +353,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Error: "No hay datos históricos"
+
 ```powershell
 # Ejecutar primera auditoría
 .\audit-control-center.ps1 run
@@ -333,6 +363,7 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 ```
 
 ### Error: "Tarea programada no encontrada"
+
 ```powershell
 # Reinstalar agendador
 .\setup-weekly-audit-scheduler.ps1
@@ -342,6 +373,7 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
 ```
 
 ### Datos inconsistentes
+
 ```powershell
 # Limpiar y recomenzar
 .\audit-control-center.ps1 clean
@@ -353,6 +385,7 @@ Get-ScheduledTask -TaskName "NEXUS V1-Weekly-Auto-Audit"
 ## 📊 Dashboard Inteligente
 
 El dashboard muestra:
+
 - 📈 Gráficos ASCII de tendencias
 - 💚 Índice de salud con barras visuales
 - 🚨 Anomalías detectadas
@@ -360,6 +393,7 @@ El dashboard muestra:
 - 📋 Tabla comparativa semanal
 
 Ejemplo de barra de salud:
+
 ```
 Seguridad:       8/10   ████████░░
 Calidad:         8/10   ████████░░
@@ -379,22 +413,23 @@ SALUD GENERAL:   8/10   ████████░░
 
 ## 🌟 Características Principales
 
-| Característica | Status | Descripción |
-|---|---|---|
-| Recolección Automática | ✅ | Cada semana a las 8:00 AM (lunes) |
-| Análisis Predictivo | ✅ | Basado en 4+ semanas de histórico |
-| Detección Anomalías | ✅ | Real-time con alertas |
-| Dashboard Interactivo | ✅ | Visualización en tiempo real |
-| Reportes Markdown | ✅ | Exportables y compartibles |
-| Índice de Salud | ✅ | Puntuación de 0-10 |
-| Tendencias Lineales | ✅ | Predicciones futuras |
-| Control Center | ✅ | Interfaz unificada |
-| Agendador | ✅ | Windows Task Scheduler |
-| Histórico JSON | ✅ | Datos persistentes y editables |
+| Característica         | Status | Descripción                       |
+| ---------------------- | ------ | --------------------------------- |
+| Recolección Automática | ✅     | Cada semana a las 8:00 AM (lunes) |
+| Análisis Predictivo    | ✅     | Basado en 4+ semanas de histórico |
+| Detección Anomalías    | ✅     | Real-time con alertas             |
+| Dashboard Interactivo  | ✅     | Visualización en tiempo real      |
+| Reportes Markdown      | ✅     | Exportables y compartibles        |
+| Índice de Salud        | ✅     | Puntuación de 0-10                |
+| Tendencias Lineales    | ✅     | Predicciones futuras              |
+| Control Center         | ✅     | Interfaz unificada                |
+| Agendador              | ✅     | Windows Task Scheduler            |
+| Histórico JSON         | ✅     | Datos persistentes y editables    |
 
 ## 📞 Soporte
 
 Para problemas o preguntas:
+
 1. Revisa los logs en `audit-data/reports/`
 2. Verifica estado: `.\audit-control-center.ps1 status`
 3. Limpia y reinicia: `.\audit-control-center.ps1 clean`
@@ -402,6 +437,7 @@ Para problemas o preguntas:
 ## 📝 Changelog
 
 ### v2.0 (Actual)
+
 - ✅ Added: Control Center unificado
 - ✅ Added: Análisis predictivo inteligente
 - ✅ Added: Dashboard de tendencias
@@ -409,6 +445,7 @@ Para problemas o preguntas:
 - ✅ Improved: Índice de salud dinámico
 
 ### v1.0
+
 - ✅ Initial: Auto-audit system
 - ✅ Initial: Weekly collection
 - ✅ Initial: Task Scheduler integration
@@ -420,5 +457,3 @@ Parte del proyecto NEXUS V1 (Autogestión Pro)
 ---
 
 **Última actualización**: 2024 | **Mantenedor**: NEXUS V1 Team | **Versión**: 2.0
-
-

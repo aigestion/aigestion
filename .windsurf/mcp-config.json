@@ -225,10 +225,7 @@
       },
       "notebooklm": {
         "command": "C:\\Users\\Alejandro\\AIGestion\\.venv-notebooklm\\Scripts\\python.exe",
-        "args": [
-          "-m",
-          "notebooklm_mcp_server"
-        ],
+        "args": ["-m", "notebooklm_mcp_server"],
         "env": {
           "PYTHONPATH": "C:\\Users\\Alejandro\\AIGestion\\.venv-notebooklm\\Lib\\site-packages",
           "NOTEBOOKLM_AUTH_PATH": "${USERPROFILE}\\.notebooklm\\credentials.json"

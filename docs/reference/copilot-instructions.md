@@ -92,4 +92,3 @@ Repository owner phrase received: "nemisanalex no noepab" – confirm if ownersh
 For deeper operations (backup, troubleshooting, CI job details) consult original expanded docs: `DOCKER.md`, `PROJECT_STRUCTURE.md`, `CONTRIBUTING.md`.
 
 <!-- End condensed instructions -->
-

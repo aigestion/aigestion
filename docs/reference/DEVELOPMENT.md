@@ -59,34 +59,34 @@ NEXUS V1/
 
 ### 🚀 Desarrollo
 
-| Comando | Descripción |
-|---------|-------------|
-| `pnpm run dev` | Desarrollo completo (Turbo) |
-| `pnpm run dev:frontend` | Solo frontend |
-| `pnpm run dev:backend` | Solo backend |
-| `pnpm run storybook` | Storybook (componentes) |
+| Comando                 | Descripción                 |
+| ----------------------- | --------------------------- |
+| `pnpm run dev`          | Desarrollo completo (Turbo) |
+| `pnpm run dev:frontend` | Solo frontend               |
+| `pnpm run dev:backend`  | Solo backend                |
+| `pnpm run storybook`    | Storybook (componentes)     |
 
 ### 🔨 Build
 
-| Comando | Descripción |
-|---------|-------------|
-| `pnpm run build` | Build de todo |
+| Comando                    | Descripción        |
+| -------------------------- | ------------------ |
+| `pnpm run build`           | Build de todo      |
 | `pnpm run build-storybook` | Build de Storybook |
 
 ### 🧪 Testing
 
-| Comando | Descripción |
-|---------|-------------|
-| `pnpm run test` | Ejecutar todos los tests |
-| `pnpm run test:e2e` | Tests E2E con Cypress |
-| `pnpm run cy:open` | Cypress interactivo |
+| Comando             | Descripción              |
+| ------------------- | ------------------------ |
+| `pnpm run test`     | Ejecutar todos los tests |
+| `pnpm run test:e2e` | Tests E2E con Cypress    |
+| `pnpm run cy:open`  | Cypress interactivo      |
 
 ### 🔍 Linting & Formatting
 
-| Comando | Descripción |
-|---------|-------------|
-| `pnpm run lint` | Lint de todo el proyecto |
-| `pnpm --filter server run format` | Formatear backend |
+| Comando                           | Descripción              |
+| --------------------------------- | ------------------------ |
+| `pnpm run lint`                   | Lint de todo el proyecto |
+| `pnpm --filter server run format` | Formatear backend        |
 
 ---
 
@@ -191,6 +191,7 @@ pnpm run commit
 ## 🔧 Snippets Disponibles
 
 ### JavaScript/TypeScript
+
 - `cl` → Console log
 - `af` → Arrow function
 - `rfc` → React functional component
@@ -198,6 +199,7 @@ pnpm run commit
 - `rue` → React useEffect
 
 ### Python
+
 - `pr` → Print con f-string
 - `def` → Function con docstring
 - `cls` → Class
@@ -209,6 +211,7 @@ pnpm run commit
 ## 🚀 CI/CD
 
 ### GitHub Actions Workflows:
+
 - `ci.yml` - Tests y lint en cada PR
 - `deploy.yml` - Deploy a producción
 - `storybook.yml` - Deploy Storybook a Chromatic
@@ -236,5 +239,4 @@ pnpm run commit
 
 ---
 
-*Configuración optimizada por Antigravity AI Assistant* ⚡
-
+_Configuración optimizada por Antigravity AI Assistant_ ⚡

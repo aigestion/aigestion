@@ -9,72 +9,75 @@ export const InteractiveFeatures: React.FC = () => {
       id: 'ai-automation',
       title: 'AUTOMATIZACIÓN INTELIGENTE',
       subtitle: 'Procesos autónomos con IA avanzada',
-      description: 'Sistemas que aprenden, se adaptan y evolucionan solos. Desde la toma de decisiones hasta la ejecución automática de tareas complejas.',
+      description:
+        'Sistemas que aprenden, se adaptan y evolucionan solos. Desde la toma de decisiones hasta la ejecución automática de tareas complejas.',
       icon: '🤖',
       color: 'from-nexus-violet to-purple-600',
       stats: [
         { label: 'Eficiencia', value: '+347%' },
         { label: 'Reducción Costos', value: '-68%' },
-        { label: 'Velocidad', value: '10x' }
+        { label: 'Velocidad', value: '10x' },
       ],
       demo: {
         title: 'Demo en Vivo',
-        description: 'Observa cómo nuestra IA procesa 1M de datos en segundos'
-      }
+        description: 'Observa cómo nuestra IA procesa 1M de datos en segundos',
+      },
     },
     {
       id: 'quantum-computing',
       title: 'COMPUTACIÓN CUÁNTICA',
       subtitle: 'Procesamiento a velocidad lumínica',
-      description: 'Algoritmos cuánticos que resuelven problemas imposibles para la computación tradicional. Optimización perfecta en tiempo real.',
+      description:
+        'Algoritmos cuánticos que resuelven problemas imposibles para la computación tradicional. Optimización perfecta en tiempo real.',
       icon: '⚛️',
       color: 'from-nexus-cyan to-blue-600',
       stats: [
         { label: 'Velocidad', value: '1000x' },
         { label: 'Precisión', value: '99.97%' },
-        { label: 'Escalabilidad', value: '∞' }
+        { label: 'Escalabilidad', value: '∞' },
       ],
       demo: {
         title: 'Simulación Cuántica',
-        description: 'Experimenta el poder de la superposición cuántica'
-      }
+        description: 'Experimenta el poder de la superposición cuántica',
+      },
     },
     {
       id: 'neural-interface',
       title: 'INTERFAZ NEURAL',
       subtitle: 'Conexión directo cerebro-máquina',
-      description: 'Control de sistemas con el pensamiento. Interfaces que traducen señales neuronales en acciones digitales precisas.',
+      description:
+        'Control de sistemas con el pensamiento. Interfaces que traducen señales neuronales en acciones digitales precisas.',
       icon: '🧠',
       color: 'from-green-400 to-emerald-600',
       stats: [
         { label: 'Latencia', value: '0.1ms' },
         { label: 'Precisión', value: '99.9%' },
-        { label: 'Compatibilidad', value: '100%' }
+        { label: 'Compatibilidad', value: '100%' },
       ],
       demo: {
         title: 'Control Neural',
-        description: 'Maneja sistemas con tu mente'
-      }
+        description: 'Maneja sistemas con tu mente',
+      },
     },
     {
       id: 'metaverse-integration',
       title: 'METAVERSO EMPRESARIAL',
       subtitle: 'Oficinas virtuales inmersivas',
-      description: 'Espacios de trabajo 3D donde la distancia física desaparece. Colaboración global como si estuvieras en la misma sala.',
+      description:
+        'Espacios de trabajo 3D donde la distancia física desaparece. Colaboración global como si estuvieras en la misma sala.',
       icon: '🌐',
       color: 'from-orange-400 to-red-600',
       stats: [
         { label: 'Productividad', value: '+89%' },
         { label: 'Colaboración', value: '+156%' },
-        { label: 'Innovación', value: '+234%' }
+        { label: 'Innovación', value: '+234%' },
       ],
       demo: {
         title: 'Tour Virtual',
-        description: 'Explora nuestras oficinas virtuales'
-      }
-    }
+        description: 'Explora nuestras oficinas virtuales',
+      },
+    },
   ];
-
 
   return (
     <section

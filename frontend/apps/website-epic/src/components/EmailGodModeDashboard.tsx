@@ -6,7 +6,37 @@
 
 import React, { useState, useEffect } from 'react';
 import { emailGodMode } from '../services/email-godmode';
-import { Mail, Send, Archive, Trash2, Star, Filter, Search, Bell, Settings, Clock, TrendingUp, Users, AlertCircle, CheckCircle, BarChart3, PieChart, Zap, Globe, Phone, MessageSquare, Calendar, Tag, Folder, Inbox, ChevronDown, MoreVertical, Reply, Forward, Paperclip } from 'lucide-react';
+import {
+  Mail,
+  Send,
+  Archive,
+  Trash2,
+  Star,
+  Filter,
+  Search,
+  Bell,
+  Settings,
+  Clock,
+  TrendingUp,
+  Users,
+  AlertCircle,
+  CheckCircle,
+  BarChart3,
+  PieChart,
+  Zap,
+  Globe,
+  Phone,
+  MessageSquare,
+  Calendar,
+  Tag,
+  Folder,
+  Inbox,
+  ChevronDown,
+  MoreVertical,
+  Reply,
+  Forward,
+  Paperclip,
+} from 'lucide-react';
 
 interface EmailAccount {
   id: string;
@@ -55,16 +85,18 @@ export const EmailGodModeDashboard: React.FC = () => {
   const loadEmailData = async () => {
     try {
       await emailGodMode.initialize();
-      
+
       const emailAccounts = emailGodMode.getAccounts();
       const emailMessages = emailGodMode.getMessages();
       const emailStats = emailGodMode.getStats();
 
-      setAccounts(emailAccounts.map(acc => ({
-        ...acc,
-        unread: emailGodMode.getUnreadCount(acc.id),
-      })));
-      
+      setAccounts(
+        emailAccounts.map(acc => ({
+          ...acc,
+          unread: emailGodMode.getUnreadCount(acc.id),
+        }))
+      );
+
       setMessages(emailMessages);
       setStats(emailStats);
       setIsLoading(false);
@@ -76,41 +108,56 @@ export const EmailGodModeDashboard: React.FC = () => {
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {
-      case 'urgent': return 'text-red-600 bg-red-50';
-      case 'high': return 'text-orange-600 bg-orange-50';
-      case 'medium': return 'text-yellow-600 bg-yellow-50';
-      case 'low': return 'text-green-600 bg-green-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'urgent':
+        return 'text-red-600 bg-red-50';
+      case 'high':
+        return 'text-orange-600 bg-orange-50';
+      case 'medium':
+        return 'text-yellow-600 bg-yellow-50';
+      case 'low':
+        return 'text-green-600 bg-green-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
-      case 'positive': return 'text-green-600 bg-green-50';
-      case 'negative': return 'text-red-600 bg-red-50';
-      case 'neutral': return 'text-gray-600 bg-gray-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'positive':
+        return 'text-green-600 bg-green-50';
+      case 'negative':
+        return 'text-red-600 bg-red-50';
+      case 'neutral':
+        return 'text-gray-600 bg-gray-50';
+      default:
+        return 'text-gray-600 bg-gray-50';
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'primary': return 'bg-blue-100 text-blue-800';
-      case 'social': return 'bg-purple-100 text-purple-800';
-      case 'promotions': return 'bg-green-100 text-green-800';
-      case 'updates': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'primary':
+        return 'bg-blue-100 text-blue-800';
+      case 'social':
+        return 'bg-purple-100 text-purple-800';
+      case 'promotions':
+        return 'bg-green-100 text-green-800';
+      case 'updates':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
     }
   };
 
   const filteredMessages = messages.filter(message => {
-    const matchesSearch = message.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         message.from.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         message.from.email.toLowerCase().includes(searchTerm.toLowerCase());
-    
+    const matchesSearch =
+      message.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      message.from.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      message.from.email.toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchesCategory = filterCategory === 'all' || message.category === filterCategory;
     const matchesAccount = selectedAccount === 'all' || message.account_id === selectedAccount;
-    
+
     return matchesSearch && matchesCategory && matchesAccount;
   });
 
@@ -142,7 +189,9 @@ export const EmailGodModeDashboard: React.FC = () => {
             <div className="flex items-center space-x-4">
               <div className="text-right">
                 <p className="text-sm text-gray-500">Cuentas Pro</p>
-                <p className="font-semibold text-blue-600">{accounts.filter(a => a.is_pro).length}/{accounts.length}</p>
+                <p className="font-semibold text-blue-600">
+                  {accounts.filter(a => a.is_pro).length}/{accounts.length}
+                </p>
               </div>
               <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
                 <Mail className="w-6 h-6" />
@@ -203,13 +252,18 @@ export const EmailGodModeDashboard: React.FC = () => {
             Cuentas de Email
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {accounts.map((account) => (
-              <div key={account.id} className="border rounded-lg p-4 hover:shadow-md transition-all">
+            {accounts.map(account => (
+              <div
+                key={account.id}
+                className="border rounded-lg p-4 hover:shadow-md transition-all"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
-                      account.type === 'professional' ? 'bg-blue-600' : 'bg-purple-600'
-                    }`}>
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
+                        account.type === 'professional' ? 'bg-blue-600' : 'bg-purple-600'
+                      }`}
+                    >
                       {account.email.charAt(0).toUpperCase()}
                     </div>
                     <div>
@@ -253,16 +307,16 @@ export const EmailGodModeDashboard: React.FC = () => {
                   type="text"
                   placeholder="Buscar emails por asunto, remitente..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
-            
+
             <div className="flex gap-2">
               <select
                 value={selectedAccount}
-                onChange={(e) => setSelectedAccount(e.target.value)}
+                onChange={e => setSelectedAccount(e.target.value)}
                 className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="all">Todas las Cuentas</option>
@@ -272,10 +326,10 @@ export const EmailGodModeDashboard: React.FC = () => {
                   </option>
                 ))}
               </select>
-              
+
               <select
                 value={filterCategory}
-                onChange={(e) => setFilterCategory(e.target.value)}
+                onChange={e => setFilterCategory(e.target.value)}
                 className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="all">Todas las Categorías</option>
@@ -284,7 +338,7 @@ export const EmailGodModeDashboard: React.FC = () => {
                 <option value="promotions">Promociones</option>
                 <option value="updates">Actualizaciones</option>
               </select>
-              
+
               <button className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
                 <Filter className="w-5 h-5" />
                 <span>Filtros</span>
@@ -320,40 +374,42 @@ export const EmailGodModeDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredMessages.map((message) => (
+                {filteredMessages.map(message => (
                   <tr key={message.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
                         {!message.is_read && (
                           <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
                         )}
-                        {message.is_important && (
-                          <Star className="w-4 h-4 text-yellow-500" />
-                        )}
+                        {message.is_important && <Star className="w-4 h-4 text-yellow-500" />}
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
                         <div className="text-sm font-medium text-gray-900">{message.from.name}</div>
                         <div className="text-sm text-gray-500">{message.from.email}</div>
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-900 font-medium">{message.subject}</div>
                       <div className="text-xs text-gray-500 mt-1">
                         {message.body.substring(0, 50)}...
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap">
                       {message.context_analysis && (
                         <div className="space-y-1">
-                          <div className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(message.context_analysis.urgency)}`}>
+                          <div
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(message.context_analysis.urgency)}`}
+                          >
                             {message.context_analysis.urgency}
                           </div>
-                          <div className={`px-2 py-1 rounded-full text-xs font-medium ${getSentimentColor(message.context_analysis.sentiment)}`}>
+                          <div
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${getSentimentColor(message.context_analysis.sentiment)}`}
+                          >
                             {message.context_analysis.sentiment}
                           </div>
                           {message.context_analysis.action_required && (
@@ -365,11 +421,11 @@ export const EmailGodModeDashboard: React.FC = () => {
                         </div>
                       )}
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {message.date.toLocaleDateString()}
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-2">
                         <button
@@ -379,21 +435,21 @@ export const EmailGodModeDashboard: React.FC = () => {
                         >
                           <Mail className="w-4 h-4" />
                         </button>
-                        
+
                         <button
                           className="p-1 text-green-600 hover:text-green-800 transition-colors"
                           title="Responder"
                         >
                           <Reply className="w-4 h-4" />
                         </button>
-                        
+
                         <button
                           className="p-1 text-purple-600 hover:text-purple-800 transition-colors"
                           title="Reenviar"
                         >
                           <Forward className="w-4 h-4" />
                         </button>
-                        
+
                         <button
                           className="p-1 text-gray-600 hover:text-gray-800 transition-colors"
                           title="Más opciones"
@@ -420,7 +476,7 @@ export const EmailGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Nuevo mensaje</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Filter className="w-5 h-5 text-purple-600" />
               <div className="text-left">
@@ -428,7 +484,7 @@ export const EmailGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Organizar emails</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Bell className="w-5 h-5 text-orange-600" />
               <div className="text-left">
@@ -436,7 +492,7 @@ export const EmailGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Configurar alertas</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Settings className="w-5 h-5 text-green-600" />
               <div className="text-left">

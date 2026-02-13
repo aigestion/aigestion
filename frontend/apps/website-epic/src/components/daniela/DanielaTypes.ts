@@ -1,25 +1,25 @@
 export interface DanielaMessage {
   id: string;
   text: string;
-  sender: "user" | "daniela";
+  sender: 'user' | 'daniela';
   timestamp: Date;
   suggestions?: string[];
-  sentiment?: "positive" | "neutral" | "negative";
+  sentiment?: 'positive' | 'neutral' | 'negative';
   confidence?: number;
 }
 
 export interface DanielaConfig {
-  variant: "widget" | "assistant" | "advisor" | "full";
-  context: "website" | "admin" | "client" | "demo" | "mobile";
+  variant: 'widget' | 'assistant' | 'advisor' | 'full';
+  context: 'website' | 'admin' | 'client' | 'demo' | 'mobile';
   voice: {
     enabled: boolean;
-    provider: "vapi" | "elevenlabs" | "native";
+    provider: 'vapi' | 'elevenlabs' | 'native';
     voiceId: string;
     autoStart: boolean;
   };
   personality: {
-    mode: "professional" | "friendly" | "strategic" | "creative";
-    language: "es" | "en" | "pt";
+    mode: 'professional' | 'friendly' | 'strategic' | 'creative';
+    language: 'es' | 'en' | 'pt';
     name: string;
   };
   features: {
@@ -40,7 +40,7 @@ export interface DanielaState {
   config: DanielaConfig;
 }
 
-export type CallStatus = "idle" | "connecting" | "active" | "error";
+export type CallStatus = 'idle' | 'connecting' | 'active' | 'error';
 
 export interface DanielaContextType {
   state: DanielaState;

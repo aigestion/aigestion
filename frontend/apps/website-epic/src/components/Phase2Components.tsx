@@ -58,14 +58,12 @@ export const EnhancedNavigation: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <motion.div whileHover={{ scale: 1.05 }} className="cursor-pointer">
-          <div className="font-orbitron font-bold text-xl text-nexus-cyan">
-            NEXUS
-          </div>
+          <div className="font-orbitron font-bold text-xl text-nexus-cyan">NEXUS</div>
         </motion.div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
+          {navItems.map(item => (
             <NavItem key={item.label} {...item} />
           ))}
         </div>
@@ -99,12 +97,8 @@ export const EnhancedNavigation: React.FC = () => {
             className="md:hidden absolute top-full left-0 right-0 bg-nexus-obsidian/95 backdrop-blur-xl border-b border-white/10"
           >
             <div className="px-6 py-6 space-y-4">
-              {navItems.map((item) => (
-                <NavItem
-                  key={item.label}
-                  {...item}
-                  onClick={() => setIsOpen(false)}
-                />
+              {navItems.map(item => (
+                <NavItem key={item.label} {...item} onClick={() => setIsOpen(false)} />
               ))}
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -204,11 +198,7 @@ export const Card3D: React.FC<CardProps> = ({
               animate={{ scale: isHovered ? 1.05 : 1 }}
               transition={{ duration: 0.3 }}
             >
-              <img
-                src={image}
-                alt={title}
-                className="w-full h-full object-cover"
-              />
+              <img src={image} alt={title} className="w-full h-full object-cover" />
             </motion.div>
           )}
 
@@ -263,10 +253,7 @@ interface BadgeProps {
   variant?: 'primary' | 'secondary' | 'success' | 'warning';
 }
 
-export const AnimatedBadge: React.FC<BadgeProps> = ({
-  text,
-  variant = 'primary',
-}) => {
+export const AnimatedBadge: React.FC<BadgeProps> = ({ text, variant = 'primary' }) => {
   const variants = {
     primary: 'bg-nexus-violet/20 border-nexus-violet/50 text-nexus-violet',
     secondary: 'bg-nexus-cyan/20 border-nexus-cyan/50 text-nexus-cyan',

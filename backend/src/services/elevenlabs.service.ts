@@ -45,7 +45,7 @@ export class ElevenLabsService {
             'Content-Type': 'application/json',
           },
           responseType: 'arraybuffer',
-        },
+        }
       );
 
       const buffer = Buffer.from(response.data);
@@ -61,7 +61,7 @@ export class ElevenLabsService {
     } catch (error: any) {
       logger.error(
         '[ElevenLabsService] Synthesis failed:',
-        error.response?.data?.toString() || error.message,
+        error.response?.data?.toString() || error.message
       );
       throw new Error('Failed to generate high-fidelity voice.');
     }

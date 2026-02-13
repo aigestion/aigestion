@@ -6,7 +6,36 @@
 
 import React, { useState, useEffect } from 'react';
 import { crmGodMode } from '../services/crm-godmode';
-import { Users, Phone, MessageCircle, Mail, Calendar, TrendingUp, Target, Award, Clock, DollarSign, Search, Filter, Plus, Edit, Trash2, Send, UserCheck, Building, Tag, Star, Activity, BarChart3, PieChart, Zap, Globe, Linkedin, Twitter, Instagram } from 'lucide-react';
+import {
+  Users,
+  Phone,
+  MessageCircle,
+  Mail,
+  Calendar,
+  TrendingUp,
+  Target,
+  Award,
+  Clock,
+  DollarSign,
+  Search,
+  Filter,
+  Plus,
+  Edit,
+  Trash2,
+  Send,
+  UserCheck,
+  Building,
+  Tag,
+  Star,
+  Activity,
+  BarChart3,
+  PieChart,
+  Zap,
+  Globe,
+  Linkedin,
+  Twitter,
+  Instagram,
+} from 'lucide-react';
 
 interface Contact {
   id: string;
@@ -38,7 +67,7 @@ export const CRMGodModeDashboard: React.FC = () => {
     try {
       // Inicializar CRM
       await crmGodMode.initializeCRM();
-      
+
       // Obtener estadísticas
       const crmStats = crmGodMode.getCRMStats();
       setStats(crmStats);
@@ -167,12 +196,13 @@ export const CRMGodModeDashboard: React.FC = () => {
   };
 
   const filteredContacts = contacts.filter(contact => {
-    const matchesSearch = contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         contact.company?.toLowerCase().includes(searchTerm.toLowerCase());
-    
+    const matchesSearch =
+      contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      contact.company?.toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchesStage = filterStage === 'all' || contact.deal_stage === filterStage;
-    
+
     return matchesSearch && matchesStage;
   });
 
@@ -269,16 +299,16 @@ export const CRMGodModeDashboard: React.FC = () => {
                   type="text"
                   placeholder="Buscar contactos por nombre, email o empresa..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
               </div>
             </div>
-            
+
             <div className="flex gap-2">
               <select
                 value={filterStage}
-                onChange={(e) => setFilterStage(e.target.value)}
+                onChange={e => setFilterStage(e.target.value)}
                 className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               >
                 <option value="all">Todas las Etapas</option>
@@ -290,7 +320,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                 <option value="closed_won">Ganados</option>
                 <option value="closed_lost">Perdidos</option>
               </select>
-              
+
               <button className="px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2">
                 <Plus className="w-5 h-5" />
                 <span>Nuevo Contacto</span>
@@ -326,7 +356,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredContacts.map((contact) => (
+                {filteredContacts.map(contact => (
                   <tr key={contact.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -342,23 +372,27 @@ export const CRMGodModeDashboard: React.FC = () => {
                         </div>
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{contact.company || '-'}</div>
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${getLeadScoreColor(contact.lead_score)}`}>
+                      <div
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getLeadScoreColor(contact.lead_score)}`}
+                      >
                         {contact.lead_score}/100
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${getStageColor(contact.deal_stage)}`}>
+                      <div
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${getStageColor(contact.deal_stage)}`}
+                      >
                         {contact.deal_stage.replace('_', ' ').toUpperCase()}
                       </div>
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap">
                       {contact.whatsapp ? (
                         <div className="flex items-center text-green-600">
@@ -372,7 +406,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                         </div>
                       )}
                     </td>
-                    
+
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center space-x-2">
                         {contact.whatsapp && (
@@ -384,7 +418,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                             <Send className="w-4 h-4" />
                           </button>
                         )}
-                        
+
                         <button
                           onClick={() => setSelectedContact(contact)}
                           className="p-1 text-blue-600 hover:text-blue-800 transition-colors"
@@ -392,7 +426,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                         >
                           <Edit className="w-4 h-4" />
                         </button>
-                        
+
                         <button
                           className="p-1 text-gray-600 hover:text-gray-800 transition-colors"
                           title="Más opciones"
@@ -423,7 +457,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                   </button>
                 </div>
               </div>
-              
+
               <div className="p-6">
                 <div className="flex items-center mb-6">
                   <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
@@ -435,7 +469,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                     <p className="text-gray-500">{selectedContact.company}</p>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h4 className="font-medium text-gray-700 mb-2">Información de Contacto</h4>
@@ -458,45 +492,54 @@ export const CRMGodModeDashboard: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div>
                     <h4 className="font-medium text-gray-700 mb-2">Información CRM</h4>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600">Lead Score:</span>
-                        <div className={`px-2 py-1 rounded-full text-xs font-medium ${getLeadScoreColor(selectedContact.lead_score)}`}>
+                        <div
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getLeadScoreColor(selectedContact.lead_score)}`}
+                        >
                           {selectedContact.lead_score}/100
                         </div>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-600">Etapa:</span>
-                        <div className={`px-2 py-1 rounded-full text-xs font-medium ${getStageColor(selectedContact.deal_stage)}`}>
+                        <div
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getStageColor(selectedContact.deal_stage)}`}
+                        >
                           {selectedContact.deal_stage.replace('_', ' ').toUpperCase()}
                         </div>
                       </div>
                       {selectedContact.last_contact && (
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-600">Último contacto:</span>
-                          <span className="text-sm">{selectedContact.last_contact.toLocaleDateString()}</span>
+                          <span className="text-sm">
+                            {selectedContact.last_contact.toLocaleDateString()}
+                          </span>
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
-                
+
                 {selectedContact.tags.length > 0 && (
                   <div className="mt-6">
                     <h4 className="font-medium text-gray-700 mb-2">Etiquetas</h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedContact.tags.map((tag, index) => (
-                        <span key={index} className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm"
+                        >
                           {tag}
                         </span>
                       ))}
                     </div>
                   </div>
                 )}
-                
+
                 <div className="mt-6 flex justify-end space-x-3">
                   {selectedContact.whatsapp && (
                     <button
@@ -510,7 +553,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                       <span>Enviar WhatsApp</span>
                     </button>
                   )}
-                  
+
                   <button
                     onClick={() => setSelectedContact(null)}
                     className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
@@ -534,7 +577,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Sincronizar contactos</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <MessageCircle className="w-5 h-5 text-green-600" />
               <div className="text-left">
@@ -542,7 +585,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Enviar mensajes</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <BarChart3 className="w-5 h-5 text-purple-600" />
               <div className="text-left">
@@ -550,7 +593,7 @@ export const CRMGodModeDashboard: React.FC = () => {
                 <div className="text-sm text-gray-500">Ver estadísticas</div>
               </div>
             </button>
-            
+
             <button className="p-4 bg-white rounded-lg hover:shadow-md transition-all flex items-center space-x-3">
               <Zap className="w-5 h-5 text-orange-600" />
               <div className="text-left">

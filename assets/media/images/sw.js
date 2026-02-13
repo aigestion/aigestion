@@ -10,37 +10,37 @@ const urlsToCache = [
 ];
 
 // Network error handling
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_NAME).then(cache => {
       console.log('[SW] Pre-caching core assets');
       return cache.addAll(urlsToCache);
-    }),
+    })
   );
 });
 
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
     caches
       .keys()
-      .then((cacheNames) => {
+      .then(cacheNames => {
         return Promise.all(
-          cacheNames.map((cacheName) => {
+          cacheNames.map(cacheName => {
             if (cacheName !== CACHE_NAME) {
               console.log('[SW] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
-          }),
+          })
         );
       })
-      .then(() => self.clients.claim()),
+      .then(() => self.clients.claim())
   );
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request).then(response => {
       // Return cached version if available
       if (response) {
         return response;
@@ -64,6 +64,6 @@ self.addEventListener('fetch', (event) => {
         console.log('[SW] Network failed, trying cache for:', event.request.url);
         return caches.match(event.request);
       });
-    }),
+    })
   );
 });

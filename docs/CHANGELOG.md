@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [1.0.1] - 2026-01-20
+
 ### Added
+
 - Created `TUTORIAL_FULL.md` with end-to-end instructions.
 - Added `CONTRIBUTING.md` for professional collaboration.
 - Revamped `README.md` with premium dashboard layout.
@@ -16,13 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial project structure for Nexus V1.
 
 ### Improved
+
 - Technical documentation updated to reflect multi-database architecture (MongoDB + Postgres).
 - Enhanced CI/CD pipeline documentation.
 
 ---
 
 ## [1.0.0] - 2025-12-14
+
 ### Added
+
 - Initial release of Nexus V1 Dashboard.
 - Support for Google Cloud Run deployment.
 - Integrated AI services with Vertex AI and OpenAI.

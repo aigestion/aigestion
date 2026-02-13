@@ -1,6 +1,6 @@
 /**
  * Sprint 1: Task 1.1 - REST API Refactoring Tests
- * 
+ *
  * Standardized for God Mode Phase 5
  */
 
@@ -38,7 +38,7 @@ const SKIP_DB_TESTS = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGR
       expect(response.body).toHaveProperty('status', 200);
       expect(response.body).toHaveProperty('data');
       expect(response.body.data).toHaveProperty('status', 'healthy');
-      
+
       const requestId = response.body.requestId;
       expect(requestId).toBeDefined();
     });

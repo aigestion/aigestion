@@ -1,12 +1,38 @@
-import React from 'react'
-import { motion } from 'framer-motion'
-import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { Users, TrendingUp, DollarSign, Activity, Settings, Database, Shield, Zap, AlertCircle } from 'lucide-react'
-import { api, SystemHealth } from '../services/api'
+import React from 'react';
+import { motion } from 'framer-motion';
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+import {
+  Users,
+  TrendingUp,
+  DollarSign,
+  Activity,
+  Settings,
+  Database,
+  Shield,
+  Zap,
+  AlertCircle,
+} from 'lucide-react';
+import { api, SystemHealth } from '../services/api';
 
 const AdminDashboard = () => {
   const [health, setHealth] = React.useState<SystemHealth | null>(null);
-  const [connectionStatus, setConnectionStatus] = React.useState<'checking' | 'connected' | 'error'>('checking');
+  const [connectionStatus, setConnectionStatus] = React.useState<
+    'checking' | 'connected' | 'error'
+  >('checking');
 
   React.useEffect(() => {
     const checkConnection = async () => {
@@ -27,7 +53,7 @@ const AdminDashboard = () => {
     { title: 'Ingresos Mensuales', value: '$45,678', icon: DollarSign, color: 'text-green-400' },
     { title: 'Tasa de Crecimiento', value: '+23.5%', icon: TrendingUp, color: 'text-purple-400' },
     { title: 'Actividad del Sistema', value: '98.2%', icon: Activity, color: 'text-orange-400' },
-  ]
+  ];
 
   const chartData = [
     { name: 'Ene', usuarios: 4000, ingresos: 2400 },
@@ -36,13 +62,13 @@ const AdminDashboard = () => {
     { name: 'Abr', usuarios: 2780, ingresos: 3908 },
     { name: 'May', usuarios: 1890, ingresos: 4800 },
     { name: 'Jun', usuarios: 2390, ingresos: 3800 },
-  ]
+  ];
 
   const pieData = [
     { name: 'Desktop', value: 400, color: '#8884d8' },
     { name: 'Mobile', value: 300, color: '#82ca9d' },
     { name: 'Tablet', value: 300, color: '#ffc658' },
-  ]
+  ];
 
   return (
     <div className="p-6 space-y-6">
@@ -65,11 +91,15 @@ const AdminDashboard = () => {
         animate={{ opacity: 1, y: 0 }}
         className="flex items-center space-x-2 mb-4"
       >
-        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${
-          connectionStatus === 'connected' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
-          connectionStatus === 'error' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
-          'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-        }`}>
+        <div
+          className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${
+            connectionStatus === 'connected'
+              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+              : connectionStatus === 'error'
+                ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+          }`}
+        >
           {connectionStatus === 'connected' ? (
             <>
               <Activity className="w-3 h-3" />
@@ -88,10 +118,9 @@ const AdminDashboard = () => {
           )}
         </div>
         {health?.data?.version && (
-           <span className="text-xs text-white/30">v{health.data.version}</span>
+          <span className="text-xs text-white/30">v{health.data.version}</span>
         )}
       </motion.div>
-
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
@@ -218,7 +247,7 @@ const AdminDashboard = () => {
         </div>
       </motion.div>
     </div>
-  )
-}
+  );
+};
 
-export { AdminDashboard }
+export { AdminDashboard };

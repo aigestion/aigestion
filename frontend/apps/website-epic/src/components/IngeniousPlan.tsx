@@ -23,7 +23,10 @@ const phases = [
 ];
 
 export const IngeniousPlan: React.FC = () => (
-  <section id="plan" className="py-32 bg-gradient-to-b from-black via-nexus-obsidian to-black relative">
+  <section
+    id="plan"
+    className="py-32 bg-gradient-to-b from-black via-nexus-obsidian to-black relative"
+  >
     <div className="absolute inset-0 bg-radial-at-center from-nexus-violet/10 via-transparent to-transparent" />
 
     <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -55,7 +58,7 @@ export const IngeniousPlan: React.FC = () => (
             <h3 className="text-xl font-bold text-white mb-4">{phase.title}</h3>
             <p className="text-sm text-nexus-silver/70 mb-6">{phase.description}</p>
             <ul className="space-y-2 text-xs text-nexus-silver/60">
-              {phase.outcomes.map((item) => (
+              {phase.outcomes.map(item => (
                 <li key={item} className="flex items-center gap-2">
                   <span className="h-1.5 w-1.5 rounded-full bg-nexus-cyan" />
                   {item}

@@ -3,9 +3,11 @@
 ## 📋 CONFIGURATION STEP-BY-STEP
 
 ### 🔐 STEP 1: GitHub Secrets Configuration
+
 **URL**: https://github.com/aigestion/aigestion/settings/secrets/actions
 
 #### Required Secrets:
+
 ```
 🔑 Google Cloud Platform:
 GCP_SA_KEY = (JSON service account key)
@@ -27,10 +29,12 @@ ADMIN_EMAIL = admin@aigestion.net
 ```
 
 ### ☁️ STEP 2: Google Cloud Project Setup
+
 **Project**: aigestion-prod
 **Console**: https://console.cloud.google.com/project/aigestion-prod
 
 #### Enable APIs:
+
 - [ ] Cloud Run API
 - [ ] Vertex AI API
 - [ ] Cloud Build API
@@ -38,29 +42,36 @@ ADMIN_EMAIL = admin@aigestion.net
 - [ ] IAM Service Account Credentials API
 
 #### Service Account:
+
 - [ ] Create service account: `aigestion-prod@aigestion-prod.iam.gserviceaccount.com`
 - [ ] Assign roles: Cloud Run Admin, Vertex AI User, Storage Admin
 - [ ] Generate JSON key
 - [ ] Add to GitHub secrets
 
 ### 🚀 STEP 3: GitHub Pages Configuration
+
 **URL**: https://github.com/aigestion/aigestion/settings/pages
 
 #### Settings:
+
 - [ ] Source: "GitHub Actions"
 - [ ] Custom domain: aigestion.net (when ready)
 
 ### 🔄 STEP 4: Workflow Testing
+
 **URL**: https://github.com/aigestion/aigestion/actions
 
 #### Test Workflows:
+
 - [ ] `ci-cd-god-mode.yml` - Main CI/CD
 - [ ] `internal-monitoring.yml` - Health checks
 - [ ] `security-monitoring.yml` - Security scans
 - [ ] `automated-testing.yml` - Test suite
 
 ### 🌐 STEP 5: Deployment Verification
+
 #### URLs to Test:
+
 - [ ] GitHub Pages: https://aigestion.github.io/aigestion/
 - [ ] Custom Domain: https://aigestion.net
 - [ ] Health Check: https://aigestion.net/health/index.html
@@ -68,6 +79,7 @@ ADMIN_EMAIL = admin@aigestion.net
 ## 🎯 AUTOMATION STATUS
 
 ### ✅ Completed:
+
 - [x] Professional account migration
 - [x] GitHub workflows setup
 - [x] Docker configuration
@@ -76,11 +88,13 @@ ADMIN_EMAIL = admin@aigestion.net
 - [x] Backup systems
 
 ### 🔄 In Progress:
+
 - [ ] GitHub secrets configuration
 - [ ] Google Cloud project setup
 - [ ] First deployment test
 
 ### ⏳ Pending:
+
 - [ ] Domain configuration
 - [ ] SSL certificates
 - [ ] Performance optimization
@@ -100,4 +114,5 @@ ADMIN_EMAIL = admin@aigestion.net
 - **Cloud Console**: https://console.cloud.google.com/project/aigestion-prod
 
 ---
-*Professional Deployment Checklist - AIGestion*
+
+_Professional Deployment Checklist - AIGestion_

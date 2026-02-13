@@ -71,7 +71,7 @@ export const ContactSection: React.FC = () => {
               title="INICIA TU TRANSFORMACIÓN"
               description="Establece el protocolo de conexión con el Nexus para integrar IA soberana en tu ecosistema."
               variant="glass"
-              onSubmit={async (data) => {
+              onSubmit={async data => {
                 console.log('Form submitted:', data);
                 // The organism handles loading and success states internally
                 // but we can trigger external effects here if needed
@@ -171,7 +171,7 @@ export const ContactSection: React.FC = () => {
                   { name: 'Twitter', icon: '🐦', color: 'from-sky-400 to-sky-600' },
                   { name: 'GitHub', icon: '🐙', color: 'from-gray-600 to-gray-800' },
                   { name: 'YouTube', icon: '📺', color: 'from-red-500 to-red-700' },
-                ].map((social) => (
+                ].map(social => (
                   <motion.button
                     key={social.name}
                     className={`p-4 bg-gradient-to-br ${social.color} rounded-xl text-white font-medium hover:scale-105 transition-transform`}

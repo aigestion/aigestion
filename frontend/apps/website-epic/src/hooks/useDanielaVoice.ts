@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 
 // Speech Recognition Type Definition
 
-
 export const useDanielaVoice = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
@@ -52,7 +51,9 @@ export const useDanielaVoice = () => {
     utterance.pitch = 1.1;
 
     const voices = window.speechSynthesis.getVoices();
-    const femaleVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Google Español'));
+    const femaleVoice = voices.find(
+      v => v.name.includes('Female') || v.name.includes('Google Español')
+    );
     if (femaleVoice) utterance.voice = femaleVoice;
 
     utterance.onend = () => setIsSpeaking(false);

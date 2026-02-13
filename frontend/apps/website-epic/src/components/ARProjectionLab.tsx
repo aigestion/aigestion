@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Scan, BoxSelect, Maximize2, Info } from 'lucide-react';
@@ -20,7 +19,7 @@ const AR_ASSETS: ARAsset[] = [
     description: 'El corazón de AIGestion. Procesamiento neuronal distribuido de alto rendimiento.',
     modelUrl: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb', // Placeholder for actual assets
     posterUrl: 'https://modelviewer.dev/shared-assets/models/Astronaut.png',
-    category: 'HARDWARE'
+    category: 'HARDWARE',
   },
   {
     id: 'drone',
@@ -28,7 +27,7 @@ const AR_ASSETS: ARAsset[] = [
     description: 'Vigilancia y mantenimiento automatizado en entornos XR.',
     modelUrl: 'https://modelviewer.dev/shared-assets/models/RobotExpressive.glb',
     posterUrl: 'https://modelviewer.dev/shared-assets/models/RobotExpressive.png',
-    category: 'INFRASTRUCTURE'
+    category: 'INFRASTRUCTURE',
   },
   {
     id: 'satellite',
@@ -36,8 +35,8 @@ const AR_ASSETS: ARAsset[] = [
     description: 'Nodo orbital para la sincronización global de inteligencia soberana.',
     modelUrl: 'https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb',
     posterUrl: 'https://modelviewer.dev/shared-assets/models/NeilArmstrong.png',
-    category: 'ORBITAL'
-  }
+    category: 'ORBITAL',
+  },
 ];
 
 export const ARProjectionLab: React.FC = () => {
@@ -100,7 +99,7 @@ export const ARProjectionLab: React.FC = () => {
               <motion.div
                 className="absolute left-0 right-0 h-1 bg-cyan-400/50 shadow-[0_0_15px_#00f5ff]"
                 animate={{ top: ['0%', '100%', '0%'] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
               />
             </motion.div>
           )}
@@ -111,31 +110,40 @@ export const ARProjectionLab: React.FC = () => {
       <div className="w-full lg:w-1/3 space-y-8">
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-             <BoxSelect className="w-6 h-6 text-cyan-400" />
-             <h3 className="text-2xl font-orbitron font-bold text-white uppercase tracking-tighter">LABORATORIO DE PROYECCIÓN</h3>
+            <BoxSelect className="w-6 h-6 text-cyan-400" />
+            <h3 className="text-2xl font-orbitron font-bold text-white uppercase tracking-tighter">
+              LABORATORIO DE PROYECCIÓN
+            </h3>
           </div>
           <p className="text-nexus-silver/70 text-sm leading-relaxed">
-            Selecciona un activo de la infraestructura Nexus y proyéctalo en tu entorno físico para análisis detallado.
+            Selecciona un activo de la infraestructura Nexus y proyéctalo en tu entorno físico para
+            análisis detallado.
           </p>
         </div>
 
         {/* Asset Grid */}
         <div className="grid grid-cols-1 gap-4">
-          {AR_ASSETS.map((asset) => (
+          {AR_ASSETS.map(asset => (
             <button
               key={asset.id}
               onClick={() => setSelectedAsset(asset)}
               className={`p-4 rounded-2xl border transition-all flex items-start gap-4 text-left group
-                ${selectedAsset.id === asset.id
-                  ? 'bg-cyan-400/10 border-cyan-400/50 shadow-[0_0_20px_rgba(0,245,255,0.1)]'
-                  : 'bg-white/5 border-white/10 hover:border-white/30'}`}
+                ${
+                  selectedAsset.id === asset.id
+                    ? 'bg-cyan-400/10 border-cyan-400/50 shadow-[0_0_20px_rgba(0,245,255,0.1)]'
+                    : 'bg-white/5 border-white/10 hover:border-white/30'
+                }`}
             >
-              <div className={`p-3 rounded-xl transition-colors ${selectedAsset.id === asset.id ? 'bg-cyan-400 text-black' : 'bg-white/5 text-white/50 group-hover:text-white'}`}>
+              <div
+                className={`p-3 rounded-xl transition-colors ${selectedAsset.id === asset.id ? 'bg-cyan-400 text-black' : 'bg-white/5 text-white/50 group-hover:text-white'}`}
+              >
                 <Box className="w-5 h-5" />
               </div>
               <div>
                 <div className="text-sm font-bold text-white mb-1">{asset.name}</div>
-                <div className="text-[10px] text-white/40 uppercase tracking-widest">{asset.category}</div>
+                <div className="text-[10px] text-white/40 uppercase tracking-widest">
+                  {asset.category}
+                </div>
               </div>
             </button>
           ))}
@@ -145,7 +153,9 @@ export const ARProjectionLab: React.FC = () => {
         <div className="glass-morphism p-6 rounded-3xl border border-white/10 space-y-4">
           <div className="flex items-center gap-2 text-cyan-400">
             <Info className="w-4 h-4" />
-            <span className="text-[10px] font-bold uppercase tracking-wider">Detalles del Activo</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">
+              Detalles del Activo
+            </span>
           </div>
           <p className="text-xs text-nexus-silver/90 leading-relaxed italic">
             "{selectedAsset.description}"

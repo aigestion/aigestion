@@ -52,7 +52,7 @@ export const idempotencyMiddleware = async (req: Request, res: Response, next: N
               status: res.statusCode,
               body,
             },
-            { ttl: 86400 },
+            { ttl: 86400 }
           )
           .catch(err => {
             logger.error({ err, cacheKey }, 'Error al guardar respuesta de idempotencia');

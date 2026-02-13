@@ -20,7 +20,7 @@ export const PerformanceImage: React.FC<OptimizedImageProps> = ({
   height,
   loading = 'lazy',
   priority = false,
-  placeholder
+  placeholder,
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -32,12 +32,12 @@ export const PerformanceImage: React.FC<OptimizedImageProps> = ({
     if (!img) return;
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             // Start loading the actual image
             const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-            
+
             // Try WebP first, fallback to original
             const webpImg = new Image();
             webpImg.onload = () => {
@@ -57,14 +57,14 @@ export const PerformanceImage: React.FC<OptimizedImageProps> = ({
               originalImg.src = src;
             };
             webpImg.src = webpSrc;
-            
+
             observer.unobserve(img);
           }
         });
       },
       {
         rootMargin: '50px 0px',
-        threshold: 0.01
+        threshold: 0.01,
       }
     );
 
@@ -83,16 +83,11 @@ export const PerformanceImage: React.FC<OptimizedImageProps> = ({
 
   if (isError) {
     return (
-      <div 
-        className={clsx(
-          'bg-gray-200 dark:bg-gray-800 flex items-center justify-center',
-          className
-        )}
+      <div
+        className={clsx('bg-gray-200 dark:bg-gray-800 flex items-center justify-center', className)}
         style={{ width, height }}
       >
-        <span className="text-gray-500 dark:text-gray-400 text-sm">
-          Image not available
-        </span>
+        <span className="text-gray-500 dark:text-gray-400 text-sm">Image not available</span>
       </div>
     );
   }
@@ -100,12 +95,12 @@ export const PerformanceImage: React.FC<OptimizedImageProps> = ({
   return (
     <div className={clsx('relative overflow-hidden', className)}>
       {!isLoaded && (
-        <div 
+        <div
           className="absolute inset-0 bg-gray-200 dark:bg-gray-800 animate-pulse"
           style={{ width, height }}
         />
       )}
-      
+
       <img
         ref={imgRef}
         src={currentSrc}

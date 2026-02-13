@@ -11,7 +11,7 @@ import {
   User,
   X,
   Activity,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 import { api, SystemHealth } from '../services/api';
 import React, { useState } from 'react';
@@ -31,7 +31,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState<'daniela' | 'analytics' | 'settings'>('daniela');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [health, setHealth] = useState<SystemHealth | null>(null);
-  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>('checking');
+  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'error'>(
+    'checking'
+  );
 
   React.useEffect(() => {
     const checkConnection = async () => {
@@ -48,42 +50,37 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const {
-    status,
-    messages,
-    emotionalAnalysis,
-    suggestedActions,
-    isProcessing,
-  } = useEnhancedVoiceAssistant({
-    sessionId: 'dashboard-session',
-    userId: user.email,
-  });
+  const { status, messages, emotionalAnalysis, suggestedActions, isProcessing } =
+    useEnhancedVoiceAssistant({
+      sessionId: 'dashboard-session',
+      userId: user.email,
+    });
 
   const menuItems = [
     {
       id: 'daniela',
       label: 'Daniela AI',
       icon: Brain,
-      color: 'from-nexus-cyan to-nexus-violet'
+      color: 'from-nexus-cyan to-nexus-violet',
     },
     {
       id: 'analytics',
       label: 'Analytics',
       icon: BarChart3,
-      color: 'from-green-500 to-emerald-600'
+      color: 'from-green-500 to-emerald-600',
     },
     {
       id: 'settings',
       label: 'Configuración',
       icon: Settings,
-      color: 'from-orange-500 to-red-600'
-    }
+      color: 'from-orange-500 to-red-600',
+    },
   ];
 
   const subscriptionColors = {
     free: 'text-nexus-silver',
     premium: 'text-nexus-violet',
-    enterprise: 'text-nexus-gold'
+    enterprise: 'text-nexus-gold',
   };
 
   return (
@@ -119,8 +116,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               animate={{ x: 0 }}
               exit={{ x: -300 }}
               transition={{ type: 'spring', damping: 25 }}
-              className={`fixed lg:relative z-50 w-72 h-screen bg-nexus-obsidian-deep border-r border-white/10 ${sidebarOpen ? 'block' : 'hidden lg:block'
-                }`}
+              className={`fixed lg:relative z-50 w-72 h-screen bg-nexus-obsidian-deep border-r border-white/10 ${
+                sidebarOpen ? 'block' : 'hidden lg:block'
+              }`}
             >
               {/* Header */}
               <div className="p-6 border-b border-white/10">
@@ -133,7 +131,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                     <p className="text-sm text-nexus-silver">{user.email}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <Shield className="w-3 h-3 text-nexus-cyan" />
-                      <span className={`text-xs font-medium ${subscriptionColors[user.subscription as keyof typeof subscriptionColors]}`}>
+                      <span
+                        className={`text-xs font-medium ${subscriptionColors[user.subscription as keyof typeof subscriptionColors]}`}
+                      >
                         {user.subscription.toUpperCase()}
                       </span>
                     </div>
@@ -144,7 +144,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               {/* Navigation */}
               <nav className="p-4">
                 <div className="space-y-2">
-                  {menuItems.map((item) => {
+                  {menuItems.map(item => {
                     const Icon = item.icon;
                     return (
                       <button
@@ -153,10 +153,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                           setActiveTab(item.id as any);
                           setSidebarOpen(false);
                         }}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${activeTab === item.id
-                          ? `bg-linear-to-r ${item.color} text-white shadow-lg`
-                          : 'text-nexus-silver hover:bg-white/5 hover:text-white'
-                          }`}
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                          activeTab === item.id
+                            ? `bg-linear-to-r ${item.color} text-white shadow-lg`
+                            : 'text-nexus-silver hover:bg-white/5 hover:text-white'
+                        }`}
                       >
                         <Icon className="w-5 h-5" />
                         <span className="font-medium">{item.label}</span>
@@ -175,20 +176,31 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-nexus-silver text-sm">Estado</span>
-                    <span className={`text-sm font-medium ${isProcessing ? 'text-yellow-400' :
-                      status === 'active' ? 'text-green-400' :
-                        status === 'error' ? 'text-red-400' :
-                          'text-nexus-silver'
-                      }`}>
-                      {isProcessing ? 'Procesando' :
-                        status === 'active' ? 'Activo' :
-                          status === 'error' ? 'Error' :
-                            'Inactivo'}
+                    <span
+                      className={`text-sm font-medium ${
+                        isProcessing
+                          ? 'text-yellow-400'
+                          : status === 'active'
+                            ? 'text-green-400'
+                            : status === 'error'
+                              ? 'text-red-400'
+                              : 'text-nexus-silver'
+                      }`}
+                    >
+                      {isProcessing
+                        ? 'Procesando'
+                        : status === 'active'
+                          ? 'Activo'
+                          : status === 'error'
+                            ? 'Error'
+                            : 'Inactivo'}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-nexus-silver text-sm">Suscripción</span>
-                    <span className={`text-xs font-medium ${subscriptionColors[user.subscription as keyof typeof subscriptionColors]}`}>
+                    <span
+                      className={`text-xs font-medium ${subscriptionColors[user.subscription as keyof typeof subscriptionColors]}`}
+                    >
                       {user.subscription}
                     </span>
                   </div>
@@ -229,33 +241,48 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             <div className="flex items-center gap-4">
               {/* Status Indicator */}
               <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-yellow-400 animate-pulse' :
-                  status === 'active' ? 'bg-green-400' :
-                    status === 'error' ? 'bg-red-400' :
-                      'bg-nexus-silver'
-                  }`} />
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    isProcessing
+                      ? 'bg-yellow-400 animate-pulse'
+                      : status === 'active'
+                        ? 'bg-green-400'
+                        : status === 'error'
+                          ? 'bg-red-400'
+                          : 'bg-nexus-silver'
+                  }`}
+                />
                 <span className="text-sm text-nexus-silver hidden sm:block">
-                  {isProcessing ? 'Procesando...' :
-                    status === 'active' ? 'Daniela Activa' :
-                      status === 'error' ? 'Error' :
-                        'Inactivo'}
+                  {isProcessing
+                    ? 'Procesando...'
+                    : status === 'active'
+                      ? 'Daniela Activa'
+                      : status === 'error'
+                        ? 'Error'
+                        : 'Inactivo'}
                 </span>
               </div>
 
               {/* System Connectivity Indicator */}
               <div className="flex items-center gap-2 border-l border-white/10 pl-4">
-                <div className={`w-2 h-2 rounded-full ${
-                  connectionStatus === 'connected' ? 'bg-emerald-400' :
-                  connectionStatus === 'error' ? 'bg-red-400' :
-                  'bg-blue-400 animate-pulse'
-                }`} />
+                <div
+                  className={`w-2 h-2 rounded-full ${
+                    connectionStatus === 'connected'
+                      ? 'bg-emerald-400'
+                      : connectionStatus === 'error'
+                        ? 'bg-red-400'
+                        : 'bg-blue-400 animate-pulse'
+                  }`}
+                />
                 <span className="text-sm text-nexus-silver hidden sm:block">
-                  {connectionStatus === 'connected' ? 'System Online' :
-                   connectionStatus === 'error' ? 'Offline' :
-                   'Syncing...'}
+                  {connectionStatus === 'connected'
+                    ? 'System Online'
+                    : connectionStatus === 'error'
+                      ? 'Offline'
+                      : 'Syncing...'}
                 </span>
                 {health?.data?.version && (
-                   <span className="text-[10px] text-white/20">v{health.data.version}</span>
+                  <span className="text-[10px] text-white/20">v{health.data.version}</span>
                 )}
               </div>
 
@@ -316,7 +343,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                       {emotionalAnalysis?.emotion?.toUpperCase() || 'NEUTRAL'}
                     </div>
                     <p className="text-nexus-silver text-sm">
-                      Confianza: {emotionalAnalysis?.confidence ? `${Math.round(emotionalAnalysis.confidence * 100)}%` : 'N/A'}
+                      Confianza:{' '}
+                      {emotionalAnalysis?.confidence
+                        ? `${Math.round(emotionalAnalysis.confidence * 100)}%`
+                        : 'N/A'}
                     </p>
                   </div>
 
@@ -334,7 +364,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                       <h3 className="text-lg font-semibold text-white">Suscripción</h3>
                       <Shield className="w-5 h-5 text-nexus-gold" />
                     </div>
-                    <div className="text-3xl font-bold text-white uppercase">{user.subscription}</div>
+                    <div className="text-3xl font-bold text-white uppercase">
+                      {user.subscription}
+                    </div>
                     <p className="text-nexus-silver text-sm">Plan actual</p>
                   </div>
                 </div>

@@ -55,7 +55,6 @@ const DemoDashboard = lazy(() =>
 );
 import { ContactModal } from './components/ContactModal';
 
-
 // ============================================
 // LAZY LOAD: Non-critical widgets & overlays
 // ============================================
@@ -283,4 +282,4 @@ export const AppContent = ({
       </Suspense>
     </div>
   );
-};;
+};

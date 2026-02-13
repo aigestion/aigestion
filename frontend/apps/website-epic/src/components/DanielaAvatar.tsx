@@ -12,18 +12,18 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
   size = 'md',
   isSpeaking = false,
   volume = 0,
-  onClick
+  onClick,
 }) => {
   const sizeClasses = {
     sm: 'w-12 h-12',
     md: 'w-24 h-24',
     lg: 'w-48 h-48',
-    xl: 'w-64 h-64'
+    xl: 'w-64 h-64',
   };
 
   // Dynamic glow based on volume
-  const glowScale = 1 + (volume * 0.8);
-  const glowOpacity = 0.1 + (volume * 0.5);
+  const glowScale = 1 + volume * 0.8;
+  const glowOpacity = 0.1 + volume * 0.5;
 
   return (
     <div className="relative group cursor-pointer" onClick={onClick}>
@@ -34,7 +34,7 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{
               scale: glowScale,
-              opacity: glowOpacity
+              opacity: glowOpacity,
             }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 15 }}
@@ -43,7 +43,9 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
         )}
       </AnimatePresence>
 
-      <div className={`${sizeClasses[size]} relative z-10 rounded-full border border-white/10 p-1.5 bg-nexus-obsidian/40 backdrop-blur-xl overflow-hidden transition-all duration-500 group-hover:scale-105 group-hover:border-nexus-violet-glow/50 shadow-2xl`}>
+      <div
+        className={`${sizeClasses[size]} relative z-10 rounded-full border border-white/10 p-1.5 bg-nexus-obsidian/40 backdrop-blur-xl overflow-hidden transition-all duration-500 group-hover:scale-105 group-hover:border-nexus-violet-glow/50 shadow-2xl`}
+      >
         <div className="absolute inset-0 bg-radial-at-center from-white/10 to-transparent opacity-50" />
         <img
           src="/images/brand/icon.png"
@@ -65,7 +67,7 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
               <motion.div
                 key={idx}
                 animate={{
-                  height: [4, 4 + (volume * 16 * (i / 4)), 4]
+                  height: [4, 4 + volume * 16 * (i / 4), 4],
                 }}
                 transition={{ duration: 0.15, repeat: Infinity, delay: idx * 0.03 }}
                 className="w-1 bg-nexus-cyan-glow rounded-full shadow-[0_0_8px_rgba(34,211,238,0.5)]"
@@ -87,4 +89,3 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
     </div>
   );
 };
-

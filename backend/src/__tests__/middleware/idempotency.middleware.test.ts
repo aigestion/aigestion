@@ -80,7 +80,7 @@ describe('Idempotency Middleware', () => {
     expect(cache.set).toHaveBeenCalledWith(
       expect.stringContaining(key),
       { status: 200, body: mockBody },
-      { ttl: 86400 },
+      { ttl: 86400 }
     );
   });
 

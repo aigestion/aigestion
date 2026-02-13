@@ -104,13 +104,13 @@ function DemoDashboard() {
         </div>
       </div>
     </div>
-  `
+  `;
 }
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
-  const root = document.getElementById('demo-root')
+  const root = document.getElementById('demo-root');
   if (root) {
-    root.innerHTML = DemoDashboard()
+    root.innerHTML = DemoDashboard();
   }
-})
+});

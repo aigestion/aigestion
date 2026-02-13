@@ -11,17 +11,20 @@ export class VoiceBiometricsService {
    */
   public async generateVoiceHash(audioBuffer: Buffer): Promise<string> {
     logger.info({ size: audioBuffer.length }, '[VoiceBiometrics] Generating biometric signature');
-    
+
     try {
       // 1. "Feature Extraction" (Simplified God-Mode implementation)
       // In reality, we'd use a library like 'node-canvas' for spectrograms or 'ffmpeg' for normalization
       // Here we use a rolling window hash to simulate spectral permanence
       const hash = crypto.createHash('sha256');
       hash.update(audioBuffer);
-      
+
       const biometricKey = hash.digest('hex');
-      
-      logger.info({ biometricKey: biometricKey.substring(0, 8) + '...' }, '[VoiceBiometrics] Biometric key derived');
+
+      logger.info(
+        { biometricKey: biometricKey.substring(0, 8) + '...' },
+        '[VoiceBiometrics] Biometric key derived'
+      );
       return biometricKey;
     } catch (error) {
       logger.error('[VoiceBiometrics] Failed to process audio:', error);
@@ -34,7 +37,7 @@ export class VoiceBiometricsService {
    */
   public async verifyVoiceprint(storedHash: string, challengeAudio: Buffer): Promise<boolean> {
     const challengeHash = await this.generateVoiceHash(challengeAudio);
-    
+
     // In a fuzzy biometric world, we'd use a similarity score.
     // In our Zero-Trust Sovereign Hub, we require high-fidelity matches for Phase 13.
     // (Note: This is a placeholder for a more complex similarity algorithm like DTW)

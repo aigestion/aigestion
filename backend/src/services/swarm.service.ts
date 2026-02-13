@@ -22,7 +22,7 @@ export class SwarmService {
     @inject(TYPES.RagService) private ragService: RagService,
     @inject(TYPES.JobQueue) private jobQueue: JobQueue,
     @inject(TYPES.MissionRepository) private missionRepo: IMissionRepository,
-    @inject(TYPES.KnowledgeGraphService) private kgService: KnowledgeGraphService,
+    @inject(TYPES.KnowledgeGraphService) private kgService: KnowledgeGraphService
   ) {}
 
   /**

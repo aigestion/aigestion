@@ -1,12 +1,11 @@
-
 import { motion } from 'framer-motion';
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Mic, StopCircle } from 'lucide-react';
 import { useDanielaVoice } from '../hooks/useDanielaVoice';
 
 export const DanielaConversationPanel: React.FC = () => {
-  const [messages, setMessages] = useState<{role: 'ai' | 'user', text: string}[]>([
-    { role: 'ai', text: 'Hola, soy Daniela. ¿En qué puedo ayudarte hoy?' }
+  const [messages, setMessages] = useState<{ role: 'ai' | 'user'; text: string }[]>([
+    { role: 'ai', text: 'Hola, soy Daniela. ¿En qué puedo ayudarte hoy?' },
   ]);
   const [input, setInput] = useState('');
   const { isListening, transcript, isSpeaking, toggleListening, speak } = useDanielaVoice();
@@ -14,7 +13,7 @@ export const DanielaConversationPanel: React.FC = () => {
 
   useEffect(() => {
     if (transcript) {
-        setInput(transcript);
+      setInput(transcript);
     }
   }, [transcript]);
 
@@ -30,16 +29,16 @@ export const DanielaConversationPanel: React.FC = () => {
 
     // Simulate AI response
     setTimeout(() => {
-        const responses = [
-            "Entendido. Estoy procesando esa solicitud.",
-            "He actualizado los parámetros del sistema según tus indicaciones.",
-            "Analizando los datos... Aquí tienes el reporte.",
-            "Excelente elección. Procediendo con la ejecución.",
-            "Sistemas nominales. ¿Deseas algo más?"
-        ];
-        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-        setMessages(prev => [...prev, { role: 'ai', text: randomResponse }]);
-        speak(randomResponse);
+      const responses = [
+        'Entendido. Estoy procesando esa solicitud.',
+        'He actualizado los parámetros del sistema según tus indicaciones.',
+        'Analizando los datos... Aquí tienes el reporte.',
+        'Excelente elección. Procediendo con la ejecución.',
+        'Sistemas nominales. ¿Deseas algo más?',
+      ];
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      setMessages(prev => [...prev, { role: 'ai', text: randomResponse }]);
+      speak(randomResponse);
     }, 1000);
   };
 
@@ -54,7 +53,7 @@ export const DanielaConversationPanel: React.FC = () => {
                 src="/images/daniela-avatar.jpg"
                 alt="Daniela"
                 className="w-full h-full object-cover"
-                onError={(e) =>
+                onError={e =>
                   (e.currentTarget.src =
                     'https://ui-avatars.com/api/?name=Daniela+AI&background=00f5ff&color=fff')
                 }
@@ -129,8 +128,8 @@ export const DanielaConversationPanel: React.FC = () => {
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && handleSend()}
             placeholder="Escribe un mensaje..."
             className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-3 text-white text-sm focus:outline-none focus:border-nexus-cyan/50 placeholder-gray-500"
           />
@@ -145,4 +144,3 @@ export const DanielaConversationPanel: React.FC = () => {
     </div>
   );
 };
-

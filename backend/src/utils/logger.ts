@@ -60,4 +60,3 @@ const internalLogger = {
 
 export const logger = internalLogger;
 export default internalLogger;
-

@@ -54,25 +54,25 @@ jobs:
           script: |
             const fs = require('fs');
             const results = JSON.parse(fs.readFileSync('.lighthouseci/lhr.json', 'utf8'));
-            
+
             const score = Math.round(results.categories.performance.score * 100);
             const lcp = Math.round(results.audits['largest-contentful-paint'].numericValue);
             const fid = Math.round(results.audits['first-input-delay'].numericValue);
             const cls = Math.round(results.audits['cumulative-layout-shift'].numericValue * 1000) / 1000;
-            
+
             const comment = `
             ## 🚀 Performance Audit Results
-            
+
             | Metric | Score | Status |
             |--------|-------|--------|
             | **Performance** | ${score}/100 | ${score >= 90 ? '✅' : score >= 80 ? '⚠️' : '❌'} |
             | **LCP** | ${lcp}ms | ${lcp <= 2500 ? '✅' : lcp <= 4000 ? '⚠️' : '❌'} |
             | **FID** | ${fid}ms | ${fid <= 100 ? '✅' : fid <= 300 ? '⚠️' : '❌'} |
             | **CLS** | ${cls} | ${cls <= 0.1 ? '✅' : cls <= 0.25 ? '⚠️' : '❌'} |
-            
+
             ${score >= 90 ? '🎉 Excellent performance!' : score >= 80 ? '👍 Good performance!' : '⚠️ Performance needs improvement!'}
             `;
-            
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -135,7 +135,7 @@ jobs:
           cd frontend/apps/website-epic/dist
           BUNDLE_SIZE=$(du -k . | tail -1 | awk '{print $1}')
           echo "Bundle size: ${BUNDLE_SIZE}KB"
-          
+
           if [ $BUNDLE_SIZE -gt 2048 ]; then
             echo "❌ Bundle size exceeds 2MB limit (${BUNDLE_SIZE}KB)"
             exit 1

@@ -16,7 +16,6 @@ Before running the application, start the AI Toolkit trace collector:
 AI Toolkit: Open Tracing
 ```
 
-
 This will start the OTLP collector at `http://localhost:4318`.
 
 ### 2. Configure Environment Variables
@@ -41,7 +40,6 @@ You should see:
 🔭 OpenTelemetry tracing initialized successfully
 📡 Sending traces to: http://localhost:4318
 ```
-
 
 ### 4. View Traces
 
@@ -163,7 +161,6 @@ OTEL_EXPORTER_OTLP_ENDPOINT=https://your-region.monitor.azure.com
    🔭 OpenTelemetry tracing initialized successfully
    ```
 
-
 ### Application crashes on startup
 
 If tracing initialization fails, the app will continue without tracing (graceful degradation):
@@ -172,7 +169,6 @@ If tracing initialization fails, the app will continue without tracing (graceful
 ❌ Error initializing OpenTelemetry: [error details]
 ⚠️  Application will continue without tracing
 ```
-
 
 ### High overhead
 
@@ -186,7 +182,6 @@ If tracing causes performance issues, you can:
      process.exit(0); // Don't load tracing in production
    }
    ```
-
 
 2. **Adjust sampling rate** (future enhancement)
 
@@ -221,4 +216,3 @@ Access it through:
 5. ✅ Set meaningful span attributes for debugging
 6. ⚠️ Don't trace PII or sensitive data
 7. ⚠️ Disable or sample in high-traffic production environments
-

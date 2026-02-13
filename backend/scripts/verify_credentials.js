@@ -25,7 +25,7 @@ console.log('\n🔍 Check Credentials:\n');
 
 let missing = 0;
 
-requiredKeys.forEach((key) => {
+requiredKeys.forEach(key => {
   const val = envConfig[key];
   if (val && val.trim().length > 0) {
     if (val.startsWith('YOUR_') || val.includes('PLACEHOLDER')) {
@@ -43,7 +43,7 @@ requiredKeys.forEach((key) => {
 
 // Also check widely used ones
 const otherKeys = ['PORT', 'MONGODB_URI', 'JWT_SECRET'];
-otherKeys.forEach((key) => {
+otherKeys.forEach(key => {
   const val = envConfig[key];
   if (val && val.trim().length > 0) {
     console.log(`✅ ${key}: FOUND`);

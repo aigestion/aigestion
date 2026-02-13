@@ -303,7 +303,7 @@ export const RootQuery = new GraphQLObjectType({
       resolve: async (_obj, args) => {
         try {
           const { stdout } = await execAsync(
-            `git log -${args.limit} --pretty=format:"%H|%an|%ai|%s"`,
+            `git log -${args.limit} --pretty=format:"%H|%an|%ai|%s"`
           );
 
           return stdout

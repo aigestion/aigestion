@@ -16,7 +16,7 @@ export const enqueue = async (_name: string, _payload: any): Promise<void> => {
 
 export const processQueue = async (
   _name: string,
-  _handler: (payload: any) => Promise<void>,
+  _handler: (payload: any) => Promise<void>
 ): Promise<void> => {
   // No operation – placeholder for processing a queue.
 };

@@ -42,7 +42,7 @@ export class BrowserAgentTool {
     }
 
     logger.debug(
-      `[BrowserAgentTool] Connecting to browser at ${browserWSEndpoint.split('?')[0]}...`,
+      `[BrowserAgentTool] Connecting to browser at ${browserWSEndpoint.split('?')[0]}...`
     );
 
     try {
@@ -72,7 +72,7 @@ export class BrowserAgentTool {
 
       // Set some comprehensive headers/settings for better stealth
       await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
       );
 
       for (let i = 0; i < actions.length; i++) {
@@ -181,7 +181,7 @@ export class BrowserAgentTool {
    */
   async screenshot(url: string, outputPath?: string): Promise<string> {
     return this.executeTask([{ action: 'navigate', url }, { action: 'screenshot' }]).then(res =>
-      res.success ? 'Screenshot captured' : 'Screenshot failed',
+      res.success ? 'Screenshot captured' : 'Screenshot failed'
     );
   }
 }

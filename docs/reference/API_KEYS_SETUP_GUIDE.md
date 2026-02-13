@@ -4,26 +4,29 @@ Esta guía te ayudará a obtener y configurar todas las API keys necesarias para
 
 ## 📋 API Keys Requeridas
 
-| Servicio | Propósito | Ubicación en NEXUS V1 | Requerido |
-|----------|-----------|------------------|-----------|
-| **Azure OpenAI** | Evaluadores LLM-as-Judge | `evaluation/NEXUS V1/.env` | ✅ Sí |
-| **Google Gemini** | API de generación de contenido | `server/.env` | ✅ Sí |
-| **MongoDB** | Base de datos | `server/.env` | ✅ Sí |
+| Servicio          | Propósito                      | Ubicación en NEXUS V1      | Requerido |
+| ----------------- | ------------------------------ | -------------------------- | --------- |
+| **Azure OpenAI**  | Evaluadores LLM-as-Judge       | `evaluation/NEXUS V1/.env` | ✅ Sí     |
+| **Google Gemini** | API de generación de contenido | `server/.env`              | ✅ Sí     |
+| **MongoDB**       | Base de datos                  | `server/.env`              | ✅ Sí     |
 
 ---
 
 ## 1️⃣ Azure OpenAI (Para Evaluación)
 
 ### ¿Para qué se usa?
+
 Los evaluadores de calidad (CoherenceEvaluator, FluencyEvaluator, RelevanceEvaluator) usan Azure OpenAI como "juez LLM" para evaluar las respuestas generadas por Gemini.
 
 ### Cómo obtener las credenciales
 
 #### Paso 1: Acceder al Azure Portal
+
 1. Ve a [portal.azure.com](https://portal.azure.com)
 2. Inicia sesión con tu cuenta Microsoft/Azure
 
 #### Paso 2: Crear recurso Azure OpenAI (si no existe)
+
 1. En el portal, haz clic en **"Crear un recurso"**
 2. Busca **"Azure OpenAI"**
 3. Haz clic en **"Crear"**
@@ -37,6 +40,7 @@ Los evaluadores de calidad (CoherenceEvaluator, FluencyEvaluator, RelevanceEvalu
 6. Espera 2-3 minutos a que se complete el despliegue
 
 #### Paso 3: Obtener Endpoint y API Key
+
 1. Una vez creado, ve a tu recurso Azure OpenAI
 2. En el menú lateral, selecciona **"Keys and Endpoint"**
 3. Copia los siguientes valores:
@@ -44,6 +48,7 @@ Los evaluadores de calidad (CoherenceEvaluator, FluencyEvaluator, RelevanceEvalu
    - **KEY 1:** Tu API key (algo como `abc123def456...`)
 
 #### Paso 4: Desplegar modelo GPT-4
+
 1. En el menú lateral, ve a **"Model deployments"** (o haz clic en "Go to Azure OpenAI Studio")
 2. En Azure OpenAI Studio, haz clic en **"Deployments"**
 3. Haz clic en **"Create new deployment"**
@@ -54,6 +59,7 @@ Los evaluadores de calidad (CoherenceEvaluator, FluencyEvaluator, RelevanceEvalu
 5. Haz clic en **"Create"**
 
 #### Paso 5: Configurar en NEXUS V1
+
 Edita `evaluation/NEXUS V1/.env`:
 
 ```bash
@@ -69,10 +75,10 @@ AZURE_OPENAI_DEPLOYMENT=gpt-4
 
 ### 💰 Costos Estimados
 
-| Modelo | Precio por 1K tokens | Evaluación completa (8 queries) |
-|--------|---------------------|--------------------------------|
-| GPT-4 | ~$0.03 input / $0.06 output | ~$0.10 - $0.20 |
-| GPT-3.5-turbo | ~$0.0005 input / $0.0015 output | ~$0.01 - $0.02 |
+| Modelo        | Precio por 1K tokens            | Evaluación completa (8 queries) |
+| ------------- | ------------------------------- | ------------------------------- |
+| GPT-4         | ~$0.03 input / $0.06 output     | ~$0.10 - $0.20                  |
+| GPT-3.5-turbo | ~$0.0005 input / $0.0015 output | ~$0.01 - $0.02                  |
 
 **Recomendación:** Usar GPT-4 para evaluaciones de producción, GPT-3.5-turbo para desarrollo.
 
@@ -81,22 +87,26 @@ AZURE_OPENAI_DEPLOYMENT=gpt-4
 ## 2️⃣ Google Gemini API (Para Generación)
 
 ### ¿Para qué se usa?
+
 El backend de NEXUS V1 usa Gemini para generar respuestas de texto e imágenes en el endpoint `/api/ai/generate`.
 
 ### Cómo obtener la API Key
 
 #### Paso 1: Acceder a Google AI Studio
+
 1. Ve a [aistudio.google.com](https://aistudio.google.com)
 2. Inicia sesión con tu cuenta Google
 3. Acepta los términos de servicio si es la primera vez
 
 #### Paso 2: Crear API Key
+
 1. En el menú lateral, haz clic en **"Get API key"**
 2. Haz clic en **"Create API key"**
 3. Selecciona un proyecto de Google Cloud (o crea uno nuevo)
 4. Copia la API key generada (formato: `AIza...`)
 
 #### Paso 3: Configurar en NEXUS V1
+
 Edita `server/.env`:
 
 ```bash
@@ -105,6 +115,7 @@ GEMINI_API_KEY=AIzaSyABC123...
 ```
 
 ### 📍 Ubicación alternativa en Google Cloud Console
+
 Si prefieres usar Google Cloud Console:
 
 1. Ve a [console.cloud.google.com](https://console.cloud.google.com)
@@ -115,10 +126,10 @@ Si prefieres usar Google Cloud Console:
 
 ### 💰 Costos Estimados
 
-| Modelo | Precio | Límite gratuito |
-|--------|--------|-----------------|
-| Gemini Pro | $0.00025 / 1K chars | 60 requests/min |
-| Gemini Pro Vision | $0.0025 / imagen | 60 requests/min |
+| Modelo            | Precio              | Límite gratuito |
+| ----------------- | ------------------- | --------------- |
+| Gemini Pro        | $0.00025 / 1K chars | 60 requests/min |
+| Gemini Pro Vision | $0.0025 / imagen    | 60 requests/min |
 
 **Nota:** Google ofrece un tier gratuito generoso para desarrollo.
 
@@ -127,22 +138,26 @@ Si prefieres usar Google Cloud Console:
 ## 3️⃣ MongoDB (Base de Datos)
 
 ### ¿Para qué se usa?
+
 NEXUS V1 almacena datos de usuarios, productos, carritos, etc. en MongoDB.
 
 ### Opción A: MongoDB Atlas (Cloud - Recomendado)
 
 #### Paso 1: Crear cuenta en MongoDB Atlas
+
 1. Ve a [mongodb.com/cloud/atlas](https://www.mongodb.com/cloud/atlas)
 2. Haz clic en **"Try Free"**
 3. Regístrate con Google/GitHub o email
 
 #### Paso 2: Crear cluster
+
 1. Selecciona **"M0 Sandbox"** (gratis)
 2. Elige región cercana
 3. Nombre del cluster: `NEXUS V1-cluster`
 4. Haz clic en **"Create Cluster"**
 
 #### Paso 3: Configurar acceso
+
 1. Crea un usuario de base de datos:
    - Username: `NEXUS V1-admin`
    - Password: Genera uno seguro (anótalo)
@@ -152,6 +167,7 @@ NEXUS V1 almacena datos de usuarios, productos, carritos, etc. en MongoDB.
    - Para producción, agrega IPs específicas
 
 #### Paso 4: Obtener Connection String
+
 1. Haz clic en **"Connect"** en tu cluster
 2. Selecciona **"Connect your application"**
 3. Copia el connection string:
@@ -161,6 +177,7 @@ NEXUS V1 almacena datos de usuarios, productos, carritos, etc. en MongoDB.
 4. Reemplaza `<username>` y `<password>` con tus credenciales
 
 #### Paso 5: Configurar en NEXUS V1
+
 Edita `server/.env`:
 
 ```bash
@@ -202,6 +219,7 @@ cat evaluation/NEXUS V1/.env
 ### 2. Test de conectividad
 
 #### Test Azure OpenAI
+
 ```bash
 cd evaluation/NEXUS V1
 
@@ -233,6 +251,7 @@ python test_azure_openai.py
 ```
 
 #### Test Gemini API
+
 ```bash
 cd server
 
@@ -258,6 +277,7 @@ node test_gemini.js
 ```
 
 #### Test MongoDB
+
 ```bash
 cd server
 
@@ -283,6 +303,7 @@ node test_mongo.js
 ## 🔐 Seguridad y Mejores Prácticas
 
 ### ✅ DO (Hacer)
+
 - ✅ Usar variables de entorno para todas las keys
 - ✅ Agregar `.env` a `.gitignore` (ya está configurado)
 - ✅ Rotar keys regularmente (cada 3-6 meses)
@@ -291,6 +312,7 @@ node test_mongo.js
 - ✅ Habilitar alertas de uso en Azure/Google Cloud
 
 ### ❌ DON'T (No hacer)
+
 - ❌ **NUNCA** commitear archivos `.env` a Git
 - ❌ **NUNCA** compartir keys en Slack/Discord público
 - ❌ **NUNCA** hardcodear keys en el código
@@ -302,6 +324,7 @@ node test_mongo.js
 ## 📊 Archivo de Configuración Completo
 
 ### `server/.env` (Backend)
+
 ```bash
 # Google Gemini API
 GEMINI_API_KEY=AIzaSyABC123...
@@ -322,6 +345,7 @@ OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
 ```
 
 ### `evaluation/NEXUS V1/.env` (Evaluación)
+
 ```bash
 # Azure OpenAI
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
@@ -337,29 +361,37 @@ NEXUS V1_API_URL=http://localhost:3000
 ## 🆘 Solución de Problemas
 
 ### Error: "Invalid API key"
+
 **Causa:** Key incorrecta o mal formateada
 **Solución:**
+
 - Verifica que copiaste la key completa (sin espacios)
 - Regenera la key en el portal correspondiente
 - Verifica que no haya caracteres especiales mal escapados
 
 ### Error: "Model deployment not found"
+
 **Causa:** El nombre del deployment no coincide
 **Solución:**
+
 - Ve a Azure OpenAI Studio → Deployments
 - Verifica el nombre exacto del deployment
 - Actualiza `AZURE_OPENAI_DEPLOYMENT` en `.env`
 
 ### Error: "Connection timeout" (MongoDB)
+
 **Causa:** IP no whitelisted o connection string incorrecta
 **Solución:**
+
 - En MongoDB Atlas, verifica la whitelist de IPs
 - Verifica que el connection string tenga `authSource=admin`
 - Prueba con `0.0.0.0/0` para desarrollo
 
 ### Error: "Rate limit exceeded"
+
 **Causa:** Demasiadas requests en poco tiempo
 **Solución:**
+
 - Espera unos minutos y reintenta
 - Verifica los límites de tu tier (Free vs Paid)
 - Para Azure: Considera upgrade a tier superior
@@ -376,4 +408,3 @@ NEXUS V1_API_URL=http://localhost:3000
 ---
 
 **✅ Configuración completa!** Una vez que hayas configurado todos los archivos `.env`, puedes proceder a ejecutar NEXUS V1 y las evaluaciones.
-

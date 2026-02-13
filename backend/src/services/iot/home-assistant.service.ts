@@ -60,7 +60,7 @@ export class HomeAssistantService {
     config: HAConfig,
     domain: string,
     service: string,
-    serviceData: any = {},
+    serviceData: any = {}
   ): Promise<any> {
     try {
       const response = await axios.post(
@@ -71,7 +71,7 @@ export class HomeAssistantService {
             Authorization: `Bearer ${config.accessToken}`,
             'Content-Type': 'application/json',
           },
-        },
+        }
       );
       return response.data;
     } catch (error: any) {

@@ -174,37 +174,49 @@ export const createStateMachines = {
   auth: (): StateMachineConfig => ({
     initialState: 'idle',
     states: new Map([
-      ['idle', {
-        name: 'idle',
-        transitions: new Map([
-          ['login', 'loading'],
-          ['register', 'loading'],
-        ]),
-      }],
-      ['loading', {
-        name: 'loading',
-        onEnter: () => console.log('Auth loading...'),
-        transitions: new Map([
-          ['success', 'authenticated'],
-          ['error', 'error'],
-        ]),
-      }],
-      ['authenticated', {
-        name: 'authenticated',
-        onEnter: () => console.log('User authenticated'),
-        transitions: new Map([
-          ['logout', 'idle'],
-          ['tokenExpired', 'idle'],
-        ]),
-      }],
-      ['error', {
-        name: 'error',
-        onEnter: () => console.log('Auth error'),
-        transitions: new Map([
-          ['retry', 'loading'],
-          ['logout', 'idle'],
-        ]),
-      }],
+      [
+        'idle',
+        {
+          name: 'idle',
+          transitions: new Map([
+            ['login', 'loading'],
+            ['register', 'loading'],
+          ]),
+        },
+      ],
+      [
+        'loading',
+        {
+          name: 'loading',
+          onEnter: () => console.log('Auth loading...'),
+          transitions: new Map([
+            ['success', 'authenticated'],
+            ['error', 'error'],
+          ]),
+        },
+      ],
+      [
+        'authenticated',
+        {
+          name: 'authenticated',
+          onEnter: () => console.log('User authenticated'),
+          transitions: new Map([
+            ['logout', 'idle'],
+            ['tokenExpired', 'idle'],
+          ]),
+        },
+      ],
+      [
+        'error',
+        {
+          name: 'error',
+          onEnter: () => console.log('Auth error'),
+          transitions: new Map([
+            ['retry', 'loading'],
+            ['logout', 'idle'],
+          ]),
+        },
+      ],
     ]),
     onTransition: (from, to, event) => {
       console.log(`Auth transition: ${from} -> ${to} (${event})`);
@@ -215,43 +227,56 @@ export const createStateMachines = {
   form: (): StateMachineConfig => ({
     initialState: 'pristine',
     states: new Map([
-      ['pristine', {
-        name: 'pristine',
-        transitions: new Map([
-          ['change', 'dirty'],
-          ['submit', 'validating'],
-        ]),
-      }],
-      ['dirty', {
-        name: 'dirty',
-        transitions: new Map([
-          ['submit', 'validating'],
-          ['reset', 'pristine'],
-        ]),
-      }],
-      ['validating', {
-        name: 'validating',
-        onEnter: () => console.log('Validating form...'),
-        transitions: new Map([
-          ['valid', 'submitting'],
-          ['invalid', 'dirty'],
-        ]),
-      }],
-      ['submitting', {
-        name: 'submitting',
-        onEnter: () => console.log('Submitting form...'),
-        transitions: new Map([
-          ['success', 'submitted'],
-          ['error', 'dirty'],
-        ]),
-      }],
-      ['submitted', {
-        name: 'submitted',
-        onEnter: () => console.log('Form submitted successfully'),
-        transitions: new Map([
-          ['reset', 'pristine'],
-        ]),
-      }],
+      [
+        'pristine',
+        {
+          name: 'pristine',
+          transitions: new Map([
+            ['change', 'dirty'],
+            ['submit', 'validating'],
+          ]),
+        },
+      ],
+      [
+        'dirty',
+        {
+          name: 'dirty',
+          transitions: new Map([
+            ['submit', 'validating'],
+            ['reset', 'pristine'],
+          ]),
+        },
+      ],
+      [
+        'validating',
+        {
+          name: 'validating',
+          onEnter: () => console.log('Validating form...'),
+          transitions: new Map([
+            ['valid', 'submitting'],
+            ['invalid', 'dirty'],
+          ]),
+        },
+      ],
+      [
+        'submitting',
+        {
+          name: 'submitting',
+          onEnter: () => console.log('Submitting form...'),
+          transitions: new Map([
+            ['success', 'submitted'],
+            ['error', 'dirty'],
+          ]),
+        },
+      ],
+      [
+        'submitted',
+        {
+          name: 'submitted',
+          onEnter: () => console.log('Form submitted successfully'),
+          transitions: new Map([['reset', 'pristine']]),
+        },
+      ],
     ]),
   }),
 
@@ -259,35 +284,45 @@ export const createStateMachines = {
   api: (): StateMachineConfig => ({
     initialState: 'idle',
     states: new Map([
-      ['idle', {
-        name: 'idle',
-        transitions: new Map([
-          ['request', 'loading'],
-        ]),
-      }],
-      ['loading', {
-        name: 'loading',
-        onEnter: () => console.log('Loading...'),
-        transitions: new Map([
-          ['success', 'success'],
-          ['error', 'error'],
-          ['cancel', 'idle'],
-        ]),
-      }],
-      ['success', {
-        name: 'success',
-        transitions: new Map([
-          ['request', 'loading'],
-          ['reset', 'idle'],
-        ]),
-      }],
-      ['error', {
-        name: 'error',
-        transitions: new Map([
-          ['retry', 'loading'],
-          ['reset', 'idle'],
-        ]),
-      }],
+      [
+        'idle',
+        {
+          name: 'idle',
+          transitions: new Map([['request', 'loading']]),
+        },
+      ],
+      [
+        'loading',
+        {
+          name: 'loading',
+          onEnter: () => console.log('Loading...'),
+          transitions: new Map([
+            ['success', 'success'],
+            ['error', 'error'],
+            ['cancel', 'idle'],
+          ]),
+        },
+      ],
+      [
+        'success',
+        {
+          name: 'success',
+          transitions: new Map([
+            ['request', 'loading'],
+            ['reset', 'idle'],
+          ]),
+        },
+      ],
+      [
+        'error',
+        {
+          name: 'error',
+          transitions: new Map([
+            ['retry', 'loading'],
+            ['reset', 'idle'],
+          ]),
+        },
+      ],
     ]),
   }),
 
@@ -295,32 +330,36 @@ export const createStateMachines = {
   modal: (): StateMachineConfig => ({
     initialState: 'closed',
     states: new Map([
-      ['closed', {
-        name: 'closed',
-        transitions: new Map([
-          ['open', 'opening'],
-        ]),
-      }],
-      ['opening', {
-        name: 'opening',
-        onEnter: () => console.log('Opening modal...'),
-        transitions: new Map([
-          ['opened', 'open'],
-        ]),
-      }],
-      ['open', {
-        name: 'open',
-        transitions: new Map([
-          ['close', 'closing'],
-        ]),
-      }],
-      ['closing', {
-        name: 'closing',
-        onEnter: () => console.log('Closing modal...'),
-        transitions: new Map([
-          ['closed', 'closed'],
-        ]),
-      }],
+      [
+        'closed',
+        {
+          name: 'closed',
+          transitions: new Map([['open', 'opening']]),
+        },
+      ],
+      [
+        'opening',
+        {
+          name: 'opening',
+          onEnter: () => console.log('Opening modal...'),
+          transitions: new Map([['opened', 'open']]),
+        },
+      ],
+      [
+        'open',
+        {
+          name: 'open',
+          transitions: new Map([['close', 'closing']]),
+        },
+      ],
+      [
+        'closing',
+        {
+          name: 'closing',
+          onEnter: () => console.log('Closing modal...'),
+          transitions: new Map([['closed', 'closed']]),
+        },
+      ],
     ]),
   }),
 };
@@ -359,10 +398,7 @@ export function StateMachineVisualizer({
   const availableTransitions = machine.getAvailableTransitions();
 
   return (
-    <div
-      className="border border-gray-300 rounded-lg p-4 bg-white"
-      style={{ width, height }}
-    >
+    <div className="border border-gray-300 rounded-lg p-4 bg-white" style={{ width, height }}>
       <h3 className="font-bold mb-2">State Machine</h3>
       <div className="mb-2">
         <span className="font-semibold">Current State: </span>
@@ -383,20 +419,14 @@ export function StateMachineVisualizer({
       </div>
       <div>
         <span className="font-semibold">History: </span>
-        <div className="text-xs text-gray-600 mt-1">
-          {machine.getHistory().join(' → ')}
-        </div>
+        <div className="text-xs text-gray-600 mt-1">{machine.getHistory().join(' → ')}</div>
       </div>
     </div>
   );
 }
 
 // State machine debugger component
-export function StateMachineDebugger({
-  machine,
-}: {
-  readonly machine: StateMachine;
-}) {
+export function StateMachineDebugger({ machine }: { readonly machine: StateMachine }) {
   const [logs, setLogs] = useState<string[]>([]);
 
   useEffect(() => {

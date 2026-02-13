@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react'
-import { Card, CardHeader, CardBody, CardFooter } from './Card'
+import type { Meta, StoryObj } from '@storybook/react';
+import { Card, CardHeader, CardBody, CardFooter } from './Card';
 
 const meta: Meta<typeof Card> = {
   title: 'Design System/Card',
@@ -24,10 +24,10 @@ const meta: Meta<typeof Card> = {
       control: 'boolean',
     },
   },
-}
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 // Default
 export const Default: Story = {
@@ -39,7 +39,7 @@ export const Default: Story = {
       </CardBody>
     </Card>
   ),
-}
+};
 
 // Variants
 export const Elevated: Story = {
@@ -51,7 +51,7 @@ export const Elevated: Story = {
       </CardBody>
     </Card>
   ),
-}
+};
 
 export const Outlined: Story = {
   render: () => (
@@ -62,7 +62,7 @@ export const Outlined: Story = {
       </CardBody>
     </Card>
   ),
-}
+};
 
 export const Glass: Story = {
   render: () => (
@@ -73,7 +73,7 @@ export const Glass: Story = {
       </CardBody>
     </Card>
   ),
-}
+};
 
 export const Neon: Story = {
   render: () => (
@@ -84,7 +84,7 @@ export const Neon: Story = {
       </CardBody>
     </Card>
   ),
-}
+};
 
 export const Gaming: Story = {
   render: () => (
@@ -95,7 +95,7 @@ export const Gaming: Story = {
       </CardBody>
     </Card>
   ),
-}
+};
 
 // Sizes
 export const Sizes: Story = {
@@ -127,7 +127,7 @@ export const Sizes: Story = {
       </Card>
     </div>
   ),
-}
+};
 
 // Complete Card
 export const Complete: Story = {
@@ -146,13 +146,17 @@ export const Complete: Story = {
       </CardHeader>
       <CardBody>
         <p className="text-gray-600 mb-4">
-          This is a complete card example with header, body, and footer sections. 
-          It demonstrates how to structure a card with multiple components.
+          This is a complete card example with header, body, and footer sections. It demonstrates
+          how to structure a card with multiple components.
         </p>
         <div className="flex gap-2">
           <span className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">React</span>
-          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">TypeScript</span>
-          <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">Design</span>
+          <span className="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+            TypeScript
+          </span>
+          <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded-full">
+            Design
+          </span>
         </div>
       </CardBody>
       <CardFooter>
@@ -165,7 +169,7 @@ export const Complete: Story = {
       </CardFooter>
     </Card>
   ),
-}
+};
 
 // Interactive Cards
 export const Interactive: Story = {
@@ -191,7 +195,7 @@ export const Interactive: Story = {
       </Card>
     </div>
   ),
-}
+};
 
 // Gaming Cards
 export const GamingCards: Story = {
@@ -199,10 +203,14 @@ export const GamingCards: Story = {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card variant="gaming">
         <CardHeader>
-          <h3 className="text-xl font-bold text-white uppercase tracking-wider">🎮 Achievement Unlocked</h3>
+          <h3 className="text-xl font-bold text-white uppercase tracking-wider">
+            🎮 Achievement Unlocked
+          </h3>
         </CardHeader>
         <CardBody>
-          <p className="text-white/80 mb-4">You've completed the first level! Ready for the next challenge?</p>
+          <p className="text-white/80 mb-4">
+            You've completed the first level! Ready for the next challenge?
+          </p>
           <div className="flex items-center justify-between">
             <span className="text-yellow-400 font-bold">+100 XP</span>
             <span className="text-white/60 text-sm">Level 1</span>
@@ -211,7 +219,9 @@ export const GamingCards: Story = {
       </Card>
       <Card variant="gaming">
         <CardHeader>
-          <h3 className="text-xl font-bold text-white uppercase tracking-wider">⚡ Power-Up Available</h3>
+          <h3 className="text-xl font-bold text-white uppercase tracking-wider">
+            ⚡ Power-Up Available
+          </h3>
         </CardHeader>
         <CardBody>
           <p className="text-white/80 mb-4">Double damage for 30 seconds! Use it wisely.</p>
@@ -223,4 +233,4 @@ export const GamingCards: Story = {
       </Card>
     </div>
   ),
-}
+};

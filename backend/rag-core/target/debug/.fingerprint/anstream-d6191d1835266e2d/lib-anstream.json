@@ -1,1 +1,28 @@
-{"rustc":2490638836439573635,"features":"[\"auto\", \"default\", \"wincon\"]","declared_features":"[\"auto\", \"default\", \"test\", \"wincon\"]","target":11278316191512382530,"profile":11679461194111479299,"path":11411276226558773492,"deps":[[384403243491392785,"colorchoice",false,2889003070018007508],[3838739200784931934,"anstyle_wincon",false,8073906841214578124],[5652275617566266604,"anstyle_query",false,13141195767295302521],[7483871650937086505,"anstyle",false,9879934186879886088],[7727459912076845739,"is_terminal_polyfill",false,18237763167907989555],[11410867133969439143,"anstyle_parse",false,18249672906109589686],[17716308468579268865,"utf8parse",false,11544458878905060188]],"local":[{"CheckDepInfo":{"dep_info":"debug\\.fingerprint\\anstream-d6191d1835266e2d\\dep-lib-anstream","checksum":false}}],"rustflags":[],"config":2069994364910194474,"compile_kind":0}
+{
+  "rustc": 2490638836439573635,
+  "features": "[\"auto\", \"default\", \"wincon\"]",
+  "declared_features": "[\"auto\", \"default\", \"test\", \"wincon\"]",
+  "target": 11278316191512382530,
+  "profile": 11679461194111479299,
+  "path": 11411276226558773492,
+  "deps": [
+    [384403243491392785, "colorchoice", false, 2889003070018007508],
+    [3838739200784931934, "anstyle_wincon", false, 8073906841214578124],
+    [5652275617566266604, "anstyle_query", false, 13141195767295302521],
+    [7483871650937086505, "anstyle", false, 9879934186879886088],
+    [7727459912076845739, "is_terminal_polyfill", false, 18237763167907989555],
+    [11410867133969439143, "anstyle_parse", false, 18249672906109589686],
+    [17716308468579268865, "utf8parse", false, 11544458878905060188]
+  ],
+  "local": [
+    {
+      "CheckDepInfo": {
+        "dep_info": "debug\\.fingerprint\\anstream-d6191d1835266e2d\\dep-lib-anstream",
+        "checksum": false
+      }
+    }
+  ],
+  "rustflags": [],
+  "config": 2069994364910194474,
+  "compile_kind": 0
+}

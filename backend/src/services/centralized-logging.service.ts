@@ -292,7 +292,7 @@ export class CentralizedLoggingService {
    */
   public async searchLogs(
     searchTerm: string,
-    options: Partial<LogQuery> = {},
+    options: Partial<LogQuery> = {}
   ): Promise<LogEntry[]> {
     try {
       const query: LogQuery = {
@@ -375,7 +375,7 @@ export class CentralizedLoggingService {
           `${log.duration ? `[duration:${log.duration}ms]` : ''} ` +
           `${
             Object.keys(log.metadata).length > 0 ? `[metadata:${JSON.stringify(log.metadata)}]` : ''
-          }`,
+          }`
       );
 
       await fs.appendFile(logFile, logLines.join('\n') + '\n');
@@ -523,7 +523,7 @@ export class CentralizedLoggingService {
           ...log,
           alertLevel: 'critical',
           sentAt: new Date(),
-        }),
+        })
       );
     } catch (error) {
       logger.error('Failed to send alert:', error);
@@ -547,7 +547,7 @@ export class CentralizedLoggingService {
       async () => {
         await this.rotateLogs();
       },
-      24 * 60 * 60 * 1000,
+      24 * 60 * 60 * 1000
     ); // Daily
   }
 

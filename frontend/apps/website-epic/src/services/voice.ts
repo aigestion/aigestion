@@ -8,12 +8,10 @@ export interface VoiceConfig {
   voiceId: string;
 }
 
-
-
 export class DanielaVoiceService {
   private static instance: DanielaVoiceService;
 
-  private constructor() { }
+  private constructor() {}
 
   public static getInstance(): DanielaVoiceService {
     if (!DanielaVoiceService.instance) {
@@ -34,9 +32,9 @@ export class DanielaVoiceService {
     // const audio = await elevenLabsClient.generate(text, DEFAULT_CONFIG);
     // audio.play();
 
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       setTimeout(() => {
-        console.log("[Daniela Voice] Audio playback finished.");
+        console.log('[Daniela Voice] Audio playback finished.');
         resolve();
       }, 2000);
     });

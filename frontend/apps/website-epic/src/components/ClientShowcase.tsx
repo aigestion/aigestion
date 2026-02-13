@@ -173,7 +173,7 @@ export const ClientShowcase: React.FC = () => {
                   </p>
 
                   <div className="grid grid-cols-3 gap-6 pt-6 border-t border-white/5">
-                    {item.stats.map((stat) => (
+                    {item.stats.map(stat => (
                       <div key={stat.label} className="text-center">
                         <div className={`text-xl font-bold ${stat.color}`}>{stat.value}</div>
                         <div className="text-[10px] text-gray-500 uppercase tracking-widest">

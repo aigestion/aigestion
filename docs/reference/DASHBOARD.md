@@ -197,6 +197,7 @@
 ## 🚀 CÓMO USAR ESTE SISTEMA
 
 ### Opción A: Inicio Rápido (5 min)
+
 ```powershell
 # 1. Abre el reporte consolidado
 code c:\Users\Alejandro\NEXUS V1\.agent\reports\consolidated-report.md
@@ -207,6 +208,7 @@ code c:\Users\Alejandro\NEXUS V1\.agent\reports\consolidated-report.md
 ```
 
 ### Opción B: Análisis Profundo (45 min)
+
 ```powershell
 # 1. Lee QUICK-START.md
 code c:\Users\Alejandro\NEXUS V1\.agent\QUICK-START.md
@@ -217,6 +219,7 @@ code c:\Users\Alejandro\NEXUS V1\.agent\QUICK-START.md
 ```
 
 ### Opción C: Re-análisis (1 min)
+
 ```powershell
 # Ejecutar nuevamente en 2-4 semanas
 cd c:\Users\Alejandro\NEXUS V1
@@ -341,6 +344,7 @@ FASE 5: VALIDACIÓN
 ## 🤝 INTEGRACIÓN CON TU FLUJO
 
 ### GitHub Issues
+
 ```powershell
 # Auto-crear issues desde recomendaciones
 gh issue create --title "🔒 Rate Limiting Implementation" \
@@ -348,22 +352,24 @@ gh issue create --title "🔒 Rate Limiting Implementation" \
 ```
 
 ### Jira
+
 Copy/paste el contenido de consolidated-report.md
 
 ### Confluence/Notion
+
 Exporta los MDfiles directamente
 
 ---
 
 ## 📞 SOPORTE & PERSONALIZACIÓN
 
-| Necesidad | Acción | Ubicación |
-|-----------|--------|-----------|
-| Modificar un agente | Edita el .agent.md | `.agent/*.agent.md` |
-| Agregar herramientas | Modifica section tools | `.agent/*.agent.md` |
-| Re-ejecutar análisis | Ejecuta script | `.\scripts/launch-multi-agent-team.ps1` |
-| Ver documentación completa | Lee README | `.agent/README.md` |
-| Guía rápida | Lee QUICK-START | `.agent/QUICK-START.md` |
+| Necesidad                  | Acción                 | Ubicación                               |
+| -------------------------- | ---------------------- | --------------------------------------- |
+| Modificar un agente        | Edita el .agent.md     | `.agent/*.agent.md`                     |
+| Agregar herramientas       | Modifica section tools | `.agent/*.agent.md`                     |
+| Re-ejecutar análisis       | Ejecuta script         | `.\scripts/launch-multi-agent-team.ps1` |
+| Ver documentación completa | Lee README             | `.agent/README.md`                      |
+| Guía rápida                | Lee QUICK-START        | `.agent/QUICK-START.md`                 |
 
 ---
 
@@ -382,4 +388,3 @@ Exporta los MDfiles directamente
 **Dashboard generado**: 2025-12-07
 **Sistema**: Agentes IA Autónomos para NEXUS V1
 **Estado**: ✅ OPERATIVO
-

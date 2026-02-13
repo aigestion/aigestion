@@ -23,7 +23,7 @@ export class AuthService {
     @inject(TYPES.VerifyEmailUseCase) private verifyEmailUseCase: VerifyEmailUseCase,
     @inject(TYPES.UpdateUserRoleUseCase) private updateUserRoleUseCase: UpdateUserRoleUseCase,
     @inject(TYPES.UpdateSubscriptionUseCase)
-    private updateSubscriptionUseCase: UpdateSubscriptionUseCase,
+    private updateSubscriptionUseCase: UpdateSubscriptionUseCase
   ) {}
 
   /**
@@ -92,7 +92,7 @@ export class AuthService {
   async refreshToken(
     token: string,
     ip: string,
-    userAgent: string,
+    userAgent: string
   ): Promise<{ user: IUser; accessToken: string; refreshToken: string }> {
     const user = await this.userRepository.findOne({ 'refreshTokens.token': token });
 
@@ -110,7 +110,7 @@ export class AuthService {
           if (compromisedUser) {
             // Invalidate ALL tokens for this family
             const newRefreshTokens = compromisedUser.refreshTokens.filter(
-              t => t.familyId !== decoded.familyId,
+              t => t.familyId !== decoded.familyId
             );
             await this.userRepository.update(compromisedUser.id, {
               refreshTokens: newRefreshTokens,

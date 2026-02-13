@@ -2,7 +2,6 @@
 
 ---
 
-
 ## 🐶 Pet Care
 
 - **Date:** February 12, 2026
@@ -14,4 +13,4 @@
 
 ## 🛠️ Upcoming Events
 
-*No other events at the moment.*
+_No other events at the moment._

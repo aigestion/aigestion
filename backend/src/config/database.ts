@@ -23,21 +23,20 @@ export const connectToDatabase = async (): Promise<void> => {
   }
 
   try {
-    const uri =
-      process.env.MONGODB_URI ||
-      process.env.MONGO_URI ||
-      mongo.uri;
+    const uri = process.env.MONGODB_URI || process.env.MONGO_URI || mongo.uri;
 
     if (!uri) {
       if (process.env.NODE_ENV === 'production') {
         logger.error('CRITICAL: MONGODB_URI/MONGO_URI is missing in PRODUCTION environment.');
         throw new Error('CRITICAL_DB_URI_MISSING_PROD');
       }
-      logger.warn('⚠️ No MongoDB URI provided. Using local development default if available or failing.');
+      logger.warn(
+        '⚠️ No MongoDB URI provided. Using local development default if available or failing.'
+      );
     }
 
     console.error(
-      `[DEBUG_DB] Attempting connection with URI: ${uri?.replace(/:([^@]+)@/, ':****@') || 'UNDEFINED'}`,
+      `[DEBUG_DB] Attempting connection with URI: ${uri?.replace(/:([^@]+)@/, ':****@') || 'UNDEFINED'}`
     );
 
     if (!uri) {

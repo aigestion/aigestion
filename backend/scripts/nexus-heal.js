@@ -8,7 +8,7 @@ const COLORS = {
   red: '\x1b[31m',
   yellow: '\x1b[33m',
   cyan: '\x1b[36m',
-  bold: '\x1b[1m'
+  bold: '\x1b[1m',
 };
 
 function log(msg, color = COLORS.reset) {
@@ -35,7 +35,7 @@ function heal() {
     path.join(rootDir, 'node_modules'),
     path.join(rootDir, 'package-lock.json'),
     path.join(rootDir, 'pnpm-lock.yaml'),
-    path.join(rootDir, 'yarn.lock')
+    path.join(rootDir, 'yarn.lock'),
   ];
 
   toRemove.forEach(p => {

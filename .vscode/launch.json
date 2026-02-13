@@ -12,18 +12,10 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "--filter",
-        "NEXUS V1-dashboard-backend",
-        "run",
-        "dev"
-      ],
+      "runtimeArgs": ["--filter", "NEXUS V1-dashboard-backend", "run", "dev"],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ],
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "express:*"
@@ -36,10 +28,7 @@
       "request": "attach",
       "port": 9229,
       "restart": true,
-      "skipFiles": [
-        "<node_internals>/**",
-        "**/node_modules/**"
-      ]
+      "skipFiles": ["<node_internals>/**", "**/node_modules/**"]
     },
     {
       "name": "📦 Backend: Current File",
@@ -47,13 +36,8 @@
       "request": "launch",
       "program": "${file}",
       "cwd": "${workspaceFolder}/server",
-      "runtimeArgs": [
-        "-r",
-        "ts-node/register"
-      ],
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "skipFiles": ["<node_internals>/**"],
       "env": {
         "NODE_ENV": "development"
       }
@@ -121,11 +105,7 @@
       "type": "debugpy",
       "request": "launch",
       "module": "pytest",
-      "args": [
-        "-v",
-        "-s",
-        "${file}"
-      ],
+      "args": ["-v", "-s", "${file}"],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     },
@@ -137,11 +117,7 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": [
-        "${relativeFile}",
-        "--runInBand",
-        "--watchAll=false"
-      ],
+      "args": ["${relativeFile}", "--runInBand", "--watchAll=false"],
       "cwd": "${workspaceFolder}/server",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"
@@ -151,10 +127,7 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/.bin/jest",
-      "args": [
-        "--runInBand",
-        "--coverage"
-      ],
+      "args": ["--runInBand", "--coverage"],
       "cwd": "${workspaceFolder}/server",
       "console": "integratedTerminal"
     },
@@ -176,9 +149,7 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/.bin/cypress",
-      "args": [
-        "open"
-      ],
+      "args": ["open"],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal"
     }
@@ -189,18 +160,12 @@
   "compounds": [
     {
       "name": "🚀 Full Stack: Backend + Frontend",
-      "configurations": [
-        "🚀 Backend: Debug",
-        "🎨 Frontend: Chrome Debug"
-      ],
+      "configurations": ["🚀 Backend: Debug", "🎨 Frontend: Chrome Debug"],
       "stopAll": true
     },
     {
       "name": "🧪 Full Test Suite",
-      "configurations": [
-        "🧪 Jest: All Tests",
-        "🧪 Python: Pytest"
-      ],
+      "configurations": ["🧪 Jest: All Tests", "🧪 Python: Pytest"],
       "stopAll": true
     }
   ]

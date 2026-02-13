@@ -11,6 +11,7 @@ En lugar de luchar contra monstruos, **luchas contra problemas de negocios** con
 ## 🎮 Las Tres Zonas Principales del Juego
 
 ### 1. 🌐 Website Principal - La Ciudad Principal
+
 **URL**: `https://aigestion.net`
 
 Es como la **ciudad principal** de tu videojuego favorito. Aquí encuentras:
@@ -23,6 +24,7 @@ Es como la **ciudad principal** de tu videojuego favorito. Aquí encuentras:
 - ❓ **Preguntas Frecuentes**: Todas las respuestas que necesitas
 
 ### 2. 🎪 Panel de Demostración - El Parque de Juegos
+
 **URL**: `https://demo.aigestion.net`
 
 Es como el **parque de juegos donde puedes probar todo gratis**:
@@ -34,6 +36,7 @@ Es como el **parque de juegos donde puedes probar todo gratis**:
 - 🎁 **Tips para Jugar**: Aprende a usar la IA como un profesional
 
 ### 3. 💼 Portal de Cliente - Tu Base Secreta
+
 **URL**: `https://client.aigestion.net`
 
 Es tu **base secreta personal** donde controlas tus misiones:
@@ -49,7 +52,9 @@ Es tu **base secreta personal** donde controlas tus misiones:
 ## 🧠 Daniela IA - Tu Mejor Amiga Inteligente
 
 ### ¿Quién es Daniela?
+
 Imagina a la amiga más inteligente del mundo que:
+
 - 🧠 **Sabe de todo**: Como tener a Einstein, Google y Wikipedia en una persona
 - 🗣️ **Habla español**: Entiende perfectamente y responde como una persona
 - ⚡ **Es súper rápida**: Te responde en menos de 1 segundo
@@ -57,6 +62,7 @@ Imagina a la amiga más inteligente del mundo que:
 - 🌍 **Habla todos los idiomas**: Puede traducir cualquier cosa
 
 ### ¿Qué puede hacer Daniela?
+
 - 📝 **Escribir emails**: Como si fueran escritos por ti
 - 📊 **Analizar negocios**: Te dice cómo ganar más dinero
 - 🎓 **Enseñar cosas**: Explica temas complicados como si fueran fáciles
@@ -72,21 +78,25 @@ Imagina a la amiga más inteligente del mundo que:
 Piensa que el frontend está construido como **Lego super avanzado**:
 
 #### **React** - Las Piezas de Lego
+
 - Es como tener **cajas de Lego mágicas** que puedes reutilizar
 - Cada pieza (componente) tiene una función especial
 - Puedes combinarlas para crear cosas increíbles
 
 #### **TypeScript** - Las Instrucciones
+
 - Como el **librito de instrucciones** que viene con los Legos
 - Te dice exactamente dónde va cada pieza
 - Evita que cometas errores al construir
 
 #### **Vite** - El Constructor Rápido
+
 - Imagina un **robot que arma todo súper rápido** ⚡
 - En lugar de tardar horas, arma todo en segundos
 - Si cambias algo, lo rearma al instante
 
 #### **Tailwind CSS** - Los Pinturas y Decoraciones
+
 - Como tener **pinturas mágicas** que decoran todo automáticamente
 - Hace que todo se vea bonito y moderno
 - Funciona en celulares, tablets y computadoras
@@ -98,21 +108,25 @@ Piensa que el frontend está construido como **Lego super avanzado**:
 ### **Personajes Principales** (Componentes Importantes)
 
 #### 🎬 CinematicPresentation
+
 - **Como**: El intro épico de una película de Marvel
 - **Hace**: Te da la bienvenida con animaciones increíbles
 - **Por qué es genial**: Te hace sentir que estás en el futuro
 
 #### 🧠 DanielaShowcase
+
 - **Como**: Conocer a tu compañero de aventuras
 - **Hace**: Presenta a Daniela IA con todos sus poderes
 - **Por qué es genial**: Muestra todo lo que la IA puede hacer
 
 #### 🤖 NexusAndroid
+
 - **Como**: Tu guardián robótico personal
 - **Hace**: Protege el sistema y se ve genial con animaciones 3D
 - **Por qué es genial**: Es como tener a Iron Man como guardián
 
 #### 📊 EnhancedROI
+
 - **Como**: Una calculadora mágica de dinero
 - **Hace**: Te muestra cuánto puedes ganar con IA
 - **Por qué es genial**: Transforma números en gráficos bonitos
@@ -120,11 +134,13 @@ Piensa que el frontend está construido como **Lego super avanzado**:
 ### **Escenarios Especiales** (Páginas Únicas)
 
 #### 🏢 DecentralandOffice
+
 - **Como**: Una oficina en el mundo virtual
 - **Hace**: Muestra una oficina 3D que puedes visitar
 - **Por qué es genial**: Es como estar en una película de ciencia ficción
 
 #### 💬 ContactSection
+
 - **Como**: El buzón de entrada mágico
 - **Hace**: Te deja enviar mensajes que llegan instantáneamente
 - **Por qué es genial**: Es como enviar un correo por paloma mensajera digital
@@ -134,9 +150,11 @@ Piensa que el frontend está construido como **Lego super avanzado**:
 ## 🎪 Los Dashboards - Los Centros de Control
 
 ### 🏆 AdminDashboard - El Cuartel General
+
 **Para**: Los superadministradores del sistema
 
 **Qué encuentras**:
+
 - 🦸‍♂️ **Panel del Súper Administrador**: Control total como un dios
 - 🧠 **Asistente Mágica Daniela**: IA que te ayuda a administrar
 - 📊 **Estadísticas de Videojuego**: Usuarios, velocidad, peticiones
@@ -145,9 +163,11 @@ Piensa que el frontend está construido como **Lego super avanzado**:
 - 🏥 **Centro de Salud**: Revisa que todo esté funcionando perfecto
 
 ### 💎 ClientDashboard - Tu Base Personal
+
 **Para**: Los clientes que usan el sistema
 
 **Qué encuentras**:
+
 - 🎯 **Portal Personal Mágico**: Tu espacio privado
 - 🧠 **Tu Amiga Daniela**: IA personal solo para ti
 - 🏆 **Panel de Logros**: Como los trofeos de tus videojuegos
@@ -156,9 +176,11 @@ Piensa que el frontend está construido como **Lego super avanzado**:
 - 🧠 **Ideas Mágicas**: Consejos personalizados de Daniela
 
 ### 🎪 DemoDashboard - El Parque de Juegos
+
 **Para**: Todos los que quieren probar el sistema
 
 **Qué encuentras**:
+
 - 🎪 **Parque de Juegos Mágico**: Diviértete probando todo
 - 🌟 **Daniela IA en Escenario**: La estrella del show
 - 🎯 **Súper Poderes**: Voz, cerebro, velocidad, idiomas
@@ -171,21 +193,25 @@ Piensa que el frontend está construido como **Lego super avanzado**:
 ## 🚀 Características Especiales - Como los Poderes Mágicos
 
 ### ⚡ Lazy Loading - La Magia de la Aparición
+
 - **Como**: Los personajes que aparecen cuando los necesitas
 - **Hace**: Las páginas cargan súper rápido porque solo carga lo necesario
 - **Por qué es genial**: No tienes que esperar siglos para ver todo
 
 ### 🎨 Animaciones Fluidas - Como en las Películas de Disney
+
 - **Como**: Las animaciones suaves de tus películas favoritas
 - **Hace**: Todo se mueve de forma natural y bonita
 - **Por qué es genial**: Hace la experiencia más divertida
 
 ### 📱 Responsive Design - La Magia del Cambio de Tamaño
+
 - **Como**: Un Transformer que se adapta a cualquier lugar
 - **Hace**: Se ve perfecto en celulares, tablets y computadoras
 - **Por qué es genial**: Puedes usarlo en cualquier aparato
 
 ### 🌙 Dark Mode - El Modo Nocturno de los Superhéroes
+
 - **Como**: Cuando Batman activa su modo sigiloso
 - **Hace**: Cuida tus ojos con colores oscuros y bonitos
 - **Por qué es genial**: Puedes usarlo de noche sin cansar la vista
@@ -195,31 +221,37 @@ Piensa que el frontend está construido como **Lego super avanzado**:
 ## 🔧 Tecnologías Usadas - Las Herramientas Mágicas
 
 ### **React 18.3.1** - El Cerebro del Sistema
+
 - **Como**: El cerebro que controla todo el videojuego
 - **Hace**: Que todo funcione y se comunique entre sí
 - **Por qué es la mejor**: Es la más nueva y potente versión
 
 ### **TypeScript 5.9.3** - El Guardián de Errores
+
 - **Como**: Un guardián que evita que cometas errores
 - **Hace**: Revisa todo antes de que funcione
 - **Por qué es genial**: Menos errores = mejor experiencia
 
 ### **Vite 5.4.21** - El Constructor Flash
+
 - **Como**: Flash construyendo todo a velocidad de luz
 - **Hace**: Compila todo en segundos en lugar de minutos
 - **Por qué es increíble**: Cambias algo y funciona al instante
 
 ### **Tailwind CSS 3.4.19** - El Diseñador Mágico
+
 - **Como**: Un diseñador que crea estilos con palabras mágicas
 - **Hace**: Que todo se vea bonito y moderno
 - **Por qué es especial**: No necesitas escribir CSS complicado
 
 ### **Framer Motion 12.26.2** - El Animador Profesional
+
 - **Como**: Pixar animando tu interfaz
 - **Hace**: Crear animaciones increíbles con poco código
 - **Por qué es asombroso**: Movimientos naturales y fluidos
 
 ### **Three.js + React Three Fiber** - El Mundo 3D
+
 - **Como**: Crear mundos 3D como en las películas de Pixar
 - **Hace**: Posibles los gráficos 3D y realidad virtual
 - **Por qué es futurista**: Es tecnología de última generación
@@ -287,6 +319,7 @@ Piensa que el frontend está construido como **Lego super avanzado**:
 ### 🚀 La Visión a Largo Plazo
 
 Imagina un futuro donde:
+
 - 🏢 **Cada empresa tenga su Daniela**: Una IA personal para cada negocio
 - 🌍 **Daniela hable todos los idiomas**: Comunicación global perfecta
 - 🤖 **Las IAs trabajen juntas**: Como un equipo de superhéroes
@@ -308,6 +341,7 @@ Imagina un futuro donde:
 ### 🚀 Tu Siguiente Misión
 
 Ahora que eres un experto:
+
 1. **Explora todo**: Prueba cada botón y función
 2. **Comparte con amigos**: Enséñales este videojuego
 3. **Crea tu propio proyecto**: Usa Daniela para algo genial
@@ -319,15 +353,18 @@ Ahora que eres un experto:
 ## 📞 Si Necesitas Ayuda
 
 ### 🧠 Pregúntale a Daniela
+
 La mejor forma de aprender es preguntando. Daniela IA siempre está disponible para ayudarte.
 
 ### 🌐 Visita los Diferentes Lugares
+
 - **Website**: `https://aigestion.net`
 - **Demo**: `https://demo.aigestion.net`
 - **Clientes**: `https://client.aigestion.net`
 - **Admins**: `https://admin.aigestion.net`
 
 ### 📧 Contacto Humano
+
 Si necesitas hablar con una persona real, siempre estamos disponibles para ayudarte.
 
 ---
@@ -338,7 +375,7 @@ Si necesitas hablar con una persona real, siempre estamos disponibles para ayuda
 
 Ahora eres parte del futuro de la inteligencia artificial. 🚀✨
 
-*Recuerda: La tecnología es divertida cuando la entiendes bien. ¡Sigue explorando y aprendiendo!*
+_Recuerda: La tecnología es divertida cuando la entiendes bien. ¡Sigue explorando y aprendiendo!_
 
 ---
 

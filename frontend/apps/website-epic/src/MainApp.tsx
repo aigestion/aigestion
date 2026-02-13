@@ -1,11 +1,11 @@
-import { BrowserRouter as Router } from "react-router-dom";
-import { AppContent, LoadingFallback } from "./AppContent";
-import { ErrorBoundary } from "./components/ErrorBoundary";
-import { NexusProvider } from "./contexts/NexusContext";
-import { NotificationProvider } from "./contexts/NotificationContext";
-import { SoundProvider } from "./contexts/SoundContext";
-import { useAuth } from "./hooks/useAuth";
-import { QueryProvider } from "./providers/QueryProvider";
+import { BrowserRouter as Router } from 'react-router-dom';
+import { AppContent, LoadingFallback } from './AppContent';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { NexusProvider } from './contexts/NexusContext';
+import { NotificationProvider } from './contexts/NotificationContext';
+import { SoundProvider } from './contexts/SoundContext';
+import { useAuth } from './hooks/useAuth';
+import { QueryProvider } from './providers/QueryProvider';
 
 function MainApp() {
   return (

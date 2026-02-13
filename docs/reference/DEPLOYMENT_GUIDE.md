@@ -16,6 +16,7 @@
 5. Esperar ~2-3 minutos hasta que aparezca "Kubernetes is running"
 
 **Verificar instalación:**
+
 ```powershell
 kubectl version --client
 kubectl cluster-info
@@ -23,6 +24,7 @@ kubectl get nodes
 ```
 
 **Output esperado:**
+
 ```
 NAME             STATUS   ROLES           AGE   VERSION
 docker-desktop   Ready    control-plane   Xd    vX.XX.X
@@ -35,6 +37,7 @@ kubectl get deployment metrics-server -n kube-system
 ```
 
 **Si no está instalado:**
+
 ```powershell
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
@@ -59,6 +62,7 @@ kubectl get namespace NEXUS V1
 ```
 
 **Output esperado:**
+
 ```
 NAME   STATUS   AGE
 NEXUS V1    Active   5s
@@ -80,6 +84,7 @@ kubectl get all -n NEXUS V1 -l app=jaeger
 ```
 
 **Output esperado:**
+
 ```
 NAME                         READY   STATUS    RESTARTS   AGE
 pod/jaeger-xxxxxxxxxx-xxxxx  1/1     Running   0          30s
@@ -92,6 +97,7 @@ deployment.apps/jaeger   1/1     1            1           30s
 ```
 
 **Acceder a Jaeger UI:**
+
 ```powershell
 # Port-forward para acceder localmente
 kubectl port-forward -n NEXUS V1 svc/jaeger 16686:16686
@@ -118,6 +124,7 @@ kubectl get pvc -n NEXUS V1 -l app=mongodb-backup
 ```
 
 **Output esperado:**
+
 ```
 NAME             SCHEDULE     SUSPEND   ACTIVE   LAST SCHEDULE   AGE
 mongodb-backup   0 2 * * *    False     0        <none>          10s
@@ -127,6 +134,7 @@ mongodb-backup-pvc      Bound    pvc-xxx  100Gi      RWO            standard    
 ```
 
 **Ejecutar backup manualmente (testing):**
+
 ```powershell
 # Crear Job desde CronJob
 kubectl create job --from=cronjob/mongodb-backup mongodb-backup-manual -n NEXUS V1
@@ -177,12 +185,14 @@ kubectl get events -n NEXUS V1 --sort-by='.lastTimestamp' | Select-Object -Last 
 #### Opción 1: OpenTelemetry SDK (Recomendado)
 
 **Instalar dependencias:**
+
 ```powershell
 cd server
 npm install @opentelemetry/api @opentelemetry/sdk-node @opentelemetry/auto-instrumentations-node @opentelemetry/exporter-jaeger
 ```
 
 **Crear `server/src/tracing.ts`:**
+
 ```typescript
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
@@ -212,9 +222,10 @@ const sdk = new NodeSDK({
 sdk.start();
 
 process.on('SIGTERM', () => {
-  sdk.shutdown()
+  sdk
+    .shutdown()
     .then(() => console.log('✅ Tracing shutdown'))
-    .catch((error) => console.error('❌ Error shutting down tracing', error))
+    .catch(error => console.error('❌ Error shutting down tracing', error))
     .finally(() => process.exit(0));
 });
 
@@ -222,6 +233,7 @@ export default sdk;
 ```
 
 **Modificar `server/src/server.ts`:**
+
 ```typescript
 // ⚠️ Debe ser la PRIMERA línea (antes de cualquier import)
 import './tracing';
@@ -231,26 +243,28 @@ import express from 'express';
 ```
 
 **Agregar a `app-deployment.yaml`:**
+
 ```yaml
 env:
   # ... variables existentes
   - name: JAEGER_ENDPOINT
-    value: "http://jaeger:14268/api/traces"
+    value: 'http://jaeger:14268/api/traces'
   - name: OTEL_SERVICE_NAME
-    value: "NEXUS V1-backend"
+    value: 'NEXUS V1-backend'
   - name: OTEL_LOG_LEVEL
-    value: "info"
+    value: 'info'
 ```
 
 #### Opción 2: Sidecar de OpenTelemetry Collector
 
 **Agregar al `app-deployment.yaml` en `spec.template.spec.containers`:**
+
 ```yaml
 - name: otel-collector
   image: otel/opentelemetry-collector:0.91.0
   command:
-    - "/otelcol"
-    - "--config=/conf/otel-collector-config.yaml"
+    - '/otelcol'
+    - '--config=/conf/otel-collector-config.yaml'
   ports:
     - containerPort: 4317
       name: otlp-grpc
@@ -271,6 +285,7 @@ env:
 ```
 
 **Agregar volumen:**
+
 ```yaml
 volumes:
   # ... volúmenes existentes
@@ -319,12 +334,14 @@ kubectl exec -it -n NEXUS V1 deployment/jaeger -- du -sh /badger
 #### 1. Jaeger Pod en CrashLoopBackOff
 
 **Diagnóstico:**
+
 ```powershell
 kubectl describe pod -n NEXUS V1 -l app=jaeger
 kubectl logs -n NEXUS V1 -l app=jaeger --previous
 ```
 
 **Solución:**
+
 - Verificar PVC está Bound: `kubectl get pvc -n NEXUS V1 jaeger-storage-pvc`
 - Verificar recursos suficientes: `kubectl top nodes`
 - Revisar permisos de storage
@@ -332,6 +349,7 @@ kubectl logs -n NEXUS V1 -l app=jaeger --previous
 #### 2. Backup CronJob no ejecuta
 
 **Diagnóstico:**
+
 ```powershell
 # Ver schedule del CronJob
 kubectl get cronjob -n NEXUS V1 mongodb-backup -o yaml | Select-String -Pattern "schedule"
@@ -341,6 +359,7 @@ kubectl get cronjob -n NEXUS V1 mongodb-backup -o jsonpath='{.spec.suspend}'
 ```
 
 **Solución:**
+
 ```powershell
 # Unsuspend si está pausado
 kubectl patch cronjob mongodb-backup -n NEXUS V1 -p '{"spec":{"suspend":false}}'
@@ -352,6 +371,7 @@ kubectl create job --from=cronjob/mongodb-backup test-backup -n NEXUS V1
 #### 3. No llegan traces a Jaeger
 
 **Verificar conexión desde app a Jaeger:**
+
 ```powershell
 # Port-forward Jaeger collector
 kubectl port-forward -n NEXUS V1 svc/jaeger 14268:14268
@@ -361,6 +381,7 @@ curl -X POST http://localhost:14268/api/traces -H "Content-Type: application/jso
 ```
 
 **Verificar NetworkPolicy permite tráfico:**
+
 ```powershell
 kubectl get networkpolicy -n NEXUS V1 jaeger-network-policy -o yaml
 ```
@@ -382,6 +403,7 @@ kubectl apply -f https://raw.githubusercontent.com/grafana/grafana/main/deploy/k
 ### 2. Configurar Alertas
 
 **Crear AlertManager:**
+
 ```yaml
 apiVersion: v1
 kind: ConfigMap
@@ -412,6 +434,7 @@ kubectl label namespace NEXUS V1 istio-injection=enabled
 ### 4. Backup a Cloud Storage
 
 **Modificar mongodb-backup-cronjob.yaml para usar S3/Azure Blob:**
+
 ```yaml
 # Agregar container de sync a cloud
 - name: cloud-sync
@@ -469,4 +492,3 @@ kubectl label namespace NEXUS V1 istio-injection=enabled
 ---
 
 **Siguiente acción:** Habilitar Kubernetes en Docker Desktop y ejecutar `.\scripts\deploy-k8s.ps1 -Environment dev`
-

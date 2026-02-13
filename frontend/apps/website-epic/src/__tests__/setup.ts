@@ -25,7 +25,7 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
 // Mock matchMedia
 Object.defineProperty(globalThis, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation((query) => ({
+  value: vi.fn().mockImplementation(query => ({
     matches: false,
     media: query,
     onchange: null,
@@ -152,7 +152,7 @@ global.performance = {
 } as Performance;
 
 // Mock requestAnimationFrame
-global.requestAnimationFrame = vi.fn((cb) => setTimeout(cb, 16));
+global.requestAnimationFrame = vi.fn(cb => setTimeout(cb, 16));
 global.cancelAnimationFrame = vi.fn(clearTimeout);
 
 // Mock crypto
@@ -192,9 +192,11 @@ global.AudioContext = vi.fn().mockImplementation(() => ({
 
 // Mock MediaDevices
 global.navigator.mediaDevices = {
-  getUserMedia: vi.fn(() => Promise.resolve({
-    getTracks: () => [{ stop: vi.fn() }],
-  })),
+  getUserMedia: vi.fn(() =>
+    Promise.resolve({
+      getTracks: () => [{ stop: vi.fn() }],
+    })
+  ),
   enumerateDevices: vi.fn(() => Promise.resolve([])),
 };
 

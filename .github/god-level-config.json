@@ -5,38 +5,91 @@
       "categories": {
         "ci_cd": {
           "workflows": ["god-level-workflows.yml", "deploy-pages.yml", "deploy-unified.yml"],
-          "features": ["multi-environment", "parallel_execution", "matrix_builds", "automated_testing"]
+          "features": [
+            "multi-environment",
+            "parallel_execution",
+            "matrix_builds",
+            "automated_testing"
+          ]
         },
         "ai_ml": {
           "workflows": ["ai-ml-integration.yml"],
-          "features": ["ai_code_review", "ai_testing", "ai_documentation", "ai_optimization", "bug_prediction"]
+          "features": [
+            "ai_code_review",
+            "ai_testing",
+            "ai_documentation",
+            "ai_optimization",
+            "bug_prediction"
+          ]
         },
         "security": {
           "workflows": ["enterprise-security.yml", "security-scan.yml"],
-          "features": ["advanced_scanning", "dependency_management", "secret_detection", "compliance", "incident_response"]
+          "features": [
+            "advanced_scanning",
+            "dependency_management",
+            "secret_detection",
+            "compliance",
+            "incident_response"
+          ]
         },
         "monitoring": {
           "workflows": ["monitoring-analytics.yml", "performance.yml"],
-          "features": ["repository_analytics", "performance_monitoring", "productivity_metrics", "cost_optimization"]
+          "features": [
+            "repository_analytics",
+            "performance_monitoring",
+            "productivity_metrics",
+            "cost_optimization"
+          ]
         },
         "dev_tools": {
           "workflows": ["dev-tools-integration.yml"],
-          "features": ["codespaces", "packages_registry", "container_registry", "artifact_management"]
+          "features": [
+            "codespaces",
+            "packages_registry",
+            "container_registry",
+            "artifact_management"
+          ]
         }
       }
     },
     "security": {
-      "enabled_features": ["codeql_analysis", "dependabot", "secret_scanning", "branch_protection", "commit_signing", "security_policies"],
+      "enabled_features": [
+        "codeql_analysis",
+        "dependabot",
+        "secret_scanning",
+        "branch_protection",
+        "commit_signing",
+        "security_policies"
+      ],
       "compliance_standards": ["GDPR", "SOC2", "HIPAA", "ISO27001"]
     },
     "ai_integration": {
-      "enabled_features": ["code_review_assistant", "automated_testing", "documentation_generation", "performance_optimization", "bug_prediction", "code_refactoring"],
+      "enabled_features": [
+        "code_review_assistant",
+        "automated_testing",
+        "documentation_generation",
+        "performance_optimization",
+        "bug_prediction",
+        "code_refactoring"
+      ],
       "models": ["gpt-4", "claude-3", "gemini-pro"],
       "automation_level": "full"
     },
     "monitoring": {
-      "metrics_tracked": ["code_quality", "test_coverage", "performance", "security_score", "developer_productivity", "cost_optimization"],
-      "dashboards": ["repository_analytics", "performance_monitoring", "quality_metrics", "cost_analysis"]
+      "metrics_tracked": [
+        "code_quality",
+        "test_coverage",
+        "performance",
+        "security_score",
+        "developer_productivity",
+        "cost_optimization"
+      ],
+      "dashboards": [
+        "repository_analytics",
+        "performance_monitoring",
+        "quality_metrics",
+        "cost_analysis"
+      ]
     },
     "integrations": {
       "slack": {

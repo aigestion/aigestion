@@ -68,7 +68,7 @@ describe('useTheme Hook', () => {
 
   it('loads saved theme from localStorage', () => {
     localStorageMock.getItem.mockReturnValue('dark');
-    
+
     const { result } = renderHook(() => useTheme(), { wrapper });
 
     expect(result.current.themeMode).toBe('dark');
@@ -210,7 +210,7 @@ describe('useTheme Hook', () => {
   it('updates theme when system preference changes', () => {
     let changeCallback: ((event: MediaQueryListEvent) => void) | null = null;
 
-    mockMatchMedia.mockImplementation((query) => ({
+    mockMatchMedia.mockImplementation(query => ({
       matches: false,
       media: query,
       addEventListener: (event, callback) => {
@@ -275,7 +275,9 @@ describe('useTheme Hook', () => {
     const { result } = renderHook(() => useTheme(), { wrapper });
 
     expect(result.current.theme.shadows.sm).toBe('0 1px 2px 0 rgba(0, 0, 0, 0.05)');
-    expect(result.current.theme.shadows.lg).toBe('0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)');
+    expect(result.current.theme.shadows.lg).toBe(
+      '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
+    );
   });
 
   it('handles invalid theme mode gracefully', () => {

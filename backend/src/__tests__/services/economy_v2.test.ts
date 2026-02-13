@@ -12,8 +12,8 @@ jest.mock('../../cache/redis', () => ({
 // Mock DeFi service
 const mockDeFiService = {
   getYieldAdvice: jest.fn().mockResolvedValue({
-    wallets: [{ asset: 'USDC', apy: 12.5, recommendation: 'Supply to Aave' }]
-  })
+    wallets: [{ asset: 'USDC', apy: 12.5, recommendation: 'Supply to Aave' }],
+  }),
 };
 
 describe('EconomyService God Mode v2', () => {
@@ -35,7 +35,7 @@ describe('EconomyService God Mode v2', () => {
         symbol: 'NVDA',
         targetPrice: 900,
         chatId: 123,
-        userId: 'god_mode'
+        userId: 'god_mode',
       });
 
       expect(alert.condition).toBe('above');
@@ -46,13 +46,15 @@ describe('EconomyService God Mode v2', () => {
       const mockPrices = [{ symbol: 'NVDA', price: 950 }];
       jest.spyOn(service, 'getEconomyUpdate').mockResolvedValue(mockPrices as any);
 
-      const activeAlerts = [{
-        symbol: 'NVDA',
-        targetPrice: 900,
-        condition: 'above',
-        chatId: 123,
-        userId: 'god_mode'
-      }];
+      const activeAlerts = [
+        {
+          symbol: 'NVDA',
+          targetPrice: 900,
+          condition: 'above',
+          chatId: 123,
+          userId: 'god_mode',
+        },
+      ];
       (getCache as jest.Mock).mockResolvedValue(activeAlerts);
 
       const triggered = await service.checkPriceAlerts();
@@ -67,11 +69,17 @@ describe('EconomyService God Mode v2', () => {
 
       await service.addPortfolioPosition('god_mode', 'PLTR', 100, 20);
 
-      expect(setCache).toHaveBeenCalledWith('economy:portfolio:god_mode', [{
-        symbol: 'PLTR',
-        amount: 100,
-        entryPrice: 20
-      }], 0);
+      expect(setCache).toHaveBeenCalledWith(
+        'economy:portfolio:god_mode',
+        [
+          {
+            symbol: 'PLTR',
+            amount: 100,
+            entryPrice: 20,
+          },
+        ],
+        0
+      );
     });
 
     it('should calculate P&L correctly', async () => {
@@ -90,7 +98,9 @@ describe('EconomyService God Mode v2', () => {
   describe('DeFi Yield Integration', () => {
     it('should include DeFi yields in investment advice', async () => {
       jest.spyOn(service, 'getEconomyUpdate').mockResolvedValue([]);
-      jest.spyOn(service, 'getMarketSentiment').mockResolvedValue({ sentiment: 'neutral', score: 0 });
+      jest
+        .spyOn(service, 'getMarketSentiment')
+        .mockResolvedValue({ sentiment: 'neutral', score: 0 });
 
       const advice = await service.getInvestmentAdvice();
       expect(advice.advice).toContain('DeFi');

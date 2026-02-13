@@ -14,7 +14,7 @@ const ServerCore = () => {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
-  useFrame((state) => {
+  useFrame(state => {
     if (meshRef.current) {
       meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.2;
       meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
@@ -31,7 +31,7 @@ const ServerCore = () => {
         scale={hovered ? 1.2 : 1}
       >
         <MeshDistortMaterial
-          color={hovered ? "#8a2be2" : "#00f5ff"}
+          color={hovered ? '#8a2be2' : '#00f5ff'}
           attach="material"
           distort={0.6}
           speed={2}
@@ -39,12 +39,9 @@ const ServerCore = () => {
           metalness={0.8}
         />
       </Sphere>
-
     </Float>
   );
 };
-
-
 
 export const NeuralServer: React.FC = () => {
   return (

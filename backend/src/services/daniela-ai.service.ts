@@ -41,7 +41,7 @@ export class DanielaAIService {
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.RagService) private ragService: RagService,
     @inject(TYPES.UserService) private userService: UserService,
-    @inject(TYPES.EconomyService) private economyService: EconomyService,
+    @inject(TYPES.EconomyService) private economyService: EconomyService
   ) {
     this.initialize();
   }
@@ -62,7 +62,7 @@ export class DanielaAIService {
     chatId: number,
     userName: string,
     userId: string,
-    userRole: string,
+    userRole: string
   ): DanielaContext {
     if (!this.contexts.has(chatId)) {
       this.contexts.set(chatId, {
@@ -86,7 +86,7 @@ export class DanielaAIService {
     message: string,
     userName: string,
     userId: string,
-    userRole: string = 'user',
+    userRole: string = 'user'
   ): Promise<string> {
     try {
       const context = this.getOrCreateContext(chatId, userName, userId, userRole);
@@ -134,7 +134,7 @@ export class DanielaAIService {
   private async generateResponse(
     context: DanielaContext,
     message: string,
-    userContext: any,
+    userContext: any
   ): Promise<string> {
     const systemPrompt = this.buildSystemPrompt(context, userContext);
     const conversationContext = this.buildConversationContext(context);
@@ -304,7 +304,7 @@ Responde en ${
   private async handleAnalyticsRequest(
     context: DanielaContext,
     message: string,
-    userContext: any,
+    userContext: any
   ): Promise<string> {
     const emoji = '📊';
     return (
@@ -328,7 +328,7 @@ Responde en ${
   private async handleEconomyRequest(
     context: DanielaContext,
     message: string,
-    userContext: any,
+    userContext: any
   ): Promise<string> {
     const report = this.economyService
       ? await this.economyService.generateFormattedReport()
@@ -348,7 +348,7 @@ Responde en ${
   private async handleAdviceRequest(
     context: DanielaContext,
     message: string,
-    userContext: any,
+    userContext: any
   ): Promise<string> {
     const emoji = '💡';
     return (
@@ -370,7 +370,7 @@ Responde en ${
   private async handleTaskRequest(
     context: DanielaContext,
     message: string,
-    userContext: any,
+    userContext: any
   ): Promise<string> {
     return (
       `✅ *Gestión de Tareas*\n\n` +
@@ -395,7 +395,7 @@ Responde en ${
   private async handleInsightRequest(
     context: DanielaContext,
     message: string,
-    userContext: any,
+    userContext: any
   ): Promise<string> {
     return (
       `🔍 *Insights Estratégicos*\n\n` +
@@ -441,7 +441,7 @@ Responde en ${
    */
   private async handleCompetitorAnalysisRequest(
     context: DanielaContext,
-    message: string,
+    message: string
   ): Promise<string> {
     try {
       const urlMatch = message.match(/(https?:\/\/[^\s]+)/g);
@@ -474,7 +474,7 @@ Responde en ${
    */
   private async handleMarketResearchRequest(
     context: DanielaContext,
-    message: string,
+    message: string
   ): Promise<string> {
     try {
       const topic =
@@ -574,14 +574,14 @@ Responde en ${
   private async logInteraction(
     userId: string,
     userMessage: string,
-    danielaResponse: string,
+    danielaResponse: string
   ): Promise<void> {
     try {
       logger.info(
         `[DANIELA] User: ${userMessage.substring(0, 50)}... | Response: ${danielaResponse.substring(
           0,
-          50,
-        )}...`,
+          50
+        )}...`
       );
     } catch (error) {
       logger.warn('Error logging interaction:', error);

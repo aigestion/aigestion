@@ -20,7 +20,7 @@ export async function processTranscriptionJob(job: TranscriptionJob): Promise<vo
   const emailService = container.get<EmailService>(TYPES.EmailService);
   const telegramService = container.get<TelegramService>(TYPES.TelegramService);
   const youtubeTranscriptionService = container.get<YoutubeTranscriptionService>(
-    TYPES.YoutubeTranscriptionService,
+    TYPES.YoutubeTranscriptionService
   );
 
   logger.info(`⚡ Processing transcription for: ${job.fileName}`);
@@ -75,7 +75,7 @@ ${formattedTranscript}
           `📹 *Video:* ${result.title}\n` +
           `📂 *File:* \`${outputFileName}\`\n` +
           `📧 *Sent to:* ${job.recipientEmail}`,
-        adminChatId,
+        adminChatId
       );
     }
   } catch (error: any) {
@@ -88,7 +88,7 @@ ${formattedTranscript}
         `❌ *Transcription Failed*\n\n` +
           `📹 *File:* ${job.fileName}\n` +
           `⚠️ *Error:* ${error.message}`,
-        adminChatId,
+        adminChatId
       );
     }
   }

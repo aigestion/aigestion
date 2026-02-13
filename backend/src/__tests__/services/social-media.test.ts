@@ -39,7 +39,7 @@ describe('Social Media Services', () => {
           recipient: { id: 'recipient' },
           message: { text: 'message' },
         }),
-        expect.anything(),
+        expect.anything()
       );
     });
 
@@ -78,7 +78,7 @@ describe('Social Media Services', () => {
             }),
           }),
         }),
-        expect.anything(),
+        expect.anything()
       );
     });
   });
@@ -100,7 +100,7 @@ describe('Social Media Services', () => {
         expect.objectContaining({
           post_info: expect.objectContaining({ title: 'Title' }),
         }),
-        expect.anything(),
+        expect.anything()
       );
     });
   });
@@ -122,7 +122,7 @@ describe('Social Media Services', () => {
         expect.objectContaining({
           text: 'Hello X',
         }),
-        expect.anything(),
+        expect.anything()
       );
     });
   });

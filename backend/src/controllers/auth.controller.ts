@@ -63,8 +63,8 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
             userId: user._id,
           },
           200,
-          (req as any).requestId,
-        ),
+          (req as any).requestId
+        )
       );
       return;
     }
@@ -185,7 +185,7 @@ export const verify2FA = [
 export const verifyLogin2FA = async (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const authService = container.get<AuthService>(TYPES.AuthService);
@@ -219,26 +219,42 @@ export const verifyLogin2FA = async (
 };
 
 // Verify Email Code
-export const verifyEmail = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const verifyEmail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const authService = container.get<AuthService>(TYPES.AuthService);
     const { userId, code } = req.body;
     await authService.verifyEmail(userId, code);
-    res.status(200).json(buildResponse({ success: true, message: 'Email verificado correctamente' }, 200, (req as any).requestId));
+    res
+      .status(200)
+      .json(
+        buildResponse(
+          { success: true, message: 'Email verificado correctamente' },
+          200,
+          (req as any).requestId
+        )
+      );
   } catch (error) {
     next(error);
   }
 };
 
 // Update User Role
-export const updateUserRole = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const updateUserRole = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const authService = container.get<AuthService>(TYPES.AuthService);
     const { userId, role } = req.body;
     // Validate role is 'family' or 'professional' ??
     // Ideally validate via middleware schema, but here for safety:
     if (!['family', 'professional'].includes(role)) {
-        throw new AppError('Rol inválido. Debe ser "family" o "professional"', 400, 'INVALID_ROLE');
+      throw new AppError('Rol inválido. Debe ser "family" o "professional"', 400, 'INVALID_ROLE');
     }
 
     const user = await authService.updateUserRole(userId, role);
@@ -249,7 +265,11 @@ export const updateUserRole = async (req: Request, res: Response, next: NextFunc
 };
 
 // Update Subscription Plan
-export const updateSubscription = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const updateSubscription = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const authService = container.get<AuthService>(TYPES.AuthService);
     const { userId, plan } = req.body;

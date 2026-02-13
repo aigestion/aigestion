@@ -47,28 +47,30 @@ async function runTest() {
       email: `test.metered.${Date.now()}@example.com`,
       password: 'password123',
       stripeSubscriptionItemId: 'si_test_12345', // Critical for metering
-      loginAttempts: 0 // Required field
+      loginAttempts: 0, // Required field
     });
     await testUser.save();
     logger.info(`✅ Created Ephemeral Test User: ${testUser.id}`);
 
     // 4. Simulate Usage
     logger.info('🚀 Simulating Usage...');
-    const prompt = "Explain the theory of relativity"; // ~6 tokens
-    const completion = "E = mc^2"; // ~4 tokens
+    const prompt = 'Explain the theory of relativity'; // ~6 tokens
+    const completion = 'E = mc^2'; // ~4 tokens
 
     await usageService.trackUsage({
       userId: testUser.id,
       provider: 'openai', // mock
       modelId: 'gpt-4',
       prompt,
-      completion
+      completion,
     });
 
     // 5. Verify Database Record
     const record = await UsageRecord.findOne({ userId: testUser.id }).sort({ createdAt: -1 });
     if (record) {
-      logger.info(`✅ UsageRecord Found: ${record.totalTokens} tokens. Cost: $${record.costEstimate}`);
+      logger.info(
+        `✅ UsageRecord Found: ${record.totalTokens} tokens. Cost: $${record.costEstimate}`
+      );
       if (record.totalTokens > 0) console.log('PASS: Tokens tracked.');
       else console.error('FAIL: Tokens were 0.');
     } else {
@@ -82,7 +84,6 @@ async function runTest() {
     await User.findByIdAndDelete(testUser.id);
     if (record) await UsageRecord.findByIdAndDelete(record.id);
     logger.info('🧹 Cleanup Complete');
-
   } catch (error) {
     logger.error('❌ Test Failed:', error);
   } finally {

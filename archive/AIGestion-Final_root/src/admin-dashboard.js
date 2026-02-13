@@ -70,13 +70,13 @@ function AdminDashboard() {
         </div>
       </div>
     </div>
-  `
+  `;
 }
 
 // Initialize dashboard
 document.addEventListener('DOMContentLoaded', () => {
-  const root = document.getElementById('admin-root')
+  const root = document.getElementById('admin-root');
   if (root) {
-    root.innerHTML = AdminDashboard()
+    root.innerHTML = AdminDashboard();
   }
-})
+});

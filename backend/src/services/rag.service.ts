@@ -118,7 +118,7 @@ export class RagService {
           const rustResults = await this.queryRustCore(query);
           if (rustResults && rustResults.length > 0) {
             logger.info(
-              `[RagService] Rust RagCore provided ${rustResults.length} optimized results.`,
+              `[RagService] Rust RagCore provided ${rustResults.length} optimized results.`
             );
             sortedFiles = rustResults;
           } else {
@@ -186,7 +186,7 @@ export class RagService {
     return results
       .map(
         (res, i) =>
-          `[Source: ${res.source.toUpperCase()} | Score: ${res.score.toFixed(2)}]\n${res.content}`,
+          `[Source: ${res.source.toUpperCase()} | Score: ${res.score.toFixed(2)}]\n${res.content}`
       )
       .join('\n\n');
   }
@@ -205,7 +205,7 @@ export class RagService {
   private async archiveToLocalMemory(
     content: string,
     filename: string,
-    tags: string[] = [],
+    tags: string[] = []
   ): Promise<void> {
     try {
       const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://ml-service:5000';
@@ -217,7 +217,7 @@ export class RagService {
           source: filename,
           tags,
         },
-        { headers: { 'X-API-Key': apiKey } },
+        { headers: { 'X-API-Key': apiKey } }
       );
       logger.info(`[RagService] Document archived to local NeuroCore: ${filename}`);
     } catch (error: any) {
@@ -235,7 +235,7 @@ export class RagService {
       const response = await axios.post(
         `${mlServiceUrl}/recall`,
         { query, limit: 3 },
-        { headers: { 'X-API-Key': apiKey } },
+        { headers: { 'X-API-Key': apiKey } }
       );
 
       const results = response.data.results;
@@ -243,7 +243,7 @@ export class RagService {
         return results
           .map(
             (res: any, i: number) =>
-              `[Local Match ${i + 1}] Source: ${res.metadata.source}\n${res.content}`,
+              `[Local Match ${i + 1}] Source: ${res.metadata.source}\n${res.content}`
           )
           .join('\n\n');
       }
@@ -459,14 +459,14 @@ export class RagService {
         query,
         mockEmbedding,
         0.3,
-        3,
+        3
       );
 
       if (results && results.length > 0) {
         return results
           .map(
             (res: any, i: number) =>
-              `[Sovereign Match ${i + 1}] Title: ${res.title}\n${res.content}`,
+              `[Sovereign Match ${i + 1}] Title: ${res.title}\n${res.content}`
           )
           .join('\n\n');
       }

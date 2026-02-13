@@ -10,6 +10,7 @@
 ## Paso 1: Instalar FFmpeg
 
 ### Windows
+
 ```bash
 # Usando Chocolatey
 choco install ffmpeg
@@ -18,6 +19,7 @@ choco install ffmpeg
 ```
 
 ### Linux/Mac
+
 ```bash
 # Ubuntu/Debian
 sudo apt install ffmpeg
@@ -98,6 +100,7 @@ curl -X POST http://localhost:5000/api/v1/voice/stt \
 ## Troubleshooting
 
 ### Error: "tts: command not found"
+
 ```bash
 # Verificar que Python scripts están en PATH
 python -m pip show TTS
@@ -107,12 +110,14 @@ python -m TTS.bin.synthesize --text "test" --out_path test.wav
 ```
 
 ### Error: "whisper: command not found"
+
 ```bash
 # Usar módulo Python directamente
 python -c "import whisper; model = whisper.load_model('base'); print('OK')"
 ```
 
 ### Error: "ffmpeg not found"
+
 ```bash
 # Instalar ffmpeg según tu sistema operativo
 # Ver instrucciones arriba

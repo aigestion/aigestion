@@ -37,7 +37,7 @@ export class SwarmInternalClient {
           status: error.response?.status,
         });
         return Promise.reject(error);
-      },
+      }
     );
   }
 

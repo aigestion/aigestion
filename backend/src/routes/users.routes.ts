@@ -95,7 +95,7 @@ router.put(
   '/:id',
   validateParams(schemas.common.id),
   validateBody(schemas.user.update),
-  updateUser,
+  updateUser
 );
 /**
  * @openapi

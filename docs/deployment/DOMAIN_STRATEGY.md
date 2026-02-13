@@ -11,6 +11,7 @@ Basado en tu modelo de negocio (admin + clientes), recomiendo una estructura min
 ## 🏗️ **Estructura de Dominios Recomendada**
 
 ### 🏢 **Dominio Principal**
+
 ```
 aigestion.net
 ├── 🏠 Landing Page (Marketing)
@@ -21,6 +22,7 @@ aigestion.net
 ```
 
 ### 👥 **Dominios de Acceso**
+
 ```
 admin.aigestion.net
 ├── 🔐 Panel Administrativo
@@ -35,11 +37,13 @@ admin.aigestion.net
 ## 🎯 **Flujo de Usuario Lógico**
 
 ### 🌟 **Flujo Cliente**
+
 1. **Acceso**: `aigestion.net` → Login
 2. **Dashboard**: `aigestion.net/dashboard` (autenticado)
 3. **Daniela**: `aigestion.net/daniela` (integrado en dashboard)
 
 ### 👨‍💼 **Flujo Admin**
+
 1. **Acceso**: `admin.aigestion.net` → Login Admin
 2. **Panel**: Gestión completa desde admin.aigestion.net
 3. **Clientes**: Ver y gestionar todos los clientes
@@ -49,21 +53,25 @@ admin.aigestion.net
 ## 💡 **Ventajas de Esta Estructura**
 
 ### ✅ **Simplicidad**
+
 - **Menos dominios** = menos costos de mantenimiento
 - **Un solo login** para clientes (email + password)
 - **Dashboard integrado** en dominio principal
 
 ### ✅ **SEO y Marketing**
+
 - **Autoridad concentrada** en aigestion.net
 - **Mejor posicionamiento** con contenido unificado
 - **Brand consistency** en toda la experiencia
 
 ### ✅ **Experiencia Usuario**
+
 - **Flujo natural**: Visitante → Login → Dashboard
 - **No confusión** con múltiples subdominios
 - **Contexto mantenido** durante toda la navegación
 
 ### ✅ **Costos**
+
 - **1 dominio principal** + **1 subdominio admin**
 - **Certificado SSL** unificado
 - **Menos configuración DNS**
@@ -73,13 +81,11 @@ admin.aigestion.net
 ## 🔧 **Implementación Técnica**
 
 ### 🌐 **Configuración Vercel**
+
 ```json
 {
   "version": 2,
-  "domains": [
-    "aigestion.net",
-    "admin.aigestion.net"
-  ],
+  "domains": ["aigestion.net", "admin.aigestion.net"],
   "routes": [
     {
       "src": "/admin",
@@ -98,6 +104,7 @@ admin.aigestion.net
 ```
 
 ### 🛡️ **Autenticación**
+
 ```typescript
 // Middleware de autenticación
 const requireAuth = (req, res, next) => {
@@ -119,6 +126,7 @@ app.get('/daniela', requireAuth, danielaHandler);
 ## 📊 **Flujo de Usuario Detallado**
 
 ### 🌟 **Cliente Nuevo**
+
 ```
 1. Visita aigestion.net
 2. Ve Daniela demo pública
@@ -129,6 +137,7 @@ app.get('/daniela', requireAuth, danielaHandler);
 ```
 
 ### 🔄 **Cliente Existente**
+
 ```
 1. Visita aigestion.net
 2. Click "Login"
@@ -138,6 +147,7 @@ app.get('/daniela', requireAuth, danielaHandler);
 ```
 
 ### 👨‍💼 **Admin**
+
 ```
 1. Accede admin.aigestion.net
 2. Login administrativo
@@ -151,6 +161,7 @@ app.get('/daniela', requireAuth, danielaHandler);
 ## 🎨 **Estructura de Navegación**
 
 ### 📱 **Website Principal (aigestion.net)**
+
 ```
 Header: [Home] [Daniela] [Precios] [Login] [Contacto]
 
@@ -175,6 +186,7 @@ Footer: [Sobre Nosotros] [Contacto] [Soporte] [Admin]
 ```
 
 ### 🏢 **Admin Panel (admin.aigestion.net)**
+
 ```
 Header: [Dashboard] [Clientes] [Analytics] [Configuración] [Logout]
 
@@ -198,15 +210,16 @@ Main Content:
 ## 🔐 **Estrategia de Seguridad**
 
 ### 🛡️ **Protección por Nivel**
+
 ```typescript
 // Niveles de acceso
 enum UserRole {
   CLIENT = 'client',
-  ADMIN = 'admin'
+  ADMIN = 'admin',
 }
 
 // Middleware específico
-const requireRole = (role) => {
+const requireRole = role => {
   return (req, res, next) => {
     const user = req.user;
     if (user.role !== role) {
@@ -222,6 +235,7 @@ app.get('/dashboard/*', requireRole('client'), clientHandler);
 ```
 
 ### 📧 **Gestión de Acceso**
+
 ```typescript
 // Login simple y efectivo
 interface LoginRequest {
@@ -246,11 +260,13 @@ interface LoginResponse {
 ## 💰 **Modelo de Negocio Simplificado**
 
 ### 🎯 **Flujo de Conversión**
+
 ```
 Visitante → Demo Daniela → Login → Dashboard Gratuito → Upgrade Premium
 ```
 
 ### 📊 **Niveles de Acceso**
+
 ```typescript
 interface UserAccess {
   free: {
@@ -280,21 +296,25 @@ interface UserAccess {
 ## 🎯 **Ventajas Competitivas**
 
 ### ✅ **Experiencia Unificada**
+
 - **Un solo dominio** para toda la experiencia cliente
 - **Contexto mantenido** durante toda la navegación
 - **Brand consistency** completa
 
 ### ✅ **Simplicidad Operativa**
+
 - **Menos configuración DNS**
 - **Un solo certificado SSL**
 - **Menos puntos de fallo**
 
 ### ✅ **Mejor SEO**
+
 - **Autoridad concentrada** en aigestion.net
 - **Contenido unificado** para mejor ranking
 - **Backlinks concentrados**
 
 ### ✅ **Costos Optimizados**
+
 - **2 dominios** vs 4+ dominios
 - **Menos mantenimiento técnico**
 - **Mejor ROI en marketing**
@@ -304,6 +324,7 @@ interface UserAccess {
 ## 🚀 **Implementación Paso a Paso**
 
 ### 1. **Configurar Dominios**
+
 ```bash
 # Dominio principal
 vercel domains add aigestion.net
@@ -313,20 +334,22 @@ vercel domains add admin.aigestion.net
 ```
 
 ### 2. **Configurar DNS**
+
 ```
 A Record: aigestion.net → Vercel IP
 A Record: admin.aigestion.net → Vercel IP
 ```
 
 ### 3. **Implementar Autenticación**
+
 ```typescript
 // JWT-based authentication
-const generateToken = (user) => {
+const generateToken = user => {
   return jwt.sign(
     {
       email: user.email,
       role: user.role,
-      subscription: user.subscription
+      subscription: user.subscription,
     },
     process.env.JWT_SECRET,
     { expiresIn: '7d' }
@@ -335,6 +358,7 @@ const generateToken = (user) => {
 ```
 
 ### 4. **Crear Rutas Protegidas**
+
 ```typescript
 // Middleware de autenticación
 app.use('/dashboard', authMiddleware);
@@ -347,24 +371,26 @@ app.use('/admin/*', adminAuthMiddleware);
 ## 📈 **Métricas de Éxito**
 
 ### 🎯 **KPIs Principales**
+
 - **Tasa de conversión**: Visitante → Login
 - **Activación**: Login → Primer uso Daniela
 - **Retención**: Uso continuo de Daniela
 - **Upgrade**: Free → Premium
 
 ### 📊 **Analytics Implementados**
+
 ```typescript
 // Event tracking
 analytics.track('user_login', {
   email: user.email,
   role: user.role,
-  source: 'website'
+  source: 'website',
 });
 
 analytics.track('daniela_conversation', {
   sessionId: sessionId,
   messageCount: messageCount,
-  emotion: emotionDetected
+  emotion: emotionDetected,
 });
 ```
 
@@ -373,11 +399,14 @@ analytics.track('daniela_conversation', {
 ## 🎉 **Conclusión**
 
 ### ✅ **Recomendación Final**
+
 **Usar solo 2 dominios:**
+
 - `aigestion.net` (experiencia completa del cliente)
 - `admin.aigestion.net` (panel administrativo)
 
 ### 🎯 **Por qué funciona:**
+
 1. **Simple de gestionar** para ti como admin
 2. **Intuitivo para clientes** (email + password)
 3. **Económico** (menos dominios, menos mantenimiento)
@@ -385,6 +414,7 @@ analytics.track('daniela_conversation', {
 5. **Escalable** (fácil agregar nuevas funcionalidades)
 
 ### 🚀 **Próximos Pasos**
+
 1. Configurar dominios en Vercel
 2. Implementar autenticación simple
 3. Crear dashboard unificado

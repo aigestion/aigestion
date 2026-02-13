@@ -15,7 +15,7 @@ export const EnhancedROI: React.FC = () => {
     { id: 'small', label: 'Pequeña', employees: '1-50', multiplier: 1.2 },
     { id: 'medium', label: 'Mediana', employees: '51-500', multiplier: 2.5 },
     { id: 'large', label: 'Grande', employees: '501-5000', multiplier: 4.8 },
-    { id: 'enterprise', label: 'Empresarial', employees: '5000+', multiplier: 8.2 }
+    { id: 'enterprise', label: 'Empresarial', employees: '5000+', multiplier: 8.2 },
   ];
 
   const industries = [
@@ -24,7 +24,7 @@ export const EnhancedROI: React.FC = () => {
     { id: 'healthcare', label: 'Salud', baseROI: 320, icon: '🏥' },
     { id: 'retail', label: 'Retail', baseROI: 290, icon: '🛍️' },
     { id: 'manufacturing', label: 'Manufactura', baseROI: 410, icon: '🏭' },
-    { id: 'logistics', label: 'Logística', baseROI: 360, icon: '🚚' }
+    { id: 'logistics', label: 'Logística', baseROI: 360, icon: '🚚' },
   ];
 
   const benefits = [
@@ -33,7 +33,7 @@ export const EnhancedROI: React.FC = () => {
     { category: 'Costos', value: -38, description: 'Reducción de gastos operativos' },
     { category: 'Innovación', value: 89, description: 'Capacidad de innovación' },
     { category: 'Satisfacción', value: 72, description: 'Mejora en satisfacción del cliente' },
-    { category: 'Velocidad', value: 156, description: 'Aceleración de procesos' }
+    { category: 'Velocidad', value: 156, description: 'Aceleración de procesos' },
   ];
 
   useEffect(() => {

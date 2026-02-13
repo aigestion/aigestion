@@ -239,7 +239,7 @@ export const preloadCriticalResources = () => {
     'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap',
   ];
 
-  fonts.forEach((fontUrl) => {
+  fonts.forEach(fontUrl => {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'style';
@@ -254,7 +254,7 @@ export const preloadCriticalResources = () => {
   // Preload critical images
   const criticalImages = ['/images/nexus/hero.png', '/images/brand/logo.png'];
 
-  criticalImages.forEach((imgUrl) => {
+  criticalImages.forEach(imgUrl => {
     const link = document.createElement('link');
     link.rel = 'preload';
     link.as = 'image';

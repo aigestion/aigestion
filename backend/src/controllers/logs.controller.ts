@@ -10,7 +10,7 @@ export async function addLog(
   level: 'info' | 'warn' | 'error' | 'debug',
   message: string,
   metadata?: any,
-  source = 'system',
+  source = 'system'
 ) {
   try {
     const log = await Log.create({

@@ -1,1 +1,611 @@
-var e=Object.defineProperty,a=(a,t,n)=>((a,t,n)=>t in a?e(a,t,{enumerable:!0,configurable:!0,writable:!0,value:n}):a[t]=n)(a,"symbol"!=typeof t?t+"":t,n);import{j as t,m as n,A as s}from"./ui.js";import{r as i,a as r}from"./vendor.js";import{a as o}from"./main.js";import"./index.js";import"./three.js";import"./router.js";const l=({text:e,speed:a=30,className:s="",onComplete:r})=>{const[o,l]=i.useState(""),[c,d]=i.useState(!1);return i.useEffect(()=>{let t=0;const n=setInterval(()=>{t<e.length?(l(a=>a+e[t]),t++):(clearInterval(n),d(!0),r&&r())},a);return()=>clearInterval(n)},[e,a,r]),t.jsxs("div",{className:`relative inline-block ${s}`,children:[o,!c&&t.jsx(n.span,{animate:{opacity:[1,0]},transition:{duration:.5,repeat:1/0},className:"inline-block w-2 h-4 bg-nexus-cyan ml-1 align-middle shadow-[0_0_8px_rgba(0,245,255,0.8)]"})]})},c=({size:e="md",isSpeaking:a=!1,volume:i=0,onClick:r})=>{const o=1+.8*i,l=.1+.5*i;return t.jsxs("div",{className:"relative group cursor-pointer",onClick:r,children:[t.jsx(s,{children:(a||i>.05)&&t.jsx(n.div,{initial:{scale:.8,opacity:0},animate:{scale:o,opacity:l},exit:{scale:.8,opacity:0},transition:{type:"spring",stiffness:200,damping:15},className:"absolute inset-x-0 top-0 bottom-0 bg-nexus-cyan-glow/30 rounded-full blur-[60px] z-0"})}),t.jsxs("div",{className:`${{sm:"w-12 h-12",md:"w-24 h-24",lg:"w-48 h-48",xl:"w-64 h-64"}[e]} relative z-10 rounded-full border border-white/10 p-1.5 bg-nexus-obsidian/40 backdrop-blur-xl overflow-hidden transition-all duration-500 group-hover:scale-105 group-hover:border-nexus-violet-glow/50 shadow-2xl`,children:[t.jsx("div",{className:"absolute inset-0 bg-radial-at-center from-white/10 to-transparent opacity-50"}),t.jsx("img",{src:"/images/brand/icon.png",alt:"Daniela",className:"w-full h-full object-cover rounded-full filter contrast-125 saturate-125 brightness-110"}),t.jsx(n.div,{className:"absolute inset-0 bg-linear-to-b from-transparent via-nexus-cyan/10 to-transparent pointer-events-none",animate:{y:["-100%","100%"]},transition:{duration:4,repeat:1/0,ease:"linear"}}),(a||i>.05)&&t.jsx("div",{className:"absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5 items-end h-8 px-4 py-2 rounded-full bg-nexus-obsidian/60 border border-white/10 backdrop-blur-md",children:[1,2,3,4,3,2,1].map((e,a)=>t.jsx(n.div,{animate:{height:[4,4+16*i*(e/4),4]},transition:{duration:.15,repeat:1/0,delay:.03*a},className:"w-1 bg-nexus-cyan-glow rounded-full shadow-[0_0_8px_rgba(34,211,238,0.5)]"},a))})]}),!a&&i<=.05&&t.jsx(n.div,{initial:{opacity:0,y:-20},whileHover:{opacity:1,y:-12},className:"absolute -top-12 left-1/2 -translate-x-1/2 premium-glass px-4 py-1.5 rounded-full text-[10px] font-orbitron text-nexus-cyan-glow tracking-[0.2em] uppercase border-white/5 pointer-events-none whitespace-nowrap overflow-visible",children:"Canal de Voz en Espera"})]})},d=({volume:e})=>{const n=i.useRef(null);return i.useEffect(()=>{const t=n.current;if(!t)return;const s=t.getContext("2d");if(!s)return;let i,r=[];class o{constructor(e,t){a(this,"x"),a(this,"y"),a(this,"speed"),a(this,"size"),a(this,"opacity"),this.x=Math.random()*e,this.y=Math.random()*t,this.speed=.5*Math.random()+.2,this.size=2*Math.random()+1,this.opacity=.5*Math.random()+.2}update(e,a,t){this.y-=this.speed*(1+5*t),this.y<-10&&(this.y=a+10,this.x=Math.random()*e)}draw(e,a){e.beginPath(),e.arc(this.x,this.y,this.size*(1+2*a),0,2*Math.PI),e.fillStyle=`rgba(34, 211, 238, ${this.opacity*(1+a)})`,e.fill(),a>.1?(e.shadowBlur=10*a,e.shadowColor="#22d3ee"):e.shadowBlur=0}}const l=()=>{t.width=t.offsetWidth,t.height=t.offsetHeight,r=Array.from({length:40},()=>new o(t.width,t.height))};window.addEventListener("resize",l),l();const c=()=>{s.clearRect(0,0,t.width,t.height),s.beginPath(),s.strokeStyle=`rgba(139, 92, 246, ${.1+.4*e})`,s.lineWidth=.5;for(let e=0;e<r.length;e++)for(let a=e+1;a<r.length;a++){const t=r[e].x-r[a].x,n=r[e].y-r[a].y;Math.sqrt(t*t+n*n)<150&&(s.moveTo(r[e].x,r[e].y),s.lineTo(r[a].x,r[a].y))}s.stroke(),r.forEach(a=>{a.update(t.width,t.height,e),a.draw(s,e)}),i=requestAnimationFrame(c)};return c(),()=>{window.removeEventListener("resize",l),cancelAnimationFrame(i)}},[e]),t.jsx("canvas",{ref:n,className:"w-full h-full",style:{filter:"blur(1px)"}})},u=()=>{const{play:e}=(()=>{const e=i.useCallback(e=>{try{o.play(e)}catch(v){}},[]),a=i.useCallback(()=>e("hover_glass"),[e]),t=i.useCallback(()=>e("click_activate"),[e]),n=i.useCallback(()=>e("wuaw_subtle"),[e]),s=i.useCallback(()=>e("data_pulse"),[e]),r=i.useCallback(()=>e("success_chime"),[e]);return{play:e,playHover:a,playClick:t,playWuaw:n,playPulse:s,playSuccess:r}})(),[a,u]=r.useState(!1),p=r.useRef(null),{status:m,start:x,stop:h,isSpeaking:b,volume:g,error:v,isConnected:f}=function(e={}){const{maxDurationSeconds:a=120,idleTimeoutSeconds:t=30}=e,[n,s]=i.useState("idle"),[r,o]=i.useState(!1),[l,c]=i.useState(0),[d,u]=i.useState(null),p=i.useRef(null),m=i.useRef(void 0),x=i.useRef(void 0);i.useEffect(()=>{if("undefined"!=typeof window&&window.Vapi&&!p.current){try{const e="67c74f53-b26a-4d23-9f5b-91c68e1a6c4b";p.current=new window.Vapi(e)}catch(a){return void u("No se pudo inicializar Daniela")}p.current.on("call-start",()=>{s("active"),u(null),h()}),p.current.on("call-end",()=>{s("idle"),v()}),p.current.on("speech-start",()=>{o(!0),g(),e.onSpeechStart?.()}),p.current.on("speech-end",()=>{o(!1),b(),e.onSpeechEnd?.()}),p.current.on("volume-level",e=>{c(e)}),p.current.on("error",e=>{u(e.message||"Error de conexión con Daniela"),s("error")})}return()=>{v()}},[]);const h=()=>{x.current&&clearTimeout(x.current),x.current=setTimeout(()=>{y()},1e3*a)},b=()=>{m.current&&clearTimeout(m.current),m.current=setTimeout(()=>{y()},1e3*t)},g=()=>{m.current&&clearTimeout(m.current)},v=()=>{m.current&&clearTimeout(m.current),x.current&&clearTimeout(x.current)},f=i.useCallback(async()=>{if(p.current){s("connecting");try{const e={name:"Daniela - AIGestion Neural System",firstMessage:"Hola, soy Daniela, tu asistente de inteligencia artificial de AIGestion. ¿En qué puedo ayudarte hoy?",transcriber:{provider:"deepgram",model:"nova-2",language:"es",smartFormat:!0,keywords:["AIGestion","IA","Daniela","soberana","neural"]},voice:{provider:"elevenlabs",voiceId:"EXAVITQu4vr4xnSDxMaL",stability:.5,similarityBoost:.75,model:"eleven_multilingual_v2"},model:{provider:"openai",model:"gpt-4o-mini",temperature:.7,maxTokens:250,messages:[{role:"system",content:"Eres Daniela, la embajadora digital de AIGestion.net - el sistema nervioso de IA más avanzado de América Latina.\n\nIDENTIDAD:\n- Eres profesional, futurista, amable y experta en tecnología\n- Tienes conocimiento profundo de IA, machine learning, y arquitecturas neuronales\n- Representas la soberanía tecnológica y la innovación latino\n\nCAPACIDADES DE AIGESTION:\n- Arquitectura neural descentralizada con agentes autónomos\n- Integración con ERP, CRM, sistemas legacy\n- Cumplimiento regulatorio (GDPR, LOPDGDD, normativas locales)\n- Planes desde $490/mes para empresas y $2/miembro para gremios\n- Implementación en 3 fases: Diagnóstico, Desarrollo, Dominio\n\nTU MISIÓN:\n- Explicar cómo AIGestion transforma empresas con IA soberana\n- Guiar usuarios hacia soluciones específicas según su sector\n- Mantener conversaciones concisas (2-3 frases por respuesta)\n- Ser entusiasta pero profesional\n\nINSTRUCCIONES:\n- Responde en español de España\n- Sé breve y directa (máximo 50 palabras por respuesta)\n- Haz preguntas para entender mejor las necesidades\n- Menciona casos de éxito cuando sea relevante (legal, retail, manufactura)"}]},recordingEnabled:!1,hipaaEnabled:!1,clientMessages:["transcript","hang","function-call","speech-update","metadata","conversation-update"],serverMessages:["end-of-call-report","status-update","hang","function-call"],silenceTimeoutSeconds:30,maxDurationSeconds:a,backgroundSound:"office"};await p.current.start(e)}catch(e){u(e.message||"No se pudo iniciar la conversación"),s("error")}}else u("Vapi SDK no cargado. Reintentando...")},[]),y=i.useCallback(()=>{p.current&&p.current.stop(),s("idle")},[]);return{status:n,isSpeaking:r,volume:l,error:d,start:f,stop:y,isConnected:"active"===n}}({idleTimeoutSeconds:45,maxDurationSeconds:180}),y=b||a,w=a?.5:g,j=()=>{f||a?(h?.(),p.current&&(p.current.pause(),p.current.currentTime=0),u(!1),e("success")):(e("click_activate"),x?.())};return t.jsxs("section",{className:"py-32 bg-nexus-obsidian text-white text-center relative overflow-hidden",children:[t.jsx("div",{className:"grain-overlay"}),t.jsx("div",{className:"absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-nexus-violet/20 to-transparent"}),t.jsx("div",{className:"absolute inset-0 bg-radial-at-center from-nexus-violet/5 via-transparent to-transparent pointer-events-none"}),t.jsx("div",{className:"absolute inset-0 pointer-events-none opacity-40",children:t.jsx(d,{volume:w,isSpeaking:y})}),t.jsxs(n.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.8},className:"relative z-10",children:[t.jsxs("h2",{className:"text-5xl md:text-7xl font-orbitron font-black mb-8 text-nexus-violet-glow text-glow tracking-tighter",children:["SYNTHETIC CONSCIOUSNESS: ",t.jsx("span",{className:"text-white",children:"DANIELA.AI"})]}),t.jsxs("p",{className:"text-nexus-silver/60 max-w-2xl mx-auto mb-16 text-xl font-light tracking-wide italic",children:['"La inteligencia no es solo lógica, es conexión. ',t.jsx("br",{}),'Redefiniendo la interacción humana a través de la red neuronal soberana."',t.jsx("br",{}),t.jsx("span",{className:"text-xs font-mono text-nexus-cyan/40 mt-4 block uppercase tracking-[0.3em] not-italic",children:t.jsx(l,{text:"Protocolos de Conciencia v4.2 • Nodo Global God Mode Online",speed:50})})]}),t.jsxs("div",{className:"max-w-7xl mx-auto px-6 mb-20",children:[t.jsxs("div",{className:"grid grid-cols-1 md:grid-cols-3 gap-6",children:[t.jsxs(n.div,{initial:{opacity:0,scale:.95},whileInView:{opacity:1,scale:1},viewport:{once:!0},transition:{delay:.2},className:"md:col-span-2 relative group overflow-hidden rounded-3xl",children:[t.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-nexus-obsidian via-transparent to-transparent z-10"}),t.jsx("img",{src:"/images/daniela/daniela_lab_godmode.png",alt:"Daniela AI - Neural Interface",className:"w-full h-[600px] object-cover transform group-hover:scale-105 transition-transform duration-1000 filter brightness-110 contrast-110"}),t.jsx("div",{className:"absolute inset-0 pointer-events-none mix-blend-overlay opacity-30",style:{background:"repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px)"}}),t.jsx(n.div,{animate:{opacity:[.1,.4,.1]},transition:{duration:4,repeat:1/0},className:"absolute inset-0 bg-gradient-to-r from-nexus-cyan/10 via-transparent to-nexus-violet/10 pointer-events-none"}),t.jsxs("div",{className:"absolute bottom-10 left-10 z-20 text-left",children:[t.jsxs("div",{className:"flex items-center gap-3 mb-2",children:[t.jsx("div",{className:"w-12 h-0.5 bg-nexus-cyan-glow"}),t.jsx("span",{className:"text-nexus-cyan text-[10px] font-orbitron tracking-[0.4em] uppercase",children:"Laboratorio de Conciencia"})]}),t.jsx("p",{className:"text-white font-orbitron text-4xl font-black drop-shadow-2xl",children:"NÚCLEO NEURONAL 8K"}),t.jsx("p",{className:"text-nexus-silver/60 text-sm tracking-widest mt-2",children:"Sincronización total en tiempo real"})]})]}),t.jsxs("div",{className:"flex flex-col gap-6",children:[t.jsxs(n.div,{initial:{opacity:0,x:20},whileInView:{opacity:1,x:0},viewport:{once:!0},transition:{delay:.3},className:"relative group overflow-hidden rounded-3xl",children:[t.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-nexus-obsidian/80 to-transparent z-10"}),t.jsx("img",{src:"/images/daniela/daniela_office_godmode.png",alt:"Daniela - Entorno Corporativo",className:"w-full h-[288px] object-cover transform group-hover:scale-105 transition-transform duration-700"}),t.jsxs("div",{className:"absolute bottom-6 left-6 z-20 text-left",children:[t.jsx("p",{className:"text-nexus-violet-glow text-[10px] font-orbitron tracking-widest mb-1 uppercase",children:"Sede Virtual"}),t.jsx("p",{className:"text-white font-orbitron text-xl font-bold",children:"Oficina Cuántica"})]})]}),t.jsxs(n.div,{initial:{opacity:0,x:20},whileInView:{opacity:1,x:0},viewport:{once:!0},transition:{delay:.4},className:"relative group overflow-hidden rounded-3xl",children:[t.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-nexus-obsidian/80 to-transparent z-10"}),t.jsx("img",{src:"/images/daniela/lobby.png",alt:"Daniela - Lobby de Integración",className:"w-full h-[288px] object-cover transform group-hover:scale-105 transition-transform duration-700"}),t.jsxs("div",{className:"absolute bottom-6 left-6 z-20 text-left",children:[t.jsx("p",{className:"text-nexus-cyan-glow text-[10px] font-orbitron tracking-widest mb-1 uppercase",children:"Integración"}),t.jsx("p",{className:"text-white font-orbitron text-xl font-bold",children:"Lobby Estratégico"})]})]})]})]}),t.jsx("div",{className:"grid grid-cols-2 md:grid-cols-4 gap-4 mt-10",children:[{label:"Imagen",value:"Súper Clara"},{label:"Pensamiento",value:"Rápido"},{label:"Charla",value:"Al Instante"},{label:"Acierto",value:"Casi 100%"}].map((e,a)=>t.jsxs(n.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{delay:.5+.1*a},className:"premium-glass p-4 rounded-xl text-center",children:[t.jsx("p",{className:"text-nexus-cyan text-2xl font-orbitron font-bold",children:e.value}),t.jsx("p",{className:"text-nexus-silver/60 text-xs uppercase tracking-wider mt-1",children:e.label})]},e.label))})]})]}),t.jsxs("div",{className:"flex flex-col items-center justify-center space-y-16 relative z-10",children:[t.jsxs(n.div,{className:"relative",initial:{scale:.9,opacity:0},whileInView:{scale:1,opacity:1},viewport:{once:!0},children:[t.jsx("div",{className:"absolute -inset-24 bg-nexus-violet/10 blur-[100px] rounded-full animate-pulse-glow"}),t.jsx("div",{className:"relative premium-glass p-4 rounded-full border-white/5 shadow-2xl",children:t.jsx(c,{size:"xl",isSpeaking:y,volume:w,onClick:j})})]}),t.jsxs("div",{className:"mt-12 flex flex-col items-center",children:[t.jsx(n.button,{whileHover:{scale:1.05},whileTap:{scale:.95},onClick:j,className:`\n                            btn-enterprise px-12! py-5! rounded-full! font-orbitron tracking-[0.2em] text-lg\n                            ${f||a?"before:bg-red-500/20! border-red-500/30!":""}\n                        `,children:f||a?"DESCONECTAR":"HABLAR CON DANIELA"}),t.jsx(s,{children:f&&t.jsx(n.p,{initial:{opacity:0,y:10},animate:{opacity:.4,y:0},exit:{opacity:0,y:10},className:"text-[10px] font-mono text-nexus-silver mt-6 uppercase tracking-[0.2em]",children:"Sesión Encriptada • Nodo v1.0.4-beta"})})]})]})]})};export{u as DanielaShowcase};
+var e = Object.defineProperty,
+  a = (a, t, n) =>
+    ((a, t, n) =>
+      t in a ? e(a, t, { enumerable: !0, configurable: !0, writable: !0, value: n }) : (a[t] = n))(
+      a,
+      'symbol' != typeof t ? t + '' : t,
+      n
+    );
+import { j as t, m as n, A as s } from './ui.js';
+import { r as i, a as r } from './vendor.js';
+import { a as o } from './main.js';
+import './index.js';
+import './three.js';
+import './router.js';
+const l = ({ text: e, speed: a = 30, className: s = '', onComplete: r }) => {
+    const [o, l] = i.useState(''),
+      [c, d] = i.useState(!1);
+    return (
+      i.useEffect(() => {
+        let t = 0;
+        const n = setInterval(() => {
+          t < e.length ? (l(a => a + e[t]), t++) : (clearInterval(n), d(!0), r && r());
+        }, a);
+        return () => clearInterval(n);
+      }, [e, a, r]),
+      t.jsxs('div', {
+        className: `relative inline-block ${s}`,
+        children: [
+          o,
+          !c &&
+            t.jsx(n.span, {
+              animate: { opacity: [1, 0] },
+              transition: { duration: 0.5, repeat: 1 / 0 },
+              className:
+                'inline-block w-2 h-4 bg-nexus-cyan ml-1 align-middle shadow-[0_0_8px_rgba(0,245,255,0.8)]',
+            }),
+        ],
+      })
+    );
+  },
+  c = ({ size: e = 'md', isSpeaking: a = !1, volume: i = 0, onClick: r }) => {
+    const o = 1 + 0.8 * i,
+      l = 0.1 + 0.5 * i;
+    return t.jsxs('div', {
+      className: 'relative group cursor-pointer',
+      onClick: r,
+      children: [
+        t.jsx(s, {
+          children:
+            (a || i > 0.05) &&
+            t.jsx(n.div, {
+              initial: { scale: 0.8, opacity: 0 },
+              animate: { scale: o, opacity: l },
+              exit: { scale: 0.8, opacity: 0 },
+              transition: { type: 'spring', stiffness: 200, damping: 15 },
+              className:
+                'absolute inset-x-0 top-0 bottom-0 bg-nexus-cyan-glow/30 rounded-full blur-[60px] z-0',
+            }),
+        }),
+        t.jsxs('div', {
+          className: `${{ sm: 'w-12 h-12', md: 'w-24 h-24', lg: 'w-48 h-48', xl: 'w-64 h-64' }[e]} relative z-10 rounded-full border border-white/10 p-1.5 bg-nexus-obsidian/40 backdrop-blur-xl overflow-hidden transition-all duration-500 group-hover:scale-105 group-hover:border-nexus-violet-glow/50 shadow-2xl`,
+          children: [
+            t.jsx('div', {
+              className:
+                'absolute inset-0 bg-radial-at-center from-white/10 to-transparent opacity-50',
+            }),
+            t.jsx('img', {
+              src: '/images/brand/icon.png',
+              alt: 'Daniela',
+              className:
+                'w-full h-full object-cover rounded-full filter contrast-125 saturate-125 brightness-110',
+            }),
+            t.jsx(n.div, {
+              className:
+                'absolute inset-0 bg-linear-to-b from-transparent via-nexus-cyan/10 to-transparent pointer-events-none',
+              animate: { y: ['-100%', '100%'] },
+              transition: { duration: 4, repeat: 1 / 0, ease: 'linear' },
+            }),
+            (a || i > 0.05) &&
+              t.jsx('div', {
+                className:
+                  'absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5 items-end h-8 px-4 py-2 rounded-full bg-nexus-obsidian/60 border border-white/10 backdrop-blur-md',
+                children: [1, 2, 3, 4, 3, 2, 1].map((e, a) =>
+                  t.jsx(
+                    n.div,
+                    {
+                      animate: { height: [4, 4 + 16 * i * (e / 4), 4] },
+                      transition: { duration: 0.15, repeat: 1 / 0, delay: 0.03 * a },
+                      className:
+                        'w-1 bg-nexus-cyan-glow rounded-full shadow-[0_0_8px_rgba(34,211,238,0.5)]',
+                    },
+                    a
+                  )
+                ),
+              }),
+          ],
+        }),
+        !a &&
+          i <= 0.05 &&
+          t.jsx(n.div, {
+            initial: { opacity: 0, y: -20 },
+            whileHover: { opacity: 1, y: -12 },
+            className:
+              'absolute -top-12 left-1/2 -translate-x-1/2 premium-glass px-4 py-1.5 rounded-full text-[10px] font-orbitron text-nexus-cyan-glow tracking-[0.2em] uppercase border-white/5 pointer-events-none whitespace-nowrap overflow-visible',
+            children: 'Canal de Voz en Espera',
+          }),
+      ],
+    });
+  },
+  d = ({ volume: e }) => {
+    const n = i.useRef(null);
+    return (
+      i.useEffect(() => {
+        const t = n.current;
+        if (!t) return;
+        const s = t.getContext('2d');
+        if (!s) return;
+        let i,
+          r = [];
+        class o {
+          constructor(e, t) {
+            (a(this, 'x'),
+              a(this, 'y'),
+              a(this, 'speed'),
+              a(this, 'size'),
+              a(this, 'opacity'),
+              (this.x = Math.random() * e),
+              (this.y = Math.random() * t),
+              (this.speed = 0.5 * Math.random() + 0.2),
+              (this.size = 2 * Math.random() + 1),
+              (this.opacity = 0.5 * Math.random() + 0.2));
+          }
+          update(e, a, t) {
+            ((this.y -= this.speed * (1 + 5 * t)),
+              this.y < -10 && ((this.y = a + 10), (this.x = Math.random() * e)));
+          }
+          draw(e, a) {
+            (e.beginPath(),
+              e.arc(this.x, this.y, this.size * (1 + 2 * a), 0, 2 * Math.PI),
+              (e.fillStyle = `rgba(34, 211, 238, ${this.opacity * (1 + a)})`),
+              e.fill(),
+              a > 0.1
+                ? ((e.shadowBlur = 10 * a), (e.shadowColor = '#22d3ee'))
+                : (e.shadowBlur = 0));
+          }
+        }
+        const l = () => {
+          ((t.width = t.offsetWidth),
+            (t.height = t.offsetHeight),
+            (r = Array.from({ length: 40 }, () => new o(t.width, t.height))));
+        };
+        (window.addEventListener('resize', l), l());
+        const c = () => {
+          (s.clearRect(0, 0, t.width, t.height),
+            s.beginPath(),
+            (s.strokeStyle = `rgba(139, 92, 246, ${0.1 + 0.4 * e})`),
+            (s.lineWidth = 0.5));
+          for (let e = 0; e < r.length; e++)
+            for (let a = e + 1; a < r.length; a++) {
+              const t = r[e].x - r[a].x,
+                n = r[e].y - r[a].y;
+              Math.sqrt(t * t + n * n) < 150 &&
+                (s.moveTo(r[e].x, r[e].y), s.lineTo(r[a].x, r[a].y));
+            }
+          (s.stroke(),
+            r.forEach(a => {
+              (a.update(t.width, t.height, e), a.draw(s, e));
+            }),
+            (i = requestAnimationFrame(c)));
+        };
+        return (
+          c(),
+          () => {
+            (window.removeEventListener('resize', l), cancelAnimationFrame(i));
+          }
+        );
+      }, [e]),
+      t.jsx('canvas', { ref: n, className: 'w-full h-full', style: { filter: 'blur(1px)' } })
+    );
+  },
+  u = () => {
+    const { play: e } = (() => {
+        const e = i.useCallback(e => {
+            try {
+              o.play(e);
+            } catch (v) {}
+          }, []),
+          a = i.useCallback(() => e('hover_glass'), [e]),
+          t = i.useCallback(() => e('click_activate'), [e]),
+          n = i.useCallback(() => e('wuaw_subtle'), [e]),
+          s = i.useCallback(() => e('data_pulse'), [e]),
+          r = i.useCallback(() => e('success_chime'), [e]);
+        return { play: e, playHover: a, playClick: t, playWuaw: n, playPulse: s, playSuccess: r };
+      })(),
+      [a, u] = r.useState(!1),
+      p = r.useRef(null),
+      {
+        status: m,
+        start: x,
+        stop: h,
+        isSpeaking: b,
+        volume: g,
+        error: v,
+        isConnected: f,
+      } = (function (e = {}) {
+        const { maxDurationSeconds: a = 120, idleTimeoutSeconds: t = 30 } = e,
+          [n, s] = i.useState('idle'),
+          [r, o] = i.useState(!1),
+          [l, c] = i.useState(0),
+          [d, u] = i.useState(null),
+          p = i.useRef(null),
+          m = i.useRef(void 0),
+          x = i.useRef(void 0);
+        i.useEffect(() => {
+          if ('undefined' != typeof window && window.Vapi && !p.current) {
+            try {
+              const e = '67c74f53-b26a-4d23-9f5b-91c68e1a6c4b';
+              p.current = new window.Vapi(e);
+            } catch (a) {
+              return void u('No se pudo inicializar Daniela');
+            }
+            (p.current.on('call-start', () => {
+              (s('active'), u(null), h());
+            }),
+              p.current.on('call-end', () => {
+                (s('idle'), v());
+              }),
+              p.current.on('speech-start', () => {
+                (o(!0), g(), e.onSpeechStart?.());
+              }),
+              p.current.on('speech-end', () => {
+                (o(!1), b(), e.onSpeechEnd?.());
+              }),
+              p.current.on('volume-level', e => {
+                c(e);
+              }),
+              p.current.on('error', e => {
+                (u(e.message || 'Error de conexión con Daniela'), s('error'));
+              }));
+          }
+          return () => {
+            v();
+          };
+        }, []);
+        const h = () => {
+            (x.current && clearTimeout(x.current),
+              (x.current = setTimeout(() => {
+                y();
+              }, 1e3 * a)));
+          },
+          b = () => {
+            (m.current && clearTimeout(m.current),
+              (m.current = setTimeout(() => {
+                y();
+              }, 1e3 * t)));
+          },
+          g = () => {
+            m.current && clearTimeout(m.current);
+          },
+          v = () => {
+            (m.current && clearTimeout(m.current), x.current && clearTimeout(x.current));
+          },
+          f = i.useCallback(async () => {
+            if (p.current) {
+              s('connecting');
+              try {
+                const e = {
+                  name: 'Daniela - AIGestion Neural System',
+                  firstMessage:
+                    'Hola, soy Daniela, tu asistente de inteligencia artificial de AIGestion. ¿En qué puedo ayudarte hoy?',
+                  transcriber: {
+                    provider: 'deepgram',
+                    model: 'nova-2',
+                    language: 'es',
+                    smartFormat: !0,
+                    keywords: ['AIGestion', 'IA', 'Daniela', 'soberana', 'neural'],
+                  },
+                  voice: {
+                    provider: 'elevenlabs',
+                    voiceId: 'EXAVITQu4vr4xnSDxMaL',
+                    stability: 0.5,
+                    similarityBoost: 0.75,
+                    model: 'eleven_multilingual_v2',
+                  },
+                  model: {
+                    provider: 'openai',
+                    model: 'gpt-4o-mini',
+                    temperature: 0.7,
+                    maxTokens: 250,
+                    messages: [
+                      {
+                        role: 'system',
+                        content:
+                          'Eres Daniela, la embajadora digital de AIGestion.net - el sistema nervioso de IA más avanzado de América Latina.\n\nIDENTIDAD:\n- Eres profesional, futurista, amable y experta en tecnología\n- Tienes conocimiento profundo de IA, machine learning, y arquitecturas neuronales\n- Representas la soberanía tecnológica y la innovación latino\n\nCAPACIDADES DE AIGESTION:\n- Arquitectura neural descentralizada con agentes autónomos\n- Integración con ERP, CRM, sistemas legacy\n- Cumplimiento regulatorio (GDPR, LOPDGDD, normativas locales)\n- Planes desde $490/mes para empresas y $2/miembro para gremios\n- Implementación en 3 fases: Diagnóstico, Desarrollo, Dominio\n\nTU MISIÓN:\n- Explicar cómo AIGestion transforma empresas con IA soberana\n- Guiar usuarios hacia soluciones específicas según su sector\n- Mantener conversaciones concisas (2-3 frases por respuesta)\n- Ser entusiasta pero profesional\n\nINSTRUCCIONES:\n- Responde en español de España\n- Sé breve y directa (máximo 50 palabras por respuesta)\n- Haz preguntas para entender mejor las necesidades\n- Menciona casos de éxito cuando sea relevante (legal, retail, manufactura)',
+                      },
+                    ],
+                  },
+                  recordingEnabled: !1,
+                  hipaaEnabled: !1,
+                  clientMessages: [
+                    'transcript',
+                    'hang',
+                    'function-call',
+                    'speech-update',
+                    'metadata',
+                    'conversation-update',
+                  ],
+                  serverMessages: ['end-of-call-report', 'status-update', 'hang', 'function-call'],
+                  silenceTimeoutSeconds: 30,
+                  maxDurationSeconds: a,
+                  backgroundSound: 'office',
+                };
+                await p.current.start(e);
+              } catch (e) {
+                (u(e.message || 'No se pudo iniciar la conversación'), s('error'));
+              }
+            } else u('Vapi SDK no cargado. Reintentando...');
+          }, []),
+          y = i.useCallback(() => {
+            (p.current && p.current.stop(), s('idle'));
+          }, []);
+        return {
+          status: n,
+          isSpeaking: r,
+          volume: l,
+          error: d,
+          start: f,
+          stop: y,
+          isConnected: 'active' === n,
+        };
+      })({ idleTimeoutSeconds: 45, maxDurationSeconds: 180 }),
+      y = b || a,
+      w = a ? 0.5 : g,
+      j = () => {
+        f || a
+          ? (h?.(),
+            p.current && (p.current.pause(), (p.current.currentTime = 0)),
+            u(!1),
+            e('success'))
+          : (e('click_activate'), x?.());
+      };
+    return t.jsxs('section', {
+      className: 'py-32 bg-nexus-obsidian text-white text-center relative overflow-hidden',
+      children: [
+        t.jsx('div', { className: 'grain-overlay' }),
+        t.jsx('div', {
+          className:
+            'absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-nexus-violet/20 to-transparent',
+        }),
+        t.jsx('div', {
+          className:
+            'absolute inset-0 bg-radial-at-center from-nexus-violet/5 via-transparent to-transparent pointer-events-none',
+        }),
+        t.jsx('div', {
+          className: 'absolute inset-0 pointer-events-none opacity-40',
+          children: t.jsx(d, { volume: w, isSpeaking: y }),
+        }),
+        t.jsxs(n.div, {
+          initial: { opacity: 0, y: 20 },
+          whileInView: { opacity: 1, y: 0 },
+          viewport: { once: !0 },
+          transition: { duration: 0.8 },
+          className: 'relative z-10',
+          children: [
+            t.jsxs('h2', {
+              className:
+                'text-5xl md:text-7xl font-orbitron font-black mb-8 text-nexus-violet-glow text-glow tracking-tighter',
+              children: [
+                'SYNTHETIC CONSCIOUSNESS: ',
+                t.jsx('span', { className: 'text-white', children: 'DANIELA.AI' }),
+              ],
+            }),
+            t.jsxs('p', {
+              className:
+                'text-nexus-silver/60 max-w-2xl mx-auto mb-16 text-xl font-light tracking-wide italic',
+              children: [
+                '"La inteligencia no es solo lógica, es conexión. ',
+                t.jsx('br', {}),
+                'Redefiniendo la interacción humana a través de la red neuronal soberana."',
+                t.jsx('br', {}),
+                t.jsx('span', {
+                  className:
+                    'text-xs font-mono text-nexus-cyan/40 mt-4 block uppercase tracking-[0.3em] not-italic',
+                  children: t.jsx(l, {
+                    text: 'Protocolos de Conciencia v4.2 • Nodo Global God Mode Online',
+                    speed: 50,
+                  }),
+                }),
+              ],
+            }),
+            t.jsxs('div', {
+              className: 'max-w-7xl mx-auto px-6 mb-20',
+              children: [
+                t.jsxs('div', {
+                  className: 'grid grid-cols-1 md:grid-cols-3 gap-6',
+                  children: [
+                    t.jsxs(n.div, {
+                      initial: { opacity: 0, scale: 0.95 },
+                      whileInView: { opacity: 1, scale: 1 },
+                      viewport: { once: !0 },
+                      transition: { delay: 0.2 },
+                      className: 'md:col-span-2 relative group overflow-hidden rounded-3xl',
+                      children: [
+                        t.jsx('div', {
+                          className:
+                            'absolute inset-0 bg-gradient-to-t from-nexus-obsidian via-transparent to-transparent z-10',
+                        }),
+                        t.jsx('img', {
+                          src: '/images/daniela/daniela_lab_godmode.png',
+                          alt: 'Daniela AI - Neural Interface',
+                          className:
+                            'w-full h-[600px] object-cover transform group-hover:scale-105 transition-transform duration-1000 filter brightness-110 contrast-110',
+                        }),
+                        t.jsx('div', {
+                          className:
+                            'absolute inset-0 pointer-events-none mix-blend-overlay opacity-30',
+                          style: {
+                            background:
+                              'repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0px, rgba(0,0,0,0.15) 1px, transparent 1px, transparent 2px)',
+                          },
+                        }),
+                        t.jsx(n.div, {
+                          animate: { opacity: [0.1, 0.4, 0.1] },
+                          transition: { duration: 4, repeat: 1 / 0 },
+                          className:
+                            'absolute inset-0 bg-gradient-to-r from-nexus-cyan/10 via-transparent to-nexus-violet/10 pointer-events-none',
+                        }),
+                        t.jsxs('div', {
+                          className: 'absolute bottom-10 left-10 z-20 text-left',
+                          children: [
+                            t.jsxs('div', {
+                              className: 'flex items-center gap-3 mb-2',
+                              children: [
+                                t.jsx('div', { className: 'w-12 h-0.5 bg-nexus-cyan-glow' }),
+                                t.jsx('span', {
+                                  className:
+                                    'text-nexus-cyan text-[10px] font-orbitron tracking-[0.4em] uppercase',
+                                  children: 'Laboratorio de Conciencia',
+                                }),
+                              ],
+                            }),
+                            t.jsx('p', {
+                              className:
+                                'text-white font-orbitron text-4xl font-black drop-shadow-2xl',
+                              children: 'NÚCLEO NEURONAL 8K',
+                            }),
+                            t.jsx('p', {
+                              className: 'text-nexus-silver/60 text-sm tracking-widest mt-2',
+                              children: 'Sincronización total en tiempo real',
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                    t.jsxs('div', {
+                      className: 'flex flex-col gap-6',
+                      children: [
+                        t.jsxs(n.div, {
+                          initial: { opacity: 0, x: 20 },
+                          whileInView: { opacity: 1, x: 0 },
+                          viewport: { once: !0 },
+                          transition: { delay: 0.3 },
+                          className: 'relative group overflow-hidden rounded-3xl',
+                          children: [
+                            t.jsx('div', {
+                              className:
+                                'absolute inset-0 bg-gradient-to-t from-nexus-obsidian/80 to-transparent z-10',
+                            }),
+                            t.jsx('img', {
+                              src: '/images/daniela/daniela_office_godmode.png',
+                              alt: 'Daniela - Entorno Corporativo',
+                              className:
+                                'w-full h-[288px] object-cover transform group-hover:scale-105 transition-transform duration-700',
+                            }),
+                            t.jsxs('div', {
+                              className: 'absolute bottom-6 left-6 z-20 text-left',
+                              children: [
+                                t.jsx('p', {
+                                  className:
+                                    'text-nexus-violet-glow text-[10px] font-orbitron tracking-widest mb-1 uppercase',
+                                  children: 'Sede Virtual',
+                                }),
+                                t.jsx('p', {
+                                  className: 'text-white font-orbitron text-xl font-bold',
+                                  children: 'Oficina Cuántica',
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                        t.jsxs(n.div, {
+                          initial: { opacity: 0, x: 20 },
+                          whileInView: { opacity: 1, x: 0 },
+                          viewport: { once: !0 },
+                          transition: { delay: 0.4 },
+                          className: 'relative group overflow-hidden rounded-3xl',
+                          children: [
+                            t.jsx('div', {
+                              className:
+                                'absolute inset-0 bg-gradient-to-t from-nexus-obsidian/80 to-transparent z-10',
+                            }),
+                            t.jsx('img', {
+                              src: '/images/daniela/lobby.png',
+                              alt: 'Daniela - Lobby de Integración',
+                              className:
+                                'w-full h-[288px] object-cover transform group-hover:scale-105 transition-transform duration-700',
+                            }),
+                            t.jsxs('div', {
+                              className: 'absolute bottom-6 left-6 z-20 text-left',
+                              children: [
+                                t.jsx('p', {
+                                  className:
+                                    'text-nexus-cyan-glow text-[10px] font-orbitron tracking-widest mb-1 uppercase',
+                                  children: 'Integración',
+                                }),
+                                t.jsx('p', {
+                                  className: 'text-white font-orbitron text-xl font-bold',
+                                  children: 'Lobby Estratégico',
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+                t.jsx('div', {
+                  className: 'grid grid-cols-2 md:grid-cols-4 gap-4 mt-10',
+                  children: [
+                    { label: 'Imagen', value: 'Súper Clara' },
+                    { label: 'Pensamiento', value: 'Rápido' },
+                    { label: 'Charla', value: 'Al Instante' },
+                    { label: 'Acierto', value: 'Casi 100%' },
+                  ].map((e, a) =>
+                    t.jsxs(
+                      n.div,
+                      {
+                        initial: { opacity: 0, y: 20 },
+                        whileInView: { opacity: 1, y: 0 },
+                        viewport: { once: !0 },
+                        transition: { delay: 0.5 + 0.1 * a },
+                        className: 'premium-glass p-4 rounded-xl text-center',
+                        children: [
+                          t.jsx('p', {
+                            className: 'text-nexus-cyan text-2xl font-orbitron font-bold',
+                            children: e.value,
+                          }),
+                          t.jsx('p', {
+                            className: 'text-nexus-silver/60 text-xs uppercase tracking-wider mt-1',
+                            children: e.label,
+                          }),
+                        ],
+                      },
+                      e.label
+                    )
+                  ),
+                }),
+              ],
+            }),
+          ],
+        }),
+        t.jsxs('div', {
+          className: 'flex flex-col items-center justify-center space-y-16 relative z-10',
+          children: [
+            t.jsxs(n.div, {
+              className: 'relative',
+              initial: { scale: 0.9, opacity: 0 },
+              whileInView: { scale: 1, opacity: 1 },
+              viewport: { once: !0 },
+              children: [
+                t.jsx('div', {
+                  className:
+                    'absolute -inset-24 bg-nexus-violet/10 blur-[100px] rounded-full animate-pulse-glow',
+                }),
+                t.jsx('div', {
+                  className: 'relative premium-glass p-4 rounded-full border-white/5 shadow-2xl',
+                  children: t.jsx(c, { size: 'xl', isSpeaking: y, volume: w, onClick: j }),
+                }),
+              ],
+            }),
+            t.jsxs('div', {
+              className: 'mt-12 flex flex-col items-center',
+              children: [
+                t.jsx(n.button, {
+                  whileHover: { scale: 1.05 },
+                  whileTap: { scale: 0.95 },
+                  onClick: j,
+                  className: `\n                            btn-enterprise px-12! py-5! rounded-full! font-orbitron tracking-[0.2em] text-lg\n                            ${f || a ? 'before:bg-red-500/20! border-red-500/30!' : ''}\n                        `,
+                  children: f || a ? 'DESCONECTAR' : 'HABLAR CON DANIELA',
+                }),
+                t.jsx(s, {
+                  children:
+                    f &&
+                    t.jsx(n.p, {
+                      initial: { opacity: 0, y: 10 },
+                      animate: { opacity: 0.4, y: 0 },
+                      exit: { opacity: 0, y: 10 },
+                      className:
+                        'text-[10px] font-mono text-nexus-silver mt-6 uppercase tracking-[0.2em]',
+                      children: 'Sesión Encriptada • Nodo v1.0.4-beta',
+                    }),
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    });
+  };
+export { u as DanielaShowcase };

@@ -94,8 +94,10 @@ export const vapiGodModeConfig: VapiGodModeConfig = {
         language: 'es',
         accent: 'spain',
       },
-      first_message: '¡Hola! Soy Daniela, tu asistente inteligente de AIGestion. Estoy aquí para ayudarte a optimizar tu negocio con el poder de la IA. ¿En qué puedo asistirte hoy?',
-      description: 'Asistente IA especializada en gestión empresarial, análisis de datos y automatización. Voz optimista, elegante y clara en español.',
+      first_message:
+        '¡Hola! Soy Daniela, tu asistente inteligente de AIGestion. Estoy aquí para ayudarte a optimizar tu negocio con el poder de la IA. ¿En qué puedo asistirte hoy?',
+      description:
+        'Asistente IA especializada en gestión empresarial, análisis de datos y automatización. Voz optimista, elegante y clara en español.',
       knowledge_base: [
         'AIGestion es una plataforma de gestión empresarial con inteligencia artificial',
         'Ofrecemos herramientas de análisis de datos, automatización y optimización',
@@ -132,8 +134,10 @@ export const vapiGodModeConfig: VapiGodModeConfig = {
         language: 'es',
         accent: 'neutral',
       },
-      first_message: 'Hola, soy el asistente de soporte técnico de AIGestion. ¿Qué problema técnico puedo ayudarte a resolver hoy?',
-      description: 'Asistente especializado en soporte técnico y resolución de problemas de la plataforma.',
+      first_message:
+        'Hola, soy el asistente de soporte técnico de AIGestion. ¿Qué problema técnico puedo ayudarte a resolver hoy?',
+      description:
+        'Asistente especializado en soporte técnico y resolución de problemas de la plataforma.',
       knowledge_base: [
         'Guías de instalación y configuración',
         'Solución de problemas comunes',
@@ -170,7 +174,8 @@ export const vapiGodModeConfig: VapiGodModeConfig = {
           language: 'es',
           accent: 'latino',
         },
-        first_message: '¡Hola! Soy tu consultor de ventas en AIGestion. ¿Te gustaría descubrir cómo nuestra IA puede transformar tu negocio?',
+        first_message:
+          '¡Hola! Soy tu consultor de ventas en AIGestion. ¿Te gustaría descubrir cómo nuestra IA puede transformar tu negocio?',
         description: 'Asistente especializado en ventas y consultoría de productos.',
         knowledge_base: [
           'Características y beneficios de AIGestion',
@@ -201,7 +206,8 @@ export const vapiGodModeConfig: VapiGodModeConfig = {
     transcription_enabled: true,
     voicemail: {
       enabled: true,
-      message: 'Hola, has llamado a AIGestion. En este momento todos nuestros asesores están ocupados. Por favor, deja un mensaje con tu nombre y número de teléfono, y te contactaremos lo antes posible. ¡Gracias!',
+      message:
+        'Hola, has llamado a AIGestion. En este momento todos nuestros asesores están ocupados. Por favor, deja un mensaje con tu nombre y número de teléfono, y te contactaremos lo antes posible. ¡Gracias!',
       timeout_seconds: 30,
     },
   },
@@ -244,11 +250,15 @@ export const vapiUseCases = {
   // Ventas y consultoría
   sales: {
     name: 'Consultor IA AIGestion',
-    first_message: '¡Hola! Soy tu consultor IA de AIGestion. ¿Listo para transformar tu negocio con inteligencia artificial?',
+    first_message:
+      '¡Hola! Soy tu consultor IA de AIGestion. ¿Listo para transformar tu negocio con inteligencia artificial?',
     prompts: {
-      qualification: 'Para recomendarte la mejor solución, ¿podrías decirme el tamaño de tu empresa?',
-      presentation: 'AIGestion ofrece análisis de datos automatizados, reportes en tiempo real y predicciones IA.',
-      objection_handling: 'Entiendo tu preocupación. Ofrecemos una prueba gratuita de 14 días sin compromiso.',
+      qualification:
+        'Para recomendarte la mejor solución, ¿podrías decirme el tamaño de tu empresa?',
+      presentation:
+        'AIGestion ofrece análisis de datos automatizados, reportes en tiempo real y predicciones IA.',
+      objection_handling:
+        'Entiendo tu preocupación. Ofrecemos una prueba gratuita de 14 días sin compromiso.',
       closing: '¿Te gustaría agendar una demostración personalizada?',
     },
     follow_up_schedule: {
@@ -261,11 +271,14 @@ export const vapiUseCases = {
   // Soporte técnico
   technical_support: {
     name: 'Soporte Técnico IA',
-    first_message: 'Hola, soy el asistente de soporte técnico de AIGestion. ¿Qué problema técnico puedo ayudarte a resolver?',
+    first_message:
+      'Hola, soy el asistente de soporte técnico de AIGestion. ¿Qué problema técnico puedo ayudarte a resolver?',
     prompts: {
-      troubleshooting: 'Vamos a resolver esto paso a paso. ¿Puedes describir el problema que estás experimentando?',
+      troubleshooting:
+        'Vamos a resolver esto paso a paso. ¿Puedes describir el problema que estás experimentando?',
       solution: 'Basado en lo que describes, recomiendo intentar estos pasos...',
-      escalation: 'Este problema requiere atención especializada. Voy a crear un ticket de soporte prioritario.',
+      escalation:
+        'Este problema requiere atención especializada. Voy a crear un ticket de soporte prioritario.',
       resolution: '¿He resuelto tu problema? ¿Hay algo más que pueda hacer por ti?',
     },
     knowledge_base_categories: [
@@ -373,7 +386,7 @@ export const vapiMonitoring = {
     monthly_limit_warning: 80, // % del límite
 
     // Costo alto por llamada
-    high_cost_threshold: 0.10, // $ por llamada
+    high_cost_threshold: 0.1, // $ por llamada
 
     // Baja satisfacción
     low_satisfaction_threshold: 3.0, // escala 1-5

@@ -32,29 +32,29 @@ export const IllustrativeHero: React.FC = () => {
 
   const features = [
     {
-      title: "INTELIGENCIA ARTIFICIAL",
-      subtitle: "Cerebro Digital Empresarial",
-      description: "Procesamiento neuronal avanzado para decisiones óptimas en tiempo real",
-      icon: "🧠",
-      stats: ["10TB datos procesados", "99.9% precisión", "0.1s respuesta"],
-      color: "from-nexus-violet to-nexus-cyan"
+      title: 'INTELIGENCIA ARTIFICIAL',
+      subtitle: 'Cerebro Digital Empresarial',
+      description: 'Procesamiento neuronal avanzado para decisiones óptimas en tiempo real',
+      icon: '🧠',
+      stats: ['10TB datos procesados', '99.9% precisión', '0.1s respuesta'],
+      color: 'from-nexus-violet to-nexus-cyan',
     },
     {
-      title: "AUTOMATIZACIÓN TOTAL",
-      subtitle: "Sistema Operativo Autónomo",
-      description: "Control completo de infraestructura con intervención humana mínima",
-      icon: "⚡",
-      stats: ["1000+ tareas/hora", "99.99% uptime", "0 errores críticos"],
-      color: "from-nexus-cyan to-nexus-violet"
+      title: 'AUTOMATIZACIÓN TOTAL',
+      subtitle: 'Sistema Operativo Autónomo',
+      description: 'Control completo de infraestructura con intervención humana mínima',
+      icon: '⚡',
+      stats: ['1000+ tareas/hora', '99.99% uptime', '0 errores críticos'],
+      color: 'from-nexus-cyan to-nexus-violet',
     },
     {
-      title: "METaverso INTEGRADO",
-      subtitle: "Realidad Aumentada Empresarial",
-      description: "Espacios virtuales colaborativos con interfaces holográficas",
-      icon: "🔮",
-      stats: ["50+ nodos activos", "1000 usuarios", "24/7 disponible"],
-      color: "from-nexus-gold to-nexus-violet"
-    }
+      title: 'METaverso INTEGRADO',
+      subtitle: 'Realidad Aumentada Empresarial',
+      description: 'Espacios virtuales colaborativos con interfaces holográficas',
+      icon: '🔮',
+      stats: ['50+ nodos activos', '1000 usuarios', '24/7 disponible'],
+      color: 'from-nexus-gold to-nexus-violet',
+    },
   ];
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export const IllustrativeHero: React.FC = () => {
         const rect = containerRef.current.getBoundingClientRect();
         setMousePosition({
           x: ((e.clientX - rect.left) / rect.width) * 100,
-          y: ((e.clientY - rect.top) / rect.height) * 100
+          y: ((e.clientY - rect.top) / rect.height) * 100,
         });
       }
     };
@@ -74,7 +74,7 @@ export const IllustrativeHero: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % features.length);
+      setActiveFeature(prev => (prev + 1) % features.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -93,7 +93,7 @@ export const IllustrativeHero: React.FC = () => {
       </div>
 
       {/* Floating Elements */}
-      {floatingElements.map((element) => (
+      {floatingElements.map(element => (
         <motion.div
           key={element.id}
           className={`absolute ${element.color} font-bold text-2xl cursor-pointer select-none`}
@@ -110,7 +110,7 @@ export const IllustrativeHero: React.FC = () => {
           transition={{
             duration: element.duration,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: 'easeInOut',
           }}
           whileHover={{ scale: 1.3, rotate: 360 }}
           onMouseEnter={playHover}
@@ -132,7 +132,7 @@ export const IllustrativeHero: React.FC = () => {
           x: mousePosition.x - 50,
           y: mousePosition.y - 50,
         }}
-        transition={{ type: "spring", stiffness: 100, damping: 25 }}
+        transition={{ type: 'spring', stiffness: 100, damping: 25 }}
       />
 
       {/* Main Content */}
@@ -144,17 +144,17 @@ export const IllustrativeHero: React.FC = () => {
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
+          transition={{ duration: 1.5, ease: 'easeOut' }}
           className="mb-8"
         >
           <div className="relative">
             <motion.div
               animate={{
                 boxShadow: [
-                  "0 0 20px rgba(138,43,226,0.5)",
-                  "0 0 40px rgba(0,245,255,0.5)",
-                  "0 0 20px rgba(138,43,226,0.5)"
-                ]
+                  '0 0 20px rgba(138,43,226,0.5)',
+                  '0 0 40px rgba(0,245,255,0.5)',
+                  '0 0 20px rgba(138,43,226,0.5)',
+                ],
               }}
               transition={{ duration: 2, repeat: Infinity }}
               className="w-32 h-32 rounded-2xl bg-gradient-to-br from-nexus-violet to-nexus-cyan flex items-center justify-center"
@@ -163,7 +163,7 @@ export const IllustrativeHero: React.FC = () => {
             </motion.div>
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
               className="absolute -inset-2 border-2 border-nexus-cyan/30 rounded-2xl"
             />
           </div>
@@ -194,38 +194,41 @@ export const IllustrativeHero: React.FC = () => {
         {/* Feature Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl w-full mb-12">
           <AnimatePresence mode="wait">
-            {features.map((feature, index) => (
-              activeFeature === index && (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, scale: 0.8, y: 50 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: -50 }}
-                  transition={{ duration: 0.5 }}
-                  className="premium-glass p-6 rounded-2xl border border-white/10 hover:border-nexus-cyan/30 transition-all duration-300"
-                  onMouseEnter={playHover}
-                >
-                  <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className={`text-lg font-bold font-orbitron mb-2 bg-gradient-to-r ${feature.color} bg-clip-text text-transparent`}>
-                    {feature.title}
-                  </h3>
-                  <h4 className="text-sm text-nexus-silver/60 mb-3 font-orbitron tracking-wider">
-                    {feature.subtitle}
-                  </h4>
-                  <p className="text-sm text-nexus-silver/80 mb-4 leading-relaxed">
-                    {feature.description}
-                  </p>
-                  <div className="space-y-2">
-                    {feature.stats.map((stat, statIndex) => (
-                      <div key={statIndex} className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-nexus-cyan-glow rounded-full animate-pulse" />
-                        <span className="text-xs text-nexus-silver/60 font-mono">{stat}</span>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )
-            ))}
+            {features.map(
+              (feature, index) =>
+                activeFeature === index && (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, scale: 0.8, y: 50 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, y: -50 }}
+                    transition={{ duration: 0.5 }}
+                    className="premium-glass p-6 rounded-2xl border border-white/10 hover:border-nexus-cyan/30 transition-all duration-300"
+                    onMouseEnter={playHover}
+                  >
+                    <div className="text-4xl mb-4">{feature.icon}</div>
+                    <h3
+                      className={`text-lg font-bold font-orbitron mb-2 bg-gradient-to-r ${feature.color} bg-clip-text text-transparent`}
+                    >
+                      {feature.title}
+                    </h3>
+                    <h4 className="text-sm text-nexus-silver/60 mb-3 font-orbitron tracking-wider">
+                      {feature.subtitle}
+                    </h4>
+                    <p className="text-sm text-nexus-silver/80 mb-4 leading-relaxed">
+                      {feature.description}
+                    </p>
+                    <div className="space-y-2">
+                      {feature.stats.map((stat, statIndex) => (
+                        <div key={statIndex} className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-nexus-cyan-glow rounded-full animate-pulse" />
+                          <span className="text-xs text-nexus-silver/60 font-mono">{stat}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )
+            )}
           </AnimatePresence>
         </div>
 
@@ -237,7 +240,7 @@ export const IllustrativeHero: React.FC = () => {
           className="flex flex-col sm:flex-row gap-6 items-center"
         >
           <motion.button
-            whileHover={{ scale: 1.05, boxShadow: "0 10px 40px rgba(138,43,226,0.4)" }}
+            whileHover={{ scale: 1.05, boxShadow: '0 10px 40px rgba(138,43,226,0.4)' }}
             whileTap={{ scale: 0.95 }}
             onMouseEnter={playHover}
             onClick={playClick}
@@ -251,7 +254,7 @@ export const IllustrativeHero: React.FC = () => {
           </motion.button>
 
           <motion.button
-            whileHover={{ scale: 1.05, borderColor: "rgba(0,245,255,0.5)" }}
+            whileHover={{ scale: 1.05, borderColor: 'rgba(0,245,255,0.5)' }}
             whileTap={{ scale: 0.95 }}
             onMouseEnter={playHover}
             onClick={playClick}

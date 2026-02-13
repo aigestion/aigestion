@@ -78,7 +78,7 @@ export const schemas = {
         .min(12)
         .regex(
           /^(?=.*[0-9])(?=.*[!@#$%^&*])/,
-          'Password must include number and special character',
+          'Password must include number and special character'
         ),
       name: z.string().min(2),
     }),
@@ -89,7 +89,7 @@ export const schemas = {
         .min(12)
         .regex(
           /^(?=.*[0-9])(?=.*[!@#$%^&*])/,
-          'Password must include number and special character',
+          'Password must include number and special character'
         ),
     }),
     enable2FA: z.object({
@@ -131,7 +131,7 @@ export const schemas = {
           z.object({
             role: z.enum(['user', 'assistant', 'system']),
             content: z.string().min(1),
-          }),
+          })
         )
         .optional(),
     }),

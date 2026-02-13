@@ -5,9 +5,10 @@ import { logger } from '../src/utils/logger';
 
 async function verifyQwenTTS() {
   console.log('🚀 Starting Qwen3 TTS Verification...');
-  
+
   const service = new QwenTTSService();
-  const testText = 'Hola, esta es una prueba de la integración de Qwen3 TTS en el proyecto AIGestion.';
+  const testText =
+    'Hola, esta es una prueba de la integración de Qwen3 TTS en el proyecto AIGestion.';
   const outputPath = path.join(process.cwd(), 'uploads', 'test', 'qwen-test.mp3');
 
   try {

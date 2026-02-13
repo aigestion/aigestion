@@ -5,9 +5,9 @@ const fs = require('fs');
 // GitHub Pages IPs para verificar
 const GITHUB_PAGES_IPS = [
   '185.199.108.153',
-  '185.199.109.153', 
+  '185.199.109.153',
   '185.199.110.153',
-  '185.199.111.153'
+  '185.199.111.153',
 ];
 
 const DOMAIN = 'aigestion.net';
@@ -24,7 +24,7 @@ async function checkDNSPropagation() {
     rootDNS: null,
     wwwDNS: null,
     sslStatus: null,
-    propagationComplete: false
+    propagationComplete: false,
   };
 
   try {
@@ -32,9 +32,9 @@ async function checkDNSPropagation() {
     console.log(`\n1. 📡 Verificando DNS para ${DOMAIN}...`);
     const rootRecords = await dns.resolve4(DOMAIN);
     results.rootDNS = rootRecords;
-    
+
     console.log(`   📍 Registros A encontrados: ${rootRecords.join(', ')}`);
-    
+
     // Verificar si apuntan a GitHub Pages
     const rootMatches = rootRecords.every(ip => GITHUB_PAGES_IPS.includes(ip));
     console.log(`   ${rootMatches ? '✅' : '❌'} Apunta a GitHub Pages: ${rootMatches}`);
@@ -43,9 +43,9 @@ async function checkDNSPropagation() {
     console.log(`\n2. 📡 Verificando DNS para ${WWW_DOMAIN}...`);
     const wwwRecords = await dns.resolve4(WWW_DOMAIN);
     results.wwwDNS = wwwRecords;
-    
+
     console.log(`   📍 Registros A encontrados: ${wwwRecords.join(', ')}`);
-    
+
     // Verificar si apuntan a GitHub Pages
     const wwwMatches = wwwRecords.every(ip => GITHUB_PAGES_IPS.includes(ip));
     console.log(`   ${wwwMatches ? '✅' : '❌'} Apunta a GitHub Pages: ${wwwMatches}`);
@@ -65,10 +65,14 @@ async function checkDNSPropagation() {
 
     // Determinar si la propagación está completa
     results.propagationComplete = rootMatches && wwwMatches;
-    
+
     console.log(`\n4. 📊 Estado General:`);
-    console.log(`   ${results.propagationComplete ? '✅' : '⏳'} Propagación DNS: ${results.propagationComplete ? 'Completa' : 'En progreso'}`);
-    console.log(`   ${results.sslStatus?.valid ? '✅' : '⏳'} Certificado SSL: ${results.sslStatus?.valid ? 'Válido' : 'Pendiente'}`);
+    console.log(
+      `   ${results.propagationComplete ? '✅' : '⏳'} Propagación DNS: ${results.propagationComplete ? 'Completa' : 'En progreso'}`
+    );
+    console.log(
+      `   ${results.sslStatus?.valid ? '✅' : '⏳'} Certificado SSL: ${results.sslStatus?.valid ? 'Válido' : 'Pendiente'}`
+    );
 
     // Guardar resultados
     const logFile = `c:\\Users\\Alejandro\\AIGestion\\.windsurf\\dns-propagation-log.json`;
@@ -76,7 +80,6 @@ async function checkDNSPropagation() {
     console.log(`\n💾 Resultados guardados en: ${logFile}`);
 
     return results;
-
   } catch (error) {
     console.error(`❌ Error verificando DNS: ${error.message}`);
     results.error = error.message;
@@ -90,10 +93,10 @@ function checkSSLCertificate(hostname) {
       hostname: hostname,
       port: 443,
       method: 'GET',
-      rejectUnauthorized: false // Para poder leer el certificado incluso si es inválido
+      rejectUnauthorized: false, // Para poder leer el certificado incluso si es inválido
     };
 
-    const req = https.request(options, (res) => {
+    const req = https.request(options, res => {
       const cert = res.socket.getPeerCertificate();
       if (Object.keys(cert).length === 0) {
         reject(new Error('No certificate found'));
@@ -105,7 +108,7 @@ function checkSSLCertificate(hostname) {
         subject: cert.subject,
         issuer: cert.issuer,
         expiresAt: new Date(cert.valid_to).toISOString(),
-        daysUntilExpiry: Math.floor((new Date(cert.valid_to) - new Date()) / (1000 * 60 * 60 * 24))
+        daysUntilExpiry: Math.floor((new Date(cert.valid_to) - new Date()) / (1000 * 60 * 60 * 24)),
       });
     });
 
@@ -120,10 +123,10 @@ function checkSSLCertificate(hostname) {
 
 async function startMonitoring(intervalMinutes = 5) {
   console.log(`🚀 Iniciando monitoreo cada ${intervalMinutes} minutos...`);
-  
+
   while (true) {
     const results = await checkDNSPropagation();
-    
+
     if (results.propagationComplete && results.sslStatus?.valid) {
       console.log('\n🎉 ¡Propagación DNS y SSL completados con éxito!');
       console.log('📋 Resumen final:');
@@ -133,7 +136,7 @@ async function startMonitoring(intervalMinutes = 5) {
       console.log('\n🔗 El dominio está listo para producción.');
       break;
     }
-    
+
     console.log(`\n⏳ Esperando ${intervalMinutes} minutos para próxima verificación...`);
     await new Promise(resolve => setTimeout(resolve, intervalMinutes * 60 * 1000));
   }
@@ -143,7 +146,7 @@ async function startMonitoring(intervalMinutes = 5) {
 if (require.main === module) {
   const args = process.argv.slice(2);
   const interval = args[0] ? parseInt(args[0]) : 5;
-  
+
   if (args.includes('--once')) {
     checkDNSPropagation();
   } else {

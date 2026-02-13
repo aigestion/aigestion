@@ -10,7 +10,7 @@ export interface IMissionRepository extends BaseRepository<IMission> {
 @injectable()
 export class MissionRepository extends BaseRepository<IMission> implements IMissionRepository {
   override async create(idOrItem: any, maybeItem?: any): Promise<IMission> {
-    const data = typeof idOrItem === 'string' ? maybeItem ?? {} : idOrItem;
+    const data = typeof idOrItem === 'string' ? (maybeItem ?? {}) : idOrItem;
     const mission = new Mission(data as any);
     return await mission.save();
   }

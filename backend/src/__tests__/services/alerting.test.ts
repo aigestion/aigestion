@@ -38,7 +38,7 @@ describe('AlertingService', () => {
 
       await alertingService.checkSystemHealth();
       expect(mockTelegramService.sendMessage).toHaveBeenCalledWith(
-        expect.stringContaining('High CPU Usage'),
+        expect.stringContaining('High CPU Usage')
       );
     });
 
@@ -60,7 +60,7 @@ describe('AlertingService', () => {
 
       await alertingService.checkDockerHealth();
       expect(mockTelegramService.sendMessage).toHaveBeenCalledWith(
-        expect.stringContaining('No Docker containers'),
+        expect.stringContaining('No Docker containers')
       );
     });
 

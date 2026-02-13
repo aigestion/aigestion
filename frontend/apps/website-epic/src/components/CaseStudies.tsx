@@ -10,7 +10,11 @@ const cases = [
   {
     sector: 'Logística & Transporte',
     title: 'Orquestación de rutas con IA y monitoreo predictivo',
-    impact: ['-19% costos operativos', '+31% cumplimiento de entregas', '-54% incidencias críticas'],
+    impact: [
+      '-19% costos operativos',
+      '+31% cumplimiento de entregas',
+      '-54% incidencias críticas',
+    ],
   },
   {
     sector: 'Educación & Gremios',
@@ -20,7 +24,10 @@ const cases = [
 ];
 
 export const CaseStudies: React.FC = () => (
-  <section id="cases" className="py-32 bg-gradient-to-b from-black via-gray-900/30 to-black relative">
+  <section
+    id="cases"
+    className="py-32 bg-gradient-to-b from-black via-gray-900/30 to-black relative"
+  >
     <div className="absolute inset-0 bg-radial-at-center from-nexus-cyan/10 via-transparent to-transparent" />
 
     <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -35,7 +42,8 @@ export const CaseStudies: React.FC = () => (
           CASOS DE <span className="text-nexus-violet text-glow">ÉXITO</span>
         </h2>
         <p className="text-lg text-nexus-silver/70 max-w-3xl mx-auto">
-          Ejemplos reales con impacto medible. Diseñamos estrategias adaptadas a tu industria y gremio.
+          Ejemplos reales con impacto medible. Diseñamos estrategias adaptadas a tu industria y
+          gremio.
         </p>
       </motion.div>
 
@@ -54,7 +62,7 @@ export const CaseStudies: React.FC = () => (
             </div>
             <h3 className="text-xl font-bold text-white mb-4">{item.title}</h3>
             <ul className="space-y-3 text-sm text-nexus-silver/70">
-              {item.impact.map((point) => (
+              {item.impact.map(point => (
                 <li key={point} className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-nexus-cyan" />
                   {point}

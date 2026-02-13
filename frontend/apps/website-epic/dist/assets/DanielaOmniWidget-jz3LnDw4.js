@@ -1,1 +1,138 @@
-import{j as e}from"./vendor-3d-BTgeB28l.js";import{r as s}from"./vendor-react-DzSuaLpV.js";import{u as a}from"./useDanielaVoice-DGiZ24v-.js";import{b as r}from"./main-B5DH-ZW_.js";import{A as t,m as i}from"./vendor-motion-I6wcTx_q.js";import"./vendor-ui-DAuP2EEx.js";import"./vendor-data-BRBMd6Um.js";const l=()=>{const[l,o]=s.useState(!1),{isListening:n,transcript:d,toggleListening:c}=a(),{playHover:u,playClick:x}=r();return e.jsxs("div",{className:"fixed bottom-8 right-8 z-9000 font-sans",children:[e.jsx(t,{children:l&&e.jsxs(i.div,{initial:{opacity:0,scale:.8,y:20},animate:{opacity:1,scale:1,y:0},exit:{opacity:0,scale:.8,y:20},className:"absolute bottom-20 right-0 w-80 bg-black/60 backdrop-blur-xl p-6 rounded-3xl mb-4 border border-nexus-violet/30 shadow-[0_0_50px_rgba(0,0,0,0.5)]",children:[e.jsxs("div",{className:"flex items-center gap-3 mb-4 border-b border-white/5 pb-2",children:[e.jsx("div",{className:"w-2 h-2 rounded-full bg-nexus-cyan animate-pulse shadow-[0_0_8px_rgba(34,211,238,1)]"}),e.jsx("span",{className:"text-[10px] font-orbitron tracking-[0.3em] text-nexus-cyan-glow uppercase",children:"Asistente Daniela"}),e.jsx("div",{className:"ml-auto w-12 h-px bg-nexus-cyan/20"})]}),e.jsx("div",{className:"min-h-[100px] text-sm text-nexus-silver/80 font-light leading-relaxed",children:d?e.jsxs("p",{className:"italic text-white border-l-2 border-nexus-violet/30 pl-3",children:['"',d,'"']}):e.jsxs("div",{className:"space-y-2",children:[e.jsx("p",{className:"opacity-70",children:"Soy Daniela. Puedo gestionar tu CRM, agenda y sistemas Nexus."}),e.jsx("p",{className:"text-[10px] uppercase tracking-widest text-nexus-violet-glow/40",children:"\xbfEn qu\xe9 puedo ayudarte hoy?"})]})}),e.jsxs("div",{className:"mt-6 pt-4 border-t border-white/5 flex justify-between items-center",children:[e.jsx(i.button,{whileHover:{scale:1.05},whileTap:{scale:.95},onClick:c,className:"px-6 py-2 rounded-full text-[10px] font-orbitron tracking-widest transition-all duration-500 "+(n?"bg-red-500/20 text-red-400 border border-red-500/30":"bg-nexus-violet/10 hover:bg-nexus-violet/20 text-nexus-violet-glow border border-nexus-violet/30"),children:n?"\u25cf PARAR":"\ud83c\udf99\ufe0f HABLAR CON ELLA"}),e.jsx("div",{className:"flex gap-1",children:[1,2,3].map(s=>e.jsx("div",{className:"w-1 h-1 rounded-full "+(n?"bg-nexus-violet-glow animate-pulse":"bg-white/10")},s))})]})]})}),e.jsxs(i.button,{onClick:()=>{o(!l),x()},whileHover:{scale:1.1},onMouseEnter:u,whileTap:{scale:.95},className:"relative w-16 h-16 rounded-full flex items-center justify-center group",children:[e.jsx("div",{className:"absolute inset-0 bg-linear-to-br from-nexus-violet to-nexus-blue-600 rounded-full blur-md opacity-70 group-hover:opacity-100 transition-opacity animate-pulse"}),e.jsxs("div",{className:"relative w-full h-full bg-black/40 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center overflow-hidden group-hover:border-nexus-violet/50 transition-colors",children:[e.jsx("img",{src:"/images/daniela/lobby.png",alt:"Daniela AI",className:"w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500"}),e.jsx("div",{className:"absolute inset-0 border border-nexus-cyan/20 rounded-full scale-90"}),e.jsx(i.div,{animate:{rotate:360},transition:{duration:10,repeat:1/0,ease:"linear"},className:"absolute inset-0 border-t-2 border-nexus-cyan/40 rounded-full"}),e.jsx(i.div,{animate:{rotate:-360},transition:{duration:15,repeat:1/0,ease:"linear"},className:"absolute inset-2 border-b-2 border-nexus-violet/30 rounded-full"})]})]})]})};export{l as DanielaOmniWidget};
+import { j as e } from './vendor-3d-BTgeB28l.js';
+import { r as s } from './vendor-react-DzSuaLpV.js';
+import { u as a } from './useDanielaVoice-DGiZ24v-.js';
+import { b as r } from './main-B5DH-ZW_.js';
+import { A as t, m as i } from './vendor-motion-I6wcTx_q.js';
+import './vendor-ui-DAuP2EEx.js';
+import './vendor-data-BRBMd6Um.js';
+const l = () => {
+  const [l, o] = s.useState(!1),
+    { isListening: n, transcript: d, toggleListening: c } = a(),
+    { playHover: u, playClick: x } = r();
+  return e.jsxs('div', {
+    className: 'fixed bottom-8 right-8 z-9000 font-sans',
+    children: [
+      e.jsx(t, {
+        children:
+          l &&
+          e.jsxs(i.div, {
+            initial: { opacity: 0, scale: 0.8, y: 20 },
+            animate: { opacity: 1, scale: 1, y: 0 },
+            exit: { opacity: 0, scale: 0.8, y: 20 },
+            className:
+              'absolute bottom-20 right-0 w-80 bg-black/60 backdrop-blur-xl p-6 rounded-3xl mb-4 border border-nexus-violet/30 shadow-[0_0_50px_rgba(0,0,0,0.5)]',
+            children: [
+              e.jsxs('div', {
+                className: 'flex items-center gap-3 mb-4 border-b border-white/5 pb-2',
+                children: [
+                  e.jsx('div', {
+                    className:
+                      'w-2 h-2 rounded-full bg-nexus-cyan animate-pulse shadow-[0_0_8px_rgba(34,211,238,1)]',
+                  }),
+                  e.jsx('span', {
+                    className:
+                      'text-[10px] font-orbitron tracking-[0.3em] text-nexus-cyan-glow uppercase',
+                    children: 'Asistente Daniela',
+                  }),
+                  e.jsx('div', { className: 'ml-auto w-12 h-px bg-nexus-cyan/20' }),
+                ],
+              }),
+              e.jsx('div', {
+                className: 'min-h-[100px] text-sm text-nexus-silver/80 font-light leading-relaxed',
+                children: d
+                  ? e.jsxs('p', {
+                      className: 'italic text-white border-l-2 border-nexus-violet/30 pl-3',
+                      children: ['"', d, '"'],
+                    })
+                  : e.jsxs('div', {
+                      className: 'space-y-2',
+                      children: [
+                        e.jsx('p', {
+                          className: 'opacity-70',
+                          children: 'Soy Daniela. Puedo gestionar tu CRM, agenda y sistemas Nexus.',
+                        }),
+                        e.jsx('p', {
+                          className:
+                            'text-[10px] uppercase tracking-widest text-nexus-violet-glow/40',
+                          children: '\xbfEn qu\xe9 puedo ayudarte hoy?',
+                        }),
+                      ],
+                    }),
+              }),
+              e.jsxs('div', {
+                className: 'mt-6 pt-4 border-t border-white/5 flex justify-between items-center',
+                children: [
+                  e.jsx(i.button, {
+                    whileHover: { scale: 1.05 },
+                    whileTap: { scale: 0.95 },
+                    onClick: c,
+                    className:
+                      'px-6 py-2 rounded-full text-[10px] font-orbitron tracking-widest transition-all duration-500 ' +
+                      (n
+                        ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+                        : 'bg-nexus-violet/10 hover:bg-nexus-violet/20 text-nexus-violet-glow border border-nexus-violet/30'),
+                    children: n ? '\u25cf PARAR' : '\ud83c\udf99\ufe0f HABLAR CON ELLA',
+                  }),
+                  e.jsx('div', {
+                    className: 'flex gap-1',
+                    children: [1, 2, 3].map(s =>
+                      e.jsx(
+                        'div',
+                        {
+                          className:
+                            'w-1 h-1 rounded-full ' +
+                            (n ? 'bg-nexus-violet-glow animate-pulse' : 'bg-white/10'),
+                        },
+                        s
+                      )
+                    ),
+                  }),
+                ],
+              }),
+            ],
+          }),
+      }),
+      e.jsxs(i.button, {
+        onClick: () => {
+          (o(!l), x());
+        },
+        whileHover: { scale: 1.1 },
+        onMouseEnter: u,
+        whileTap: { scale: 0.95 },
+        className: 'relative w-16 h-16 rounded-full flex items-center justify-center group',
+        children: [
+          e.jsx('div', {
+            className:
+              'absolute inset-0 bg-linear-to-br from-nexus-violet to-nexus-blue-600 rounded-full blur-md opacity-70 group-hover:opacity-100 transition-opacity animate-pulse',
+          }),
+          e.jsxs('div', {
+            className:
+              'relative w-full h-full bg-black/40 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center overflow-hidden group-hover:border-nexus-violet/50 transition-colors',
+            children: [
+              e.jsx('img', {
+                src: '/images/daniela/lobby.png',
+                alt: 'Daniela AI',
+                className:
+                  'w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500',
+              }),
+              e.jsx('div', {
+                className: 'absolute inset-0 border border-nexus-cyan/20 rounded-full scale-90',
+              }),
+              e.jsx(i.div, {
+                animate: { rotate: 360 },
+                transition: { duration: 10, repeat: 1 / 0, ease: 'linear' },
+                className: 'absolute inset-0 border-t-2 border-nexus-cyan/40 rounded-full',
+              }),
+              e.jsx(i.div, {
+                animate: { rotate: -360 },
+                transition: { duration: 15, repeat: 1 / 0, ease: 'linear' },
+                className: 'absolute inset-2 border-b-2 border-nexus-violet/30 rounded-full',
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+};
+export { l as DanielaOmniWidget };

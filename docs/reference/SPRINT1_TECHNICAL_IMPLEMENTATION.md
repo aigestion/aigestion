@@ -51,14 +51,17 @@ Crear `docs/adr/001-api-versioning.md`:
 # ADR 001: API Versioning Strategy
 
 ## Decisión
+
 Usar URL versioning (`/api/v1/`, `/api/v2/`) en lugar de header versioning
 
 ## Rationale
+
 - Más claro para desarrollo
 - Facilita migration gradual
 - Compatible con OpenAPI/Swagger
 
 ## Alternativas Consideradas
+
 - Header versioning (rechazada: menos visible)
 - Accept header (rechazada: requiere docs)
 - Subdomain (rechazada: infraestructura compleja)
@@ -369,10 +372,7 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async createUser(
-    @Arg('email') email: string,
-    @Arg('name') name: string,
-  ) {
+  async createUser(@Arg('email') email: string, @Arg('name') name: string) {
     // Resolver implementation
   }
 }
@@ -399,7 +399,7 @@ export class UserLoader {
     return new DataLoader(async (userIds: string[]) => {
       const users = await this.userService.findByIds(userIds);
       // Retornar en el mismo orden que userIds
-      return userIds.map((id) => users.find((u) => u.id === id));
+      return userIds.map(id => users.find(u => u.id === id));
     });
   }
 }
@@ -523,11 +523,7 @@ import { RedisService } from '@liaoliaots/nestjs-redis';
 export class QueryCacheService {
   constructor(private redis: RedisService) {}
 
-  async getCachedQuery<T>(
-    key: string,
-    queryFn: () => Promise<T>,
-    ttl: number = 3600,
-  ): Promise<T> {
+  async getCachedQuery<T>(key: string, queryFn: () => Promise<T>, ttl: number = 3600): Promise<T> {
     const cached = await this.redis.get(key);
 
     if (cached) {
@@ -555,14 +551,14 @@ export class QueryCacheService {
 export class UsersService {
   constructor(
     private cache: QueryCacheService,
-    private db: Database,
+    private db: Database
   ) {}
 
   async getUserById(id: string) {
     return this.cache.getCachedQuery(
       `user:${id}`,
       () => this.db.users.findById(id),
-      3600, // 1 hora
+      3600 // 1 hora
     );
   }
 
@@ -629,7 +625,7 @@ import { AmqpConnection } from '@nestjs-modules/rabbitmq';
 export class EventPublisher {
   constructor(
     private amqp: AmqpConnection,
-    private eventEmitter: EventEmitter2,
+    private eventEmitter: EventEmitter2
   ) {}
 
   async publishEvent<T>(eventType: string, payload: T) {
@@ -641,11 +637,7 @@ export class EventPublisher {
     };
 
     // Publish to RabbitMQ for external consumers
-    await this.amqp.publish(
-      'events',
-      `event.${eventType}`,
-      Buffer.from(JSON.stringify(event)),
-    );
+    await this.amqp.publish('events', `event.${eventType}`, Buffer.from(JSON.stringify(event)));
 
     // Emit locally for immediate handlers
     this.eventEmitter.emit(`event.${eventType}`, event);
@@ -739,6 +731,7 @@ Profile Service (consumer)
 └─ create profile (async)
 
 ```
+
 ```
 
 ### Paso 1.5.2: Refactor a Async
@@ -751,7 +744,7 @@ export class UserService {
   constructor(
     private db: Database,
     private emailService: EmailService,
-    private analyticsService: AnalyticsService,
+    private analyticsService: AnalyticsService
   ) {}
 
   async createUser(dto: CreateUserDto) {
@@ -773,7 +766,7 @@ export class UserService {
 export class UserService {
   constructor(
     private db: Database,
-    private publisher: EventPublisher,
+    private publisher: EventPublisher
   ) {}
 
   async createUser(dto: CreateUserDto) {
@@ -867,19 +860,19 @@ redis-cli --cluster create localhost:6379 localhost:6380 localhost:6381
 export class CacheInvalidationService {
   constructor(
     private redis: RedisService,
-    private eventEmitter: EventEmitter2,
+    private eventEmitter: EventEmitter2
   ) {
     this.setupInvalidationListeners();
   }
 
   private setupInvalidationListeners() {
     // Invalidar cache cuando datos cambien
-    this.eventEmitter.on('user.updated', (event) => {
+    this.eventEmitter.on('user.updated', event => {
       this.redis.del(`user:${event.userId}`);
       this.redis.del('users:*'); // Invalidar listas
     });
 
-    this.eventEmitter.on('inventory.changed', (event) => {
+    this.eventEmitter.on('inventory.changed', event => {
       this.redis.del(`product:${event.productId}`);
     });
   }
@@ -898,9 +891,7 @@ export class CacheWarmupService implements OnModuleInit {
       console.log('Warming up cache...');
 
       // Precarga datos frecuentes
-      await this.cache.getCachedQuery('products:popular', () =>
-        this.db.products.findPopular(100),
-      );
+      await this.cache.getCachedQuery('products:popular', () => this.db.products.findPopular(100));
 
       console.log('Cache warmed up');
     }
@@ -970,4 +961,3 @@ pnpm run sprint-report > sprint1_results.md
 **Último Update:** 2025-12-16 20:58
 **Responsable:** Alejandro
 **Status:** 🚀 KICKOFF - READY TO EXECUTE
-

@@ -9,11 +9,13 @@ Paso a paso para crear y configurar el proyecto "AIGestion Sovereign" en Google 
 ## 🔧 Paso 1: Crear Proyecto
 
 ### 1.1 Acceder a Google Cloud Console
+
 1. Ve a: https://console.cloud.google.com/
 2. Inicia sesión con tu cuenta de Google
 3. Acepta los términos de servicio si es necesario
 
 ### 1.2 Crear Nuevo Proyecto
+
 1. Haz clic en el selector de proyectos (arriba izquierda)
 2. Haz clic en **"NUEVO PROYECTO"**
 3. Configura el proyecto:
@@ -31,17 +33,21 @@ Paso a paso para crear y configurar el proyecto "AIGestion Sovereign" en Google 
 ## 🔑 Paso 2: Habilitar API de Gemini Pro
 
 ### 2.1 Buscar API
+
 1. En el menú izquierdo, ve a **"API y servicios"** → **"Biblioteca"**
 2. En el buscador, escribe: **"Generative Language API"**
 3. Selecciona **"Generative Language API"** de Google
 
 ### 2.2 Habilitar API
+
 1. Haz clic en **"HABILITAR"**
 2. Espera la confirmación (puede tardar 1-2 minutos)
 3. Verás el mensaje: "API habilitada correctamente"
 
 ### 2.3 APIs Adicionales Recomendadas
+
 También habilita estas APIs para AIGestion:
+
 - **Cloud Vision API** (para análisis de imágenes)
 - **Cloud Natural Language API** (para análisis de texto)
 - **Cloud Translation API** (para multilingüe)
@@ -51,11 +57,13 @@ También habilita estas APIs para AIGestion:
 ## 🔐 Paso 3: Crear API Key Segura
 
 ### 3.1 Crear Credenciales
+
 1. Ve a **"API y servicios"** → **"Credenciales"**
 2. Haz clic en **"+ CREAR CREDENCIALES"**
 3. Selecciona **"Clave de API"**
 
 ### 3.2 Configurar API Key
+
 1. **Nombre**: `AIGestion-Gemini-Pro-Key`
 2. **Restricciones de API**:
    - Selecciona **"Restringir clave"**
@@ -70,6 +78,7 @@ También habilita estas APIs para AIGestion:
 4. Haz clic en **"CREAR"**
 
 ### 3.3 Copiar y Guardar API Key
+
 1. **COPIA INMEDIATAMENTE** la API key generada
 2. Guárdala en un lugar seguro (gestor de contraseñas)
 3. **No compartas esta key públicamente**
@@ -79,6 +88,7 @@ También habilita estas APIs para AIGestion:
 ## 🛡️ Paso 4: Configurar Seguridad Adicional
 
 ### 4.1 Configurar Cuotas y Límites
+
 1. Ve a **"API y servicios"** → **"Cuotas"**
 2. Busca **"Generative Language API"**
 3. Configura límites diarios para evitar costos inesperados:
@@ -86,6 +96,7 @@ También habilita estas APIs para AIGestion:
    - **Tokens por día**: 100,000 (ajusta según necesidad)
 
 ### 4.2 Configurar Alertas
+
 1. Ve a **"Facturación"** → **"Presupuestos"**
 2. Crea un presupuesto mensual (ej: $50 USD)
 3. Configura alertas al 50%, 90% y 100% del presupuesto
@@ -95,6 +106,7 @@ También habilita estas APIs para AIGestion:
 ## 🔧 Paso 5: Configurar en AIGestion
 
 ### 5.1 Actualizar Archivo .env.gemini
+
 Edita el archivo: `c:\Users\Alejandro\AIGestion\.env.gemini`
 
 ```bash
@@ -119,6 +131,7 @@ GEMINI_RESPONSE_FORMAT=json
 ```
 
 ### 5.2 Obtener Project Number
+
 1. En Google Cloud Console, ve a **"IAM y administración"** → **"Configuración"**
 2. Copia el **"Número de proyecto"**
 3. Añádelo al archivo `.env.gemini`
@@ -128,6 +141,7 @@ GEMINI_RESPONSE_FORMAT=json
 ## 🧪 Paso 6: Probar Configuración
 
 ### 6.1 Probar con PowerShell
+
 ```powershell
 cd c:\Users\Alejandro\AIGestion\scripts\ai
 
@@ -138,6 +152,7 @@ cd c:\Users\Alejandro\AIGestion\scripts\ai
 ```
 
 ### 6.2 Probar con TypeScript
+
 ```bash
 cd c:\Users\Alejandro\AIGestion\frontend\apps\website-epic
 
@@ -155,11 +170,13 @@ console.log(response);
 ## 📊 Paso 7: Monitoreo y Mantenimiento
 
 ### 7.1 Dashboard de Monitoreo
+
 1. Ve a **"API y servicios"** → **"Panel"**
 2. Monitoriza el uso de la API en tiempo real
 3. Revisa métricas de rendimiento
 
 ### 7.2 Logs y Errores
+
 1. Ve a **"Logging"** → **"Explorador de registros"**
 2. Filtra por: `resource.type="generative_language_api"`
 3. Revisa errores y advertencias
@@ -169,16 +186,19 @@ console.log(response);
 ## 🚨 Solución de Problemas Comunes
 
 ### Problema: "API key no válida"
+
 - ✅ Verifica que la API key esté correctamente copiada
 - ✅ Confirma que la API esté habilitada
 - ✅ Revisa las restricciones de IP
 
 ### Problema: "Cuota excedida"
+
 - ✅ Revisa los límites configurados
 - ✅ Aumenta las cuotas si es necesario
 - ✅ Implementa caching para reducir llamadas
 
 ### Problema: "Permiso denegado"
+
 - ✅ Verifica las restricciones de API
 - ✅ Confirma que el proyecto esté activo
 - ✅ Revisa la configuración de IAM
@@ -220,4 +240,4 @@ Una vez completados estos pasos, tendrás:
 
 **🔥 AIGESTION SOVEREIGN LISTO PARA PRODUCCIÓN! 🚀**
 
-*Tu proyecto de IA soberano con la tecnología más avanzada de Google*
+_Tu proyecto de IA soberano con la tecnología más avanzada de Google_

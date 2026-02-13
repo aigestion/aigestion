@@ -99,7 +99,7 @@ export class IoTController {
         { baseUrl: haUrl, accessToken: haToken },
         domain,
         service,
-        serviceData,
+        serviceData
       );
       return res.json({ success: true, message: 'Command executed' });
     } catch (error: any) {

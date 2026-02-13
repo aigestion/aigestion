@@ -41,7 +41,7 @@ export const createPersona = [
 export const getMarketplacePersonas = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const getMarketplacePersonasUseCase = container.get<GetMarketplacePersonasUseCase>(
-      TYPES.GetMarketplacePersonasUseCase,
+      TYPES.GetMarketplacePersonasUseCase
     );
     const limit = parseInt(req.query.limit as string) || 20;
     const offset = parseInt(req.query.offset as string) || 0;

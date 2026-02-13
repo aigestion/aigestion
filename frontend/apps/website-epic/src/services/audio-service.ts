@@ -32,7 +32,7 @@ class AudioService {
   private async preloadEssentialSounds(): Promise<void> {
     // Preload in background without blocking
     setTimeout(() => {
-      this.preloadQueue.forEach(async (sound) => {
+      this.preloadQueue.forEach(async sound => {
         try {
           await this.loadSound(sound);
         } catch (error) {
@@ -65,7 +65,7 @@ class AudioService {
       return this.loadingPromises.get(type)!;
     }
 
-    const loadPromise = new Promise<HTMLAudioElement>((resolve) => {
+    const loadPromise = new Promise<HTMLAudioElement>(resolve => {
       const existingCache = this.audioCache.get(type);
       if (existingCache?.isLoaded) {
         resolve(existingCache.audio);
@@ -79,7 +79,7 @@ class AudioService {
       };
 
       const tryLoad = (src: string): Promise<HTMLAudioElement> => {
-        return new Promise((resolveLoad) => {
+        return new Promise(resolveLoad => {
           const audio = new Audio();
           audio.src = src;
           audio.volume = 0.3;
@@ -96,31 +96,37 @@ class AudioService {
             }
           }, 2000);
 
+          audio.addEventListener(
+            'canplaythrough',
+            () => {
+              clearTimeout(timeout);
+              const cache: AudioCache = { audio, isLoaded: true, error: false };
+              this.audioCache.set(type, cache);
+              this.cleanupCache();
+              resolveLoad(audio);
+            },
+            { once: true }
+          );
 
-          audio.addEventListener('canplaythrough', () => {
-            clearTimeout(timeout);
-            const cache: AudioCache = { audio, isLoaded: true, error: false };
-            this.audioCache.set(type, cache);
-            this.cleanupCache();
-            resolveLoad(audio);
-          }, { once: true });
-
-          audio.addEventListener('error', () => {
-            clearTimeout(timeout);
-            console.debug(`[AudioService] Failed to load ${type} from ${src}`);
-            resolveLoad(createSilentFallback());
-          }, { once: true });
+          audio.addEventListener(
+            'error',
+            () => {
+              clearTimeout(timeout);
+              console.debug(`[AudioService] Failed to load ${type} from ${src}`);
+              resolveLoad(createSilentFallback());
+            },
+            { once: true }
+          );
 
           audio.load();
         });
       };
 
       // Load .mp3 only
-      tryLoad(`/sounds/${type}.mp3`)
-        .then((audio) => {
-          this.loadingPromises.delete(type);
-          resolve(audio);
-        });
+      tryLoad(`/sounds/${type}.mp3`).then(audio => {
+        this.loadingPromises.delete(type);
+        resolve(audio);
+      });
     });
 
     this.loadingPromises.set(type, loadPromise);
@@ -143,7 +149,7 @@ class AudioService {
         const playPromise = audio.play();
 
         if (playPromise !== undefined) {
-          playPromise.catch((error) => {
+          playPromise.catch(error => {
             // Autoplay was prevented - this is expected in some browsers
             if (error.name !== 'NotAllowedError') {
               console.debug(`[AudioService] Error playing ${type}:`, error);
@@ -194,7 +200,7 @@ class AudioService {
     if (this.isMuted) {
       this.stopAmbience();
       // Pause all cached audio
-      this.audioCache.forEach((cache) => {
+      this.audioCache.forEach(cache => {
         if (cache.isLoaded) {
           cache.audio.pause();
         }
@@ -221,7 +227,7 @@ class AudioService {
   // Cleanup method
   destroy(): void {
     this.stopAmbience();
-    this.audioCache.forEach((cache) => {
+    this.audioCache.forEach(cache => {
       if (cache.audio) {
         cache.audio.pause();
         cache.audio.src = '';

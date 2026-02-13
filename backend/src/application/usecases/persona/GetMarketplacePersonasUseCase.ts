@@ -9,7 +9,7 @@ export class GetMarketplacePersonasUseCase {
 
   async execute(
     limit: number = 20,
-    offset: number = 0,
+    offset: number = 0
   ): Promise<{ personas: IPersona[]; total: number }> {
     return await this.personaRepository.findPublic(limit, offset);
   }

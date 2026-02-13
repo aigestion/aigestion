@@ -1,10 +1,10 @@
-const eslint = require("@eslint/js");
-const typescriptEslint = require("typescript-eslint");
-const importPlugin = require("eslint-plugin-import-x");
-const nodeRecommended = require("eslint-plugin-n");
-const prettier = require("eslint-config-prettier");
-const jestPlugin = require("eslint-plugin-jest");
-const simpleImportSort = require("eslint-plugin-simple-import-sort");
+const eslint = require('@eslint/js');
+const typescriptEslint = require('typescript-eslint');
+const importPlugin = require('eslint-plugin-import-x');
+const nodeRecommended = require('eslint-plugin-n');
+const prettier = require('eslint-config-prettier');
+const jestPlugin = require('eslint-plugin-jest');
+const simpleImportSort = require('eslint-plugin-simple-import-sort');
 // const preferArrowFunctions = require("eslint-plugin-prefer-arrow-functions");
 
 module.exports = [

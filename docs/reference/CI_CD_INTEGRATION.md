@@ -131,7 +131,7 @@ name: Scheduled Gemini API Evaluation
 
 on:
   schedule:
-    - cron: '0 9 * * 1'  # Every Monday at 9 AM UTC
+    - cron: '0 9 * * 1' # Every Monday at 9 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -269,12 +269,12 @@ if __name__ == "__main__":
 
 Configurar en GitHub Settings > Secrets and variables > Actions:
 
-| Secret Name | Description | Example |
-|-------------|-------------|---------|
-| `GEMINI_API_KEY` | Google Gemini API key | `AIza...` |
-| `AZURE_OPENAI_ENDPOINT` | Azure OpenAI endpoint | `https://your-resource.openai.azure.com/` |
-| `AZURE_OPENAI_KEY` | Azure OpenAI API key | `abc123...` |
-| `SLACK_WEBHOOK_URL` | Slack webhook for alerts | `https://hooks.slack.com/...` |
+| Secret Name             | Description              | Example                                   |
+| ----------------------- | ------------------------ | ----------------------------------------- |
+| `GEMINI_API_KEY`        | Google Gemini API key    | `AIza...`                                 |
+| `AZURE_OPENAI_ENDPOINT` | Azure OpenAI endpoint    | `https://your-resource.openai.azure.com/` |
+| `AZURE_OPENAI_KEY`      | Azure OpenAI API key     | `abc123...`                               |
+| `SLACK_WEBHOOK_URL`     | Slack webhook for alerts | `https://hooks.slack.com/...`             |
 
 ## 📊 Tracking Metrics Over Time
 
@@ -394,4 +394,3 @@ def send_slack_alert(webhook_url: str, metrics: dict):
 
 **Status:** 🚧 Plantilla lista para implementación
 **Next Steps:** Ajustar workflows según necesidades específicas de NEXUS V1
-

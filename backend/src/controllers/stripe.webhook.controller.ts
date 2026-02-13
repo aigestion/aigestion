@@ -25,7 +25,7 @@ export class StripeWebhookController {
       const rawBody = (req as any).rawBody;
       if (!rawBody) {
         logger.error(
-          'Webhook Error: Missing rawBody. parsing middleware configuration might be incorrect.',
+          'Webhook Error: Missing rawBody. parsing middleware configuration might be incorrect.'
         );
         return (res as any).status(400).send('Webhook Error: Missing rawBody');
       }

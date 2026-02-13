@@ -12,7 +12,8 @@ if (!uri) {
   process.exit(1);
 }
 
-mongoose.connect(uri)
+mongoose
+  .connect(uri)
   .then(() => {
     console.log('✅ Successfully connected to MongoDB!');
     process.exit(0);
