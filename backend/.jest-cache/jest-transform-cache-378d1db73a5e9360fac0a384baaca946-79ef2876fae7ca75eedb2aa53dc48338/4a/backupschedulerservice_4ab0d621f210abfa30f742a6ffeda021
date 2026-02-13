@@ -1,0 +1,81 @@
+6fa017ff310023ec94d8690ae9782252
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+var _a, _b;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BackupSchedulerService = void 0;
+const inversify_1 = require("inversify");
+const path_1 = __importDefault(require("path"));
+const types_1 = require("../types");
+const logger_1 = require("../utils/logger");
+const backup_service_1 = require("./backup.service");
+const telegram_service_1 = require("./telegram.service");
+let BackupSchedulerService = class BackupSchedulerService {
+    backupService;
+    telegramService;
+    timer = null;
+    // Default: run every 24 hours
+    INTERVAL_MS = 24 * 60 * 60 * 1000;
+    // Default source: User's 'ale' folder (adjust as needed)
+    SOURCE_DIR = path_1.default.join(process.env.HOME || process.env.USERPROFILE || '', 'ale');
+    constructor(backupService, telegramService) {
+        this.backupService = backupService;
+        this.telegramService = telegramService;
+    }
+    start() {
+        logger_1.logger.info('BackupSchedulerService started. First backup will run immediately (async) and then daily.');
+        // Run initial backup after a short delay to let server startup finish
+        setTimeout(() => this.runBackupJob(), 10000);
+        this.timer = setInterval(() => {
+            this.runBackupJob();
+        }, this.INTERVAL_MS);
+    }
+    stop() {
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+    }
+    async runBackupJob() {
+        logger_1.logger.info(`Starting scheduled backup for ${this.SOURCE_DIR}`);
+        try {
+            await this.backupService.backupDirectory(this.SOURCE_DIR);
+            const msg = `✅ Backup Successful: ${this.SOURCE_DIR}`;
+            logger_1.logger.info(msg);
+            // Optional: don't spam success message to telegram every day unless requested
+            // await this.telegramService.sendMessage(msg);
+        }
+        catch (error) {
+            const msg = `🚨 Backup FAILED: ${error.message}`;
+            logger_1.logger.error(msg, error);
+            try {
+                await this.telegramService.sendMessage(msg);
+            }
+            catch (tgError) {
+                logger_1.logger.error('Failed to send backup failure alert to Telegram', tgError);
+            }
+        }
+    }
+};
+exports.BackupSchedulerService = BackupSchedulerService;
+exports.BackupSchedulerService = BackupSchedulerService = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.BackupService)),
+    __param(1, (0, inversify_1.inject)(types_1.TYPES.TelegramService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof backup_service_1.BackupService !== "undefined" && backup_service_1.BackupService) === "function" ? _a : Object, typeof (_b = typeof telegram_service_1.TelegramService !== "undefined" && telegram_service_1.TelegramService) === "function" ? _b : Object])
+], BackupSchedulerService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcYmFja3VwLXNjaGVkdWxlci5zZXJ2aWNlLnRzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSx5Q0FBK0M7QUFDL0MsZ0RBQXdCO0FBRXhCLG9DQUFpQztBQUNqQyw0Q0FBeUM7QUFDekMscURBQWlEO0FBQ2pELHlEQUFxRDtBQUc5QyxJQUFNLHNCQUFzQixHQUE1QixNQUFNLHNCQUFzQjtJQVFNO0lBQ0U7SUFSakMsS0FBSyxHQUEwQixJQUFJLENBQUM7SUFDNUMsOEJBQThCO0lBQ2IsV0FBVyxHQUFHLEVBQUUsR0FBRyxFQUFFLEdBQUcsRUFBRSxHQUFHLElBQUksQ0FBQztJQUNuRCx5REFBeUQ7SUFDeEMsVUFBVSxHQUFHLGNBQUksQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFDLEdBQUcsQ0FBQyxJQUFJLElBQUksT0FBTyxDQUFDLEdBQUcsQ0FBQyxXQUFXLElBQUksRUFBRSxFQUFFLEtBQUssQ0FBQyxDQUFDO0lBRWxHLFlBQ3VDLGFBQTRCLEVBQzFCLGVBQWdDO1FBRGxDLGtCQUFhLEdBQWIsYUFBYSxDQUFlO1FBQzFCLG9CQUFlLEdBQWYsZUFBZSxDQUFpQjtJQUN0RSxDQUFDO0lBRUcsS0FBSztRQUNWLGVBQU0sQ0FBQyxJQUFJLENBQ1QsMkZBQTJGLENBQzVGLENBQUM7UUFFRixzRUFBc0U7UUFDdEUsVUFBVSxDQUFDLEdBQUcsRUFBRSxDQUFDLElBQUksQ0FBQyxZQUFZLEVBQUUsRUFBRSxLQUFLLENBQUMsQ0FBQztRQUU3QyxJQUFJLENBQUMsS0FBSyxHQUFHLFdBQVcsQ0FBQyxHQUFHLEVBQUU7WUFDNUIsSUFBSSxDQUFDLFlBQVksRUFBRSxDQUFDO1FBQ3RCLENBQUMsRUFBRSxJQUFJLENBQUMsV0FBVyxDQUFDLENBQUM7SUFDdkIsQ0FBQztJQUVNLElBQUk7UUFDVCxJQUFJLElBQUksQ0FBQyxLQUFLLEVBQUUsQ0FBQztZQUNmLGFBQWEsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUM7WUFDMUIsSUFBSSxDQUFDLEtBQUssR0FBRyxJQUFJLENBQUM7UUFDcEIsQ0FBQztJQUNILENBQUM7SUFFTyxLQUFLLENBQUMsWUFBWTtRQUN4QixlQUFNLENBQUMsSUFBSSxDQUFDLGlDQUFpQyxJQUFJLENBQUMsVUFBVSxFQUFFLENBQUMsQ0FBQztRQUNoRSxJQUFJLENBQUM7WUFDSCxNQUFNLElBQUksQ0FBQyxhQUFhLENBQUMsZUFBZSxDQUFDLElBQUksQ0FBQyxVQUFVLENBQUMsQ0FBQztZQUMxRCxNQUFNLEdBQUcsR0FBRyx3QkFBd0IsSUFBSSxDQUFDLFVBQVUsRUFBRSxDQUFDO1lBQ3RELGVBQU0sQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLENBQUM7WUFDakIsOEVBQThFO1lBQzlFLCtDQUErQztRQUNqRCxDQUFDO1FBQUMsT0FBTyxLQUFVLEVBQUUsQ0FBQztZQUNwQixNQUFNLEdBQUcsR0FBRyxxQkFBcUIsS0FBSyxDQUFDLE9BQU8sRUFBRSxDQUFDO1lBQ2pELGVBQU0sQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLEtBQUssQ0FBQyxDQUFDO1lBQ3pCLElBQUksQ0FBQztnQkFDSCxNQUFNLElBQUksQ0FBQyxlQUFlLENBQUMsV0FBVyxDQUFDLEdBQUcsQ0FBQyxDQUFDO1lBQzlDLENBQUM7WUFBQyxPQUFPLE9BQU8sRUFBRSxDQUFDO2dCQUNqQixlQUFNLENBQUMsS0FBSyxDQUFDLGlEQUFpRCxFQUFFLE9BQU8sQ0FBQyxDQUFDO1lBQzNFLENBQUM7UUFDSCxDQUFDO0lBQ0gsQ0FBQztDQUNGLENBQUE7QUFsRFksd0RBQXNCO2lDQUF0QixzQkFBc0I7SUFEbEMsSUFBQSxzQkFBVSxHQUFFO0lBU1IsV0FBQSxJQUFBLGtCQUFNLEVBQUMsYUFBSyxDQUFDLGFBQWEsQ0FBQyxDQUFBO0lBQzNCLFdBQUEsSUFBQSxrQkFBTSxFQUFDLGFBQUssQ0FBQyxlQUFlLENBQUMsQ0FBQTt5REFEc0IsOEJBQWEsb0JBQWIsOEJBQWEsb0RBQ1Qsa0NBQWUsb0JBQWYsa0NBQWU7R0FUOUQsc0JBQXNCLENBa0RsQyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJDOlxcVXNlcnNcXEFsZWphbmRyb1xcQUlHZXN0aW9uXFxiYWNrZW5kXFxzcmNcXHNlcnZpY2VzXFxiYWNrdXAtc2NoZWR1bGVyLnNlcnZpY2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgaW5qZWN0LCBpbmplY3RhYmxlIH0gZnJvbSAnaW52ZXJzaWZ5JztcbmltcG9ydCBwYXRoIGZyb20gJ3BhdGgnO1xuXG5pbXBvcnQgeyBUWVBFUyB9IGZyb20gJy4uL3R5cGVzJztcbmltcG9ydCB7IGxvZ2dlciB9IGZyb20gJy4uL3V0aWxzL2xvZ2dlcic7XG5pbXBvcnQgeyBCYWNrdXBTZXJ2aWNlIH0gZnJvbSAnLi9iYWNrdXAuc2VydmljZSc7XG5pbXBvcnQgeyBUZWxlZ3JhbVNlcnZpY2UgfSBmcm9tICcuL3RlbGVncmFtLnNlcnZpY2UnO1xuXG5AaW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgQmFja3VwU2NoZWR1bGVyU2VydmljZSB7XG4gIHByaXZhdGUgdGltZXI6IE5vZGVKUy5UaW1lb3V0IHwgbnVsbCA9IG51bGw7XG4gIC8vIERlZmF1bHQ6IHJ1biBldmVyeSAyNCBob3Vyc1xuICBwcml2YXRlIHJlYWRvbmx5IElOVEVSVkFMX01TID0gMjQgKiA2MCAqIDYwICogMTAwMDtcbiAgLy8gRGVmYXVsdCBzb3VyY2U6IFVzZXIncyAnYWxlJyBmb2xkZXIgKGFkanVzdCBhcyBuZWVkZWQpXG4gIHByaXZhdGUgcmVhZG9ubHkgU09VUkNFX0RJUiA9IHBhdGguam9pbihwcm9jZXNzLmVudi5IT01FIHx8IHByb2Nlc3MuZW52LlVTRVJQUk9GSUxFIHx8ICcnLCAnYWxlJyk7XG5cbiAgY29uc3RydWN0b3IoXG4gICAgQGluamVjdChUWVBFUy5CYWNrdXBTZXJ2aWNlKSBwcml2YXRlIGJhY2t1cFNlcnZpY2U6IEJhY2t1cFNlcnZpY2UsXG4gICAgQGluamVjdChUWVBFUy5UZWxlZ3JhbVNlcnZpY2UpIHByaXZhdGUgdGVsZWdyYW1TZXJ2aWNlOiBUZWxlZ3JhbVNlcnZpY2UsXG4gICkge31cblxuICBwdWJsaWMgc3RhcnQoKSB7XG4gICAgbG9nZ2VyLmluZm8oXG4gICAgICAnQmFja3VwU2NoZWR1bGVyU2VydmljZSBzdGFydGVkLiBGaXJzdCBiYWNrdXAgd2lsbCBydW4gaW1tZWRpYXRlbHkgKGFzeW5jKSBhbmQgdGhlbiBkYWlseS4nLFxuICAgICk7XG5cbiAgICAvLyBSdW4gaW5pdGlhbCBiYWNrdXAgYWZ0ZXIgYSBzaG9ydCBkZWxheSB0byBsZXQgc2VydmVyIHN0YXJ0dXAgZmluaXNoXG4gICAgc2V0VGltZW91dCgoKSA9PiB0aGlzLnJ1bkJhY2t1cEpvYigpLCAxMDAwMCk7XG5cbiAgICB0aGlzLnRpbWVyID0gc2V0SW50ZXJ2YWwoKCkgPT4ge1xuICAgICAgdGhpcy5ydW5CYWNrdXBKb2IoKTtcbiAgICB9LCB0aGlzLklOVEVSVkFMX01TKTtcbiAgfVxuXG4gIHB1YmxpYyBzdG9wKCkge1xuICAgIGlmICh0aGlzLnRpbWVyKSB7XG4gICAgICBjbGVhckludGVydmFsKHRoaXMudGltZXIpO1xuICAgICAgdGhpcy50aW1lciA9IG51bGw7XG4gICAgfVxuICB9XG5cbiAgcHJpdmF0ZSBhc3luYyBydW5CYWNrdXBKb2IoKSB7XG4gICAgbG9nZ2VyLmluZm8oYFN0YXJ0aW5nIHNjaGVkdWxlZCBiYWNrdXAgZm9yICR7dGhpcy5TT1VSQ0VfRElSfWApO1xuICAgIHRyeSB7XG4gICAgICBhd2FpdCB0aGlzLmJhY2t1cFNlcnZpY2UuYmFja3VwRGlyZWN0b3J5KHRoaXMuU09VUkNFX0RJUik7XG4gICAgICBjb25zdCBtc2cgPSBg4pyFIEJhY2t1cCBTdWNjZXNzZnVsOiAke3RoaXMuU09VUkNFX0RJUn1gO1xuICAgICAgbG9nZ2VyLmluZm8obXNnKTtcbiAgICAgIC8vIE9wdGlvbmFsOiBkb24ndCBzcGFtIHN1Y2Nlc3MgbWVzc2FnZSB0byB0ZWxlZ3JhbSBldmVyeSBkYXkgdW5sZXNzIHJlcXVlc3RlZFxuICAgICAgLy8gYXdhaXQgdGhpcy50ZWxlZ3JhbVNlcnZpY2Uuc2VuZE1lc3NhZ2UobXNnKTtcbiAgICB9IGNhdGNoIChlcnJvcjogYW55KSB7XG4gICAgICBjb25zdCBtc2cgPSBg8J+aqCBCYWNrdXAgRkFJTEVEOiAke2Vycm9yLm1lc3NhZ2V9YDtcbiAgICAgIGxvZ2dlci5lcnJvcihtc2csIGVycm9yKTtcbiAgICAgIHRyeSB7XG4gICAgICAgIGF3YWl0IHRoaXMudGVsZWdyYW1TZXJ2aWNlLnNlbmRNZXNzYWdlKG1zZyk7XG4gICAgICB9IGNhdGNoICh0Z0Vycm9yKSB7XG4gICAgICAgIGxvZ2dlci5lcnJvcignRmFpbGVkIHRvIHNlbmQgYmFja3VwIGZhaWx1cmUgYWxlcnQgdG8gVGVsZWdyYW0nLCB0Z0Vycm9yKTtcbiAgICAgIH1cbiAgICB9XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

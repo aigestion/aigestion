@@ -26,7 +26,7 @@ const SLIDES: Slide[] = [
     title: 'AIGESTION',
     subtitle: 'SOVEREIGN INTELLIGENCE',
     desc: 'Arquitectura avanzada de inteligencia artificial diseñada para la soberanía operativa y la automatización estratégica empresarial.',
-    staticImage: '/images/cinematic/aigestion_core.png',
+    staticImage: '', // Minimalist approach: focus on the title
     emoji: '🚀',
     color: 'from-slate-700 to-slate-900',
     funFact: 'Sistemas con arquitectura de alta disponibilidad y redundancia geográfica.',
@@ -182,13 +182,20 @@ export const CinematicPresentation: React.FC = () => {
           <motion.div
             className="absolute inset-0 pointer-events-none z-1"
             animate={{
-              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 245, 255, 0.05) 0%, transparent 60%)`,
+              background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(0, 245, 255, 0.08) 0%, transparent 50%)`,
             }}
             transition={{ duration: 1.5 }}
           />
+          
+          {/* Sovereign Scanlines */}
+          <div className="absolute inset-0 pointer-events-none z-2 overflow-hidden opacity-10">
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%]" />
+          </div>
+
           <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black" />
         </motion.div>
       </AnimatePresence>
+
 
       {/* Content Layer */}
       <div
@@ -258,6 +265,17 @@ export const CinematicPresentation: React.FC = () => {
                   Contactar Especialista
                 </button>
               </MagneticButton>
+
+              <button
+                onMouseEnter={playHover}
+                onClick={() => {
+                  const el = document.getElementById('demo-dashboard');
+                  el?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="px-12 py-5 bg-transparent text-white border border-white/20 rounded-full text-[10px] tracking-[0.4em] uppercase hover:border-nexus-cyan hover:text-nexus-cyan transition-all font-bold"
+              >
+                Ver Dashboard
+              </button>
 
               <button
                 onClick={toggleFunFact}

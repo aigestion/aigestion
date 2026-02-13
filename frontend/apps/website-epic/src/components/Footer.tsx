@@ -53,18 +53,19 @@ export const Footer: React.FC = () => {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="group cursor-pointer"
+              className="group cursor-pointer flex items-center gap-4"
             >
-              <img
-                src="/images/brand/logo.png"
-                alt="Sovereign Nexus"
-                className="h-10 mb-6 opacity-80 group-hover:opacity-100 transition-opacity"
-              />
-              <div className="h-0.5 w-12 bg-nexus-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500" />
+              <div className="w-10 h-10 border border-nexus-cyan/20 rounded-lg rotate-45 flex items-center justify-center group-hover:rotate-0 transition-transform duration-700">
+                <div className="w-2 h-2 bg-nexus-cyan rounded-full animate-pulse shadow-[0_0_10px_rgba(0,245,255,0.8)]" />
+              </div>
+              <h3 className="font-orbitron font-black text-2xl tracking-tighter text-white">
+                AIGESTION<span className="text-nexus-cyan font-extralight">.NET</span>
+              </h3>
             </motion.div>
 
             <p className="text-nexus-silver/40 text-sm leading-relaxed max-w-md font-light italic">
-              "La orquestación de la inteligencia no es solo una herramienta, es el fundamento de la soberanía digital en el nuevo siglo."
+              "La orquestación de la inteligencia no es solo una herramienta, es el fundamento de la
+              soberanía digital en el nuevo siglo."
             </p>
 
             {/* Newsletter / CTA */}
@@ -118,14 +119,16 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
-             <div className="text-[9px] font-orbitron tracking-[0.4em] text-nexus-silver/20 uppercase">
-                © {currentYear} SOVEREIGN NEXUS | ENTERPRISE INFRASTRUCTURE V2.1
-             </div>
-             <div className="flex items-center gap-4 text-[8px] font-mono text-nexus-cyan/30">
-                <span>ESTADO DEL SISTEMA: <span className="text-green-500 animate-pulse">OPERATIVO</span></span>
-                <span className="h-3 w-px bg-white/10" />
-                <span>LATENCIA: 14MS</span>
-             </div>
+            <div className="text-[9px] font-orbitron tracking-[0.4em] text-nexus-silver/20 uppercase">
+              © {currentYear} SOVEREIGN NEXUS | ENTERPRISE INFRASTRUCTURE V2.1
+            </div>
+            <div className="flex items-center gap-4 text-[8px] font-mono text-nexus-cyan/30">
+              <span>
+                ESTADO DEL SISTEMA: <span className="text-green-500 animate-pulse">OPERATIVO</span>
+              </span>
+              <span className="h-3 w-px bg-white/10" />
+              <span>LATENCIA: 14MS</span>
+            </div>
           </div>
 
           <div className="flex items-center gap-8">

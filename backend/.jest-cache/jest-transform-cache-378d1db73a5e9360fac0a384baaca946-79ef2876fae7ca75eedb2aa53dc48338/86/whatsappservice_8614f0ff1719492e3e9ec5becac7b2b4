@@ -1,0 +1,86 @@
+76054d8249097a35d917de5e0f9ec861
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WhatsAppService = void 0;
+const axios_1 = __importDefault(require("axios"));
+const inversify_1 = require("inversify");
+const env_schema_1 = require("../config/env.schema");
+const logger_1 = require("../utils/logger");
+let WhatsAppService = class WhatsAppService {
+    baseUrl = env_schema_1.env.WHATSAPP_API_URL || 'https://graph.facebook.com/v19.0';
+    /**
+     * Send a WhatsApp message using the Business API
+     */
+    async sendMessage(to, message) {
+        const phoneId = env_schema_1.env.WHATSAPP_BUSINESS_PHONE_ID;
+        const token = env_schema_1.env.WHATSAPP_TOKEN || env_schema_1.env.FACEBOOK_PAGE_ACCESS_TOKEN || env_schema_1.env.META_ACCESS_TOKEN;
+        if (!phoneId || !token) {
+            throw new Error('WhatsApp Business Phone ID or Token not configured');
+        }
+        try {
+            const response = await axios_1.default.post(`${this.baseUrl}/${phoneId}/messages`, {
+                messaging_product: 'whatsapp',
+                to: to,
+                type: 'text',
+                text: { body: message },
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            logger_1.logger.info(`WhatsApp message sent to ${to}: ${response.data.messages[0].id}`);
+            return response.data;
+        }
+        catch (error) {
+            logger_1.logger.error({ error: error.response?.data || error.message }, 'Error sending WhatsApp message');
+            throw error;
+        }
+    }
+    /**
+     * Send a template message (required for initiating conversations)
+     */
+    async sendTemplate(to, templateName, languageCode = 'es') {
+        const phoneId = env_schema_1.env.WHATSAPP_BUSINESS_PHONE_ID;
+        const token = env_schema_1.env.WHATSAPP_TOKEN || env_schema_1.env.FACEBOOK_PAGE_ACCESS_TOKEN || env_schema_1.env.META_ACCESS_TOKEN;
+        if (!phoneId || !token) {
+            throw new Error('WhatsApp Business Phone ID or Token not configured');
+        }
+        try {
+            const response = await axios_1.default.post(`${this.baseUrl}/${phoneId}/messages`, {
+                messaging_product: 'whatsapp',
+                to: to,
+                type: 'template',
+                template: {
+                    name: templateName,
+                    language: { code: languageCode },
+                },
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            logger_1.logger.info(`WhatsApp template sent to ${to}: ${response.data.messages[0].id}`);
+            return response.data;
+        }
+        catch (error) {
+            logger_1.logger.error({ error: error.response?.data || error.message }, 'Error sending WhatsApp template');
+            throw error;
+        }
+    }
+};
+exports.WhatsAppService = WhatsAppService;
+exports.WhatsAppService = WhatsAppService = __decorate([
+    (0, inversify_1.injectable)()
+], WhatsAppService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcd2hhdHNhcHAuc2VydmljZS50cyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7QUFBQSxrREFBMEI7QUFDMUIseUNBQXVDO0FBQ3ZDLHFEQUEyQztBQUMzQyw0Q0FBeUM7QUFHbEMsSUFBTSxlQUFlLEdBQXJCLE1BQU0sZUFBZTtJQUNULE9BQU8sR0FBRyxnQkFBRyxDQUFDLGdCQUFnQixJQUFJLGtDQUFrQyxDQUFDO0lBRXRGOztPQUVHO0lBQ0gsS0FBSyxDQUFDLFdBQVcsQ0FBQyxFQUFVLEVBQUUsT0FBZTtRQUMzQyxNQUFNLE9BQU8sR0FBRyxnQkFBRyxDQUFDLDBCQUEwQixDQUFDO1FBQy9DLE1BQU0sS0FBSyxHQUFHLGdCQUFHLENBQUMsY0FBYyxJQUFJLGdCQUFHLENBQUMsMEJBQTBCLElBQUksZ0JBQUcsQ0FBQyxpQkFBaUIsQ0FBQztRQUU1RixJQUFJLENBQUMsT0FBTyxJQUFJLENBQUMsS0FBSyxFQUFFLENBQUM7WUFDdkIsTUFBTSxJQUFJLEtBQUssQ0FBQyxvREFBb0QsQ0FBQyxDQUFDO1FBQ3hFLENBQUM7UUFFRCxJQUFJLENBQUM7WUFDSCxNQUFNLFFBQVEsR0FBRyxNQUFNLGVBQUssQ0FBQyxJQUFJLENBQy9CLEdBQUcsSUFBSSxDQUFDLE9BQU8sSUFBSSxPQUFPLFdBQVcsRUFDckM7Z0JBQ0UsaUJBQWlCLEVBQUUsVUFBVTtnQkFDN0IsRUFBRSxFQUFFLEVBQUU7Z0JBQ04sSUFBSSxFQUFFLE1BQU07Z0JBQ1osSUFBSSxFQUFFLEVBQUUsSUFBSSxFQUFFLE9BQU8sRUFBRTthQUN4QixFQUNEO2dCQUNFLE9BQU8sRUFBRTtvQkFDUCxhQUFhLEVBQUUsVUFBVSxLQUFLLEVBQUU7b0JBQ2hDLGNBQWMsRUFBRSxrQkFBa0I7aUJBQ25DO2FBQ0YsQ0FDRixDQUFDO1lBRUYsZUFBTSxDQUFDLElBQUksQ0FBQyw0QkFBNEIsRUFBRSxLQUFLLFFBQVEsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLEVBQUUsRUFBRSxDQUFDLENBQUM7WUFDL0UsT0FBTyxRQUFRLENBQUMsSUFBSSxDQUFDO1FBQ3ZCLENBQUM7UUFBQyxPQUFPLEtBQVUsRUFBRSxDQUFDO1lBQ3BCLGVBQU0sQ0FBQyxLQUFLLENBQ1YsRUFBRSxLQUFLLEVBQUUsS0FBSyxDQUFDLFFBQVEsRUFBRSxJQUFJLElBQUksS0FBSyxDQUFDLE9BQU8sRUFBRSxFQUNoRCxnQ0FBZ0MsQ0FDakMsQ0FBQztZQUNGLE1BQU0sS0FBSyxDQUFDO1FBQ2QsQ0FBQztJQUNILENBQUM7SUFFRDs7T0FFRztJQUNILEtBQUssQ0FBQyxZQUFZLENBQUMsRUFBVSxFQUFFLFlBQW9CLEVBQUUsZUFBdUIsSUFBSTtRQUM5RSxNQUFNLE9BQU8sR0FBRyxnQkFBRyxDQUFDLDBCQUEwQixDQUFDO1FBQy9DLE1BQU0sS0FBSyxHQUFHLGdCQUFHLENBQUMsY0FBYyxJQUFJLGdCQUFHLENBQUMsMEJBQTBCLElBQUksZ0JBQUcsQ0FBQyxpQkFBaUIsQ0FBQztRQUU1RixJQUFJLENBQUMsT0FBTyxJQUFJLENBQUMsS0FBSyxFQUFFLENBQUM7WUFDdkIsTUFBTSxJQUFJLEtBQUssQ0FBQyxvREFBb0QsQ0FBQyxDQUFDO1FBQ3hFLENBQUM7UUFFRCxJQUFJLENBQUM7WUFDSCxNQUFNLFFBQVEsR0FBRyxNQUFNLGVBQUssQ0FBQyxJQUFJLENBQy9CLEdBQUcsSUFBSSxDQUFDLE9BQU8sSUFBSSxPQUFPLFdBQVcsRUFDckM7Z0JBQ0UsaUJBQWlCLEVBQUUsVUFBVTtnQkFDN0IsRUFBRSxFQUFFLEVBQUU7Z0JBQ04sSUFBSSxFQUFFLFVBQVU7Z0JBQ2hCLFFBQVEsRUFBRTtvQkFDUixJQUFJLEVBQUUsWUFBWTtvQkFDbEIsUUFBUSxFQUFFLEVBQUUsSUFBSSxFQUFFLFlBQVksRUFBRTtpQkFDakM7YUFDRixFQUNEO2dCQUNFLE9BQU8sRUFBRTtvQkFDUCxhQUFhLEVBQUUsVUFBVSxLQUFLLEVBQUU7b0JBQ2hDLGNBQWMsRUFBRSxrQkFBa0I7aUJBQ25DO2FBQ0YsQ0FDRixDQUFDO1lBRUYsZUFBTSxDQUFDLElBQUksQ0FBQyw2QkFBNkIsRUFBRSxLQUFLLFFBQVEsQ0FBQyxJQUFJLENBQUMsUUFBUSxDQUFDLENBQUMsQ0FBQyxDQUFDLEVBQUUsRUFBRSxDQUFDLENBQUM7WUFDaEYsT0FBTyxRQUFRLENBQUMsSUFBSSxDQUFDO1FBQ3ZCLENBQUM7UUFBQyxPQUFPLEtBQVUsRUFBRSxDQUFDO1lBQ3BCLGVBQU0sQ0FBQyxLQUFLLENBQ1YsRUFBRSxLQUFLLEVBQUUsS0FBSyxDQUFDLFFBQVEsRUFBRSxJQUFJLElBQUksS0FBSyxDQUFDLE9BQU8sRUFBRSxFQUNoRCxpQ0FBaUMsQ0FDbEMsQ0FBQztZQUNGLE1BQU0sS0FBSyxDQUFDO1FBQ2QsQ0FBQztJQUNILENBQUM7Q0FDRixDQUFBO0FBbkZZLDBDQUFlOzBCQUFmLGVBQWU7SUFEM0IsSUFBQSxzQkFBVSxHQUFFO0dBQ0EsZUFBZSxDQW1GM0IiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcd2hhdHNhcHAuc2VydmljZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgYXhpb3MgZnJvbSAnYXhpb3MnO1xuaW1wb3J0IHsgaW5qZWN0YWJsZSB9IGZyb20gJ2ludmVyc2lmeSc7XG5pbXBvcnQgeyBlbnYgfSBmcm9tICcuLi9jb25maWcvZW52LnNjaGVtYSc7XG5pbXBvcnQgeyBsb2dnZXIgfSBmcm9tICcuLi91dGlscy9sb2dnZXInO1xuXG5AaW5qZWN0YWJsZSgpXG5leHBvcnQgY2xhc3MgV2hhdHNBcHBTZXJ2aWNlIHtcbiAgcHJpdmF0ZSByZWFkb25seSBiYXNlVXJsID0gZW52LldIQVRTQVBQX0FQSV9VUkwgfHwgJ2h0dHBzOi8vZ3JhcGguZmFjZWJvb2suY29tL3YxOS4wJztcblxuICAvKipcbiAgICogU2VuZCBhIFdoYXRzQXBwIG1lc3NhZ2UgdXNpbmcgdGhlIEJ1c2luZXNzIEFQSVxuICAgKi9cbiAgYXN5bmMgc2VuZE1lc3NhZ2UodG86IHN0cmluZywgbWVzc2FnZTogc3RyaW5nKTogUHJvbWlzZTxhbnk+IHtcbiAgICBjb25zdCBwaG9uZUlkID0gZW52LldIQVRTQVBQX0JVU0lORVNTX1BIT05FX0lEO1xuICAgIGNvbnN0IHRva2VuID0gZW52LldIQVRTQVBQX1RPS0VOIHx8IGVudi5GQUNFQk9PS19QQUdFX0FDQ0VTU19UT0tFTiB8fCBlbnYuTUVUQV9BQ0NFU1NfVE9LRU47XG5cbiAgICBpZiAoIXBob25lSWQgfHwgIXRva2VuKSB7XG4gICAgICB0aHJvdyBuZXcgRXJyb3IoJ1doYXRzQXBwIEJ1c2luZXNzIFBob25lIElEIG9yIFRva2VuIG5vdCBjb25maWd1cmVkJyk7XG4gICAgfVxuXG4gICAgdHJ5IHtcbiAgICAgIGNvbnN0IHJlc3BvbnNlID0gYXdhaXQgYXhpb3MucG9zdChcbiAgICAgICAgYCR7dGhpcy5iYXNlVXJsfS8ke3Bob25lSWR9L21lc3NhZ2VzYCxcbiAgICAgICAge1xuICAgICAgICAgIG1lc3NhZ2luZ19wcm9kdWN0OiAnd2hhdHNhcHAnLFxuICAgICAgICAgIHRvOiB0byxcbiAgICAgICAgICB0eXBlOiAndGV4dCcsXG4gICAgICAgICAgdGV4dDogeyBib2R5OiBtZXNzYWdlIH0sXG4gICAgICAgIH0sXG4gICAgICAgIHtcbiAgICAgICAgICBoZWFkZXJzOiB7XG4gICAgICAgICAgICBBdXRob3JpemF0aW9uOiBgQmVhcmVyICR7dG9rZW59YCxcbiAgICAgICAgICAgICdDb250ZW50LVR5cGUnOiAnYXBwbGljYXRpb24vanNvbicsXG4gICAgICAgICAgfSxcbiAgICAgICAgfSxcbiAgICAgICk7XG5cbiAgICAgIGxvZ2dlci5pbmZvKGBXaGF0c0FwcCBtZXNzYWdlIHNlbnQgdG8gJHt0b306ICR7cmVzcG9uc2UuZGF0YS5tZXNzYWdlc1swXS5pZH1gKTtcbiAgICAgIHJldHVybiByZXNwb25zZS5kYXRhO1xuICAgIH0gY2F0Y2ggKGVycm9yOiBhbnkpIHtcbiAgICAgIGxvZ2dlci5lcnJvcihcbiAgICAgICAgeyBlcnJvcjogZXJyb3IucmVzcG9uc2U/LmRhdGEgfHwgZXJyb3IubWVzc2FnZSB9LFxuICAgICAgICAnRXJyb3Igc2VuZGluZyBXaGF0c0FwcCBtZXNzYWdlJyxcbiAgICAgICk7XG4gICAgICB0aHJvdyBlcnJvcjtcbiAgICB9XG4gIH1cblxuICAvKipcbiAgICogU2VuZCBhIHRlbXBsYXRlIG1lc3NhZ2UgKHJlcXVpcmVkIGZvciBpbml0aWF0aW5nIGNvbnZlcnNhdGlvbnMpXG4gICAqL1xuICBhc3luYyBzZW5kVGVtcGxhdGUodG86IHN0cmluZywgdGVtcGxhdGVOYW1lOiBzdHJpbmcsIGxhbmd1YWdlQ29kZTogc3RyaW5nID0gJ2VzJyk6IFByb21pc2U8YW55PiB7XG4gICAgY29uc3QgcGhvbmVJZCA9IGVudi5XSEFUU0FQUF9CVVNJTkVTU19QSE9ORV9JRDtcbiAgICBjb25zdCB0b2tlbiA9IGVudi5XSEFUU0FQUF9UT0tFTiB8fCBlbnYuRkFDRUJPT0tfUEFHRV9BQ0NFU1NfVE9LRU4gfHwgZW52Lk1FVEFfQUNDRVNTX1RPS0VOO1xuXG4gICAgaWYgKCFwaG9uZUlkIHx8ICF0b2tlbikge1xuICAgICAgdGhyb3cgbmV3IEVycm9yKCdXaGF0c0FwcCBCdXNpbmVzcyBQaG9uZSBJRCBvciBUb2tlbiBub3QgY29uZmlndXJlZCcpO1xuICAgIH1cblxuICAgIHRyeSB7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGF4aW9zLnBvc3QoXG4gICAgICAgIGAke3RoaXMuYmFzZVVybH0vJHtwaG9uZUlkfS9tZXNzYWdlc2AsXG4gICAgICAgIHtcbiAgICAgICAgICBtZXNzYWdpbmdfcHJvZHVjdDogJ3doYXRzYXBwJyxcbiAgICAgICAgICB0bzogdG8sXG4gICAgICAgICAgdHlwZTogJ3RlbXBsYXRlJyxcbiAgICAgICAgICB0ZW1wbGF0ZToge1xuICAgICAgICAgICAgbmFtZTogdGVtcGxhdGVOYW1lLFxuICAgICAgICAgICAgbGFuZ3VhZ2U6IHsgY29kZTogbGFuZ3VhZ2VDb2RlIH0sXG4gICAgICAgICAgfSxcbiAgICAgICAgfSxcbiAgICAgICAge1xuICAgICAgICAgIGhlYWRlcnM6IHtcbiAgICAgICAgICAgIEF1dGhvcml6YXRpb246IGBCZWFyZXIgJHt0b2tlbn1gLFxuICAgICAgICAgICAgJ0NvbnRlbnQtVHlwZSc6ICdhcHBsaWNhdGlvbi9qc29uJyxcbiAgICAgICAgICB9LFxuICAgICAgICB9LFxuICAgICAgKTtcblxuICAgICAgbG9nZ2VyLmluZm8oYFdoYXRzQXBwIHRlbXBsYXRlIHNlbnQgdG8gJHt0b306ICR7cmVzcG9uc2UuZGF0YS5tZXNzYWdlc1swXS5pZH1gKTtcbiAgICAgIHJldHVybiByZXNwb25zZS5kYXRhO1xuICAgIH0gY2F0Y2ggKGVycm9yOiBhbnkpIHtcbiAgICAgIGxvZ2dlci5lcnJvcihcbiAgICAgICAgeyBlcnJvcjogZXJyb3IucmVzcG9uc2U/LmRhdGEgfHwgZXJyb3IubWVzc2FnZSB9LFxuICAgICAgICAnRXJyb3Igc2VuZGluZyBXaGF0c0FwcCB0ZW1wbGF0ZScsXG4gICAgICApO1xuICAgICAgdGhyb3cgZXJyb3I7XG4gICAgfVxuICB9XG59XG4iXSwidmVyc2lvbiI6M30=

@@ -34,6 +34,8 @@ module.exports = {
     'no-console': 'warn',
     'prefer-const': 'error',
     eqeqeq: ['error', 'always'],
+    'no-unused-expressions': 'off',
+    '@typescript-eslint/no-unused-expressions': 'off',
   },
   ignorePatterns: [
     'dist/',

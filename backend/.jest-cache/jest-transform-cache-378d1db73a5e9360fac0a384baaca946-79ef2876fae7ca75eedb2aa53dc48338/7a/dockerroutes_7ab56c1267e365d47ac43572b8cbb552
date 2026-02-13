@@ -1,0 +1,45 @@
+8372c85ee325b39467de9d2c75a12824
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const inversify_config_1 = require("../config/inversify.config");
+const types_1 = require("../types");
+const router = (0, express_1.Router)();
+const controller = inversify_config_1.container.get(types_1.TYPES.DockerController);
+/**
+ * @openapi
+ * /docker/containers:
+ *   get:
+ *     summary: List all Docker containers
+ *     tags: [Docker]
+ *     responses:
+ *       200:
+ *         description: List of containers
+ */
+router.get('/containers', (req, res, next) => controller.getContainers(req, res, next));
+/**
+ * @openapi
+ * /docker/containers/{id}/stats:
+ *   get:
+ *     summary: Get stats for a specific container
+ *     tags: [Docker]
+ */
+router.get('/containers/:id/stats', (req, res, next) => controller.getContainerStats(req, res, next));
+/**
+ * @openapi
+ * /docker/containers/{id}/start:
+ *   post:
+ *     summary: Start a specific container
+ *     tags: [Docker]
+ */
+router.post('/containers/:id/start', (req, res, next) => controller.startContainer(req, res, next));
+/**
+ * @openapi
+ * /docker/containers/{id}/stop:
+ *   post:
+ *     summary: Stop a specific container
+ *     tags: [Docker]
+ */
+router.post('/containers/:id/stop', (req, res, next) => controller.stopContainer(req, res, next));
+exports.default = router;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxyb3V0ZXNcXGRvY2tlci5yb3V0ZXMudHMiLCJtYXBwaW5ncyI6Ijs7QUFBQSxxQ0FBaUM7QUFDakMsaUVBQXVEO0FBQ3ZELG9DQUFpQztBQUdqQyxNQUFNLE1BQU0sR0FBRyxJQUFBLGdCQUFNLEdBQUUsQ0FBQztBQUN4QixNQUFNLFVBQVUsR0FBRyw0QkFBUyxDQUFDLEdBQUcsQ0FBbUIsYUFBSyxDQUFDLGdCQUFnQixDQUFDLENBQUM7QUFFM0U7Ozs7Ozs7OztHQVNHO0FBQ0gsTUFBTSxDQUFDLEdBQUcsQ0FBQyxhQUFhLEVBQUUsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLElBQUksRUFBRSxFQUFFLENBQUMsVUFBVSxDQUFDLGFBQWEsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLElBQUksQ0FBQyxDQUFDLENBQUM7QUFFeEY7Ozs7OztHQU1HO0FBQ0gsTUFBTSxDQUFDLEdBQUcsQ0FBQyx1QkFBdUIsRUFBRSxDQUFDLEdBQUcsRUFBRSxHQUFHLEVBQUUsSUFBSSxFQUFFLEVBQUUsQ0FDckQsVUFBVSxDQUFDLGlCQUFpQixDQUFDLEdBQUcsRUFBRSxHQUFHLEVBQUUsSUFBSSxDQUFDLENBQzdDLENBQUM7QUFFRjs7Ozs7O0dBTUc7QUFDSCxNQUFNLENBQUMsSUFBSSxDQUFDLHVCQUF1QixFQUFFLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLEVBQUUsRUFBRSxDQUFDLFVBQVUsQ0FBQyxjQUFjLENBQUMsR0FBRyxFQUFFLEdBQUcsRUFBRSxJQUFJLENBQUMsQ0FBQyxDQUFDO0FBRXBHOzs7Ozs7R0FNRztBQUNILE1BQU0sQ0FBQyxJQUFJLENBQUMsc0JBQXNCLEVBQUUsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLElBQUksRUFBRSxFQUFFLENBQUMsVUFBVSxDQUFDLGFBQWEsQ0FBQyxHQUFHLEVBQUUsR0FBRyxFQUFFLElBQUksQ0FBQyxDQUFDLENBQUM7QUFFbEcsa0JBQWUsTUFBTSxDQUFDIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIkM6XFxVc2Vyc1xcQWxlamFuZHJvXFxBSUdlc3Rpb25cXGJhY2tlbmRcXHNyY1xccm91dGVzXFxkb2NrZXIucm91dGVzLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFJvdXRlciB9IGZyb20gJ2V4cHJlc3MnO1xuaW1wb3J0IHsgY29udGFpbmVyIH0gZnJvbSAnLi4vY29uZmlnL2ludmVyc2lmeS5jb25maWcnO1xuaW1wb3J0IHsgVFlQRVMgfSBmcm9tICcuLi90eXBlcyc7XG5pbXBvcnQgeyBEb2NrZXJDb250cm9sbGVyIH0gZnJvbSAnLi4vY29udHJvbGxlcnMvZG9ja2VyLmNvbnRyb2xsZXInO1xuXG5jb25zdCByb3V0ZXIgPSBSb3V0ZXIoKTtcbmNvbnN0IGNvbnRyb2xsZXIgPSBjb250YWluZXIuZ2V0PERvY2tlckNvbnRyb2xsZXI+KFRZUEVTLkRvY2tlckNvbnRyb2xsZXIpO1xuXG4vKipcbiAqIEBvcGVuYXBpXG4gKiAvZG9ja2VyL2NvbnRhaW5lcnM6XG4gKiAgIGdldDpcbiAqICAgICBzdW1tYXJ5OiBMaXN0IGFsbCBEb2NrZXIgY29udGFpbmVyc1xuICogICAgIHRhZ3M6IFtEb2NrZXJdXG4gKiAgICAgcmVzcG9uc2VzOlxuICogICAgICAgMjAwOlxuICogICAgICAgICBkZXNjcmlwdGlvbjogTGlzdCBvZiBjb250YWluZXJzXG4gKi9cbnJvdXRlci5nZXQoJy9jb250YWluZXJzJywgKHJlcSwgcmVzLCBuZXh0KSA9PiBjb250cm9sbGVyLmdldENvbnRhaW5lcnMocmVxLCByZXMsIG5leHQpKTtcblxuLyoqXG4gKiBAb3BlbmFwaVxuICogL2RvY2tlci9jb250YWluZXJzL3tpZH0vc3RhdHM6XG4gKiAgIGdldDpcbiAqICAgICBzdW1tYXJ5OiBHZXQgc3RhdHMgZm9yIGEgc3BlY2lmaWMgY29udGFpbmVyXG4gKiAgICAgdGFnczogW0RvY2tlcl1cbiAqL1xucm91dGVyLmdldCgnL2NvbnRhaW5lcnMvOmlkL3N0YXRzJywgKHJlcSwgcmVzLCBuZXh0KSA9PlxuICBjb250cm9sbGVyLmdldENvbnRhaW5lclN0YXRzKHJlcSwgcmVzLCBuZXh0KSxcbik7XG5cbi8qKlxuICogQG9wZW5hcGlcbiAqIC9kb2NrZXIvY29udGFpbmVycy97aWR9L3N0YXJ0OlxuICogICBwb3N0OlxuICogICAgIHN1bW1hcnk6IFN0YXJ0IGEgc3BlY2lmaWMgY29udGFpbmVyXG4gKiAgICAgdGFnczogW0RvY2tlcl1cbiAqL1xucm91dGVyLnBvc3QoJy9jb250YWluZXJzLzppZC9zdGFydCcsIChyZXEsIHJlcywgbmV4dCkgPT4gY29udHJvbGxlci5zdGFydENvbnRhaW5lcihyZXEsIHJlcywgbmV4dCkpO1xuXG4vKipcbiAqIEBvcGVuYXBpXG4gKiAvZG9ja2VyL2NvbnRhaW5lcnMve2lkfS9zdG9wOlxuICogICBwb3N0OlxuICogICAgIHN1bW1hcnk6IFN0b3AgYSBzcGVjaWZpYyBjb250YWluZXJcbiAqICAgICB0YWdzOiBbRG9ja2VyXVxuICovXG5yb3V0ZXIucG9zdCgnL2NvbnRhaW5lcnMvOmlkL3N0b3AnLCAocmVxLCByZXMsIG5leHQpID0+IGNvbnRyb2xsZXIuc3RvcENvbnRhaW5lcihyZXEsIHJlcywgbmV4dCkpO1xuXG5leHBvcnQgZGVmYXVsdCByb3V0ZXI7XG4iXSwidmVyc2lvbiI6M30=

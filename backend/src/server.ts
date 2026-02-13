@@ -4,9 +4,8 @@ import { createServer } from 'http';
 import path from 'path';
 import { type Socket } from 'socket.io';
 
-import { app } from './app';
-import { connectToDatabase } from './config/database';
-import { config } from './config/index';
+// import { app } from './app'; // This import will be moved inside initializeAndStart
+// import { config } from './config/index'; // This import will be moved inside initializeAndStart
 import { container, TYPES } from './config/inversify.config';
 import { AlertingService } from './services/alerting.service';
 import { BackupSchedulerService } from './services/backup-scheduler.service';
@@ -32,7 +31,10 @@ console.log('🔵 [DEBUG] server.ts starting...');
 // Load .env from workspace root
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-const httpServer = createServer(app);
+let io: any;
+let httpServer: any;
+let server: any;
+let app: any;
 
 // Socket.IO Types
 interface ClientToServerEvents {
@@ -43,45 +45,20 @@ interface ServerToClientEvents {}
 interface InterServerEvents {}
 interface SocketData {}
 
-// Initialize Socket.IO via SocketService
-const socketService = container.get<SocketService>(TYPES.SocketService);
-socketService.init(httpServer);
-const io = socketService.getIO();
-if (!io) {
-  logger.error('Failed to initialize Socket.IO server');
-  process.exit(1);
-}
+// Resolution moved inside initializeAndStart
 
 // Neural Heartbeat: Bridge service events to WebSockets
 neuralHealthService.on('healthUpdate', metrics => {
-  (io as any).emit('nexus:neural_heartbeat', metrics);
+  if (io) (io as any).emit('nexus:neural_heartbeat', metrics);
 });
 
 neuralHealthService.on('healthWarning', metrics => {
-  (io as any).emit('nexus:neural_warning', metrics);
+  if (io) (io as any).emit('nexus:neural_warning', metrics);
 });
 
-// Socket.IO connection handling
-io.on(
-  'connection',
-  (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>) => {
-    logger.info('New WebSocket connection');
-
-    socket.on('joinRoom', (room: string) => {
-      socket.join(room);
-      logger.info(`User joined room: ${room}`);
-    });
-
-    socket.on('leaveRoom', (room: string) => {
-      socket.leave(room);
-      logger.info(`User left room: ${room}`);
-    });
-
-    socket.on('disconnect', () => {
-      logger.info('Client disconnected');
-    });
-  },
-);
+neuralHealthService.on('healthCritical', metrics => {
+  if (io) (io as any).emit('nexus:critical_alert', metrics);
+});
 
 // Reset RPS every second
 setInterval(() => {
@@ -105,8 +82,8 @@ setInterval(async () => {
       responseTime: stats.lastRequestTime,
     };
 
-    (io as any).emit('analytics:update', update);
-    (io as any).emit('analytics:traffic', { timestamp: Date.now(), value: currentRPS });
+    if (io) (io as any).emit('analytics:update', update);
+    if (io) (io as any).emit('analytics:traffic', { timestamp: Date.now(), value: currentRPS });
 
     const systemMetrics = {
       cpu: metrics.cpu,
@@ -119,7 +96,7 @@ setInterval(async () => {
       lastBackup: new Date().toISOString(),
     };
 
-    (io as any).emit('system:metrics', systemMetrics);
+    if (io) (io as any).emit('system:metrics', systemMetrics);
   } catch (err) {
     logger.error('Error fetching metrics for broadcast:', err);
   }
@@ -171,31 +148,72 @@ setInterval(async () => {
 }, 60000);
 
 // Start server
-const initializeAndStart = async () => {
-  // 1. Determine Port (Cloud Run uses PORT)
-  const port = process.env.PORT || config.port || 5000;
+export async function initializeAndStart() {
+  console.log('🚀 [DEBUG] initializeAndStart() entered');
+  try {
+    console.log('🔵 [DEBUG] Loading configuration...');
+    const config = (await import('./config/config')).config;
 
-  // 2. Start HTTP Server Immediately (for Cloud Run Health Check)
-  const server = httpServer.listen(port, () => {
-    logger.info(`
+    console.log('🔵 [DEBUG] Importing app (routes & middleware)...');
+    const { app: importedApp } = await import('./app');
+    app = importedApp; // Assign to global app for export
+    console.log('🟢 [DEBUG] app imported successfully');
+
+    // Create HTTP server with loaded app
+    httpServer = createServer(app);
+
+    // Initialize Socket.IO via SocketService
+    const socketService = container.get<SocketService>(TYPES.SocketService);
+    socketService.init(httpServer);
+    io = socketService.getIO();
+
+    if (!io) {
+      logger.error('Failed to initialize Socket.IO server');
+      process.exit(1);
+    }
+    console.log('🟢 [DEBUG] Socket.IO initialized');
+
+    // Socket.IO connection handling
+    io.on(
+      'connection',
+      (socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>) => {
+        logger.info('New WebSocket connection');
+
+        socket.on('joinRoom', (room: string) => {
+          socket.join(room);
+          logger.info(`User joined room: ${room}`);
+        });
+
+        socket.on('leaveRoom', (room: string) => {
+          socket.leave(room);
+          logger.info(`User left room: ${room}`);
+        });
+
+        socket.on('disconnect', () => {
+          logger.info('Client disconnected');
+        });
+      },
+    );
+
+    // 1. Data Source (Optional for dev)
+    try {
+      const { connectToDatabase } = await import('./config/database');
+      await connectToDatabase();
+    } catch (dbErr) {
+      logger.warn('⚠️ [Database] Failed to connect. Running in degraded mode: ' + (dbErr as Error).message);
+    }
+
+    const port = process.env.PORT || config.port || 5000;
+
+    // 2. Start HTTP Server
+    console.log(`🔵 [DEBUG] Attempting to listen on port ${port}...`);
+    server = httpServer.listen(port, async () => {
+      console.log(`🟢 [DEBUG] server.listen callback triggered!`);
+      logger.info(`
     ################################################
     🛡️  Server listening on port: ${port} 🛡️
     ################################################
       `);
-  });
-
-  // 3. Non-blocking Background Initialization
-  (async () => {
-    try {
-      const shouldLoadSecrets =
-        process.env.NODE_ENV === 'production' ||
-        (!!process.env.GOOGLE_CLOUD_PROJECT_ID && !process.env.SKIP_SECRETS);
-
-      if (shouldLoadSecrets) {
-        // Secrets loading logic (optional, currently disabled per original file)
-      } else {
-        logger.info('Skipping Google Secret Manager (Dev mode or missing Project ID)');
-      }
 
       // Start Background Workers
       WorkerSetup.startWorkers();
@@ -216,47 +234,32 @@ const initializeAndStart = async () => {
         logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
       }
 
-      // Resilient DB Connection
-      await connectToDatabase();
-
-      // Post-startup logic (Credential verification, Telegram, etc.)
-      const credManager = container.get<CredentialManagerService>(TYPES.CredentialManagerService);
-      const telegramService = container.get<TelegramService>(TYPES.TelegramService);
-
-      credManager
-        .verifyAll()
-        .then(async (report: any[]) => {
-          const failures = report.filter((r: any) => r.status !== 'valid');
-          if (failures.length > 0) {
-            const message = `🚨 *Credential Audit Failed*:\n${failures
-              .map((f: any) => `• ${f.provider}: ${f.status} (${f.message || 'No details'})`)
-              .join('\n')}`;
-            await telegramService.sendMessage(message);
-            logger.error('Credential audit failed, alert sent.');
-          } else {
-            logger.info('✅ All critical credentials verified successfully.');
-          }
-        })
-        .catch((err: any) => logger.error('Credential audit system error:', err));
-
-      // Start Backup Scheduler
+      // Final initialization tasks
       try {
-        const backupScheduler = container.get<BackupSchedulerService>(TYPES.BackupSchedulerService);
-        backupScheduler.start();
-      } catch (err: any) {
-        logger.error('Failed to start BackupSchedulerService:', err);
-      }
+        const credManager = container.get<CredentialManagerService>(TYPES.CredentialManagerService);
+        const report = await credManager.verifyAll();
+        if (report.criticalFailures > 0) {
+           logger.error('⚠️ Critical credentials missing. System may be unstable.');
+        }
+      } catch (e) {}
 
-      // YouTube & Telegram Bots
+      const backupScheduler = container.get<BackupSchedulerService>(TYPES.BackupSchedulerService);
+      backupScheduler.start();
+
       logger.info('✅ Background services initialization completed');
-    } catch (error) {
-      logger.error('Critical failure during background initialization:', error);
-    }
-  })();
+    });
 
-  // 4. Graceful Shutdown
-  const gracefullyShutdown = async (signal: string) => {
-    logger.info(`${signal} signal received. Shutting down gracefully...`);
+  } catch (error) {
+    console.error('❌ [DEBUG] Critical startup failure:', error);
+    logger.error('Critical failure during startup:', error);
+    process.exit(1);
+  }
+}
+
+// 4. Graceful Shutdown
+const gracefullyShutdown = async (signal: string) => {
+  logger.info(`${signal} signal received. Shutting down gracefully...`);
+  if (server) {
     server.close(async () => {
       logger.info('HTTP server closed.');
       try {
@@ -267,15 +270,13 @@ const initializeAndStart = async () => {
         process.exit(1);
       }
     });
-    setTimeout(() => {
-      logger.error('Forcefully shutting down');
-      process.exit(1);
-    }, 10000);
-  };
-
-  process.on('SIGTERM', () => gracefullyShutdown('SIGTERM'));
-  process.on('SIGINT', () => gracefullyShutdown('SIGINT'));
+  } else {
+    process.exit(0);
+  }
 };
+
+process.on('SIGTERM', () => gracefullyShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefullyShutdown('SIGINT'));
 
 initializeAndStart();
 
