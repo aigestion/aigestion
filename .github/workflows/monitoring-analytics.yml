@@ -36,7 +36,7 @@ jobs:
             security_score
 
       - name: Create Analytics Dashboard
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
@@ -106,7 +106,7 @@ jobs:
           threshold-memory-usage: 85
 
       - name: Generate Performance Report
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
@@ -212,7 +212,7 @@ jobs:
           echo "Total Estimated Cost: $(cat total-cost.txt)"
 
       - name: Create Cost Optimization Issue
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
@@ -321,7 +321,7 @@ jobs:
 
       - name: Create Health Alert
         if: failure()
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             github.rest.issues.create({
