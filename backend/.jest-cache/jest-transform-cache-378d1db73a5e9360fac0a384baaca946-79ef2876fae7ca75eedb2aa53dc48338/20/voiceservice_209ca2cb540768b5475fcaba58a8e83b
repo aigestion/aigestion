@@ -1,0 +1,115 @@
+78f6269b63d94c2a0081db51ecc9c0c1
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var _a, _b, _c;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.VoiceService = void 0;
+const inversify_1 = require("inversify");
+const types_1 = require("../types");
+const ai_service_1 = require("./ai.service");
+const analytics_service_1 = require("./analytics.service");
+const metaverse_service_1 = require("./metaverse.service");
+const logger_1 = require("../utils/logger");
+const env_schema_1 = require("../config/env.schema");
+const daniela_persona_1 = require("../config/prompts/daniela.persona");
+let VoiceService = class VoiceService {
+    aiService;
+    analyticsService;
+    metaverseService;
+    constructor(aiService, analyticsService, metaverseService) {
+        this.aiService = aiService;
+        this.analyticsService = analyticsService;
+        this.metaverseService = metaverseService;
+    }
+    /**
+     * Processes a message from Vapi and returns the response for the voice assistant
+     */
+    async processVapiMessage(payload) {
+        const messageType = payload.message?.type;
+        if (messageType === 'assistant-request') {
+            // Return the initial assistant configuration
+            return {
+                assistant: {
+                    name: 'Daniela',
+                    model: {
+                        provider: 'openai',
+                        model: 'gpt-4o',
+                        systemPrompt: `${daniela_persona_1.DANIELA_SYSTEM_PROMPT}\n\n[CONTEXTO ACTUAL]\nFecha: ${new Date().toLocaleDateString()}\nHora: ${new Date().toLocaleTimeString()}\nEntorno: ${env_schema_1.env.NODE_ENV}`,
+                    },
+                    voice: {
+                        provider: 'eleven_labs',
+                        voiceId: env_schema_1.env.ELEVENLABS_VOICE_ID || 'eleven_monica',
+                    },
+                    tools: [
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'get_business_summary',
+                                description: 'Get a summary of business health, revenue, and growth.',
+                                parameters: { type: 'object', properties: {} },
+                            },
+                        },
+                        {
+                            type: 'function',
+                            function: {
+                                name: 'get_metaverse_office_status',
+                                description: 'Get the coordinates and status of our Decentraland virtual headquarters.',
+                                parameters: { type: 'object', properties: {} },
+                            },
+                        },
+                    ],
+                },
+            };
+        }
+        if (messageType === 'function-call') {
+            const functionCall = payload.message.functionCall;
+            return await this.handleFunctionCall(functionCall);
+        }
+        return { status: 'ignored', type: messageType };
+    }
+    async handleFunctionCall(call) {
+        const { name, parameters } = call;
+        logger_1.logger.info(`[VoiceService] Voice Tool Call: ${name}`, parameters);
+        try {
+            if (name === 'get_business_summary') {
+                const data = await this.analyticsService.getDashboardData();
+                return {
+                    result: `The current monthly revenue is $${data.revenue.reduce((acc, curr) => acc + curr.value, 0)}. User growth is steady with ${data.users.length} new signups recently.`,
+                };
+            }
+            if (name === 'get_metaverse_office_status') {
+                const status = await this.metaverseService.getStatus();
+                return {
+                    result: `Our virtual headquarters is located at coordinates ${status.coordinates} in Decentraland. ${status.activeEvents.length > 0
+                        ? `We have an active event: ${status.activeEvents[0].title}.`
+                        : 'No events are currently scheduled.'} You can visit it at ${status.visitUrl}`,
+                };
+            }
+            return { error: 'Unknown function' };
+        }
+        catch (error) {
+            logger_1.logger.error(error, `[VoiceService] Error handling voice tool: ${name}`);
+            return { error: 'Internal service error' };
+        }
+    }
+};
+exports.VoiceService = VoiceService;
+exports.VoiceService = VoiceService = __decorate([
+    (0, inversify_1.injectable)(),
+    __param(0, (0, inversify_1.inject)(types_1.TYPES.AIService)),
+    __param(1, (0, inversify_1.inject)(types_1.TYPES.AnalyticsService)),
+    __param(2, (0, inversify_1.inject)(types_1.TYPES.MetaverseService)),
+    __metadata("design:paramtypes", [typeof (_a = typeof ai_service_1.AIService !== "undefined" && ai_service_1.AIService) === "function" ? _a : Object, typeof (_b = typeof analytics_service_1.AnalyticsService !== "undefined" && analytics_service_1.AnalyticsService) === "function" ? _b : Object, typeof (_c = typeof metaverse_service_1.MetaverseService !== "undefined" && metaverse_service_1.MetaverseService) === "function" ? _c : Object])
+], VoiceService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcdm9pY2Uuc2VydmljZS50cyIsIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7O0FBQUEseUNBQStDO0FBQy9DLG9DQUFpQztBQUNqQyw2Q0FBeUM7QUFDekMsMkRBQXVEO0FBQ3ZELDJEQUF1RDtBQUN2RCw0Q0FBeUM7QUFDekMscURBQTJDO0FBQzNDLHVFQUEwRTtBQUduRSxJQUFNLFlBQVksR0FBbEIsTUFBTSxZQUFZO0lBRVk7SUFDTztJQUNBO0lBSDFDLFlBQ21DLFNBQW9CLEVBQ2IsZ0JBQWtDLEVBQ2xDLGdCQUFrQztRQUZ6QyxjQUFTLEdBQVQsU0FBUyxDQUFXO1FBQ2IscUJBQWdCLEdBQWhCLGdCQUFnQixDQUFrQjtRQUNsQyxxQkFBZ0IsR0FBaEIsZ0JBQWdCLENBQWtCO0lBQ3pFLENBQUM7SUFFSjs7T0FFRztJQUNILEtBQUssQ0FBQyxrQkFBa0IsQ0FBQyxPQUFZO1FBQ25DLE1BQU0sV0FBVyxHQUFHLE9BQU8sQ0FBQyxPQUFPLEVBQUUsSUFBSSxDQUFDO1FBRTFDLElBQUksV0FBVyxLQUFLLG1CQUFtQixFQUFFLENBQUM7WUFDeEMsNkNBQTZDO1lBQzdDLE9BQU87Z0JBQ0wsU0FBUyxFQUFFO29CQUNULElBQUksRUFBRSxTQUFTO29CQUNmLEtBQUssRUFBRTt3QkFDTCxRQUFRLEVBQUUsUUFBUTt3QkFDbEIsS0FBSyxFQUFFLFFBQVE7d0JBQ2YsWUFBWSxFQUFFLEdBQUcsdUNBQXFCLGlDQUFpQyxJQUFJLElBQUksRUFBRSxDQUFDLGtCQUFrQixFQUFFLFdBQVcsSUFBSSxJQUFJLEVBQUUsQ0FBQyxrQkFBa0IsRUFBRSxjQUM5SSxnQkFBRyxDQUFDLFFBQ04sRUFBRTtxQkFDSDtvQkFDRCxLQUFLLEVBQUU7d0JBQ0wsUUFBUSxFQUFFLGFBQWE7d0JBQ3ZCLE9BQU8sRUFBRSxnQkFBRyxDQUFDLG1CQUFtQixJQUFJLGVBQWU7cUJBQ3BEO29CQUNELEtBQUssRUFBRTt3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QTt5REFGYSxzQkFBUyxvQkFBVCxzQkFBUyxvREFDSyxvQ0FBZ0Isb0JBQWhCLG9DQUFnQixvREFDaEIsb0NBQWdCLG9CQUFoQixvQ0FBZ0I7R0FKakUsWUFBWSxDQThGeEIiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcdm9pY2Uuc2VydmljZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBpbmplY3QsIGluamVjdGFibGUgfSBmcm9tICdpbnZlcnNpZnknO1xuaW1wb3J0IHsgVFlQRVMgfSBmcm9tICcuLi90eXBlcyc7XG5pbXBvcnQgeyBBSVNlcnZpY2UgfSBmcm9tICcuL2FpLnNlcnZpY2UnO1xuaW1wb3J0IHsgQW5hbHl0aWNzU2VydmljZSB9IGZyb20gJy4vYW5hbHl0aWNzLnNlcnZpY2UnO1xuaW1wb3J0IHsgTWV0YXZlcnNlU2VydmljZSB9IGZyb20gJy4vbWV0YXZlcnNlLnNlcnZpY2UnO1xuaW1wb3J0IHsgbG9nZ2VyIH0gZnJvbSAnLi4vdXRpbHMvbG9nZ2VyJztcbmltcG9ydCB7IGVudiB9IGZyb20gJy4uL2NvbmZpZy9lbnYuc2NoZW1hJztcbmltcG9ydCB7IERBTklFTEFfU1lTVEVNX1BST01QVCB9IGZyb20gJy4uL2NvbmZpZy9wcm9tcHRzL2RhbmllbGEucGVyc29uYSc7XG5cbkBpbmplY3RhYmxlKClcbmV4cG9ydCBjbGFzcyBWb2ljZVNlcnZpY2Uge1xuICBjb25zdHJ1Y3RvcihcbiAgICBAaW5qZWN0KFRZUEVTLkFJU2VydmljZSkgcHJpdmF0ZSBhaVNlcnZpY2U6IEFJU2VydmljZSxcbiAgICBAaW5qZWN0KFRZUEVTLkFuYWx5dGljc1NlcnZpY2UpIHByaXZhdGUgYW5hbHl0aWNzU2VydmljZTogQW5hbHl0aWNzU2VydmljZSxcbiAgICBAaW5qZWN0KFRZUEVTLk1ldGF2ZXJzZVNlcnZpY2UpIHByaXZhdGUgbWV0YXZlcnNlU2VydmljZTogTWV0YXZlcnNlU2VydmljZSxcbiAgKSB7fVxuXG4gIC8qKlxuICAgKiBQcm9jZXNzZXMgYSBtZXNzYWdlIGZyb20gVmFwaSBhbmQgcmV0dXJucyB0aGUgcmVzcG9uc2UgZm9yIHRoZSB2b2ljZSBhc3Npc3RhbnRcbiAgICovXG4gIGFzeW5jIHByb2Nlc3NWYXBpTWVzc2FnZShwYXlsb2FkOiBhbnkpOiBQcm9taXNlPGFueT4ge1xuICAgIGNvbnN0IG1lc3NhZ2VUeXBlID0gcGF5bG9hZC5tZXNzYWdlPy50eXBlO1xuXG4gICAgaWYgKG1lc3NhZ2VUeXBlID09PSAnYXNzaXN0YW50LXJlcXVlc3QnKSB7XG4gICAgICAvLyBSZXR1cm4gdGhlIGluaXRpYWwgYXNzaXN0YW50IGNvbmZpZ3VyYXRpb25cbiAgICAgIHJldHVybiB7XG4gICAgICAgIGFzc2lzdGFudDoge1xuICAgICAgICAgIG5hbWU6ICdEYW5pZWxhJyxcbiAgICAgICAgICBtb2RlbDoge1xuICAgICAgICAgICAgcHJvdmlkZXI6ICdvcGVuYWknLFxuICAgICAgICAgICAgbW9kZWw6ICdncHQtNG8nLFxuICAgICAgICAgICAgc3lzdGVtUHJvbXB0OiBgJHtEQU5JRUxBX1NZU1RFTV9QUk9NUFR9XFxuXFxuW0NPTlRFWFRPIEFDVFVBTF1cXG5GZWNoYTogJHtuZXcgRGF0ZSgpLnRvTG9jYWxlRGF0ZVN0cmluZygpfVxcbkhvcmE6ICR7bmV3IERhdGUoKS50b0xvY2FsZVRpbWVTdHJpbmcoKX1cXG5FbnRvcm5vOiAke1xuICAgICAgICAgICAgICBlbnYuTk9ERV9FTlZcbiAgICAgICAgICAgIH1gLFxuICAgICAgICAgIH0sXG4gICAgICAgICAgdm9pY2U6IHtcbiAgICAgICAgICAgIHByb3ZpZGVyOiAnZWxldmVuX2xhYnMnLFxuICAgICAgICAgICAgdm9pY2VJZDogZW52LkVMRVZFTkxBQlNfVk9JQ0VfSUQgfHwgJ2VsZXZlbl9tb25pY2EnLFxuICAgICAgICAgIH0sXG4gICAgICAgICAgdG9vbHM6IFtcbiAgICAgICAgICAgIHtcbiAgICAgICAgICAgICAgdHlwZTogJ2Z1bmN0aW9uJyxcbiAgICAgICAgICAgICAgZnVuY3Rpb246IHtcbiAgICAgICAgICAgICAgICBuYW1lOiAnZ2V0X2J1c2luZXNzX3N1bW1hcnknLFxuICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uOiAnR2V0IGEgc3VtbWFyeSBvZiBidXNpbmVzcyBoZWFsdGgsIHJldmVudWUsIGFuZCBncm93dGguJyxcbiAgICAgICAgICAgICAgICBwYXJhbWV0ZXJzOiB7IHR5cGU6ICdvYmplY3QnLCBwcm9wZXJ0aWVzOiB7fSB9LFxuICAgICAgICAgICAgICB9LFxuICAgICAgICAgICAgfSxcbiAgICAgICAgICAgIHtcbiAgICAgICAgICAgICAgdHlwZTogJ2Z1bmN0aW9uJyxcbiAgICAgICAgICAgICAgZnVuY3Rpb246IHtcbiAgICAgICAgICAgICAgICBuYW1lOiAnZ2V0X21ldGF2ZXJzZV9vZmZpY2Vfc3RhdHVzJyxcbiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbjpcbiAgICAgICAgICAgICAgICAgICdHZXQgdGhlIGNvb3JkaW5hdGVzIGFuZCBzdGF0dXMgb2Ygb3VyIERlY2VudHJhbGFuZCB2aXJ0dWFsIGhlYWRxdWFydGVycy4nLFxuICAgICAgICAgICAgICAgIHBhcmFtZXRlcnM6IHsgdHlwZTogJ29iamVjdCcsIHByb3BlcnRpZXM6IHt9IH0sXG4gICAgICAgICAgICAgIH0sXG4gICAgICAgICAgICB9LFxuICAgICAgICAgIF0sXG4gICAgICAgIH0sXG4gICAgICB9O1xuICAgIH1cblxuICAgIGlmIChtZXNzYWdlVHlwZSA9PT0gJ2Z1bmN0aW9uLWNhbGwnKSB7XG4gICAgICBjb25zdCBmdW5jdGlvbkNhbGwgPSBwYXlsb2FkLm1lc3NhZ2UuZnVuY3Rpb25DYWxsO1xuICAgICAgcmV0dXJuIGF3YWl0IHRoaXMuaGFuZGxlRnVuY3Rpb25DYWxsKGZ1bmN0aW9uQ2FsbCk7XG4gICAgfVxuXG4gICAgcmV0dXJuIHsgc3RhdHVzOiAnaWdub3JlZCcsIHR5cGU6IG1lc3NhZ2VUeXBlIH07XG4gIH1cblxuICBwcml2YXRlIGFzeW5jIGhhbmRsZUZ1bmN0aW9uQ2FsbChjYWxsOiBhbnkpOiBQcm9taXNlPGFueT4ge1xuICAgIGNvbnN0IHsgbmFtZSwgcGFyYW1ldGVycyB9ID0gY2FsbDtcbiAgICBsb2dnZXIuaW5mbyhgW1ZvaWNlU2VydmljZV0gVm9pY2UgVG9vbCBDYWxsOiAke25hbWV9YCwgcGFyYW1ldGVycyk7XG5cbiAgICB0cnkge1xuICAgICAgaWYgKG5hbWUgPT09ICdnZXRfYnVzaW5lc3Nfc3VtbWFyeScpIHtcbiAgICAgICAgY29uc3QgZGF0YSA9IGF3YWl0IHRoaXMuYW5hbHl0aWNzU2VydmljZS5nZXREYXNoYm9hcmREYXRhKCk7XG4gICAgICAgIHJldHVybiB7XG4gICAgICAgICAgcmVzdWx0OiBgVGhlIGN1cnJlbnQgbW9udGhseSByZXZlbnVlIGlzICQke2RhdGEucmV2ZW51ZS5yZWR1Y2UoXG4gICAgICAgICAgICAoYWNjOiBudW1iZXIsIGN1cnI6IGFueSkgPT4gYWNjICsgY3Vyci52YWx1ZSxcbiAgICAgICAgICAgIDAsXG4gICAgICAgICAgKX0uIFVzZXIgZ3Jvd3RoIGlzIHN0ZWFkeSB3aXRoICR7ZGF0YS51c2Vycy5sZW5ndGh9IG5ldyBzaWdudXBzIHJlY2VudGx5LmAsXG4gICAgICAgIH07XG4gICAgICB9XG5cbiAgICAgIGlmIChuYW1lID09PSAnZ2V0X21ldGF2ZXJzZV9vZmZpY2Vfc3RhdHVzJykge1xuICAgICAgICBjb25zdCBzdGF0dXMgPSBhd2FpdCB0aGlzLm1ldGF2ZXJzZVNlcnZpY2UuZ2V0U3RhdHVzKCk7XG4gICAgICAgIHJldHVybiB7XG4gICAgICAgICAgcmVzdWx0OiBgT3VyIHZpcnR1YWwgaGVhZHF1YXJ0ZXJzIGlzIGxvY2F0ZWQgYXQgY29vcmRpbmF0ZXMgJHtcbiAgICAgICAgICAgIHN0YXR1cy5jb29yZGluYXRlc1xuICAgICAgICAgIH0gaW4gRGVjZW50cmFsYW5kLiAke1xuICAgICAgICAgICAgc3RhdHVzLmFjdGl2ZUV2ZW50cy5sZW5ndGggPiAwXG4gICAgICAgICAgICAgID8gYFdlIGhhdmUgYW4gYWN0aXZlIGV2ZW50OiAke3N0YXR1cy5hY3RpdmVFdmVudHNbMF0udGl0bGV9LmBcbiAgICAgICAgICAgICAgOiAnTm8gZXZlbnRzIGFyZSBjdXJyZW50bHkgc2NoZWR1bGVkLidcbiAgICAgICAgICB9IFlvdSBjYW4gdmlzaXQgaXQgYXQgJHtzdGF0dXMudmlzaXRVcmx9YCxcbiAgICAgICAgfTtcbiAgICAgIH1cblxuICAgICAgcmV0dXJuIHsgZXJyb3I6ICdVbmtub3duIGZ1bmN0aW9uJyB9O1xuICAgIH0gY2F0Y2ggKGVycm9yKSB7XG4gICAgICBsb2dnZXIuZXJyb3IoZXJyb3IsIGBbVm9pY2VTZXJ2aWNlXSBFcnJvciBoYW5kbGluZyB2b2ljZSB0b29sOiAke25hbWV9YCk7XG4gICAgICByZXR1cm4geyBlcnJvcjogJ0ludGVybmFsIHNlcnZpY2UgZXJyb3InIH07XG4gICAgfVxuICB9XG59XG4iXSwidmVyc2lvbiI6M30=

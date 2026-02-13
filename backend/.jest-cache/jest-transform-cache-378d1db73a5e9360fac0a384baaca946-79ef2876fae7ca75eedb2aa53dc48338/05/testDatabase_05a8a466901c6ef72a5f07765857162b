@@ -1,0 +1,54 @@
+5badc802b7e03f8e67a6d54ac4e1b573
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.stopInMemoryMongo = exports.startInMemoryMongo = void 0;
+const mongodb_memory_server_1 = require("mongodb-memory-server");
+const mongoose_1 = __importDefault(require("mongoose"));
+let mongoServer;
+let isConnected = false;
+const startInMemoryMongo = async () => {
+    if (isConnected)
+        return;
+    try {
+        // Create an actual in-memory MongoDB instance
+        mongoServer = await mongodb_memory_server_1.MongoMemoryServer.create();
+        const uri = mongoServer.getUri();
+        console.log(`🔧 [TEST] Connecting to MongoMemoryServer at ${uri}`);
+        await mongoose_1.default.connect(uri, {
+            serverSelectionTimeoutMS: 15000,
+            connectTimeoutMS: 30000,
+        });
+        isConnected = true;
+        console.log('✅ [TEST] Connected to MongoMemoryServer successfully');
+    }
+    catch (error) {
+        console.error('❌ [TEST] Failed to start MongoMemoryServer:', error);
+        // Fallback if MongoMemoryServer fails (e.g., binaries missing)
+        const fallbackUri = 'mongodb://127.0.0.1:27017/aigestion-test-jest';
+        console.warn(`⚠️ [TEST] Using local fallback at ${fallbackUri}`);
+        try {
+            await mongoose_1.default.connect(fallbackUri);
+            isConnected = true;
+        }
+        catch (fallbackError) {
+            console.error('❌ [TEST] Global MongoDB connection failure');
+            throw error;
+        }
+    }
+};
+exports.startInMemoryMongo = startInMemoryMongo;
+const stopInMemoryMongo = async () => {
+    if (mongoose_1.default.connection.readyState !== 0) {
+        await mongoose_1.default.disconnect();
+    }
+    if (mongoServer) {
+        await mongoServer.stop();
+    }
+    isConnected = false;
+    console.log('🔧 [TEST] MongoDB connection and server closed');
+};
+exports.stopInMemoryMongo = stopInMemoryMongo;
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFx0ZXN0RGF0YWJhc2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBQUEsaUVBQTBEO0FBQzFELHdEQUFnQztBQUVoQyxJQUFJLFdBQStELENBQUM7QUFDcEUsSUFBSSxXQUFXLEdBQUcsS0FBSyxDQUFDO0FBRWpCLE1BQU0sa0JBQWtCLEdBQUcsS0FBSyxJQUFtQixFQUFFO0lBQzFELElBQUksV0FBVztRQUFFLE9BQU87SUFFeEIsSUFBSSxDQUFDO1FBQ0gsOENBQThDO1FBQzlDLFdBQVcsR0FBRyxNQUFNLHlDQUFpQixDQUFDLE1BQU0sRUFBRSxDQUFDO1FBQy9DLE1BQU0sR0FBRyxHQUFHLFdBQVcsQ0FBQyxNQUFNLEVBQUUsQ0FBQztRQUVqQyxPQUFPLENBQUMsR0FBRyxDQUFDLGdEQUFnRCxHQUFHLEVBQUUsQ0FBQyxDQUFDO1FBRW5FLE1BQU0sa0JBQVEsQ0FBQyxPQUFPLENBQUMsR0FBRyxFQUFFO1lBQzFCLHdCQUF3QixFQUFFLEtBQUs7WUFDL0IsZ0JBQWdCLEVBQUUsS0FBSztTQUN4QixDQUFDLENBQUM7UUFFSCxXQUFXLEdBQUcsSUFBSSxDQUFDO1FBQ25CLE9BQU8sQ0FBQyxHQUFHLENBQUMsc0RBQXNELENBQUMsQ0FBQztJQUN0RSxDQUFDO0lBQUMsT0FBTyxLQUFVLEVBQUUsQ0FBQztRQUNwQixPQUFPLENBQUMsS0FBSyxDQUFDLDZDQUE2QyxFQUFFLEtBQUssQ0FBQyxDQUFDO1FBRXBFLCtEQUErRDtRQUMvRCxNQUFNLFdBQVcsR0FBRywrQ0FBK0MsQ0FBQztRQUNwRSxPQUFPLENBQUMsSUFBSSxDQUFDLHFDQUFxQyxXQUFXLEVBQUUsQ0FBQyxDQUFDO1FBRWpFLElBQUksQ0FBQztZQUNILE1BQU0sa0JBQVEsQ0FBQyxPQUFPLENBQUMsV0FBVyxDQUFDLENBQUM7WUFDcEMsV0FBVyxHQUFHLElBQUksQ0FBQztRQUNyQixDQUFDO1FBQUMsT0FBTyxhQUFhLEVBQUUsQ0FBQztZQUN2QixPQUFPLENBQUMsS0FBSyxDQUFDLDRDQUE0QyxDQUFDLENBQUM7WUFDNUQsTUFBTSxLQUFLLENBQUM7UUFDZCxDQUFDO0lBQ0gsQ0FBQztBQUNILENBQUMsQ0FBQztBQWhDVyxRQUFBLGtCQUFrQixzQkFnQzdCO0FBRUssTUFBTSxpQkFBaUIsR0FBRyxLQUFLLElBQW1CLEVBQUU7SUFDekQsSUFBSSxrQkFBUSxDQUFDLFVBQVUsQ0FBQyxVQUFVLEtBQUssQ0FBQyxFQUFFLENBQUM7UUFDekMsTUFBTSxrQkFBUSxDQUFDLFVBQVUsRUFBRSxDQUFDO0lBQzlCLENBQUM7SUFDRCxJQUFJLFdBQVcsRUFBRSxDQUFDO1FBQ2hCLE1BQU0sV0FBVyxDQUFDLElBQUksRUFBRSxDQUFDO0lBQzNCLENBQUM7SUFDRCxXQUFXLEdBQUcsS0FBSyxDQUFDO0lBQ3BCLE9BQU8sQ0FBQyxHQUFHLENBQUMsZ0RBQWdELENBQUMsQ0FBQztBQUNoRSxDQUFDLENBQUM7QUFUVyxRQUFBLGlCQUFpQixxQkFTNUIiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFx0ZXN0RGF0YWJhc2UudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgTW9uZ29NZW1vcnlTZXJ2ZXIgfSBmcm9tICdtb25nb2RiLW1lbW9yeS1zZXJ2ZXInO1xuaW1wb3J0IG1vbmdvb3NlIGZyb20gJ21vbmdvb3NlJztcblxubGV0IG1vbmdvU2VydmVyOiBJbnN0YW5jZVR5cGU8dHlwZW9mIE1vbmdvTWVtb3J5U2VydmVyPiB8IHVuZGVmaW5lZDtcbmxldCBpc0Nvbm5lY3RlZCA9IGZhbHNlO1xuXG5leHBvcnQgY29uc3Qgc3RhcnRJbk1lbW9yeU1vbmdvID0gYXN5bmMgKCk6IFByb21pc2U8dm9pZD4gPT4ge1xuICBpZiAoaXNDb25uZWN0ZWQpIHJldHVybjtcblxuICB0cnkge1xuICAgIC8vIENyZWF0ZSBhbiBhY3R1YWwgaW4tbWVtb3J5IE1vbmdvREIgaW5zdGFuY2VcbiAgICBtb25nb1NlcnZlciA9IGF3YWl0IE1vbmdvTWVtb3J5U2VydmVyLmNyZWF0ZSgpO1xuICAgIGNvbnN0IHVyaSA9IG1vbmdvU2VydmVyLmdldFVyaSgpO1xuXG4gICAgY29uc29sZS5sb2coYPCflKcgW1RFU1RdIENvbm5lY3RpbmcgdG8gTW9uZ29NZW1vcnlTZXJ2ZXIgYXQgJHt1cml9YCk7XG5cbiAgICBhd2FpdCBtb25nb29zZS5jb25uZWN0KHVyaSwge1xuICAgICAgc2VydmVyU2VsZWN0aW9uVGltZW91dE1TOiAxNTAwMCxcbiAgICAgIGNvbm5lY3RUaW1lb3V0TVM6IDMwMDAwLFxuICAgIH0pO1xuXG4gICAgaXNDb25uZWN0ZWQgPSB0cnVlO1xuICAgIGNvbnNvbGUubG9nKCfinIUgW1RFU1RdIENvbm5lY3RlZCB0byBNb25nb01lbW9yeVNlcnZlciBzdWNjZXNzZnVsbHknKTtcbiAgfSBjYXRjaCAoZXJyb3I6IGFueSkge1xuICAgIGNvbnNvbGUuZXJyb3IoJ+KdjCBbVEVTVF0gRmFpbGVkIHRvIHN0YXJ0IE1vbmdvTWVtb3J5U2VydmVyOicsIGVycm9yKTtcblxuICAgIC8vIEZhbGxiYWNrIGlmIE1vbmdvTWVtb3J5U2VydmVyIGZhaWxzIChlLmcuLCBiaW5hcmllcyBtaXNzaW5nKVxuICAgIGNvbnN0IGZhbGxiYWNrVXJpID0gJ21vbmdvZGI6Ly8xMjcuMC4wLjE6MjcwMTcvYWlnZXN0aW9uLXRlc3QtamVzdCc7XG4gICAgY29uc29sZS53YXJuKGDimqDvuI8gW1RFU1RdIFVzaW5nIGxvY2FsIGZhbGxiYWNrIGF0ICR7ZmFsbGJhY2tVcml9YCk7XG5cbiAgICB0cnkge1xuICAgICAgYXdhaXQgbW9uZ29vc2UuY29ubmVjdChmYWxsYmFja1VyaSk7XG4gICAgICBpc0Nvbm5lY3RlZCA9IHRydWU7XG4gICAgfSBjYXRjaCAoZmFsbGJhY2tFcnJvcikge1xuICAgICAgY29uc29sZS5lcnJvcign4p2MIFtURVNUXSBHbG9iYWwgTW9uZ29EQiBjb25uZWN0aW9uIGZhaWx1cmUnKTtcbiAgICAgIHRocm93IGVycm9yO1xuICAgIH1cbiAgfVxufTtcblxuZXhwb3J0IGNvbnN0IHN0b3BJbk1lbW9yeU1vbmdvID0gYXN5bmMgKCk6IFByb21pc2U8dm9pZD4gPT4ge1xuICBpZiAobW9uZ29vc2UuY29ubmVjdGlvbi5yZWFkeVN0YXRlICE9PSAwKSB7XG4gICAgYXdhaXQgbW9uZ29vc2UuZGlzY29ubmVjdCgpO1xuICB9XG4gIGlmIChtb25nb1NlcnZlcikge1xuICAgIGF3YWl0IG1vbmdvU2VydmVyLnN0b3AoKTtcbiAgfVxuICBpc0Nvbm5lY3RlZCA9IGZhbHNlO1xuICBjb25zb2xlLmxvZygn8J+UpyBbVEVTVF0gTW9uZ29EQiBjb25uZWN0aW9uIGFuZCBzZXJ2ZXIgY2xvc2VkJyk7XG59O1xuIl0sInZlcnNpb24iOjN9

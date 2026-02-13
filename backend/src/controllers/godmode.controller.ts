@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
-import { supabaseService } from '../services/supabase.service';
+import { SupabaseService } from '../services/supabase.service';
 import { GodNotificationService } from '../services/god-notification.service';
 import { logger } from '../utils/logger';
 
@@ -18,7 +18,7 @@ export class GodModeController {
   // PROJECTS
   public async listProjects(req: Request, res: Response, next: NextFunction) {
     try {
-      const client = supabaseService.getClient();
+      const client = SupabaseService.getInstance().getClient();
       const { data, error } = await client
         .from('projects')
         .select('*')
@@ -34,7 +34,7 @@ export class GodModeController {
   public async createProject(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, description } = req.body;
-      const client = supabaseService.getClient();
+      const client = SupabaseService.getInstance().getClient();
       const { data, error } = await client
         .from('projects')
         .insert({ name, description })
@@ -58,7 +58,7 @@ export class GodModeController {
         return res.status(400).json({ error: 'Query and embedding are required' });
       }
 
-      const results = await supabaseService.hybridSearch(
+      const results = await SupabaseService.getInstance().hybridSearch(
         projectId,
         query,
         embedding,
@@ -76,7 +76,7 @@ export class GodModeController {
   public async getPrompt(req: Request, res: Response, next: NextFunction) {
     try {
       const name = req.params.name as string;
-      const template = await supabaseService.getPromptTemplate(name);
+      const template = await SupabaseService.getInstance().getPromptTemplate(name);
 
       if (!template) {
         return res.status(404).json({ error: `Prompt template [${name}] not found` });
@@ -90,7 +90,7 @@ export class GodModeController {
 
   public async listPrompts(req: Request, res: Response, next: NextFunction) {
     try {
-      const client = supabaseService.getClient();
+      const client = SupabaseService.getInstance().getClient();
       const { data, error } = await client
         .from('prompt_templates')
         .select('name, description, version, is_active')
@@ -106,12 +106,13 @@ export class GodModeController {
   // AUDIT
   public async getAuditLogs(req: Request, res: Response, next: NextFunction) {
     try {
-      const client = supabaseService.getClient();
+      const client = SupabaseService.getInstance().getClient();
       const { data, error } = await client
         .from('audit_logs')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(50);
+
 
       if (error) throw error;
       res.json({ success: true, data });

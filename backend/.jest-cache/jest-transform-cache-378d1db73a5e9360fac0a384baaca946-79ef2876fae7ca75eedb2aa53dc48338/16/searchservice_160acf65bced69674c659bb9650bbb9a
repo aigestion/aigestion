@@ -1,0 +1,54 @@
+ec5e4063aef66f04d358659a03514730
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SearchService = void 0;
+const axios_1 = __importDefault(require("axios"));
+const inversify_1 = require("inversify");
+const env_schema_1 = require("../config/env.schema");
+const logger_1 = require("../utils/logger");
+let SearchService = class SearchService {
+    apiKey;
+    baseUrl = 'https://api.tavily.com/search';
+    constructor() {
+        this.apiKey = env_schema_1.env.TAVILY_API_KEY;
+    }
+    async search(query, limit = 5) {
+        if (!this.apiKey) {
+            logger_1.logger.warn('TAVILY_API_KEY is missing. Web search will not work.');
+            return [];
+        }
+        try {
+            const response = await axios_1.default.post(this.baseUrl, {
+                api_key: this.apiKey,
+                query,
+                search_depth: 'smart',
+                include_images: false,
+                include_answer: true,
+                max_results: limit,
+            });
+            return response.data.results || [];
+        }
+        catch (error) {
+            logger_1.logger.error(error, `Error performing web search for query: ${query}`);
+            return [];
+        }
+    }
+};
+exports.SearchService = SearchService;
+exports.SearchService = SearchService = __decorate([
+    (0, inversify_1.injectable)(),
+    __metadata("design:paramtypes", [])
+], SearchService);
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJmaWxlIjoiQzpcXFVzZXJzXFxBbGVqYW5kcm9cXEFJR2VzdGlvblxcYmFja2VuZFxcc3JjXFxzZXJ2aWNlc1xcc2VhcmNoLnNlcnZpY2UudHMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsa0RBQTBCO0FBQzFCLHlDQUF1QztBQUV2QyxxREFBMkM7QUFDM0MsNENBQXlDO0FBVWxDLElBQU0sYUFBYSxHQUFuQixNQUFNLGFBQWE7SUFDUCxNQUFNLENBQXFCO0lBQzNCLE9BQU8sR0FBRywrQkFBK0IsQ0FBQztJQUUzRDtRQUNFLElBQUksQ0FBQyxNQUFNLEdBQUcsZ0JBQUcsQ0FBQyxjQUFjLENBQUM7SUFDbkMsQ0FBQztJQUVELEtBQUssQ0FBQyxNQUFNLENBQUMsS0FBYSxFQUFFLEtBQUssR0FBRyxDQUFDO1FBQ25DLElBQUksQ0FBQyxJQUFJLENBQUMsTUFBTSxFQUFFLENBQUM7WUFDakIsZUFBTSxDQUFDLElBQUksQ0FBQyxzREFBc0QsQ0FBQyxDQUFDO1lBQ3BFLE9BQU8sRUFBRSxDQUFDO1FBQ1osQ0FBQztRQUVELElBQUksQ0FBQztZQUNILE1BQU0sUUFBUSxHQUFHLE1BQU0sZUFBSyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsT0FBTyxFQUFFO2dCQUM5QyxPQUFPLEVBQUUsSUFBSSxDQUFDLE1BQU07Z0JBQ3BCLEtBQUs7Z0JBQ0wsWUFBWSxFQUFFLE9BQU87Z0JBQ3JCLGNBQWMsRUFBRSxLQUFLO2dCQUNyQixjQUFjLEVBQUUsSUFBSTtnQkFDcEIsV0FBVyxFQUFFLEtBQUs7YUFDbkIsQ0FBQyxDQUFDO1lBRUgsT0FBTyxRQUFRLENBQUMsSUFBSSxDQUFDLE9BQU8sSUFBSSxFQUFFLENBQUM7UUFDckMsQ0FBQztRQUFDLE9BQU8sS0FBSyxFQUFFLENBQUM7WUFDZixlQUFNLENBQUMsS0FBSyxDQUFDLEtBQUssRUFBRSwwQ0FBMEMsS0FBSyxFQUFFLENBQUMsQ0FBQztZQUN2RSxPQUFPLEVBQUUsQ0FBQztRQUNaLENBQUM7SUFDSCxDQUFDO0NBQ0YsQ0FBQTtBQTlCWSxzQ0FBYTt3QkFBYixhQUFhO0lBRHpCLElBQUEsc0JBQVUsR0FBRTs7R0FDQSxhQUFhLENBOEJ6QiIsIm5hbWVzIjpbXSwic291cmNlcyI6WyJDOlxcVXNlcnNcXEFsZWphbmRyb1xcQUlHZXN0aW9uXFxiYWNrZW5kXFxzcmNcXHNlcnZpY2VzXFxzZWFyY2guc2VydmljZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgYXhpb3MgZnJvbSAnYXhpb3MnO1xuaW1wb3J0IHsgaW5qZWN0YWJsZSB9IGZyb20gJ2ludmVyc2lmeSc7XG5cbmltcG9ydCB7IGVudiB9IGZyb20gJy4uL2NvbmZpZy9lbnYuc2NoZW1hJztcbmltcG9ydCB7IGxvZ2dlciB9IGZyb20gJy4uL3V0aWxzL2xvZ2dlcic7XG5cbmV4cG9ydCBpbnRlcmZhY2UgU2VhcmNoUmVzdWx0IHtcbiAgdGl0bGU6IHN0cmluZztcbiAgdXJsOiBzdHJpbmc7XG4gIGNvbnRlbnQ6IHN0cmluZztcbiAgc2NvcmU6IG51bWJlcjtcbn1cblxuQGluamVjdGFibGUoKVxuZXhwb3J0IGNsYXNzIFNlYXJjaFNlcnZpY2Uge1xuICBwcml2YXRlIHJlYWRvbmx5IGFwaUtleTogc3RyaW5nIHwgdW5kZWZpbmVkO1xuICBwcml2YXRlIHJlYWRvbmx5IGJhc2VVcmwgPSAnaHR0cHM6Ly9hcGkudGF2aWx5LmNvbS9zZWFyY2gnO1xuXG4gIGNvbnN0cnVjdG9yKCkge1xuICAgIHRoaXMuYXBpS2V5ID0gZW52LlRBVklMWV9BUElfS0VZO1xuICB9XG5cbiAgYXN5bmMgc2VhcmNoKHF1ZXJ5OiBzdHJpbmcsIGxpbWl0ID0gNSk6IFByb21pc2U8U2VhcmNoUmVzdWx0W10+IHtcbiAgICBpZiAoIXRoaXMuYXBpS2V5KSB7XG4gICAgICBsb2dnZXIud2FybignVEFWSUxZX0FQSV9LRVkgaXMgbWlzc2luZy4gV2ViIHNlYXJjaCB3aWxsIG5vdCB3b3JrLicpO1xuICAgICAgcmV0dXJuIFtdO1xuICAgIH1cblxuICAgIHRyeSB7XG4gICAgICBjb25zdCByZXNwb25zZSA9IGF3YWl0IGF4aW9zLnBvc3QodGhpcy5iYXNlVXJsLCB7XG4gICAgICAgIGFwaV9rZXk6IHRoaXMuYXBpS2V5LFxuICAgICAgICBxdWVyeSxcbiAgICAgICAgc2VhcmNoX2RlcHRoOiAnc21hcnQnLFxuICAgICAgICBpbmNsdWRlX2ltYWdlczogZmFsc2UsXG4gICAgICAgIGluY2x1ZGVfYW5zd2VyOiB0cnVlLFxuICAgICAgICBtYXhfcmVzdWx0czogbGltaXQsXG4gICAgICB9KTtcblxuICAgICAgcmV0dXJuIHJlc3BvbnNlLmRhdGEucmVzdWx0cyB8fCBbXTtcbiAgICB9IGNhdGNoIChlcnJvcikge1xuICAgICAgbG9nZ2VyLmVycm9yKGVycm9yLCBgRXJyb3IgcGVyZm9ybWluZyB3ZWIgc2VhcmNoIGZvciBxdWVyeTogJHtxdWVyeX1gKTtcbiAgICAgIHJldHVybiBbXTtcbiAgICB9XG4gIH1cbn1cbiJdLCJ2ZXJzaW9uIjozfQ==

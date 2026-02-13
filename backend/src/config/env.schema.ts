@@ -3,7 +3,7 @@ import path from 'path';
 import { z } from 'zod';
 
 // Load .env from project root
-const envPath = path.resolve(__dirname, '../../.env');
+const envPath = path.resolve(__dirname, '../../../.env');
 const result = dotenv.config({ path: envPath });
 if (process.env.NODE_ENV === 'test') {
   console.log(`[DEBUG] Loading .env from: ${envPath}`);

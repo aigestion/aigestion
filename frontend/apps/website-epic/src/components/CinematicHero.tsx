@@ -15,6 +15,8 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
   const [currentScene, setCurrentScene] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(true);
+  const [showDemo, setShowDemo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const { playHover, playClick } = useSound();
 
   const scenes = [
@@ -151,19 +153,20 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
             className="flex items-center gap-6"
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-nexus-cyan/40 blur-xl animate-pulse" />
-              <div className="relative w-16 h-16 bg-black/60 backdrop-blur-md rounded-2xl border border-white/20 flex items-center justify-center overflow-hidden">
-                <img src="/images/brand/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
+              <div className="absolute inset-0 bg-nexus-cyan/40 blur-2xl animate-pulse" />
+              <div className="relative w-16 h-16 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden group">
+                <div className="absolute inset-0 bg-linear-to-br from-nexus-cyan/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="w-8 h-8 rounded-full border-2 border-nexus-cyan/50 border-t-nexus-cyan animate-spin-slow" />
               </div>
             </div>
             <div>
-              <h1 className="text-white font-orbitron text-3xl font-black tracking-tighter">
+              <h1 className="text-white font-orbitron text-4xl font-black tracking-tighter">
                 AIGESTION<span className="text-nexus-cyan font-light">.NET</span>
               </h1>
               <div className="flex items-center gap-2">
-                <div className="h-[2px] w-8 bg-nexus-violet" />
-                <p className="text-nexus-cyan text-[10px] font-mono tracking-[0.4em] uppercase">
-                  Cinematic Experience
+                <div className="h-[1px] w-12 bg-linear-to-r from-nexus-violet to-transparent" />
+                <p className="text-nexus-cyan/60 text-[8px] font-mono tracking-[0.5em] uppercase">
+                  Sovereign Intelligence Nexus
                 </p>
               </div>
             </div>
@@ -180,6 +183,16 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
               className="premium-glass px-6 py-3 rounded-full text-white text-xs font-orbitron font-bold tracking-widest uppercase hover:text-nexus-cyan transition-colors"
             >
               {isPlaying ? '⏸ PAUSA' : '▶ PLAY'}
+            </button>
+            <button
+              onClick={() => {
+                const el = document.getElementById('demo-dashboard');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              onMouseEnter={playHover}
+              className="premium-glass px-6 py-3 rounded-full text-nexus-cyan text-xs font-orbitron font-bold tracking-widest uppercase hover:bg-nexus-cyan/20 transition-all"
+            >
+              PROBAR DEMO
             </button>
             <button
               onClick={() => setIsContactModalOpen(true)}
@@ -262,28 +275,37 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
             <motion.button
               key={scene.id}
               onClick={() => handleSceneClick(index)}
-              className={`relative w-32 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+              className={`relative w-40 h-24 rounded-xl overflow-hidden border transition-all duration-500 ${
                 currentScene === index
-                  ? 'border-nexus-cyan shadow-lg shadow-nexus-cyan/50'
-                  : 'border-white/20 hover:border-white/40'
+                  ? 'border-nexus-cyan/60 bg-nexus-cyan/5 shadow-[0_0_40px_rgba(0,245,255,0.2)]'
+                  : 'border-white/5 bg-white/2 hover:border-white/20 hover:bg-white/5'
               }`}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -5 }}
               whileTap={{ scale: 0.95 }}
               onMouseEnter={playHover}
             >
-              <div className="absolute inset-0 bg-linear-to-br from-nexus-violet/20 to-nexus-cyan/20" />
-              <div className="relative z-10 p-2">
-                <p className="text-white text-[10px] font-bold text-center">
-                  {scene.title.split(' ')[0]}
+              <div className="absolute inset-0 bg-linear-to-br from-nexus-violet/10 to-nexus-cyan/10 opacity-40" />
+              <div className="relative z-10 p-3 h-full flex flex-col justify-between">
+                <p
+                  className={`text-[9px] font-bold tracking-widest uppercase transition-colors ${
+                    currentScene === index ? 'text-white' : 'text-white/40'
+                  }`}
+                >
+                  {scene.title}
                 </p>
-                <p className="text-nexus-cyan text-[10px] text-center mt-1">{index + 1}/5</p>
+                <div className="flex justify-between items-end">
+                  <p className="text-nexus-cyan text-[8px] font-mono">0{index + 1}</p>
+                  <div
+                    className={`w-1 h-1 rounded-full ${currentScene === index ? 'bg-nexus-cyan animate-pulse' : 'bg-white/10'}`}
+                  />
+                </div>
               </div>
               {currentScene === index && (
                 <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-nexus-cyan"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-nexus-cyan shadow-[0_0_10px_rgba(0,245,255,1)]"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: scene.duration / 1000, ease: 'linear' }}
+                  transition={{ duration: scenes[index].duration / 1000, ease: 'linear' }}
                   style={{ originX: 0 }}
                 />
               )}

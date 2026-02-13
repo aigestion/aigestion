@@ -36,4 +36,29 @@ export const api = {
       throw error;
     }
   },
+  getAnalyticsOverview: async (): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/analytics/overview`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching analytics overview:', error);
+      throw error;
+    }
+  },
+  getDashboardData: async (): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/analytics/dashboard-data`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      throw error;
+    }
+  },
 };
+
