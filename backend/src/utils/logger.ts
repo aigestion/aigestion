@@ -58,5 +58,23 @@ const internalLogger = {
   silly: wrap('trace'), // Map silly to trace
 };
 
-export const logger = internalLogger;
+// Helper to ensure all methods exist and are bound correctly
+const wrapLogger = (pinoInstance: any) => {
+  const methods = ['info', 'error', 'warn', 'debug', 'http', 'verbose', 'silly'];
+  const safeLogger: any = { ...pinoInstance };
+
+  methods.forEach(method => {
+    // If the method doesn't exist on pino, or we want to ensure it works,
+    // we bridge it. Pino uses 'warn' as 'warn', but sometimes older implementations
+    // or mocks might lack it.
+    const original = pinoInstance[method];
+    safeLogger[method] = typeof original === 'function' 
+      ? original.bind(pinoInstance) 
+      : (...args: any[]) => pinoInstance.info(...args); // Fallback to info
+  });
+
+  return safeLogger;
+};
+
+export const logger = wrapLogger(pinoLogger);
 export default internalLogger;

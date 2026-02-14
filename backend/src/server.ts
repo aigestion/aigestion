@@ -1,19 +1,14 @@
 import dotenv from 'dotenv';
-// import fs from 'fs';
-import { createServer } from 'http';
-import path from 'path';
+import { createServer } from 'node:http';
+import path from 'node:path';
 import { type Socket } from 'socket.io';
 
-// import { app } from './app'; // This import will be moved inside initializeAndStart
-// import { config } from './config/index'; // This import will be moved inside initializeAndStart
+// Core services
 import { container, TYPES } from './config/inversify.config';
 import { AlertingService } from './services/alerting.service';
 import { BackupSchedulerService } from './services/backup-scheduler.service';
 import { CredentialManagerService } from './services/credential-manager.service';
 import { HistoryService } from './services/history.service';
-// import { youtubeTranscriptionQueue } from './queue/youtube-transcription.queue';
-// import { youtubeWatcherService } from './utils/youtube-watcher.service';
-// import { GoogleSecretManagerService } from './services/google/secret-manager.service';
 import { neuralHealthService } from './services/NeuralHealthService';
 import { SocketService } from './services/socket.service';
 import { SystemMetricsService } from './services/system-metrics.service';
@@ -242,8 +237,13 @@ export async function initializeAndStart() {
       try {
         const credManager = container.get<CredentialManagerService>(TYPES.CredentialManagerService);
         const report = await credManager.verifyAll();
-        if (report.criticalFailures > 0) {
-          logger.error('⚠️ Critical credentials missing. System may be unstable.');
+        const criticalFailures = report.filter(
+          r => r.status === 'missing' || r.status === 'invalid',
+        ).length;
+        if (criticalFailures > 0) {
+          logger.error(
+            `⚠️ ${criticalFailures} Critical credentials issues detected. System may be unstable.`,
+          );
         }
       } catch (e) {}
 

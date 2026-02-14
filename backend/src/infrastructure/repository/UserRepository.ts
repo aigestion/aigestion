@@ -16,7 +16,7 @@ export interface IUserRepository extends BaseRepository<IUser> {
 @injectable()
 export class UserRepository extends BaseRepository<IUser> implements IUserRepository {
   async findByEmail(email: string): Promise<IUser | null> {
-    return await User.findOne({ email }).exec();
+    return await User.findOne({ email }).select('+password').exec();
   }
 
   override async create(
