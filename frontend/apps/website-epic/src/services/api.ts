@@ -14,7 +14,7 @@ export interface SystemHealth {
 export const api = {
   getSystemHealth: async (): Promise<SystemHealth> => {
     try {
-      const response = await fetch(`${API_URL}/health`);
+      const response = await fetch(`${API_URL}/v1/health`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -26,7 +26,7 @@ export const api = {
   },
   getSystemDiagnostic: async (): Promise<any> => {
     try {
-      const response = await fetch(`${API_URL}/system/diagnostic`);
+      const response = await fetch(`${API_URL}/v1/system/diagnostic`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -38,7 +38,7 @@ export const api = {
   },
   getAnalyticsOverview: async (): Promise<any> => {
     try {
-      const response = await fetch(`${API_URL}/analytics/overview`);
+      const response = await fetch(`${API_URL}/v1/analytics/overview`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -50,7 +50,7 @@ export const api = {
   },
   getDashboardData: async (): Promise<any> => {
     try {
-      const response = await fetch(`${API_URL}/analytics/dashboard-data`);
+      const response = await fetch(`${API_URL}/v1/analytics/dashboard-data`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
