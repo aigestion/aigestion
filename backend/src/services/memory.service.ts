@@ -3,7 +3,7 @@ import { TYPES } from '../types';
 import { PineconeService } from './pinecone.service';
 import { SupabaseService } from './supabase.service';
 import { VertexAIService } from './google/vertex-ai.service';
-import { VectorStoreIndex, storageContextFromDefaults } from 'llamaindex';
+// import { VectorStoreIndex, storageContextFromDefaults } from 'llamaindex';
 import { logger } from '../utils/logger';
 
 export interface MemoryResult {
@@ -57,8 +57,8 @@ export class MemoryService {
 
       // 2. Parallel Execution: Pinecone (Vector) + Supabase (SQL)
       const [vectorResults, relationalResults] = await Promise.all([
-        this.pinecone.query(embedding, limit, namespace),
-        this.supabase.searchDocuments(query, limit), // Assuming searchDocuments exists or using standard SQL
+        this.pinecone.search(query, { topK: limit, namespace }),
+        this.supabase.hybridSearch(undefined, query, embedding, 0.5, limit),
       ]);
 
       // 3. Normalize and Merge
@@ -100,17 +100,12 @@ export class MemoryService {
     try {
       // Parallel Commit
       await Promise.all([
-        this.pinecone.upsert(
-          [
-            {
-              id: `mem_${Date.now()}`,
-              values: await this.vertex.generateEmbeddings(content),
-              metadata: { ...metadata, content },
-            },
-          ],
-          namespace,
-        ),
-        this.supabase.saveDocument({ content, metadata, namespace }),
+        this.pinecone.upsertDocument(`mem_${Date.now()}`, content, metadata, namespace),
+        this.supabase.upsertDocument({
+          content,
+          metadata: { ...metadata, namespace, tags: [] },
+          title: `Memory ${Date.now()}`, // Placeholder title
+        }),
       ]);
 
       logger.info('[MemoryService] Memory synchronized successfully.');
@@ -124,7 +119,7 @@ export class MemoryService {
    * Reflexive Purge: Cleans caches and redundant memories.
    */
   async reflexivePurge(namespace: string): Promise<void> {
-    await this.pinecone.deleteAll(namespace);
+    await this.pinecone.purgeNamespace(namespace);
     logger.info(`[MemoryService] Namespace ${namespace} purged for re-learning.`);
   }
 }

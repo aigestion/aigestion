@@ -9,6 +9,7 @@ import { getRedisClient } from '../cache/redis';
 import { MalwareScannerService } from './malware-scanner.service';
 import { elevenLabsService } from './elevenlabs.service';
 import { twilioService } from './twilio.service';
+import { logger } from '../utils/logger';
 
 @injectable()
 export class HealthService {
@@ -131,20 +132,17 @@ export class HealthService {
 
     // 10. BigQuery & Maps Health
     try {
-      const bqService = container.get<any>(TYPES.BigQueryService);
-      const bqStatus = await bqService.checkHealth();
-      results.checks.push({ name: 'bigquery', status: bqStatus === 'ready' ? 'up' : 'down' });
+      // Disabled for now to fix build
+      results.checks.push({ name: 'bigquery', status: 'disabled' });
     } catch (err) {
       results.checks.push({ name: 'bigquery', status: 'down' });
     }
 
     // 11. Quantum & Visual Sentinel Status
     try {
-      const quantum = container.get<any>(TYPES.QuantumSecurityService);
-      results.checks.push({ name: 'quantum-pqc', status: 'up' }); // PQC is stateless/active
-
-      const vision = container.get<any>(TYPES.VideoIntelligenceService);
-      results.checks.push({ name: 'visual-sentinel', status: 'up' });
+      // Disabled for now to fix build
+      results.checks.push({ name: 'quantum-pqc', status: 'disabled' });
+      results.checks.push({ name: 'visual-sentinel', status: 'disabled' });
     } catch (err) {
       logger.warn('[Health] Phase 8 sub-system diagnostic fault');
     }

@@ -261,7 +261,7 @@ export class RagService {
     try {
       logger.info(`[RagService] Querying Pinecone Vector DB for: "${query}"`);
 
-      const results = await pineconeService.search(query, 3);
+      const results = await pineconeService.search(query, { topK: 3 });
 
       if (results && results.length > 0) {
         let docStr = '';

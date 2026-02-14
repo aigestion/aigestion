@@ -47,9 +47,13 @@ export class ColabService {
 
     try {
       // Upload to Drive to make it viable for Colab
-      const fileId = await this.drive.uploadFile(Buffer.from(content), fileName, 'application/x-ipynb+json');
+      const fileId = await this.drive.uploadFileContent(
+        Buffer.from(content),
+        fileName,
+        'application/x-ipynb+json',
+      );
       const colabUrl = `https://colab.research.google.com/drive/${fileId}`;
-      
+
       logger.info(`[ColabService] Notebook ready at: ${colabUrl}`);
       return colabUrl;
     } catch (error) {

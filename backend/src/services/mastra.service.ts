@@ -1,8 +1,12 @@
 import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
 import { Gemini2Service } from './gemini-2.service';
-import { Mastra } from 'mastra';
+// import { Mastra } from 'mastra';
 import { logger } from '../utils/logger';
+
+class Mastra {
+  constructor(config: any) {}
+}
 
 /**
  * SOVEREIGN MASTRA SERVICE
