@@ -17,8 +17,8 @@ export class RegisterUserUseCase {
     if (existingUser) {
       throw new AppError('El correo electrónico ya está registrado', 400, 'AUTH_ERROR');
     }
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    // Double hashing avoided: the User model handles hashing via pre('save') hook
+    const hashedPassword = password;
 
     // Generate Verification Code
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();

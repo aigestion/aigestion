@@ -1,4 +1,4 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 
 import { logger } from '../utils/logger';
 import { AIService } from './ai.service';
@@ -9,7 +9,6 @@ import { UserBehaviorService } from './user-behavior.service';
 import { UserService } from './user.service';
 import { SwarmInternalClient } from './swarm-internal.client';
 import { TYPES } from '../types';
-import { inject } from 'inversify';
 
 interface DanielaContext {
   userId: string;
@@ -27,13 +26,8 @@ interface DanielaContext {
  */
 @injectable()
 export class DanielaAIService {
-  private contexts = new Map<number, DanielaContext>();
-  private aiService: AIService | null = null;
-  private analyticsService: AnalyticsService | null = null;
-  private userService: UserService | null = null;
-  private behaviorService: UserBehaviorService | null = null;
-  private ragService: RagService | null = null;
-  private economyService: EconomyService | null = null;
+  private readonly contexts = new Map<number, DanielaContext>();
+  private readonly behaviorService: UserBehaviorService | null = null;
 
   constructor(
     @inject(TYPES.SwarmInternalClient) private swarmClient: SwarmInternalClient,
@@ -41,7 +35,7 @@ export class DanielaAIService {
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.RagService) private ragService: RagService,
     @inject(TYPES.UserService) private userService: UserService,
-    @inject(TYPES.EconomyService) private economyService: EconomyService
+    @inject(TYPES.EconomyService) private economyService: EconomyService,
   ) {
     this.initialize();
   }
@@ -62,7 +56,7 @@ export class DanielaAIService {
     chatId: number,
     userName: string,
     userId: string,
-    userRole: string
+    userRole: string,
   ): DanielaContext {
     if (!this.contexts.has(chatId)) {
       this.contexts.set(chatId, {
@@ -86,7 +80,7 @@ export class DanielaAIService {
     message: string,
     userName: string,
     userId: string,
-    userRole: string = 'user'
+    userRole: string = 'user',
   ): Promise<string> {
     try {
       const context = this.getOrCreateContext(chatId, userName, userId, userRole);
@@ -134,7 +128,7 @@ export class DanielaAIService {
   private async generateResponse(
     context: DanielaContext,
     message: string,
-    userContext: any
+    userContext: any,
   ): Promise<string> {
     const systemPrompt = this.buildSystemPrompt(context, userContext);
     const conversationContext = this.buildConversationContext(context);
@@ -304,7 +298,7 @@ Responde en ${
   private async handleAnalyticsRequest(
     context: DanielaContext,
     message: string,
-    userContext: any
+    userContext: any,
   ): Promise<string> {
     const emoji = '📊';
     return (
@@ -328,7 +322,7 @@ Responde en ${
   private async handleEconomyRequest(
     context: DanielaContext,
     message: string,
-    userContext: any
+    userContext: any,
   ): Promise<string> {
     const report = this.economyService
       ? await this.economyService.generateFormattedReport()
@@ -348,7 +342,7 @@ Responde en ${
   private async handleAdviceRequest(
     context: DanielaContext,
     message: string,
-    userContext: any
+    userContext: any,
   ): Promise<string> {
     const emoji = '💡';
     return (
@@ -370,7 +364,7 @@ Responde en ${
   private async handleTaskRequest(
     context: DanielaContext,
     message: string,
-    userContext: any
+    userContext: any,
   ): Promise<string> {
     return (
       `✅ *Gestión de Tareas*\n\n` +
@@ -395,7 +389,7 @@ Responde en ${
   private async handleInsightRequest(
     context: DanielaContext,
     message: string,
-    userContext: any
+    userContext: any,
   ): Promise<string> {
     return (
       `🔍 *Insights Estratégicos*\n\n` +
@@ -441,7 +435,7 @@ Responde en ${
    */
   private async handleCompetitorAnalysisRequest(
     context: DanielaContext,
-    message: string
+    message: string,
   ): Promise<string> {
     try {
       const urlMatch = message.match(/(https?:\/\/[^\s]+)/g);
@@ -474,7 +468,7 @@ Responde en ${
    */
   private async handleMarketResearchRequest(
     context: DanielaContext,
-    message: string
+    message: string,
   ): Promise<string> {
     try {
       const topic =
@@ -518,18 +512,44 @@ Responde en ${
    * Generar respuesta general
    */
   private async generateGeneralResponse(context: DanielaContext, message: string): Promise<string> {
-    // Aquí irían llamadas a un modelo de IA real
-    // Por ahora, una respuesta inteligente basada en patrones
-    return (
-      `💜 *Daniela:* ${message}\n\n` +
-      `Entiendo tu punto. Déjame ayudarte con eso.\n\n` +
-      `¿Necesitas que:\n` +
-      `📊 Analice datos\n` +
-      `💡 Dé una recomendación\n` +
-      `✅ Gestione tareas\n` +
-      `🎯 Trabaje en estrategia\n\n` +
-      `Dime cómo puedo asistirte mejor 🚀`
-    );
+    try {
+      // [GOD MODE] Enhance with RAG context if applicable
+      const ragContext = await this.ragService.getProjectContext(message);
+
+      // Construir prompt completo con identidad y contexto
+      const systemPrompt = `
+      Identidad: Eres Daniela, la IA soberana de AIGestion.
+      Tono: ${context.mood || 'strategic'} y profesional.
+      Contexto Usuario: ${context.userName} (${context.userRole}).
+      Misión: Asistir con precisión estratégica, evitar respuestas genéricas.
+
+      Instrucción: Responde a la siguiente consulta del usuario basándote en tu identidad.
+      Si no puedes responder específicamente, ofrece una perspectiva estratégica relacionada.
+      `;
+
+      // Combinar historial breve para contexto
+      const historyContext = context.conversationHistory
+        .slice(-4)
+        .map(msg => `${msg.role}: ${msg.content}`)
+        .join('\n');
+
+      const fullPrompt = `${systemPrompt}\n\nContexto RAG:\n${ragContext}\n\nHistorial:\n${historyContext}\n\nUsuario: ${message}`;
+
+      // Llamada al servicio de IA real (Gemini/GPT via Router)
+      if (!this.aiService) {
+        throw new Error('AI Service not initialized');
+      }
+      const aiResponse = await this.aiService.generateContent(
+        fullPrompt,
+        context.userId,
+        context.userRole,
+      );
+
+      return aiResponse;
+    } catch (error) {
+      logger.error('Error in generateGeneralResponse:', error);
+      return '💜 Mis redes neuronales están recalibrando. ¿Podrías reformular eso con un enfoque más táctico?';
+    }
   }
 
   /**
@@ -574,14 +594,14 @@ Responde en ${
   private async logInteraction(
     userId: string,
     userMessage: string,
-    danielaResponse: string
+    danielaResponse: string,
   ): Promise<void> {
     try {
       logger.info(
         `[DANIELA] User: ${userMessage.substring(0, 50)}... | Response: ${danielaResponse.substring(
           0,
-          50
-        )}...`
+          50,
+        )}...`,
       );
     } catch (error) {
       logger.warn('Error logging interaction:', error);

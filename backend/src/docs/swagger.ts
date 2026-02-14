@@ -14,10 +14,15 @@ const swaggerDefinition = {
   servers: [{ url: process.env.API_BASE_URL || 'http://localhost:3000' }],
 };
 
-// Options for swagger‑jsdoc – reads JSDoc @openapi annotations from route files
-const options = {
+import path from 'path';
+
+const options: swaggerJsdoc.Options = {
   swaggerDefinition,
-  apis: ['src/routes/**/*.ts'],
+  apis: [
+    path.join(process.cwd(), 'src/routes/**/*.ts'),
+    path.join(process.cwd(), 'src/controllers/**/*.ts'),
+    path.join(process.cwd(), 'src/models/**/*.ts'),
+  ],
 };
 
 const specs = swaggerJsdoc(options);
