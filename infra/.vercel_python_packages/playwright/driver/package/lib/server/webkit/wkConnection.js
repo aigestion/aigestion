@@ -1,36 +1,38 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var wkConnection_exports = {};
 __export(wkConnection_exports, {
   WKConnection: () => WKConnection,
   WKSession: () => WKSession,
   kBrowserCloseMessageId: () => kBrowserCloseMessageId,
-  kPageProxyMessageReceived: () => kPageProxyMessageReceived
+  kPageProxyMessageReceived: () => kPageProxyMessageReceived,
 });
 module.exports = __toCommonJS(wkConnection_exports);
-var import_events = require("events");
-var import_utils = require("../../utils");
-var import_debugLogger = require("../utils/debugLogger");
-var import_helper = require("../helper");
-var import_protocolError = require("../protocolError");
+var import_events = require('events');
+var import_utils = require('../../utils');
+var import_debugLogger = require('../utils/debugLogger');
+var import_helper = require('../helper');
+var import_protocolError = require('../protocolError');
 const kBrowserCloseMessageId = -9999;
-const kPageProxyMessageReceived = Symbol("kPageProxyMessageReceived");
+const kPageProxyMessageReceived = Symbol('kPageProxyMessageReceived');
 class WKConnection {
   constructor(transport, onDisconnect, protocolLogger, browserLogsCollector) {
     this._lastId = 0;
@@ -39,7 +41,7 @@ class WKConnection {
     this._onDisconnect = onDisconnect;
     this._protocolLogger = protocolLogger;
     this._browserLogsCollector = browserLogsCollector;
-    this.browserSession = new WKSession(this, "", (message) => {
+    this.browserSession = new WKSession(this, '', message => {
       this.rawSend(message);
     });
     this._transport.onmessage = this._dispatchMessage.bind(this);
@@ -49,13 +51,12 @@ class WKConnection {
     return ++this._lastId;
   }
   rawSend(message) {
-    this._protocolLogger("send", message);
+    this._protocolLogger('send', message);
     this._transport.send(message);
   }
   _dispatchMessage(message) {
-    this._protocolLogger("receive", message);
-    if (message.id === kBrowserCloseMessageId)
-      return;
+    this._protocolLogger('receive', message);
+    if (message.id === kBrowserCloseMessageId) return;
     if (message.pageProxyId) {
       const payload = { message, pageProxyId: message.pageProxyId };
       this.browserSession.dispatchMessage({ method: kPageProxyMessageReceived, params: payload });
@@ -67,7 +68,10 @@ class WKConnection {
     this._closed = true;
     this._transport.onmessage = void 0;
     this._transport.onclose = void 0;
-    this._browserDisconnectedLogs = import_helper.helper.formatBrowserLogs(this._browserLogsCollector.recentLogs(), reason);
+    this._browserDisconnectedLogs = import_helper.helper.formatBrowserLogs(
+      this._browserLogsCollector.recentLogs(),
+      reason
+    );
     this.browserSession.dispose();
     this._onDisconnect();
   }
@@ -75,8 +79,7 @@ class WKConnection {
     return this._closed;
   }
   close() {
-    if (!this._closed)
-      this._transport.close();
+    if (!this._closed) this._transport.close();
   }
 }
 class WKSession extends import_events.EventEmitter {
@@ -92,16 +95,26 @@ class WKSession extends import_events.EventEmitter {
   }
   async send(method, params) {
     if (this._crashed || this._disposed || this.connection._browserDisconnectedLogs)
-      throw new import_protocolError.ProtocolError(this._crashed ? "crashed" : "closed", void 0, this.connection._browserDisconnectedLogs);
+      throw new import_protocolError.ProtocolError(
+        this._crashed ? 'crashed' : 'closed',
+        void 0,
+        this.connection._browserDisconnectedLogs
+      );
     const id = this.connection.nextMessageId();
     const messageObj = { id, method, params };
     this._rawSend(messageObj);
     return new Promise((resolve, reject) => {
-      this._callbacks.set(id, { resolve, reject, error: new import_protocolError.ProtocolError("error", method) });
+      this._callbacks.set(id, {
+        resolve,
+        reject,
+        error: new import_protocolError.ProtocolError('error', method),
+      });
     });
   }
   sendMayFail(method, params) {
-    return this.send(method, params).catch((error) => import_debugLogger.debugLogger.log("error", error));
+    return this.send(method, params).catch(error =>
+      import_debugLogger.debugLogger.log('error', error)
+    );
   }
   markAsCrashed() {
     this._crashed = true;
@@ -111,7 +124,7 @@ class WKSession extends import_events.EventEmitter {
   }
   dispose() {
     for (const callback of this._callbacks.values()) {
-      callback.error.type = this._crashed ? "crashed" : "closed";
+      callback.error.type = this._crashed ? 'crashed' : 'closed';
       callback.error.logs = this.connection._browserDisconnectedLogs;
       callback.reject(callback.error);
     }
@@ -136,9 +149,10 @@ class WKSession extends import_events.EventEmitter {
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  WKConnection,
-  WKSession,
-  kBrowserCloseMessageId,
-  kPageProxyMessageReceived
-});
+0 &&
+  (module.exports = {
+    WKConnection,
+    WKSession,
+    kBrowserCloseMessageId,
+    kPageProxyMessageReceived,
+  });

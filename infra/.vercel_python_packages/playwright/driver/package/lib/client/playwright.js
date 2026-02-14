@@ -1,34 +1,36 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var playwright_exports = {};
 __export(playwright_exports, {
-  Playwright: () => Playwright
+  Playwright: () => Playwright,
 });
 module.exports = __toCommonJS(playwright_exports);
-var import_android = require("./android");
-var import_browser = require("./browser");
-var import_browserType = require("./browserType");
-var import_channelOwner = require("./channelOwner");
-var import_electron = require("./electron");
-var import_errors = require("./errors");
-var import_fetch = require("./fetch");
-var import_selectors = require("./selectors");
+var import_android = require('./android');
+var import_browser = require('./browser');
+var import_browserType = require('./browserType');
+var import_channelOwner = require('./channelOwner');
+var import_electron = require('./electron');
+var import_errors = require('./errors');
+var import_fetch = require('./fetch');
+var import_selectors = require('./selectors');
 class Playwright extends import_channelOwner.ChannelOwner {
   constructor(parent, type, guid, initializer) {
     super(parent, type, guid, initializer);
@@ -59,13 +61,14 @@ class Playwright extends import_channelOwner.ChannelOwner {
     return browser;
   }
   _allContexts() {
-    return this._browserTypes().flatMap((type) => [...type._contexts]);
+    return this._browserTypes().flatMap(type => [...type._contexts]);
   }
   _allPages() {
-    return this._allContexts().flatMap((context) => context.pages());
+    return this._allContexts().flatMap(context => context.pages());
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  Playwright
-});
+0 &&
+  (module.exports = {
+    Playwright,
+  });

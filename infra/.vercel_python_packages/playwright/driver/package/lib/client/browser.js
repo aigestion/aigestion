@@ -1,33 +1,35 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var browser_exports = {};
 __export(browser_exports, {
-  Browser: () => Browser
+  Browser: () => Browser,
 });
 module.exports = __toCommonJS(browser_exports);
-var import_artifact = require("./artifact");
-var import_browserContext = require("./browserContext");
-var import_cdpSession = require("./cdpSession");
-var import_channelOwner = require("./channelOwner");
-var import_errors = require("./errors");
-var import_events = require("./events");
-var import_fileUtils = require("./fileUtils");
+var import_artifact = require('./artifact');
+var import_browserContext = require('./browserContext');
+var import_cdpSession = require('./cdpSession');
+var import_channelOwner = require('./channelOwner');
+var import_errors = require('./errors');
+var import_events = require('./events');
+var import_fileUtils = require('./fileUtils');
 class Browser extends import_channelOwner.ChannelOwner {
   constructor(parent, type, guid, initializer) {
     super(parent, type, guid, initializer);
@@ -36,9 +38,11 @@ class Browser extends import_channelOwner.ChannelOwner {
     this._shouldCloseConnectionOnClose = false;
     this._options = {};
     this._name = initializer.name;
-    this._channel.on("context", ({ context }) => this._didCreateContext(import_browserContext.BrowserContext.from(context)));
-    this._channel.on("close", () => this._didClose());
-    this._closedPromise = new Promise((f) => this.once(import_events.Events.Browser.Disconnected, f));
+    this._channel.on('context', ({ context }) =>
+      this._didCreateContext(import_browserContext.BrowserContext.from(context))
+    );
+    this._channel.on('close', () => this._didClose());
+    this._closedPromise = new Promise(f => this.once(import_events.Events.Browser.Disconnected, f));
   }
   static from(browser) {
     return browser._object;
@@ -53,25 +57,26 @@ class Browser extends import_channelOwner.ChannelOwner {
     return await this._innerNewContext(options, true);
   }
   async _disconnectFromReusedContext(reason) {
-    const context = [...this._contexts].find((context2) => context2._forReuse);
-    if (!context)
-      return;
+    const context = [...this._contexts].find(context2 => context2._forReuse);
+    if (!context) return;
     await this._instrumentation.runBeforeCloseBrowserContext(context);
-    for (const page of context.pages())
-      page._onClose();
+    for (const page of context.pages()) page._onClose();
     context._onClose();
     await this._channel.disconnectFromReusedContext({ reason });
   }
   async _innerNewContext(userOptions = {}, forReuse) {
     const options = this._browserType._playwright.selectors._withSelectorOptions(userOptions);
     await this._instrumentation.runBeforeCreateBrowserContext(options);
-    const contextOptions = await (0, import_browserContext.prepareBrowserContextParams)(this._platform, options);
-    const response = forReuse ? await this._channel.newContextForReuse(contextOptions) : await this._channel.newContext(contextOptions);
+    const contextOptions = await (0, import_browserContext.prepareBrowserContextParams)(
+      this._platform,
+      options
+    );
+    const response = forReuse
+      ? await this._channel.newContextForReuse(contextOptions)
+      : await this._channel.newContext(contextOptions);
     const context = import_browserContext.BrowserContext.from(response.context);
-    if (forReuse)
-      context._forReuse = true;
-    if (options.logger)
-      context._logger = options.logger;
+    if (forReuse) context._forReuse = true;
+    if (options.logger) context._logger = options.logger;
     await context._initializeHarFromOptions(options.recordHar);
     await this._instrumentation.runAfterCreateBrowserContext(context);
     return context;
@@ -80,14 +85,12 @@ class Browser extends import_channelOwner.ChannelOwner {
     this._browserType = browserType;
     this._options = browserOptions;
     this._logger = logger;
-    for (const context of this._contexts)
-      this._setupBrowserContext(context);
+    for (const context of this._contexts) this._setupBrowserContext(context);
   }
   _didCreateContext(context) {
     context._browser = this;
     this._contexts.add(context);
-    if (this._browserType)
-      this._setupBrowserContext(context);
+    if (this._browserType) this._setupBrowserContext(context);
   }
   _setupBrowserContext(context) {
     context._logger = this._logger;
@@ -95,7 +98,9 @@ class Browser extends import_channelOwner.ChannelOwner {
     this._browserType._contexts.add(context);
     this._browserType._playwright.selectors._contextsForSelectors.add(context);
     context.setDefaultTimeout(this._browserType._playwright._defaultContextTimeout);
-    context.setDefaultNavigationTimeout(this._browserType._playwright._defaultContextNavigationTimeout);
+    context.setDefaultNavigationTimeout(
+      this._browserType._playwright._defaultContextNavigationTimeout
+    );
   }
   contexts() {
     return [...this._contexts];
@@ -104,13 +109,16 @@ class Browser extends import_channelOwner.ChannelOwner {
     return this._initializer.version;
   }
   async newPage(options = {}) {
-    return await this._wrapApiCall(async () => {
-      const context = await this.newContext(options);
-      const page = await context.newPage();
-      page._ownedContext = context;
-      context._ownerPage = page;
-      return page;
-    }, { title: "Create page" });
+    return await this._wrapApiCall(
+      async () => {
+        const context = await this.newContext(options);
+        const page = await context.newPage();
+        page._ownedContext = context;
+        context._ownerPage = page;
+        return page;
+      },
+      { title: 'Create page' }
+    );
   }
   isConnected() {
     return this._isConnected;
@@ -139,14 +147,11 @@ class Browser extends import_channelOwner.ChannelOwner {
   async close(options = {}) {
     this._closeReason = options.reason;
     try {
-      if (this._shouldCloseConnectionOnClose)
-        this._connection.close();
-      else
-        await this._channel.close(options);
+      if (this._shouldCloseConnectionOnClose) this._connection.close();
+      else await this._channel.close(options);
       await this._closedPromise;
     } catch (e) {
-      if ((0, import_errors.isTargetClosedError)(e))
-        return;
+      if ((0, import_errors.isTargetClosedError)(e)) return;
       throw e;
     }
   }
@@ -156,6 +161,7 @@ class Browser extends import_channelOwner.ChannelOwner {
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  Browser
-});
+0 &&
+  (module.exports = {
+    Browser,
+  });

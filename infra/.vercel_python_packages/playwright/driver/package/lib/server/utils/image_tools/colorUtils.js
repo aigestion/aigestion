@@ -1,35 +1,37 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var colorUtils_exports = {};
 __export(colorUtils_exports, {
   blendWithWhite: () => blendWithWhite,
   colorDeltaE94: () => colorDeltaE94,
   rgb2gray: () => rgb2gray,
   srgb2xyz: () => srgb2xyz,
-  xyz2lab: () => xyz2lab
+  xyz2lab: () => xyz2lab,
 });
 module.exports = __toCommonJS(colorUtils_exports);
 function blendWithWhite(c, a) {
   return 255 + (c - 255) * a;
 }
 function rgb2gray(r, g, b) {
-  return 77 * r + 150 * g + 29 * b + 128 >> 8;
+  return (77 * r + 150 * g + 29 * b + 128) >> 8;
 }
 function colorDeltaE94(rgb1, rgb2) {
   const [l1, a1, b1] = xyz2lab(srgb2xyz(rgb1));
@@ -62,11 +64,11 @@ function srgb2xyz(rgb) {
   return [
     r * 0.4124 + g * 0.3576 + b * 0.1805,
     r * 0.2126 + g * 0.7152 + b * 0.0722,
-    r * 0.0193 + g * 0.1192 + b * 0.9505
+    r * 0.0193 + g * 0.1192 + b * 0.9505,
   ];
 }
-const sigma_pow2 = 6 * 6 / 29 / 29;
-const sigma_pow3 = 6 * 6 * 6 / 29 / 29 / 29;
+const sigma_pow2 = (6 * 6) / 29 / 29;
+const sigma_pow3 = (6 * 6 * 6) / 29 / 29 / 29;
 function xyz2lab(xyz) {
   const x = xyz[0] / 0.950489;
   const y = xyz[1];
@@ -80,10 +82,11 @@ function xyz2lab(xyz) {
   return [l, a, b];
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  blendWithWhite,
-  colorDeltaE94,
-  rgb2gray,
-  srgb2xyz,
-  xyz2lab
-});
+0 &&
+  (module.exports = {
+    blendWithWhite,
+    colorDeltaE94,
+    rgb2gray,
+    srgb2xyz,
+    xyz2lab,
+  });

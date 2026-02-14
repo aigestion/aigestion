@@ -1,29 +1,31 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var zones_exports = {};
 __export(zones_exports, {
   Zone: () => Zone,
   currentZone: () => currentZone,
-  emptyZone: () => emptyZone
+  emptyZone: () => emptyZone,
 });
 module.exports = __toCommonJS(zones_exports);
-var import_async_hooks = require("async_hooks");
+var import_async_hooks = require('async_hooks');
 const asyncLocalStorage = new import_async_hooks.AsyncLocalStorage();
 class Zone {
   constructor(asyncLocalStorage2, store) {
@@ -50,8 +52,9 @@ function currentZone() {
   return asyncLocalStorage.getStore() ?? emptyZone;
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  Zone,
-  currentZone,
-  emptyZone
-});
+0 &&
+  (module.exports = {
+    Zone,
+    currentZone,
+    emptyZone,
+  });

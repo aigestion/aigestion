@@ -44,6 +44,7 @@ describe('UserRepository', () => {
   it('should find a user by email', async () => {
     const email = 'bob@example.com';
     const mockFindOne = {
+      select: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue({ ...mockUser, email }),
     };
     (User.findOne as jest.Mock).mockReturnValue(mockFindOne);
@@ -52,6 +53,7 @@ describe('UserRepository', () => {
     expect(user).not.toBeNull();
     expect(user?.email).toBe(email);
     expect(User.findOne).toHaveBeenCalledWith({ email });
+    expect(mockFindOne.select).toHaveBeenCalledWith('+password');
   });
 
   it('should find a user by id', async () => {
@@ -63,6 +65,32 @@ describe('UserRepository', () => {
     const found = await repo.findById('custom-id');
     expect(found).toEqual(mockUser);
     expect(User.findById).toHaveBeenCalledWith('custom-id');
+  });
+
+  it('should find all users', async () => {
+    const mockFind = {
+      skip: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockReturnThis(),
+      exec: jest.fn().mockResolvedValue([mockUser]),
+    };
+    (User.find as jest.Mock).mockReturnValue(mockFind);
+
+    const result = await repo.findAll(10, 0);
+    expect(result).toEqual([mockUser]);
+    expect(User.find).toHaveBeenCalled();
+    expect(mockFind.skip).toHaveBeenCalledWith(0);
+    expect(mockFind.limit).toHaveBeenCalledWith(10);
+  });
+
+  it('should count all users', async () => {
+    const mockCount = {
+      exec: jest.fn().mockResolvedValue(1),
+    };
+    (User.countDocuments as jest.Mock).mockReturnValue(mockCount);
+
+    const count = await repo.countAll();
+    expect(count).toBe(1);
+    expect(User.countDocuments).toHaveBeenCalled();
   });
 
   it('should update a user', async () => {

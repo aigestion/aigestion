@@ -129,7 +129,7 @@ export const TYPES = {
   KeplerService: Symbol.for('KeplerService'),
   SelfHealingService: Symbol.for('SelfHealingService'),
   Gemini2Service: Symbol.for('Gemini2Service'),
-  SupabaseGodService: Symbol.for('SupabaseGodService'),
+  SupabaseService: Symbol.for('SupabaseService'),
   BrowserlessService: Symbol.for('BrowserlessService'),
   DiscoveryService: Symbol.for('DiscoveryService'),
   SandboxService: Symbol.for('SandboxService'),

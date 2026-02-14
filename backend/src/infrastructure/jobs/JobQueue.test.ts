@@ -19,6 +19,7 @@ describe('JobQueue', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    process.env.ENABLE_REDIS = 'true';
     jobQueue = new JobQueue();
   });
 

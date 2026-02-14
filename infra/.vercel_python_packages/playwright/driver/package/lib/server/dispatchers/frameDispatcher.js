@@ -1,60 +1,76 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var frameDispatcher_exports = {};
 __export(frameDispatcher_exports, {
-  FrameDispatcher: () => FrameDispatcher
+  FrameDispatcher: () => FrameDispatcher,
 });
 module.exports = __toCommonJS(frameDispatcher_exports);
-var import_frames = require("../frames");
-var import_dispatcher = require("./dispatcher");
-var import_elementHandlerDispatcher = require("./elementHandlerDispatcher");
-var import_jsHandleDispatcher = require("./jsHandleDispatcher");
-var import_networkDispatchers = require("./networkDispatchers");
-var import_networkDispatchers2 = require("./networkDispatchers");
-var import_ariaSnapshot = require("../../utils/isomorphic/ariaSnapshot");
-var import_utilsBundle = require("../../utilsBundle");
+var import_frames = require('../frames');
+var import_dispatcher = require('./dispatcher');
+var import_elementHandlerDispatcher = require('./elementHandlerDispatcher');
+var import_jsHandleDispatcher = require('./jsHandleDispatcher');
+var import_networkDispatchers = require('./networkDispatchers');
+var import_networkDispatchers2 = require('./networkDispatchers');
+var import_ariaSnapshot = require('../../utils/isomorphic/ariaSnapshot');
+var import_utilsBundle = require('../../utilsBundle');
 class FrameDispatcher extends import_dispatcher.Dispatcher {
   constructor(scope, frame) {
-    const gcBucket = frame._page.mainFrame() === frame ? "MainFrame" : "Frame";
+    const gcBucket = frame._page.mainFrame() === frame ? 'MainFrame' : 'Frame';
     const pageDispatcher = scope.connection.existingDispatcher(frame._page);
-    super(pageDispatcher || scope, frame, "Frame", {
-      url: frame.url(),
-      name: frame.name(),
-      parentFrame: FrameDispatcher.fromNullable(scope, frame.parentFrame()),
-      loadStates: Array.from(frame._firedLifecycleEvents)
-    }, gcBucket);
+    super(
+      pageDispatcher || scope,
+      frame,
+      'Frame',
+      {
+        url: frame.url(),
+        name: frame.name(),
+        parentFrame: FrameDispatcher.fromNullable(scope, frame.parentFrame()),
+        loadStates: Array.from(frame._firedLifecycleEvents),
+      },
+      gcBucket
+    );
     this._type_Frame = true;
     this._browserContextDispatcher = scope;
     this._frame = frame;
-    this.addObjectListener(import_frames.Frame.Events.AddLifecycle, (lifecycleEvent) => {
-      this._dispatchEvent("loadstate", { add: lifecycleEvent });
+    this.addObjectListener(import_frames.Frame.Events.AddLifecycle, lifecycleEvent => {
+      this._dispatchEvent('loadstate', { add: lifecycleEvent });
     });
-    this.addObjectListener(import_frames.Frame.Events.RemoveLifecycle, (lifecycleEvent) => {
-      this._dispatchEvent("loadstate", { remove: lifecycleEvent });
+    this.addObjectListener(import_frames.Frame.Events.RemoveLifecycle, lifecycleEvent => {
+      this._dispatchEvent('loadstate', { remove: lifecycleEvent });
     });
-    this.addObjectListener(import_frames.Frame.Events.InternalNavigation, (event) => {
-      if (!event.isPublic)
-        return;
-      const params = { url: event.url, name: event.name, error: event.error ? event.error.message : void 0 };
+    this.addObjectListener(import_frames.Frame.Events.InternalNavigation, event => {
+      if (!event.isPublic) return;
+      const params = {
+        url: event.url,
+        name: event.name,
+        error: event.error ? event.error.message : void 0,
+      };
       if (event.newDocument)
-        params.newDocument = { request: import_networkDispatchers2.RequestDispatcher.fromNullable(this._browserContextDispatcher, event.newDocument.request || null) };
-      this._dispatchEvent("navigated", params);
+        params.newDocument = {
+          request: import_networkDispatchers2.RequestDispatcher.fromNullable(
+            this._browserContextDispatcher,
+            event.newDocument.request || null
+          ),
+        };
+      this._dispatchEvent('navigated', params);
     });
   }
   static from(scope, frame) {
@@ -62,40 +78,113 @@ class FrameDispatcher extends import_dispatcher.Dispatcher {
     return result || new FrameDispatcher(scope, frame);
   }
   static fromNullable(scope, frame) {
-    if (!frame)
-      return;
+    if (!frame) return;
     return FrameDispatcher.from(scope, frame);
   }
   async goto(params, progress) {
-    return { response: import_networkDispatchers.ResponseDispatcher.fromNullable(this._browserContextDispatcher, await this._frame.goto(progress, params.url, params)) };
+    return {
+      response: import_networkDispatchers.ResponseDispatcher.fromNullable(
+        this._browserContextDispatcher,
+        await this._frame.goto(progress, params.url, params)
+      ),
+    };
   }
   async frameElement(params, progress) {
-    return { element: import_elementHandlerDispatcher.ElementHandleDispatcher.from(this, await progress.race(this._frame.frameElement())) };
+    return {
+      element: import_elementHandlerDispatcher.ElementHandleDispatcher.from(
+        this,
+        await progress.race(this._frame.frameElement())
+      ),
+    };
   }
   async evaluateExpression(params, progress) {
-    return { value: (0, import_jsHandleDispatcher.serializeResult)(await progress.race(this._frame.evaluateExpression(params.expression, { isFunction: params.isFunction }, (0, import_jsHandleDispatcher.parseArgument)(params.arg)))) };
+    return {
+      value: (0, import_jsHandleDispatcher.serializeResult)(
+        await progress.race(
+          this._frame.evaluateExpression(
+            params.expression,
+            { isFunction: params.isFunction },
+            (0, import_jsHandleDispatcher.parseArgument)(params.arg)
+          )
+        )
+      ),
+    };
   }
   async evaluateExpressionHandle(params, progress) {
-    return { handle: import_elementHandlerDispatcher.ElementHandleDispatcher.fromJSOrElementHandle(this, await progress.race(this._frame.evaluateExpressionHandle(params.expression, { isFunction: params.isFunction }, (0, import_jsHandleDispatcher.parseArgument)(params.arg)))) };
+    return {
+      handle: import_elementHandlerDispatcher.ElementHandleDispatcher.fromJSOrElementHandle(
+        this,
+        await progress.race(
+          this._frame.evaluateExpressionHandle(
+            params.expression,
+            { isFunction: params.isFunction },
+            (0, import_jsHandleDispatcher.parseArgument)(params.arg)
+          )
+        )
+      ),
+    };
   }
   async waitForSelector(params, progress) {
-    return { element: import_elementHandlerDispatcher.ElementHandleDispatcher.fromNullable(this, await this._frame.waitForSelector(progress, params.selector, true, params)) };
+    return {
+      element: import_elementHandlerDispatcher.ElementHandleDispatcher.fromNullable(
+        this,
+        await this._frame.waitForSelector(progress, params.selector, true, params)
+      ),
+    };
   }
   async dispatchEvent(params, progress) {
-    return this._frame.dispatchEvent(progress, params.selector, params.type, (0, import_jsHandleDispatcher.parseArgument)(params.eventInit), params);
+    return this._frame.dispatchEvent(
+      progress,
+      params.selector,
+      params.type,
+      (0, import_jsHandleDispatcher.parseArgument)(params.eventInit),
+      params
+    );
   }
   async evalOnSelector(params, progress) {
-    return { value: (0, import_jsHandleDispatcher.serializeResult)(await progress.race(this._frame.evalOnSelector(params.selector, !!params.strict, params.expression, params.isFunction, (0, import_jsHandleDispatcher.parseArgument)(params.arg)))) };
+    return {
+      value: (0, import_jsHandleDispatcher.serializeResult)(
+        await progress.race(
+          this._frame.evalOnSelector(
+            params.selector,
+            !!params.strict,
+            params.expression,
+            params.isFunction,
+            (0, import_jsHandleDispatcher.parseArgument)(params.arg)
+          )
+        )
+      ),
+    };
   }
   async evalOnSelectorAll(params, progress) {
-    return { value: (0, import_jsHandleDispatcher.serializeResult)(await progress.race(this._frame.evalOnSelectorAll(params.selector, params.expression, params.isFunction, (0, import_jsHandleDispatcher.parseArgument)(params.arg)))) };
+    return {
+      value: (0, import_jsHandleDispatcher.serializeResult)(
+        await progress.race(
+          this._frame.evalOnSelectorAll(
+            params.selector,
+            params.expression,
+            params.isFunction,
+            (0, import_jsHandleDispatcher.parseArgument)(params.arg)
+          )
+        )
+      ),
+    };
   }
   async querySelector(params, progress) {
-    return { element: import_elementHandlerDispatcher.ElementHandleDispatcher.fromNullable(this, await progress.race(this._frame.querySelector(params.selector, params))) };
+    return {
+      element: import_elementHandlerDispatcher.ElementHandleDispatcher.fromNullable(
+        this,
+        await progress.race(this._frame.querySelector(params.selector, params))
+      ),
+    };
   }
   async querySelectorAll(params, progress) {
     const elements = await progress.race(this._frame.querySelectorAll(params.selector));
-    return { elements: elements.map((e) => import_elementHandlerDispatcher.ElementHandleDispatcher.from(this, e)) };
+    return {
+      elements: elements.map(e =>
+        import_elementHandlerDispatcher.ElementHandleDispatcher.from(this, e)
+      ),
+    };
   }
   async queryCount(params, progress) {
     return { value: await progress.race(this._frame.queryCount(params.selector, params)) };
@@ -107,10 +196,20 @@ class FrameDispatcher extends import_dispatcher.Dispatcher {
     return await this._frame.setContent(progress, params.html, params);
   }
   async addScriptTag(params, progress) {
-    return { element: import_elementHandlerDispatcher.ElementHandleDispatcher.from(this, await progress.race(this._frame.addScriptTag(params))) };
+    return {
+      element: import_elementHandlerDispatcher.ElementHandleDispatcher.from(
+        this,
+        await progress.race(this._frame.addScriptTag(params))
+      ),
+    };
   }
   async addStyleTag(params, progress) {
-    return { element: import_elementHandlerDispatcher.ElementHandleDispatcher.from(this, await progress.race(this._frame.addStyleTag(params))) };
+    return {
+      element: import_elementHandlerDispatcher.ElementHandleDispatcher.from(
+        this,
+        await progress.race(this._frame.addStyleTag(params))
+      ),
+    };
   }
   async click(params, progress) {
     progress.metadata.potentiallyClosesScope = true;
@@ -177,8 +276,16 @@ class FrameDispatcher extends import_dispatcher.Dispatcher {
     return await this._frame.hover(progress, params.selector, params);
   }
   async selectOption(params, progress) {
-    const elements = (params.elements || []).map((e) => e._elementHandle);
-    return { values: await this._frame.selectOption(progress, params.selector, elements, params.options || [], params) };
+    const elements = (params.elements || []).map(e => e._elementHandle);
+    return {
+      values: await this._frame.selectOption(
+        progress,
+        params.selector,
+        elements,
+        params.options || [],
+        params
+      ),
+    };
   }
   async setInputFiles(params, progress) {
     return await this._frame.setInputFiles(progress, params.selector, params);
@@ -199,7 +306,18 @@ class FrameDispatcher extends import_dispatcher.Dispatcher {
     return await this._frame.waitForTimeout(progress, params.waitTimeout);
   }
   async waitForFunction(params, progress) {
-    return { handle: import_elementHandlerDispatcher.ElementHandleDispatcher.fromJSOrElementHandle(this, await this._frame.waitForFunctionExpression(progress, params.expression, params.isFunction, (0, import_jsHandleDispatcher.parseArgument)(params.arg), params)) };
+    return {
+      handle: import_elementHandlerDispatcher.ElementHandleDispatcher.fromJSOrElementHandle(
+        this,
+        await this._frame.waitForFunctionExpression(
+          progress,
+          params.expression,
+          params.isFunction,
+          (0, import_jsHandleDispatcher.parseArgument)(params.arg),
+          params
+        )
+      ),
+    };
   }
   async title(params, progress) {
     return { value: await progress.race(this._frame.title()) };
@@ -209,10 +327,19 @@ class FrameDispatcher extends import_dispatcher.Dispatcher {
   }
   async expect(params, progress) {
     progress.metadata.potentiallyClosesScope = true;
-    let expectedValue = params.expectedValue ? (0, import_jsHandleDispatcher.parseArgument)(params.expectedValue) : void 0;
-    if (params.expression === "to.match.aria" && expectedValue)
-      expectedValue = (0, import_ariaSnapshot.parseAriaSnapshotUnsafe)(import_utilsBundle.yaml, expectedValue);
-    const result = await this._frame.expect(progress, params.selector, { ...params, expectedValue, timeoutForLogs: params.timeout });
+    let expectedValue = params.expectedValue
+      ? (0, import_jsHandleDispatcher.parseArgument)(params.expectedValue)
+      : void 0;
+    if (params.expression === 'to.match.aria' && expectedValue)
+      expectedValue = (0, import_ariaSnapshot.parseAriaSnapshotUnsafe)(
+        import_utilsBundle.yaml,
+        expectedValue
+      );
+    const result = await this._frame.expect(progress, params.selector, {
+      ...params,
+      expectedValue,
+      timeoutForLogs: params.timeout,
+    });
     if (result.received !== void 0)
       result.received = (0, import_jsHandleDispatcher.serializeResult)(result.received);
     return result;
@@ -222,6 +349,7 @@ class FrameDispatcher extends import_dispatcher.Dispatcher {
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  FrameDispatcher
-});
+0 &&
+  (module.exports = {
+    FrameDispatcher,
+  });

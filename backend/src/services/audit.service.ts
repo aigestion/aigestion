@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
-import { supabaseGodService } from './supabase-god.service';
+import { supabaseService as supabaseGodService } from './supabase.service';
 import { telegramService } from './telegram.service';
 
 export enum AuditLevel {
@@ -26,7 +26,7 @@ export interface AuditLog {
  */
 @injectable()
 export class AuditService {
-  
+
   /**
    * Dispatches a sentinel log across the sovereign network (DB + Logs + Alerts).
    */

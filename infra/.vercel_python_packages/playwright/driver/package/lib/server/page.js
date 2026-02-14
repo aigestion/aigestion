@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -6,74 +6,81 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toESM = (mod, isNodeMode, target) => (
+  (target = mod != null ? __create(__getProtoOf(mod)) : {}),
+  __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule
+      ? __defProp(target, 'default', { value: mod, enumerable: true })
+      : target,
+    mod
+  )
+);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var page_exports = {};
 __export(page_exports, {
   InitScript: () => InitScript,
   Page: () => Page,
   PageBinding: () => PageBinding,
   Worker: () => Worker,
-  WorkerEvent: () => WorkerEvent
+  WorkerEvent: () => WorkerEvent,
 });
 module.exports = __toCommonJS(page_exports);
-var import_browserContext = require("./browserContext");
-var import_console = require("./console");
-var import_errors = require("./errors");
-var import_fileChooser = require("./fileChooser");
-var frames = __toESM(require("./frames"));
-var import_helper = require("./helper");
-var input = __toESM(require("./input"));
-var import_instrumentation = require("./instrumentation");
-var js = __toESM(require("./javascript"));
-var import_screenshotter = require("./screenshotter");
-var import_utils = require("../utils");
-var import_utils2 = require("../utils");
-var import_comparators = require("./utils/comparators");
-var import_debugLogger = require("./utils/debugLogger");
-var import_selectorParser = require("../utils/isomorphic/selectorParser");
-var import_manualPromise = require("../utils/isomorphic/manualPromise");
-var import_utilityScriptSerializers = require("../utils/isomorphic/utilityScriptSerializers");
-var import_callLog = require("./callLog");
-var rawBindingsControllerSource = __toESM(require("../generated/bindingsControllerSource"));
-var import_screencast = require("./screencast");
+var import_browserContext = require('./browserContext');
+var import_console = require('./console');
+var import_errors = require('./errors');
+var import_fileChooser = require('./fileChooser');
+var frames = __toESM(require('./frames'));
+var import_helper = require('./helper');
+var input = __toESM(require('./input'));
+var import_instrumentation = require('./instrumentation');
+var js = __toESM(require('./javascript'));
+var import_screenshotter = require('./screenshotter');
+var import_utils = require('../utils');
+var import_utils2 = require('../utils');
+var import_comparators = require('./utils/comparators');
+var import_debugLogger = require('./utils/debugLogger');
+var import_selectorParser = require('../utils/isomorphic/selectorParser');
+var import_manualPromise = require('../utils/isomorphic/manualPromise');
+var import_utilityScriptSerializers = require('../utils/isomorphic/utilityScriptSerializers');
+var import_callLog = require('./callLog');
+var rawBindingsControllerSource = __toESM(require('../generated/bindingsControllerSource'));
+var import_screencast = require('./screencast');
 const PageEvent = {
-  Close: "close",
-  Crash: "crash",
-  Download: "download",
-  EmulatedSizeChanged: "emulatedsizechanged",
-  FileChooser: "filechooser",
-  FrameAttached: "frameattached",
-  FrameDetached: "framedetached",
-  InternalFrameNavigatedToNewDocument: "internalframenavigatedtonewdocument",
-  LocatorHandlerTriggered: "locatorhandlertriggered",
-  ScreencastFrame: "screencastframe",
-  Video: "video",
-  WebSocket: "websocket",
-  Worker: "worker"
+  Close: 'close',
+  Crash: 'crash',
+  Download: 'download',
+  EmulatedSizeChanged: 'emulatedsizechanged',
+  FileChooser: 'filechooser',
+  FrameAttached: 'frameattached',
+  FrameDetached: 'framedetached',
+  InternalFrameNavigatedToNewDocument: 'internalframenavigatedtonewdocument',
+  LocatorHandlerTriggered: 'locatorhandlertriggered',
+  ScreencastFrame: 'screencastframe',
+  Video: 'video',
+  WebSocket: 'websocket',
+  Worker: 'worker',
 };
 class Page extends import_instrumentation.SdkObject {
   constructor(delegate, browserContext) {
-    super(browserContext, "page");
-    this._closedState = "open";
+    super(browserContext, 'page');
+    this._closedState = 'open';
     this._closedPromise = new import_manualPromise.ManualPromise();
     this._initializedPromise = new import_manualPromise.ManualPromise();
     this._consoleMessages = [];
@@ -100,8 +107,7 @@ class Page extends import_instrumentation.SdkObject {
     this.screenshotter = new import_screenshotter.Screenshotter(this);
     this.frameManager = new frames.FrameManager(this);
     this.screencast = new import_screencast.Screencast(this);
-    if (delegate.pdf)
-      this.pdf = delegate.pdf.bind(delegate);
+    if (delegate.pdf) this.pdf = delegate.pdf.bind(delegate);
     this.coverage = delegate.coverage ? delegate.coverage() : null;
     this.isStorageStatePage = browserContext.isCreatingStorageStatePage();
   }
@@ -118,8 +124,7 @@ class Page extends import_instrumentation.SdkObject {
   }
   _markInitialized(error = void 0) {
     if (error) {
-      if (this.browserContext.isClosingOrClosed())
-        return;
+      if (this.browserContext.isClosingOrClosed()) return;
       this.frameManager.createDummyMainFrameIfNeeded();
     }
     this._initialized = error || this;
@@ -128,10 +133,8 @@ class Page extends import_instrumentation.SdkObject {
       this.emitOnContext(import_browserContext.BrowserContext.Events.PageError, pageError, this);
     for (const message of this._consoleMessages)
       this.emitOnContext(import_browserContext.BrowserContext.Events.Console, message);
-    if (this.isClosed())
-      this.emit(Page.Events.Close);
-    else
-      this.instrumentation.onPageOpen(this);
+    if (this.isClosed()) this.emit(Page.Events.Close);
+    else this.instrumentation.onPageOpen(this);
     this._initializedPromise.resolve(this._initialized);
   }
   initializedOrUndefined() {
@@ -141,27 +144,26 @@ class Page extends import_instrumentation.SdkObject {
     return this._initializedPromise;
   }
   emitOnContext(event, ...args) {
-    if (this.isStorageStatePage)
-      return;
+    if (this.isStorageStatePage) return;
     this.browserContext.emit(event, ...args);
   }
   async resetForReuse(progress) {
-    await this.mainFrame().gotoImpl(progress, "about:blank", {});
+    await this.mainFrame().gotoImpl(progress, 'about:blank', {});
     this._emulatedSize = void 0;
     this._emulatedMedia = {};
     this._extraHTTPHeaders = void 0;
     await Promise.all([
       this.delegate.updateEmulatedViewportSize(),
       this.delegate.updateEmulateMedia(),
-      this.delegate.updateExtraHTTPHeaders()
+      this.delegate.updateExtraHTTPHeaders(),
     ]);
     await this.delegate.resetForReuse(progress);
   }
   _didClose() {
     this.frameManager.dispose();
     this.screencast.stopFrameThrottler();
-    (0, import_utils.assert)(this._closedState !== "closed", "Page closed twice");
-    this._closedState = "closed";
+    (0, import_utils.assert)(this._closedState !== 'closed', 'Page closed twice');
+    this._closedState = 'closed';
     this.emit(Page.Events.Close);
     this._closedPromise.resolve();
     this.instrumentation.onPageClose(this);
@@ -173,12 +175,12 @@ class Page extends import_instrumentation.SdkObject {
     this.emit(Page.Events.Crash);
     this._crashed = true;
     this.instrumentation.onPageClose(this);
-    this.openScope.close(new Error("Page crashed"));
+    this.openScope.close(new Error('Page crashed'));
   }
   async _onFileChooserOpened(handle) {
     let multiple;
     try {
-      multiple = await handle.evaluate((element) => !!element.multiple);
+      multiple = await handle.evaluate(element => !!element.multiple);
     } catch (e) {
       return;
     }
@@ -208,7 +210,9 @@ class Page extends import_instrumentation.SdkObject {
     this._pageBindings.set(name, binding);
     try {
       await progress.race(this.delegate.addInitScript(binding.initScript));
-      await progress.race(this.safeNonStallingEvaluateInAllFrames(binding.initScript.source, "main"));
+      await progress.race(
+        this.safeNonStallingEvaluateInAllFrames(binding.initScript.source, 'main')
+      );
       return binding;
     } catch (error) {
       this._pageBindings.delete(name);
@@ -216,13 +220,16 @@ class Page extends import_instrumentation.SdkObject {
     }
   }
   async removeExposedBindings(bindings) {
-    bindings = bindings.filter((binding) => this._pageBindings.get(binding.name) === binding);
-    for (const binding of bindings)
-      this._pageBindings.delete(binding.name);
-    await this.delegate.removeInitScripts(bindings.map((binding) => binding.initScript));
-    const cleanup = bindings.map((binding) => `{ ${binding.cleanupScript} };
-`).join("");
-    await this.safeNonStallingEvaluateInAllFrames(cleanup, "main");
+    bindings = bindings.filter(binding => this._pageBindings.get(binding.name) === binding);
+    for (const binding of bindings) this._pageBindings.delete(binding.name);
+    await this.delegate.removeInitScripts(bindings.map(binding => binding.initScript));
+    const cleanup = bindings
+      .map(
+        binding => `{ ${binding.cleanupScript} };
+`
+      )
+      .join('');
+    await this.safeNonStallingEvaluateInAllFrames(cleanup, 'main');
   }
   async setExtraHTTPHeaders(progress, headers) {
     const oldHeaders = this._extraHTTPHeaders;
@@ -231,8 +238,7 @@ class Page extends import_instrumentation.SdkObject {
       await progress.race(this.delegate.updateExtraHTTPHeaders());
     } catch (error) {
       this._extraHTTPHeaders = oldHeaders;
-      this.delegate.updateExtraHTTPHeaders().catch(() => {
-      });
+      this.delegate.updateExtraHTTPHeaders().catch(() => {});
       throw error;
     }
   }
@@ -247,15 +253,14 @@ class Page extends import_instrumentation.SdkObject {
     return this._networkRequests;
   }
   async onBindingCalled(payload, context) {
-    if (this._closedState === "closed")
-      return;
+    if (this._closedState === 'closed') return;
     await PageBinding.dispatch(this, payload, context);
   }
   addConsoleMessage(worker, type, args, location, text) {
     const message = new import_console.ConsoleMessage(this, worker, type, text, args, location);
     const intercepted = this.frameManager.interceptConsoleMessage(message);
     if (intercepted) {
-      args.forEach((arg) => arg.dispose());
+      args.forEach(arg => arg.dispose());
       return;
     }
     this._consoleMessages.push(message);
@@ -280,7 +285,7 @@ class Page extends import_instrumentation.SdkObject {
       const [response] = await Promise.all([
         // Reload must be a new document, and should not be confused with a stray pushState.
         this.mainFrame()._waitForNavigation(progress, true, options),
-        progress.race(this.delegate.reload())
+        progress.race(this.delegate.reload()),
       ]);
       return response;
     });
@@ -288,38 +293,38 @@ class Page extends import_instrumentation.SdkObject {
   async goBack(progress, options) {
     return this.mainFrame().raceNavigationAction(progress, async () => {
       let error;
-      const waitPromise = this.mainFrame()._waitForNavigation(progress, false, options).catch((e) => {
-        error = e;
-        return null;
-      });
+      const waitPromise = this.mainFrame()
+        ._waitForNavigation(progress, false, options)
+        .catch(e => {
+          error = e;
+          return null;
+        });
       const result = await progress.race(this.delegate.goBack());
       if (!result) {
-        waitPromise.catch(() => {
-        });
+        waitPromise.catch(() => {});
         return null;
       }
       const response = await waitPromise;
-      if (error)
-        throw error;
+      if (error) throw error;
       return response;
     });
   }
   async goForward(progress, options) {
     return this.mainFrame().raceNavigationAction(progress, async () => {
       let error;
-      const waitPromise = this.mainFrame()._waitForNavigation(progress, false, options).catch((e) => {
-        error = e;
-        return null;
-      });
+      const waitPromise = this.mainFrame()
+        ._waitForNavigation(progress, false, options)
+        .catch(e => {
+          error = e;
+          return null;
+        });
       const result = await progress.race(this.delegate.goForward());
       if (!result) {
-        waitPromise.catch(() => {
-        });
+        waitPromise.catch(() => {});
         return null;
       }
       const response = await waitPromise;
-      if (error)
-        throw error;
+      if (error) throw error;
       return response;
     });
   }
@@ -333,8 +338,7 @@ class Page extends import_instrumentation.SdkObject {
   }
   resolveLocatorHandler(uid, remove) {
     const handler = this._locatorHandlers.get(uid);
-    if (remove)
-      this._locatorHandlers.delete(uid);
+    if (remove) this._locatorHandlers.delete(uid);
     if (handler) {
       handler.resolved?.resolve();
       handler.resolved = void 0;
@@ -349,77 +353,96 @@ class Page extends import_instrumentation.SdkObject {
     await this._performWaitForNavigationCheck(progress);
   }
   async _performWaitForNavigationCheck(progress) {
-    if (process.env.PLAYWRIGHT_SKIP_NAVIGATION_CHECK)
-      return;
+    if (process.env.PLAYWRIGHT_SKIP_NAVIGATION_CHECK) return;
     const mainFrame = this.frameManager.mainFrame();
-    if (!mainFrame || !mainFrame.pendingDocument())
-      return;
+    if (!mainFrame || !mainFrame.pendingDocument()) return;
     const url = mainFrame.pendingDocument()?.request?.url();
-    const toUrl = url ? `" ${(0, import_utils.trimStringWithEllipsis)(url, 200)}"` : "";
+    const toUrl = url ? `" ${(0, import_utils.trimStringWithEllipsis)(url, 200)}"` : '';
     progress.log(`  waiting for${toUrl} navigation to finish...`);
-    await import_helper.helper.waitForEvent(progress, mainFrame, frames.Frame.Events.InternalNavigation, (e) => {
-      if (!e.isPublic)
-        return false;
-      if (!e.error)
-        progress.log(`  navigated to "${(0, import_utils.trimStringWithEllipsis)(mainFrame.url(), 200)}"`);
-      return true;
-    }).promise;
+    await import_helper.helper.waitForEvent(
+      progress,
+      mainFrame,
+      frames.Frame.Events.InternalNavigation,
+      e => {
+        if (!e.isPublic) return false;
+        if (!e.error)
+          progress.log(
+            `  navigated to "${(0, import_utils.trimStringWithEllipsis)(mainFrame.url(), 200)}"`
+          );
+        return true;
+      }
+    ).promise;
   }
   async _performLocatorHandlersCheckpoint(progress) {
-    if (this._locatorHandlerRunningCounter)
-      return;
+    if (this._locatorHandlerRunningCounter) return;
     for (const [uid, handler] of this._locatorHandlers) {
       if (!handler.resolved) {
-        if (await this.mainFrame().isVisibleInternal(progress, handler.selector, { strict: true })) {
+        if (
+          await this.mainFrame().isVisibleInternal(progress, handler.selector, { strict: true })
+        ) {
           handler.resolved = new import_manualPromise.ManualPromise();
           this.emit(Page.Events.LocatorHandlerTriggered, uid);
         }
       }
       if (handler.resolved) {
         ++this._locatorHandlerRunningCounter;
-        progress.log(`  found ${(0, import_utils2.asLocator)(this.browserContext._browser.sdkLanguage(), handler.selector)}, intercepting action to run the handler`);
+        progress.log(
+          `  found ${(0, import_utils2.asLocator)(this.browserContext._browser.sdkLanguage(), handler.selector)}, intercepting action to run the handler`
+        );
         const promise = handler.resolved.then(async () => {
           if (!handler.noWaitAfter) {
-            progress.log(`  locator handler has finished, waiting for ${(0, import_utils2.asLocator)(this.browserContext._browser.sdkLanguage(), handler.selector)} to be hidden`);
-            await this.mainFrame().waitForSelector(progress, handler.selector, false, { state: "hidden" });
+            progress.log(
+              `  locator handler has finished, waiting for ${(0, import_utils2.asLocator)(this.browserContext._browser.sdkLanguage(), handler.selector)} to be hidden`
+            );
+            await this.mainFrame().waitForSelector(progress, handler.selector, false, {
+              state: 'hidden',
+            });
           } else {
             progress.log(`  locator handler has finished`);
           }
         });
-        await progress.race(this.openScope.race(promise)).finally(() => --this._locatorHandlerRunningCounter);
+        await progress
+          .race(this.openScope.race(promise))
+          .finally(() => --this._locatorHandlerRunningCounter);
         progress.log(`  interception handler has finished, continuing`);
       }
     }
   }
   async emulateMedia(progress, options) {
     const oldEmulatedMedia = { ...this._emulatedMedia };
-    if (options.media !== void 0)
-      this._emulatedMedia.media = options.media;
-    if (options.colorScheme !== void 0)
-      this._emulatedMedia.colorScheme = options.colorScheme;
-    if (options.reducedMotion !== void 0)
-      this._emulatedMedia.reducedMotion = options.reducedMotion;
-    if (options.forcedColors !== void 0)
-      this._emulatedMedia.forcedColors = options.forcedColors;
-    if (options.contrast !== void 0)
-      this._emulatedMedia.contrast = options.contrast;
+    if (options.media !== void 0) this._emulatedMedia.media = options.media;
+    if (options.colorScheme !== void 0) this._emulatedMedia.colorScheme = options.colorScheme;
+    if (options.reducedMotion !== void 0) this._emulatedMedia.reducedMotion = options.reducedMotion;
+    if (options.forcedColors !== void 0) this._emulatedMedia.forcedColors = options.forcedColors;
+    if (options.contrast !== void 0) this._emulatedMedia.contrast = options.contrast;
     try {
       await progress.race(this.delegate.updateEmulateMedia());
     } catch (error) {
       this._emulatedMedia = oldEmulatedMedia;
-      this.delegate.updateEmulateMedia().catch(() => {
-      });
+      this.delegate.updateEmulateMedia().catch(() => {});
       throw error;
     }
   }
   emulatedMedia() {
     const contextOptions = this.browserContext._options;
     return {
-      media: this._emulatedMedia.media || "no-override",
-      colorScheme: this._emulatedMedia.colorScheme !== void 0 ? this._emulatedMedia.colorScheme : contextOptions.colorScheme ?? "light",
-      reducedMotion: this._emulatedMedia.reducedMotion !== void 0 ? this._emulatedMedia.reducedMotion : contextOptions.reducedMotion ?? "no-preference",
-      forcedColors: this._emulatedMedia.forcedColors !== void 0 ? this._emulatedMedia.forcedColors : contextOptions.forcedColors ?? "none",
-      contrast: this._emulatedMedia.contrast !== void 0 ? this._emulatedMedia.contrast : contextOptions.contrast ?? "no-preference"
+      media: this._emulatedMedia.media || 'no-override',
+      colorScheme:
+        this._emulatedMedia.colorScheme !== void 0
+          ? this._emulatedMedia.colorScheme
+          : (contextOptions.colorScheme ?? 'light'),
+      reducedMotion:
+        this._emulatedMedia.reducedMotion !== void 0
+          ? this._emulatedMedia.reducedMotion
+          : (contextOptions.reducedMotion ?? 'no-preference'),
+      forcedColors:
+        this._emulatedMedia.forcedColors !== void 0
+          ? this._emulatedMedia.forcedColors
+          : (contextOptions.forcedColors ?? 'none'),
+      contrast:
+        this._emulatedMedia.contrast !== void 0
+          ? this._emulatedMedia.contrast
+          : (contextOptions.contrast ?? 'no-preference'),
     };
   }
   async setViewportSize(progress, viewportSize) {
@@ -429,8 +452,7 @@ class Page extends import_instrumentation.SdkObject {
       await progress.race(this.delegate.updateEmulatedViewportSize());
     } catch (error) {
       this._emulatedSize = oldEmulatedSize;
-      this.delegate.updateEmulatedViewportSize().catch(() => {
-      });
+      this.delegate.updateEmulatedViewportSize().catch(() => {});
       throw error;
     }
   }
@@ -442,10 +464,14 @@ class Page extends import_instrumentation.SdkObject {
     this.emit(Page.Events.EmulatedSizeChanged);
   }
   emulatedSize() {
-    if (this._emulatedSize)
-      return this._emulatedSize;
+    if (this._emulatedSize) return this._emulatedSize;
     const contextOptions = this.browserContext._options;
-    return contextOptions.viewport ? { viewport: contextOptions.viewport, screen: contextOptions.screen || contextOptions.viewport } : void 0;
+    return contextOptions.viewport
+      ? {
+          viewport: contextOptions.viewport,
+          screen: contextOptions.screen || contextOptions.viewport,
+        }
+      : void 0;
   }
   async bringToFront() {
     await this.delegate.bringToFront();
@@ -456,99 +482,100 @@ class Page extends import_instrumentation.SdkObject {
     try {
       await progress.race(this.delegate.addInitScript(initScript));
     } catch (error) {
-      this.removeInitScripts([initScript]).catch(() => {
-      });
+      this.removeInitScripts([initScript]).catch(() => {});
       throw error;
     }
     return initScript;
   }
   async removeInitScripts(initScripts) {
     const set = new Set(initScripts);
-    this.initScripts = this.initScripts.filter((script) => !set.has(script));
+    this.initScripts = this.initScripts.filter(script => !set.has(script));
     await this.delegate.removeInitScripts(initScripts);
   }
   needsRequestInterception() {
-    return this.requestInterceptors.length > 0 || this.browserContext.requestInterceptors.length > 0;
+    return (
+      this.requestInterceptors.length > 0 || this.browserContext.requestInterceptors.length > 0
+    );
   }
   async addRequestInterceptor(progress, handler, prepend) {
-    if (prepend)
-      this.requestInterceptors.unshift(handler);
-    else
-      this.requestInterceptors.push(handler);
+    if (prepend) this.requestInterceptors.unshift(handler);
+    else this.requestInterceptors.push(handler);
     await this.delegate.updateRequestInterception();
   }
   async removeRequestInterceptor(handler) {
     const index = this.requestInterceptors.indexOf(handler);
-    if (index === -1)
-      return;
+    if (index === -1) return;
     this.requestInterceptors.splice(index, 1);
     await this.browserContext.notifyRoutesInFlightAboutRemovedHandler(handler);
     await this.delegate.updateRequestInterception();
   }
   async expectScreenshot(progress, options) {
     const locator = options.locator;
-    const rafrafScreenshot = locator ? async (timeout) => {
-      return await locator.frame.rafrafTimeoutScreenshotElementWithProgress(progress, locator.selector, timeout, options || {});
-    } : async (timeout) => {
-      await this.performActionPreChecks(progress);
-      await this.mainFrame().rafrafTimeout(progress, timeout);
-      return await this.screenshotter.screenshotPage(progress, options || {});
-    };
-    const comparator = (0, import_comparators.getComparator)("image/png");
+    const rafrafScreenshot = locator
+      ? async timeout => {
+          return await locator.frame.rafrafTimeoutScreenshotElementWithProgress(
+            progress,
+            locator.selector,
+            timeout,
+            options || {}
+          );
+        }
+      : async timeout => {
+          await this.performActionPreChecks(progress);
+          await this.mainFrame().rafrafTimeout(progress, timeout);
+          return await this.screenshotter.screenshotPage(progress, options || {});
+        };
+    const comparator = (0, import_comparators.getComparator)('image/png');
     if (!options.expected && options.isNot)
       return { errorMessage: '"not" matcher requires expected result' };
     try {
       const format = (0, import_screenshotter.validateScreenshotOptions)(options || {});
-      if (format !== "png")
-        throw new Error("Only PNG screenshots are supported");
+      if (format !== 'png') throw new Error('Only PNG screenshots are supported');
     } catch (error) {
       return { errorMessage: error.message };
     }
     let intermediateResult;
     const areEqualScreenshots = (actual, expected, previous) => {
       const comparatorResult = actual && expected ? comparator(actual, expected, options) : void 0;
-      if (comparatorResult !== void 0 && !!comparatorResult === !!options.isNot)
-        return true;
+      if (comparatorResult !== void 0 && !!comparatorResult === !!options.isNot) return true;
       if (comparatorResult)
-        intermediateResult = { errorMessage: comparatorResult.errorMessage, diff: comparatorResult.diff, actual, previous };
+        intermediateResult = {
+          errorMessage: comparatorResult.errorMessage,
+          diff: comparatorResult.diff,
+          actual,
+          previous,
+        };
       return false;
     };
     try {
       let actual;
       let previous;
       const pollIntervals = [0, 100, 250, 500];
-      progress.log(`${(0, import_utils.renderTitleForCall)(progress.metadata)}${options.timeout ? ` with timeout ${options.timeout}ms` : ""}`);
-      if (options.expected)
-        progress.log(`  verifying given screenshot expectation`);
-      else
-        progress.log(`  generating new stable screenshot expectation`);
+      progress.log(
+        `${(0, import_utils.renderTitleForCall)(progress.metadata)}${options.timeout ? ` with timeout ${options.timeout}ms` : ''}`
+      );
+      if (options.expected) progress.log(`  verifying given screenshot expectation`);
+      else progress.log(`  generating new stable screenshot expectation`);
       let isFirstIteration = true;
       while (true) {
-        if (this.isClosed())
-          throw new Error("The page has closed");
+        if (this.isClosed()) throw new Error('The page has closed');
         const screenshotTimeout = pollIntervals.shift() ?? 1e3;
         if (screenshotTimeout)
           progress.log(`waiting ${screenshotTimeout}ms before taking screenshot`);
         previous = actual;
-        actual = await rafrafScreenshot(screenshotTimeout).catch((e) => {
-          if (this.mainFrame().isNonRetriableError(e))
-            throw e;
+        actual = await rafrafScreenshot(screenshotTimeout).catch(e => {
+          if (this.mainFrame().isNonRetriableError(e)) throw e;
           progress.log(`failed to take screenshot - ` + e.message);
           return void 0;
         });
-        if (!actual)
-          continue;
+        if (!actual) continue;
         const expectation = options.expected && isFirstIteration ? options.expected : previous;
-        if (areEqualScreenshots(actual, expectation, previous))
-          break;
-        if (intermediateResult)
-          progress.log(intermediateResult.errorMessage);
+        if (areEqualScreenshots(actual, expectation, previous)) break;
+        if (intermediateResult) progress.log(intermediateResult.errorMessage);
         isFirstIteration = false;
       }
-      if (!isFirstIteration)
-        progress.log(`captured a stable screenshot`);
-      if (!options.expected)
-        return { actual };
+      if (!isFirstIteration) progress.log(`captured a stable screenshot`);
+      if (!options.expected) return { actual };
       if (isFirstIteration) {
         progress.log(`screenshot matched expectation`);
         return {};
@@ -565,10 +592,12 @@ class Page extends import_instrumentation.SdkObject {
       if (e instanceof import_errors.TimeoutError && intermediateResult?.previous)
         errorMessage = `Failed to take two consecutive stable screenshots.`;
       return {
-        log: (0, import_callLog.compressCallLog)(e.message ? [...progress.metadata.log, e.message] : progress.metadata.log),
+        log: (0, import_callLog.compressCallLog)(
+          e.message ? [...progress.metadata.log, e.message] : progress.metadata.log
+        ),
         ...intermediateResult,
         errorMessage,
-        timedOut: e instanceof import_errors.TimeoutError
+        timedOut: e instanceof import_errors.TimeoutError,
       };
     }
   }
@@ -576,27 +605,25 @@ class Page extends import_instrumentation.SdkObject {
     return await this.screenshotter.screenshotPage(progress, options);
   }
   async close(options = {}) {
-    if (this._closedState === "closed")
-      return;
-    if (options.reason)
-      this._closeReason = options.reason;
+    if (this._closedState === 'closed') return;
+    if (options.reason) this._closeReason = options.reason;
     const runBeforeUnload = !!options.runBeforeUnload;
-    if (this._closedState !== "closing") {
-      if (!runBeforeUnload)
-        this._closedState = "closing";
-      await this.delegate.closePage(runBeforeUnload).catch((e) => import_debugLogger.debugLogger.log("error", e));
+    if (this._closedState !== 'closing') {
+      if (!runBeforeUnload) this._closedState = 'closing';
+      await this.delegate
+        .closePage(runBeforeUnload)
+        .catch(e => import_debugLogger.debugLogger.log('error', e));
     }
-    if (!runBeforeUnload)
-      await this._closedPromise;
+    if (!runBeforeUnload) await this._closedPromise;
   }
   isClosed() {
-    return this._closedState === "closed";
+    return this._closedState === 'closed';
   }
   hasCrashed() {
     return this._crashed;
   }
   isClosedOrClosingOrCrashed() {
-    return this._closedState !== "open" || this._crashed;
+    return this._closedState !== 'open' || this._crashed;
   }
   addWorker(workerId, worker) {
     this._workers.set(workerId, worker);
@@ -604,8 +631,7 @@ class Page extends import_instrumentation.SdkObject {
   }
   removeWorker(workerId) {
     const worker = this._workers.get(workerId);
-    if (!worker)
-      return;
+    if (!worker) return;
     worker.didClose();
     this._workers.delete(workerId);
   }
@@ -617,10 +643,8 @@ class Page extends import_instrumentation.SdkObject {
   }
   async setFileChooserInterceptedBy(enabled, by) {
     const wasIntercepted = this.fileChooserIntercepted();
-    if (enabled)
-      this._fileChooserInterceptedBy.add(by);
-    else
-      this._fileChooserInterceptedBy.delete(by);
+    if (enabled) this._fileChooserInterceptedBy.add(by);
+    else this._fileChooserInterceptedBy.delete(by);
     if (wasIntercepted !== this.fileChooserIntercepted())
       await this.delegate.updateFileChooserInterception();
   }
@@ -630,11 +654,13 @@ class Page extends import_instrumentation.SdkObject {
   frameNavigatedToNewDocument(frame) {
     this.emit(Page.Events.InternalFrameNavigatedToNewDocument, frame);
     const origin = frame.origin();
-    if (origin)
-      this.browserContext.addVisitedOrigin(origin);
+    if (origin) this.browserContext.addVisitedOrigin(origin);
   }
   allInitScripts() {
-    const bindings = [...this.browserContext._pageBindings.values(), ...this._pageBindings.values()].map((binding) => binding.initScript);
+    const bindings = [
+      ...this.browserContext._pageBindings.values(),
+      ...this._pageBindings.values(),
+    ].map(binding => binding.initScript);
     if (this.browserContext.bindingsInitScript)
       bindings.unshift(this.browserContext.bindingsInitScript);
     return [...bindings, ...this.browserContext.initScripts, ...this.initScripts];
@@ -643,30 +669,30 @@ class Page extends import_instrumentation.SdkObject {
     return this._pageBindings.get(name) || this.browserContext._pageBindings.get(name);
   }
   async safeNonStallingEvaluateInAllFrames(expression, world, options = {}) {
-    await Promise.all(this.frames().map(async (frame) => {
-      try {
-        await frame.nonStallingEvaluateInExistingContext(expression, world);
-      } catch (e) {
-        if (options.throwOnJSErrors && js.isJavaScriptErrorInEvaluate(e))
-          throw e;
-      }
-    }));
+    await Promise.all(
+      this.frames().map(async frame => {
+        try {
+          await frame.nonStallingEvaluateInExistingContext(expression, world);
+        } catch (e) {
+          if (options.throwOnJSErrors && js.isJavaScriptErrorInEvaluate(e)) throw e;
+        }
+      })
+    );
   }
   async hideHighlight() {
-    await Promise.all(this.frames().map((frame) => frame.hideHighlight().catch(() => {
-    })));
+    await Promise.all(this.frames().map(frame => frame.hideHighlight().catch(() => {})));
   }
   async snapshotForAI(progress, options = {}) {
     const snapshot = await snapshotFrameForAI(progress, this.mainFrame(), options);
-    return { full: snapshot.full.join("\n"), incremental: snapshot.incremental?.join("\n") };
+    return { full: snapshot.full.join('\n'), incremental: snapshot.incremental?.join('\n') };
   }
 }
 const WorkerEvent = {
-  Close: "close"
+  Close: 'close',
 };
 class Worker extends import_instrumentation.SdkObject {
   constructor(parent, url) {
-    super(parent, "worker");
+    super(parent, 'worker');
     this._executionContextPromise = new import_manualPromise.ManualPromise();
     this._workerScriptLoaded = false;
     this.existingExecutionContext = null;
@@ -677,7 +703,7 @@ class Worker extends import_instrumentation.SdkObject {
     this.Events = WorkerEvent;
   }
   createExecutionContext(delegate) {
-    this.existingExecutionContext = new js.ExecutionContext(this, delegate, "worker");
+    this.existingExecutionContext = new js.ExecutionContext(this, delegate, 'worker');
     if (this._workerScriptLoaded)
       this._executionContextPromise.resolve(this.existingExecutionContext);
     return this.existingExecutionContext;
@@ -689,23 +715,33 @@ class Worker extends import_instrumentation.SdkObject {
   }
   didClose() {
     if (this.existingExecutionContext)
-      this.existingExecutionContext.contextDestroyed("Worker was closed");
+      this.existingExecutionContext.contextDestroyed('Worker was closed');
     this.emit(Worker.Events.Close, this);
-    this.openScope.close(new Error("Worker closed"));
+    this.openScope.close(new Error('Worker closed'));
   }
   async evaluateExpression(expression, isFunction, arg) {
-    return js.evaluateExpression(await this._executionContextPromise, expression, { returnByValue: true, isFunction }, arg);
+    return js.evaluateExpression(
+      await this._executionContextPromise,
+      expression,
+      { returnByValue: true, isFunction },
+      arg
+    );
   }
   async evaluateExpressionHandle(expression, isFunction, arg) {
-    return js.evaluateExpression(await this._executionContextPromise, expression, { returnByValue: false, isFunction }, arg);
+    return js.evaluateExpression(
+      await this._executionContextPromise,
+      expression,
+      { returnByValue: false, isFunction },
+      arg
+    );
   }
 }
 class PageBinding {
   static {
-    this.kController = "__playwright__binding__controller__";
+    this.kController = '__playwright__binding__controller__';
   }
   static {
-    this.kBindingName = "__playwright__binding__";
+    this.kBindingName = '__playwright__binding__';
   }
   static createInitScript() {
     return new InitScript(`
@@ -721,7 +757,9 @@ class PageBinding {
   constructor(name, playwrightFunction, needsHandle) {
     this.name = name;
     this.playwrightFunction = playwrightFunction;
-    this.initScript = new InitScript(`globalThis['${PageBinding.kController}'].addBinding(${JSON.stringify(name)}, ${needsHandle})`);
+    this.initScript = new InitScript(
+      `globalThis['${PageBinding.kController}'].addBinding(${JSON.stringify(name)}, ${needsHandle})`
+    );
     this.needsHandle = needsHandle;
     this.cleanupScript = `globalThis['${PageBinding.kController}'].removeBinding(${JSON.stringify(name)})`;
   }
@@ -730,21 +768,48 @@ class PageBinding {
     try {
       (0, import_utils.assert)(context.world);
       const binding = page.getBinding(name);
-      if (!binding)
-        throw new Error(`Function "${name}" is not exposed`);
+      if (!binding) throw new Error(`Function "${name}" is not exposed`);
       let result;
       if (binding.needsHandle) {
-        const handle = await context.evaluateExpressionHandle(`arg => globalThis['${PageBinding.kController}'].takeBindingHandle(arg)`, { isFunction: true }, { name, seq }).catch((e) => null);
-        result = await binding.playwrightFunction({ frame: context.frame, page, context: page.browserContext }, handle);
+        const handle = await context
+          .evaluateExpressionHandle(
+            `arg => globalThis['${PageBinding.kController}'].takeBindingHandle(arg)`,
+            { isFunction: true },
+            { name, seq }
+          )
+          .catch(e => null);
+        result = await binding.playwrightFunction(
+          { frame: context.frame, page, context: page.browserContext },
+          handle
+        );
       } else {
         if (!Array.isArray(serializedArgs))
-          throw new Error(`serializedArgs is not an array. This can happen when Array.prototype.toJSON is defined incorrectly`);
-        const args = serializedArgs.map((a) => (0, import_utilityScriptSerializers.parseEvaluationResultValue)(a));
-        result = await binding.playwrightFunction({ frame: context.frame, page, context: page.browserContext }, ...args);
+          throw new Error(
+            `serializedArgs is not an array. This can happen when Array.prototype.toJSON is defined incorrectly`
+          );
+        const args = serializedArgs.map(a =>
+          (0, import_utilityScriptSerializers.parseEvaluationResultValue)(a)
+        );
+        result = await binding.playwrightFunction(
+          { frame: context.frame, page, context: page.browserContext },
+          ...args
+        );
       }
-      context.evaluateExpressionHandle(`arg => globalThis['${PageBinding.kController}'].deliverBindingResult(arg)`, { isFunction: true }, { name, seq, result }).catch((e) => import_debugLogger.debugLogger.log("error", e));
+      context
+        .evaluateExpressionHandle(
+          `arg => globalThis['${PageBinding.kController}'].deliverBindingResult(arg)`,
+          { isFunction: true },
+          { name, seq, result }
+        )
+        .catch(e => import_debugLogger.debugLogger.log('error', e));
     } catch (error) {
-      context.evaluateExpressionHandle(`arg => globalThis['${PageBinding.kController}'].deliverBindingResult(arg)`, { isFunction: true }, { name, seq, error }).catch((e) => import_debugLogger.debugLogger.log("error", e));
+      context
+        .evaluateExpressionHandle(
+          `arg => globalThis['${PageBinding.kController}'].deliverBindingResult(arg)`,
+          { isFunction: true },
+          { name, seq, error }
+        )
+        .catch(e => import_debugLogger.debugLogger.log('error', e));
     }
   }
 }
@@ -756,40 +821,54 @@ class InitScript {
   }
 }
 async function snapshotFrameForAI(progress, frame, options = {}) {
-  const snapshot = await frame.retryWithProgressAndTimeouts(progress, [1e3, 2e3, 4e3, 8e3], async (continuePolling) => {
-    try {
-      const context = await progress.race(frame._utilityContext());
-      const injectedScript = await progress.race(context.injectedScript());
-      const snapshotOrRetry = await progress.race(injectedScript.evaluate((injected, options2) => {
-        const node = injected.document.body;
-        if (!node)
-          return true;
-        return injected.incrementalAriaSnapshot(node, { mode: "ai", ...options2 });
-      }, { refPrefix: frame.seq ? "f" + frame.seq : "", track: options.track, doNotRenderActive: options.doNotRenderActive }));
-      if (snapshotOrRetry === true)
+  const snapshot = await frame.retryWithProgressAndTimeouts(
+    progress,
+    [1e3, 2e3, 4e3, 8e3],
+    async continuePolling => {
+      try {
+        const context = await progress.race(frame._utilityContext());
+        const injectedScript = await progress.race(context.injectedScript());
+        const snapshotOrRetry = await progress.race(
+          injectedScript.evaluate(
+            (injected, options2) => {
+              const node = injected.document.body;
+              if (!node) return true;
+              return injected.incrementalAriaSnapshot(node, { mode: 'ai', ...options2 });
+            },
+            {
+              refPrefix: frame.seq ? 'f' + frame.seq : '',
+              track: options.track,
+              doNotRenderActive: options.doNotRenderActive,
+            }
+          )
+        );
+        if (snapshotOrRetry === true) return continuePolling;
+        return snapshotOrRetry;
+      } catch (e) {
+        if (frame.isNonRetriableError(e)) throw e;
         return continuePolling;
-      return snapshotOrRetry;
-    } catch (e) {
-      if (frame.isNonRetriableError(e))
-        throw e;
-      return continuePolling;
+      }
     }
-  });
-  const childSnapshotPromises = snapshot.iframeRefs.map((ref) => snapshotFrameRefForAI(progress, frame, ref, options));
+  );
+  const childSnapshotPromises = snapshot.iframeRefs.map(ref =>
+    snapshotFrameRefForAI(progress, frame, ref, options)
+  );
   const childSnapshots = await Promise.all(childSnapshotPromises);
   const full = [];
   let incremental;
   if (snapshot.incremental !== void 0) {
-    incremental = snapshot.incremental.split("\n");
+    incremental = snapshot.incremental.split('\n');
     for (let i = 0; i < snapshot.iframeRefs.length; i++) {
       const childSnapshot = childSnapshots[i];
-      if (childSnapshot.incremental)
-        incremental.push(...childSnapshot.incremental);
+      if (childSnapshot.incremental) incremental.push(...childSnapshot.incremental);
       else if (childSnapshot.full.length)
-        incremental.push("- <changed> iframe [ref=" + snapshot.iframeRefs[i] + "]:", ...childSnapshot.full.map((l) => "  " + l));
+        incremental.push(
+          '- <changed> iframe [ref=' + snapshot.iframeRefs[i] + ']:',
+          ...childSnapshot.full.map(l => '  ' + l)
+        );
     }
   }
-  for (const line of snapshot.full.split("\n")) {
+  for (const line of snapshot.full.split('\n')) {
     const match = line.match(/^(\s*)- iframe (?:\[active\] )?\[ref=([^\]]*)\]/);
     if (!match) {
       full.push(line);
@@ -798,17 +877,18 @@ async function snapshotFrameForAI(progress, frame, options = {}) {
     const leadingSpace = match[1];
     const ref = match[2];
     const childSnapshot = childSnapshots[snapshot.iframeRefs.indexOf(ref)] ?? { full: [] };
-    full.push(childSnapshot.full.length ? line + ":" : line);
-    full.push(...childSnapshot.full.map((l) => leadingSpace + "  " + l));
+    full.push(childSnapshot.full.length ? line + ':' : line);
+    full.push(...childSnapshot.full.map(l => leadingSpace + '  ' + l));
   }
   return { full, incremental };
 }
 async function snapshotFrameRefForAI(progress, parentFrame, frameRef, options) {
   const frameSelector = `aria-ref=${frameRef} >> internal:control=enter-frame`;
   const frameBodySelector = `${frameSelector} >> body`;
-  const child = await progress.race(parentFrame.selectors.resolveFrameForSelector(frameBodySelector, { strict: true }));
-  if (!child)
-    return { full: [] };
+  const child = await progress.race(
+    parentFrame.selectors.resolveFrameForSelector(frameBodySelector, { strict: true })
+  );
+  if (!child) return { full: [] };
   try {
     return await snapshotFrameForAI(progress, child.frame, options);
   } catch {
@@ -816,15 +896,15 @@ async function snapshotFrameRefForAI(progress, parentFrame, frameRef, options) {
   }
 }
 function ensureArrayLimit(array, limit) {
-  if (array.length > limit)
-    return array.splice(0, limit / 10);
+  if (array.length > limit) return array.splice(0, limit / 10);
   return [];
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  InitScript,
-  Page,
-  PageBinding,
-  Worker,
-  WorkerEvent
-});
+0 &&
+  (module.exports = {
+    InitScript,
+    Page,
+    PageBinding,
+    Worker,
+    WorkerEvent,
+  });

@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
 import { PineconeService } from './pinecone.service';
-import { SupabaseGodService } from './supabase-god.service';
+import { SupabaseService } from './supabase.service';
 import { VertexAIService } from './google/vertex-ai.service';
 import { VectorStoreIndex, storageContextFromDefaults } from 'llamaindex';
 import { logger } from '../utils/logger';
@@ -21,14 +21,14 @@ export interface MemoryResult {
 export class MemoryService {
   constructor(
     @inject(TYPES.PineconeService) private pinecone: PineconeService,
-    @inject(TYPES.SupabaseGodService) private supabase: SupabaseGodService,
-    @inject(TYPES.VertexAIService) private vertex: VertexAIService
+    @inject(TYPES.SupabaseService) private supabase: SupabaseService,
+    @inject(TYPES.VertexAIService) private vertex: VertexAIService,
   ) {
     this.initializeLlamaIndex();
   }
 
   private async initializeLlamaIndex() {
-      logger.info('📚 LlamaIndex Ingestion Engine Initialized');
+    logger.info('📚 LlamaIndex Ingestion Engine Initialized');
   }
 
   /**
@@ -36,15 +36,19 @@ export class MemoryService {
    * Supports complex files, Notion, Slack, etc.
    */
   async ingestUniversal(dataSource: any) {
-      logger.info('[MemoryService] Universal Ingestion Initiated via LlamaIndex');
-      // Logic for LlamaIndex loaders would go here
-      return { status: 'ingested' };
+    logger.info('[MemoryService] Universal Ingestion Initiated via LlamaIndex');
+    // Logic for LlamaIndex loaders would go here
+    return { status: 'ingested' };
   }
 
   /**
    * Hybrid Search: Executes semantic and relational queries in parallel.
    */
-  async hybridSearch(query: string, limit: number = 5, namespace: string = 'general'): Promise<MemoryResult[]> {
+  async hybridSearch(
+    query: string,
+    limit: number = 5,
+    namespace: string = 'general',
+  ): Promise<MemoryResult[]> {
     logger.info(`[MemoryService] Initiating hybrid search: "${query}" in namespace: ${namespace}`);
 
     try {
@@ -54,7 +58,7 @@ export class MemoryService {
       // 2. Parallel Execution: Pinecone (Vector) + Supabase (SQL)
       const [vectorResults, relationalResults] = await Promise.all([
         this.pinecone.query(embedding, limit, namespace),
-        this.supabase.searchDocuments(query, limit) // Assuming searchDocuments exists or using standard SQL
+        this.supabase.searchDocuments(query, limit), // Assuming searchDocuments exists or using standard SQL
       ]);
 
       // 3. Normalize and Merge
@@ -62,14 +66,14 @@ export class MemoryService {
         content: match.metadata.content || match.id,
         metadata: match.metadata,
         score: match.score,
-        source: 'semantic'
+        source: 'semantic',
       }));
 
       const sqlResults: MemoryResult[] = relationalResults.map((doc: any) => ({
         content: doc.content || doc.text,
         metadata: doc.metadata,
         score: 0.85, // Relational matches are highly relevant by default in this context
-        source: 'relational'
+        source: 'relational',
       }));
 
       // 4. De-duplicate and Sort
@@ -77,7 +81,9 @@ export class MemoryService {
         .sort((a, b) => b.score - a.score)
         .slice(0, limit);
 
-      logger.debug(`[MemoryService] Hybrid search retrieved ${combined.length} relevant fragments.`);
+      logger.debug(
+        `[MemoryService] Hybrid search retrieved ${combined.length} relevant fragments.`,
+      );
       return combined;
     } catch (error) {
       logger.error('[MemoryService] Search synchronization fault', error);
@@ -94,10 +100,19 @@ export class MemoryService {
     try {
       // Parallel Commit
       await Promise.all([
-        this.pinecone.upsert([{ id: `mem_${Date.now()}`, values: await this.vertex.generateEmbeddings(content), metadata: { ...metadata, content } }], namespace),
-        this.supabase.saveDocument({ content, metadata, namespace })
+        this.pinecone.upsert(
+          [
+            {
+              id: `mem_${Date.now()}`,
+              values: await this.vertex.generateEmbeddings(content),
+              metadata: { ...metadata, content },
+            },
+          ],
+          namespace,
+        ),
+        this.supabase.saveDocument({ content, metadata, namespace }),
       ]);
-      
+
       logger.info('[MemoryService] Memory synchronized successfully.');
     } catch (error) {
       logger.error('[MemoryService] Commit failed', error);
@@ -109,7 +124,7 @@ export class MemoryService {
    * Reflexive Purge: Cleans caches and redundant memories.
    */
   async reflexivePurge(namespace: string): Promise<void> {
-      await this.pinecone.deleteAll(namespace);
-      logger.info(`[MemoryService] Namespace ${namespace} purged for re-learning.`);
+    await this.pinecone.deleteAll(namespace);
+    logger.info(`[MemoryService] Namespace ${namespace} purged for re-learning.`);
   }
 }

@@ -250,10 +250,16 @@ export class AIService {
         return cached;
       }
 
-      const { provider, modelId, reason } = await this.arbitrationService.getOptimalConfig(tier, prompt);
+      const { provider, modelId, reason } = await this.arbitrationService.getOptimalConfig(
+        tier,
+        prompt,
+      );
 
-      logger.info(`[AIService] Arbitrated to Tier: ${tier} (${provider}/${modelId}) | Reason: ${reason}`);
+      logger.info(
+        `[AIService] Arbitrated to Tier: ${tier} (${provider}/${modelId}) | Reason: ${reason}`,
+      );
 
+      // [GOD MODE] Dual-Provider Support
       if (provider === 'gemini') {
         const model = await this.getProviderModel({ provider, modelId });
         const result = await model.generateContent(prompt);
@@ -270,8 +276,22 @@ export class AIService {
         });
 
         await this.semanticCache.setSemantic(prompt, text);
-
         return text;
+      }
+
+      if (provider === 'anthropic' || provider === 'openai') {
+        // Fallback or specialized handling for other providers (Stub for now or use ArbitrationService if it has a direct generator)
+        // Since ArbitrationService is already here, we could add a generic generateText there or implement it here.
+        // For now, let's use gemini-2.0-flash as a sovereign fallback to avoid breakage while keeping the arbitration log.
+        logger.warn(
+          `[AIService] Provider ${provider} selected by arbitrator but not fully implemented in AIService yet. Falling back to Gemini.`,
+        );
+        const model = await this.getProviderModel({
+          provider: 'gemini',
+          modelId: 'gemini-2.0-flash',
+        });
+        const result = await model.generateContent(prompt);
+        return result.response.text();
       }
 
       return 'Error: Unsupported provider in router.';

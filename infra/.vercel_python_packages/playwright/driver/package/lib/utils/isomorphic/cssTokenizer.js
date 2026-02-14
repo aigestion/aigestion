@@ -1,21 +1,23 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var cssTokenizer_exports = {};
 __export(cssTokenizer_exports, {
   AtKeywordToken: () => AtKeywordToken,
@@ -53,10 +55,10 @@ __export(cssTokenizer_exports, {
   SuffixMatchToken: () => SuffixMatchToken,
   URLToken: () => URLToken,
   WhitespaceToken: () => WhitespaceToken,
-  tokenize: () => tokenize
+  tokenize: () => tokenize,
 });
 module.exports = __toCommonJS(cssTokenizer_exports);
-const between = function(num, first, last) {
+const between = function (num, first, last) {
   return num >= first && num <= last;
 };
 function digit(code) {
@@ -96,7 +98,7 @@ const maximumallowedcodepoint = 1114111;
 class InvalidCharacterError extends Error {
   constructor(message) {
     super(message);
-    this.name = "InvalidCharacterError";
+    this.name = 'InvalidCharacterError';
   }
 }
 function preprocess(str) {
@@ -107,10 +109,8 @@ function preprocess(str) {
       code = 10;
       i++;
     }
-    if (code === 13 || code === 12)
-      code = 10;
-    if (code === 0)
-      code = 65533;
+    if (code === 13 || code === 12) code = 10;
+    if (code === 0) code = 65533;
     if (between(code, 55296, 56319) && between(str.charCodeAt(i + 1), 56320, 57343)) {
       const lead = code - 55296;
       const trail = str.charCodeAt(i + 1) - 56320;
@@ -122,11 +122,10 @@ function preprocess(str) {
   return codepoints;
 }
 function stringFromCode(code) {
-  if (code <= 65535)
-    return String.fromCharCode(code);
+  if (code <= 65535) return String.fromCharCode(code);
   code -= Math.pow(2, 16);
   const lead = Math.floor(code / Math.pow(2, 10)) + 55296;
-  const trail = code % Math.pow(2, 10) + 56320;
+  const trail = (code % Math.pow(2, 10)) + 56320;
   return String.fromCharCode(lead) + String.fromCharCode(trail);
 }
 function tokenize(str1) {
@@ -137,36 +136,30 @@ function tokenize(str1) {
   let line = 0;
   let column = 0;
   let lastLineLength = 0;
-  const incrLineno = function() {
+  const incrLineno = function () {
     line += 1;
     lastLineLength = column;
     column = 0;
   };
   const locStart = { line, column };
-  const codepoint = function(i2) {
-    if (i2 >= str.length)
-      return -1;
+  const codepoint = function (i2) {
+    if (i2 >= str.length) return -1;
     return str[i2];
   };
-  const next = function(num) {
-    if (num === void 0)
-      num = 1;
-    if (num > 3)
-      throw "Spec Error: no more than three codepoints of lookahead.";
+  const next = function (num) {
+    if (num === void 0) num = 1;
+    if (num > 3) throw 'Spec Error: no more than three codepoints of lookahead.';
     return codepoint(i + num);
   };
-  const consume = function(num) {
-    if (num === void 0)
-      num = 1;
+  const consume = function (num) {
+    if (num === void 0) num = 1;
     i += num;
     code = codepoint(i);
-    if (newline(code))
-      incrLineno();
-    else
-      column += num;
+    if (newline(code)) incrLineno();
+    else column += num;
     return true;
   };
-  const reconsume = function() {
+  const reconsume = function () {
     i -= 1;
     if (newline(code)) {
       line -= 1;
@@ -178,29 +171,24 @@ function tokenize(str1) {
     locStart.column = column;
     return true;
   };
-  const eof = function(codepoint2) {
-    if (codepoint2 === void 0)
-      codepoint2 = code;
+  const eof = function (codepoint2) {
+    if (codepoint2 === void 0) codepoint2 = code;
     return codepoint2 === -1;
   };
-  const donothing = function() {
-  };
-  const parseerror = function() {
-  };
-  const consumeAToken = function() {
+  const donothing = function () {};
+  const parseerror = function () {};
+  const consumeAToken = function () {
     consumeComments();
     consume();
     if (whitespace(code)) {
-      while (whitespace(next()))
-        consume();
+      while (whitespace(next())) consume();
       return new WhitespaceToken();
     } else if (code === 34) {
       return consumeAStringToken();
     } else if (code === 35) {
       if (namechar(next()) || areAValidEscape(next(1), next(2))) {
-        const token = new HashToken("");
-        if (wouldStartAnIdentifier(next(1), next(2), next(3)))
-          token.type = "id";
+        const token = new HashToken('');
+        if (wouldStartAnIdentifier(next(1), next(2), next(3))) token.type = 'id';
         token.value = consumeAName();
         return token;
       } else {
@@ -269,8 +257,7 @@ function tokenize(str1) {
     } else if (code === 64) {
       if (wouldStartAnIdentifier(next(1), next(2), next(3)))
         return new AtKeywordToken(consumeAName());
-      else
-        return new DelimToken(code);
+      else return new DelimToken(code);
     } else if (code === 91) {
       return new OpenSquareToken();
     } else if (code === 92) {
@@ -323,7 +310,7 @@ function tokenize(str1) {
       return new DelimToken(code);
     }
   };
-  const consumeComments = function() {
+  const consumeComments = function () {
     while (next(1) === 47 && next(2) === 42) {
       consume(2);
       while (true) {
@@ -338,7 +325,7 @@ function tokenize(str1) {
       }
     }
   };
-  const consumeANumericToken = function() {
+  const consumeANumericToken = function () {
     const num = consumeANumber();
     if (wouldStartAnIdentifier(next(1), next(2), next(3))) {
       const token = new DimensionToken();
@@ -361,18 +348,15 @@ function tokenize(str1) {
       return token;
     }
   };
-  const consumeAnIdentlikeToken = function() {
+  const consumeAnIdentlikeToken = function () {
     const str2 = consumeAName();
-    if (str2.toLowerCase() === "url" && next() === 40) {
+    if (str2.toLowerCase() === 'url' && next() === 40) {
       consume();
-      while (whitespace(next(1)) && whitespace(next(2)))
-        consume();
-      if (next() === 34 || next() === 39)
-        return new FunctionToken(str2);
+      while (whitespace(next(1)) && whitespace(next(2))) consume();
+      if (next() === 34 || next() === 39) return new FunctionToken(str2);
       else if (whitespace(next()) && (next(2) === 34 || next(2) === 39))
         return new FunctionToken(str2);
-      else
-        return consumeAURLToken();
+      else return consumeAURLToken();
     } else if (next() === 40) {
       consume();
       return new FunctionToken(str2);
@@ -380,10 +364,9 @@ function tokenize(str1) {
       return new IdentToken(str2);
     }
   };
-  const consumeAStringToken = function(endingCodePoint) {
-    if (endingCodePoint === void 0)
-      endingCodePoint = code;
-    let string = "";
+  const consumeAStringToken = function (endingCodePoint) {
+    if (endingCodePoint === void 0) endingCodePoint = code;
+    let string = '';
     while (consume()) {
       if (code === endingCodePoint || eof()) {
         return new StringToken(string);
@@ -392,30 +375,24 @@ function tokenize(str1) {
         reconsume();
         return new BadStringToken();
       } else if (code === 92) {
-        if (eof(next()))
-          donothing();
-        else if (newline(next()))
-          consume();
-        else
-          string += stringFromCode(consumeEscape());
+        if (eof(next())) donothing();
+        else if (newline(next())) consume();
+        else string += stringFromCode(consumeEscape());
       } else {
         string += stringFromCode(code);
       }
     }
-    throw new Error("Internal error");
+    throw new Error('Internal error');
   };
-  const consumeAURLToken = function() {
-    const token = new URLToken("");
-    while (whitespace(next()))
-      consume();
-    if (eof(next()))
-      return token;
+  const consumeAURLToken = function () {
+    const token = new URLToken('');
+    while (whitespace(next())) consume();
+    if (eof(next())) return token;
     while (consume()) {
       if (code === 41 || eof()) {
         return token;
       } else if (whitespace(code)) {
-        while (whitespace(next()))
-          consume();
+        while (whitespace(next())) consume();
         if (next() === 41 || eof(next())) {
           consume();
           return token;
@@ -439,9 +416,9 @@ function tokenize(str1) {
         token.value += stringFromCode(code);
       }
     }
-    throw new Error("Internal error");
+    throw new Error('Internal error');
   };
-  const consumeEscape = function() {
+  const consumeEscape = function () {
     consume();
     if (hexdigit(code)) {
       const digits = [code];
@@ -453,13 +430,16 @@ function tokenize(str1) {
           break;
         }
       }
-      if (whitespace(next()))
-        consume();
-      let value = parseInt(digits.map(function(x) {
-        return String.fromCharCode(x);
-      }).join(""), 16);
-      if (value > maximumallowedcodepoint)
-        value = 65533;
+      if (whitespace(next())) consume();
+      let value = parseInt(
+        digits
+          .map(function (x) {
+            return String.fromCharCode(x);
+          })
+          .join(''),
+        16
+      );
+      if (value > maximumallowedcodepoint) value = 65533;
       return value;
     } else if (eof()) {
       return 65533;
@@ -467,39 +447,30 @@ function tokenize(str1) {
       return code;
     }
   };
-  const areAValidEscape = function(c1, c2) {
-    if (c1 !== 92)
-      return false;
-    if (newline(c2))
-      return false;
+  const areAValidEscape = function (c1, c2) {
+    if (c1 !== 92) return false;
+    if (newline(c2)) return false;
     return true;
   };
-  const startsWithAValidEscape = function() {
+  const startsWithAValidEscape = function () {
     return areAValidEscape(code, next());
   };
-  const wouldStartAnIdentifier = function(c1, c2, c3) {
-    if (c1 === 45)
-      return namestartchar(c2) || c2 === 45 || areAValidEscape(c2, c3);
-    else if (namestartchar(c1))
-      return true;
-    else if (c1 === 92)
-      return areAValidEscape(c1, c2);
-    else
-      return false;
+  const wouldStartAnIdentifier = function (c1, c2, c3) {
+    if (c1 === 45) return namestartchar(c2) || c2 === 45 || areAValidEscape(c2, c3);
+    else if (namestartchar(c1)) return true;
+    else if (c1 === 92) return areAValidEscape(c1, c2);
+    else return false;
   };
-  const startsWithAnIdentifier = function() {
+  const startsWithAnIdentifier = function () {
     return wouldStartAnIdentifier(code, next(1), next(2));
   };
-  const wouldStartANumber = function(c1, c2, c3) {
+  const wouldStartANumber = function (c1, c2, c3) {
     if (c1 === 43 || c1 === 45) {
-      if (digit(c2))
-        return true;
-      if (c2 === 46 && digit(c3))
-        return true;
+      if (digit(c2)) return true;
+      if (c2 === 46 && digit(c3)) return true;
       return false;
     } else if (c1 === 46) {
-      if (digit(c2))
-        return true;
+      if (digit(c2)) return true;
       return false;
     } else if (digit(c1)) {
       return true;
@@ -507,11 +478,11 @@ function tokenize(str1) {
       return false;
     }
   };
-  const startsWithANumber = function() {
+  const startsWithANumber = function () {
     return wouldStartANumber(code, next(1), next(2));
   };
-  const consumeAName = function() {
-    let result = "";
+  const consumeAName = function () {
+    let result = '';
     while (consume()) {
       if (namechar(code)) {
         result += stringFromCode(code);
@@ -522,11 +493,11 @@ function tokenize(str1) {
         return result;
       }
     }
-    throw new Error("Internal parse error");
+    throw new Error('Internal parse error');
   };
-  const consumeANumber = function() {
-    let repr = "";
-    let type = "integer";
+  const consumeANumber = function () {
+    let repr = '';
+    let type = 'integer';
     if (next() === 43 || next() === 45) {
       consume();
       repr += stringFromCode(code);
@@ -540,19 +511,21 @@ function tokenize(str1) {
       repr += stringFromCode(code);
       consume();
       repr += stringFromCode(code);
-      type = "number";
+      type = 'number';
       while (digit(next())) {
         consume();
         repr += stringFromCode(code);
       }
     }
-    const c1 = next(1), c2 = next(2), c3 = next(3);
+    const c1 = next(1),
+      c2 = next(2),
+      c3 = next(3);
     if ((c1 === 69 || c1 === 101) && digit(c2)) {
       consume();
       repr += stringFromCode(code);
       consume();
       repr += stringFromCode(code);
-      type = "number";
+      type = 'number';
       while (digit(next())) {
         consume();
         repr += stringFromCode(code);
@@ -564,7 +537,7 @@ function tokenize(str1) {
       repr += stringFromCode(code);
       consume();
       repr += stringFromCode(code);
-      type = "number";
+      type = 'number';
       while (digit(next())) {
         consume();
         repr += stringFromCode(code);
@@ -573,10 +546,10 @@ function tokenize(str1) {
     const value = convertAStringToANumber(repr);
     return { type, value, repr };
   };
-  const convertAStringToANumber = function(string) {
+  const convertAStringToANumber = function (string) {
     return +string;
   };
-  const consumeTheRemnantsOfABadURL = function() {
+  const consumeTheRemnantsOfABadURL = function () {
     while (consume()) {
       if (code === 41 || eof()) {
         return;
@@ -592,14 +565,13 @@ function tokenize(str1) {
   while (!eof(next())) {
     tokens.push(consumeAToken());
     iterationCount++;
-    if (iterationCount > str.length * 2)
-      throw new Error("I'm infinite-looping!");
+    if (iterationCount > str.length * 2) throw new Error("I'm infinite-looping!");
   }
   return tokens;
 }
 class CSSParserToken {
   constructor() {
-    this.tokenType = "";
+    this.tokenType = '';
   }
   toJSON() {
     return { token: this.tokenType };
@@ -608,178 +580,178 @@ class CSSParserToken {
     return this.tokenType;
   }
   toSource() {
-    return "" + this;
+    return '' + this;
   }
 }
 class BadStringToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "BADSTRING";
+    this.tokenType = 'BADSTRING';
   }
 }
 class BadURLToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "BADURL";
+    this.tokenType = 'BADURL';
   }
 }
 class WhitespaceToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "WHITESPACE";
+    this.tokenType = 'WHITESPACE';
   }
   toString() {
-    return "WS";
+    return 'WS';
   }
   toSource() {
-    return " ";
+    return ' ';
   }
 }
 class CDOToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "CDO";
+    this.tokenType = 'CDO';
   }
   toSource() {
-    return "<!--";
+    return '<!--';
   }
 }
 class CDCToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "CDC";
+    this.tokenType = 'CDC';
   }
   toSource() {
-    return "-->";
+    return '-->';
   }
 }
 class ColonToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = ":";
+    this.tokenType = ':';
   }
 }
 class SemicolonToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = ";";
+    this.tokenType = ';';
   }
 }
 class CommaToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = ",";
+    this.tokenType = ',';
   }
 }
 class GroupingToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.value = "";
-    this.mirror = "";
+    this.value = '';
+    this.mirror = '';
   }
 }
 class OpenCurlyToken extends GroupingToken {
   constructor() {
     super();
-    this.tokenType = "{";
-    this.value = "{";
-    this.mirror = "}";
+    this.tokenType = '{';
+    this.value = '{';
+    this.mirror = '}';
   }
 }
 class CloseCurlyToken extends GroupingToken {
   constructor() {
     super();
-    this.tokenType = "}";
-    this.value = "}";
-    this.mirror = "{";
+    this.tokenType = '}';
+    this.value = '}';
+    this.mirror = '{';
   }
 }
 class OpenSquareToken extends GroupingToken {
   constructor() {
     super();
-    this.tokenType = "[";
-    this.value = "[";
-    this.mirror = "]";
+    this.tokenType = '[';
+    this.value = '[';
+    this.mirror = ']';
   }
 }
 class CloseSquareToken extends GroupingToken {
   constructor() {
     super();
-    this.tokenType = "]";
-    this.value = "]";
-    this.mirror = "[";
+    this.tokenType = ']';
+    this.value = ']';
+    this.mirror = '[';
   }
 }
 class OpenParenToken extends GroupingToken {
   constructor() {
     super();
-    this.tokenType = "(";
-    this.value = "(";
-    this.mirror = ")";
+    this.tokenType = '(';
+    this.value = '(';
+    this.mirror = ')';
   }
 }
 class CloseParenToken extends GroupingToken {
   constructor() {
     super();
-    this.tokenType = ")";
-    this.value = ")";
-    this.mirror = "(";
+    this.tokenType = ')';
+    this.value = ')';
+    this.mirror = '(';
   }
 }
 class IncludeMatchToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "~=";
+    this.tokenType = '~=';
   }
 }
 class DashMatchToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "|=";
+    this.tokenType = '|=';
   }
 }
 class PrefixMatchToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "^=";
+    this.tokenType = '^=';
   }
 }
 class SuffixMatchToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "$=";
+    this.tokenType = '$=';
   }
 }
 class SubstringMatchToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "*=";
+    this.tokenType = '*=';
   }
 }
 class ColumnToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "||";
+    this.tokenType = '||';
   }
 }
 class EOFToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.tokenType = "EOF";
+    this.tokenType = 'EOF';
   }
   toSource() {
-    return "";
+    return '';
   }
 }
 class DelimToken extends CSSParserToken {
   constructor(code) {
     super();
-    this.tokenType = "DELIM";
-    this.value = "";
+    this.tokenType = 'DELIM';
+    this.value = '';
     this.value = stringFromCode(code);
   }
   toString() {
-    return "DELIM(" + this.value + ")";
+    return 'DELIM(' + this.value + ')';
   }
   toJSON() {
     const json = this.constructor.prototype.constructor.prototype.toJSON.call(this);
@@ -787,16 +759,14 @@ class DelimToken extends CSSParserToken {
     return json;
   }
   toSource() {
-    if (this.value === "\\")
-      return "\\\n";
-    else
-      return this.value;
+    if (this.value === '\\') return '\\\n';
+    else return this.value;
   }
 }
 class StringValuedToken extends CSSParserToken {
   constructor() {
     super(...arguments);
-    this.value = "";
+    this.value = '';
   }
   ASCIIMatch(str) {
     return this.value.toLowerCase() === str.toLowerCase();
@@ -810,11 +780,11 @@ class StringValuedToken extends CSSParserToken {
 class IdentToken extends StringValuedToken {
   constructor(val) {
     super();
-    this.tokenType = "IDENT";
+    this.tokenType = 'IDENT';
     this.value = val;
   }
   toString() {
-    return "IDENT(" + this.value + ")";
+    return 'IDENT(' + this.value + ')';
   }
   toSource() {
     return escapeIdent(this.value);
@@ -823,39 +793,39 @@ class IdentToken extends StringValuedToken {
 class FunctionToken extends StringValuedToken {
   constructor(val) {
     super();
-    this.tokenType = "FUNCTION";
+    this.tokenType = 'FUNCTION';
     this.value = val;
-    this.mirror = ")";
+    this.mirror = ')';
   }
   toString() {
-    return "FUNCTION(" + this.value + ")";
+    return 'FUNCTION(' + this.value + ')';
   }
   toSource() {
-    return escapeIdent(this.value) + "(";
+    return escapeIdent(this.value) + '(';
   }
 }
 class AtKeywordToken extends StringValuedToken {
   constructor(val) {
     super();
-    this.tokenType = "AT-KEYWORD";
+    this.tokenType = 'AT-KEYWORD';
     this.value = val;
   }
   toString() {
-    return "AT(" + this.value + ")";
+    return 'AT(' + this.value + ')';
   }
   toSource() {
-    return "@" + escapeIdent(this.value);
+    return '@' + escapeIdent(this.value);
   }
 }
 class HashToken extends StringValuedToken {
   constructor(val) {
     super();
-    this.tokenType = "HASH";
+    this.tokenType = 'HASH';
     this.value = val;
-    this.type = "unrestricted";
+    this.type = 'unrestricted';
   }
   toString() {
-    return "HASH(" + this.value + ")";
+    return 'HASH(' + this.value + ')';
   }
   toJSON() {
     const json = this.constructor.prototype.constructor.prototype.toJSON.call(this);
@@ -864,16 +834,14 @@ class HashToken extends StringValuedToken {
     return json;
   }
   toSource() {
-    if (this.type === "id")
-      return "#" + escapeIdent(this.value);
-    else
-      return "#" + escapeHash(this.value);
+    if (this.type === 'id') return '#' + escapeIdent(this.value);
+    else return '#' + escapeHash(this.value);
   }
 }
 class StringToken extends StringValuedToken {
   constructor(val) {
     super();
-    this.tokenType = "STRING";
+    this.tokenType = 'STRING';
     this.value = val;
   }
   toString() {
@@ -883,11 +851,11 @@ class StringToken extends StringValuedToken {
 class URLToken extends StringValuedToken {
   constructor(val) {
     super();
-    this.tokenType = "URL";
+    this.tokenType = 'URL';
     this.value = val;
   }
   toString() {
-    return "URL(" + this.value + ")";
+    return 'URL(' + this.value + ')';
   }
   toSource() {
     return 'url("' + escapeString(this.value) + '")';
@@ -896,14 +864,13 @@ class URLToken extends StringValuedToken {
 class NumberToken extends CSSParserToken {
   constructor() {
     super();
-    this.tokenType = "NUMBER";
-    this.type = "integer";
-    this.repr = "";
+    this.tokenType = 'NUMBER';
+    this.type = 'integer';
+    this.repr = '';
   }
   toString() {
-    if (this.type === "integer")
-      return "INT(" + this.value + ")";
-    return "NUMBER(" + this.value + ")";
+    if (this.type === 'integer') return 'INT(' + this.value + ')';
+    return 'NUMBER(' + this.value + ')';
   }
   toJSON() {
     const json = super.toJSON();
@@ -919,11 +886,11 @@ class NumberToken extends CSSParserToken {
 class PercentageToken extends CSSParserToken {
   constructor() {
     super();
-    this.tokenType = "PERCENTAGE";
-    this.repr = "";
+    this.tokenType = 'PERCENTAGE';
+    this.repr = '';
   }
   toString() {
-    return "PERCENTAGE(" + this.value + ")";
+    return 'PERCENTAGE(' + this.value + ')';
   }
   toJSON() {
     const json = this.constructor.prototype.constructor.prototype.toJSON.call(this);
@@ -932,19 +899,19 @@ class PercentageToken extends CSSParserToken {
     return json;
   }
   toSource() {
-    return this.repr + "%";
+    return this.repr + '%';
   }
 }
 class DimensionToken extends CSSParserToken {
   constructor() {
     super();
-    this.tokenType = "DIMENSION";
-    this.type = "integer";
-    this.repr = "";
-    this.unit = "";
+    this.tokenType = 'DIMENSION';
+    this.type = 'integer';
+    this.repr = '';
+    this.unit = '';
   }
   toString() {
-    return "DIM(" + this.value + "," + this.unit + ")";
+    return 'DIM(' + this.value + ',' + this.unit + ')';
   }
   toJSON() {
     const json = this.constructor.prototype.constructor.prototype.toJSON.call(this);
@@ -957,95 +924,110 @@ class DimensionToken extends CSSParserToken {
   toSource() {
     const source = this.repr;
     let unit = escapeIdent(this.unit);
-    if (unit[0].toLowerCase() === "e" && (unit[1] === "-" || between(unit.charCodeAt(1), 48, 57))) {
-      unit = "\\65 " + unit.slice(1, unit.length);
+    if (unit[0].toLowerCase() === 'e' && (unit[1] === '-' || between(unit.charCodeAt(1), 48, 57))) {
+      unit = '\\65 ' + unit.slice(1, unit.length);
     }
     return source + unit;
   }
 }
 function escapeIdent(string) {
-  string = "" + string;
-  let result = "";
+  string = '' + string;
+  let result = '';
   const firstcode = string.charCodeAt(0);
   for (let i = 0; i < string.length; i++) {
     const code = string.charCodeAt(i);
     if (code === 0)
-      throw new InvalidCharacterError("Invalid character: the input contains U+0000.");
-    if (between(code, 1, 31) || code === 127 || i === 0 && between(code, 48, 57) || i === 1 && between(code, 48, 57) && firstcode === 45)
-      result += "\\" + code.toString(16) + " ";
-    else if (code >= 128 || code === 45 || code === 95 || between(code, 48, 57) || between(code, 65, 90) || between(code, 97, 122))
+      throw new InvalidCharacterError('Invalid character: the input contains U+0000.');
+    if (
+      between(code, 1, 31) ||
+      code === 127 ||
+      (i === 0 && between(code, 48, 57)) ||
+      (i === 1 && between(code, 48, 57) && firstcode === 45)
+    )
+      result += '\\' + code.toString(16) + ' ';
+    else if (
+      code >= 128 ||
+      code === 45 ||
+      code === 95 ||
+      between(code, 48, 57) ||
+      between(code, 65, 90) ||
+      between(code, 97, 122)
+    )
       result += string[i];
-    else
-      result += "\\" + string[i];
+    else result += '\\' + string[i];
   }
   return result;
 }
 function escapeHash(string) {
-  string = "" + string;
-  let result = "";
+  string = '' + string;
+  let result = '';
   for (let i = 0; i < string.length; i++) {
     const code = string.charCodeAt(i);
     if (code === 0)
-      throw new InvalidCharacterError("Invalid character: the input contains U+0000.");
-    if (code >= 128 || code === 45 || code === 95 || between(code, 48, 57) || between(code, 65, 90) || between(code, 97, 122))
+      throw new InvalidCharacterError('Invalid character: the input contains U+0000.');
+    if (
+      code >= 128 ||
+      code === 45 ||
+      code === 95 ||
+      between(code, 48, 57) ||
+      between(code, 65, 90) ||
+      between(code, 97, 122)
+    )
       result += string[i];
-    else
-      result += "\\" + code.toString(16) + " ";
+    else result += '\\' + code.toString(16) + ' ';
   }
   return result;
 }
 function escapeString(string) {
-  string = "" + string;
-  let result = "";
+  string = '' + string;
+  let result = '';
   for (let i = 0; i < string.length; i++) {
     const code = string.charCodeAt(i);
     if (code === 0)
-      throw new InvalidCharacterError("Invalid character: the input contains U+0000.");
-    if (between(code, 1, 31) || code === 127)
-      result += "\\" + code.toString(16) + " ";
-    else if (code === 34 || code === 92)
-      result += "\\" + string[i];
-    else
-      result += string[i];
+      throw new InvalidCharacterError('Invalid character: the input contains U+0000.');
+    if (between(code, 1, 31) || code === 127) result += '\\' + code.toString(16) + ' ';
+    else if (code === 34 || code === 92) result += '\\' + string[i];
+    else result += string[i];
   }
   return result;
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  AtKeywordToken,
-  BadStringToken,
-  BadURLToken,
-  CDCToken,
-  CDOToken,
-  CSSParserToken,
-  CloseCurlyToken,
-  CloseParenToken,
-  CloseSquareToken,
-  ColonToken,
-  ColumnToken,
-  CommaToken,
-  DashMatchToken,
-  DelimToken,
-  DimensionToken,
-  EOFToken,
-  FunctionToken,
-  GroupingToken,
-  HashToken,
-  IdentToken,
-  IncludeMatchToken,
-  InvalidCharacterError,
-  NumberToken,
-  OpenCurlyToken,
-  OpenParenToken,
-  OpenSquareToken,
-  PercentageToken,
-  PrefixMatchToken,
-  SemicolonToken,
-  StringToken,
-  StringValuedToken,
-  SubstringMatchToken,
-  SuffixMatchToken,
-  URLToken,
-  WhitespaceToken,
-  tokenize
-});
+0 &&
+  (module.exports = {
+    AtKeywordToken,
+    BadStringToken,
+    BadURLToken,
+    CDCToken,
+    CDOToken,
+    CSSParserToken,
+    CloseCurlyToken,
+    CloseParenToken,
+    CloseSquareToken,
+    ColonToken,
+    ColumnToken,
+    CommaToken,
+    DashMatchToken,
+    DelimToken,
+    DimensionToken,
+    EOFToken,
+    FunctionToken,
+    GroupingToken,
+    HashToken,
+    IdentToken,
+    IncludeMatchToken,
+    InvalidCharacterError,
+    NumberToken,
+    OpenCurlyToken,
+    OpenParenToken,
+    OpenSquareToken,
+    PercentageToken,
+    PrefixMatchToken,
+    SemicolonToken,
+    StringToken,
+    StringValuedToken,
+    SubstringMatchToken,
+    SuffixMatchToken,
+    URLToken,
+    WhitespaceToken,
+    tokenize,
+  });

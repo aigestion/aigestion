@@ -1,31 +1,33 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var tracingDispatcher_exports = {};
 __export(tracingDispatcher_exports, {
-  TracingDispatcher: () => TracingDispatcher
+  TracingDispatcher: () => TracingDispatcher,
 });
 module.exports = __toCommonJS(tracingDispatcher_exports);
-var import_artifactDispatcher = require("./artifactDispatcher");
-var import_dispatcher = require("./dispatcher");
+var import_artifactDispatcher = require('./artifactDispatcher');
+var import_dispatcher = require('./dispatcher');
 class TracingDispatcher extends import_dispatcher.Dispatcher {
   constructor(scope, tracing) {
-    super(scope, tracing, "Tracing", {});
+    super(scope, tracing, 'Tracing', {});
     this._type_Tracing = true;
     this._started = false;
   }
@@ -49,7 +51,12 @@ class TracingDispatcher extends import_dispatcher.Dispatcher {
   }
   async tracingStopChunk(params, progress) {
     const { artifact, entries } = await this._object.stopChunk(progress, params);
-    return { artifact: artifact ? import_artifactDispatcher.ArtifactDispatcher.from(this, artifact) : void 0, entries };
+    return {
+      artifact: artifact
+        ? import_artifactDispatcher.ArtifactDispatcher.from(this, artifact)
+        : void 0,
+      entries,
+    };
   }
   async tracingStop(params, progress) {
     this._started = false;
@@ -57,12 +64,15 @@ class TracingDispatcher extends import_dispatcher.Dispatcher {
   }
   _onDispose() {
     if (this._started)
-      this._object.stopChunk(void 0, { mode: "discard" }).then(() => this._object.stop(void 0)).catch(() => {
-      });
+      this._object
+        .stopChunk(void 0, { mode: 'discard' })
+        .then(() => this._object.stop(void 0))
+        .catch(() => {});
     this._started = false;
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  TracingDispatcher
-});
+0 &&
+  (module.exports = {
+    TracingDispatcher,
+  });

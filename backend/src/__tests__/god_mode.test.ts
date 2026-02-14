@@ -13,6 +13,13 @@ const mockSemanticCacheService = {
   getSemantic: jest.fn().mockResolvedValue(null),
   setSemantic: jest.fn().mockResolvedValue(undefined),
 };
+const mockArbitrationService = {
+  getOptimalConfig: jest.fn().mockResolvedValue({
+    provider: 'gemini',
+    modelId: 'gemini-2.0-flash',
+    reason: 'Test Reason',
+  }),
+};
 
 describe('God Mode Verification', () => {
   describe('Rate Limiter Bypass', () => {
@@ -38,14 +45,15 @@ describe('God Mode Verification', () => {
         mockAnalyticsService as any,
         mockRagService as any,
         mockUsageService as any,
-        mockSemanticCacheService as any
+        mockSemanticCacheService as any,
+        mockArbitrationService as any,
       );
     });
 
     it('should force PREMIUM tier for GOD role even with simple prompts', async () => {
       // Mock the router to ensure we are bypassing it
       const routeSpy = jest.spyOn(AIModelRouter, 'route');
-      const configSpy = jest.spyOn(AIModelRouter, 'getModelConfig');
+      const arbSpy = jest.spyOn(mockArbitrationService, 'getOptimalConfig');
 
       // We mock the internals (getProviderModel, etc) to avoid actual API calls
       // Since those are private, we can just check if the logic calls getModelConfig with PREMIUM
@@ -69,20 +77,21 @@ describe('God Mode Verification', () => {
       // const tier = (userRole === 'god' || userRole === 'admin') ? AIModelTier.PREMIUM : AIModelRouter.route(prompt);
 
       expect(routeSpy).not.toHaveBeenCalled();
-      expect(configSpy).toHaveBeenCalledWith(AIModelTier.PREMIUM);
+      expect(arbSpy).toHaveBeenCalledWith(AIModelTier.PREMIUM, prompt);
     });
 
     it('should force PREMIUM tier for ADMIN role', async () => {
-      const configSpy = jest.spyOn(AIModelRouter, 'getModelConfig');
+      const arbSpy = jest.spyOn(mockArbitrationService, 'getOptimalConfig');
       (aiService as any).getProviderModel = jest.fn().mockResolvedValue({
         generateContent: jest
           .fn()
           .mockResolvedValue({ response: { text: () => 'Admin Mode Response' } }),
       });
 
-      await aiService.generateContent('simple prompt', 'admin-id', 'admin');
+      const prompt = 'simple prompt';
+      await aiService.generateContent(prompt, 'admin-id', 'admin');
 
-      expect(configSpy).toHaveBeenCalledWith(AIModelTier.PREMIUM);
+      expect(arbSpy).toHaveBeenCalledWith(AIModelTier.PREMIUM, prompt);
     });
 
     it('should use Router for USER role', async () => {
