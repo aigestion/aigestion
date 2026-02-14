@@ -93,7 +93,7 @@ jobs:
           out: 'dependency-check-report'
 
       - name: Upload Dependency Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: dependency-security-report
           path: dependency-check-report/
@@ -172,7 +172,7 @@ jobs:
           echo "✅ HIPAA Compliance: $(cat hipaa-status.txt)"
 
       - name: Upload Compliance Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: compliance-report
           path: compliance-report/
