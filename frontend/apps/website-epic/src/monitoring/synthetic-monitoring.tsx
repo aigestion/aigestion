@@ -85,7 +85,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     {
       id: 'api-health-check',
       name: 'API Health Check',
-      url: 'https://api.aigestion.net/health',
+      url: 'https://api.aigestion.net/v1/health',
       method: 'GET',
       expectedStatus: 200,
       timeout: 5000,
@@ -97,7 +97,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     {
       id: 'auth-check',
       name: 'Authentication Service Check',
-      url: 'https://api.aigestion.net/auth/status',
+      url: 'https://api.aigestion.net/v1/auth/status',
       method: 'GET',
       expectedStatus: 200,
       timeout: 8000,
@@ -109,7 +109,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     {
       id: 'database-check',
       name: 'Database Connection Check',
-      url: 'https://api.aigestion.net/db/health',
+      url: 'https://api.aigestion.net/v1/health/detailed',
       method: 'GET',
       expectedStatus: 200,
       timeout: 5000,
