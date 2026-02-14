@@ -129,7 +129,7 @@ import { CloudTasksService } from '../services/google/cloud-tasks.service';
 import { VideoIntelligenceService } from '../services/google/video-intelligence.service';
 import { NexusRadioService } from '../services/google/nexus-radio.service';
 import { QuantumSecurityService } from '../services/security/quantum-security.service';
-import { MastraService } from '../services/mastra.service';
+// MastraService: removed (not installed, not bound)
 import { KeplerService } from '../services/google/kepler.service';
 import { SelfHealingService } from '../services/self-healing.service';
 import { DiscoveryService } from '../services/evolution/discovery.service';
@@ -289,8 +289,7 @@ if (!container.isBound(NexusRadioService))
   container.bind<NexusRadioService>(NexusRadioService).toSelf().inSingletonScope();
 if (!container.isBound(QuantumSecurityService))
   container.bind<QuantumSecurityService>(QuantumSecurityService).toSelf().inSingletonScope();
-if (!container.isBound(MastraService))
-  container.bind<MastraService>(MastraService).toSelf().inSingletonScope();
+// MastraService binding removed (package not installed)
 if (!container.isBound(KeplerService))
   container.bind<KeplerService>(KeplerService).toSelf().inSingletonScope();
 if (!container.isBound(SelfHealingService))

@@ -3,7 +3,7 @@ import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
 import { SupabaseService } from '../services/supabase.service';
 import { GodNotificationService } from '../services/god-notification.service';
-import { MastraService } from '../services/mastra.service';
+// MastraService: removed (not installed, routed through SwarmService)
 import { SwarmService } from '../services/swarm.service';
 import { logger } from '../utils/logger';
 
@@ -15,7 +15,6 @@ import { logger } from '../utils/logger';
 export class GodModeController {
   constructor(
     @inject(TYPES.GodNotificationService) private notificationService: GodNotificationService,
-    @inject(TYPES.MastraService) private mastra: MastraService,
     @inject(TYPES.SwarmService) private swarm: SwarmService,
   ) {}
 
@@ -28,18 +27,13 @@ export class GodModeController {
       const { input, type, context } = req.body;
       logger.info(`[GodMode] Transcendental command received: ${type}`);
 
-      // Hybrid routing: Mastra for complex workflows, Swarm for immediate tasks
-      let result;
-      if (type === 'workflow') {
-        result = await this.mastra.executeMission(input, context);
-      } else {
-        result = await this.swarm.orchestrate({
-          id: `cmd_${Date.now()}`,
-          type: type || 'general',
-          payload: input,
-          context,
-        });
-      }
+      // All commands routed through SwarmService
+      const result = await this.swarm.orchestrate({
+        id: `cmd_${Date.now()}`,
+        type: type || 'general',
+        payload: input,
+        context,
+      });
 
       res.json({ success: true, ...result });
     } catch (error: any) {
