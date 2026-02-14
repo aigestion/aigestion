@@ -81,6 +81,8 @@ import { TelegramBotHandlerGodMode } from '../services/telegram-bot-godmode';
 import { TelegramBotHandler } from '../services/telegram-bot.handler';
 import { TelegramService } from '../services/telegram.service';
 import { TikTokService } from '../services/tiktok.service';
+import { SupabaseService } from '../services/supabase.service';
+import { VertexAIService } from '../services/google/vertex-ai.service';
 import { TwoFactorService } from '../services/two-factor.service';
 import { UsageService } from '../services/usage.service';
 import { UserService } from '../services/user.service';
@@ -253,6 +255,8 @@ bind<BackupService>(TYPES.BackupService, BackupService);
 bind<BackupSchedulerService>(TYPES.BackupSchedulerService, BackupSchedulerService);
 bind<MemoryService>(TYPES.MemoryService, MemoryService);
 bind<AuditService>(TYPES.AuditService, AuditService);
+bind<SupabaseService>(TYPES.SupabaseService, SupabaseService);
+bind<VertexAIService>(TYPES.VertexAIService, VertexAIService);
 
 // ========================================
 // EXTERNAL INTEGRATIONS

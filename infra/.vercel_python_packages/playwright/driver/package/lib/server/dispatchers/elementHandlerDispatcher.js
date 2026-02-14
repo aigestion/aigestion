@@ -1,29 +1,31 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var elementHandlerDispatcher_exports = {};
 __export(elementHandlerDispatcher_exports, {
-  ElementHandleDispatcher: () => ElementHandleDispatcher
+  ElementHandleDispatcher: () => ElementHandleDispatcher,
 });
 module.exports = __toCommonJS(elementHandlerDispatcher_exports);
-var import_browserContextDispatcher = require("./browserContextDispatcher");
-var import_frameDispatcher = require("./frameDispatcher");
-var import_jsHandleDispatcher = require("./jsHandleDispatcher");
+var import_browserContextDispatcher = require('./browserContextDispatcher');
+var import_frameDispatcher = require('./frameDispatcher');
+var import_jsHandleDispatcher = require('./jsHandleDispatcher');
 class ElementHandleDispatcher extends import_jsHandleDispatcher.JSHandleDispatcher {
   constructor(scope, elementHandle) {
     super(scope, elementHandle);
@@ -31,29 +33,38 @@ class ElementHandleDispatcher extends import_jsHandleDispatcher.JSHandleDispatch
     this._elementHandle = elementHandle;
   }
   static from(scope, handle) {
-    return scope.connection.existingDispatcher(handle) || new ElementHandleDispatcher(scope, handle);
+    return (
+      scope.connection.existingDispatcher(handle) || new ElementHandleDispatcher(scope, handle)
+    );
   }
   static fromNullable(scope, handle) {
-    if (!handle)
-      return void 0;
-    return scope.connection.existingDispatcher(handle) || new ElementHandleDispatcher(scope, handle);
+    if (!handle) return void 0;
+    return (
+      scope.connection.existingDispatcher(handle) || new ElementHandleDispatcher(scope, handle)
+    );
   }
   static fromJSOrElementHandle(scope, handle) {
     const result = scope.connection.existingDispatcher(handle);
-    if (result)
-      return result;
+    if (result) return result;
     const elementHandle = handle.asElement();
-    if (!elementHandle)
-      return new import_jsHandleDispatcher.JSHandleDispatcher(scope, handle);
+    if (!elementHandle) return new import_jsHandleDispatcher.JSHandleDispatcher(scope, handle);
     return new ElementHandleDispatcher(scope, elementHandle);
   }
   async ownerFrame(params, progress) {
     const frame = await this._elementHandle.ownerFrame();
-    return { frame: frame ? import_frameDispatcher.FrameDispatcher.from(this._browserContextDispatcher(), frame) : void 0 };
+    return {
+      frame: frame
+        ? import_frameDispatcher.FrameDispatcher.from(this._browserContextDispatcher(), frame)
+        : void 0,
+    };
   }
   async contentFrame(params, progress) {
     const frame = await progress.race(this._elementHandle.contentFrame());
-    return { frame: frame ? import_frameDispatcher.FrameDispatcher.from(this._browserContextDispatcher(), frame) : void 0 };
+    return {
+      frame: frame
+        ? import_frameDispatcher.FrameDispatcher.from(this._browserContextDispatcher(), frame)
+        : void 0,
+    };
   }
   async getAttribute(params, progress) {
     const value = await this._elementHandle.getAttribute(progress, params.name);
@@ -92,7 +103,11 @@ class ElementHandleDispatcher extends import_jsHandleDispatcher.JSHandleDispatch
     return { value: await this._elementHandle.isVisible(progress) };
   }
   async dispatchEvent(params, progress) {
-    await this._elementHandle.dispatchEvent(progress, params.type, (0, import_jsHandleDispatcher.parseArgument)(params.eventInit));
+    await this._elementHandle.dispatchEvent(
+      progress,
+      params.type,
+      (0, import_jsHandleDispatcher.parseArgument)(params.eventInit)
+    );
   }
   async scrollIntoViewIfNeeded(params, progress) {
     await this._elementHandle.scrollIntoViewIfNeeded(progress);
@@ -110,8 +125,15 @@ class ElementHandleDispatcher extends import_jsHandleDispatcher.JSHandleDispatch
     return await this._elementHandle.tap(progress, params);
   }
   async selectOption(params, progress) {
-    const elements = (params.elements || []).map((e) => e._elementHandle);
-    return { values: await this._elementHandle.selectOption(progress, elements, params.options || [], params) };
+    const elements = (params.elements || []).map(e => e._elementHandle);
+    return {
+      values: await this._elementHandle.selectOption(
+        progress,
+        elements,
+        params.options || [],
+        params
+      ),
+    };
   }
   async fill(params, progress) {
     return await this._elementHandle.fill(progress, params.value, params);
@@ -144,7 +166,7 @@ class ElementHandleDispatcher extends import_jsHandleDispatcher.JSHandleDispatch
   async screenshot(params, progress) {
     const mask = (params.mask || []).map(({ frame, selector }) => ({
       frame: frame._object,
-      selector
+      selector,
     }));
     return { binary: await this._elementHandle.screenshot(progress, { ...params, mask }) };
   }
@@ -154,19 +176,47 @@ class ElementHandleDispatcher extends import_jsHandleDispatcher.JSHandleDispatch
   }
   async querySelectorAll(params, progress) {
     const elements = await progress.race(this._elementHandle.querySelectorAll(params.selector));
-    return { elements: elements.map((e) => ElementHandleDispatcher.from(this.parentScope(), e)) };
+    return { elements: elements.map(e => ElementHandleDispatcher.from(this.parentScope(), e)) };
   }
   async evalOnSelector(params, progress) {
-    return { value: (0, import_jsHandleDispatcher.serializeResult)(await progress.race(this._elementHandle.evalOnSelector(params.selector, !!params.strict, params.expression, params.isFunction, (0, import_jsHandleDispatcher.parseArgument)(params.arg)))) };
+    return {
+      value: (0, import_jsHandleDispatcher.serializeResult)(
+        await progress.race(
+          this._elementHandle.evalOnSelector(
+            params.selector,
+            !!params.strict,
+            params.expression,
+            params.isFunction,
+            (0, import_jsHandleDispatcher.parseArgument)(params.arg)
+          )
+        )
+      ),
+    };
   }
   async evalOnSelectorAll(params, progress) {
-    return { value: (0, import_jsHandleDispatcher.serializeResult)(await progress.race(this._elementHandle.evalOnSelectorAll(params.selector, params.expression, params.isFunction, (0, import_jsHandleDispatcher.parseArgument)(params.arg)))) };
+    return {
+      value: (0, import_jsHandleDispatcher.serializeResult)(
+        await progress.race(
+          this._elementHandle.evalOnSelectorAll(
+            params.selector,
+            params.expression,
+            params.isFunction,
+            (0, import_jsHandleDispatcher.parseArgument)(params.arg)
+          )
+        )
+      ),
+    };
   }
   async waitForElementState(params, progress) {
     await this._elementHandle.waitForElementState(progress, params.state);
   }
   async waitForSelector(params, progress) {
-    return { element: ElementHandleDispatcher.fromNullable(this.parentScope(), await this._elementHandle.waitForSelector(progress, params.selector, params)) };
+    return {
+      element: ElementHandleDispatcher.fromNullable(
+        this.parentScope(),
+        await this._elementHandle.waitForSelector(progress, params.selector, params)
+      ),
+    };
   }
   _browserContextDispatcher() {
     const parentScope = this.parentScope().parentScope();
@@ -176,6 +226,7 @@ class ElementHandleDispatcher extends import_jsHandleDispatcher.JSHandleDispatch
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  ElementHandleDispatcher
-});
+0 &&
+  (module.exports = {
+    ElementHandleDispatcher,
+  });

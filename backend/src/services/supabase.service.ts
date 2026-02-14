@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
@@ -7,11 +8,12 @@ import { logger } from '../utils/logger';
  * High-performance, singleton client for Supabase integration.
  * Features: Automatic instance management, health checks, and secure config validation.
  */
+@injectable()
 export class SupabaseService {
   private static instance: SupabaseService;
   private readonly client: SupabaseClient;
 
-  private constructor() {
+  public constructor() {
     this.validateConfig();
 
     const url = env.SUPABASE_URL;
@@ -37,7 +39,7 @@ export class SupabaseService {
       logger.info('[SupabaseService] 🚀 Sovereign Client initialized (God Mode)');
     } else {
       logger.warn(
-        '[SupabaseService] ⚠️ Supabase credentials missing. Client is running in DISABLED mode.'
+        '[SupabaseService] ⚠️ Supabase credentials missing. Client is running in DISABLED mode.',
       );
       this.client = null as any;
     }
@@ -81,7 +83,7 @@ export class SupabaseService {
     if (!env.SUPABASE_URL || !env.SUPABASE_KEY) {
       logger.error('❌ Critical: SUPABASE_URL or SUPABASE_KEY missing from environment.');
       logger.warn(
-        '⚠️ [SupabaseService] Running without valid credentials. Some features will be disabled.'
+        '⚠️ [SupabaseService] Running without valid credentials. Some features will be disabled.',
       );
     }
   }
@@ -101,7 +103,11 @@ export class SupabaseService {
    * Test connection and schema health (GOD MODE)
    * Performs an optimized health check with latency measurement.
    */
-  public async testConnection(): Promise<{ connected: boolean; latencyMs: number; tables: string[] }> {
+  public async testConnection(): Promise<{
+    connected: boolean;
+    latencyMs: number;
+    tables: string[];
+  }> {
     try {
       if (!this.client) return { connected: false, latencyMs: -1, tables: [] };
 
@@ -140,7 +146,7 @@ export class SupabaseService {
       const latencyMs = Date.now() - start;
 
       logger.info(
-        `[SupabaseService] ✅ Health check: ${tablesChecked.length} tables OK, ${latencyMs}ms`
+        `[SupabaseService] ✅ Health check: ${tablesChecked.length} tables OK, ${latencyMs}ms`,
       );
 
       return {
@@ -163,7 +169,7 @@ export class SupabaseService {
     queryText: string,
     embedding: number[],
     threshold: number = 0.5,
-    count: number = 5
+    count: number = 5,
   ) {
     if (!this.client) throw new Error('Supabase client not initialized');
     const { data, error } = await this.client.rpc('hybrid_search', {
@@ -196,7 +202,7 @@ export class SupabaseService {
 
     if (error) {
       logger.error(
-        `[SupabaseService] ❌ Failed to fetch prompt template [${name}]: ${error.message}`
+        `[SupabaseService] ❌ Failed to fetch prompt template [${name}]: ${error.message}`,
       );
       throw error;
     }

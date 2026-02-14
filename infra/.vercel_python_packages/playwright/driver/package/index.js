@@ -20,7 +20,7 @@ const [major] = [+semver[0]];
 
 if (major < minimumMajorNodeVersion) {
   console.error(
-      'You are running Node.js ' +
+    'You are running Node.js ' +
       currentNodeVersion +
       '.\n' +
       `Playwright requires Node.js ${minimumMajorNodeVersion} or higher. \n` +

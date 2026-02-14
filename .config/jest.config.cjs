@@ -12,7 +12,12 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/../backend/src/$1',
   },
   transform: {
-    '^.+\\.[tj]sx?$': 'ts-jest',
+    '^.+\\.[tj]sx?$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.test.json',
+      },
+    ],
   },
   globals: {
     'ts-jest': {

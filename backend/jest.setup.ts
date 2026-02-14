@@ -60,6 +60,28 @@ jest.mock('@supabase/supabase-js', () => ({
   })),
 }));
 
+// Mock Mastra (ESM module that causes issues in CJS tests)
+jest.mock('mastra', () => ({
+  Mastra: jest.fn().mockImplementation(() => ({
+    agents: [],
+    vectors: [],
+    storage: undefined,
+  })),
+}));
+
+// Mock BullMQ globally to prevent real Redis connections
+jest.mock('bullmq', () => ({
+  Queue: jest.fn().mockImplementation(() => ({
+    add: jest.fn().mockResolvedValue({ id: 'mock-job-id' }),
+    close: jest.fn().mockResolvedValue(undefined),
+    on: jest.fn().mockReturnThis(),
+  })),
+  Worker: jest.fn().mockImplementation(() => ({
+    on: jest.fn().mockReturnThis(),
+    close: jest.fn().mockResolvedValue(undefined),
+  })),
+}));
+
 
 import { startInMemoryMongo, stopInMemoryMongo } from './src/testDatabase';
 import mongoose from 'mongoose';
@@ -99,3 +121,5 @@ afterAll(async () => {
 });
 
 // Environment variables set at the top
+
+

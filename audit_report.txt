@@ -1,0 +1,4 @@
+Name      Version ID             Fix Versions Description
+--------- ------- -------------- ------------ -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+diskcache 5.6.3   CVE-2025-69872              DiskCache (python-diskcache) through 5.6.3 uses Python pickle for serialization by default. An attacker with write access to the cache directory can achieve arbitrary code execution when a victim application reads from the cache.
+Found 1 known vulnerability in 1 package

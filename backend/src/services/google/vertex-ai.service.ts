@@ -1,3 +1,4 @@
+import { injectable } from 'inversify';
 // Importing as any to avoid TS2709 errors
 import { VertexAI } from '@google-cloud/vertexai';
 
@@ -6,6 +7,7 @@ import { logger } from '../../utils/logger';
 type VertexAIType = any;
 type GenerativeModelType = any;
 
+@injectable()
 export class VertexAIService {
   private vertexAI: VertexAIType | null = null;
   private model: GenerativeModelType | null = null;
@@ -85,7 +87,8 @@ export class VertexAIService {
       // Priority: Use Gemini API Key (Simplest, requires no GCP Service Account)
       // This is the Sovereign/God Mode path for easy deployment
       const geminiApiKey = process.env.GEMINI_API_KEY;
-      const isRedacted = geminiApiKey && (geminiApiKey.includes('REDACTED') || geminiApiKey.includes('MIGRATED'));
+      const isRedacted =
+        geminiApiKey && (geminiApiKey.includes('REDACTED') || geminiApiKey.includes('MIGRATED'));
 
       if (geminiApiKey && !isRedacted) {
         const { GoogleGenerativeAI } = await import('@google/generative-ai');
@@ -126,7 +129,8 @@ export class VertexAIService {
 
     try {
       const geminiApiKey = process.env.GEMINI_API_KEY;
-      const isRedacted = geminiApiKey && (geminiApiKey.includes('REDACTED') || geminiApiKey.includes('MIGRATED'));
+      const isRedacted =
+        geminiApiKey && (geminiApiKey.includes('REDACTED') || geminiApiKey.includes('MIGRATED'));
 
       // Path A: Gemini API Batching
       if (geminiApiKey && !isRedacted) {
@@ -148,15 +152,13 @@ export class VertexAIService {
       // Process in smaller batches of 10 to avoid payload limits/timeouts
       const results: number[][] = [];
       const batchSize = 10;
-      
+
       for (let i = 0; i < texts.length; i += batchSize) {
         const chunk = texts.slice(i, i + batchSize);
-        const chunkResults = await Promise.all(
-          chunk.map(text => this.generateEmbeddings(text))
-        );
+        const chunkResults = await Promise.all(chunk.map(text => this.generateEmbeddings(text)));
         results.push(...chunkResults);
       }
-      
+
       return results;
     } catch (error) {
       logger.error('Error in generateEmbeddingsBatch', error);
