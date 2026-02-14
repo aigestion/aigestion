@@ -163,5 +163,3 @@ spec:
           emptyDir: {}
       imagePullSecrets:
         - name: ghcr-secret
-
-

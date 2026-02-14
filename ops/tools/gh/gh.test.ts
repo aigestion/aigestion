@@ -1,12 +1,12 @@
-import { makeToolTestConfig, toolTest } from "tests";
+import { makeToolTestConfig, toolTest } from 'tests';
 
 toolTest({
-  toolName: "gh",
-  toolVersion: "2.27.0",
+  toolName: 'gh',
+  toolVersion: '2.27.0',
   testConfigs: [
     makeToolTestConfig({
-      command: ["gh", "--version"],
-      expectedOut: "gh version 2.27.0",
+      command: ['gh', '--version'],
+      expectedOut: 'gh version 2.27.0',
     }),
   ],
 });

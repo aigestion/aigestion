@@ -37,4 +37,34 @@ export const api = {
       throw error;
     }
   },
+  getTreasuryOverview: async (userId: string = 'default_sovereign_user'): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/treasury/overview?userId=${userId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching treasury overview:', error);
+      throw error;
+    }
+  },
+  purchaseBond: async (data: { amount: number; tier: string; userId?: string }): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/treasury/purchase`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error purchasing bond:', error);
+      throw error;
+    }
+  },
 };

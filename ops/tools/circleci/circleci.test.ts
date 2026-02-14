@@ -1,11 +1,11 @@
-import { makeToolTestConfig, toolTest } from "tests";
+import { makeToolTestConfig, toolTest } from 'tests';
 toolTest({
-  toolName: "circleci",
-  toolVersion: "0.1.28528",
+  toolName: 'circleci',
+  toolVersion: '0.1.28528',
   testConfigs: [
     makeToolTestConfig({
-      command: ["circleci", "version"],
-      expectedOut: "0.1.28528",
+      command: ['circleci', 'version'],
+      expectedOut: '0.1.28528',
     }),
   ],
 });

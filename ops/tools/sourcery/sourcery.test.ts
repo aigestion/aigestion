@@ -1,11 +1,11 @@
-import { makeToolTestConfig, toolTest } from "tests";
+import { makeToolTestConfig, toolTest } from 'tests';
 toolTest({
-  toolName: "sourcery",
-  toolVersion: "1.37.0",
+  toolName: 'sourcery',
+  toolVersion: '1.37.0',
   testConfigs: [
     makeToolTestConfig({
-      command: ["sourcery", "--version"],
-      expectedOut: "1.37.0",
+      command: ['sourcery', '--version'],
+      expectedOut: '1.37.0',
     }),
   ],
 });

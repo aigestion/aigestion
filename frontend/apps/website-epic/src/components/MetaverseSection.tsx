@@ -154,10 +154,11 @@ export const MetaverseSection: React.FC = () => {
                 <h3 className="text-3xl font-orbitron font-bold mb-4 text-nexus-violet-glow">
                   DESARROLLO INMOBILIARIO DIGITAL
                 </h3>
-                <p className="text-nexus-silver/70 mb-8">
-                  The Sandbox ofrece el suelo más fértil para el comercio virtual. Ofrecemos
-                  soluciones llave en mano: desde el alquiler del terreno hasta la construcción
-                  arquitectónica de su sede.
+                <p className="text-nexus-silver/70 mb-8 leading-relaxed">
+                  ¿Quieres lanzar tu Marca en el Metaverso de forma fácil? Hemos reservado parcelas
+                  estratégicas en <strong>The Sandbox</strong> para emprendedores y empresas que
+                  quieran empezar hoy mismo. Te ofrecemos un modelo de alquiler flexible y amigable,
+                  con todo el soporte técnico que necesites.
                 </p>
                 {/* Sandbox Land Coordinates */}
                 <div className="inline-flex items-center gap-4 px-6 py-3 bg-nexus-violet/10 border border-nexus-violet/30 rounded-full">

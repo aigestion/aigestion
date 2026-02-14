@@ -29,16 +29,19 @@ AIGestion/
 ## 🚀 Inicio Rápido
 
 ### Requisitos previos
+
 - Node.js v20+
 - pnpm v10+
 - Docker & Docker Compose
 
 ### Instalación
+
 ```bash
 pnpm install
 ```
 
 ### Desarrollo
+
 ```bash
 # Iniciar todo el ecosistema (Frontend + Backend + AI)
 pnpm dev
@@ -53,6 +56,7 @@ pnpm dev:frontend  # Website Eco-system
 ## 🔒 Estándares de Configuración
 
 El proyecto utiliza el estándar **Sovereign de 20 bloques** para archivos `.env`. Asegúrate de completar el archivo `.env` en la raíz siguiendo la plantilla oficial.
+
 - [docs/project-documentation/](file:///C:/Users/Alejandro/AIGestion/docs/project-documentation/) - Project status and completion reports
 - [docs/memory-management/](file:///C:/Users/Alejandro/AIGestion/docs/memory-management/) - Memory optimization guides
 - [mobile/documentation/](file:///C:/Users/Alejandro/AIGestion/mobile/documentation/) - Mobile app installation guides
@@ -141,5 +145,4 @@ The AIGestion system is now powered by **God Mode v2.0**, featuring:
 
 ---
 
-Last updated: 2026-02-10 07:25:00
-
+Last updated: 2026-02-13 14:40:00 (Sovereign Update)

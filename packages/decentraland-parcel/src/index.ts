@@ -1,5 +1,5 @@
-import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs'
-import { Color4, Vector3 } from '@dcl/sdk/math'
+import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs';
+import { Color4, Vector3 } from '@dcl/sdk/math';
 import { danielaMetaverse } from './daniela-integration';
 
 // Optimized main function for AIGestion Virtual Office

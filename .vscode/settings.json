@@ -90,6 +90,6 @@
   "google.geminicodeassist.enable": true,
   "ms-azuretools.vscode-azure-mcp-server.enable": true,
   "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "vscode.css-language-features"
   }
 }

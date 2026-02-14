@@ -7,18 +7,24 @@
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
-const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} = require('@modelcontextprotocol/sdk/types.js');
 
 class GoogleCloudIAMMCPServer {
   constructor() {
-    this.server = new Server({
-      name: 'google-cloud-iam',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    this.server = new Server(
+      {
+        name: 'google-cloud-iam',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.setupTools();
     this.setupErrorHandling();
@@ -37,10 +43,10 @@ class GoogleCloudIAMMCPServer {
               display_name: { type: 'string', description: 'Display name' },
               description: { type: 'string', description: 'Service account description' },
               project_id: { type: 'string', description: 'Google Cloud project ID' },
-              roles: { type: 'array', items: { type: 'string' }, description: 'Roles to assign' }
+              roles: { type: 'array', items: { type: 'string' }, description: 'Roles to assign' },
             },
-            required: ['account_id', 'display_name', 'project_id']
-          }
+            required: ['account_id', 'display_name', 'project_id'],
+          },
         },
         {
           name: 'iam_list_service_accounts',
@@ -48,10 +54,10 @@ class GoogleCloudIAMMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              project_id: { type: 'string', description: 'Google Cloud project ID' }
+              project_id: { type: 'string', description: 'Google Cloud project ID' },
             },
-            required: ['project_id']
-          }
+            required: ['project_id'],
+          },
         },
         {
           name: 'iam_create_policy',
@@ -61,10 +67,10 @@ class GoogleCloudIAMMCPServer {
             properties: {
               resource: { type: 'string', description: 'Resource name' },
               policy: { type: 'object', description: 'IAM policy' },
-              project_id: { type: 'string', description: 'Google Cloud project ID' }
+              project_id: { type: 'string', description: 'Google Cloud project ID' },
             },
-            required: ['resource', 'policy', 'project_id']
-          }
+            required: ['resource', 'policy', 'project_id'],
+          },
         },
         {
           name: 'iam_get_policy',
@@ -73,10 +79,10 @@ class GoogleCloudIAMMCPServer {
             type: 'object',
             properties: {
               resource: { type: 'string', description: 'Resource name' },
-              project_id: { type: 'string', description: 'Google Cloud project ID' }
+              project_id: { type: 'string', description: 'Google Cloud project ID' },
             },
-            required: ['resource', 'project_id']
-          }
+            required: ['resource', 'project_id'],
+          },
         },
         {
           name: 'iam_test_permissions',
@@ -85,11 +91,15 @@ class GoogleCloudIAMMCPServer {
             type: 'object',
             properties: {
               resource: { type: 'string', description: 'Resource name' },
-              permissions: { type: 'array', items: { type: 'string' }, description: 'Permissions to test' },
-              project_id: { type: 'string', description: 'Google Cloud project ID' }
+              permissions: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Permissions to test',
+              },
+              project_id: { type: 'string', description: 'Google Cloud project ID' },
             },
-            required: ['resource', 'permissions', 'project_id']
-          }
+            required: ['resource', 'permissions', 'project_id'],
+          },
         },
         {
           name: 'iam_create_custom_role',
@@ -100,11 +110,15 @@ class GoogleCloudIAMMCPServer {
               role_id: { type: 'string', description: 'Role ID' },
               title: { type: 'string', description: 'Role title' },
               description: { type: 'string', description: 'Role description' },
-              permissions: { type: 'array', items: { type: 'string' }, description: 'Permissions to include' },
-              project_id: { type: 'string', description: 'Google Cloud project ID' }
+              permissions: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Permissions to include',
+              },
+              project_id: { type: 'string', description: 'Google Cloud project ID' },
             },
-            required: ['role_id', 'title', 'description', 'permissions', 'project_id']
-          }
+            required: ['role_id', 'title', 'description', 'permissions', 'project_id'],
+          },
         },
         {
           name: 'iam_list_roles',
@@ -113,9 +127,9 @@ class GoogleCloudIAMMCPServer {
             type: 'object',
             properties: {
               project_id: { type: 'string', description: 'Google Cloud project ID' },
-              view: { type: 'string', description: 'View type (FULL, BASIC)' }
-            }
-          }
+              view: { type: 'string', description: 'View type (FULL, BASIC)' },
+            },
+          },
         },
         {
           name: 'iam_manage_service_account_keys',
@@ -123,13 +137,17 @@ class GoogleCloudIAMMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              action: { type: 'string', enum: ['create', 'list', 'delete'], description: 'Key action' },
+              action: {
+                type: 'string',
+                enum: ['create', 'list', 'delete'],
+                description: 'Key action',
+              },
               account_id: { type: 'string', description: 'Service account ID' },
               project_id: { type: 'string', description: 'Google Cloud project ID' },
-              key_algorithm: { type: 'string', description: 'Key algorithm' }
+              key_algorithm: { type: 'string', description: 'Key algorithm' },
             },
-            required: ['action', 'account_id', 'project_id']
-          }
+            required: ['action', 'account_id', 'project_id'],
+          },
         },
         {
           name: 'iam_audit_permissions',
@@ -139,10 +157,10 @@ class GoogleCloudIAMMCPServer {
             properties: {
               resource: { type: 'string', description: 'Resource to audit' },
               project_id: { type: 'string', description: 'Google Cloud project ID' },
-              time_range: { type: 'string', description: 'Time range for audit' }
+              time_range: { type: 'string', description: 'Time range for audit' },
             },
-            required: ['resource', 'project_id']
-          }
+            required: ['resource', 'project_id'],
+          },
         },
         {
           name: 'iam_configure_iam_bindings',
@@ -152,15 +170,15 @@ class GoogleCloudIAMMCPServer {
             properties: {
               resource: { type: 'string', description: 'Resource name' },
               bindings: { type: 'array', items: { type: 'object' }, description: 'IAM bindings' },
-              project_id: { type: 'string', description: 'Google Cloud project ID' }
+              project_id: { type: 'string', description: 'Google Cloud project ID' },
             },
-            required: ['resource', 'bindings', 'project_id']
-          }
-        }
-      ]
+            required: ['resource', 'bindings', 'project_id'],
+          },
+        },
+      ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -190,10 +208,12 @@ class GoogleCloudIAMMCPServer {
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: `Error: ${error.message}`
-          }]
+          content: [
+            {
+              type: 'text',
+              text: `Error: ${error.message}`,
+            },
+          ],
         };
       }
     });
@@ -201,116 +221,136 @@ class GoogleCloudIAMMCPServer {
 
   async createServiceAccount(args) {
     const { account_id, display_name, description, project_id, roles } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud Service Account Creation:\n\nAccount ID: ${account_id}\nDisplay Name: ${display_name}\nDescription: ${description || 'Service account created by AIGestion'}\nProject ID: ${project_id}\nRoles: ${roles ? roles.join(', ') : 'None'}\n\nService account configuration:\n- Email generation\n- Key creation\n- Role assignment\n- Permissions configuration\n- Access control\n\nService Account Email: ${account_id}@${project_id}.iam.gserviceaccount.com\n\nAccount ID: sa_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual service account creation requires Google Cloud IAM API.\n\nThis prepares Google Cloud service account creation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud Service Account Creation:\n\nAccount ID: ${account_id}\nDisplay Name: ${display_name}\nDescription: ${description || 'Service account created by AIGestion'}\nProject ID: ${project_id}\nRoles: ${roles ? roles.join(', ') : 'None'}\n\nService account configuration:\n- Email generation\n- Key creation\n- Role assignment\n- Permissions configuration\n- Access control\n\nService Account Email: ${account_id}@${project_id}.iam.gserviceaccount.com\n\nAccount ID: sa_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual service account creation requires Google Cloud IAM API.\n\nThis prepares Google Cloud service account creation.`,
+        },
+      ],
     };
   }
 
   async listServiceAccounts(args) {
     const { project_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud Service Accounts List:\n\nProject ID: ${project_id}\n\nSample service accounts:\n- aigestion-ai-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion AI Service\n- aigestion-data-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion Data Service\n- aigestion-web-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion Web Service\n\nService account information:\n- Email address\n- Display name\n- Creation time\n- Key count\n- Assigned roles\n\nNote: Actual service account listing requires Google Cloud IAM API.\n\nThis prepares Google Cloud service accounts listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud Service Accounts List:\n\nProject ID: ${project_id}\n\nSample service accounts:\n- aigestion-ai-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion AI Service\n- aigestion-data-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion Data Service\n- aigestion-web-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion Web Service\n\nService account information:\n- Email address\n- Display name\n- Creation time\n- Key count\n- Assigned roles\n\nNote: Actual service account listing requires Google Cloud IAM API.\n\nThis prepares Google Cloud service accounts listing.`,
+        },
+      ],
     };
   }
 
   async createPolicy(args) {
     const { resource, policy, project_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud IAM Policy Creation:\n\nResource: ${resource}\nProject ID: ${project_id}\nPolicy: ${JSON.stringify(policy, null, 2)}\n\nPolicy configuration:\n- Policy validation\n- Permission mapping\n- Role assignment\n- Access control\n- Security settings\n\nPolicy ID: policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual policy creation requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM policy creation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud IAM Policy Creation:\n\nResource: ${resource}\nProject ID: ${project_id}\nPolicy: ${JSON.stringify(policy, null, 2)}\n\nPolicy configuration:\n- Policy validation\n- Permission mapping\n- Role assignment\n- Access control\n- Security settings\n\nPolicy ID: policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual policy creation requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM policy creation.`,
+        },
+      ],
     };
   }
 
   async getPolicy(args) {
     const { resource, project_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud IAM Policy Retrieval:\n\nResource: ${resource}\nProject ID: ${project_id}\n\nPolicy information:\n- Bindings\n- Roles\n- Members\n- Permissions\n- Etag\n- Version\n\nNote: Actual policy retrieval requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM policy retrieval.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud IAM Policy Retrieval:\n\nResource: ${resource}\nProject ID: ${project_id}\n\nPolicy information:\n- Bindings\n- Roles\n- Members\n- Permissions\n- Etag\n- Version\n\nNote: Actual policy retrieval requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM policy retrieval.`,
+        },
+      ],
     };
   }
 
   async testPermissions(args) {
     const { resource, permissions, project_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud IAM Permissions Test:\n\nResource: ${resource}\nPermissions: ${permissions.join(', ')}\nProject ID: ${project_id}\n\nPermission testing:\n- Permission validation\n- Access check\n- Role verification\n- Security assessment\n\nTest ID: test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual permission testing requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM permissions testing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud IAM Permissions Test:\n\nResource: ${resource}\nPermissions: ${permissions.join(', ')}\nProject ID: ${project_id}\n\nPermission testing:\n- Permission validation\n- Access check\n- Role verification\n- Security assessment\n\nTest ID: test_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual permission testing requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM permissions testing.`,
+        },
+      ],
     };
   }
 
   async createCustomRole(args) {
     const { role_id, title, description, permissions, project_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud Custom Role Creation:\n\nRole ID: ${role_id}\nTitle: ${title}\nDescription: ${description}\nPermissions: ${permissions.join(', ')}\nProject ID: ${project_id}\n\nCustom role configuration:\n- Role validation\n- Permission mapping\n- Stage configuration\n- Launch settings\n- Security review\n\nRole ID: role_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual custom role creation requires Google Cloud IAM API.\n\nThis prepares Google Cloud custom role creation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud Custom Role Creation:\n\nRole ID: ${role_id}\nTitle: ${title}\nDescription: ${description}\nPermissions: ${permissions.join(', ')}\nProject ID: ${project_id}\n\nCustom role configuration:\n- Role validation\n- Permission mapping\n- Stage configuration\n- Launch settings\n- Security review\n\nRole ID: role_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual custom role creation requires Google Cloud IAM API.\n\nThis prepares Google Cloud custom role creation.`,
+        },
+      ],
     };
   }
 
   async listRoles(args) {
     const { project_id, view } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud IAM Roles List:\n\nProject ID: ${project_id}\nView: ${view || 'FULL'}\n\nSample roles:\n- roles/editor - Title: Editor - Description: Full access to all resources\n- roles/viewer - Title: Viewer - Description: Read-only access to all resources\n- roles/owner - Title: Owner - Description: Full control of all resources\n- roles/bigquery.admin - Title: BigQuery Admin - Description: Full control of BigQuery resources\n\nRole information:\n- Role ID\n- Title\n- Description\n- Permissions\n\nNote: Actual role listing requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM roles listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud IAM Roles List:\n\nProject ID: ${project_id}\nView: ${view || 'FULL'}\n\nSample roles:\n- roles/editor - Title: Editor - Description: Full access to all resources\n- roles/viewer - Title: Viewer - Description: Read-only access to all resources\n- roles/owner - Title: Owner - Description: Full control of all resources\n- roles/bigquery.admin - Title: BigQuery Admin - Description: Full control of BigQuery resources\n\nRole information:\n- Role ID\n- Title\n- Description\n- Permissions\n\nNote: Actual role listing requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM roles listing.`,
+        },
+      ],
     };
   }
 
   async manageServiceAccountKeys(args) {
     const { action, account_id, project_id, key_algorithm } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud Service Account Key Management:\n\nAction: ${action}\nAccount ID: ${account_id}\nProject ID: ${project_id}\nKey Algorithm: ${key_algorithm || 'RS256'}\n\n${action === 'create' ? 'Key creation:\n- Key generation\n- Algorithm selection\n- Key format\n- Security settings' : action === 'list' ? 'Key listing:\n- Key metadata\n- Creation time\n- Key algorithm' : action === 'delete' ? 'Key deletion:\n- Key revocation\n- Security cleanup' : 'Unknown action'}\n\nKey ID: key_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual key management requires Google Cloud IAM API.\n\nThis prepares Google Cloud service account key management.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud Service Account Key Management:\n\nAction: ${action}\nAccount ID: ${account_id}\nProject ID: ${project_id}\nKey Algorithm: ${key_algorithm || 'RS256'}\n\n${action === 'create' ? 'Key creation:\n- Key generation\n- Algorithm selection\n- Key format\n- Security settings' : action === 'list' ? 'Key listing:\n- Key metadata\n- Creation time\n- Key algorithm' : action === 'delete' ? 'Key deletion:\n- Key revocation\n- Security cleanup' : 'Unknown action'}\n\nKey ID: key_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual key management requires Google Cloud IAM API.\n\nThis prepares Google Cloud service account key management.`,
+        },
+      ],
     };
   }
 
   async auditPermissions(args) {
     const { resource, project_id, time_range } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud IAM Permissions Audit:\n\nResource: ${resource}\nProject ID: ${project_id}\nTime Range: ${time_range || 'Last 30 days'}\n\nAudit information:\n- Permission changes\n- Role assignments\n- Access modifications\n- Security events\n- Compliance status\n\nAudit ID: audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: actual audit requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM permissions audit.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud IAM Permissions Audit:\n\nResource: ${resource}\nProject ID: ${project_id}\nTime Range: ${time_range || 'Last 30 days'}\n\nAudit information:\n- Permission changes\n- Role assignments\n- Access modifications\n- Security events\n- Compliance status\n\nAudit ID: audit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: actual audit requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM permissions audit.`,
+        },
+      ],
     };
   }
 
   async configureIamBindings(args) {
     const { resource, bindings, project_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Google Cloud IAM Bindings Configuration:\n\nResource: ${resource}\nBindings: ${JSON.stringify(bindings, null, 2)}\nProject ID: ${project_id}\n\nBinding configuration:\n- Member validation\n- Role assignment\n- Permission mapping\n- Access control\n- Security settings\n\nBinding ID: binding_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual binding configuration requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM bindings configuration.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Google Cloud IAM Bindings Configuration:\n\nResource: ${resource}\nBindings: ${JSON.stringify(bindings, null, 2)}\nProject ID: ${project_id}\n\nBinding configuration:\n- Member validation\n- Role assignment\n- Permission mapping\n- Access control\n- Security settings\n\nBinding ID: binding_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual binding configuration requires Google Cloud IAM API.\n\nThis prepares Google Cloud IAM bindings configuration.`,
+        },
+      ],
     };
   }
 
   setupErrorHandling() {
-    this.server.onerror = (error) => console.error('[Google Cloud IAM MCP Error]', error);
+    this.server.onerror = error => console.error('[Google Cloud IAM MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);

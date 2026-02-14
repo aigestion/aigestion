@@ -1,7 +1,7 @@
-import * as fs from "fs";
-import path from "path";
-import { setupLintDriver } from "tests";
-import { osTimeoutMultiplier, REPO_ROOT } from "tests/utils";
+import * as fs from 'fs';
+import path from 'path';
+import { setupLintDriver } from 'tests';
+import { osTimeoutMultiplier, REPO_ROOT } from 'tests/utils';
 
 // Avoid strictly typing composite config
 // trunk-ignore-all(eslint/@typescript-eslint/no-unsafe-assignment)
@@ -17,33 +17,33 @@ jest.setTimeout(300000 * osTimeoutMultiplier);
  * even in the context of each other. If this test were to fail, users would experience config errors
  * when sourcing plugins from this repository.
  */
-describe("Global config health check", () => {
+describe('Global config health check', () => {
   // Step 1: Define test setup and teardown
   const driver = setupLintDriver(REPO_ROOT, {
     setupGit: false,
     setupTrunk: true,
     // NOTE: This version should be kept compatible in lockstep with the `required_trunk_version` in plugin.yaml
     // IfChange
-    trunkVersion: "1.22.2-beta.5",
+    trunkVersion: '1.22.2-beta.5',
     // ThenChange plugin.yaml
   });
 
   // Step 2a: Validate config
-  it("trunk config print with required_trunk_version", async () => {
+  it('trunk config print with required_trunk_version', async () => {
     // Remove user.yaml if it exists, since some definitions may not exist in composite config.
     // Specifying force avoid errors being thrown if it doesn't exist.
-    fs.rmSync(path.resolve(driver.getSandbox(), ".trunk/user.yaml"), {
+    fs.rmSync(path.resolve(driver.getSandbox(), '.trunk/user.yaml'), {
       force: true,
     });
 
     // Test that config healthily resolves
     try {
-      const testRunResult = await driver.runTrunkCmd("config print");
-      expect(testRunResult.stdout).toContain("version: 0.1");
-      expect(testRunResult.stdout).toContain("local:");
+      const testRunResult = await driver.runTrunkCmd('config print');
+      expect(testRunResult.stdout).toContain('version: 0.1');
+      expect(testRunResult.stdout).toContain('local:');
     } catch (error) {
       console.log(
-        "`trunk config print` failed. You likely have bad configuration or need to update trunkVersion in this test.",
+        '`trunk config print` failed. You likely have bad configuration or need to update trunkVersion in this test.'
       );
       throw error;
     }
@@ -51,74 +51,74 @@ describe("Global config health check", () => {
 
   // TODO(Tyler): Add snapshot about generated configs
   // Step 2b: Validate only verified linters are auto-enabled
-  it("validate auto-enabled linters", async () => {
+  it('validate auto-enabled linters', async () => {
     const defaultFiles = [
-      "basic.BUILD",
-      "WORKSPACE",
-      "basic.c",
-      "basic.hh",
-      "basic.cc",
-      "basic.cs",
-      "basic.yaml",
-      "basic.css",
-      "basic.cue",
-      "basic.ddl",
-      "basic.dml",
-      "basic.Dockerfile",
-      "basic.env",
-      "basic.gemspec",
-      ".github/workflows/basic.yaml",
-      "basic.go",
-      "basic.graphql",
-      "basic.haml",
-      "basic.html",
-      "basic.java",
-      "basic.js",
-      "basic.json",
-      "basic.ipynb",
-      "basic.kt",
-      "basic.tex",
-      "Cargo.lock",
-      "basic.lua",
-      "basic.md",
-      "basic.nix",
-      "basic.m",
-      "basic.php",
-      "basic.png",
-      ".prettierrc",
-      "basic.proto",
-      "basic.py",
-      "basic.rb",
-      "Cargo.toml",
-      "basic.rs",
-      "basic.sass",
-      "basic.sc",
-      "basic.sh",
-      "basic.sql",
-      "basic.sql.j2",
-      "basic.bzl",
-      "basic.storyboard",
-      "basic.strings",
-      "basic.svg",
-      "basic.swift",
-      "basic.tf",
-      "basic.toml",
-      "basic.ts",
-      "basic.xib",
-      "basic.zsh",
+      'basic.BUILD',
+      'WORKSPACE',
+      'basic.c',
+      'basic.hh',
+      'basic.cc',
+      'basic.cs',
+      'basic.yaml',
+      'basic.css',
+      'basic.cue',
+      'basic.ddl',
+      'basic.dml',
+      'basic.Dockerfile',
+      'basic.env',
+      'basic.gemspec',
+      '.github/workflows/basic.yaml',
+      'basic.go',
+      'basic.graphql',
+      'basic.haml',
+      'basic.html',
+      'basic.java',
+      'basic.js',
+      'basic.json',
+      'basic.ipynb',
+      'basic.kt',
+      'basic.tex',
+      'Cargo.lock',
+      'basic.lua',
+      'basic.md',
+      'basic.nix',
+      'basic.m',
+      'basic.php',
+      'basic.png',
+      '.prettierrc',
+      'basic.proto',
+      'basic.py',
+      'basic.rb',
+      'Cargo.toml',
+      'basic.rs',
+      'basic.sass',
+      'basic.sc',
+      'basic.sh',
+      'basic.sql',
+      'basic.sql.j2',
+      'basic.bzl',
+      'basic.storyboard',
+      'basic.strings',
+      'basic.svg',
+      'basic.swift',
+      'basic.tf',
+      'basic.toml',
+      'basic.ts',
+      'basic.xib',
+      'basic.zsh',
     ];
-    defaultFiles.forEach((file) => driver.writeFile(file, "\n"));
+    defaultFiles.forEach(file => driver.writeFile(file, '\n'));
 
     const defaultFilesContents = new Map([
-      ["cloudformation.yaml", "AWSTemplateFormatVersion: true\n"],
+      ['cloudformation.yaml', 'AWSTemplateFormatVersion: true\n'],
     ]);
     defaultFilesContents.forEach((contents, file) => driver.writeFile(file, contents));
 
-    await driver.runTrunkCmd("upgrade check --no-progress -y");
+    await driver.runTrunkCmd('upgrade check --no-progress -y');
 
     const newYaml = await driver.getTrunkConfig();
     const autoEnabledLinters = newYaml.lint.enabled
-      .map((enabledLinter: any) => enabledLinter.split("@")[0])
+      .map((enabledLinter: any) => enabledLinter.split('@')[0])
       .sort();
 
     /**

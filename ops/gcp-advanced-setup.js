@@ -22,9 +22,9 @@ class GoogleCloudAdvancedSetup {
       SUCCESS: '\x1b[32m',
       WARNING: '\x1b[33m',
       ERROR: '\x1b[31m',
-      RESET: '\x1b[0m'
+      RESET: '\x1b[0m',
     };
-    
+
     console.log(`${colors[type]}[${timestamp}] ${message}${colors.RESET}`);
   }
 
@@ -115,16 +115,16 @@ class GoogleCloudAdvancedSetup {
     const tables = [
       {
         name: 'user_interactions',
-        schema: 'user_interactions_schema.json'
+        schema: 'user_interactions_schema.json',
       },
       {
         name: 'ai_predictions',
-        schema: 'ai_predictions_schema.json'
+        schema: 'ai_predictions_schema.json',
       },
       {
         name: 'business_metrics',
-        schema: 'business_metrics_schema.json'
-      }
+        schema: 'business_metrics_schema.json',
+      },
     ];
 
     for (const table of tables) {
@@ -134,8 +134,8 @@ class GoogleCloudAdvancedSetup {
           { name: 'id', type: 'STRING', mode: 'REQUIRED' },
           { name: 'timestamp', type: 'TIMESTAMP', mode: 'REQUIRED' },
           { name: 'user_id', type: 'STRING', mode: 'REQUIRED' },
-          { name: 'data', type: 'JSON', mode: 'NULLABLE' }
-        ]
+          { name: 'data', type: 'JSON', mode: 'NULLABLE' },
+        ],
       };
 
       const schemaFile = path.join(__dirname, `${table.name}_schema.json`);
@@ -165,22 +165,22 @@ class GoogleCloudAdvancedSetup {
         entryPoint: 'processWebhook',
         runtime: 'nodejs20',
         trigger: 'http',
-        description: 'Procesador de webhooks para AIGestion'
+        description: 'Procesador de webhooks para AIGestion',
       },
       {
         name: 'aigestion-document-analyzer',
         entryPoint: 'analyzeDocument',
         runtime: 'python39',
         trigger: 'storage',
-        description: 'Analizador automático de documentos'
+        description: 'Analizador automático de documentos',
       },
       {
         name: 'aigestion-ai-orchestrator',
         entryPoint: 'orchestrateAI',
         runtime: 'nodejs20',
         trigger: 'pubsub',
-        description: 'Orquestador de servicios AI'
-      }
+        description: 'Orquestador de servicios AI',
+      },
     ];
 
     for (const func of functions) {
@@ -200,7 +200,7 @@ class GoogleCloudAdvancedSetup {
       info: {
         title: 'AIGestion Divine API',
         description: 'API principal para servicios de AIGestion',
-        version: '1.0.0'
+        version: '1.0.0',
       },
       host: `${this.region}-${this.projectId}.cloudfunctions.net`,
       schemes: ['https'],
@@ -208,26 +208,26 @@ class GoogleCloudAdvancedSetup {
         '/ai/generate': {
           post: {
             'x-google-backend': {
-              address: `https://${this.region}-${this.projectId}.cloudfunctions.net/aigestion-ai-orchestrator`
+              address: `https://${this.region}-${this.projectId}.cloudfunctions.net/aigestion-ai-orchestrator`,
             },
             parameters: [
               {
                 name: 'prompt',
                 in: 'query',
                 required: true,
-                type: 'string'
-              }
-            ]
-          }
+                type: 'string',
+              },
+            ],
+          },
         },
         '/documents/analyze': {
           post: {
             'x-google-backend': {
-              address: `https://${this.region}-${this.projectId}.cloudfunctions.net/aigestion-document-analyzer`
-            }
-          }
-        }
-      }
+              address: `https://${this.region}-${this.projectId}.cloudfunctions.net/aigestion-document-analyzer`,
+            },
+          },
+        },
+      },
     };
 
     const apiFile = path.join(__dirname, 'aigestion-api.yaml');
@@ -268,7 +268,7 @@ class GoogleCloudAdvancedSetup {
       'aigestion-api-keys',
       'aigestion-jwt-secret',
       'aigestion-ai-models-config',
-      'aigestion-third-party-credentials'
+      'aigestion-third-party-credentials',
     ];
 
     for (const secret of secrets) {
@@ -297,41 +297,48 @@ class GoogleCloudAdvancedSetup {
           {
             title: 'AI Model Performance',
             xyChart: {
-              dataSets: [{
-                timeSeriesQuery: {
-                  prometheusQueryEndpoint: {
-                    query: 'rate(vertex_ai_requests_total[5m])'
-                  }
-                }
-              }]
-            }
+              dataSets: [
+                {
+                  timeSeriesQuery: {
+                    prometheusQueryEndpoint: {
+                      query: 'rate(vertex_ai_requests_total[5m])',
+                    },
+                  },
+                },
+              ],
+            },
           },
           {
             title: 'Document Processing Rate',
             xyChart: {
-              dataSets: [{
-                timeSeriesQuery: {
-                  prometheusQueryEndpoint: {
-                    query: 'rate(documentai_requests_total[5m])'
-                  }
-                }
-              }]
-            }
+              dataSets: [
+                {
+                  timeSeriesQuery: {
+                    prometheusQueryEndpoint: {
+                      query: 'rate(documentai_requests_total[5m])',
+                    },
+                  },
+                },
+              ],
+            },
           },
           {
             title: 'API Response Time',
             xyChart: {
-              dataSets: [{
-                timeSeriesQuery: {
-                  prometheusQueryEndpoint: {
-                    query: 'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))'
-                  }
-                }
-              }]
-            }
-          }
-        ]
-      }
+              dataSets: [
+                {
+                  timeSeriesQuery: {
+                    prometheusQueryEndpoint: {
+                      query:
+                        'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))',
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
     };
 
     const dashboardFile = path.join(__dirname, 'aigestion-dashboard.json');
@@ -347,18 +354,18 @@ class GoogleCloudAdvancedSetup {
       {
         name: 'High Error Rate',
         condition: 'error_rate > 0.05',
-        duration: '300s'
+        duration: '300s',
       },
       {
         name: 'High Response Time',
         condition: 'response_time_p95 > 2000',
-        duration: '300s'
+        duration: '300s',
       },
       {
         name: 'AI Model Latency',
         condition: 'vertex_ai_latency > 5000',
-        duration: '300s'
-      }
+        duration: '300s',
+      },
     ];
 
     for (const alert of alertPolicies) {
@@ -374,11 +381,7 @@ class GoogleCloudAdvancedSetup {
   async generateCredentials() {
     this.log('🔑 Generando credenciales de servicio...', 'INFO');
 
-    const serviceAccounts = [
-      'aigestion-ai-sa',
-      'aigestion-backend-sa',
-      'aigestion-automation-sa'
-    ];
+    const serviceAccounts = ['aigestion-ai-sa', 'aigestion-backend-sa', 'aigestion-automation-sa'];
 
     const credentialsDir = path.join(__dirname, '../../credentials');
     if (!fs.existsSync(credentialsDir)) {
@@ -396,7 +399,7 @@ class GoogleCloudAdvancedSetup {
   async run() {
     try {
       this.log('🚀 Iniciando configuración AVANZADA de Google Cloud para AIGestion', 'INFO');
-      
+
       await this.setupVertexAI();
       await this.setupDocumentAI();
       await this.setupBigQuery();
@@ -408,7 +411,6 @@ class GoogleCloudAdvancedSetup {
 
       this.log('🎉 CONFIGURACIÓN AVANZADA COMPLETADA', 'SUCCESS');
       this.log('🌟 AIGestion está operando a NIVEL DIVINO en Google Cloud', 'SUCCESS');
-      
     } catch (error) {
       this.log(`❌ Error en configuración avanzada: ${error.message}`, 'ERROR');
       process.exit(1);

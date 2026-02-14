@@ -25,7 +25,7 @@ runtimes:
         - name: HOME
           value: ${env.HOME:-}
         - name: PATH
-          list: ["${runtime}/bin"]
+          list: ['${runtime}/bin']
         - name: http_proxy
           value: ${env.http_proxy}
           optional: true
@@ -34,7 +34,7 @@ runtimes:
           optional: true
       linter_environment:
         - name: PATH
-          list: ["${linter}/bin"]
+          list: ['${linter}/bin']
       known_good_version: 1.82.0
       version_commands:
         - run: rustc --version

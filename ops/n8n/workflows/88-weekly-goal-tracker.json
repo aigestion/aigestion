@@ -7,10 +7,7 @@
           "interval": [
             {
               "field": "weeks",
-              "triggerAtDay": [
-                1,
-                5
-              ],
+              "triggerAtDay": [1, 5],
               "triggerAtHour": 9
             }
           ]

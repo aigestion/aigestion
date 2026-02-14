@@ -129,5 +129,3 @@ data:
 
     print("Database initialized successfully!");
     EOF
-
-

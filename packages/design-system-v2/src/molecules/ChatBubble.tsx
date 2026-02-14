@@ -30,11 +30,7 @@ const ChatBubble = ({ message, isAI = true, timestamp, className }: ChatBubblePr
       >
         {message}
       </div>
-      {timestamp && (
-        <span className="text-[10px] text-gray-500 px-1">
-          {timestamp}
-        </span>
-      )}
+      {timestamp && <span className="text-[10px] text-gray-500 px-1">{timestamp}</span>}
     </motion.div>
   );
 };

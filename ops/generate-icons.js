@@ -8,7 +8,10 @@ const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
-const sourceIcon = path.join(__dirname, '../frontend/apps/website-epic/public/icons/icon-512x512.png');
+const sourceIcon = path.join(
+  __dirname,
+  '../frontend/apps/website-epic/public/icons/icon-512x512.png'
+);
 const outputDir = path.join(__dirname, '../frontend/apps/website-epic/public/icons');
 const deployDist = path.join(__dirname, '../deploy_dist/icons');
 const deployDistManual = path.join(__dirname, '../deploy_dist_manual/icons');
@@ -40,7 +43,7 @@ async function generateIcons() {
         await sharp(sourceIcon)
           .resize(size, size, {
             fit: 'contain',
-            background: { r: 1, g: 1, b: 3, alpha: 1 } // Match dark background
+            background: { r: 1, g: 1, b: 3, alpha: 1 }, // Match dark background
           })
           .png()
           .toFile(outputPath);

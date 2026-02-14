@@ -10,10 +10,7 @@
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 1,
-      "position": [
-        250,
-        300
-      ]
+      "position": [250, 300]
     },
     {
       "parameters": {
@@ -35,10 +32,7 @@
       "name": "Extract Data",
       "type": "n8n-nodes-base.set",
       "typeVersion": 1,
-      "position": [
-        450,
-        300
-      ]
+      "position": [450, 300]
     },
     {
       "parameters": {
@@ -50,10 +44,7 @@
       "name": "Slack Notification",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 1,
-      "position": [
-        650,
-        300
-      ]
+      "position": [650, 300]
     }
   ],
   "connections": {

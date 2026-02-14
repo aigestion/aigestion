@@ -373,7 +373,7 @@ const VoiceAIDashboard: React.FC = () => {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm text-gray-900 truncate">{message.text}</p>
                         <p className="text-xs text-gray-500">
-                          {new Date(message.timestamp).toLocaleTimeString()}
+                          {new Date(message.timestamp).toLocaleTimeString('es-ES')}
                         </p>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -461,7 +461,7 @@ const VoiceAIDashboard: React.FC = () => {
                         </span>
                       </div>
                       <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>Started: {new Date(session.startTime).toLocaleTimeString()}</span>
+                        <span>Started: {new Date(session.startTime).toLocaleTimeString('es-ES')}</span>
                         {(session.status === 'active' || session.status === 'in-progress') && (
                           <button
                             onClick={() => handleEndCall(session.id)}

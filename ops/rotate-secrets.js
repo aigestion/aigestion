@@ -7,7 +7,7 @@ const client = new SecretManagerServiceClient();
  */
 async function rotateSecret(secretName) {
   console.log(`🔐 Starting rotation for secret: ${secretName}`);
-  
+
   try {
     // 1. Generate new value (placeholder for actual DB/Service Account generation)
     const newValue = `gen_${Math.random().toString(36).substring(7)}`;
@@ -24,7 +24,7 @@ async function rotateSecret(secretName) {
 
     // 3. Update application environment (placeholder)
     // In production, this might trigger a Cloud Run redeploy or a signal to the app
-    
+
     return true;
   } catch (error) {
     console.error(`❌ Rotation failed for ${secretName}:`, error.message);

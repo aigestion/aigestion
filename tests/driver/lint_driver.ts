@@ -1,13 +1,13 @@
-import Debug from "debug";
-import * as fs from "fs";
-import path from "path";
-import { GenericTrunkDriver, SetupSettings } from "tests/driver/driver";
-import { LandingState, TrunkVerb } from "tests/types";
-import { ARGS, REPO_ROOT } from "tests/utils";
-import { tryParseLandingState } from "tests/utils/landing_state";
-import { getTrunkVersion } from "tests/utils/trunk_config";
+import Debug from 'debug';
+import * as fs from 'fs';
+import path from 'path';
+import { GenericTrunkDriver, SetupSettings } from 'tests/driver/driver';
+import { LandingState, TrunkVerb } from 'tests/types';
+import { ARGS, REPO_ROOT } from 'tests/utils';
+import { tryParseLandingState } from 'tests/utils/landing_state';
+import { getTrunkVersion } from 'tests/utils/trunk_config';
 
-const baseDebug = Debug("Driver");
+const baseDebug = Debug('Driver');
 let testNum = 1;
 const linterTests = new Map<string, number>();
 
@@ -78,7 +78,7 @@ export class TrunkLintDriver extends GenericTrunkDriver {
     setupSettings: SetupSettings,
     linter?: string,
     version?: string,
-    manualVersionReplacer?: (version: string) => string,
+    manualVersionReplacer?: (version: string) => string
   ) {
     super(testDir, setupSettings, getDebugger(linter));
     this.linter = linter;
@@ -118,26 +118,26 @@ lint:
   extractLinterVersion = (): string => {
     const toEnableVersion = this.toEnableVersion ?? ARGS.linterVersion;
 
-    if (!toEnableVersion || toEnableVersion === "Latest") {
-      return "";
-    } else if (toEnableVersion === "KnownGoodVersion") {
+    if (!toEnableVersion || toEnableVersion === 'Latest') {
+      return '';
+    } else if (toEnableVersion === 'KnownGoodVersion') {
       // trunk-ignore-begin(eslint/@typescript-eslint/no-unsafe-member-access,eslint/@typescript-eslint/no-unsafe-call)
       const kgv =
         (this.getFullTrunkConfig().lint.definitions.find(
-          ({ name }: { name: string }) => name === this.linter,
-        )?.known_good_version as string) ?? "";
+          ({ name }: { name: string }) => name === this.linter
+        )?.known_good_version as string) ?? '';
       // trunk-ignore(eslint/@typescript-eslint/no-unnecessary-template-expression): Convert kgv to string
-      if (this.linter === "include-what-you-use" && kgv.length === 3) {
+      if (this.linter === 'include-what-you-use' && kgv.length === 3) {
         // TODO(Tyler): `trunk config print` does not correctly wrap quotes around kgv, so we must patch iwyu here
         return `${kgv}0`;
       }
       return kgv;
       // trunk-ignore-end(eslint/@typescript-eslint/no-unsafe-member-access,eslint/@typescript-eslint/no-unsafe-call)
-    } else if (toEnableVersion !== "Snapshots") {
+    } else if (toEnableVersion !== 'Snapshots') {
       // toEnableVersion is a version string
       return toEnableVersion;
     } else {
-      return "";
+      return '';
     }
   };
 
@@ -147,37 +147,37 @@ lint:
       return;
     }
 
-    let newTrunkContents = "<undefined contents>";
+    let newTrunkContents = '<undefined contents>';
     try {
       // trunk-ignore(eslint/@typescript-eslint/no-unnecessary-template-expression): Cast to string to handle decimal case
       const version = this.extractLinterVersion();
-      const versionString = version.length > 0 ? `@${version}` : "";
+      const versionString = version.length > 0 ? `@${version}` : '';
       const linterVersionString = `${this.linter}${versionString}`;
       // Prefer calling `check enable` over editing trunk.yaml directly because it also handles version, etc.
-      this.debug("Enabling %s", linterVersionString);
+      this.debug('Enabling %s', linterVersionString);
       await this.runTrunkCmd(
-        `check enable ${linterVersionString} --monitor=false --bypass-validated`,
+        `check enable ${linterVersionString} --monitor=false --bypass-validated`
       );
 
       // Retrieve the enabled version
       newTrunkContents = fs.readFileSync(
-        path.resolve(this.sandboxPath, ".trunk/trunk.yaml"),
-        "utf8",
+        path.resolve(this.sandboxPath, '.trunk/trunk.yaml'),
+        'utf8'
       );
       const enabledVersionRegex = `(?<linter>${this.linter})@(?<version>.+)\n`;
       const foundIn = newTrunkContents.match(enabledVersionRegex);
       if (foundIn?.groups?.version && foundIn.groups.version.length > 0) {
         this.enabledVersion = foundIn.groups.version;
-        this.debug("Enabled %s", this.enabledVersion);
+        this.debug('Enabled %s', this.enabledVersion);
       }
 
       // Apply version patch if applicable.
       if (this.enabledVersion && this.manualVersionReplacer) {
         const newEnabledVersion = this.manualVersionReplacer(this.enabledVersion);
         if (newEnabledVersion !== this.enabledVersion) {
-          this.debug("Replacing %s with %s", this.enabledVersion, newEnabledVersion);
+          this.debug('Replacing %s with %s', this.enabledVersion, newEnabledVersion);
           await this.runTrunkCmd(
-            `check enable ${this.linter}@${newEnabledVersion} --monitor=false --bypass-validated`,
+            `check enable ${this.linter}@${newEnabledVersion} --monitor=false --bypass-validated`
           );
           this.enabledVersion = newEnabledVersion;
         }
@@ -195,7 +195,7 @@ lint:
   parseRunResult(
     trunkRunResult: TrunkRunResult,
     trunkVerb: TrunkVerb,
-    targetAbsPath?: string,
+    targetAbsPath?: string
   ): TestResult {
     return {
       success: [0, 1].includes(trunkRunResult.exitCode),
@@ -217,10 +217,10 @@ lint:
    * @param resultJsonPath where to write the JSON result to
    */
   async runCheck({
-    args = "",
+    args = '',
     linter,
     targetAbsPath,
-    resultJsonPath = path.resolve(this.sandboxPath ?? "", "result.json"),
+    resultJsonPath = path.resolve(this.sandboxPath ?? '', 'result.json'),
   }: {
     args?: string;
     linter?: string;
@@ -228,17 +228,17 @@ lint:
     resultJsonPath?: string;
   }) {
     // Note that args "prefer last", so specifying options like `-y` are still viable.
-    const linterFilter = linter ? `--filter=${linter}` : "";
+    const linterFilter = linter ? `--filter=${linter}` : '';
     const fullArgs = `check -n --output-file=${resultJsonPath} --no-progress --ignore-git-state ${linterFilter} ${args}`;
     try {
       const { stdout, stderr } = await this.runTrunkCmd(fullArgs);
       // Used for debugging only
-      if (args.includes("--debug")) {
+      if (args.includes('--debug')) {
         console.log(stdout);
         console.log(stderr);
       }
-      const output = fs.readFileSync(resultJsonPath, { encoding: "utf-8" });
-      if (linter == "eslint") {
+      const output = fs.readFileSync(resultJsonPath, { encoding: 'utf-8' });
+      if (linter == 'eslint') {
         console.log(output);
       }
       return this.parseRunResult(
@@ -248,15 +248,15 @@ lint:
           stderr,
           outputJson: JSON.parse(output),
         },
-        "Check",
-        targetAbsPath,
+        'Check',
+        targetAbsPath
       );
     } catch (error: any) {
       // trunk-ignore-begin(eslint/@typescript-eslint/no-unsafe-member-access)
       // If critical failure occurs, JSON file might be empty
-      let jsonContents = fs.readFileSync(resultJsonPath, { encoding: "utf-8" });
+      let jsonContents = fs.readFileSync(resultJsonPath, { encoding: 'utf-8' });
       if (!jsonContents) {
-        jsonContents = "{}";
+        jsonContents = '{}';
         console.log(error.stdout as string);
         console.log(error.stderr as string);
       }
@@ -272,7 +272,7 @@ lint:
         console.log(`${error.code as number} Failure running 'trunk check'`, error);
       }
       // trunk-ignore-end(eslint/@typescript-eslint/no-unsafe-member-access)
-      return this.parseRunResult(trunkRunResult, "Check", targetAbsPath);
+      return this.parseRunResult(trunkRunResult, 'Check', targetAbsPath);
     }
   }
 
@@ -281,12 +281,12 @@ lint:
    * Prefer this to 'runCheck' when possible.
    */
   async runCheckUnit(targetRelativePath: string, linter: string): Promise<TestResult> {
-    const targetAbsPath = path.resolve(this.sandboxPath ?? "", targetRelativePath);
+    const targetAbsPath = path.resolve(this.sandboxPath ?? '', targetRelativePath);
     // this has been changed from ".json" to ".out.json" for linters that run on terraform files
     // terraform extensions are .tf and .tf.json - this change prevents accidentally linting the trunk output
     const resultJsonPath = `${targetAbsPath}.out.json`;
     const args = targetRelativePath;
-    this.debug("Running `trunk check` on %s", targetRelativePath);
+    this.debug('Running `trunk check` on %s', targetRelativePath);
     return await this.runCheck({ args, linter, targetAbsPath, resultJsonPath });
   }
 
@@ -299,23 +299,23 @@ lint:
    * @param resultJsonPath where to write the JSON result to
    */
   async runFmt({
-    args = "",
+    args = '',
     linter,
     targetAbsPath,
-    resultJsonPath = path.resolve(this.sandboxPath ?? "", "result.json"),
+    resultJsonPath = path.resolve(this.sandboxPath ?? '', 'result.json'),
   }: {
     args?: string;
     linter?: string;
     targetAbsPath?: string;
     resultJsonPath?: string;
   }) {
-    const linterFilter = linter ? `--filter=${linter}` : "";
+    const linterFilter = linter ? `--filter=${linter}` : '';
     const fullArgs = `fmt --output-file=${resultJsonPath} --no-progress --ignore-git-state ${linterFilter} ${args}`;
 
     try {
       const { stdout, stderr } = await this.runTrunkCmd(fullArgs);
       // Used for debugging only
-      if (args.includes("--debug")) {
+      if (args.includes('--debug')) {
         console.log(stdout);
         console.log(stderr);
       }
@@ -324,17 +324,17 @@ lint:
           exitCode: 0,
           stdout,
           stderr,
-          outputJson: JSON.parse(fs.readFileSync(resultJsonPath, { encoding: "utf-8" })),
+          outputJson: JSON.parse(fs.readFileSync(resultJsonPath, { encoding: 'utf-8' })),
         },
-        "Format",
-        targetAbsPath,
+        'Format',
+        targetAbsPath
       );
     } catch (error: any) {
       // trunk-ignore-begin(eslint/@typescript-eslint/no-unsafe-member-access)
       // If critical failure occurs, JSON file might be empty
-      let jsonContents = fs.readFileSync(resultJsonPath, { encoding: "utf-8" });
+      let jsonContents = fs.readFileSync(resultJsonPath, { encoding: 'utf-8' });
       if (!jsonContents) {
-        jsonContents = "{}";
+        jsonContents = '{}';
         console.log(error.stdout as string);
         console.log(error.stderr as string);
       }
@@ -350,7 +350,7 @@ lint:
         console.log(`${error.code as number} Failure running 'trunk fmt'`, error);
       }
       // trunk-ignore-end(eslint/@typescript-eslint/no-unsafe-member-access)
-      return this.parseRunResult(trunkRunResult, "Format", targetAbsPath);
+      return this.parseRunResult(trunkRunResult, 'Format', targetAbsPath);
     }
   }
 
@@ -359,10 +359,10 @@ lint:
    * Prefer this to 'runFmt' when possible.
    */
   async runFmtUnit(targetRelativePath: string, linter: string): Promise<TestResult> {
-    const targetAbsPath = path.resolve(this.sandboxPath ?? "", targetRelativePath);
+    const targetAbsPath = path.resolve(this.sandboxPath ?? '', targetRelativePath);
     const resultJsonPath = `${targetAbsPath}.json`;
     const args = targetRelativePath;
-    this.debug("Running `trunk fmt` on %s", targetRelativePath);
+    this.debug('Running `trunk fmt` on %s', targetRelativePath);
     return await this.runFmt({ args, linter, targetAbsPath, resultJsonPath });
   }
 }

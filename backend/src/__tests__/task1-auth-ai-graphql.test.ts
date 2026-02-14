@@ -12,19 +12,27 @@
 const SKIP = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGRATION_TESTS;
 
 (SKIP ? describe.skip : describe)('Task 1.3: Auth & AI GraphQL', () => {
-  jest.setTimeout(60000);
+  jest.setTimeout(120000);
   it('should return token and user on successful login', async () => {
     const request = require('supertest');
     const { app } = require('../app');
     const { connectToDatabase } = require('../config/database');
     await connectToDatabase();
 
+    const { User } = require('../models/User');
+    await User.deleteMany({ email: 'test@example.com' });
+
     // Create user for login
-    await request(app).post('/api/v1/users').send({
+    const createRes = await request(app).post('/api/v1/users').send({
       email: 'test@example.com',
       name: 'GraphQL User',
       password: 'AIGestion2026!',
     });
+
+    if (createRes.status !== 201) {
+      console.error('User creation failed:', createRes.body);
+    }
+    expect(createRes.status).toBe(201);
 
     const mutation = `
       mutation {

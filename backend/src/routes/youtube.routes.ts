@@ -5,6 +5,7 @@ import { container } from '../config/inversify.config';
 import { YoutubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
 import { TYPES } from '../types';
 import { logger } from '../utils/logger';
+import { buildResponse, buildError } from '../common/response-builder';
 
 const youtubeRouter = Router();
 const youtubeTranscriptionQueue = container.get<YoutubeTranscriptionQueue>(
@@ -18,7 +19,7 @@ const TranscribeSchema = z.object({
 
 /**
  * @openapi
- * /youtube/transcribe:
+ * /api/v1/youtube/transcribe:
  *   post:
  *     summary: Request a YouTube video transcription
  *     tags: [YouTube]

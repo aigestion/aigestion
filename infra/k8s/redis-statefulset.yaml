@@ -159,5 +159,3 @@ data:
     auto-aof-rewrite-min-size 64mb
     aof-load-truncated yes
     aof-use-rdb-preamble yes
-
-

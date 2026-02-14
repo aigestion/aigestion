@@ -76,34 +76,48 @@ export const DanielaOmniWidget: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <motion.button
-        onClick={handleToggleExpand}
-        whileHover={{ scale: 1.1 }}
-        onMouseEnter={playHover}
-        whileTap={{ scale: 0.95 }}
-        className="relative w-16 h-16 rounded-full flex items-center justify-center group"
-      >
-        <div className="absolute inset-0 bg-linear-to-br from-nexus-violet to-nexus-blue-600 rounded-full blur-md opacity-70 group-hover:opacity-100 transition-opacity animate-pulse" />
-        <div className="relative w-full h-full bg-black/40 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center overflow-hidden group-hover:border-nexus-violet/50 transition-colors">
-          <img
-            src="/images/daniela/lobby.png"
-            alt="Daniela AI"
-            className="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500"
-          />
-          {/* HUD Orbit Ring */}
-          <div className="absolute inset-0 border border-nexus-cyan/20 rounded-full scale-90" />
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-            className="absolute inset-0 border-t-2 border-nexus-cyan/40 rounded-full"
-          />
-          <motion.div
-            animate={{ rotate: -360 }}
-            transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-            className="absolute inset-2 border-b-2 border-nexus-violet/30 rounded-full"
-          />
-        </div>
-      </motion.button>
+      <div className="flex items-center gap-4">
+        {/* Label visible to the left */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="px-5 py-3 bg-black/40 backdrop-blur-xl rounded-full border border-white/10 hidden md:flex items-center gap-3 shadow-[0_0_20px_rgba(0,0,0,0.5)] group-hover:border-nexus-violet/30 transition-colors"
+        >
+          <div className="w-1.5 h-1.5 rounded-full bg-nexus-cyan animate-pulse" />
+          <span className="text-[9px] font-orbitron font-black tracking-[0.4em] text-white uppercase whitespace-nowrap">
+            HABLAR CON DANIELA
+          </span>
+        </motion.div>
+
+        <motion.button
+          onClick={handleToggleExpand}
+          whileHover={{ scale: 1.1 }}
+          onMouseEnter={playHover}
+          whileTap={{ scale: 0.95 }}
+          className="relative w-16 h-16 rounded-full flex items-center justify-center group"
+        >
+          <div className="absolute inset-0 bg-linear-to-br from-nexus-violet to-nexus-blue-600 rounded-full blur-md opacity-70 group-hover:opacity-100 transition-opacity animate-pulse" />
+          <div className="relative w-full h-full bg-black/40 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center overflow-hidden group-hover:border-nexus-violet/50 transition-colors">
+            <img
+              src="/images/daniela/lobby.png"
+              alt="Daniela AI"
+              className="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500"
+            />
+            {/* HUD Orbit Ring */}
+            <div className="absolute inset-0 border border-nexus-cyan/20 rounded-full scale-90" />
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+              className="absolute inset-0 border-t-2 border-nexus-cyan/40 rounded-full"
+            />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+              className="absolute inset-2 border-b-2 border-nexus-violet/30 rounded-full"
+            />
+          </div>
+        </motion.button>
+      </div>
     </div>
   );
 };

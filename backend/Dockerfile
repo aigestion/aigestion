@@ -6,6 +6,9 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
+# Set memory limit for tsc
+ENV NODE_OPTIONS="--max-old-space-size=2048"
+
 # Copy package files for layer caching
 COPY package*.json ./
 
@@ -37,7 +40,7 @@ RUN apk add --no-cache curl tzdata
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --omit=dev --legacy-peer-deps && \
+RUN npm install --omit=dev --legacy-peer-deps && \
   npm cache clean --force
 
 # Copy compiled artifacts from builder stage (guarantees consistency)

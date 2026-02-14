@@ -18,7 +18,12 @@ const FeedbackWidget = ({ onFeedback, className }: FeedbackWidgetProps) => {
   };
 
   return (
-    <div className={cn('flex items-center gap-2 bg-white/5 p-1 rounded-full border border-white/10 backdrop-blur-sm', className)}>
+    <div
+      className={cn(
+        'flex items-center gap-2 bg-white/5 p-1 rounded-full border border-white/10 backdrop-blur-sm',
+        className
+      )}
+    >
       <AnimatePresence mode="wait">
         {voted ? (
           <motion.div

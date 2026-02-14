@@ -6,9 +6,17 @@ import { StripeService } from './stripe.service';
 import { TYPES } from '../types';
 import { logger } from '../utils/logger';
 
+import { Persona } from '../models/Persona';
+import { TreasuryService } from './TreasuryService';
+
 @injectable()
 export class UsageService {
-  constructor(@inject(TYPES.StripeService) private stripeService: StripeService) {}
+  private readonly PLATFORM_COMMISSION_RATE = 0.30;
+
+  constructor(
+    @inject(TYPES.StripeService) private stripeService: StripeService,
+    @inject(TYPES.TreasuryService) private treasury: TreasuryService
+  ) {}
 
   /**
    * Calculates token count for a text
@@ -33,13 +41,37 @@ export class UsageService {
     modelId: string;
     prompt: string;
     completion: string;
+    personaId?: string;
+    arbitrationReason?: string;
   }): Promise<void> {
     const promptTokens = this.countTokens(params.prompt);
     const completionTokens = this.countTokens(params.completion);
     const totalTokens = promptTokens + completionTokens;
+    const costEstimate = this.estimateCost(params.modelId, promptTokens, completionTokens);
 
     try {
-      // 1. Save record to DB for internal auditing
+      // 0. Sovereign Bond Redemption
+      // Try to pay with bonds first. If remainingCost > 0, the rest goes to billing.
+      const remainingCost = await this.treasury.redeemCredit(params.userId, costEstimate);
+      const isPaidByBond = remainingCost < costEstimate;
+
+      let creatorId: string | undefined;
+      let creatorCommission = 0;
+      let platformCommission = 0;
+
+      // 1. Process Persona commissions if applicable
+      if (params.personaId) {
+        const persona = await Persona.findById(params.personaId);
+        if (persona) {
+          creatorId = persona.ownerId.toString();
+          // Logic: 30% platform, 70% creator of the cost estimate
+          // This can be adjusted if we have a specific 'markup' for personas
+          platformCommission = costEstimate * this.PLATFORM_COMMISSION_RATE;
+          creatorCommission = costEstimate * (1 - this.PLATFORM_COMMISSION_RATE);
+        }
+      }
+
+      // 2. Save record to DB for internal auditing
       const record = new UsageRecord({
         userId: params.userId,
         provider: params.provider,
@@ -47,11 +79,16 @@ export class UsageService {
         promptTokens,
         completionTokens,
         totalTokens,
-        costEstimate: this.estimateCost(params.modelId, promptTokens, completionTokens),
+        costEstimate,
+        personaId: params.personaId,
+        creatorId,
+        creatorCommission,
+        platformCommission,
+        arbitrationReason: params.arbitrationReason,
       });
       await record.save();
 
-      // 2. Report to Stripe if user has a metered subscription
+      // 3. Report to Stripe if user has a metered subscription
       const user = await User.findById(params.userId).select('+stripeSubscriptionItemId');
       if (user?.stripeSubscriptionItemId) {
         // Stripe usually bills in fixed units.
@@ -63,7 +100,7 @@ export class UsageService {
       }
 
       logger.info(
-        `[UsageService] Tracked ${totalTokens} tokens for user ${params.userId} (${params.modelId})`
+        `[UsageService] Tracked ${totalTokens} tokens for user ${params.userId} (Persona: ${params.personaId || 'None'})`
       );
     } catch (error) {
       logger.error(error, `[UsageService] Failed to track usage for user ${params.userId}`);
@@ -78,6 +115,7 @@ export class UsageService {
       'gemini-3.0-flash': { prompt: 0.1 / 1_000_000, completion: 0.3 / 1_000_000 },
       'gemini-1.5-flash-8b': { prompt: 0.03 / 1_000_000, completion: 0.09 / 1_000_000 },
       'claude-3-5-sonnet-20241022': { prompt: 3 / 1_000_000, completion: 15 / 1_000_000 },
+      'claude-3-5-sonnet': { prompt: 3 / 1_000_000, completion: 15 / 1_000_000 },
     };
 
     const rate = rates[modelId] || rates['gemini-3.0-flash'];

@@ -1,6 +1,6 @@
 node_modules
 .git
 coverage
-!dist
+dist
 !package.json
 !package-lock.json

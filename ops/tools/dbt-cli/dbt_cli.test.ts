@@ -1,6 +1,6 @@
-import { toolInstallTest } from "tests";
+import { toolInstallTest } from 'tests';
 
 toolInstallTest({
-  toolName: "dbt-cli",
-  toolVersion: "0.38.14",
+  toolName: 'dbt-cli',
+  toolVersion: '0.38.14',
 });

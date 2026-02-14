@@ -2,6 +2,7 @@
 // CRITICAL: Set NODE_ENV before ANY imports
 // ============================================
 process.env.NODE_ENV = 'test';
+jest.setTimeout(120000);
 
 // ============================================
 // SECURITY: Override DB URIs to NEVER use production
@@ -59,63 +60,17 @@ jest.mock('@supabase/supabase-js', () => ({
   })),
 }));
 
-jest.setTimeout(120000);
 
 import { startInMemoryMongo, stopInMemoryMongo } from './src/testDatabase';
 import mongoose from 'mongoose';
-import 'ts-node/register';
-import 'tsconfig-paths/register';
+
 import { TextEncoder, TextDecoder } from 'util';
 
 // Fix for whatwg-url global issue
 global.TextEncoder = TextEncoder as unknown as typeof globalThis.TextEncoder;
 global.TextDecoder = TextDecoder as unknown as typeof globalThis.TextDecoder;
 
-// Mock whatwg-url to avoid the TypeError
-jest.mock('whatwg-url', () => ({
-  URL: class MockURL {
-    constructor(url: string, base?: string) {
-      this.href = url;
-      this.origin = base || '';
-      this.protocol = 'https:';
-      this.host = 'localhost';
-      this.hostname = 'localhost';
-      this.port = '';
-      this.pathname = '/';
-      this.search = '';
-      this.hash = '';
-    }
-    href: string;
-    origin: string;
-    protocol: string;
-    host: string;
-    hostname: string;
-    port: string;
-    pathname: string;
-    search: string;
-    hash: string;
-    toString() {
-      return this.href;
-    }
-  },
-  URLSearchParams: class MockURLSearchParams {
-    constructor(init?: string | Record<string, string> | string[][] | Iterable<[string, string]>) {
-      // Simple mock implementation
-    }
-    append(name: string, value: string) {}
-    delete(name: string) {}
-    get(name: string) {
-      return null;
-    }
-    has(name: string) {
-      return false;
-    }
-    set(name: string, value: string) {}
-    toString() {
-      return '';
-    }
-  },
-}));
+
 
 // Setup and teardown
 beforeAll(async () => {

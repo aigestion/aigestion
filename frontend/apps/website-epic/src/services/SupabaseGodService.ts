@@ -2,11 +2,41 @@ import { supabase } from './supabase';
 
 const getSupabase = () => {
   if (!supabase) {
-    console.warn('Supabase not configured');
-    throw new Error('Supabase not configured');
+    throw new Error(
+      '[SupabaseGodService] Client not configured. Check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.'
+    );
   }
   return supabase;
 };
+
+// ═══════════════════════════════════════════════════════════════════
+// Retry Wrapper — Exponential backoff for resilient DB operations
+// ═══════════════════════════════════════════════════════════════════
+async function withRetry<T>(
+  operation: () => Promise<T>,
+  label: string,
+  maxRetries = 3
+): Promise<T> {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error: any) {
+      // Don't retry auth errors or validation errors
+      const code = error?.code || '';
+      if (code.startsWith('PGRST') || code === '42501' || code === '23505') {
+        throw error;
+      }
+      if (attempt === maxRetries) {
+        console.error(`[SupabaseGod] ${label} failed after ${maxRetries + 1} attempts:`, error);
+        throw error;
+      }
+      const delay = 200 * Math.pow(2, attempt); // 200ms, 400ms, 800ms
+      console.warn(`[SupabaseGod] ${label} attempt ${attempt + 1} failed, retrying in ${delay}ms`);
+      await new Promise(r => setTimeout(r, delay));
+    }
+  }
+  throw new Error(`[SupabaseGod] ${label} unreachable`);
+}
 
 export interface AIImageCache {
   id: string;
@@ -83,20 +113,30 @@ export class SupabaseGodService {
     prompt: string,
     model: string = 'flux-schnell'
   ): Promise<AIImageCache | null> {
-    const hash = this.generatePromptHash(prompt, model);
+    const hash = await this.generatePromptHash(prompt, model);
 
-    const { data, error } = await getSupabase()
-      .from('ai_image_cache')
-      .select('*')
-      .eq('hash', hash)
-      .eq('model', model)
-      .maybeSingle();
+    return withRetry(async () => {
+      const { data, error } = await getSupabase()
+        .from('ai_image_cache')
+        .select('*')
+        .eq('hash', hash)
+        .eq('model', model)
+        .maybeSingle();
 
-    if (data && !error) {
-      return data;
-    }
-
-    return null;
+      if (data && !error) {
+        // Update access count in background (fire & forget)
+        getSupabase()
+          .from('ai_image_cache')
+          .update({
+            access_count: (data.access_count || 0) + 1,
+            last_accessed: new Date().toISOString(),
+          })
+          .eq('id', data.id)
+          .then();
+        return data;
+      }
+      return null;
+    }, 'getCachedImage');
   }
 
   static async cacheImage(
@@ -105,27 +145,29 @@ export class SupabaseGodService {
     imageUrl: string,
     settings: Record<string, any> = {}
   ): Promise<AIImageCache> {
-    const hash = this.generatePromptHash(prompt, model);
+    const hash = await this.generatePromptHash(prompt, model);
 
-    const { data, error } = await getSupabase()
-      .from('ai_image_cache')
-      .upsert(
-        {
-          prompt,
-          model,
-          image_url: imageUrl,
-          settings,
-          hash,
-        },
-        {
-          onConflict: 'hash,model',
-        }
-      )
-      .select()
-      .single();
+    return withRetry(async () => {
+      const { data, error } = await getSupabase()
+        .from('ai_image_cache')
+        .upsert(
+          {
+            prompt,
+            model,
+            image_url: imageUrl,
+            settings,
+            hash,
+          },
+          {
+            onConflict: 'hash,model',
+          }
+        )
+        .select()
+        .single();
 
-    if (error) throw error;
-    return data;
+      if (error) throw error;
+      return data;
+    }, 'cacheImage');
   }
 
   // PROJECT OPERATIONS
@@ -169,17 +211,21 @@ export class SupabaseGodService {
     projectId: string,
     embedding: number[],
     threshold: number = 0.7,
-    count: number = 5
+    count: number = 5,
+    metadataFilter: Record<string, any> = {}
   ): Promise<any[]> {
-    const { data, error } = await getSupabase().rpc('match_documents', {
-      query_embedding: embedding,
-      match_threshold: threshold,
-      match_count: count,
-      p_project_id: projectId,
-    });
+    return withRetry(async () => {
+      const { data, error } = await getSupabase().rpc('match_documents_advanced', {
+        query_embedding: embedding,
+        match_threshold: threshold,
+        match_count: count,
+        p_project_id: projectId,
+        p_metadata_filter: metadataFilter,
+      });
 
-    if (error) throw error;
-    return data || [];
+      if (error) throw error;
+      return data || [];
+    }, 'searchSimilarDocuments');
   }
 
   static async searchHybrid(
@@ -307,10 +353,14 @@ export class SupabaseGodService {
     if (error) throw error;
     return data;
   }
-  // UTILITIES
-  private static generatePromptHash(prompt: string, model: string): string {
-    return btoa(prompt + model)
-      .replace(/[^a-zA-Z0-9]/g, '')
+  // UTILITIES — SHA-256 via Web Crypto API (collision-resistant)
+  private static async generatePromptHash(prompt: string, model: string): Promise<string> {
+    const data = new TextEncoder().encode(`${prompt}::${model}`);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('')
       .substring(0, 32);
   }
 }

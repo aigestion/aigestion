@@ -68,7 +68,7 @@ runtimes:
         - name: HOME
           value: ${env.HOME:-}
         - name: PATH
-          list: ["${runtime}/bin"]
+          list: ['${runtime}/bin']
         - name: JAVA_HOME
           value: ${runtime}
         - name: http_proxy
@@ -79,7 +79,7 @@ runtimes:
           optional: true
       linter_environment:
         - name: PATH
-          list: ["${linter}/bin"]
+          list: ['${linter}/bin']
       known_good_version: 13.0.11
       version_commands:
         - run: java --version

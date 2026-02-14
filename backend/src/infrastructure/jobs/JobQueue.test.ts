@@ -1,17 +1,16 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import 'reflect-metadata';
 import { JobQueue } from './JobQueue';
 import { JobName } from './job-definitions';
 import { Queue } from 'bullmq';
 
 // Mock BullMQ Queue
-vi.mock('bullmq', () => {
+jest.mock('bullmq', () => {
   return {
-    Queue: vi.fn().mockImplementation(() => ({
-      add: vi.fn(),
-      close: vi.fn(),
+    Queue: jest.fn().mockImplementation(() => ({
+      add: jest.fn(),
+      close: jest.fn(),
     })),
-    Worker: vi.fn(),
+    Worker: jest.fn(),
   };
 });
 
@@ -19,7 +18,7 @@ describe('JobQueue', () => {
   let jobQueue: JobQueue;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     jobQueue = new JobQueue();
   });
 
@@ -35,7 +34,7 @@ describe('JobQueue', () => {
   });
 
   it('should add a job to the correct queue', async () => {
-    const queueInstance = (Queue as unknown as ReturnType<typeof vi.fn>).mock.results[0].value;
+    const queueInstance = (Queue as unknown as jest.Mock).mock.results[0].value;
 
     await jobQueue.addJob(JobName.EMAIL_SEND, {
       to: 'test@example.com',

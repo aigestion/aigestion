@@ -1,8 +1,7 @@
 // @ts-nocheck
 import { injectable } from 'inversify';
-import puppeteer from 'puppeteer-core';
-import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
+import { browserlessService } from '../services/browserless.service';
 
 export interface BrowserAction {
   action: 'navigate' | 'click' | 'type' | 'screenshot' | 'extract' | 'wait';
@@ -12,53 +11,14 @@ export interface BrowserAction {
   timeout?: number;
 }
 
+/**
+ * BrowserAgentTool - Refactored for God Mode Resilience.
+ * Now utilizes BrowserlessService for centralized session and stealth management.
+ */
 @injectable()
 export class BrowserAgentTool {
-  private readonly apiKey: string;
-  private readonly host: string;
-
-  constructor() {
-    this.apiKey = env.BROWSERLESS_API_KEY || '';
-    this.host = env.BROWSERLESS_HOST;
-  }
-
   /**
-   * Connects to the browserless instance via WebSocket
-   */
-  private async connect() {
-    // Construct the WebSocket endpoint
-    let browserWSEndpoint = this.host;
-
-    // Append token if provided
-    if (this.apiKey) {
-      const separator = browserWSEndpoint.includes('?') ? '&' : '?';
-      browserWSEndpoint += `${separator}token=${this.apiKey}`;
-    }
-
-    // Add stealth and pre-boot flags for local/unauthenticated instances if not already in URL
-    if (!browserWSEndpoint.includes('stealth')) {
-      const separator = browserWSEndpoint.includes('?') ? '&' : '?';
-      browserWSEndpoint += `${separator}stealth=true&--disable-web-security=true`;
-    }
-
-    logger.debug(
-      `[BrowserAgentTool] Connecting to browser at ${browserWSEndpoint.split('?')[0]}...`
-    );
-
-    try {
-      return await puppeteer.connect({
-        browserWSEndpoint,
-        defaultViewport: { width: 1920, height: 1080 },
-      });
-    } catch (error: any) {
-      logger.error(`[BrowserAgentTool] Connection failed: ${error.message}`);
-      throw new Error(`Failed to connect to Browserless at ${this.host}: ${error.message}`);
-    }
-  }
-
-  /**
-   * Executes a browser task via Puppeteer (Browserless)
-   * This allows for complex, stateful interactions.
+   * Executes a browser task via Sovereign BrowserlessService
    */
   async executeTask(actions: BrowserAction[]): Promise<any> {
     let browser;
@@ -66,14 +26,10 @@ export class BrowserAgentTool {
     const results: any = {};
 
     try {
-      logger.info(`[BrowserAgentTool] Initiating browser task with ${actions.length} steps`);
-      browser = await this.connect();
-      page = await browser.newPage();
-
-      // Set some comprehensive headers/settings for better stealth
-      await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-      );
+      logger.info(`[BrowserAgentTool] Initiating sovereign browser task with ${actions.length} steps`);
+      
+      browser = await browserlessService.connect();
+      page = await browserlessService.setupPage(browser);
 
       for (let i = 0; i < actions.length; i++) {
         const step = actions[i];
@@ -82,10 +38,7 @@ export class BrowserAgentTool {
         switch (step.action) {
           case 'navigate':
             if (!step.url) throw new Error('URL required for navigate action');
-            await page.goto(step.url, {
-              waitUntil: 'networkidle2',
-              timeout: step.timeout || 30000,
-            });
+            await browserlessService.navigate(page, step.url, step.timeout);
             break;
 
           case 'click':
@@ -125,13 +78,10 @@ export class BrowserAgentTool {
                 }, {}),
               }));
             } else {
-              // Detailed extraction strategy (Metadata, OG, Content)
               results.metadata = await page.evaluate(() => {
                 const doc = document as any;
                 const getMeta = (name: string) =>
-                  doc
-                    .querySelector(`meta[name="${name}"], meta[property="${name}"]`)
-                    ?.getAttribute('content');
+                  doc.querySelector(`meta[name="${name}"], meta[property="${name}"]`)?.getAttribute('content');
 
                 return {
                   title: doc.title,
@@ -152,18 +102,16 @@ export class BrowserAgentTool {
       return {
         success: true,
         data: results,
-        summary: `Successfully executed ${actions.length} browser actions.`,
+        summary: `Successfully executed ${actions.length} sovereign browser actions.`,
       };
     } catch (error: any) {
-      logger.error('[BrowserAgentTool] Browser task failed:', error.message);
+      logger.error('[BrowserAgentTool] Sovereign task failed:', error.message);
       let errorScreenshot;
       if (page) {
         try {
           const sc = await page.screenshot();
           errorScreenshot = Buffer.from(sc).toString('base64');
-        } catch (e) {
-          /* ignore */
-        }
+        } catch (e) { /* ignore */ }
       }
 
       return {
@@ -176,10 +124,7 @@ export class BrowserAgentTool {
     }
   }
 
-  /**
-   * One-off screenshot helper
-   */
-  async screenshot(url: string, outputPath?: string): Promise<string> {
+  async screenshot(url: string): Promise<string> {
     return this.executeTask([{ action: 'navigate', url }, { action: 'screenshot' }]).then(res =>
       res.success ? 'Screenshot captured' : 'Screenshot failed'
     );

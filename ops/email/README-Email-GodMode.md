@@ -9,22 +9,26 @@ Sistema completo de automatización de emails nivel dios para **AIGestion.net**,
 ## 🎯 COMPONENTES IMPLEMENTADOS
 
 ### 📁 Scripts Principales
+
 - **AIGestion-Email-GodMode.ps1** - Configuración completa y automatización
 - **Email-AI-Triage.ps1** - Sistema de clasificación con IA
 - **Email-Monitoring.ps1** - Monitoreo 24/7 y alertas
 
 ### 📝 Plantillas Profesionales
+
 - **Welcome.html** - Email de bienvenida para nuevos clientes
 - **Proposal.html** - Propuestas comerciales personalizadas
 - **Support.html** - Respuestas de soporte técnico
 - **Newsletter.html** - Comunicaciones mensuales
 
 ### 🔍 Filtros Inteligentes
+
 - **Gmail-Filters-Import.xml** - 15+ filtros automáticos para Gmail
 - Clasificación inteligente por categorías
 - Archivado automático y priorización
 
 ### 🤖 Automatización Avanzada
+
 - **Gmail-Apps-Script-Enhanced.js** - Script Google Apps con IA
 - Clasificación automática con OpenAI GPT
 - Respuestas automáticas inteligentes
@@ -35,16 +39,18 @@ Sistema completo de automatización de emails nivel dios para **AIGestion.net**,
 ## ⚡ CARACTERÍSTICAS NIVEL DIOS
 
 ### 🧠 Inteligencia Artificial
+
 - **Clasificación con GPT-3.5**: Análisis semántico de contenido
 - **Respuestas automáticas**: Generadas por IA según contexto
 - **Priorización inteligente**: Basada en contenido y remitente
 - **Aprendizaje continuo**: Mejora con cada email procesado
 
 ### 🏷️ Sistema de Categorización
+
 ```
 🔧 TRABAJO
 ├── 🤖 AI_ALERTS
-├── 💼 CLIENTES  
+├── 💼 CLIENTES
 ├── 📊 ANALYTICS
 ├── 🔧 DEV_OPS
 └── 💰 FINANZAS
@@ -69,6 +75,7 @@ Sistema completo de automatización de emails nivel dios para **AIGestion.net**,
 ```
 
 ### 📊 Métricas y Reportes
+
 - **Dashboard en tiempo real**: Estadísticas de procesamiento
 - **Reportes diarios**: Resumen automático por email
 - **Análisis de tendencias**: Patrones de comunicación
@@ -79,6 +86,7 @@ Sistema completo de automatización de emails nivel dios para **AIGestion.net**,
 ## 🚀 INSTALACIÓN Y CONFIGURACIÓN
 
 ### Paso 1: Configuración Inicial
+
 ```powershell
 # Ejecutar como Administrador
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -91,6 +99,7 @@ cd "c:\Users\Alejandro\AIGestion\scripts\email"
 ```
 
 ### Paso 2: Configurar Variables de Entorno
+
 ```powershell
 # OpenAI API Key (para clasificación IA)
 $env:OPENAI_API_KEY = "tu-api-key-aqui"
@@ -101,11 +110,13 @@ $env:EMAIL_PASS = "tu-contraseña"
 ```
 
 ### Paso 3: Configurar Gmail Filters
+
 1. Abrir Gmail Settings → Filters and Blocked Addresses
 2. Importar `Gmail-Filters-Import.xml`
 3. Verificar que todas las etiquetas se crearon correctamente
 
 ### Paso 4: Configurar Google Apps Script
+
 1. Ir a [script.google.com](https://script.google.com)
 2. Crear nuevo proyecto: "AIGestion Email God Mode"
 3. Copiar contenido de `Gmail-Apps-Script-Enhanced.js`
@@ -117,6 +128,7 @@ $env:EMAIL_PASS = "tu-contraseña"
 ## 🎮 MODO DE USO
 
 ### Automatización Completa
+
 ```powershell
 # Procesar ambos emails con IA
 .\Email-AI-Triage.ps1 -EmailAccount "both"
@@ -129,17 +141,19 @@ $env:EMAIL_PASS = "tu-contraseña"
 ```
 
 ### Monitoreo Activo
+
 ```powershell
 # Iniciar monitoreo 24/7
-Start-Job -ScriptBlock { 
-    while ($true) { 
+Start-Job -ScriptBlock {
+    while ($true) {
         .\Email-Monitoring.ps1
-        Start-Sleep -Seconds 300 
-    } 
+        Start-Sleep -Seconds 300
+    }
 }
 ```
 
 ### Reportes y Análisis
+
 ```powershell
 # Generar reporte semanal
 .\Email-AI-Triage.ps1 -EmailAccount "both" -GenerateReport
@@ -153,6 +167,7 @@ Start-Job -ScriptBlock {
 ## 📈 FLUJOS DE TRABAJO
 
 ### 🔄 Procesamiento Automático
+
 ```
 📧 Email Recibido
     ↓
@@ -170,6 +185,7 @@ Start-Job -ScriptBlock {
 ```
 
 ### 🎯 Priorización de Emails
+
 ```
 🔴 URGENTE (Respuesta < 2 horas)
 ├── Alertas de seguridad
@@ -197,6 +213,7 @@ Start-Job -ScriptBlock {
 ## 🛠️ PERSONALIZACIÓN
 
 ### Agregar Nuevas Categorías
+
 ```powershell
 # En $Categories del script Email-AI-Triage.ps1
 "Nueva Categoría" = @{
@@ -208,21 +225,24 @@ Start-Job -ScriptBlock {
 ```
 
 ### Personalizar Plantillas
+
 Editar archivos HTML en `templates/`:
+
 - Modificar branding y colores
 - Ajustar contenido según necesidad
 - Agregar variables dinámicas
 
 ### Configurar Respuestas Automáticas
+
 ```javascript
 // En Gmail-Apps-Script-Enhanced.js
 const responses = {
   nuevaRespuesta: {
-    subject: "Asunto personalizado",
-    keywords: ["palabra-clave"],
+    subject: 'Asunto personalizado',
+    keywords: ['palabra-clave'],
     autoReply: true,
-    template: "nombrePlantilla"
-  }
+    template: 'nombrePlantilla',
+  },
 };
 ```
 
@@ -231,12 +251,14 @@ const responses = {
 ## 📊 MÉTRICAS Y KPIs
 
 ### Indicadores Clave
+
 - **Tasa de respuesta**: % de emails respondidos automáticamente
 - **Tiempo de respuesta**: Promedio de tiempo de respuesta
 - **Precisión de clasificación**: % de emails clasificados correctamente
 - **Productividad ganada**: Horas ahorradas por semana
 
 ### Dashboard en Tiempo Real
+
 ```
 📊 Email Dashboard AIGestion
 ├── 📧 Emails recibidos hoy: 45
@@ -252,6 +274,7 @@ const responses = {
 ## 🔧 SOLUCIÓN DE PROBLEMAS
 
 ### Issues Comunes
+
 1. **OpenAI API Key no encontrada**
    - Configurar variable de entorno `OPENAI_API_KEY`
    - Verificar que la key sea válida
@@ -269,6 +292,7 @@ const responses = {
    - Revisar logs de errores
 
 ### Depuración
+
 ```powershell
 # Modo verbose con logs detallados
 .\Email-AI-Triage.ps1 -Verbose -DryRun
@@ -285,12 +309,14 @@ Test-AIClassification -Subject "Test email" -Body "Test content" -Sender "test@e
 ## 🔐 SEGURIDAD Y PRIVACIDAD
 
 ### Protección de Datos
+
 - **Encriptación TLS**: Todas las comunicaciones encriptadas
 - **API Keys seguras**: Almacenadas en variables de entorno
 - **Sin almacenamiento de contenido**: Los emails se procesan en memoria
 - **Cumplimiento GDPR**: Conformidad con regulaciones europeas
 
 ### Permisos Mínimos
+
 - Gmail API: Lectura, escritura y gestión de etiquetas
 - OpenAI API: Solo para clasificación de texto
 - Exchange Online: Acceso limitado a bandeja de entrada
@@ -300,6 +326,7 @@ Test-AIClassification -Subject "Test email" -Body "Test content" -Sender "test@e
 ## 📱 INTEGRACIONES
 
 ### Servicios Conectados
+
 - ✅ **Gmail API** - Clasificación y gestión
 - ✅ **OpenAI GPT-3.5** - Inteligencia artificial
 - ✅ **Exchange Online** - Emails corporativos
@@ -307,10 +334,11 @@ Test-AIClassification -Subject "Test email" -Body "Test content" -Sender "test@e
 - ✅ **CRM (HubSpot)** - Integración con clientes
 
 ### Webhooks Disponibles
+
 ```
 POST /email-webhook
 ├── email_recibido
-├── email_clasificado  
+├── email_clasificado
 ├── respuesta_automatica
 └── reporte_diario
 ```
@@ -320,6 +348,7 @@ POST /email-webhook
 ## 🚀 MEJORAS FUTURAS
 
 ### Roadmap v2.0
+
 - 🤖 **Clasificación con GPT-4**: Mayor precisión
 - 📧 **Integración Outlook**: Soporte completo Microsoft
 - 🎯 **Segmentación avanzada**: Más categorías personalizadas
@@ -328,6 +357,7 @@ POST /email-webhook
 - 🌐 **Multi-idioma**: Soporte inglés/español
 
 ### Integraciones Planeadas
+
 - 📅 **Calendar AI**: Agendamiento automático
 - 💬 **Chatbot integrado**: Respuestas conversacionales
 - 📈 **Predictive Analytics**: Predicción de tendencias
@@ -338,11 +368,13 @@ POST /email-webhook
 ## 📞 SOPORTE
 
 ### Contacto
+
 - **Email**: support@aigestion.net
 - **Discord**: AIGestion Community
 - **GitHub**: Issues en repositorio
 
 ### Documentación
+
 - 📖 **Guía completa**: docs.aigestion.net/email
 - 🎥 **Video tutoriales**: youtube.com/aigestion
 - 💬 **FAQ**: faq.aigestion.net/email
@@ -359,4 +391,4 @@ POST /email-webhook
 
 **🔥 EMAIL GOD MODE NIVEL DIOS COMPLETADO 🚀**
 
-*Sistema de automatización de emails avanzado con inteligencia artificial para máxima productividad*
+_Sistema de automatización de emails avanzado con inteligencia artificial para máxima productividad_

@@ -3,7 +3,7 @@ import { cn } from '../utils/cn';
 import { Loader2 } from 'lucide-react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 
-export interface ButtonProps extends Omit<HTMLMotionProps<"button">, 'children'> {
+export interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'glass';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   loading?: boolean;
@@ -62,7 +62,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <motion.button
-       // @ts-ignore - ref issues with motion.button and forwardRef are common
+        // @ts-ignore - ref issues with motion.button and forwardRef are common
         ref={ref}
         whileHover={whileHover || { scale: 1.02 }}
         whileTap={whileTap || { scale: 0.98 }}

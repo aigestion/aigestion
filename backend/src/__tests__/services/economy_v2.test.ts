@@ -1,10 +1,10 @@
 import 'reflect-metadata';
-import { EconomyService } from '../../services/economy.service';
-import { DeFiStrategistService } from '../../services/defi-strategist.service';
-import { getCache, setCache } from '../../cache/redis';
+import { EconomyService } from '@/services/economy.service';
+import { DeFiStrategistService } from '@/services/defi-strategist.service';
+import { getCache, setCache } from '@/cache/redis';
 
 // Mock Redis functions
-jest.mock('../../cache/redis', () => ({
+jest.mock('@/cache/redis', () => ({
   getCache: jest.fn(),
   setCache: jest.fn(),
 }));

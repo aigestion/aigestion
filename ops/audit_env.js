@@ -44,7 +44,9 @@ lines.forEach((line, idx) => {
 
   // Detect sensitive values that are not placeholders
   if (sensitivePatterns.test(key) && !/^(\*|placeholder|your_|<.*>|\{.*\})$/i.test(value)) {
-    console.warn(`🔐 Sensitive key "${key}" has a concrete value. Consider using a placeholder in .env.example.`);
+    console.warn(
+      `🔐 Sensitive key "${key}" has a concrete value. Consider using a placeholder in .env.example.`
+    );
     hasIssues = true;
     // Replace with placeholder in example
     exampleLines.push(`${key}=<${key}_PLACEHOLDER>`);

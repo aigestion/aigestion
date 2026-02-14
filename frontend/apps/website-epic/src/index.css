@@ -1,9 +1,11 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
   :root {
-    --color-nexus-obsidian: #020205;
-    --color-nexus-obsidian-light: #0a0a0f;
+    --color-nexus-obsidian: #030303;
+      --color-nexus-obsidian-light: #080808;
     --color-nexus-obsidian-deep: #000000;
 
     --color-nexus-violet: #8a2be2;
@@ -132,12 +134,12 @@
   }
 
   .premium-glass {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.6) 100%);
-    backdrop-filter: blur(40px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.01) 0%, rgba(0, 0, 0, 0.8) 100%);
+      backdrop-filter: blur(60px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow:
-      0 25px 60px -15px rgba(0, 0, 0, 0.9),
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
+      0 30px 100px -20px rgba(0, 0, 0, 1),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.02);
     position: relative;
     overflow: hidden;
   }

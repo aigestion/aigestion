@@ -16,7 +16,9 @@ const syncDependencies = () => {
   const sharedPkg = getPackageJson(sharedDir);
   const sharedDeps = { ...sharedPkg.dependencies, ...sharedPkg.devDependencies };
 
-  const apps = fs.readdirSync(appsDir).filter(f => fs.statSync(path.join(appsDir, f)).isDirectory());
+  const apps = fs
+    .readdirSync(appsDir)
+    .filter(f => fs.statSync(path.join(appsDir, f)).isDirectory());
 
   apps.forEach(app => {
     const appPath = path.join(appsDir, app);

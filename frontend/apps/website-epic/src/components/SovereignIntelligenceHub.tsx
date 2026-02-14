@@ -646,7 +646,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
                             </h4>
                             <div className="flex gap-4 mt-2 text-[10px] text-white/30 uppercase tracking-widest">
                               <span>ID: {mission.id}</span>
-                              <span>{new Date(mission.createdAt).toLocaleString()}</span>
+                              <span>{new Date(mission.createdAt).toLocaleString('es-ES')}</span>
                               <span
                                 className={
                                   mission.status === 'completed'

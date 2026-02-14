@@ -4,6 +4,7 @@ This list covers all credentials required to run the automated workflows generat
 Configure these in your n8n **Credentials** section or as **Environment Variables** (where `{{$env["VAR"]}}` is used).
 
 ## 🔑 Core Integrations
+
 | Service        | Environment Variable                                      | Usage                                                          |
 | -------------- | --------------------------------------------------------- | -------------------------------------------------------------- |
 | **OpenAI**     | `OPENAI_API_KEY`                                          | Generators, Analyzers (Workflows 15, 21, 23, 24, 26, 27, 30)   |
@@ -13,6 +14,7 @@ Configure these in your n8n **Credentials** section or as **Environment Variable
 | **PostgreSQL** | `DB_CONNECTION_STRING`<br>`DB_HOST`, `DB_USER`, `DB_PASS` | Analytics, Database Ops (Workflows 14, 16, 32, 35, 36, 37, 43) |
 
 ## 🛠️ SaaS Integrations
+
 | Service        | Environment Variable                     | Usage                                        |
 | :------------- | :--------------------------------------- | :------------------------------------------- |
 | **Linear**     | `LINEAR_API_KEY`<br>`LINEAR_TEAM_ID`     | Issue Tracking (Workflow 05)                 |
@@ -28,8 +30,8 @@ Configure these in your n8n **Credentials** section or as **Environment Variable
 This document tracks all credentials required for the Antigravity workflows.
 **Status:** Validated against `config/.env`.
 
-| Service           | Variable / Credential Name | Status                | Location / Notes                                                                          |
-| :---------------- | :------------------------- | :-------------------- | :---------------------------------------------------------------------------------------- |
+| Service           | Variable / Credential Name | Status                 | Location / Notes                                                                          |
+| :---------------- | :------------------------- | :--------------------- | :---------------------------------------------------------------------------------------- |
 | **OpenAI**        | `OPENAI_API_KEY`           | ✅ **Secured**         | `config/.env`. Used via n8n Credential `openAiApi`.                                       |
 | **Stripe**        | `STRIPE_SECRET_KEY`        | ✅ **Secured**         | `config/.env`. Workflow uses placeholder `STRIPE_KEY` - needs alias.                      |
 | **Stripe**        | `STRIPE_PUBLISHABLE_KEY`   | ✅ **Secured**         | `config/.env`.                                                                            |
@@ -48,6 +50,7 @@ This document tracks all credentials required for the Antigravity workflows.
 ## 🛠 Action Required
 
 The following specific keys need to be added to your `.env` or n8n Credentials:
+
 - `NEWS_API_KEY`
 - `LINEAR_API_KEY` (for Linear Sync)
 - `PINECONE_API_KEY` (for Vector DB)
@@ -56,5 +59,4 @@ The following specific keys need to be added to your `.env` or n8n Credentials:
 ## 🔐 Security Note
 
 All "Secured" keys are currently loaded from `config/.env`. Ensure this file is never committed to git.
-For Production, we recommend moving these to Google Secret Manager.
-3. For OAuth services (Google Sheets, Slack, Hubspot), authenticate directly in the n8n UI under **Credentials**.
+For Production, we recommend moving these to Google Secret Manager. 3. For OAuth services (Google Sheets, Slack, Hubspot), authenticate directly in the n8n UI under **Credentials**.

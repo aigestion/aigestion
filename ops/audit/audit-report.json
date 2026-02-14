@@ -13,9 +13,7 @@
           "title": "auth0/node-jws Improperly Verifies HMAC Signature",
           "url": "https://github.com/advisories/GHSA-869p-cjfg-cm3x",
           "severity": "high",
-          "cwe": [
-            "CWE-347"
-          ],
+          "cwe": ["CWE-347"],
           "cvss": {
             "score": 7.5,
             "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N"
@@ -25,9 +23,7 @@
       ],
       "effects": [],
       "range": "4.0.0",
-      "nodes": [
-        "node_modules/jws"
-      ],
+      "nodes": ["node_modules/jws"],
       "fixAvailable": true
     }
   },

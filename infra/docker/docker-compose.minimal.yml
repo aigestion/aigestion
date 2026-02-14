@@ -11,7 +11,7 @@ services:
       dockerfile: Dockerfile
     container_name: NEXUS V1-backend
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - PORT=3000
@@ -26,13 +26,13 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'      # Max 50% of 1 core
-          memory: 512M     # Max 512MB RAM
+          cpus: '0.5' # Max 50% of 1 core
+          memory: 512M # Max 512MB RAM
         reservations:
           cpus: '0.25'
           memory: 256M
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:3000/api/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -45,8 +45,8 @@ services:
       dockerfile: Dockerfile.static
     container_name: NEXUS V1-nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     # No volume mounts for code - it's baked in!
     # Only mount SSL if needed
     # volumes:
@@ -63,7 +63,7 @@ services:
           cpus: '0.1'
           memory: 64M
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost/health"]
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost/health']
       interval: 30s
       timeout: 5s
       retries: 3

@@ -25,6 +25,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { api, SystemHealth } from '../services/api';
+import { SovereignTreasury } from './SovereignTreasury';
 
 const ClientDashboard = () => {
   const [health, setHealth] = React.useState<SystemHealth | null>(null);
@@ -141,6 +142,14 @@ const ClientDashboard = () => {
           </motion.div>
         ))}
       </div>
+
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        <SovereignTreasury />
+      </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div
