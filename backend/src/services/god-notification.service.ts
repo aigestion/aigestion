@@ -10,9 +10,9 @@ import { DANIELA_IDENTITY } from '../config/prompts/daniela.persona';
 @injectable()
 export class GodNotificationService {
   constructor(
-    @inject(TYPES.TelegramService) private telegram: TelegramService,
-    @inject(TYPES.WhatsAppService) private whatsapp: WhatsAppService,
-    @inject(TYPES.EmailService) private email: EmailService
+    @inject(TYPES.TelegramService) private readonly telegram: TelegramService,
+    @inject(TYPES.WhatsAppService) private readonly whatsapp: WhatsAppService,
+    @inject(TYPES.EmailService) private readonly email: EmailService
   ) {}
 
   /**
@@ -43,7 +43,13 @@ export class GodNotificationService {
       const emailSubject = `[${DANIELA_IDENTITY.brand} ALERT] ${title}`;
       const emailHtml = `<pre style="font-family: monospace; font-size: 14px;">${formattedMessage}</pre>`;
 
-      tasks.push(this.email.sendEmail(emailTo, emailSubject, emailHtml));
+      tasks.push(
+        this.email.sendEmail({
+          to: emailTo,
+          subject: emailSubject,
+          html: emailHtml,
+        }),
+      );
     }
 
     await Promise.allSettled(tasks);

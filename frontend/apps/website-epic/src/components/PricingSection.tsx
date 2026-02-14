@@ -1,5 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Building2, Home, CheckCircle2, ChevronRight } from 'lucide-react';
+import {
+  Building2,
+  Home,
+  CheckCircle2,
+  ChevronRight,
+  ShieldCheck,
+  Lock,
+  Trophy,
+} from 'lucide-react';
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
 
@@ -168,6 +176,33 @@ export const PricingSection: React.FC = () => {
             ))}
           </motion.div>
         </AnimatePresence>
+
+        {/* Trust Signals Section */}
+        <motion.div
+          className="mt-20 pt-10 border-t border-white/5 flex flex-wrap justify-center items-center gap-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+        >
+          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-nexus-cyan/50 transition-colors">
+            <ShieldCheck className="w-5 h-5" />
+            <span className="text-[10px] tracking-widest uppercase font-bold">
+              Infraestructura Segura
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-nexus-violet/50 transition-colors">
+            <Lock className="w-5 h-5" />
+            <span className="text-[10px] tracking-widest uppercase font-bold">
+              Bóveda Soberana Cifrada
+            </span>
+          </div>
+          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-white/50 transition-colors">
+            <Trophy className="w-5 h-5" />
+            <span className="text-[10px] tracking-widest uppercase font-bold">
+              Excelencia Garantizada
+            </span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -24,7 +24,10 @@ export class User extends Document {
   @Prop({ type: String, select: false })
   stripeSubscriptionItemId: string;
 
-  @Prop({ enum: ['active', 'past_due', 'canceled', 'incomplete', 'trialing'], default: 'incomplete' })
+  @Prop({
+    enum: ['active', 'past_due', 'canceled', 'incomplete', 'trialing'],
+    default: 'incomplete',
+  })
   subscriptionStatus: string;
 
   @Prop()

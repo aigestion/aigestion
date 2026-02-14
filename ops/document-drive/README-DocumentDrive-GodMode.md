@@ -9,23 +9,27 @@ Sistema completo de gestión de documentos compartidos nivel dios para **AIGesti
 ## 🎯 COMPONENTES IMPLEMENTADOS
 
 ### 📁 Scripts Principales
+
 - **AIGestion-DocumentDrive-GodMode.ps1** - Sistema principal de gestión de documentos
 - **AIGestion-DocumentProcessor.ps1** - Procesamiento inteligente con IA
 - **AIGestion-WebInterface.ps1** - Interfaz web moderna y responsiva
 
 ### 🤖 Inteligencia Artificial Integrada
+
 - **OpenAI GPT-3.5** - Clasificación y análisis de documentos
 - **Google Cloud Document AI** - OCR y extracción de datos
 - **Procesamiento Automático** - Clasificación, extracción, validación
 - **Análisis de Contenido** - Resumen y puntos clave
 
 ### 📁 Sistema de Gestión de Clientes
+
 - **Carpetas Personalizadas**: Cada cliente tiene su estructura completa
 - **Control de Acceso**: Permisisos específicos por cliente
 - **Cuotas de Almacenamiento**: Límites configurables por cliente
 - **Seguridad**: Aislamiento y encriptación de datos
 
 ### 📊 Tipos de Documentos Soportados
+
 - **Contratos** - Validación legal y extracción de datos
 - **Facturas** - Procesamiento automático y validación
 - **Reportes** - Análisis y generación de insights
@@ -38,6 +42,7 @@ Sistema completo de gestión de documentos compartidos nivel dios para **AIGesti
 ## ⚡ CARACTERÍSTICAS NIVEL DIOS
 
 ### 🤖 Inteligencia Artificial Avanzada
+
 - **Clasificación Automática**: IA clasifica documentos por tipo y contenido
 - **OCR Avanzado**: Reconocimiento de texto en imágenes y PDFs
 - **Extracción de Datos**: Identificación automática de información estructurada
@@ -45,6 +50,7 @@ Sistema completo de gestión de documentos compartidos nivel dios para **AIGesti
 - **Validación Legal**: Verificación de requisitos legales y de negocio
 
 ### 📊 Organización Inteligente
+
 - **Estructura Jerárquica**: 15 carpetas estándar por cliente
 - **Categorización Automática**: Documentos clasificados por tipo
 - **Versionamiento**: Control de versiones y historial
@@ -52,6 +58,7 @@ Sistema completo de gestión de documentos compartidos nivel dios para **AIGesti
 - **Búsqueda Avanzada**: Búsqueda por contenido, tipo, fecha, cliente
 
 ### 🔐 Seguridad y Cumplimiento
+
 - **Encriptación**: Todos los documentos encriptados
 - **Control de Acceso**: Permisos granulares por cliente
 - **Retención Automática**: Políticas de retención por tipo de documento
@@ -59,6 +66,7 @@ Sistema completo de gestión de documentos compartidos nivel dios para **AIGesti
 - **Cumplimiento GDPR**: Conformidad con regulaciones europeas
 
 ### 🔄 Automatización Completa
+
 - **Procesamiento Automático**: IA procesa documentos al subir
 - **Clasificación Inteligente**: Categorización automática por contenido
 - **Notificaciones**: Alertas sobre documentos importantes
@@ -70,6 +78,7 @@ Sistema completo de gestión de documentos compartidos nivel dios para **AIGesti
 ## 🚀 INSTALACIÓN Y CONFIGURACIÓN
 
 ### Paso 1: Configuración Inicial
+
 ```powershell
 # Ejecutar como Administrador
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
@@ -82,6 +91,7 @@ cd "c:\Users\Alejandro\AIGestion\scripts\document-drive"
 ```
 
 ### Paso 2: Configurar Variables de Entorno
+
 ```powershell
 # OpenAI API Key (para procesamiento IA)
 $env:OPENAI_API_KEY = "tu-api-key-aqui"
@@ -98,6 +108,7 @@ $env:SUPABASE_SERVICE_ROLE_KEY = "tu-service-key"
 ```
 
 ### Paso 3: Configurar Base de Datos
+
 ```powershell
 # Crear estructura de carpetas
 .\AIGestion-DocumentDrive-GodMode.ps1 -Action "create" -ClientId "CLI-001" -ClientName "Cliente Demo"
@@ -107,6 +118,7 @@ $env:SUPABASE_SERVICE_ROLE_KEY = "tu-service-key"
 ```
 
 ### Paso 4: Iniciar Interfaz Web
+
 ```powershell
 # Modo desarrollo
 .\AIGestion-WebInterface.ps1 -Development
@@ -120,6 +132,7 @@ $env:SUPABASE_SERVICE_ROLE_KEY = "tu-service-key"
 ## 🎮 MODO DE USO
 
 ### Gestión de Clientes
+
 ```powershell
 # Modo interactivo completo
 .\AIGestion-DocumentDrive-GodMode.ps1 -Interactive
@@ -135,6 +148,7 @@ $env:SUPABASE_SERVICE_ROLE_KEY = "tu-service-key"
 ```
 
 ### Procesamiento con IA
+
 ```powershell
 # Procesar documento específico
 .\AIGestion-DocumentProcessor.ps1 -ClientId "CLI-001" -DocumentId "DOC-001" -ProcessingType "auto"
@@ -147,6 +161,7 @@ $env:SUPABASE_SERVICE_ROLE_KEY = "tu-service-key"
 ```
 
 ### Interfaz Web
+
 ```powershell
 # Abrir interfaz web
 Start-Process -FilePath "c:\Users\Alejandro\AIGestion\scripts\document-drive\AIGestion-WebInterface.ps1"
@@ -160,6 +175,7 @@ Start-Process "http://localhost:3001"
 ## 📊 ESTRUCTURA DE CARPETAS
 
 ### 📁 Estructura Base
+
 ```
 AIGestion_Document_Drive/
 ├── 01_Entrada_Documentos/
@@ -180,6 +196,7 @@ AIGestion_Document_Drive/
 ```
 
 ### 📁 Estructura por Cliente
+
 ```
 AIGestion_Document_Drive/Clientes/
 ├── CLI-001/
@@ -213,39 +230,40 @@ AIGestion_Document_Drive/Clientes/
 ## 📊 METADATOS DE DOCUMENTOS
 
 ### 📋 Estructura de Metadatos
+
 ```json
 {
-    "DocumentId": "DOC-CLI-001-20240202-1234",
-    "ClientId": "CLI-001",
-    "DocumentType": "Contrato",
-    "OriginalName": "contrato_servicios.pdf",
-    "FileName": "DOC-CLI-001-20240202-1234.pdf",
-    "FilePath": "C:\\AIGestion_Document_Drive\\Clientes\\CLI-001\\03_Completado\\DOC-CLI-001-202402-1234.pdf",
-    "FileSize": 2621440,
-    "MimeType": "application/pdf",
-    "UploadedAt": "2024-02-02T10:30:00Z",
-    "UploadedBy": "System",
-    "Status": "Processed",
-    "Version": 1,
-    "Tags": ["importante", "prioridad-alta"],
-    "Metadata": {
-        "cliente": "Empresa ABC",
-        "monto": 10000,
-        "moneda": "MXN",
-        "fecha_inicio": "2024-01-01",
-        "fecha_fin": "2024-12-31"
-    },
-    "Processing": {
-        "Status": "Completed",
-        "StartedAt": "2024-02-02T10:35:00Z",
-        "CompletedAt": "2024-02-02T10:37:00Z",
-        "Type": "Extraction",
-        "Result": {
-            "partes": ["Empresa ABC", "Cliente XYZ"],
-            "monto": 10000,
-            "moneda": "MXN"
-        }
+  "DocumentId": "DOC-CLI-001-20240202-1234",
+  "ClientId": "CLI-001",
+  "DocumentType": "Contrato",
+  "OriginalName": "contrato_servicios.pdf",
+  "FileName": "DOC-CLI-001-20240202-1234.pdf",
+  "FilePath": "C:\\AIGestion_Document_Drive\\Clientes\\CLI-001\\03_Completado\\DOC-CLI-001-202402-1234.pdf",
+  "FileSize": 2621440,
+  "MimeType": "application/pdf",
+  "UploadedAt": "2024-02-02T10:30:00Z",
+  "UploadedBy": "System",
+  "Status": "Processed",
+  "Version": 1,
+  "Tags": ["importante", "prioridad-alta"],
+  "Metadata": {
+    "cliente": "Empresa ABC",
+    "monto": 10000,
+    "moneda": "MXN",
+    "fecha_inicio": "2024-01-01",
+    "fecha_fin": "2024-12-31"
+  },
+  "Processing": {
+    "Status": "Completed",
+    "StartedAt": "2024-02-02T10:35:00Z",
+    "CompletedAt": "2024-02-02T10:37:00Z",
+    "Type": "Extraction",
+    "Result": {
+      "partes": ["Empresa ABC", "Cliente XYZ"],
+      "monto": 10000,
+      "moneda": "MXN"
     }
+  }
 }
 ```
 
@@ -254,6 +272,7 @@ AIGestion_Document_Drive/Clientes/
 ## 📈 FLUJOS DE TRABAJO
 
 ### 🔄 Proceso de Subida
+
 ```
 📤 Cliente selecciona archivos
     ↓
@@ -273,6 +292,7 @@ AIGestion_Document_Drive/Clientes/
 ```
 
 ### 🤖 Procesamiento con IA
+
 ```
 📄 Documento cargado
     ↓
@@ -291,6 +311,7 @@ AIGestion_Document_Drive/Clientes/
 ```
 
 ### 📊 Gestión de Versiones
+
 ```
 📄 Versión 1: Documento original
     ↓
@@ -308,6 +329,7 @@ AIGestion_Document_Drive/Clientes/
 ## 📊 ANÁLISIS Y REPORTES
 
 ### 📊 Dashboard en Tiempo Real
+
 ```
 📊 Dashboard de Document Drive AIGestion
 ├── 👥 Total Clientes: 2
@@ -320,6 +342,7 @@ AIGestion_Document_Drive/Clientes/
 ```
 
 ### 📊 Reportes Personalizados
+
 ```
 📊 Reporte General del Sistema
 ├── 📊 Total de documentos por tipo
@@ -330,6 +353,7 @@ AIGestion_Document_Drive/Clientes/
 ```
 
 ### 📊 Reportes por Cliente
+
 ```
 📊 Reporte Detallado: Cliente ABC
 ├── 📄 Documentos por tipo y estado
@@ -344,6 +368,7 @@ AIGestion_Document_Drive/Clientes/
 ## 🔧 CONFIGURACIÓN AVANZADA
 
 ### 🎛 Límites y Cuotas
+
 ```powershell
 # Límites por cliente
 $ClientLimits = @{
@@ -352,13 +377,14 @@ $ClientLimits = @{
     MaxDocuments = 1000
     MaxVersions = 5
     AllowedExtensions = @(
-        ".pdf", ".docx", ".doc", ".xlsx", ".pptx", 
+        ".pdf", ".docx", ".doc", ".xlsx", ".pptx",
         ".jpg", ".jpeg", ".png", ".gif", ".zip"
     )
 }
 ```
 
 ### 🎛 Tipos de Documentos Soportados
+
 ```powershell
 $DocumentTypes = @{
     "Contrato" = @{
@@ -387,6 +413,7 @@ $DocumentTypes = @{
 ## 🔐 SEGURIDAD Y PRIVACIDAD
 
 ### 🔐 Protección de Datos
+
 - **Encriptación**: Todos los documentos encriptados en repositorio seguro
 - **Control de Acceso**: Permisos granulares por cliente
 - **Validación**: Verificación de archivos antes de procesar
@@ -394,6 +421,7 @@ $DocumentTypes = @{
 - **Backup Automático**: Copias de seguridad regulares
 
 ### 🔐 Cumplimiento Normativo
+
 - **GDPR**: Conformidad con regulaciones europeas
 - **Ley de Firmas Digitales**: Validación de firmas digitales
 - **Retención de Datos**: Políticas de retención por tipo
@@ -404,6 +432,7 @@ $DocumentTypes = @{
 ## 🌐 INTEGRACIONES
 
 ### 📊 APIs Externas
+
 - **OpenAI GPT-3.5** - Clasificación y análisis
 - **Google Cloud Document AI** - OCR y extracción
 - **Google Drive API** - Almacenamiento en la nube
@@ -411,6 +440,7 @@ $DocumentTypes = @{
 - **Microsoft Graph API** - Integración con Office 365
 
 ### 🔗 Servicios Conectados
+
 - **Email Automation** - Notificaciones automáticas
 - **Client Management** - Integración con sistema de clientes
 - **Analytics Platform** - Métricas y reportes
@@ -422,6 +452,7 @@ $DocumentTypes = @{
 ## 🚀 MEJORAS FUTURAS
 
 ### 🎯 Roadmap v2.0
+
 - 🤖 **GPT-4 Integration**: Análisis más avanzado
 - 📊 **Multi-idioma**: Soporte para múltiples idiomas
 - 🔍 **Blockchain**: Verificación de autenticidad de documentos
@@ -429,6 +460,7 @@ $DocumentTypes = @{
 - 🤖 **Chatbot Integrado**: Asistente virtual para documentos
 
 ### 🚀 Integraciones Planeadas
+
 - 📊 **Microsoft Office 365**: Integración completa
 - 📊 **Dropbox Business**: Sincronización automática
 - 📊 **SharePoint Online**: Colaboración empresarial
@@ -440,13 +472,15 @@ $DocumentTypes = @{
 ## 📞 SOPORTE Y MANTENIMIENTO
 
 ### 🔄 Monitoreo Continuo
+
 - **Health Checks**: Verificación de sistemas
 - **Performance Metrics**: Monitoreo de rendimiento
 - **Error Tracking**: Detección de problemas
 - **Usage Analytics**: Estadísticas de uso del sistema
-- **Security Audits Auditorías de seguridad periódicas
+- \*\*Security Audits Auditorías de seguridad periódicas
 
 ### 📋 Mantenimiento Programado
+
 - **Actualizaciones**: Actualización de sistemas y APIs
 - **Backup Verificación**: Verificación de respaldos
 - **Security Patches**: Parches de seguridad
@@ -458,22 +492,26 @@ $DocumentTypes = @{
 ## 📞 SOPORTE DE EMERGENCIA
 
 ### 🚨 Incidentes Críticos
+
 1. **Pérdida de Datos**: Restaurar desde backup inmediato
 2. **Fallo de IA**: Usar sistema fallback manual
 3. **Sistema Caido**: Modo de emergencia con funcionalidad limitada
 4. **Ataque de Seguridad**: Protocolos de respuesta inmediata
 
 ### 📋 Procedimientos de Recuperación
+
 1. **Identificar Problema**: Diagnóstico rápido del incidente
-2. **Aislar Impacto Evaluar alcance del problema
-3. **Implementar Solución: Aplicar corrección inmediata
+2. \*\*Aislar Impacto Evaluar alcance del problema
+3. \*\*Implementar Solución: Aplicar corrección inmediata
 4. **Verificar Solución**: Confirmar que el problema esté resuelto
 5. **Documentar Incidente**: Registrar lecciones aprendizadas
 
 ---
 
 ## 📞 SOPORTE DE BACKUP
+
 ### 🔄 Backup Automatizado
+
 - **Frecuencia**: Backups diarios incrementales
 - **Retención**: Múltiples copias en diferentes ubicaciones
 - **Verificación**: Integridad de respaldos
@@ -481,6 +519,7 @@ $DocumentTypes = @{
 - **Archivado**: Archivado de documentos antiguos
 
 ### 📁 Estrategia de Backup
+
 - **Local**: Copias locales regulares
 - **Cloud**: Almacenamiento en múltiples nubes
 - **Offsite**: Copias externas seguras
@@ -490,7 +529,9 @@ $DocumentTypes = @{
 ---
 
 ## 📞 SOPORTE DE MIGRACIÓN
+
 ### 🔄 Migración de Clientes
+
 1. **Planificación**: Plan detallado de migración
 2. **Exportación**: Exportar documentos existentes
 3. **Importación**: Importar a nuevo sistema
@@ -499,6 +540,7 @@ $DocumentTypes = @{
 6. **Corte de Migración**: Transición gradual
 
 ### 📁 Estrategia de Migración
+
 - **Fase 1**: Clientes de baja prioridad
 - **Fase 2**: Clientes de prioridad media
 - **Fase 3**: Clientes de alta prioridad
@@ -525,4 +567,4 @@ $DocumentTypes = @{
 
 **🔥 DOCUMENT DRIVE GOD MODE AIGESTION LISTO PARA USO EXTREMO! 🚀**
 
-*Sistema revolucionario de gestión de documentos con inteligencia artificial para máxima organización y productividad*
+_Sistema revolucionario de gestión de documentos con inteligencia artificial para máxima organización y productividad_

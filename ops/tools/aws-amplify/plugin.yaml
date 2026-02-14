@@ -3,7 +3,7 @@ tools:
   definitions:
     - name: aws-amplify
       runtime: node
-      package: "@aws-amplify/cli"
+      package: '@aws-amplify/cli'
       known_good_version: 12.3.0
       shims: [amplify]
       health_checks:

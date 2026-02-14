@@ -1,8 +1,8 @@
-import { toolInstallTest } from "tests";
-import { skipOS } from "tests/utils";
+import { toolInstallTest } from 'tests';
+import { skipOS } from 'tests/utils';
 
 toolInstallTest({
-  toolName: "phpunit",
-  toolVersion: "11.1.3",
-  skipTestIf: skipOS(["win32"]),
+  toolName: 'phpunit',
+  toolVersion: '11.1.3',
+  skipTestIf: skipOS(['win32']),
 });

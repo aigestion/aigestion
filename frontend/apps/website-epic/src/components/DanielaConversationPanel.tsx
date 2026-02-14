@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Mic, StopCircle } from 'lucide-react';
-import { useDanielaVoice } from '../hooks/useDanielaVoice';
+import { danielaApi } from '../services/daniela-api.service';
 
 export const DanielaConversationPanel: React.FC = () => {
   const [messages, setMessages] = useState<{ role: 'ai' | 'user'; text: string }[]>([
@@ -21,25 +21,25 @@ export const DanielaConversationPanel: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
 
-    setMessages(prev => [...prev, { role: 'user', text: input }]);
+    const userText = input;
+    setMessages(prev => [...prev, { role: 'user', text: userText }]);
     setInput('');
 
-    // Simulate AI response
-    setTimeout(() => {
-      const responses = [
-        'Entendido. Estoy procesando esa solicitud.',
-        'He actualizado los parámetros del sistema según tus indicaciones.',
-        'Analizando los datos... Aquí tienes el reporte.',
-        'Excelente elección. Procediendo con la ejecución.',
-        'Sistemas nominales. ¿Deseas algo más?',
-      ];
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      setMessages(prev => [...prev, { role: 'ai', text: randomResponse }]);
-      speak(randomResponse);
-    }, 1000);
+    try {
+      const response = await danielaApi.chat(userText, 'website-user', `session-${Date.now()}`);
+      const aiText = response.response;
+      setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
+      speak(aiText);
+    } catch (error) {
+      console.error('Daniela API Error:', error);
+      const fallbackMsg =
+        'Disculpa, estoy experimentando una breve interrupción en mis sistemas neuronales. ¿Podrías repetir eso?';
+      setMessages(prev => [...prev, { role: 'ai', text: fallbackMsg }]);
+      speak(fallbackMsg);
+    }
   };
 
   return (

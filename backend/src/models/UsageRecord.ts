@@ -8,6 +8,11 @@ export interface IUsageRecord extends Document {
   completionTokens: number;
   totalTokens: number;
   costEstimate: number; // For internal auditing
+  personaId?: string;
+  creatorId?: string;
+  creatorCommission?: number;
+  platformCommission?: number;
+  arbitrationReason?: string;
   timestamp: Date;
 }
 
@@ -20,11 +25,16 @@ const usageRecordSchema = new Schema<IUsageRecord>(
     completionTokens: { type: Number, required: true },
     totalTokens: { type: Number, required: true },
     costEstimate: { type: Number, default: 0 },
+    personaId: { type: String, index: true },
+    creatorId: { type: String, index: true },
+    creatorCommission: { type: Number, default: 0 },
+    platformCommission: { type: Number, default: 0 },
+    arbitrationReason: { type: String },
     timestamp: { type: Date, default: Date.now },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 export const UsageRecord = mongoose.model<IUsageRecord>('UsageRecord', usageRecordSchema);

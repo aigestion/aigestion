@@ -7,18 +7,24 @@
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
-const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} = require('@modelcontextprotocol/sdk/types.js');
 
 class RedisMCPServer {
   constructor() {
-    this.server = new Server({
-      name: 'redis',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    this.server = new Server(
+      {
+        name: 'redis',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.setupTools();
     this.setupErrorHandling();
@@ -35,10 +41,10 @@ class RedisMCPServer {
             properties: {
               key: { type: 'string', description: 'Redis key' },
               value: { type: 'string', description: 'Redis value' },
-              ttl: { type: 'number', description: 'Time to live in seconds (optional)' }
+              ttl: { type: 'number', description: 'Time to live in seconds (optional)' },
             },
-            required: ['key', 'value']
-          }
+            required: ['key', 'value'],
+          },
         },
         {
           name: 'redis_get',
@@ -46,10 +52,10 @@ class RedisMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              key: { type: 'string', description: 'Redis key' }
+              key: { type: 'string', description: 'Redis key' },
             },
-            required: ['key']
-          }
+            required: ['key'],
+          },
         },
         {
           name: 'redis_delete',
@@ -57,18 +63,18 @@ class RedisMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              key: { type: 'string', description: 'Redis key' }
+              key: { type: 'string', description: 'Redis key' },
             },
-            required: ['key']
-          }
+            required: ['key'],
+          },
         },
         {
           name: 'redis_cache_info',
           description: 'Get Redis cache information',
           inputSchema: {
             type: 'object',
-            properties: {}
-          }
+            properties: {},
+          },
         },
         {
           name: 'redis_flush_cache',
@@ -76,14 +82,18 @@ class RedisMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              cache_type: { type: 'string', enum: ['all', 'db'], description: 'Cache type to flush' }
-            }
-          }
-        }
-      ]
+              cache_type: {
+                type: 'string',
+                enum: ['all', 'db'],
+                description: 'Cache type to flush',
+              },
+            },
+          },
+        },
+      ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -103,10 +113,12 @@ class RedisMCPServer {
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: `Error: ${error.message}`
-          }]
+          content: [
+            {
+              type: 'text',
+              text: `Error: ${error.message}`,
+            },
+          ],
         };
       }
     });
@@ -114,59 +126,69 @@ class RedisMCPServer {
 
   async setValue(args) {
     const { key, value, ttl } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Redis SET Operation:\n\nKey: ${key}\nValue: ${value}\nTTL: ${ttl || 'No expiration'}\n\nNote: Actual Redis operations require Redis connection configuration.\n\nThis prepares the set operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Redis SET Operation:\n\nKey: ${key}\nValue: ${value}\nTTL: ${ttl || 'No expiration'}\n\nNote: Actual Redis operations require Redis connection configuration.\n\nThis prepares the set operation for execution.`,
+        },
+      ],
     };
   }
 
   async getValue(args) {
     const { key } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Redis GET Operation:\n\nKey: ${key}\n\nNote: Actual Redis operations require Redis connection.\n\nThis prepares the get operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Redis GET Operation:\n\nKey: ${key}\n\nNote: Actual Redis operations require Redis connection.\n\nThis prepares the get operation for execution.`,
+        },
+      ],
     };
   }
 
   async deleteKey(args) {
     const { key } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Redis DELETE Operation:\n\nKey: ${key}\n\nNote: Actual Redis operations require Redis connection.\n\nThis prepares the delete operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Redis DELETE Operation:\n\nKey: ${key}\n\nNote: Actual Redis operations require Redis connection.\n\nThis prepares the delete operation for execution.`,
+        },
+      ],
     };
   }
 
   async getCacheInfo(args) {
     return {
-      content: [{
-        type: 'text',
-        text: `Redis Cache Information:\n\n- Memory usage\n- Connected clients\n- Operations per second\n- Key count\n\nNote: Actual cache info requires Redis connection.\n\nThis prepares cache information retrieval.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Redis Cache Information:\n\n- Memory usage\n- Connected clients\n- Operations per second\n- Key count\n\nNote: Actual cache info requires Redis connection.\n\nThis prepares cache information retrieval.`,
+        },
+      ],
     };
   }
 
   async flushCache(args) {
     const { cache_type } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Redis Flush Operation:\n\nCache Type: ${cache_type || 'all'}\n\nNote: Actual cache flush requires Redis connection and permissions.\n\nThis prepares cache flush operation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Redis Flush Operation:\n\nCache Type: ${cache_type || 'all'}\n\nNote: Actual cache flush requires Redis connection and permissions.\n\nThis prepares cache flush operation.`,
+        },
+      ],
     };
   }
 
   setupErrorHandling() {
-    this.server.onerror = (error) => console.error('[Redis MCP Error]', error);
+    this.server.onerror = error => console.error('[Redis MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);

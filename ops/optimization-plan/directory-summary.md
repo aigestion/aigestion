@@ -13,8 +13,8 @@
 
 ### 🏢 **CARPETAS PROFESIONALES (PRIORIDAD ALTA)**
 
-| Carpeta        | Estado                | Tamaño Estimado | Prioridad | Acción                        |
-| -------------- | --------------------- | --------------- | --------- | ----------------------------- |
+| Carpeta        | Estado                 | Tamaño Estimado | Prioridad | Acción                        |
+| -------------- | ---------------------- | --------------- | --------- | ----------------------------- |
 | **AIGestion/** | ✅ Activo              | ~2GB            | Máxima    | Mantener + Integrar Workspace |
 | **Data/**      | 🔄 Organizar           | ~5GB            | Alta      | Migrar críticos a Workspace   |
 | **Dev/**       | 📦 Desorganizado       | ~3GB            | Alta      | Estructurar por tecnologías   |
@@ -24,8 +24,8 @@
 
 ### 🤖 **CARPETAS DE IA Y HERRAMIENTAS AVANZADAS**
 
-| Herramienta IA    | Configuración | Estado | Prioridad | Acción                  |
-| ----------------- | ------------- | ------ | --------- | ----------------------- |
+| Herramienta IA    | Configuración  | Estado | Prioridad | Acción                  |
+| ----------------- | -------------- | ------ | --------- | ----------------------- |
 | **.gemini/**      | ✅ Configurada | Activo | Alta      | Sincronizar perfil      |
 | **.antigravity/** | ✅ Configurada | Activo | Alta      | Optimizar configuración |
 | **.codeium/**     | ✅ Configurada | Activo | Alta      | Centralizar settings    |
@@ -35,8 +35,8 @@
 
 ### 🔧 **CARPETAS DE SISTEMA Y CONFIGURACIÓN**
 
-| Sistema        | Configuración       | Estado | Prioridad | Acción                 |
-| -------------- | ------------------- | ------ | --------- | ---------------------- |
+| Sistema        | Configuración        | Estado | Prioridad | Acción                 |
+| -------------- | -------------------- | ------ | --------- | ---------------------- |
 | **.vscode/**   | ✅ Principal         | Activa | Máxima    | Backup y documentar    |
 | **.windsurf/** | ✅ Secundaria        | Activa | Alta      | Sincronizar con VSCode |
 | **.docker/**   | ✅ Configurada       | Activa | Media     | Optimizar imágenes     |
@@ -46,8 +46,8 @@
 
 ### 🗂️ **CARPETAS PERSONALES (PRIORIDAD BAJA)**
 
-| Personal       | Estado                        | Tamaño | Prioridad | Acción                         |
-| -------------- | ----------------------------- | ------ | --------- | ------------------------------ |
+| Personal       | Estado                         | Tamaño | Prioridad | Acción                         |
+| -------------- | ------------------------------ | ------ | --------- | ------------------------------ |
 | **Desktop/**   | 📦 Desorganizado               | ~1GB   | Baja      | Clasificar y archivar          |
 | **Documents/** | 📄 Mezcla personal/profesional | ~2GB   | Media     | Separar y organizar            |
 | **Downloads/** | 📥 Acumulación                 | ~3GB   | Baja      | Limpiar y clasificar           |

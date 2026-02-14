@@ -7,18 +7,24 @@
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
-const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} = require('@modelcontextprotocol/sdk/types.js');
 
 class RestAPIMCPServer {
   constructor() {
-    this.server = new Server({
-      name: 'rest-api',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    this.server = new Server(
+      {
+        name: 'rest-api',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.setupTools();
     this.setupErrorHandling();
@@ -35,10 +41,10 @@ class RestAPIMCPServer {
             properties: {
               url: { type: 'string', description: 'API endpoint URL' },
               headers: { type: 'object', description: 'Request headers' },
-              params: { type: 'object', description: 'Query parameters' }
+              params: { type: 'object', description: 'Query parameters' },
             },
-            required: ['url']
-          }
+            required: ['url'],
+          },
         },
         {
           name: 'api_post_request',
@@ -49,10 +55,10 @@ class RestAPIMCPServer {
               url: { type: 'string', description: 'API endpoint URL' },
               headers: { type: 'object', description: 'Request headers' },
               body: { type: 'object', description: 'Request body' },
-              content_type: { type: 'string', description: 'Content type' }
+              content_type: { type: 'string', description: 'Content type' },
             },
-            required: ['url']
-          }
+            required: ['url'],
+          },
         },
         {
           name: 'api_put_request',
@@ -62,10 +68,10 @@ class RestAPIMCPServer {
             properties: {
               url: { type: 'string', description: 'API endpoint URL' },
               headers: { type: 'object', description: 'Request headers' },
-              body: { type: 'object', description: 'Request body' }
+              body: { type: 'object', description: 'Request body' },
             },
-            required: ['url']
-          }
+            required: ['url'],
+          },
         },
         {
           name: 'api_delete_request',
@@ -74,10 +80,10 @@ class RestAPIMCPServer {
             type: 'object',
             properties: {
               url: { type: 'string', description: 'API endpoint URL' },
-              headers: { type: 'object', description: 'Request headers' }
+              headers: { type: 'object', description: 'Request headers' },
             },
-            required: ['url']
-          }
+            required: ['url'],
+          },
         },
         {
           name: 'api_test_suite',
@@ -85,11 +91,19 @@ class RestAPIMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              endpoints: { type: 'array', items: { type: 'string' }, description: 'List of endpoints to test' },
-              test_type: { type: 'string', enum: ['smoke', 'integration', 'performance'], description: 'Type of test' }
+              endpoints: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'List of endpoints to test',
+              },
+              test_type: {
+                type: 'string',
+                enum: ['smoke', 'integration', 'performance'],
+                description: 'Type of test',
+              },
             },
-            required: ['endpoints']
-          }
+            required: ['endpoints'],
+          },
         },
         {
           name: 'api_documentation',
@@ -98,15 +112,19 @@ class RestAPIMCPServer {
             type: 'object',
             properties: {
               base_url: { type: 'string', description: 'Base API URL' },
-              format: { type: 'string', enum: ['openapi', 'postman', 'swagger'], description: 'Documentation format' }
+              format: {
+                type: 'string',
+                enum: ['openapi', 'postman', 'swagger'],
+                description: 'Documentation format',
+              },
             },
-            required: ['base_url']
-          }
-        }
-      ]
+            required: ['base_url'],
+          },
+        },
+      ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -128,10 +146,12 @@ class RestAPIMCPServer {
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: `Error: ${error.message}`
-          }]
+          content: [
+            {
+              type: 'text',
+              text: `Error: ${error.message}`,
+            },
+          ],
         };
       }
     });
@@ -139,72 +159,84 @@ class RestAPIMCPServer {
 
   async executeGet(args) {
     const { url, headers, params } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `REST API GET Request:\n\nURL: ${url}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\nParameters: ${JSON.stringify(params || {}, null, 2)}\n\nNote: Actual HTTP requests require fetch/axios library.\n\nThis prepares the GET request for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `REST API GET Request:\n\nURL: ${url}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\nParameters: ${JSON.stringify(params || {}, null, 2)}\n\nNote: Actual HTTP requests require fetch/axios library.\n\nThis prepares the GET request for execution.`,
+        },
+      ],
     };
   }
 
   async executePost(args) {
     const { url, headers, body, content_type } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `REST API POST Request:\n\nURL: ${url}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\nContent-Type: ${content_type || 'application/json'}\nBody: ${JSON.stringify(body || {}, null, 2)}\n\nNote: Actual HTTP requests require fetch/axios library.\n\nThis prepares the POST request for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `REST API POST Request:\n\nURL: ${url}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\nContent-Type: ${content_type || 'application/json'}\nBody: ${JSON.stringify(body || {}, null, 2)}\n\nNote: Actual HTTP requests require fetch/axios library.\n\nThis prepares the POST request for execution.`,
+        },
+      ],
     };
   }
 
   async executePut(args) {
     const { url, headers, body } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `REST API PUT Request:\n\nURL: ${url}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\nBody: ${JSON.stringify(body || {}, null, 2)}\n\nNote: Actual HTTP requests require fetch/axios library.\n\nThis prepares the PUT request for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `REST API PUT Request:\n\nURL: ${url}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\nBody: ${JSON.stringify(body || {}, null, 2)}\n\nNote: Actual HTTP requests require fetch/axios library.\n\nThis prepares the PUT request for execution.`,
+        },
+      ],
     };
   }
 
   async executeDelete(args) {
     const { url, headers } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `REST API DELETE Request:\n\nURL: ${url}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\n\nNote: Actual HTTP requests require fetch/axios library.\n\nThis prepares the DELETE request for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `REST API DELETE Request:\n\nURL: ${url}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\n\nNote: Actual HTTP requests require fetch/axios library.\n\nThis prepares the DELETE request for execution.`,
+        },
+      ],
     };
   }
 
   async runTestSuite(args) {
     const { endpoints, test_type } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `API Test Suite:\n\nEndpoints: ${endpoints.join(', ')}\nTest Type: ${test_type}\n\nTests to run:\n${endpoints.map((endpoint, index) => `${index + 1}. ${endpoint} - ${test_type} test`).join('\n')}\n\nNote: Actual testing requires HTTP client library.\n\nThis prepares the test suite for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `API Test Suite:\n\nEndpoints: ${endpoints.join(', ')}\nTest Type: ${test_type}\n\nTests to run:\n${endpoints.map((endpoint, index) => `${index + 1}. ${endpoint} - ${test_type} test`).join('\n')}\n\nNote: Actual testing requires HTTP client library.\n\nThis prepares the test suite for execution.`,
+        },
+      ],
     };
   }
 
   async generateDocumentation(args) {
     const { base_url, format } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `API Documentation Generation:\n\nBase URL: ${base_url}\nFormat: ${format}\n\nDocumentation structure:\n- API Overview\n- Authentication\n- Endpoints\n- Request/Response schemas\n- Error handling\n- Examples\n\nNote: Actual documentation generation requires API introspection.\n\nThis prepares documentation generation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `API Documentation Generation:\n\nBase URL: ${base_url}\nFormat: ${format}\n\nDocumentation structure:\n- API Overview\n- Authentication\n- Endpoints\n- Request/Response schemas\n- Error handling\n- Examples\n\nNote: Actual documentation generation requires API introspection.\n\nThis prepares documentation generation.`,
+        },
+      ],
     };
   }
 
   setupErrorHandling() {
-    this.server.onerror = (error) => console.error('[REST API MCP Error]', error);
+    this.server.onerror = error => console.error('[REST API MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);

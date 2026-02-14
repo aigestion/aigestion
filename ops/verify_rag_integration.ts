@@ -1,4 +1,3 @@
-
 import { ragService } from '../backend/src/services/rag.service';
 
 async function verifyIntegration() {
@@ -11,7 +10,7 @@ async function verifyIntegration() {
   console.log('Skipping full context for brevity.');
 
   // 2. Test with query (should trigger RAG)
-  const query = "Nexus architecture";
+  const query = 'Nexus architecture';
   console.log(`\n--- Test 2: Query "${query}" ---`);
   const queryContext = await ragService.getProjectContext(query);
 
@@ -21,7 +20,9 @@ async function verifyIntegration() {
     console.log('--------------------------------------------------');
 
     // Extract doc section
-    const docSection = queryContext.split('[Documentation Memory]')[1].split('Here is the codebase context')[0];
+    const docSection = queryContext
+      .split('[Documentation Memory]')[1]
+      .split('Here is the codebase context')[0];
     console.log(docSection.trim().substring(0, 500) + '...');
   } else {
     console.log('FAILED: Documentation Memory NOT found.');

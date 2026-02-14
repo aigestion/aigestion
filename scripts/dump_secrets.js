@@ -24,7 +24,12 @@ async function listSecrets(projectId) {
   }
 }
 
-const projects = ['aigestion-v2', 'aigestion-net', 'aigestion-pro-2026', 'aigestion-sovereign-2026'];
+const projects = [
+  'aigestion-v2',
+  'aigestion-net',
+  'aigestion-pro-2026',
+  'aigestion-sovereign-2026',
+];
 
 (async () => {
   for (const p of projects) {

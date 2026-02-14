@@ -25,7 +25,9 @@ const UserMenu = ({ user, onLogout, onSettings }: UserMenuProps) => {
         size="md"
         onClick={() => setIsOpen(!isOpen)}
         className="gap-3 pr-2"
-        icon={<ChevronDown className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')} />}
+        icon={
+          <ChevronDown className={cn('w-4 h-4 transition-transform', isOpen && 'rotate-180')} />
+        }
         iconPosition="right"
       >
         <div className="flex items-center gap-2 text-left">

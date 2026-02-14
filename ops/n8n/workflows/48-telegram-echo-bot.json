@@ -3,9 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "updates": [
-          "message"
-        ]
+        "updates": ["message"]
       },
       "name": "Telegram Trigger",
       "type": "n8n-nodes-base.telegramTrigger",

@@ -58,8 +58,8 @@ lint:
   ignore:
     - linters: [ALL]
       paths:
-        - "**/test_data" # required for golangci-lint, which runs on directories
-        - "**/test_data/**"
+        - '**/test_data' # required for golangci-lint, which runs on directories
+        - '**/test_data/**'
     - linters: [prettier]
       paths: [linters/markdownlint/README.md]
   threshold:
@@ -100,8 +100,7 @@ actions:
     - id: remove-release-snapshots
       display_name: Remove Release Snapshots
       description: Remove release tag from snapshots that were added to the release
-      run:
-        grep "// trunk-upgrade-validation:RELEASE" -r --include=*.shot -l | xargs -I {} sed -i -e
+      run: grep "// trunk-upgrade-validation:RELEASE" -r --include=*.shot -l | xargs -I {} sed -i -e
         '/^\/\/ trunk-upgrade-validation:RELEASE/d' {}
       shell: bash
 

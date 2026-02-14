@@ -45,15 +45,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9
-      ],
+      "dependencies": [3, 4, 5, 6, 7, 8, 9],
       "notes": []
     },
     {
@@ -217,9 +209,7 @@
       "actualHours": 22,
       "progress": 40,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": [
         "Task 1.1: REST API v1 refactoring completed - response builder, standardized endpoints, error handling",
         "Task 1.2: GraphQL implementation expanded - added Project and Mission types, dataloaders updated",
@@ -243,9 +233,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     },
     {
@@ -265,9 +253,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     },
     {
@@ -287,9 +273,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     },
     {
@@ -309,9 +293,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     },
     {
@@ -331,9 +313,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     },
     {
@@ -353,9 +333,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     },
     {
@@ -375,9 +353,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     },
     {
@@ -397,9 +373,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     },
     {
@@ -419,9 +393,7 @@
       "actualHours": 0,
       "progress": 0,
       "assignee": "Alejandro",
-      "dependencies": [
-        1
-      ],
+      "dependencies": [1],
       "notes": []
     }
   ]

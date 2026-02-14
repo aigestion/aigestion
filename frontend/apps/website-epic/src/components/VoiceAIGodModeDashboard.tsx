@@ -217,8 +217,8 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-600">Caracteres usados</span>
                   <span className="font-medium">
-                    {voiceStats.elevenlabs.characters_used.toLocaleString()}/
-                    {voiceStats.elevenlabs.characters_limit.toLocaleString()}
+                    {voiceStats.elevenlabs.characters_used.toLocaleString('es-ES')}/
+                    {voiceStats.elevenlabs.characters_limit.toLocaleString('es-ES')}
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">

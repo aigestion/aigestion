@@ -5,17 +5,20 @@
 ### ✅ **INSTALLED COMPONENTS**
 
 #### **1. Task Scheduler Automation**
+
 - **Memory Manager Task**: Runs every 5 minutes with auto-kill
 - **Startup Task**: Starts automatically at user login
 - **Status**: ✅ Active and running
 
 #### **2. Desktop Shortcuts**
+
 - **AIGestion Memory Monitor**: Real-time monitoring
 - **AIGestion Memory Optimize**: Quick optimization
 - **AIGestion Control Center**: GUI control panel
 - **Location**: Desktop (3 shortcuts created)
 
 #### **3. Scripts Created**
+
 - `memory-auto-scheduler.ps1` - Task scheduler management
 - `memory-desktop-shortcut.ps1` - Desktop shortcuts
 - `memory-startup.ps1` - Startup configuration
@@ -26,12 +29,14 @@
 ## 🚀 **HOW TO USE**
 
 ### **Automatic Management (Recommended)**
+
 ```powershell
 # The system is already running automatically!
 # No action needed - it manages memory every 5 minutes
 ```
 
 ### **Manual Control**
+
 ```powershell
 # Quick memory check
 powershell -ExecutionPolicy Bypass -Command ". .\memory-quick.ps1; mem"
@@ -44,12 +49,14 @@ powershell -ExecutionPolicy Bypass -Command ". .\memory-quick.ps1; memkill -Thre
 ```
 
 ### **GUI Control Center**
+
 ```powershell
 # Launch the visual control panel
 powershell -ExecutionPolicy Bypass -File .\memory-control-center.ps1
 ```
 
 ### **Task Scheduler Management**
+
 ```powershell
 # Check status
 powershell -ExecutionPolicy Bypass -File .\memory-auto-scheduler.ps1 -Status
@@ -62,6 +69,7 @@ powershell -ExecutionPolicy Bypass -File .\memory-auto-scheduler.ps1 -Install
 ```
 
 ### **Startup Management**
+
 ```powershell
 # Check startup status
 powershell -ExecutionPolicy Bypass -File .\memory-startup.ps1 -Status
@@ -75,12 +83,14 @@ powershell -ExecutionPolicy Bypass -File .\memory-startup.ps1 -Uninstall
 ## 📊 **AUTOMATION FEATURES**
 
 ### **✅ Active Automations**
+
 1. **Every 5 Minutes**: Auto memory manager runs
 2. **At Login**: Memory manager starts automatically
 3. **Auto-Kill**: Processes >300MB terminated automatically
 4. **Logging**: All actions logged to files
 
 ### **⚙️ Configuration**
+
 - **Check Interval**: 5 minutes
 - **Memory Threshold**: 300MB per process
 - **Total Memory Limit**: 1024MB
@@ -88,6 +98,7 @@ powershell -ExecutionPolicy Bypass -File .\memory-startup.ps1 -Uninstall
 - **Auto-Kill**: Enabled
 
 ### **📁 Log Files**
+
 - **Memory Manager**: `c:\Users\Alejandro\AIGestion\logs\memory-manager.log`
 - **Scheduler**: `c:\Users\Alejandro\AIGestion\logs\memory-scheduler.log`
 - **Startup**: `c:\Users\Alejandro\AIGestion\logs\memory-startup.log`
@@ -97,6 +108,7 @@ powershell -ExecutionPolicy Bypass -File .\memory-startup.ps1 -Uninstall
 ## 🎯 **DESKTOP SHORTCUTS**
 
 ### **🖥️ Available Shortcuts**
+
 1. **AIGestion Memory Monitor**
    - Real-time memory monitoring
    - Continuous updates
@@ -118,7 +130,9 @@ powershell -ExecutionPolicy Bypass -File .\memory-startup.ps1 -Uninstall
 ## 🔧 **ADVANCED CONFIGURATION**
 
 ### **Custom Thresholds**
+
 Edit `auto-memory-manager.ps1` to modify:
+
 ```powershell
 param(
     [switch]$EnableAutoKill,
@@ -130,7 +144,9 @@ param(
 ```
 
 ### **Custom Schedule**
+
 Edit `memory-auto-scheduler.ps1` to modify:
+
 ```powershell
 # Change repetition interval
 $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 5)
@@ -141,16 +157,19 @@ $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (Ne
 ## 📈 **MONITORING & LOGS**
 
 ### **Real-time Monitoring**
+
 - GUI Control Center shows live status
 - Auto-refresh every 5 seconds
 - Color-coded status indicators
 
 ### **Comprehensive Logging**
+
 - All actions logged with timestamps
 - Error tracking and debugging info
 - Historical performance data
 
 ### **Alert System**
+
 - Visual alerts in GUI
 - Color-coded status indicators
 - Log-based notifications
@@ -160,6 +179,7 @@ $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (Ne
 ## 🛠️ **TROUBLESHOOTING**
 
 ### **Common Issues**
+
 ```powershell
 # Check if tasks are running
 Get-ScheduledTask | Where-Object {$_.TaskName -like "*AIGestion*"}
@@ -173,6 +193,7 @@ powershell -ExecutionPolicy Bypass -File .\memory-auto-scheduler.ps1 -Install
 ```
 
 ### **Performance Issues**
+
 ```powershell
 # Check current memory usage
 powershell -ExecutionPolicy Bypass -Command ". .\memory-quick.ps1; mem"
@@ -189,6 +210,7 @@ powershell -ExecutionPolicy Bypass -Command ". .\memory-quick.ps1; memkill -Thre
 ## 🎉 **SYSTEM STATUS**
 
 ### **✅ Currently Active**
+
 - **Auto Memory Manager**: Running every 5 minutes
 - **Startup Task**: Configured for user login
 - **Desktop Shortcuts**: 3 shortcuts created
@@ -196,6 +218,7 @@ powershell -ExecutionPolicy Bypass -Command ". .\memory-quick.ps1; memkill -Thre
 - **Logging System**: Active and recording
 
 ### **📊 Performance Impact**
+
 - **CPU Usage**: Minimal (<1%)
 - **Memory Overhead**: ~10MB for scripts
 - **Disk I/O**: Minimal (log files only)
@@ -206,12 +229,14 @@ powershell -ExecutionPolicy Bypass -Command ". .\memory-quick.ps1; memkill -Thre
 ## 🚀 **NEXT STEPS**
 
 ### **Enjoy Your Automated System!**
+
 1. **No action needed** - system runs automatically
 2. **Monitor via GUI** - Launch Control Center anytime
 3. **Check logs** - Review activity when needed
 4. **Customize** - Modify thresholds if desired
 
 ### **Optional Enhancements**
+
 - Add email notifications for critical events
 - Create web dashboard for remote monitoring
 - Integrate with system monitoring tools

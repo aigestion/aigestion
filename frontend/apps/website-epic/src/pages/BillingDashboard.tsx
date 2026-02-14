@@ -50,6 +50,16 @@ export const BillingDashboard: React.FC = () => {
 
   useEffect(() => {
     loadBillingData();
+
+    // Check for success param from Stripe redirect
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('success') === 'true') {
+      notify('¡Pago Exitoso!', 'Tu suscripción ha sido activada.', 'success');
+      // Redirect to Client Dashboard after short delay
+      setTimeout(() => {
+        window.location.href = '/client';
+      }, 2000);
+    }
   }, []);
 
   const loadBillingData = async () => {

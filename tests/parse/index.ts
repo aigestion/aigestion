@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import path from "path";
+import * as fs from 'fs';
+import path from 'path';
 import {
   FailedVersion,
   FailureMode,
@@ -8,30 +8,30 @@ import {
   TestResultStatus,
   TestResultSummary,
   ValidatedVersion,
-} from "tests/types";
-import { REPO_ROOT } from "tests/utils";
-import { getTrunkVersion } from "tests/utils/trunk_config";
-import YAML from "yaml";
+} from 'tests/types';
+import { REPO_ROOT } from 'tests/utils';
+import { getTrunkVersion } from 'tests/utils/trunk_config';
+import YAML from 'yaml';
 
-const RESULTS_FILE = path.resolve(REPO_ROOT, "results.json");
-const FAILURES_FILE = path.resolve(REPO_ROOT, "failures.yaml");
-const RERUN_FILE = path.resolve(REPO_ROOT, "reruns.txt");
+const RESULTS_FILE = path.resolve(REPO_ROOT, 'results.json');
+const FAILURES_FILE = path.resolve(REPO_ROOT, 'failures.yaml');
+const RERUN_FILE = path.resolve(REPO_ROOT, 'reruns.txt');
 
-const EXCLUDED_RERUN_LINTERS: string[] = ["snyk"];
+const EXCLUDED_RERUN_LINTERS: string[] = ['snyk'];
 const VALIDATED_LINTER_BLOCKLIST: string[] = [];
 
-const RUN_ID = process.env.RUN_ID ?? "";
-const TEST_REF = process.env.TEST_REF ?? "latest release";
-const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY ?? "missing_repo";
+const RUN_ID = process.env.RUN_ID ?? '';
+const TEST_REF = process.env.TEST_REF ?? 'latest release';
+const GITHUB_REPOSITORY = process.env.GITHUB_REPOSITORY ?? 'missing_repo';
 const PARSE_STRICTNESS = process.env.PARSE_STRICTNESS;
 // If "none", don't generate failures for version mismatches.
-const PLUGIN_VERSION = process.env.PLUGIN_VERSION ?? "v0.0.10";
+const PLUGIN_VERSION = process.env.PLUGIN_VERSION ?? 'v0.0.10';
 if (!process.env.PLUGIN_VERSION) {
-  console.log("Environment var `PLUGIN_VERSION` is not set, using fallback `v0.0.10`");
+  console.log('Environment var `PLUGIN_VERSION` is not set, using fallback `v0.0.10`');
 }
-const TEST_TYPE = process.env.TEST_TYPE ?? "linter";
+const TEST_TYPE = process.env.TEST_TYPE ?? 'linter';
 if (!process.env.TEST_TYPE) {
-  console.log("Environment var `TEST_TYPE` is not set, using fallback `linter`");
+  console.log('Environment var `TEST_TYPE` is not set, using fallback `linter`');
 }
 
 /**
@@ -44,12 +44,12 @@ const getResultsFileFromOS = (os: TestOS) => path.resolve(REPO_ROOT, `${os}-late
  */
 const parseTestStatus = (status: string): TestResultStatus => {
   switch (status) {
-    case "passed":
-      return "passed";
-    case "pending":
-      return "skipped";
+    case 'passed':
+      return 'passed';
+    case 'pending':
+      return 'skipped';
     default:
-      return "failed";
+      return 'failed';
   }
 };
 
@@ -60,11 +60,11 @@ const parseTestStatus = (status: string): TestResultStatus => {
  */
 const mergeTestStatuses = (
   original: TestResultStatus,
-  incoming: TestResultStatus,
+  incoming: TestResultStatus
 ): TestResultStatus => {
-  if (incoming == "failed") {
+  if (incoming == 'failed') {
     return incoming;
-  } else if (original == "skipped") {
+  } else if (original == 'skipped') {
     return incoming;
   }
 
@@ -78,7 +78,7 @@ const mergeTestStatuses = (
 const mergeTestVersions = (original: TestResult, incoming: TestResult) => {
   Array.from(incoming.allVersions).reduce((accumulator, [os, versions]) => {
     const originalOsVersions = original.allVersions.get(os) ?? new Set<string>();
-    versions.forEach((version) => originalOsVersions.add(version));
+    versions.forEach(version => originalOsVersions.add(version));
     accumulator.set(os, originalOsVersions);
 
     return accumulator;
@@ -95,23 +95,23 @@ const mergeTestFailureMetadata = (original: TestResult, incoming: TestResult) =>
       if (originalSuspectedFailureMode) {
         // If the incoming test result is a version mismatch, invalidate the failure mode
         if (incoming.version && original.version && incoming.version !== original.version) {
-          original.testFailureMetadata.set(testFullName, "unknown");
+          original.testFailureMetadata.set(testFullName, 'unknown');
           return;
         }
 
         // If the incoming test result is a pass, invalidate the failure mode
-        if (incoming.testResultStatus === "passed") {
-          original.testFailureMetadata.set(testFullName, "passed");
+        if (incoming.testResultStatus === 'passed') {
+          original.testFailureMetadata.set(testFullName, 'passed');
           return;
         }
 
         // If the incoming test result is a skipped, use the current failure mode
-        if (incoming.testResultStatus === "skipped") {
+        if (incoming.testResultStatus === 'skipped') {
           return;
         }
 
         // If the incoming test result is a failure and not assertion_failure, invalidate the failure mode
-        if (incomingSuspectedFailureMode !== "assertion_failure") {
+        if (incomingSuspectedFailureMode !== 'assertion_failure') {
           original.testFailureMetadata.set(testFullName, incomingSuspectedFailureMode);
           return;
         }
@@ -120,7 +120,7 @@ const mergeTestFailureMetadata = (original: TestResult, incoming: TestResult) =>
       } else {
         original.testFailureMetadata.set(testFullName, incomingSuspectedFailureMode);
       }
-    },
+    }
   );
 };
 
@@ -135,13 +135,13 @@ const mergeTestResults = (original: TestResult, incoming: TestResult) => {
   mergeTestFailureMetadata(original, incoming);
 
   // Handle TestResult information
-  if (version && original.version && version !== original.version && PARSE_STRICTNESS !== "none") {
-    original.testResultStatus = "mismatch";
+  if (version && original.version && version !== original.version && PARSE_STRICTNESS !== 'none') {
+    original.testResultStatus = 'mismatch';
     mergeTestVersions(original, incoming);
   } else {
     original.testResultStatus = mergeTestStatuses(original.testResultStatus, testResultStatus);
   }
-  if (original.testResultStatus == "failed") {
+  if (original.testResultStatus == 'failed') {
     original.failedPlatforms = new Set([...original.failedPlatforms, ...incoming.failedPlatforms]);
   }
 };
@@ -158,7 +158,7 @@ const parseResultsJson = (os: TestOS): TestResultSummary => {
 
   let jsonResult;
   try {
-    jsonResult = JSON.parse(fs.readFileSync(resultsJsonPath, { encoding: "utf-8" }));
+    jsonResult = JSON.parse(fs.readFileSync(resultsJsonPath, { encoding: 'utf-8' }));
   } catch (error) {
     // The caller is primarily responsible for reporting if a file is missing.
     console.warn(`Failed to parse ${resultsJsonPath}. Skipping`);
@@ -173,7 +173,7 @@ const parseResultsJson = (os: TestOS): TestResultSummary => {
     // NOTE(Tyler): Jest does their own file path transformation that sometimes interferes with GH runners.
     // Use this naive replacement in order to divine the relative path to the test file.
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const testFilePath = (testResult.name as string).replace(/.*linters/, "linters").toString();
+    const testFilePath = (testResult.name as string).replace(/.*linters/, 'linters').toString();
 
     testResult.assertionResults.forEach((assertionResult: any) => {
       const testName: string = assertionResult.ancestorTitles[0];
@@ -192,10 +192,10 @@ const parseResultsJson = (os: TestOS): TestResultSummary => {
       }
 
       const version: string = assertionResult.version;
-      const suspectedFailureMode: FailureMode = assertionResult.suspectedFailureMode ?? "unknown";
+      const suspectedFailureMode: FailureMode = assertionResult.suspectedFailureMode ?? 'unknown';
       const status = parseTestStatus(assertionResult.status);
       const failedPlatforms = new Set<TestOS>();
-      if (status === "failed") {
+      if (status === 'failed') {
         failedPlatforms.add(os);
       }
 
@@ -238,7 +238,7 @@ const mergeTestResultSummaries = (testResults: TestResultSummary[]): TestResultS
   const compositeLinterResults = testResults[0].testResults;
 
   // Merge all other OS results into the first OS's results
-  testResults.slice(1).forEach((testResult) => {
+  testResults.slice(1).forEach(testResult => {
     testResult.testResults.forEach((linterResult, linterName) => {
       const compositeLinterResult = compositeLinterResults.get(linterName);
       if (compositeLinterResult) {
@@ -252,7 +252,7 @@ const mergeTestResultSummaries = (testResults: TestResultSummary[]): TestResultS
   });
 
   return {
-    os: "composite",
+    os: 'composite',
     testResults: compositeLinterResults,
   };
 };
@@ -264,33 +264,33 @@ const writeFailuresForNotification = (failures: FailedVersion[]) => {
   const allBlocks = failures.map(
     ({ linter, version, status, allVersions, failedPlatforms, rerunningTest }) => {
       const linterVersion = version ? `${linter}@${version}` : linter;
-      let details = "";
-      if (status == "mismatch") {
+      let details = '';
+      if (status == 'mismatch') {
         details = `(${Array.from(allVersions)
-          .map(([os, versions]) => `${os}: ${Array.from(versions).join(", ")}`)
-          .join("; ")})`;
-      } else if (status == "failed") {
+          .map(([os, versions]) => `${os}: ${Array.from(versions).join(', ')}`)
+          .join('; ')})`;
+      } else if (status == 'failed') {
         details = `(${Array.from(failedPlatforms.keys())
-          .map((os) => os.toString())
-          .join(", ")})`;
+          .map(os => os.toString())
+          .join(', ')})`;
         if (rerunningTest) {
-          details = details.concat(" _(rerunning)_");
+          details = details.concat(' _(rerunning)_');
         }
       }
       return {
-        type: "section",
+        type: 'section',
         text: {
-          type: "mrkdwn",
+          type: 'mrkdwn',
           text: `${TEST_REF} Test Failure: <https://github.com/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}| Testing latest ${TEST_TYPE} ${linterVersion} > _STATUS: ${status}_ ${details}`,
         },
       };
-    },
+    }
   );
 
   const remainingBlock = {
-    type: "section",
+    type: 'section',
     text: {
-      type: "mrkdwn",
+      type: 'mrkdwn',
       text: `${TEST_REF} Test Failure: <https://github.com/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}| _And ${
         allBlocks.length - 50
       } more_`,
@@ -315,7 +315,7 @@ const writeFailuresForNotification = (failures: FailedVersion[]) => {
  * Write the payload for which tests to rerun
  */
 const writeRerunTests = (rerunPaths: string[]) => {
-  const rerunString = rerunPaths.join(" ");
+  const rerunString = rerunPaths.join(' ');
   fs.writeFileSync(RERUN_FILE, rerunString);
   console.log(`Wrote ${rerunString} reruns out to ${RERUN_FILE}`);
 };
@@ -329,7 +329,7 @@ const writeTestResults = (testResults: TestResultSummary) => {
   const validatedVersions = Array.from(testResults.testResults).reduce(
     (accumulator: ValidatedVersion[], [linter, { version, testResultStatus }]) => {
       if (
-        testResultStatus === "passed" &&
+        testResultStatus === 'passed' &&
         version &&
         !VALIDATED_LINTER_BLOCKLIST.includes(linter)
       ) {
@@ -338,7 +338,7 @@ const writeTestResults = (testResults: TestResultSummary) => {
       }
       return accumulator;
     },
-    [],
+    []
   );
   const rerunPaths: string[] = [];
   const failures: FailedVersion[] = [];
@@ -354,18 +354,18 @@ const writeTestResults = (testResults: TestResultSummary) => {
         testFilePath,
       },
     ]) => {
-      if (status !== "passed" && status !== "skipped") {
+      if (status !== 'passed' && status !== 'skipped') {
         const allMetadata = Array.from(testFailureMetadata.values());
         // Must have at least one assertion_failure and no other failure types in order to proactively generate snapshot.
         const shouldRerunTest =
           !EXCLUDED_RERUN_LINTERS.includes(linter) &&
           allMetadata.every(
-            (failureMode) =>
-              failureMode === "assertion_failure" ||
-              failureMode === "skipped" ||
-              failureMode === "passed",
+            failureMode =>
+              failureMode === 'assertion_failure' ||
+              failureMode === 'skipped' ||
+              failureMode === 'passed'
           ) &&
-          allMetadata.find((failureMode) => failureMode === "assertion_failure") !== undefined;
+          allMetadata.find(failureMode => failureMode === 'assertion_failure') !== undefined;
         if (shouldRerunTest) {
           rerunPaths.push(testFilePath);
         }
@@ -380,7 +380,7 @@ const writeTestResults = (testResults: TestResultSummary) => {
         };
         failures.push(additionalFailedVersion);
       }
-    },
+    }
   );
 
   const resultsObject = {
@@ -403,14 +403,14 @@ const writeTestResults = (testResults: TestResultSummary) => {
 
 const parseTestResultsAndWrite = () => {
   // Step 1: Parse each OS's results json file. If one of the expected files does not exist, throw and error out.
-  const testResults = Object.values(TestOS).map((os) => parseResultsJson(os));
+  const testResults = Object.values(TestOS).map(os => parseResultsJson(os));
   const totalParsedTests = testResults.reduce(
     (total, testResultsSummary) => total + testResultsSummary.testResults.size,
-    0,
+    0
   );
   if (totalParsedTests === 0) {
     throw new Error(
-      "No tests were parsed. Output files should be named {ubuntu-latest-res.json|macos-latest-res.json|windows-latest-res.json}",
+      'No tests were parsed. Output files should be named {ubuntu-latest-res.json|macos-latest-res.json|windows-latest-res.json}'
     );
   }
 

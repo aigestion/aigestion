@@ -209,8 +209,8 @@
       "destination": "/backend/api/v2/alexa/$1"
     },
     {
-        "source": "/api/system/(.*)",
-        "destination": "/backend/api/v2/system/$1"
+      "source": "/api/system/(.*)",
+      "destination": "/backend/api/v2/system/$1"
     }
   ],
   "env": {

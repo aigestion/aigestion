@@ -10,9 +10,9 @@ export class StripeService {
   private _stripe: Stripe | undefined;
 
   // Circuit Breakers
-  private createCustomerBreaker: any;
-  private createSessionBreaker: any;
-  private createPortalBreaker: any;
+  private readonly createCustomerBreaker: any;
+  private readonly createSessionBreaker: any;
+  private readonly createPortalBreaker: any;
 
   private get stripe(): Stripe {
     if (!this._stripe) {
@@ -154,3 +154,5 @@ export class StripeService {
     }
   }
 }
+
+export const stripeService = new StripeService();

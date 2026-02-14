@@ -19,13 +19,28 @@ export const ContactModal: React.FC = () => {
     setIsSubmitting(true);
     playClick();
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Real API call
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': import.meta.env.VITE_API_KEY || '', // Ensure API key is passed if required by middleware
+        },
+        body: JSON.stringify(formState),
+      });
 
-    setIsSubmitting(false);
-    playSuccess();
-    setIsContactModalOpen(false);
-    setFormState({ name: '', email: '', message: '' });
+      if (!response.ok) throw new Error('Failed to transmit message');
+
+      setIsSubmitting(false);
+      playSuccess();
+      setIsContactModalOpen(false);
+      setFormState({ name: '', email: '', message: '' });
+    } catch (error) {
+      console.error('Transmission error:', error);
+      setIsSubmitting(false);
+      // Optional: Add error feedback to user
+    }
   };
 
   return (

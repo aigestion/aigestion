@@ -1,9 +1,9 @@
-import { LogType } from "@jest/console";
-import { Reporter } from "@jest/reporters";
-import { AggregatedResult, Test, TestResult } from "@jest/test-result";
-import { FailureMode } from "tests/types";
+import { LogType } from '@jest/console';
+import { Reporter } from '@jest/reporters';
+import { AggregatedResult, Test, TestResult } from '@jest/test-result';
+import { FailureMode } from 'tests/types';
 
-type CustomReporter = Pick<Reporter, "onTestResult">;
+type CustomReporter = Pick<Reporter, 'onTestResult'>;
 
 /**
  * This reporter is run before the default jest reporter. This allows console output to be parsed and then filtered
@@ -31,18 +31,18 @@ export default class TestReporter implements CustomReporter {
     const suspectedFailureModeMap = new Map<string, FailureMode>();
 
     const filteredConsole = testResult.console?.filter(({ message, origin, type }) => {
-      const hasFailureMode = type === ("suspected-failure-mode" as LogType);
+      const hasFailureMode = type === ('suspected-failure-mode' as LogType);
       if (hasFailureMode && !suspectedFailureModeMap.has(origin)) {
         suspectedFailureModeMap.set(origin, message as FailureMode);
       }
 
-      const isLinterVersionMessage = type === ("linter-version" as LogType);
+      const isLinterVersionMessage = type === ('linter-version' as LogType);
       if (isLinterVersionMessage) {
         // full test name is stored in origin, linter version is stored in message
         linterVersionMap.set(origin, message);
       }
 
-      const hasTestType = type === ("test-type" as LogType);
+      const hasTestType = type === ('test-type' as LogType);
       if (hasTestType) {
         // full test name is stored in origin, test type label is stored in message
         testTypeMap.set(origin, message);
@@ -57,13 +57,13 @@ export default class TestReporter implements CustomReporter {
     testResult.testResults = testResult.testResults.map((individualResult: any) => {
       individualResult.version = linterVersionMap.get(individualResult.fullName);
       individualResult.testType = testTypeMap.get(individualResult.fullName);
-      if (individualResult.status === "failed") {
+      if (individualResult.status === 'failed') {
         individualResult.suspectedFailureMode =
-          suspectedFailureModeMap.get(individualResult.fullName) ?? "unknown";
-      } else if (individualResult.status === "pending") {
-        individualResult.suspectedFailureMode = "skipped";
+          suspectedFailureModeMap.get(individualResult.fullName) ?? 'unknown';
+      } else if (individualResult.status === 'pending') {
+        individualResult.suspectedFailureMode = 'skipped';
       } else {
-        individualResult.suspectedFailureMode = "passed";
+        individualResult.suspectedFailureMode = 'passed';
       }
       return individualResult;
     });

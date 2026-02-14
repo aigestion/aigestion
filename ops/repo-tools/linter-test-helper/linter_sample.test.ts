@@ -1,4 +1,4 @@
-import { linterCheckTest, linterFmtTest } from "tests";
+import { linterCheckTest, linterFmtTest } from 'tests';
 
 // Guidelines for configuring tests:
 //  - By default, linters and formatters will only run on files with syntax `<name>.in.<extension>`
@@ -9,7 +9,7 @@ import { linterCheckTest, linterFmtTest } from "tests";
 // If you are unable to write a test for this linter, please document why in your PR. Feel free to ask for help!
 
 // Use if your tool is a linter
-linterCheckTest({ linterName: "NAME_HERE" });
+linterCheckTest({ linterName: 'NAME_HERE' });
 
 // Use if your tool is a formatter
-linterFmtTest({ linterName: "NAME_HERE" });
+linterFmtTest({ linterName: 'NAME_HERE' });

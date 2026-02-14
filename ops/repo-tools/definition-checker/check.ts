@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import path from 'path';
 // trunk-ignore(eslint/import-x/no-extraneous-dependencies)
-import YAML from "yaml";
+import YAML from 'yaml';
 
 // Avoid strictly typing composite config
 // trunk-ignore-all(eslint/@typescript-eslint/no-unsafe-assignment)
@@ -27,9 +27,9 @@ const validateEnables = (file: string, config: any): string[] => {
   const actionsEnabled = config.actions?.enabled;
 
   [
-    [lintEnabled, "Linter"],
-    [toolsEnabled, "Tool"],
-    [actionsEnabled, "Action"],
+    [lintEnabled, 'Linter'],
+    [toolsEnabled, 'Tool'],
+    [actionsEnabled, 'Action'],
   ].forEach((value: any[][]) => {
     const [enableds, enabledType] = value as [any[], string];
     if (enableds?.length) {
@@ -38,9 +38,9 @@ const validateEnables = (file: string, config: any): string[] => {
           generateMessage(
             file,
             `${enabledType} ${enabled} is explicitly enabled`,
-            `no-enable-${enabledType.toLowerCase()}`,
-          ),
-        ),
+            `no-enable-${enabledType.toLowerCase()}`
+          )
+        )
       );
     }
   });
@@ -50,9 +50,9 @@ const validateEnables = (file: string, config: any): string[] => {
   const actionsDefinitions = config.actions?.definitions;
 
   [
-    [lintDefinitions, "Linter"],
-    [toolsDefinitions, "Tool"],
-    [actionsDefinitions, "Action"],
+    [lintDefinitions, 'Linter'],
+    [toolsDefinitions, 'Tool'],
+    [actionsDefinitions, 'Action'],
   ].forEach((value: any[][]) => {
     const [definitions, definitionType] = value as [any[], string];
     if (!definitions) {
@@ -65,12 +65,12 @@ const validateEnables = (file: string, config: any): string[] => {
             generateMessage(
               file,
               `${definitionType} ${definition.name ?? definition.id} is explicitly enabled`,
-              `no-enable-${definitionType.toLowerCase()}`,
-            ),
+              `no-enable-${definitionType.toLowerCase()}`
+            )
           );
         }
         return acc;
-      }, []),
+      }, [])
     );
   });
 
@@ -94,8 +94,8 @@ const validateLinters = (file: string, config: any): string[] => {
         generateMessage(
           file,
           `Linter ${definition.name} should specify 'suggest_if'`,
-          "suggest-if-linter",
-        ),
+          'suggest-if-linter'
+        )
       );
     }
     if (!definition.description) {
@@ -103,8 +103,8 @@ const validateLinters = (file: string, config: any): string[] => {
         generateMessage(
           file,
           `Linter ${definition.name} should specify 'description'`,
-          "description-linter",
-        ),
+          'description-linter'
+        )
       );
     }
     return acc;
@@ -115,16 +115,16 @@ const validateLinters = (file: string, config: any): string[] => {
  * Ensure that a plugin.yaml in the linters or tools subfolders has a matching test file.
  */
 const validateTests = async (file: string): Promise<string[]> => {
-  if (!file.includes("linters") || !file.includes("tools")) {
+  if (!file.includes('linters') || !file.includes('tools')) {
     return [];
   }
 
   const directoryContents = await fs.promises.readdir(path.dirname(file));
-  const hasTest = directoryContents.some((dirFile: string) => dirFile.endsWith(".test.ts"));
+  const hasTest = directoryContents.some((dirFile: string) => dirFile.endsWith('.test.ts'));
   if (hasTest) {
     return [];
   }
-  return [generateMessage(file, "No test file found", "no-test-file")];
+  return [generateMessage(file, 'No test file found', 'no-test-file')];
 };
 
 /**** Lint Plugin Files ****/
@@ -132,12 +132,12 @@ const validateTests = async (file: string): Promise<string[]> => {
 const fileArgs = process.argv.slice(2);
 
 const processFile = async (filePath: string) => {
-  const fileContent = await fs.promises.readFile(filePath, "utf8");
+  const fileContent = await fs.promises.readFile(filePath, 'utf8');
   const yamlContents = YAML.parse(fileContent);
   const errors = validateEnables(filePath, yamlContents);
   errors.push(...validateLinters(filePath, yamlContents));
   errors.push(...(await validateTests(filePath)));
-  console.log(errors.join("\n"));
+  console.log(errors.join('\n'));
 };
 
 const processFiles = async (filePaths: string[]) => {

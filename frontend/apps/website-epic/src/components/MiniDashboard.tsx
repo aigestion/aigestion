@@ -93,7 +93,7 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
                   Ingresos en Tiempo Real
                 </span>
                 <div className="text-3xl font-orbitron font-bold text-white mt-2">
-                  ${data.revenue.toLocaleString()}
+                  ${data.revenue.toLocaleString('es-ES')}
                 </div>
                 <span className="text-xs text-green-400 flex items-center gap-1 mt-2">
                   <TrendingUp className="w-3 h-3" /> +12.5% vs ayer
@@ -104,7 +104,7 @@ export const MiniDashboard: React.FC<MiniDashboardProps> = ({ onClose }) => {
                   Usuarios Conectados
                 </span>
                 <div className="text-3xl font-orbitron font-bold text-white mt-2">
-                  {data.users.toLocaleString()}
+                  {data.users.toLocaleString('es-ES')}
                 </div>
                 <div className="w-full bg-white/10 h-1 rounded-full mt-4 overflow-hidden">
                   <motion.div

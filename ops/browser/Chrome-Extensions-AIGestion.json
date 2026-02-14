@@ -215,11 +215,7 @@
           "version": "1.0.0",
           "manifest_version": 3,
           "description": "Herramientas de desarrollo específicas para AIGestion",
-          "permissions": [
-            "activeTab",
-            "storage",
-            "scripting"
-          ],
+          "permissions": ["activeTab", "storage", "scripting"],
           "background": {
             "service_worker": "background.js"
           },
@@ -266,11 +262,7 @@
     "production": {
       "name": "AIGestion Production",
       "extensions": ["security", "productivity"],
-      "flags": [
-        "enable-gpu-rasterization",
-        "enable-zero-copy",
-        "enable-quic"
-      ]
+      "flags": ["enable-gpu-rasterization", "enable-zero-copy", "enable-quic"]
     }
   },
   "installation": {

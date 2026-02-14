@@ -1,24 +1,24 @@
-import { actionRunTest } from "tests";
-import { TrunkActionDriver } from "tests/driver";
+import { actionRunTest } from 'tests';
+import { TrunkActionDriver } from 'tests/driver';
 
 const preCheck = (driver: TrunkActionDriver) => {
   driver.writeFile(
-    "commitlint.config.mjs",
-    "export default {extends: ['@commitlint/config-conventional']}",
+    'commitlint.config.mjs',
+    "export default {extends: ['@commitlint/config-conventional']}"
   );
 };
 
 const testCallback = async (driver: TrunkActionDriver) => {
   try {
     await driver.gitDriver?.commit(
-      "Test commit",
+      'Test commit',
       [],
-      { "--allow-empty": null },
+      { '--allow-empty': null },
       (error, result) => {
-        expect(error?.message).toContain("subject may not be empty [subject-empty]");
-        expect(error?.message).toContain("type may not be empty [type-empty]");
+        expect(error?.message).toContain('subject may not be empty [subject-empty]');
+        expect(error?.message).toContain('type may not be empty [type-empty]');
         expect(result).toBeUndefined();
-      },
+      }
     );
 
     // Commit step should throw
@@ -29,7 +29,7 @@ const testCallback = async (driver: TrunkActionDriver) => {
 };
 
 actionRunTest({
-  actionName: "commitlint",
+  actionName: 'commitlint',
   syncGitHooks: true,
   testCallback,
   preCheck,

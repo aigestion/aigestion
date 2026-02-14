@@ -8,7 +8,7 @@ tools:
       shims: [phpunit]
       environment:
         - name: PATH
-          list: ["${tool}/vendor/bin"]
+          list: ['${tool}/vendor/bin']
       health_checks:
         - command: phpunit --version
           parse_regex: PHPUnit ${semver}

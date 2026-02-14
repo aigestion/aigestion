@@ -25,9 +25,9 @@ runtimes:
         - name: HOME
           value: ${env.HOME:-}
         - name: PATH
-          list: ["${runtime}/bin"]
+          list: ['${runtime}/bin']
         - name: LD_LIBRARY_PATH
-          list: ["${runtime}/lib"]
+          list: ['${runtime}/lib']
         - name: http_proxy
           value: ${env.http_proxy}
           optional: true
@@ -36,7 +36,7 @@ runtimes:
           optional: true
       linter_environment:
         - name: PATH
-          list: ["${linter}/bin"]
+          list: ['${linter}/bin']
         - name: GEM_HOME
           value: ${linter}
         - name: GEM_PATH

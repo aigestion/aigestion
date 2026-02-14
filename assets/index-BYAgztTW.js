@@ -979,7 +979,7 @@ function useNavigateUnstable() {
       if (dataRouterContext == null && basename !== '/') {
         path.pathname = path.pathname === '/' ? basename : joinPaths([basename, path.pathname]);
       }
-      (!!options.replace ? navigator.replace : navigator.push)(path, options.state, options);
+      (options.replace ? navigator.replace : navigator.push)(path, options.state, options);
     },
     [basename, navigator, routePathnamesJson, locationPathname, dataRouterContext]
   );
@@ -1449,7 +1449,7 @@ function Router(_ref5) {
     static: staticProp = false,
     future,
   } = _ref5;
-  !!useInRouterContext() ? invariant(false) : void 0;
+  useInRouterContext() ? invariant(false) : void 0;
   let basename = basenameProp.replace(/^\/*/, '/');
   let navigationContext = reactExports.useMemo(
     () => ({

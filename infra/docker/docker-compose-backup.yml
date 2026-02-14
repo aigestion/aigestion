@@ -230,7 +230,7 @@ services:
     image: ghcr.io/browserless/chromium:latest
     container_name: NEXUS V1-browser-service
     ports:
-      - "3001:3000"
+      - '3001:3000'
     environment:
       - MAX_CONCURRENT_SESSIONS=10
       - TOKEN=${BROWSERLESS_API_KEY}
@@ -238,7 +238,7 @@ services:
       - NEXUS V1-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "http://localhost:3000/"]
+      test: ['CMD', 'wget', '--spider', 'http://localhost:3000/']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -250,7 +250,7 @@ services:
       dockerfile: Dockerfile
     container_name: NEXUS V1-aig-engine
     ports:
-      - "8000:8000"
+      - '8000:8000'
     volumes:
       - ../aig-ia-engine:/app
     environment:

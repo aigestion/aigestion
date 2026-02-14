@@ -20,71 +20,70 @@ interface Slide {
 
 const SLIDES: Slide[] = [
   {
-    id: 'intro',
-    speaker: 'system',
-    title: 'AIGESTION',
-    subtitle: 'SOVEREIGN INTELLIGENCE',
-    desc: 'Arquitectura avanzada de inteligencia artificial diseñada para la soberanía operativa y la automatización estratégica empresarial.',
-    staticImage: '', // Minimalist approach: focus on the title
-    emoji: '🚀',
-    color: 'from-slate-700 to-slate-900',
-    funFact: 'Sistemas con arquitectura de alta disponibilidad y redundancia geográfica.',
+    id: 'daniela_intro',
+    speaker: 'daniela',
+    title: 'DANIELA',
+    subtitle: 'NEXUS INTELLIGENCE GHOST',
+    desc: 'Hola, soy Daniela. Bienvenido a AIGestion.net. He diseñado este carrusel cinemático para mostrarte el futuro de tu organización bajo la arquitectura de Inteligencia Soberana.',
+    staticImage: '/images/daniela/daniela_office_godmode.png',
+    emoji: '✨',
+    color: 'from-violet-900 to-black',
+    funFact: 'Sistemas con conciencia algorítmica y protocolos de soberanía total.',
   },
   {
-    id: 'nexus_iot',
+    id: 'nexus_control',
     speaker: 'nexus',
-    title: 'NEXUS CONTROL',
-    subtitle: 'OPERATIONAL EXCELLENCE',
-    desc: 'Gestión autónoma de infraestructura y activos en tiempo real, garantizando la continuidad operativa mediante monitoreo predictivo.',
+    title: 'NEXUS CORE',
+    subtitle: 'SOBERANÍA OPERATIVA',
+    desc: 'Control total de infraestructuras críticas. Gestión autónoma de activos con redundancia de grado militar y latencia cero.',
     staticImage: '/images/cinematic/nexus_iot.png',
     emoji: '🤖',
     color: 'from-slate-900 to-black',
-    funFact: 'Capacidad de procesamiento masivo con latencia ultra-baja para entornos críticos.',
+    funFact: 'Capacidad de procesamiento masivo en el edge para decisiones en milisegundos.',
   },
   {
-    id: 'daniela_sales',
+    id: 'sovereign_ai',
     speaker: 'daniela',
-    title: 'DANIELA AI',
-    subtitle: 'COGNITIVE ASSISTANT',
-    desc: 'Asistente cognitivo multilingüe especializado en optimización de procesos y atención al cliente de alto nivel.',
+    title: 'IA SOBERANA',
+    subtitle: 'AUTONOMÍA ESTRATÉGICA',
+    desc: 'Tu inteligencia, tus datos, tu poder. Implementamos redes neuronales privadas que solo responden ante tu organización.',
     staticImage: '/images/daniela/desk.png',
     emoji: '🧠',
     color: 'from-indigo-900 to-violet-900',
-    funFact:
-      'Interface neuronal capaz de gestionar flujos de trabajo complejos con precisión absoluta.',
+    funFact: 'Gobernanza de datos inquebrantable mediante bóvedas de cifrado cuántico.',
   },
   {
-    id: 'nexus_social',
+    id: 'global_vision',
     speaker: 'nexus',
-    title: 'GLOBAL REACH',
-    subtitle: 'STRATEGIC EXPANSION',
-    desc: 'Automatización de presencia digital y análisis de tendencias globales para un posicionamiento de mercado dominante.',
+    title: 'VISIÓN GLOBAL',
+    subtitle: 'EXPANSIÓN DOMINANTE',
+    desc: 'Dominamos el ecosistema digital. Automatización de presencia y análisis predictivo para posicionar vuestra marca en la vanguardia.',
     staticImage: '/images/cinematic/viral_architecture.png',
     emoji: '🌟',
     color: 'from-slate-800 to-blue-900',
-    funFact: 'Algoritmos propietarios de optimización de visibilidad en ecosistemas digitales.',
+    funFact: 'Algoritmos de crecimiento viral escalables a nivel continental.',
   },
   {
-    id: 'roi',
+    id: 'roi_epic',
     speaker: 'system',
-    title: 'ROI OPTIMIZATION',
-    subtitle: 'ECONOMIC EFFICIENCY',
-    desc: 'Maximización del retorno de inversión mediante la reducción de costos operativos y la eficiencia algorítmica aplicada.',
+    title: 'EFICIENCIA DIOS',
+    subtitle: 'OPTIMIZACIÓN DE CAPITAL',
+    desc: 'Maximización radical del retorno de inversión. Reducimos costes operativos mediante la orquestación inteligente de procesos.',
     staticImage: '/images/cinematic/roi_synergy.png',
     emoji: '💰',
     color: 'from-emerald-900 to-slate-900',
-    funFact: 'Incremento medible en la eficiencia de capital mediante automatización inteligente.',
+    funFact: 'Incremento de rentabilidad medible desde el primer ciclo de despliegue.',
   },
   {
-    id: 'cta',
+    id: 'nexus_portal',
     speaker: 'daniela',
-    title: 'CENTRO DE CONTROL',
-    subtitle: 'START YOUR DEPLOYMENT',
-    desc: 'Inicie la transformación digital de su organización con protocolos de implementación de grado industrial.',
+    title: 'AIGESTION.NET',
+    subtitle: 'INICIA TU DESPLIEGUE',
+    desc: 'El Nexo está preparado. Es hora de reclamar la soberanía tecnológica de vuestra empresa. Acceded al Centro de Control.',
     staticImage: '/images/cinematic/future_portal.png',
     emoji: '🎮',
     color: 'from-slate-900 to-indigo-950',
-    funFact: 'Ecosistema escalable preparado para el futuro de la gobernanza digital.',
+    funFact: 'Ecosistema escalable listo para la próxima generación de gobernanza digital.',
   },
 ];
 
@@ -133,23 +132,23 @@ export const CinematicPresentation: React.FC = () => {
       case 'nexus':
         return {
           color: 'text-nexus-cyan-glow',
-          name: 'NEXUS ARCHITECTURE',
+          name: 'ARQUITECTURA NEXUS',
           align: 'items-start text-left',
-          description: 'Autonomous Infrastructure Systems',
+          description: 'Sistemas de Infraestructura Autónoma',
         };
       case 'daniela':
         return {
           color: 'text-nexus-violet-glow',
-          name: 'DANIELA COGNITIVE',
+          name: 'NEXUS INTELLIGENCE GHOST',
           align: 'items-end text-right',
-          description: 'Advanced Process Automation',
+          description: 'Daniela AI | Protocolo Soberano',
         };
       default:
         return {
           color: 'text-white',
-          name: 'AIGESTION CORE',
+          name: 'AIGESTION.NET',
           align: 'items-center text-center',
-          description: 'Strategic Intelligence Hub',
+          description: 'Núcleo de Inteligencia Estratégica',
         };
     }
   };
@@ -190,8 +189,16 @@ export const CinematicPresentation: React.FC = () => {
             <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-size-[100%_4px,3px_100%]" />
           </div>
 
+          {/* Holographic HUD Overlay */}
+          <div className="absolute inset-0 pointer-events-none z-3 opacity-20">
+            <div className="absolute top-10 left-10 w-32 h-32 border-l border-t border-nexus-cyan/40" />
+            <div className="absolute top-10 right-10 w-32 h-32 border-r border-t border-nexus-cyan/40" />
+            <div className="absolute bottom-10 left-10 w-32 h-32 border-l border-b border-nexus-cyan/40" />
+            <div className="absolute bottom-10 right-10 w-32 h-32 border-r border-b border-nexus-cyan/40" />
+          </div>
+
           <div className="absolute inset-x-0 bottom-0 h-px bg-size-[100%_4px,3px_100%] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
-          <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-black" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black" />
         </motion.div>
       </AnimatePresence>
 
@@ -232,8 +239,9 @@ export const CinematicPresentation: React.FC = () => {
               {activeSlide.subtitle}
             </motion.h2>
 
-            <h1 className="text-6xl md:text-8xl xl:text-9xl font-black mb-12 leading-none tracking-tight kinetic-text stack-reveal drop-shadow-[0_0_50px_rgba(255,255,255,0.1)]">
+            <h1 className="text-6xl md:text-8xl xl:text-9xl font-black mb-12 leading-none tracking-tight kinetic-text stack-reveal drop-shadow-[0_0_50px_rgba(255,255,255,0.1)] glitch-text">
               {activeSlide.title}
+              <span className="text-nexus-cyan">.</span>
             </h1>
 
             <div
@@ -260,7 +268,7 @@ export const CinematicPresentation: React.FC = () => {
                   onClick={() => setIsContactModalOpen(true)}
                   className="px-12 py-5 bg-white text-black border border-white rounded-full text-[10px] tracking-[0.4em] uppercase hover:bg-nexus-cyan hover:text-white transition-all font-bold shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                 >
-                  Contactar Especialista
+                  Contactar Estratega
                 </button>
               </MagneticButton>
 
@@ -272,7 +280,7 @@ export const CinematicPresentation: React.FC = () => {
                 }}
                 className="px-12 py-5 bg-transparent text-white border border-white/20 rounded-full text-[10px] tracking-[0.4em] uppercase hover:border-nexus-cyan hover:text-nexus-cyan transition-all font-bold"
               >
-                Ver Dashboard
+                Acceder al Nexo
               </button>
 
               <button

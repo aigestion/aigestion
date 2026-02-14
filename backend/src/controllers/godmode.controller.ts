@@ -3,6 +3,8 @@ import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
 import { SupabaseService } from '../services/supabase.service';
 import { GodNotificationService } from '../services/god-notification.service';
+import { MastraService } from '../services/mastra.service';
+import { SwarmService } from '../services/swarm.service';
 import { logger } from '../utils/logger';
 
 /**
@@ -12,8 +14,58 @@ import { logger } from '../utils/logger';
 @injectable()
 export class GodModeController {
   constructor(
-    @inject(TYPES.GodNotificationService) private notificationService: GodNotificationService
+    @inject(TYPES.GodNotificationService) private notificationService: GodNotificationService,
+    @inject(TYPES.MastraService) private mastra: MastraService,
+    @inject(TYPES.SwarmService) private swarm: SwarmService,
   ) {}
+
+  /**
+   * 🎙️ UNIFIED TRANSCENDENT COMMAND INTERFACE
+   * Single entry-point for all cognitive requests.
+   */
+  public async executeCommand(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { input, type, context } = req.body;
+      logger.info(`[GodMode] Transcendental command received: ${type}`);
+
+      // Hybrid routing: Mastra for complex workflows, Swarm for immediate tasks
+      let result;
+      if (type === 'workflow') {
+        result = await this.mastra.executeMission(input, context);
+      } else {
+        result = await this.swarm.orchestrate({
+          id: `cmd_${Date.now()}`,
+          type: type || 'general',
+          payload: input,
+          context,
+        });
+      }
+
+      res.json({ success: true, ...result });
+    } catch (error: any) {
+      next(error);
+    }
+  }
+
+  /**
+   * 💓 GOD-PULSE
+   * Real-time state synchronization for the Sovereign Dashboard.
+   */
+  public async godPulse(req: Request, res: Response, next: NextFunction) {
+    try {
+      res.json({
+        success: true,
+        pulse: {
+          timestamp: new Date().toISOString(),
+          status: 'SOVEREIGN_ACTIVE',
+          entropy: Math.random(),
+          cognitiveLoad: 0.12, // Example metric
+        },
+      });
+    } catch (error: any) {
+      next(error);
+    }
+  }
 
   // PROJECTS
   public async listProjects(req: Request, res: Response, next: NextFunction) {
@@ -63,7 +115,7 @@ export class GodModeController {
         query,
         embedding,
         threshold || 0.5,
-        limit || 5
+        limit || 5,
       );
 
       res.json({ success: true, data: results });
@@ -128,7 +180,7 @@ export class GodModeController {
       await this.notificationService.broadcastGodAlert(
         title || 'Prueba de Sistema Soberano',
         message || 'Este es un mensaje de prueba verificado por Daniela.',
-        urgency || 'medium'
+        urgency || 'medium',
       );
 
       res.json({ success: true, message: 'Broadcast successful' });

@@ -5,5 +5,3 @@ metadata:
   labels:
     name: NEXUS V1
     environment: production
-
-

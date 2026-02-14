@@ -22,6 +22,11 @@ export class LoginUserUseCase {
     if (user.lockUntil && user.lockUntil > new Date()) {
       throw new AppError('Credenciales inválidas', 401, 'AUTH_ERROR');
     }
+
+    if (!password || !user.password) {
+      throw new AppError('Credenciales inválidas', 401, 'AUTH_ERROR');
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       const loginAttempts = (user.loginAttempts ?? 0) + 1;

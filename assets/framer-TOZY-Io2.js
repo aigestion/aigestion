@@ -2997,7 +2997,7 @@ const colorTypes = [hex, rgba, hsla];
 const getColorType = v => colorTypes.find(type => type.test(v));
 function asRGBA(color2) {
   const type = getColorType(color2);
-  if (!Boolean(type)) return false;
+  if (!type) return false;
   let model = type.parse(color2);
   if (type === hsla) {
     model = hslaToRgba(model);
@@ -6620,7 +6620,7 @@ function createProjectionNode({
         this.forceRelativeParentToResolveTarget();
         calcRelativeBox(this.target, this.relativeTarget, this.relativeParent.target);
       } else if (this.targetDelta) {
-        if (Boolean(this.resumingFrom)) {
+        if (this.resumingFrom) {
           this.target = this.applyTransform(this.layout.layoutBox);
         } else {
           copyBoxInto(this.target, this.layout.layoutBox);

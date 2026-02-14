@@ -91,21 +91,21 @@ spec:
               name: admin
           env:
             - name: COLLECTOR_ZIPKIN_HOST_PORT
-              value: ":9411"
+              value: ':9411'
             - name: COLLECTOR_OTLP_ENABLED
-              value: "true"
+              value: 'true'
             - name: SPAN_STORAGE_TYPE
-              value: "badger"
+              value: 'badger'
             - name: BADGER_EPHEMERAL
-              value: "false"
+              value: 'false'
             - name: BADGER_DIRECTORY_VALUE
-              value: "/badger/data"
+              value: '/badger/data'
             - name: BADGER_DIRECTORY_KEY
-              value: "/badger/key"
+              value: '/badger/key'
             - name: MEMORY_MAX_TRACES
-              value: "10000"
+              value: '10000'
             - name: QUERY_BASE_PATH
-              value: "/jaeger"
+              value: '/jaeger'
           volumeMounts:
             - name: jaeger-storage
               mountPath: /badger
@@ -217,13 +217,13 @@ spec:
               app: evaluation
       ports:
         - protocol: TCP
-          port: 14268  # HTTP collector
+          port: 14268 # HTTP collector
         - protocol: TCP
-          port: 14250  # gRPC collector
+          port: 14250 # gRPC collector
         - protocol: UDP
-          port: 6831   # Jaeger agent compact
+          port: 6831 # Jaeger agent compact
         - protocol: UDP
-          port: 6832   # Jaeger agent binary
+          port: 6832 # Jaeger agent binary
     # Permitir acceso a UI desde ingress
     - from:
         - namespaceSelector:
@@ -231,7 +231,7 @@ spec:
               name: ingress-nginx
       ports:
         - protocol: TCP
-          port: 16686  # Jaeger Query UI
+          port: 16686 # Jaeger Query UI
   egress:
     # Permitir DNS
     - to:
@@ -241,4 +241,3 @@ spec:
           port: 53
         - protocol: UDP
           port: 53
-

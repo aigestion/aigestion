@@ -34,6 +34,7 @@ La documentación interactiva estará disponible en: `http://localhost:8000/docs
 ### Endpoints
 
 - `POST /archive`: Guardar conocimiento.
+
   ```json
   {
     "content": "El proyecto NEXUS V1 busca automatizar la gestión mediante IA.",
@@ -48,4 +49,3 @@ La documentación interactiva estará disponible en: `http://localhost:8000/docs
     "query": "¿Cuál es el objetivo de NEXUS V1?"
   }
   ```
-

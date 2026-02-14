@@ -1,66 +1,75 @@
 import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
-import { cache } from '../utils/cacheManager';
+import { pineconeService } from './pinecone.service';
 
 export interface VectorDocument {
   id: string;
   text: string;
   metadata: Record<string, any>;
-  embedding?: number[];
+  namespace?: string;
 }
 
+/**
+ * UNIFIED VECTOR REGISTRY (God Mode)
+ * Orchastrates semantic memory across the Sovereign Ecosystem.
+ */
 @injectable()
 export class VectorService {
-  private readonly provider: string = process.env.VECTOR_DB_PROVIDER || 'pinecone';
-
   /**
-   * Index a document into the long-term memory
+   * Synchronize document with Semantic Memory
    */
-  async upsert(doc: VectorDocument) {
+  async upsert(doc: VectorDocument): Promise<boolean> {
     try {
-      logger.info({ docId: doc.id, provider: this.provider }, 'Upserting to Vector Memory');
+      const namespace = doc.namespace || 'documentation';
+      logger.info({ docId: doc.id, namespace }, '[VectorService] Indexing to Semantic Memory');
 
-      // 1. Generate Embedding (Simulated for this jump)
-      // In production: const embedding = await openAI.createEmbedding(doc.text);
-
-      // 2. Storage Logic (Simulated for initial scaffold)
-      const vectorKey = `vector:mem:${doc.id}`;
-      await cache.set(
-        vectorKey,
+      await pineconeService.upsertDocument(
+        doc.id,
+        doc.text,
         {
-          ...doc,
-          indexedAt: Date.now(),
+          ...doc.metadata,
+          source: 'vector-service-upload',
         },
-        { ttl: 0 }
-      ); // Circular persistence
+        namespace
+      );
 
       return true;
     } catch (error) {
-      logger.error({ error, docId: doc.id }, 'Error upserting to Vector Memory');
+      logger.error({ error, docId: doc.id }, '[VectorService] Upsert fault in semantic layer');
       return false;
     }
   }
 
   /**
-   * Semantic search for relevant context
+   * Execute semantic interaction (Search)
    */
-  async search(query: string, limit: number = 5) {
+  async search(query: string, limit: number = 5, namespace: string = 'documentation') {
     try {
-      logger.info({ query, limit }, 'Searching Vector Memory');
+      logger.info({ query, limit, namespace }, '[VectorService] Querying Quantum Registry');
 
-      // In production: perform cosine similarity search in Pinecone/Weaviate
-      // For now, we return a symbolic context hit
-      return [
-        {
-          id: 'ref-Q1-milestones',
-          text: 'The Q1 2026 Roadmap focused on NestJS and Atomic Design System v2.',
-          score: 0.98,
-        },
-      ];
+      const matches = await pineconeService.search(query, {
+        topK: limit,
+        namespace,
+      });
+
+      // Format for standardized response
+      return matches.map(match => ({
+        id: match.id,
+        text: match.metadata?.text || '',
+        score: match.score || 0,
+        metadata: match.metadata || {},
+      }));
     } catch (error) {
-      logger.error({ error, query }, 'Error searching Vector Memory');
+      logger.error({ error, query }, '[VectorService] Search fault in quantum registry');
       return [];
     }
+  }
+
+  /**
+   * Perform deep cleanup of a memory segment
+   */
+  async clearMemory(namespace: string): Promise<void> {
+    await pineconeService.purgeNamespace(namespace);
   }
 }
 
