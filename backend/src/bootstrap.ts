@@ -1,3 +1,24 @@
+// MUST run before ANY imports to register @/ alias
+import path from 'path';
+import Module from 'module';
+
+// Register @/ path alias → dist/ directory at runtime
+// This replaces tsc-alias which incorrectly transforms npm package names
+// that collide with directory names (e.g., 'graphql' → '../graphql')
+const originalResolveFilename = (Module as any)._resolveFilename;
+(Module as any)._resolveFilename = function (
+  request: string,
+  parent: any,
+  isMain: boolean,
+  options: any,
+) {
+  if (request.startsWith('@/')) {
+    const resolved = path.join(__dirname, request.substring(2));
+    return originalResolveFilename.call(this, resolved, parent, isMain, options);
+  }
+  return originalResolveFilename.call(this, request, parent, isMain, options);
+};
+
 import { loadSecrets } from './utils/secrets';
 import { logger } from './utils/logger';
 
