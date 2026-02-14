@@ -119,11 +119,11 @@ import { DevicePostureService } from '../services/device-posture.service';
 import { SovereignHealingService } from '../services/SovereignHealingService';
 import { VoiceBiometricsService } from '../services/VoiceBiometricsService';
 import { SovereignSentinelService } from '../services/SovereignSentinelService';
-import { MemoryService } from '../services/memory.service';
+// MemoryService: removed (llamaindex not installed)
 import { AuditService } from '../services/audit.service';
 import { NotebookInsightService } from '../services/google/notebook-insight.service';
 import { ColabService } from '../services/google/colab.service';
-import { MapsService } from '../services/google/maps.service';
+// MapsService: removed (@googlemaps/google-maps-services-js not installed)
 import { BigQueryService } from '../services/google/bigquery.service';
 import { CloudTasksService } from '../services/google/cloud-tasks.service';
 import { VideoIntelligenceService } from '../services/google/video-intelligence.service';
@@ -253,7 +253,7 @@ bind<UserService>(TYPES.UserService, UserService);
 bind<EmailService>(TYPES.EmailService, EmailService);
 bind<BackupService>(TYPES.BackupService, BackupService);
 bind<BackupSchedulerService>(TYPES.BackupSchedulerService, BackupSchedulerService);
-bind<MemoryService>(TYPES.MemoryService, MemoryService);
+// MemoryService binding removed (llamaindex not installed)
 bind<AuditService>(TYPES.AuditService, AuditService);
 bind<SupabaseService>(TYPES.SupabaseService, SupabaseService);
 bind<VertexAIService>(TYPES.VertexAIService, VertexAIService);
@@ -277,8 +277,7 @@ if (!container.isBound(ColabService))
   container.bind<ColabService>(ColabService).toSelf().inSingletonScope();
 if (!container.isBound(NotebookInsightService))
   container.bind<NotebookInsightService>(NotebookInsightService).toSelf().inSingletonScope();
-if (!container.isBound(MapsService))
-  container.bind<MapsService>(MapsService).toSelf().inSingletonScope();
+// MapsService binding removed (@googlemaps not installed)
 if (!container.isBound(BigQueryService))
   container.bind<BigQueryService>(BigQueryService).toSelf().inSingletonScope();
 if (!container.isBound(CloudTasksService))
