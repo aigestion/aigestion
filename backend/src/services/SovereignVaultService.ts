@@ -78,7 +78,7 @@ export class SovereignVaultService {
       // Pinecone search using pre-generated embeddings could be optimized,
       // but current pineconeService.search re-ranks/generates.
       // We use the text for now as search accepts string, but ideally would accept vector.
-      const results = await pineconeService.search(text, limit);
+      const results = await pineconeService.search(text, { topK: limit });
       return results.map(res => ({
         content: res.metadata?.text || '',
         source: 'cloud',

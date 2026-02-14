@@ -1,17 +1,37 @@
-import fs from 'fs';
-import { drive_v3, google } from 'googleapis';
+import { google } from 'googleapis';
 import { injectable } from 'inversify';
 
 import { logger } from '../../utils/logger';
 
 @injectable()
 export class GoogleDriveService {
-  private drive: drive_v3.Drive | null = null;
+  private drive: any | null = null;
   private readonly DRIVE_SCOPES = ['https://www.googleapis.com/auth/drive'];
   private initPromise: Promise<void> | null = null;
 
   constructor() {
     this.initPromise = this.initializeClient();
+  }
+
+  async uploadFileContent(content: Buffer, fileName: string, mimeType: string): Promise<string> {
+      if (!this.drive) {
+          // Attempt to init if not ready, though improper usage
+           await this.getDriveClient();
+      }
+      if (!this.drive) throw new Error('Drive client not initialized');
+      
+      const media = {
+          mimeType,
+          body: require('stream').Readable.from(content)
+      };
+
+      const res = await this.drive.files.create({
+          requestBody: { name: fileName },
+          media: media,
+          fields: 'id'
+      });
+      logger.info(`Uploaded content ${fileName} (${res.data.id})`);
+      return res.data.id!;
   }
 
   private async initializeClient() {
@@ -32,7 +52,7 @@ export class GoogleDriveService {
     }
   }
 
-  private async getDriveClient(): Promise<drive_v3.Drive> {
+  private async getDriveClient(): Promise<any> {
     if (this.initPromise) {
       await this.initPromise;
     }
@@ -117,7 +137,7 @@ export class GoogleDriveService {
     fileName: string,
     parentId: string,
     mimeType: string,
-    hash: string
+    hash: string,
   ): Promise<void> {
     if (!this.drive) {
       throw new Error('Drive client not initialized');
@@ -213,7 +233,7 @@ export class GoogleDriveService {
    * Lists contents of a folder for restore purposes
    */
   async listFolderContents(
-    folderId: string
+    folderId: string,
   ): Promise<{ id: string; name: string; mimeType: string; localHash?: string }[]> {
     if (!this.drive) {
       throw new Error('Drive client not initialized');

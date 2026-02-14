@@ -34,7 +34,7 @@ export class PQCEncryptionService {
    */
   async sign(payload: Uint8Array, privateKey: Uint8Array) {
     const seed = crypto.getRandomValues(new Uint8Array(32));
-    return mldsa.ml_dsa65.sign(privateKey, payload, undefined, seed);
+    return mldsa.ml_dsa65.sign(privateKey, payload);
   }
 
   /**

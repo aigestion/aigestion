@@ -25,7 +25,7 @@ export class NexusRadioService {
       Act as two high-level AI News anchors, "Nexus" (authoritative, deep) and "Aurora" (analytical, sharp).
       Generate a conversational script summarizing:
       ${context}
-      
+
       Style: "High-tech noir", fast-paced, insightful. Avoid filler.
       Format: [NEXUS]: text, [AURORA]: text.
     `;
@@ -41,6 +41,8 @@ export class NexusRadioService {
     // Logic for multi-voice interleaving would go here
     // For now, we synthesize the authoritative core
     const summary = script.replaceAll(/\[NEXUS\]:|\[AURORA\]:/g, '');
-    return await this.eleven.textToSpeech(summary);
+    const voiceId = process.env.ELEVENLABS_VOICE_ID || '21m00Tcm4TlvDq8ikWAM'; // Fallback voice
+    const outputPath = `temp/briefing_${Date.now()}.mp3`;
+    return await this.eleven.textToSpeech(summary, voiceId, outputPath);
   }
 }

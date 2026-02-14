@@ -27,3 +27,9 @@ downloads
 backups
 .gemini
 
+
+# AI Engine Data (Large files)
+aig-ia-engine/data
+**/trained_models
+**/checkpoints
+**/vectors
