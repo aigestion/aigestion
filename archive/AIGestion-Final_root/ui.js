@@ -446,7 +446,7 @@ const Wt = (t, e, n) => t + (e - t) * n,
 function $t(t) {
   const e = ((n = t), Ht.find(t => t.test(n)));
   var n;
-  if (!Boolean(e)) return !1;
+  if (!e) return !1;
   let i = e.parse(t);
   return (
     e === At &&
@@ -3806,7 +3806,7 @@ function No({
             so(r.x, a.x, l.x),
             so(r.y, a.y, l.y))
           : this.targetDelta
-            ? (Boolean(this.resumingFrom)
+            ? (this.resumingFrom
                 ? (this.target = this.applyTransform(this.layout.layoutBox))
                 : mo(this.target, this.layout.layoutBox),
               xs(this.target, this.targetDelta))

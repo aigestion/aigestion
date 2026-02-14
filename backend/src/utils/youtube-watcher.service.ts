@@ -1,7 +1,7 @@
 ﻿import { injectable, inject } from 'inversify';
 import * as chokidar from 'chokidar';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 import { env } from '../config/env.schema';
 import { TranscriptionJob, YoutubeTranscriptionQueue } from '../queue/youtube-transcription.queue';
@@ -10,7 +10,7 @@ import { TelegramService } from '../services/telegram.service';
 import { logger } from '../utils/logger';
 import { TYPES } from '../types';
 
-const VIDEO_EXTENSIONS = ['.mp4', '.mov', '.avi', '.mkv'];
+const VIDEO_EXTENSIONS = new Set(['.mp4', '.mov', '.avi', '.mkv']);
 
 /**
  * Servicio de vigilancia de carpeta para archivos de YouTube
@@ -18,15 +18,15 @@ const VIDEO_EXTENSIONS = ['.mp4', '.mov', '.avi', '.mkv'];
 @injectable()
 export class YoutubeWatcherService {
   private watcher: chokidar.FSWatcher | null = null;
-  private watchPath: string;
-  private processedPath: string;
-  private recipientEmail: string;
+  private readonly watchPath: string;
+  private readonly processedPath: string;
+  private readonly recipientEmail: string;
 
   constructor(
     @inject(TYPES.YoutubeTranscriptionQueue)
-    private youtubeTranscriptionQueue: YoutubeTranscriptionQueue,
-    @inject(TYPES.YoutubeChannelService) private youtubeChannelService: YouTubeChannelService,
-    @inject(TYPES.TelegramService) private telegramService: TelegramService
+    private readonly youtubeTranscriptionQueue: YoutubeTranscriptionQueue,
+    @inject(TYPES.YoutubeChannelService) private readonly youtubeChannelService: YouTubeChannelService,
+    @inject(TYPES.TelegramService) private readonly telegramService: TelegramService
   ) {
     // La carpeta a vigilar está en la raíz del proyecto NEXUS V1
     const projectRoot = path.resolve(__dirname, '../../../../');
@@ -113,7 +113,7 @@ export class YoutubeWatcherService {
     }
 
     // Soporte para archivos de video (Upload)
-    if (VIDEO_EXTENSIONS.includes(path.extname(filePath).toLowerCase())) {
+    if (VIDEO_EXTENSIONS.has(path.extname(filePath).toLowerCase())) {
       await this.processVideoFile(filePath, fileName);
       return;
     }
@@ -198,7 +198,7 @@ export class YoutubeWatcherService {
         timestamp: new Date().toISOString(),
       };
 
-      const enqueued = await youtubeTranscriptionQueue.publishTranscriptionJob(job);
+      const enqueued = await this.youtubeTranscriptionQueue.publishTranscriptionJob(job);
 
       if (enqueued) {
         logger.info(`Job de transcripción encolado para video subido: ${fileName}`);

@@ -3,15 +3,15 @@ const { performance } = require('perf_hooks');
 
 async function runChaosTest() {
   console.log('🔥 Initializing AIGestion Chaos Engineering Suite...');
-  
+
   const targets = [
     { name: 'NestJS Auth', url: 'http://localhost:5001/diagnostic/status' },
-    { name: 'Express Backend', url: 'http://localhost:5002/api/health' }
+    { name: 'Express Backend', url: 'http://localhost:5002/api/health' },
   ];
 
   for (const target of targets) {
     console.log(`\n🧪 Testing Resilience for: ${target.name}`);
-    
+
     // 1. Baseline Latency
     const start = performance.now();
     try {
@@ -25,7 +25,9 @@ async function runChaosTest() {
     console.log('⏳ Simulating 500ms Network Jitter...');
     const jitterStart = performance.now();
     await new Promise(r => setTimeout(r, 500));
-    console.log(`✅ Fallback logic engaged after ${(performance.now() - jitterStart).toFixed(2)}ms`);
+    console.log(
+      `✅ Fallback logic engaged after ${(performance.now() - jitterStart).toFixed(2)}ms`
+    );
 
     // 3. Simulated Service Failure
     console.log('💀 Simulating Service CRASH (L1 Cache Fallback)...');

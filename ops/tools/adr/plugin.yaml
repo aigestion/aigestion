@@ -15,4 +15,4 @@ tools:
       shims: [adr]
       environment:
         - name: PATH
-          list: ["${tool}/src"]
+          list: ['${tool}/src']

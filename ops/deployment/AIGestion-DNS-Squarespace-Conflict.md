@@ -11,35 +11,43 @@ He analizado tu configuración DNS y **está configurada correctamente para Verc
 ## 📊 **CONFIGURACIÓN DNS ACTUAL**
 
 ### **✅ Nameservers - CORRECTOS**
+
 ```
 ns1.vercel-dns.com
 ns2.vercel-dns.com
 ```
+
 **Estado**: ✅ **Apuntando a Vercel correctamente**
 
 ### **✅ Registros A - CORRECTOS**
+
 ```
 @ → 185.199.108.153
-@ → 185.199.109.153  
+@ → 185.199.109.153
 @ → 185.199.110.153
 @ → 185.199.111.153
 www → 185.199.111.153
 ```
+
 **Estado**: ✅ **Servidores Vercel correctos**
 
 ### **✅ Registros TXT - CORRECTOS**
+
 ```
 _vercel1: vc-domain-verify=www.aigestion.net,e7f70f66965938d86608
 _vercel: vc-domain-verify=www.aigestion.net,e7f70f66965938d86608
 @: google-site-verification=RlJ-bmxhPWVRe_KkONR11QSrTdTVR4xmqrudcKoRwkE
 @: v=spf1 include:_spf.google.com ~all
 ```
+
 **Estado**: ✅ **Verificación de dominio Vercel configurada**
 
-### **❌ Problema: _domainconnect CNAME**
+### **❌ Problema: \_domainconnect CNAME**
+
 ```
 _domainconnect → 0 → _domainconnect.domains.squarespace.com
 ```
+
 **Estado**: ❌ **Dominio conectado a Squarespace**
 
 ---
@@ -49,6 +57,7 @@ _domainconnect → 0 → _domainconnect.domains.squarespace.com
 ### **🔍 Causa Principal: Dominio Conectado a Squarespace**
 
 #### **Análisis del Conflicto**
+
 ```
 ✅ DNS configurado para Vercel
 ❌ _domainconnect conectado a Squarespace
@@ -57,7 +66,8 @@ _domainconnect → 0 → _domainconnect.domains.squarespace.com
 ```
 
 #### **Explicación**
-- **_domainconnect**: Indica que el dominio está "conectado" a Squarespace
+
+- **\_domainconnect**: Indica que el dominio está "conectado" a Squarespace
 - **Squarespace**: Está interceptando todo el tráfico del dominio
 - **Vercel**: Tiene DNS correcto pero Squarespace tiene prioridad
 - **Resultado**: Error 404 porque Squarespace no tiene contenido
@@ -69,6 +79,7 @@ _domainconnect → 0 → _domainconnect.domains.squarespace.com
 ### **📦 Paso 1: Desconectar Dominio de Squarespace**
 
 #### **Acciones Requeridas**
+
 ```
 1. Acceder a panel de Squarespace
 2. Ir a Settings → Domains
@@ -78,6 +89,7 @@ _domainconnect → 0 → _domainconnect.domains.squarespace.com
 ```
 
 #### **Alternativa: Contactar Soporte**
+
 ```
 Si no tienes acceso a Squarespace:
 1. Contactar soporte de Squarespace
@@ -88,7 +100,8 @@ Si no tienes acceso a Squarespace:
 
 ### **📦 Paso 2: Verificar Desconexión**
 
-#### **Eliminar Registro _domainconnect**
+#### **Eliminar Registro \_domainconnect**
+
 ```
 1. Acceder a configuración DNS
 2. Eliminar registro CNAME: _domainconnect
@@ -99,6 +112,7 @@ Si no tienes acceso a Squarespace:
 ### **📦 Paso 3: Verificar Funcionamiento**
 
 #### **Testear Dominio**
+
 ```
 1. Esperar 30 minutos después de desconectar
 2. Testear aigestion.net en navegador
@@ -113,6 +127,7 @@ Si no tienes acceso a Squarespace:
 ### **📦 Mientras se resuelve el conflicto**
 
 #### **Usar URLs Directas Funcionales**
+
 ```
 🎮 Website Principal: https://aig-estion-final.vercel.app
 🏆 Dashboard Admin: https://aig-estion-final.vercel.app/admin-simple.html
@@ -127,6 +142,7 @@ Si no tienes acceso a Squarespace:
 ### **📦 Opción 1: Acceso a Squarespace (Recomendada)**
 
 #### **Si tienes acceso a Squarespace**
+
 ```
 1. Iniciar sesión en Squarespace
 2. Ir a Settings → Domains
@@ -140,6 +156,7 @@ Si no tienes acceso a Squarespace:
 ### **📦 Opción 2: Contactar Soporte Squarespace**
 
 #### **Si no tienes acceso**
+
 ```
 1. Contactar soporte Squarespace
 2. Explicar que necesitas liberar el dominio
@@ -151,6 +168,7 @@ Si no tienes acceso a Squarespace:
 ### **📦 Opción 3: Transferir Dominio**
 
 #### **Si no se puede resolver**
+
 ```
 1. Iniciar transferencia de dominio
 2. Mover a otro registrador
@@ -163,19 +181,23 @@ Si no tienes acceso a Squarespace:
 ## 🌟️ **VEREDICTO FINAL**
 
 ### **✅ PROBLEMA IDENTIFICADO**
-- **Causa**: Dominio conectado a Squarespace (_domainconnect)
+
+- **Causa**: Dominio conectado a Squarespace (\_domainconnect)
 - **Conflicto**: Squarespace interceptando tráfico de Vercel
 - **Solución**: Desconectar dominio de Squarespace
 - **Estado**: DNS correcto pero servicio en conflicto
 
 ### **🎯 ACCIÓN INMEDIATA PARA TI**
+
 1. **Acceder a Squarespace** y desconectar aigestion.net
-2. **Eliminar registro _domainconnect** de DNS
+2. **Eliminar registro \_domainconnect** de DNS
 3. **Esperar 30 minutos** y testear aigestion.net
 4. **Si no tienes acceso**, contactar soporte Squarespace
 
 ### **🚀 MIENTRAS TANTO**
+
 **Usa las URLs funcionales directamente:**
+
 ```
 🎮 https://aig-estion-final.vercel.app
 🏆 https://aig-estion-final.vercel.app/admin-simple.html
@@ -185,4 +207,4 @@ Si no tienes acceso a Squarespace:
 
 **🔥 EL PROBLEMA ESTÁ 100% IDENTIFICADO: CONFLICTO SQUARESPACE!**
 
-*Tu DNS está configurado correctamente para Vercel, pero el dominio está conectado a Squarespace a través del registro _domainconnect. Squarespace está interceptando todo el tráfico. La solución es desconectar el dominio de Squarespace.*
+_Tu DNS está configurado correctamente para Vercel, pero el dominio está conectado a Squarespace a través del registro \_domainconnect. Squarespace está interceptando todo el tráfico. La solución es desconectar el dominio de Squarespace._

@@ -1,6 +1,6 @@
-import { toolInstallTest } from "tests";
+import { toolInstallTest } from 'tests';
 
 toolInstallTest({
-  toolName: "platformio",
-  toolVersion: "6.1.11",
+  toolName: 'platformio',
+  toolVersion: '6.1.11',
 });

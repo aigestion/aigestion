@@ -13,7 +13,7 @@ const path = require('path');
 
 const rl = readline.createInterface({
   input: process.stdin,
-  output: process.stdout
+  output: process.stdout,
 });
 
 class AIGestionWorkspaceSetup {
@@ -22,13 +22,13 @@ class AIGestionWorkspaceSetup {
       empresa: 'AIGestion',
       dominio: 'aigestion.net',
       plan: 'Business Standard',
-      usuarios: []
+      usuarios: [],
     };
   }
 
   async iniciar() {
     console.log('🌌 BIENVENIDO AL SETUP DE GOOGLE WORKSPACE - AIGESTION');
-    console.log('=' .repeat(60));
+    console.log('='.repeat(60));
 
     await this.recopilarDatos();
     await this.generarConfiguracion();
@@ -45,7 +45,8 @@ class AIGestionWorkspaceSetup {
     this.config.emailPersonal = await this.pregunta('📧 Tu email personal actual (gmail): ');
 
     // Usuarios a crear
-    const numUsuarios = parseInt(await this.pregunta('👥 Número de usuarios iniciales (4 recomendado): ')) || 4;
+    const numUsuarios =
+      parseInt(await this.pregunta('👥 Número de usuarios iniciales (4 recomendado): ')) || 4;
 
     for (let i = 0; i < numUsuarios; i++) {
       console.log(`\n👤 Usuario ${i + 1}:`);
@@ -59,7 +60,7 @@ class AIGestionWorkspaceSetup {
         apellido,
         email,
         rol,
-        departamento: this.getDepartamento(rol)
+        departamento: this.getDepartamento(rol),
       });
     }
 
@@ -98,31 +99,35 @@ class AIGestionWorkspaceSetup {
   }
 
   generarConfigJSON() {
-    return JSON.stringify({
-      workspace: {
-        empresa: this.config.empresa,
-        dominio: this.config.dominio,
-        plan: this.config.plan,
-        adminEmail: `admin@${this.config.dominio}`,
-        createdAt: new Date().toISOString()
+    return JSON.stringify(
+      {
+        workspace: {
+          empresa: this.config.empresa,
+          dominio: this.config.dominio,
+          plan: this.config.plan,
+          adminEmail: `admin@${this.config.dominio}`,
+          createdAt: new Date().toISOString(),
+        },
+        separacionEmails: {
+          personal: this.config.emailPersonal,
+          profesional: `alejandro@${this.config.dominio}`,
+          recomendaciones: [
+            'Usar email personal para redes sociales y suscripciones',
+            'Usar email profesional para negocios y clientes',
+            'Configurar forwarding de emails importantes',
+          ],
+        },
+        usuarios: this.config.usuarios,
+        costos: {
+          plan: 'Business Standard',
+          costoPorUsuario: 12,
+          costoMensual: this.config.usuarios.length * 12,
+          costoAnual: this.config.usuarios.length * 12 * 12,
+        },
       },
-      separacionEmails: {
-        personal: this.config.emailPersonal,
-        profesional: `alejandro@${this.config.dominio}`,
-        recomendaciones: [
-          'Usar email personal para redes sociales y suscripciones',
-          'Usar email profesional para negocios y clientes',
-          'Configurar forwarding de emails importantes'
-        ]
-      },
-      usuarios: this.config.usuarios,
-      costos: {
-        plan: 'Business Standard',
-        costoPorUsuario: 12,
-        costoMensual: this.config.usuarios.length * 12,
-        costoAnual: this.config.usuarios.length * 12 * 12
-      }
-    }, null, 2);
+      null,
+      2
+    );
   }
 
   generarScriptUsuarios() {
@@ -363,11 +368,11 @@ module.exports = {verificarConfiguracion};
 
   getDepartamento(rol) {
     const departamentos = {
-      'CEO': 'Directiva',
-      'Dev': 'Desarrollo',
-      'IA': 'InteligenciaArtificial',
-      'Support': 'Soporte',
-      'Admin': 'Administracion'
+      CEO: 'Directiva',
+      Dev: 'Desarrollo',
+      IA: 'InteligenciaArtificial',
+      Support: 'Soporte',
+      Admin: 'Administracion',
     };
     return departamentos[rol] || 'General';
   }
@@ -388,7 +393,8 @@ module.exports = {verificarConfiguracion};
 // Ejecutar script
 if (require.main === module) {
   const setup = new AIGestionWorkspaceSetup();
-  setup.iniciar()
+  setup
+    .iniciar()
     .then(() => setup.cerrar())
     .catch(error => {
       console.error('❌ ERROR:', error.message);

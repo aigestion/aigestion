@@ -2,9 +2,10 @@ import 'reflect-metadata';
 import { Container } from 'inversify';
 import { Readable } from 'stream';
 import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import type { AnalyticsService } from '../../services/analytics.service';
-import type { RagService } from '../../services/rag.service';
-import type { UsageService } from '../../services/usage.service';
+import type { AnalyticsService } from '@/services/analytics.service';
+import type { RagService } from '@/services/rag.service';
+import type { UsageService } from '@/services/usage.service';
+import type { ArbitrationService } from '@/services/arbitration.service';
 // import { AIModelRouter, AIModelTier } from '../../utils/aiRouter'; // Removing static import
 
 describe('AIService', () => {
@@ -17,6 +18,10 @@ describe('AIService', () => {
   const mockRagService = { getProjectContext: jest.fn() };
   const mockUsageService = { trackUsage: jest.fn() };
   const mockSemanticCache = { getSemantic: jest.fn(), setSemantic: jest.fn() };
+  const mockArbitrationService = { 
+    arbitrate: jest.fn(),
+    getOptimalConfig: jest.fn().mockReturnValue({ provider: 'gemini', modelId: 'gemini-1.5-flash' })
+  };
 
   beforeEach(async () => {
     jest.resetModules();
@@ -46,8 +51,8 @@ describe('AIService', () => {
       };
     });
 
-    const { AIService } = require('../../services/ai.service');
-    const { TYPES } = require('../../types');
+    const { AIService } = require('@/services/ai.service');
+    const { TYPES } = require('@/types');
 
     container = new Container();
     container
@@ -56,6 +61,7 @@ describe('AIService', () => {
     container.bind<RagService>(TYPES.RagService).toConstantValue(mockRagService as any);
     container.bind<UsageService>(TYPES.UsageService).toConstantValue(mockUsageService as any);
     container.bind<any>(TYPES.SemanticCacheService).toConstantValue(mockSemanticCache as any);
+    container.bind<ArbitrationService>(TYPES.ArbitrationService).toConstantValue(mockArbitrationService as any);
     container.bind<any>(AIService).toSelf();
 
     aiService = container.get<any>(AIService);

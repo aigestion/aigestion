@@ -1,54 +1,69 @@
-"use strict";
+'use strict';
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __commonJS = (cb, mod2) => function __require() {
-  return mod2 || (0, cb[__getOwnPropNames(cb)[0]])((mod2 = { exports: {} }).exports, mod2), mod2.exports;
-};
+var __commonJS = (cb, mod2) =>
+  function __require() {
+    return (
+      mod2 || (0, cb[__getOwnPropNames(cb)[0]])((mod2 = { exports: {} }).exports, mod2),
+      mod2.exports
+    );
+  };
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toESM = (mod2, isNodeMode, target) => (target = mod2 != null ? __create(__getProtoOf(mod2)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod2 || !mod2.__esModule ? __defProp(target, "default", { value: mod2, enumerable: true }) : target,
-  mod2
-));
-var __toCommonJS = (mod2) => __copyProps(__defProp({}, "__esModule", { value: true }), mod2);
+var __toESM = (mod2, isNodeMode, target) => (
+  (target = mod2 != null ? __create(__getProtoOf(mod2)) : {}),
+  __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod2 || !mod2.__esModule
+      ? __defProp(target, 'default', { value: mod2, enumerable: true })
+      : target,
+    mod2
+  )
+);
+var __toCommonJS = mod2 => __copyProps(__defProp({}, '__esModule', { value: true }), mod2);
 
 // ../../node_modules/.pnpm/@protobufjs+aspromise@1.1.2/node_modules/@protobufjs/aspromise/index.js
 var require_aspromise = __commonJS({
-  "../../node_modules/.pnpm/@protobufjs+aspromise@1.1.2/node_modules/@protobufjs/aspromise/index.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/@protobufjs+aspromise@1.1.2/node_modules/@protobufjs/aspromise/index.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = asPromise;
     function asPromise(fn, ctx) {
-      var params = new Array(arguments.length - 1), offset = 0, index = 2, pending = true;
-      while (index < arguments.length)
-        params[offset++] = arguments[index++];
+      var params = new Array(arguments.length - 1),
+        offset = 0,
+        index = 2,
+        pending = true;
+      while (index < arguments.length) params[offset++] = arguments[index++];
       return new Promise(function executor(resolve2, reject) {
         params[offset] = function callback(err) {
           if (pending) {
             pending = false;
-            if (err)
-              reject(err);
+            if (err) reject(err);
             else {
-              var params2 = new Array(arguments.length - 1), offset2 = 0;
-              while (offset2 < params2.length)
-                params2[offset2++] = arguments[offset2];
+              var params2 = new Array(arguments.length - 1),
+                offset2 = 0;
+              while (offset2 < params2.length) params2[offset2++] = arguments[offset2];
               resolve2.apply(null, params2);
             }
           }
@@ -63,31 +78,34 @@ var require_aspromise = __commonJS({
         }
       });
     }
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/@protobufjs+base64@1.1.2/node_modules/@protobufjs/base64/index.js
 var require_base64 = __commonJS({
-  "../../node_modules/.pnpm/@protobufjs+base64@1.1.2/node_modules/@protobufjs/base64/index.js"(exports2) {
-    "use strict";
+  '../../node_modules/.pnpm/@protobufjs+base64@1.1.2/node_modules/@protobufjs/base64/index.js'(
+    exports2
+  ) {
+    'use strict';
     var base64 = exports2;
     base64.length = function length2(string) {
       var p = string.length;
-      if (!p)
-        return 0;
+      if (!p) return 0;
       var n = 0;
-      while (--p % 4 > 1 && string.charAt(p) === "=")
-        ++n;
+      while (--p % 4 > 1 && string.charAt(p) === '=') ++n;
       return Math.ceil(string.length * 3) / 4 - n;
     };
     var b64 = new Array(64);
     var s64 = new Array(123);
     for (i = 0; i < 64; )
-      s64[b64[i] = i < 26 ? i + 65 : i < 52 ? i + 71 : i < 62 ? i - 4 : i - 59 | 43] = i++;
+      s64[(b64[i] = i < 26 ? i + 65 : i < 52 ? i + 71 : i < 62 ? i - 4 : (i - 59) | 43)] = i++;
     var i;
     base64.encode = function encode(buffer2, start, end) {
-      var parts = null, chunk = [];
-      var i2 = 0, j = 0, t;
+      var parts = null,
+        chunk = [];
+      var i2 = 0,
+        j = 0,
+        t;
       while (start < end) {
         var b = buffer2[start++];
         switch (j) {
@@ -97,12 +115,12 @@ var require_base64 = __commonJS({
             j = 1;
             break;
           case 1:
-            chunk[i2++] = b64[t | b >> 4];
+            chunk[i2++] = b64[t | (b >> 4)];
             t = (b & 15) << 2;
             j = 2;
             break;
           case 2:
-            chunk[i2++] = b64[t | b >> 6];
+            chunk[i2++] = b64[t | (b >> 6)];
             chunk[i2++] = b64[b & 63];
             j = 0;
             break;
@@ -115,61 +133,60 @@ var require_base64 = __commonJS({
       if (j) {
         chunk[i2++] = b64[t];
         chunk[i2++] = 61;
-        if (j === 1)
-          chunk[i2++] = 61;
+        if (j === 1) chunk[i2++] = 61;
       }
       if (parts) {
-        if (i2)
-          parts.push(String.fromCharCode.apply(String, chunk.slice(0, i2)));
-        return parts.join("");
+        if (i2) parts.push(String.fromCharCode.apply(String, chunk.slice(0, i2)));
+        return parts.join('');
       }
       return String.fromCharCode.apply(String, chunk.slice(0, i2));
     };
-    var invalidEncoding = "invalid encoding";
+    var invalidEncoding = 'invalid encoding';
     base64.decode = function decode(string, buffer2, offset) {
       var start = offset;
-      var j = 0, t;
+      var j = 0,
+        t;
       for (var i2 = 0; i2 < string.length; ) {
         var c = string.charCodeAt(i2++);
-        if (c === 61 && j > 1)
-          break;
-        if ((c = s64[c]) === void 0)
-          throw Error(invalidEncoding);
+        if (c === 61 && j > 1) break;
+        if ((c = s64[c]) === void 0) throw Error(invalidEncoding);
         switch (j) {
           case 0:
             t = c;
             j = 1;
             break;
           case 1:
-            buffer2[offset++] = t << 2 | (c & 48) >> 4;
+            buffer2[offset++] = (t << 2) | ((c & 48) >> 4);
             t = c;
             j = 2;
             break;
           case 2:
-            buffer2[offset++] = (t & 15) << 4 | (c & 60) >> 2;
+            buffer2[offset++] = ((t & 15) << 4) | ((c & 60) >> 2);
             t = c;
             j = 3;
             break;
           case 3:
-            buffer2[offset++] = (t & 3) << 6 | c;
+            buffer2[offset++] = ((t & 3) << 6) | c;
             j = 0;
             break;
         }
       }
-      if (j === 1)
-        throw Error(invalidEncoding);
+      if (j === 1) throw Error(invalidEncoding);
       return offset - start;
     };
     base64.test = function test(string) {
       return /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(string);
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/@protobufjs+eventemitter@1.1.0/node_modules/@protobufjs/eventemitter/index.js
 var require_eventemitter = __commonJS({
-  "../../node_modules/.pnpm/@protobufjs+eventemitter@1.1.0/node_modules/@protobufjs/eventemitter/index.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/@protobufjs+eventemitter@1.1.0/node_modules/@protobufjs/eventemitter/index.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = EventEmitter;
     function EventEmitter() {
       this._listeners = {};
@@ -177,23 +194,19 @@ var require_eventemitter = __commonJS({
     EventEmitter.prototype.on = function on(evt, fn, ctx) {
       (this._listeners[evt] || (this._listeners[evt] = [])).push({
         fn,
-        ctx: ctx || this
+        ctx: ctx || this,
       });
       return this;
     };
     EventEmitter.prototype.off = function off(evt, fn) {
-      if (evt === void 0)
-        this._listeners = {};
+      if (evt === void 0) this._listeners = {};
       else {
-        if (fn === void 0)
-          this._listeners[evt] = [];
+        if (fn === void 0) this._listeners[evt] = [];
         else {
           var listeners = this._listeners[evt];
           for (var i = 0; i < listeners.length; )
-            if (listeners[i].fn === fn)
-              listeners.splice(i, 1);
-            else
-              ++i;
+            if (listeners[i].fn === fn) listeners.splice(i, 1);
+            else ++i;
         }
       }
       return this;
@@ -201,26 +214,30 @@ var require_eventemitter = __commonJS({
     EventEmitter.prototype.emit = function emit(evt) {
       var listeners = this._listeners[evt];
       if (listeners) {
-        var args = [], i = 1;
-        for (; i < arguments.length; )
-          args.push(arguments[i++]);
-        for (i = 0; i < listeners.length; )
-          listeners[i].fn.apply(listeners[i++].ctx, args);
+        var args = [],
+          i = 1;
+        for (; i < arguments.length; ) args.push(arguments[i++]);
+        for (i = 0; i < listeners.length; ) listeners[i].fn.apply(listeners[i++].ctx, args);
       }
       return this;
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/@protobufjs+float@1.0.2/node_modules/@protobufjs/float/index.js
 var require_float = __commonJS({
-  "../../node_modules/.pnpm/@protobufjs+float@1.0.2/node_modules/@protobufjs/float/index.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/@protobufjs+float@1.0.2/node_modules/@protobufjs/float/index.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = factory(factory);
     function factory(exports3) {
-      if (typeof Float32Array !== "undefined")
-        (function() {
-          var f32 = new Float32Array([-0]), f8b = new Uint8Array(f32.buffer), le = f8b[3] === 128;
+      if (typeof Float32Array !== 'undefined')
+        (function () {
+          var f32 = new Float32Array([-0]),
+            f8b = new Uint8Array(f32.buffer),
+            le = f8b[3] === 128;
           function writeFloat_f32_cpy(val, buf, pos) {
             f32[0] = val;
             buf[pos] = f8b[0];
@@ -255,42 +272,54 @@ var require_float = __commonJS({
           exports3.readFloatBE = le ? readFloat_f32_rev : readFloat_f32_cpy;
         })();
       else
-        (function() {
+        (function () {
           function writeFloat_ieee754(writeUint, val, buf, pos) {
             var sign = val < 0 ? 1 : 0;
-            if (sign)
-              val = -val;
+            if (sign) val = -val;
             if (val === 0)
-              writeUint(1 / val > 0 ? (
-                /* positive */
-                0
-              ) : (
-                /* negative 0 */
-                2147483648
-              ), buf, pos);
-            else if (isNaN(val))
-              writeUint(2143289344, buf, pos);
+              writeUint(
+                1 / val > 0
+                  ? /* positive */
+                    0
+                  : /* negative 0 */
+                    2147483648,
+                buf,
+                pos
+              );
+            else if (isNaN(val)) writeUint(2143289344, buf, pos);
             else if (val > 34028234663852886e22)
-              writeUint((sign << 31 | 2139095040) >>> 0, buf, pos);
+              writeUint(((sign << 31) | 2139095040) >>> 0, buf, pos);
             else if (val < 11754943508222875e-54)
-              writeUint((sign << 31 | Math.round(val / 1401298464324817e-60)) >>> 0, buf, pos);
+              writeUint(((sign << 31) | Math.round(val / 1401298464324817e-60)) >>> 0, buf, pos);
             else {
-              var exponent = Math.floor(Math.log(val) / Math.LN2), mantissa = Math.round(val * Math.pow(2, -exponent) * 8388608) & 8388607;
-              writeUint((sign << 31 | exponent + 127 << 23 | mantissa) >>> 0, buf, pos);
+              var exponent = Math.floor(Math.log(val) / Math.LN2),
+                mantissa = Math.round(val * Math.pow(2, -exponent) * 8388608) & 8388607;
+              writeUint(((sign << 31) | ((exponent + 127) << 23) | mantissa) >>> 0, buf, pos);
             }
           }
           exports3.writeFloatLE = writeFloat_ieee754.bind(null, writeUintLE);
           exports3.writeFloatBE = writeFloat_ieee754.bind(null, writeUintBE);
           function readFloat_ieee754(readUint, buf, pos) {
-            var uint = readUint(buf, pos), sign = (uint >> 31) * 2 + 1, exponent = uint >>> 23 & 255, mantissa = uint & 8388607;
-            return exponent === 255 ? mantissa ? NaN : sign * Infinity : exponent === 0 ? sign * 1401298464324817e-60 * mantissa : sign * Math.pow(2, exponent - 150) * (mantissa + 8388608);
+            var uint = readUint(buf, pos),
+              sign = (uint >> 31) * 2 + 1,
+              exponent = (uint >>> 23) & 255,
+              mantissa = uint & 8388607;
+            return exponent === 255
+              ? mantissa
+                ? NaN
+                : sign * Infinity
+              : exponent === 0
+                ? sign * 1401298464324817e-60 * mantissa
+                : sign * Math.pow(2, exponent - 150) * (mantissa + 8388608);
           }
           exports3.readFloatLE = readFloat_ieee754.bind(null, readUintLE);
           exports3.readFloatBE = readFloat_ieee754.bind(null, readUintBE);
         })();
-      if (typeof Float64Array !== "undefined")
-        (function() {
-          var f64 = new Float64Array([-0]), f8b = new Uint8Array(f64.buffer), le = f8b[7] === 128;
+      if (typeof Float64Array !== 'undefined')
+        (function () {
+          var f64 = new Float64Array([-0]),
+            f8b = new Uint8Array(f64.buffer),
+            le = f8b[7] === 128;
           function writeDouble_f64_cpy(val, buf, pos) {
             f64[0] = val;
             buf[pos] = f8b[0];
@@ -341,48 +370,62 @@ var require_float = __commonJS({
           exports3.readDoubleBE = le ? readDouble_f64_rev : readDouble_f64_cpy;
         })();
       else
-        (function() {
+        (function () {
           function writeDouble_ieee754(writeUint, off0, off1, val, buf, pos) {
             var sign = val < 0 ? 1 : 0;
-            if (sign)
-              val = -val;
+            if (sign) val = -val;
             if (val === 0) {
               writeUint(0, buf, pos + off0);
-              writeUint(1 / val > 0 ? (
-                /* positive */
-                0
-              ) : (
-                /* negative 0 */
-                2147483648
-              ), buf, pos + off1);
+              writeUint(
+                1 / val > 0
+                  ? /* positive */
+                    0
+                  : /* negative 0 */
+                    2147483648,
+                buf,
+                pos + off1
+              );
             } else if (isNaN(val)) {
               writeUint(0, buf, pos + off0);
               writeUint(2146959360, buf, pos + off1);
             } else if (val > 17976931348623157e292) {
               writeUint(0, buf, pos + off0);
-              writeUint((sign << 31 | 2146435072) >>> 0, buf, pos + off1);
+              writeUint(((sign << 31) | 2146435072) >>> 0, buf, pos + off1);
             } else {
               var mantissa;
               if (val < 22250738585072014e-324) {
                 mantissa = val / 5e-324;
                 writeUint(mantissa >>> 0, buf, pos + off0);
-                writeUint((sign << 31 | mantissa / 4294967296) >>> 0, buf, pos + off1);
+                writeUint(((sign << 31) | (mantissa / 4294967296)) >>> 0, buf, pos + off1);
               } else {
                 var exponent = Math.floor(Math.log(val) / Math.LN2);
-                if (exponent === 1024)
-                  exponent = 1023;
+                if (exponent === 1024) exponent = 1023;
                 mantissa = val * Math.pow(2, -exponent);
-                writeUint(mantissa * 4503599627370496 >>> 0, buf, pos + off0);
-                writeUint((sign << 31 | exponent + 1023 << 20 | mantissa * 1048576 & 1048575) >>> 0, buf, pos + off1);
+                writeUint((mantissa * 4503599627370496) >>> 0, buf, pos + off0);
+                writeUint(
+                  ((sign << 31) | ((exponent + 1023) << 20) | ((mantissa * 1048576) & 1048575)) >>>
+                    0,
+                  buf,
+                  pos + off1
+                );
               }
             }
           }
           exports3.writeDoubleLE = writeDouble_ieee754.bind(null, writeUintLE, 0, 4);
           exports3.writeDoubleBE = writeDouble_ieee754.bind(null, writeUintBE, 4, 0);
           function readDouble_ieee754(readUint, off0, off1, buf, pos) {
-            var lo = readUint(buf, pos + off0), hi = readUint(buf, pos + off1);
-            var sign = (hi >> 31) * 2 + 1, exponent = hi >>> 20 & 2047, mantissa = 4294967296 * (hi & 1048575) + lo;
-            return exponent === 2047 ? mantissa ? NaN : sign * Infinity : exponent === 0 ? sign * 5e-324 * mantissa : sign * Math.pow(2, exponent - 1075) * (mantissa + 4503599627370496);
+            var lo = readUint(buf, pos + off0),
+              hi = readUint(buf, pos + off1);
+            var sign = (hi >> 31) * 2 + 1,
+              exponent = (hi >>> 20) & 2047,
+              mantissa = 4294967296 * (hi & 1048575) + lo;
+            return exponent === 2047
+              ? mantissa
+                ? NaN
+                : sign * Infinity
+              : exponent === 0
+                ? sign * 5e-324 * mantissa
+                : sign * Math.pow(2, exponent - 1075) * (mantissa + 4503599627370496);
           }
           exports3.readDoubleLE = readDouble_ieee754.bind(null, readUintLE, 0, 4);
           exports3.readDoubleBE = readDouble_ieee754.bind(null, readUintBE, 4, 0);
@@ -391,123 +434,133 @@ var require_float = __commonJS({
     }
     function writeUintLE(val, buf, pos) {
       buf[pos] = val & 255;
-      buf[pos + 1] = val >>> 8 & 255;
-      buf[pos + 2] = val >>> 16 & 255;
+      buf[pos + 1] = (val >>> 8) & 255;
+      buf[pos + 2] = (val >>> 16) & 255;
       buf[pos + 3] = val >>> 24;
     }
     function writeUintBE(val, buf, pos) {
       buf[pos] = val >>> 24;
-      buf[pos + 1] = val >>> 16 & 255;
-      buf[pos + 2] = val >>> 8 & 255;
+      buf[pos + 1] = (val >>> 16) & 255;
+      buf[pos + 2] = (val >>> 8) & 255;
       buf[pos + 3] = val & 255;
     }
     function readUintLE(buf, pos) {
-      return (buf[pos] | buf[pos + 1] << 8 | buf[pos + 2] << 16 | buf[pos + 3] << 24) >>> 0;
+      return (buf[pos] | (buf[pos + 1] << 8) | (buf[pos + 2] << 16) | (buf[pos + 3] << 24)) >>> 0;
     }
     function readUintBE(buf, pos) {
-      return (buf[pos] << 24 | buf[pos + 1] << 16 | buf[pos + 2] << 8 | buf[pos + 3]) >>> 0;
+      return ((buf[pos] << 24) | (buf[pos + 1] << 16) | (buf[pos + 2] << 8) | buf[pos + 3]) >>> 0;
     }
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/@protobufjs+inquire@1.1.0/node_modules/@protobufjs/inquire/index.js
 var require_inquire = __commonJS({
-  "../../node_modules/.pnpm/@protobufjs+inquire@1.1.0/node_modules/@protobufjs/inquire/index.js"(exports, module) {
-    "use strict";
+  '../../node_modules/.pnpm/@protobufjs+inquire@1.1.0/node_modules/@protobufjs/inquire/index.js'(
+    exports,
+    module
+  ) {
+    'use strict';
     module.exports = inquire;
     function inquire(moduleName) {
       try {
-        var mod = eval("quire".replace(/^/, "re"))(moduleName);
-        if (mod && (mod.length || Object.keys(mod).length))
-          return mod;
-      } catch (e) {
-      }
+        var mod = eval('quire'.replace(/^/, 're'))(moduleName);
+        if (mod && (mod.length || Object.keys(mod).length)) return mod;
+      } catch (e) {}
       return null;
     }
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/@protobufjs+utf8@1.1.0/node_modules/@protobufjs/utf8/index.js
 var require_utf8 = __commonJS({
-  "../../node_modules/.pnpm/@protobufjs+utf8@1.1.0/node_modules/@protobufjs/utf8/index.js"(exports2) {
-    "use strict";
+  '../../node_modules/.pnpm/@protobufjs+utf8@1.1.0/node_modules/@protobufjs/utf8/index.js'(
+    exports2
+  ) {
+    'use strict';
     var utf83 = exports2;
     utf83.length = function utf8_length(string) {
-      var len = 0, c = 0;
+      var len = 0,
+        c = 0;
       for (var i = 0; i < string.length; ++i) {
         c = string.charCodeAt(i);
-        if (c < 128)
-          len += 1;
-        else if (c < 2048)
-          len += 2;
+        if (c < 128) len += 1;
+        else if (c < 2048) len += 2;
         else if ((c & 64512) === 55296 && (string.charCodeAt(i + 1) & 64512) === 56320) {
           ++i;
           len += 4;
-        } else
-          len += 3;
+        } else len += 3;
       }
       return len;
     };
     utf83.read = function utf8_read(buffer2, start, end) {
       var len = end - start;
-      if (len < 1)
-        return "";
-      var parts = null, chunk = [], i = 0, t;
+      if (len < 1) return '';
+      var parts = null,
+        chunk = [],
+        i = 0,
+        t;
       while (start < end) {
         t = buffer2[start++];
-        if (t < 128)
-          chunk[i++] = t;
-        else if (t > 191 && t < 224)
-          chunk[i++] = (t & 31) << 6 | buffer2[start++] & 63;
+        if (t < 128) chunk[i++] = t;
+        else if (t > 191 && t < 224) chunk[i++] = ((t & 31) << 6) | (buffer2[start++] & 63);
         else if (t > 239 && t < 365) {
-          t = ((t & 7) << 18 | (buffer2[start++] & 63) << 12 | (buffer2[start++] & 63) << 6 | buffer2[start++] & 63) - 65536;
+          t =
+            (((t & 7) << 18) |
+              ((buffer2[start++] & 63) << 12) |
+              ((buffer2[start++] & 63) << 6) |
+              (buffer2[start++] & 63)) -
+            65536;
           chunk[i++] = 55296 + (t >> 10);
           chunk[i++] = 56320 + (t & 1023);
         } else
-          chunk[i++] = (t & 15) << 12 | (buffer2[start++] & 63) << 6 | buffer2[start++] & 63;
+          chunk[i++] = ((t & 15) << 12) | ((buffer2[start++] & 63) << 6) | (buffer2[start++] & 63);
         if (i > 8191) {
           (parts || (parts = [])).push(String.fromCharCode.apply(String, chunk));
           i = 0;
         }
       }
       if (parts) {
-        if (i)
-          parts.push(String.fromCharCode.apply(String, chunk.slice(0, i)));
-        return parts.join("");
+        if (i) parts.push(String.fromCharCode.apply(String, chunk.slice(0, i)));
+        return parts.join('');
       }
       return String.fromCharCode.apply(String, chunk.slice(0, i));
     };
     utf83.write = function utf8_write(string, buffer2, offset) {
-      var start = offset, c1, c2;
+      var start = offset,
+        c1,
+        c2;
       for (var i = 0; i < string.length; ++i) {
         c1 = string.charCodeAt(i);
         if (c1 < 128) {
           buffer2[offset++] = c1;
         } else if (c1 < 2048) {
-          buffer2[offset++] = c1 >> 6 | 192;
-          buffer2[offset++] = c1 & 63 | 128;
+          buffer2[offset++] = (c1 >> 6) | 192;
+          buffer2[offset++] = (c1 & 63) | 128;
         } else if ((c1 & 64512) === 55296 && ((c2 = string.charCodeAt(i + 1)) & 64512) === 56320) {
           c1 = 65536 + ((c1 & 1023) << 10) + (c2 & 1023);
           ++i;
-          buffer2[offset++] = c1 >> 18 | 240;
-          buffer2[offset++] = c1 >> 12 & 63 | 128;
-          buffer2[offset++] = c1 >> 6 & 63 | 128;
-          buffer2[offset++] = c1 & 63 | 128;
+          buffer2[offset++] = (c1 >> 18) | 240;
+          buffer2[offset++] = ((c1 >> 12) & 63) | 128;
+          buffer2[offset++] = ((c1 >> 6) & 63) | 128;
+          buffer2[offset++] = (c1 & 63) | 128;
         } else {
-          buffer2[offset++] = c1 >> 12 | 224;
-          buffer2[offset++] = c1 >> 6 & 63 | 128;
-          buffer2[offset++] = c1 & 63 | 128;
+          buffer2[offset++] = (c1 >> 12) | 224;
+          buffer2[offset++] = ((c1 >> 6) & 63) | 128;
+          buffer2[offset++] = (c1 & 63) | 128;
         }
       }
       return offset - start;
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/@protobufjs+pool@1.1.0/node_modules/@protobufjs/pool/index.js
 var require_pool = __commonJS({
-  "../../node_modules/.pnpm/@protobufjs+pool@1.1.0/node_modules/@protobufjs/pool/index.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/@protobufjs+pool@1.1.0/node_modules/@protobufjs/pool/index.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = pool;
     function pool(alloc, slice, size) {
       var SIZE = size || 8192;
@@ -515,127 +568,154 @@ var require_pool = __commonJS({
       var slab = null;
       var offset = SIZE;
       return function pool_alloc(size2) {
-        if (size2 < 1 || size2 > MAX)
-          return alloc(size2);
+        if (size2 < 1 || size2 > MAX) return alloc(size2);
         if (offset + size2 > SIZE) {
           slab = alloc(SIZE);
           offset = 0;
         }
-        var buf = slice.call(slab, offset, offset += size2);
-        if (offset & 7)
-          offset = (offset | 7) + 1;
+        var buf = slice.call(slab, offset, (offset += size2));
+        if (offset & 7) offset = (offset | 7) + 1;
         return buf;
       };
     }
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/util/longbits.js
 var require_longbits = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/util/longbits.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/util/longbits.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = LongBits;
     var util = require_minimal();
     function LongBits(lo, hi) {
       this.lo = lo >>> 0;
       this.hi = hi >>> 0;
     }
-    var zero = LongBits.zero = new LongBits(0, 0);
-    zero.toNumber = function() {
+    var zero = (LongBits.zero = new LongBits(0, 0));
+    zero.toNumber = function () {
       return 0;
     };
-    zero.zzEncode = zero.zzDecode = function() {
+    zero.zzEncode = zero.zzDecode = function () {
       return this;
     };
-    zero.length = function() {
+    zero.length = function () {
       return 1;
     };
-    var zeroHash = LongBits.zeroHash = "\0\0\0\0\0\0\0\0";
+    var zeroHash = (LongBits.zeroHash = '\0\0\0\0\0\0\0\0');
     LongBits.fromNumber = function fromNumber2(value) {
-      if (value === 0)
-        return zero;
+      if (value === 0) return zero;
       var sign = value < 0;
-      if (sign)
-        value = -value;
-      var lo = value >>> 0, hi = (value - lo) / 4294967296 >>> 0;
+      if (sign) value = -value;
+      var lo = value >>> 0,
+        hi = ((value - lo) / 4294967296) >>> 0;
       if (sign) {
         hi = ~hi >>> 0;
         lo = ~lo >>> 0;
         if (++lo > 4294967295) {
           lo = 0;
-          if (++hi > 4294967295)
-            hi = 0;
+          if (++hi > 4294967295) hi = 0;
         }
       }
       return new LongBits(lo, hi);
     };
     LongBits.from = function from(value) {
-      if (typeof value === "number")
-        return LongBits.fromNumber(value);
+      if (typeof value === 'number') return LongBits.fromNumber(value);
       if (util.isString(value)) {
-        if (util.Long)
-          value = util.Long.fromString(value);
-        else
-          return LongBits.fromNumber(parseInt(value, 10));
+        if (util.Long) value = util.Long.fromString(value);
+        else return LongBits.fromNumber(parseInt(value, 10));
       }
       return value.low || value.high ? new LongBits(value.low >>> 0, value.high >>> 0) : zero;
     };
     LongBits.prototype.toNumber = function toNumber2(unsigned) {
       if (!unsigned && this.hi >>> 31) {
-        var lo = ~this.lo + 1 >>> 0, hi = ~this.hi >>> 0;
-        if (!lo)
-          hi = hi + 1 >>> 0;
+        var lo = (~this.lo + 1) >>> 0,
+          hi = ~this.hi >>> 0;
+        if (!lo) hi = (hi + 1) >>> 0;
         return -(lo + hi * 4294967296);
       }
       return this.lo + this.hi * 4294967296;
     };
     LongBits.prototype.toLong = function toLong(unsigned) {
-      return util.Long ? new util.Long(this.lo | 0, this.hi | 0, Boolean(unsigned)) : { low: this.lo | 0, high: this.hi | 0, unsigned: Boolean(unsigned) };
+      return util.Long
+        ? new util.Long(this.lo | 0, this.hi | 0, Boolean(unsigned))
+        : { low: this.lo | 0, high: this.hi | 0, unsigned: Boolean(unsigned) };
     };
     var charCodeAt = String.prototype.charCodeAt;
     LongBits.fromHash = function fromHash(hash) {
-      if (hash === zeroHash)
-        return zero;
+      if (hash === zeroHash) return zero;
       return new LongBits(
-        (charCodeAt.call(hash, 0) | charCodeAt.call(hash, 1) << 8 | charCodeAt.call(hash, 2) << 16 | charCodeAt.call(hash, 3) << 24) >>> 0,
-        (charCodeAt.call(hash, 4) | charCodeAt.call(hash, 5) << 8 | charCodeAt.call(hash, 6) << 16 | charCodeAt.call(hash, 7) << 24) >>> 0
+        (charCodeAt.call(hash, 0) |
+          (charCodeAt.call(hash, 1) << 8) |
+          (charCodeAt.call(hash, 2) << 16) |
+          (charCodeAt.call(hash, 3) << 24)) >>>
+          0,
+        (charCodeAt.call(hash, 4) |
+          (charCodeAt.call(hash, 5) << 8) |
+          (charCodeAt.call(hash, 6) << 16) |
+          (charCodeAt.call(hash, 7) << 24)) >>>
+          0
       );
     };
     LongBits.prototype.toHash = function toHash() {
       return String.fromCharCode(
         this.lo & 255,
-        this.lo >>> 8 & 255,
-        this.lo >>> 16 & 255,
+        (this.lo >>> 8) & 255,
+        (this.lo >>> 16) & 255,
         this.lo >>> 24,
         this.hi & 255,
-        this.hi >>> 8 & 255,
-        this.hi >>> 16 & 255,
+        (this.hi >>> 8) & 255,
+        (this.hi >>> 16) & 255,
         this.hi >>> 24
       );
     };
     LongBits.prototype.zzEncode = function zzEncode() {
       var mask = this.hi >> 31;
-      this.hi = ((this.hi << 1 | this.lo >>> 31) ^ mask) >>> 0;
-      this.lo = (this.lo << 1 ^ mask) >>> 0;
+      this.hi = (((this.hi << 1) | (this.lo >>> 31)) ^ mask) >>> 0;
+      this.lo = ((this.lo << 1) ^ mask) >>> 0;
       return this;
     };
     LongBits.prototype.zzDecode = function zzDecode() {
       var mask = -(this.lo & 1);
-      this.lo = ((this.lo >>> 1 | this.hi << 31) ^ mask) >>> 0;
-      this.hi = (this.hi >>> 1 ^ mask) >>> 0;
+      this.lo = (((this.lo >>> 1) | (this.hi << 31)) ^ mask) >>> 0;
+      this.hi = ((this.hi >>> 1) ^ mask) >>> 0;
       return this;
     };
     LongBits.prototype.length = function length2() {
-      var part0 = this.lo, part1 = (this.lo >>> 28 | this.hi << 4) >>> 0, part2 = this.hi >>> 24;
-      return part2 === 0 ? part1 === 0 ? part0 < 16384 ? part0 < 128 ? 1 : 2 : part0 < 2097152 ? 3 : 4 : part1 < 16384 ? part1 < 128 ? 5 : 6 : part1 < 2097152 ? 7 : 8 : part2 < 128 ? 9 : 10;
+      var part0 = this.lo,
+        part1 = ((this.lo >>> 28) | (this.hi << 4)) >>> 0,
+        part2 = this.hi >>> 24;
+      return part2 === 0
+        ? part1 === 0
+          ? part0 < 16384
+            ? part0 < 128
+              ? 1
+              : 2
+            : part0 < 2097152
+              ? 3
+              : 4
+          : part1 < 16384
+            ? part1 < 128
+              ? 5
+              : 6
+            : part1 < 2097152
+              ? 7
+              : 8
+        : part2 < 128
+          ? 9
+          : 10;
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/util/minimal.js
 var require_minimal = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/util/minimal.js"(exports2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/util/minimal.js'(
+    exports2
+  ) {
+    'use strict';
     var util = exports2;
     util.asPromise = require_aspromise();
     util.base64 = require_base64();
@@ -645,59 +725,81 @@ var require_minimal = __commonJS({
     util.utf8 = require_utf8();
     util.pool = require_pool();
     util.LongBits = require_longbits();
-    util.isNode = Boolean(typeof global !== "undefined" && global && global.process && global.process.versions && global.process.versions.node);
-    util.global = util.isNode && global || false || typeof self !== "undefined" && self || exports2;
-    util.emptyArray = Object.freeze ? Object.freeze([]) : (
-      /* istanbul ignore next */
-      []
+    util.isNode = Boolean(
+      typeof global !== 'undefined' &&
+      global &&
+      global.process &&
+      global.process.versions &&
+      global.process.versions.node
     );
-    util.emptyObject = Object.freeze ? Object.freeze({}) : (
-      /* istanbul ignore next */
-      {}
-    );
-    util.isInteger = Number.isInteger || /* istanbul ignore next */
-    function isInteger(value) {
-      return typeof value === "number" && isFinite(value) && Math.floor(value) === value;
-    };
+    util.global =
+      (util.isNode && global) || false || (typeof self !== 'undefined' && self) || exports2;
+    util.emptyArray = Object.freeze
+      ? Object.freeze([])
+      : /* istanbul ignore next */
+        [];
+    util.emptyObject = Object.freeze
+      ? Object.freeze({})
+      : /* istanbul ignore next */
+        {};
+    util.isInteger =
+      Number.isInteger /* istanbul ignore next */ ||
+      function isInteger(value) {
+        return typeof value === 'number' && isFinite(value) && Math.floor(value) === value;
+      };
     util.isString = function isString(value) {
-      return typeof value === "string" || value instanceof String;
+      return typeof value === 'string' || value instanceof String;
     };
     util.isObject = function isObject3(value) {
-      return value && typeof value === "object";
+      return value && typeof value === 'object';
     };
-    util.isset = /**
-     * Checks if a property on a message is considered to be present.
-     * @param {Object} obj Plain object or message instance
-     * @param {string} prop Property name
-     * @returns {boolean} `true` if considered to be present, otherwise `false`
-     */
-    util.isSet = function isSet3(obj, prop) {
-      var value = obj[prop];
-      if (value != null && obj.hasOwnProperty(prop))
-        return typeof value !== "object" || (Array.isArray(value) ? value.length : Object.keys(value).length) > 0;
-      return false;
-    };
-    util.Buffer = function() {
+    util.isset =
+      /**
+       * Checks if a property on a message is considered to be present.
+       * @param {Object} obj Plain object or message instance
+       * @param {string} prop Property name
+       * @returns {boolean} `true` if considered to be present, otherwise `false`
+       */
+      util.isSet = function isSet3(obj, prop) {
+        var value = obj[prop];
+        if (value != null && obj.hasOwnProperty(prop))
+          return (
+            typeof value !== 'object' ||
+            (Array.isArray(value) ? value.length : Object.keys(value).length) > 0
+          );
+        return false;
+      };
+    util.Buffer = (function () {
       try {
-        var Buffer2 = util.inquire("buffer").Buffer;
-        return Buffer2.prototype.utf8Write ? Buffer2 : (
-          /* istanbul ignore next */
-          null
-        );
+        var Buffer2 = util.inquire('buffer').Buffer;
+        return Buffer2.prototype.utf8Write
+          ? Buffer2
+          : /* istanbul ignore next */
+            null;
       } catch (e) {
         return null;
       }
-    }();
+    })();
     util._Buffer_from = null;
     util._Buffer_allocUnsafe = null;
     util.newBuffer = function newBuffer(sizeOrArray) {
-      return typeof sizeOrArray === "number" ? util.Buffer ? util._Buffer_allocUnsafe(sizeOrArray) : new util.Array(sizeOrArray) : util.Buffer ? util._Buffer_from(sizeOrArray) : typeof Uint8Array === "undefined" ? sizeOrArray : new Uint8Array(sizeOrArray);
+      return typeof sizeOrArray === 'number'
+        ? util.Buffer
+          ? util._Buffer_allocUnsafe(sizeOrArray)
+          : new util.Array(sizeOrArray)
+        : util.Buffer
+          ? util._Buffer_from(sizeOrArray)
+          : typeof Uint8Array === 'undefined'
+            ? sizeOrArray
+            : new Uint8Array(sizeOrArray);
     };
-    util.Array = typeof Uint8Array !== "undefined" ? Uint8Array : Array;
-    util.Long = /* istanbul ignore next */
-    util.global.dcodeIO && /* istanbul ignore next */
-    util.global.dcodeIO.Long || /* istanbul ignore next */
-    util.global.Long || util.inquire("long");
+    util.Array = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
+    util.Long =
+      /* istanbul ignore next */
+      (util.global.dcodeIO /* istanbul ignore next */ &&
+        util.global.dcodeIO.Long) /* istanbul ignore next */ ||
+      util.global.Long ||
+      util.inquire('long');
     util.key2Re = /^true|false|0|1$/;
     util.key32Re = /^-?(?:0|[1-9][0-9]*)$/;
     util.key64Re = /^(?:[\\x00-\\xff]{8}|-?(?:0|[1-9][0-9]*))$/;
@@ -706,14 +808,12 @@ var require_minimal = __commonJS({
     };
     util.longFromHash = function longFromHash(hash, unsigned) {
       var bits = util.LongBits.fromHash(hash);
-      if (util.Long)
-        return util.Long.fromBits(bits.lo, bits.hi, unsigned);
+      if (util.Long) return util.Long.fromBits(bits.lo, bits.hi, unsigned);
       return bits.toNumber(Boolean(unsigned));
     };
     function merge(dst, src, ifNotSet) {
       for (var keys = Object.keys(src), i = 0; i < keys.length; ++i)
-        if (dst[keys[i]] === void 0 || !ifNotSet)
-          dst[keys[i]] = src[keys[i]];
+        if (dst[keys[i]] === void 0 || !ifNotSet) dst[keys[i]] = src[keys[i]];
       return dst;
     }
     util.merge = merge;
@@ -722,24 +822,22 @@ var require_minimal = __commonJS({
     };
     function newError(name) {
       function CustomError(message, properties) {
-        if (!(this instanceof CustomError))
-          return new CustomError(message, properties);
-        Object.defineProperty(this, "message", { get: function() {
-          return message;
-        } });
-        if (Error.captureStackTrace)
-          Error.captureStackTrace(this, CustomError);
-        else
-          Object.defineProperty(this, "stack", { value: new Error().stack || "" });
-        if (properties)
-          merge(this, properties);
+        if (!(this instanceof CustomError)) return new CustomError(message, properties);
+        Object.defineProperty(this, 'message', {
+          get: function () {
+            return message;
+          },
+        });
+        if (Error.captureStackTrace) Error.captureStackTrace(this, CustomError);
+        else Object.defineProperty(this, 'stack', { value: new Error().stack || '' });
+        if (properties) merge(this, properties);
       }
       CustomError.prototype = Object.create(Error.prototype, {
         constructor: {
           value: CustomError,
           writable: true,
           enumerable: false,
-          configurable: true
+          configurable: true,
         },
         name: {
           get: function get() {
@@ -751,66 +849,69 @@ var require_minimal = __commonJS({
           // the original, but I'm guessing that was not intentional.
           // For an actual error subclass, this property would
           // be configurable.
-          configurable: true
+          configurable: true,
         },
         toString: {
           value: function value() {
-            return this.name + ": " + this.message;
+            return this.name + ': ' + this.message;
           },
           writable: true,
           enumerable: false,
-          configurable: true
-        }
+          configurable: true,
+        },
       });
       return CustomError;
     }
     util.newError = newError;
-    util.ProtocolError = newError("ProtocolError");
+    util.ProtocolError = newError('ProtocolError');
     util.oneOfGetter = function getOneOf(fieldNames) {
       var fieldMap = {};
-      for (var i = 0; i < fieldNames.length; ++i)
-        fieldMap[fieldNames[i]] = 1;
-      return function() {
+      for (var i = 0; i < fieldNames.length; ++i) fieldMap[fieldNames[i]] = 1;
+      return function () {
         for (var keys = Object.keys(this), i2 = keys.length - 1; i2 > -1; --i2)
           if (fieldMap[keys[i2]] === 1 && this[keys[i2]] !== void 0 && this[keys[i2]] !== null)
             return keys[i2];
       };
     };
     util.oneOfSetter = function setOneOf(fieldNames) {
-      return function(name) {
+      return function (name) {
         for (var i = 0; i < fieldNames.length; ++i)
-          if (fieldNames[i] !== name)
-            delete this[fieldNames[i]];
+          if (fieldNames[i] !== name) delete this[fieldNames[i]];
       };
     };
     util.toJSONOptions = {
       longs: String,
       enums: String,
       bytes: String,
-      json: true
+      json: true,
     };
-    util._configure = function() {
+    util._configure = function () {
       var Buffer2 = util.Buffer;
       if (!Buffer2) {
         util._Buffer_from = util._Buffer_allocUnsafe = null;
         return;
       }
-      util._Buffer_from = Buffer2.from !== Uint8Array.from && Buffer2.from || /* istanbul ignore next */
-      function Buffer_from(value, encoding) {
-        return new Buffer2(value, encoding);
-      };
-      util._Buffer_allocUnsafe = Buffer2.allocUnsafe || /* istanbul ignore next */
-      function Buffer_allocUnsafe(size) {
-        return new Buffer2(size);
-      };
+      util._Buffer_from =
+        (Buffer2.from !== Uint8Array.from && Buffer2.from) /* istanbul ignore next */ ||
+        function Buffer_from(value, encoding) {
+          return new Buffer2(value, encoding);
+        };
+      util._Buffer_allocUnsafe =
+        Buffer2.allocUnsafe /* istanbul ignore next */ ||
+        function Buffer_allocUnsafe(size) {
+          return new Buffer2(size);
+        };
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/writer.js
 var require_writer = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/writer.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/writer.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = Writer;
     var util = require_minimal();
     var BufferWriter;
@@ -823,8 +924,7 @@ var require_writer = __commonJS({
       this.next = void 0;
       this.val = val;
     }
-    function noop() {
-    }
+    function noop() {}
     function State(writer) {
       this.head = writer.head;
       this.tail = writer.tail;
@@ -838,20 +938,21 @@ var require_writer = __commonJS({
       this.states = null;
     }
     var create = function create2() {
-      return util.Buffer ? function create_buffer_setup() {
-        return (Writer.create = function create_buffer() {
-          return new BufferWriter();
-        })();
-      } : function create_array() {
-        return new Writer();
-      };
+      return util.Buffer
+        ? function create_buffer_setup() {
+            return (Writer.create = function create_buffer() {
+              return new BufferWriter();
+            })();
+          }
+        : function create_array() {
+            return new Writer();
+          };
     };
     Writer.create = create();
     Writer.alloc = function alloc(size) {
       return new util.Array(size);
     };
-    if (util.Array !== Array)
-      Writer.alloc = util.pool(Writer.alloc, util.Array.prototype.subarray);
+    if (util.Array !== Array) Writer.alloc = util.pool(Writer.alloc, util.Array.prototype.subarray);
     Writer.prototype._push = function push(fn, len, val) {
       this.tail = this.tail.next = new Op(fn, len, val);
       this.len += len;
@@ -862,7 +963,7 @@ var require_writer = __commonJS({
     }
     function writeVarint32(val, buf, pos) {
       while (val > 127) {
-        buf[pos++] = val & 127 | 128;
+        buf[pos++] = (val & 127) | 128;
         val >>>= 7;
       }
       buf[pos] = val;
@@ -875,26 +976,37 @@ var require_writer = __commonJS({
     VarintOp.prototype = Object.create(Op.prototype);
     VarintOp.prototype.fn = writeVarint32;
     Writer.prototype.uint32 = function write_uint32(value) {
-      this.len += (this.tail = this.tail.next = new VarintOp(
-        (value = value >>> 0) < 128 ? 1 : value < 16384 ? 2 : value < 2097152 ? 3 : value < 268435456 ? 4 : 5,
-        value
-      )).len;
+      this.len += (this.tail = this.tail.next =
+        new VarintOp(
+          (value = value >>> 0) < 128
+            ? 1
+            : value < 16384
+              ? 2
+              : value < 2097152
+                ? 3
+                : value < 268435456
+                  ? 4
+                  : 5,
+          value
+        )).len;
       return this;
     };
     Writer.prototype.int32 = function write_int32(value) {
-      return value < 0 ? this._push(writeVarint64, 10, LongBits.fromNumber(value)) : this.uint32(value);
+      return value < 0
+        ? this._push(writeVarint64, 10, LongBits.fromNumber(value))
+        : this.uint32(value);
     };
     Writer.prototype.sint32 = function write_sint32(value) {
-      return this.uint32((value << 1 ^ value >> 31) >>> 0);
+      return this.uint32(((value << 1) ^ (value >> 31)) >>> 0);
     };
     function writeVarint64(val, buf, pos) {
       while (val.hi) {
-        buf[pos++] = val.lo & 127 | 128;
-        val.lo = (val.lo >>> 7 | val.hi << 25) >>> 0;
+        buf[pos++] = (val.lo & 127) | 128;
+        val.lo = ((val.lo >>> 7) | (val.hi << 25)) >>> 0;
         val.hi >>>= 7;
       }
       while (val.lo > 127) {
-        buf[pos++] = val.lo & 127 | 128;
+        buf[pos++] = (val.lo & 127) | 128;
         val.lo = val.lo >>> 7;
       }
       buf[pos++] = val.lo;
@@ -913,8 +1025,8 @@ var require_writer = __commonJS({
     };
     function writeFixed32(val, buf, pos) {
       buf[pos] = val & 255;
-      buf[pos + 1] = val >>> 8 & 255;
-      buf[pos + 2] = val >>> 16 & 255;
+      buf[pos + 1] = (val >>> 8) & 255;
+      buf[pos + 2] = (val >>> 16) & 255;
       buf[pos + 3] = val >>> 24;
     }
     Writer.prototype.fixed32 = function write_fixed32(value) {
@@ -932,18 +1044,18 @@ var require_writer = __commonJS({
     Writer.prototype.double = function write_double(value) {
       return this._push(util.float.writeDoubleLE, 8, value);
     };
-    var writeBytes = util.Array.prototype.set ? function writeBytes_set(val, buf, pos) {
-      buf.set(val, pos);
-    } : function writeBytes_for(val, buf, pos) {
-      for (var i = 0; i < val.length; ++i)
-        buf[pos + i] = val[i];
-    };
+    var writeBytes = util.Array.prototype.set
+      ? function writeBytes_set(val, buf, pos) {
+          buf.set(val, pos);
+        }
+      : function writeBytes_for(val, buf, pos) {
+          for (var i = 0; i < val.length; ++i) buf[pos + i] = val[i];
+        };
     Writer.prototype.bytes = function write_bytes(value) {
       var len = value.length >>> 0;
-      if (!len)
-        return this._push(writeByte, 1, 0);
+      if (!len) return this._push(writeByte, 1, 0);
       if (util.isString(value)) {
-        var buf = Writer.alloc(len = base64.length(value));
+        var buf = Writer.alloc((len = base64.length(value)));
         base64.decode(value, buf, 0);
         value = buf;
       }
@@ -972,7 +1084,9 @@ var require_writer = __commonJS({
       return this;
     };
     Writer.prototype.ldelim = function ldelim() {
-      var head = this.head, tail = this.tail, len = this.len;
+      var head = this.head,
+        tail = this.tail,
+        len = this.len;
       this.reset().uint32(len);
       if (len) {
         this.tail.next = head.next;
@@ -982,7 +1096,9 @@ var require_writer = __commonJS({
       return this;
     };
     Writer.prototype.finish = function finish() {
-      var head = this.head.next, buf = this.constructor.alloc(this.len), pos = 0;
+      var head = this.head.next,
+        buf = this.constructor.alloc(this.len),
+        pos = 0;
       while (head) {
         head.fn(head.val, buf, pos);
         pos += head.len;
@@ -990,18 +1106,21 @@ var require_writer = __commonJS({
       }
       return buf;
     };
-    Writer._configure = function(BufferWriter_) {
+    Writer._configure = function (BufferWriter_) {
       BufferWriter = BufferWriter_;
       Writer.create = create();
       BufferWriter._configure();
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/writer_buffer.js
 var require_writer_buffer = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/writer_buffer.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/writer_buffer.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = BufferWriter;
     var Writer = require_writer();
     (BufferWriter.prototype = Object.create(Writer.prototype)).constructor = BufferWriter;
@@ -1009,198 +1128,192 @@ var require_writer_buffer = __commonJS({
     function BufferWriter() {
       Writer.call(this);
     }
-    BufferWriter._configure = function() {
+    BufferWriter._configure = function () {
       BufferWriter.alloc = util._Buffer_allocUnsafe;
-      BufferWriter.writeBytesBuffer = util.Buffer && util.Buffer.prototype instanceof Uint8Array && util.Buffer.prototype.set.name === "set" ? function writeBytesBuffer_set(val, buf, pos) {
-        buf.set(val, pos);
-      } : function writeBytesBuffer_copy(val, buf, pos) {
-        if (val.copy)
-          val.copy(buf, pos, 0, val.length);
-        else
-          for (var i = 0; i < val.length; )
-            buf[pos++] = val[i++];
-      };
+      BufferWriter.writeBytesBuffer =
+        util.Buffer &&
+        util.Buffer.prototype instanceof Uint8Array &&
+        util.Buffer.prototype.set.name === 'set'
+          ? function writeBytesBuffer_set(val, buf, pos) {
+              buf.set(val, pos);
+            }
+          : function writeBytesBuffer_copy(val, buf, pos) {
+              if (val.copy) val.copy(buf, pos, 0, val.length);
+              else for (var i = 0; i < val.length; ) buf[pos++] = val[i++];
+            };
     };
     BufferWriter.prototype.bytes = function write_bytes_buffer(value) {
-      if (util.isString(value))
-        value = util._Buffer_from(value, "base64");
+      if (util.isString(value)) value = util._Buffer_from(value, 'base64');
       var len = value.length >>> 0;
       this.uint32(len);
-      if (len)
-        this._push(BufferWriter.writeBytesBuffer, len, value);
+      if (len) this._push(BufferWriter.writeBytesBuffer, len, value);
       return this;
     };
     function writeStringBuffer(val, buf, pos) {
-      if (val.length < 40)
-        util.utf8.write(val, buf, pos);
-      else if (buf.utf8Write)
-        buf.utf8Write(val, pos);
-      else
-        buf.write(val, pos);
+      if (val.length < 40) util.utf8.write(val, buf, pos);
+      else if (buf.utf8Write) buf.utf8Write(val, pos);
+      else buf.write(val, pos);
     }
     BufferWriter.prototype.string = function write_string_buffer(value) {
       var len = util.Buffer.byteLength(value);
       this.uint32(len);
-      if (len)
-        this._push(writeStringBuffer, len, value);
+      if (len) this._push(writeStringBuffer, len, value);
       return this;
     };
     BufferWriter._configure();
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/reader.js
 var require_reader = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/reader.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/reader.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = Reader;
     var util = require_minimal();
     var BufferReader;
     var LongBits = util.LongBits;
     var utf83 = util.utf8;
     function indexOutOfRange(reader, writeLength) {
-      return RangeError("index out of range: " + reader.pos + " + " + (writeLength || 1) + " > " + reader.len);
+      return RangeError(
+        'index out of range: ' + reader.pos + ' + ' + (writeLength || 1) + ' > ' + reader.len
+      );
     }
     function Reader(buffer2) {
       this.buf = buffer2;
       this.pos = 0;
       this.len = buffer2.length;
     }
-    var create_array = typeof Uint8Array !== "undefined" ? function create_typed_array(buffer2) {
-      if (buffer2 instanceof Uint8Array || Array.isArray(buffer2))
-        return new Reader(buffer2);
-      throw Error("illegal buffer");
-    } : function create_array2(buffer2) {
-      if (Array.isArray(buffer2))
-        return new Reader(buffer2);
-      throw Error("illegal buffer");
-    };
+    var create_array =
+      typeof Uint8Array !== 'undefined'
+        ? function create_typed_array(buffer2) {
+            if (buffer2 instanceof Uint8Array || Array.isArray(buffer2)) return new Reader(buffer2);
+            throw Error('illegal buffer');
+          }
+        : function create_array2(buffer2) {
+            if (Array.isArray(buffer2)) return new Reader(buffer2);
+            throw Error('illegal buffer');
+          };
     var create = function create2() {
-      return util.Buffer ? function create_buffer_setup(buffer2) {
-        return (Reader.create = function create_buffer(buffer3) {
-          return util.Buffer.isBuffer(buffer3) ? new BufferReader(buffer3) : create_array(buffer3);
-        })(buffer2);
-      } : create_array;
+      return util.Buffer
+        ? function create_buffer_setup(buffer2) {
+            return (Reader.create = function create_buffer(buffer3) {
+              return util.Buffer.isBuffer(buffer3)
+                ? new BufferReader(buffer3)
+                : create_array(buffer3);
+            })(buffer2);
+          }
+        : create_array;
     };
     Reader.create = create();
-    Reader.prototype._slice = util.Array.prototype.subarray || /* istanbul ignore next */
-    util.Array.prototype.slice;
-    Reader.prototype.uint32 = function read_uint32_setup() {
+    Reader.prototype._slice =
+      util.Array.prototype.subarray /* istanbul ignore next */ || util.Array.prototype.slice;
+    Reader.prototype.uint32 = (function read_uint32_setup() {
       var value = 4294967295;
       return function read_uint32() {
         value = (this.buf[this.pos] & 127) >>> 0;
-        if (this.buf[this.pos++] < 128)
-          return value;
-        value = (value | (this.buf[this.pos] & 127) << 7) >>> 0;
-        if (this.buf[this.pos++] < 128)
-          return value;
-        value = (value | (this.buf[this.pos] & 127) << 14) >>> 0;
-        if (this.buf[this.pos++] < 128)
-          return value;
-        value = (value | (this.buf[this.pos] & 127) << 21) >>> 0;
-        if (this.buf[this.pos++] < 128)
-          return value;
-        value = (value | (this.buf[this.pos] & 15) << 28) >>> 0;
-        if (this.buf[this.pos++] < 128)
-          return value;
+        if (this.buf[this.pos++] < 128) return value;
+        value = (value | ((this.buf[this.pos] & 127) << 7)) >>> 0;
+        if (this.buf[this.pos++] < 128) return value;
+        value = (value | ((this.buf[this.pos] & 127) << 14)) >>> 0;
+        if (this.buf[this.pos++] < 128) return value;
+        value = (value | ((this.buf[this.pos] & 127) << 21)) >>> 0;
+        if (this.buf[this.pos++] < 128) return value;
+        value = (value | ((this.buf[this.pos] & 15) << 28)) >>> 0;
+        if (this.buf[this.pos++] < 128) return value;
         if ((this.pos += 5) > this.len) {
           this.pos = this.len;
           throw indexOutOfRange(this, 10);
         }
         return value;
       };
-    }();
+    })();
     Reader.prototype.int32 = function read_int32() {
       return this.uint32() | 0;
     };
     Reader.prototype.sint32 = function read_sint32() {
       var value = this.uint32();
-      return value >>> 1 ^ -(value & 1) | 0;
+      return ((value >>> 1) ^ -(value & 1)) | 0;
     };
     function readLongVarint() {
       var bits = new LongBits(0, 0);
       var i = 0;
       if (this.len - this.pos > 4) {
         for (; i < 4; ++i) {
-          bits.lo = (bits.lo | (this.buf[this.pos] & 127) << i * 7) >>> 0;
-          if (this.buf[this.pos++] < 128)
-            return bits;
+          bits.lo = (bits.lo | ((this.buf[this.pos] & 127) << (i * 7))) >>> 0;
+          if (this.buf[this.pos++] < 128) return bits;
         }
-        bits.lo = (bits.lo | (this.buf[this.pos] & 127) << 28) >>> 0;
-        bits.hi = (bits.hi | (this.buf[this.pos] & 127) >> 4) >>> 0;
-        if (this.buf[this.pos++] < 128)
-          return bits;
+        bits.lo = (bits.lo | ((this.buf[this.pos] & 127) << 28)) >>> 0;
+        bits.hi = (bits.hi | ((this.buf[this.pos] & 127) >> 4)) >>> 0;
+        if (this.buf[this.pos++] < 128) return bits;
         i = 0;
       } else {
         for (; i < 3; ++i) {
-          if (this.pos >= this.len)
-            throw indexOutOfRange(this);
-          bits.lo = (bits.lo | (this.buf[this.pos] & 127) << i * 7) >>> 0;
-          if (this.buf[this.pos++] < 128)
-            return bits;
+          if (this.pos >= this.len) throw indexOutOfRange(this);
+          bits.lo = (bits.lo | ((this.buf[this.pos] & 127) << (i * 7))) >>> 0;
+          if (this.buf[this.pos++] < 128) return bits;
         }
-        bits.lo = (bits.lo | (this.buf[this.pos++] & 127) << i * 7) >>> 0;
+        bits.lo = (bits.lo | ((this.buf[this.pos++] & 127) << (i * 7))) >>> 0;
         return bits;
       }
       if (this.len - this.pos > 4) {
         for (; i < 5; ++i) {
-          bits.hi = (bits.hi | (this.buf[this.pos] & 127) << i * 7 + 3) >>> 0;
-          if (this.buf[this.pos++] < 128)
-            return bits;
+          bits.hi = (bits.hi | ((this.buf[this.pos] & 127) << (i * 7 + 3))) >>> 0;
+          if (this.buf[this.pos++] < 128) return bits;
         }
       } else {
         for (; i < 5; ++i) {
-          if (this.pos >= this.len)
-            throw indexOutOfRange(this);
-          bits.hi = (bits.hi | (this.buf[this.pos] & 127) << i * 7 + 3) >>> 0;
-          if (this.buf[this.pos++] < 128)
-            return bits;
+          if (this.pos >= this.len) throw indexOutOfRange(this);
+          bits.hi = (bits.hi | ((this.buf[this.pos] & 127) << (i * 7 + 3))) >>> 0;
+          if (this.buf[this.pos++] < 128) return bits;
         }
       }
-      throw Error("invalid varint encoding");
+      throw Error('invalid varint encoding');
     }
     Reader.prototype.bool = function read_bool() {
       return this.uint32() !== 0;
     };
     function readFixed32_end(buf, end) {
-      return (buf[end - 4] | buf[end - 3] << 8 | buf[end - 2] << 16 | buf[end - 1] << 24) >>> 0;
+      return (
+        (buf[end - 4] | (buf[end - 3] << 8) | (buf[end - 2] << 16) | (buf[end - 1] << 24)) >>> 0
+      );
     }
     Reader.prototype.fixed32 = function read_fixed32() {
-      if (this.pos + 4 > this.len)
-        throw indexOutOfRange(this, 4);
-      return readFixed32_end(this.buf, this.pos += 4);
+      if (this.pos + 4 > this.len) throw indexOutOfRange(this, 4);
+      return readFixed32_end(this.buf, (this.pos += 4));
     };
     Reader.prototype.sfixed32 = function read_sfixed32() {
-      if (this.pos + 4 > this.len)
-        throw indexOutOfRange(this, 4);
-      return readFixed32_end(this.buf, this.pos += 4) | 0;
+      if (this.pos + 4 > this.len) throw indexOutOfRange(this, 4);
+      return readFixed32_end(this.buf, (this.pos += 4)) | 0;
     };
     function readFixed64() {
-      if (this.pos + 8 > this.len)
-        throw indexOutOfRange(this, 8);
-      return new LongBits(readFixed32_end(this.buf, this.pos += 4), readFixed32_end(this.buf, this.pos += 4));
+      if (this.pos + 8 > this.len) throw indexOutOfRange(this, 8);
+      return new LongBits(
+        readFixed32_end(this.buf, (this.pos += 4)),
+        readFixed32_end(this.buf, (this.pos += 4))
+      );
     }
     Reader.prototype.float = function read_float() {
-      if (this.pos + 4 > this.len)
-        throw indexOutOfRange(this, 4);
+      if (this.pos + 4 > this.len) throw indexOutOfRange(this, 4);
       var value = util.float.readFloatLE(this.buf, this.pos);
       this.pos += 4;
       return value;
     };
     Reader.prototype.double = function read_double() {
-      if (this.pos + 8 > this.len)
-        throw indexOutOfRange(this, 4);
+      if (this.pos + 8 > this.len) throw indexOutOfRange(this, 4);
       var value = util.float.readDoubleLE(this.buf, this.pos);
       this.pos += 8;
       return value;
     };
     Reader.prototype.bytes = function read_bytes() {
-      var length2 = this.uint32(), start = this.pos, end = this.pos + length2;
-      if (end > this.len)
-        throw indexOutOfRange(this, length2);
+      var length2 = this.uint32(),
+        start = this.pos,
+        end = this.pos + length2;
+      if (end > this.len) throw indexOutOfRange(this, length2);
       this.pos += length2;
-      if (Array.isArray(this.buf))
-        return this.buf.slice(start, end);
+      if (Array.isArray(this.buf)) return this.buf.slice(start, end);
       return start === end ? new this.buf.constructor(0) : this._slice.call(this.buf, start, end);
     };
     Reader.prototype.string = function read_string() {
@@ -1208,19 +1321,17 @@ var require_reader = __commonJS({
       return utf83.read(bytes, 0, bytes.length);
     };
     Reader.prototype.skip = function skip(length2) {
-      if (typeof length2 === "number") {
-        if (this.pos + length2 > this.len)
-          throw indexOutOfRange(this, length2);
+      if (typeof length2 === 'number') {
+        if (this.pos + length2 > this.len) throw indexOutOfRange(this, length2);
         this.pos += length2;
       } else {
         do {
-          if (this.pos >= this.len)
-            throw indexOutOfRange(this);
+          if (this.pos >= this.len) throw indexOutOfRange(this);
         } while (this.buf[this.pos++] & 128);
       }
       return this;
     };
-    Reader.prototype.skipType = function(wireType) {
+    Reader.prototype.skipType = function (wireType) {
       switch (wireType) {
         case 0:
           this.skip();
@@ -1240,18 +1351,18 @@ var require_reader = __commonJS({
           this.skip(4);
           break;
         default:
-          throw Error("invalid wire type " + wireType + " at offset " + this.pos);
+          throw Error('invalid wire type ' + wireType + ' at offset ' + this.pos);
       }
       return this;
     };
-    Reader._configure = function(BufferReader_) {
+    Reader._configure = function (BufferReader_) {
       BufferReader = BufferReader_;
       Reader.create = create();
       BufferReader._configure();
-      var fn = util.Long ? "toLong" : (
-        /* istanbul ignore next */
-        "toNumber"
-      );
+      var fn = util.Long
+        ? 'toLong'
+        : /* istanbul ignore next */
+          'toNumber';
       util.merge(Reader.prototype, {
         int64: function read_int64() {
           return readLongVarint.call(this)[fn](false);
@@ -1267,16 +1378,19 @@ var require_reader = __commonJS({
         },
         sfixed64: function read_sfixed64() {
           return readFixed64.call(this)[fn](false);
-        }
+        },
       });
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/reader_buffer.js
 var require_reader_buffer = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/reader_buffer.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/reader_buffer.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = BufferReader;
     var Reader = require_reader();
     (BufferReader.prototype = Object.create(Reader.prototype)).constructor = BufferReader;
@@ -1284,52 +1398,60 @@ var require_reader_buffer = __commonJS({
     function BufferReader(buffer2) {
       Reader.call(this, buffer2);
     }
-    BufferReader._configure = function() {
-      if (util.Buffer)
-        BufferReader.prototype._slice = util.Buffer.prototype.slice;
+    BufferReader._configure = function () {
+      if (util.Buffer) BufferReader.prototype._slice = util.Buffer.prototype.slice;
     };
     BufferReader.prototype.string = function read_string_buffer() {
       var len = this.uint32();
-      return this.buf.utf8Slice ? this.buf.utf8Slice(this.pos, this.pos = Math.min(this.pos + len, this.len)) : this.buf.toString("utf-8", this.pos, this.pos = Math.min(this.pos + len, this.len));
+      return this.buf.utf8Slice
+        ? this.buf.utf8Slice(this.pos, (this.pos = Math.min(this.pos + len, this.len)))
+        : this.buf.toString('utf-8', this.pos, (this.pos = Math.min(this.pos + len, this.len)));
     };
     BufferReader._configure();
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/rpc/service.js
 var require_service = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/rpc/service.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/rpc/service.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = Service;
     var util = require_minimal();
     (Service.prototype = Object.create(util.EventEmitter.prototype)).constructor = Service;
     function Service(rpcImpl, requestDelimited, responseDelimited) {
-      if (typeof rpcImpl !== "function")
-        throw TypeError("rpcImpl must be a function");
+      if (typeof rpcImpl !== 'function') throw TypeError('rpcImpl must be a function');
       util.EventEmitter.call(this);
       this.rpcImpl = rpcImpl;
       this.requestDelimited = Boolean(requestDelimited);
       this.responseDelimited = Boolean(responseDelimited);
     }
-    Service.prototype.rpcCall = function rpcCall(method, requestCtor, responseCtor, request, callback) {
-      if (!request)
-        throw TypeError("request must be specified");
+    Service.prototype.rpcCall = function rpcCall(
+      method,
+      requestCtor,
+      responseCtor,
+      request,
+      callback
+    ) {
+      if (!request) throw TypeError('request must be specified');
       var self2 = this;
       if (!callback)
         return util.asPromise(rpcCall, self2, method, requestCtor, responseCtor, request);
       if (!self2.rpcImpl) {
-        setTimeout(function() {
-          callback(Error("already ended"));
+        setTimeout(function () {
+          callback(Error('already ended'));
         }, 0);
         return void 0;
       }
       try {
         return self2.rpcImpl(
           method,
-          requestCtor[self2.requestDelimited ? "encodeDelimited" : "encode"](request).finish(),
+          requestCtor[self2.requestDelimited ? 'encodeDelimited' : 'encode'](request).finish(),
           function rpcCallback(err, response) {
             if (err) {
-              self2.emit("error", err, method);
+              self2.emit('error', err, method);
               return callback(err);
             }
             if (response === null) {
@@ -1341,19 +1463,20 @@ var require_service = __commonJS({
             }
             if (!(response instanceof responseCtor)) {
               try {
-                response = responseCtor[self2.responseDelimited ? "decodeDelimited" : "decode"](response);
+                response =
+                  responseCtor[self2.responseDelimited ? 'decodeDelimited' : 'decode'](response);
               } catch (err2) {
-                self2.emit("error", err2, method);
+                self2.emit('error', err2, method);
                 return callback(err2);
               }
             }
-            self2.emit("data", response, method);
+            self2.emit('data', response, method);
             return callback(null, response);
           }
         );
       } catch (err) {
-        self2.emit("error", err, method);
-        setTimeout(function() {
+        self2.emit('error', err, method);
+        setTimeout(function () {
           callback(err);
         }, 0);
         return void 0;
@@ -1361,39 +1484,43 @@ var require_service = __commonJS({
     };
     Service.prototype.end = function end(endedByRPC) {
       if (this.rpcImpl) {
-        if (!endedByRPC)
-          this.rpcImpl(null, null, null);
+        if (!endedByRPC) this.rpcImpl(null, null, null);
         this.rpcImpl = null;
-        this.emit("end").off();
+        this.emit('end').off();
       }
       return this;
     };
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/rpc.js
 var require_rpc = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/rpc.js"(exports2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/rpc.js'(exports2) {
+    'use strict';
     var rpc = exports2;
     rpc.Service = require_service();
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/roots.js
 var require_roots = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/roots.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/roots.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = {};
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/index-minimal.js
 var require_index_minimal = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/index-minimal.js"(exports2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/src/index-minimal.js'(
+    exports2
+  ) {
+    'use strict';
     var protobuf = exports2;
-    protobuf.build = "minimal";
+    protobuf.build = 'minimal';
     protobuf.Writer = require_writer();
     protobuf.BufferWriter = require_writer_buffer();
     protobuf.Reader = require_reader();
@@ -1408,15 +1535,18 @@ var require_index_minimal = __commonJS({
       protobuf.Reader._configure(protobuf.BufferReader);
     }
     configure();
-  }
+  },
 });
 
 // ../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/minimal.js
 var require_minimal2 = __commonJS({
-  "../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/minimal.js"(exports2, module2) {
-    "use strict";
+  '../../node_modules/.pnpm/protobufjs@7.2.4/node_modules/protobufjs/minimal.js'(
+    exports2,
+    module2
+  ) {
+    'use strict';
     module2.exports = require_index_minimal();
-  }
+  },
 });
 
 // src/index.ts.entry-point.ts
@@ -1425,7 +1555,7 @@ __export(index_ts_entry_point_exports, {
   main: () => main,
   onStart: () => onStart,
   onUpdate: () => onUpdate,
-  rendererTransport: () => rendererTransport
+  rendererTransport: () => rendererTransport,
 });
 module.exports = __toCommonJS(index_ts_entry_point_exports);
 
@@ -1435,7 +1565,7 @@ function createBasePBAnimator() {
   return { states: [] };
 }
 var PBAnimator;
-(function(PBAnimator2) {
+(function (PBAnimator2) {
   function encode(message, writer = import_minimal.default.Writer.create()) {
     for (const v of message.states) {
       PBAnimationState.encode(v, writer.uint32(10).fork()).ldelim();
@@ -1444,7 +1574,10 @@ var PBAnimator;
   }
   PBAnimator2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal.default.Reader ? input : import_minimal.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal.default.Reader
+        ? input
+        : import_minimal.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAnimator();
     while (reader.pos < end) {
@@ -1467,12 +1600,19 @@ var PBAnimator;
   PBAnimator2.decode = decode;
 })(PBAnimator || (PBAnimator = {}));
 function createBasePBAnimationState() {
-  return { clip: "", playing: void 0, weight: void 0, speed: void 0, loop: void 0, shouldReset: void 0 };
+  return {
+    clip: '',
+    playing: void 0,
+    weight: void 0,
+    speed: void 0,
+    loop: void 0,
+    shouldReset: void 0,
+  };
 }
 var PBAnimationState;
-(function(PBAnimationState2) {
+(function (PBAnimationState2) {
   function encode(message, writer = import_minimal.default.Writer.create()) {
-    if (message.clip !== "") {
+    if (message.clip !== '') {
       writer.uint32(18).string(message.clip);
     }
     if (message.playing !== void 0) {
@@ -1494,7 +1634,10 @@ var PBAnimationState;
   }
   PBAnimationState2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal.default.Reader ? input : import_minimal.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal.default.Reader
+        ? input
+        : import_minimal.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAnimationState();
     while (reader.pos < end) {
@@ -1562,11 +1705,11 @@ var AnimatorSchema = {
     return PBAnimator.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAnimator"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAnimator',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/audio_event.gen.js
@@ -1575,7 +1718,7 @@ function createBasePBAudioEvent() {
   return { state: 0, timestamp: 0 };
 }
 var PBAudioEvent;
-(function(PBAudioEvent2) {
+(function (PBAudioEvent2) {
   function encode(message, writer = import_minimal2.default.Writer.create()) {
     if (message.state !== 0) {
       writer.uint32(8).int32(message.state);
@@ -1587,7 +1730,10 @@ var PBAudioEvent;
   }
   PBAudioEvent2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal2.default.Reader ? input : import_minimal2.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal2.default.Reader
+        ? input
+        : import_minimal2.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAudioEvent();
     while (reader.pos < end) {
@@ -1631,11 +1777,11 @@ var AudioEventSchema = {
     return PBAudioEvent.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAudioEvent"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAudioEvent',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/audio_source.gen.js
@@ -1646,13 +1792,13 @@ function createBasePBAudioSource() {
     volume: void 0,
     loop: void 0,
     pitch: void 0,
-    audioClipUrl: "",
+    audioClipUrl: '',
     currentTime: void 0,
-    global: void 0
+    global: void 0,
   };
 }
 var PBAudioSource;
-(function(PBAudioSource2) {
+(function (PBAudioSource2) {
   function encode(message, writer = import_minimal3.default.Writer.create()) {
     if (message.playing !== void 0) {
       writer.uint32(8).bool(message.playing);
@@ -1666,7 +1812,7 @@ var PBAudioSource;
     if (message.pitch !== void 0) {
       writer.uint32(37).float(message.pitch);
     }
-    if (message.audioClipUrl !== "") {
+    if (message.audioClipUrl !== '') {
       writer.uint32(42).string(message.audioClipUrl);
     }
     if (message.currentTime !== void 0) {
@@ -1679,7 +1825,10 @@ var PBAudioSource;
   }
   PBAudioSource2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal3.default.Reader ? input : import_minimal3.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal3.default.Reader
+        ? input
+        : import_minimal3.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAudioSource();
     while (reader.pos < end) {
@@ -1753,11 +1902,11 @@ var AudioSourceSchema = {
     return PBAudioSource.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAudioSource"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAudioSource',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/audio_stream.gen.js
@@ -1766,14 +1915,14 @@ function createBasePBAudioStream() {
   return {
     playing: void 0,
     volume: void 0,
-    url: "",
+    url: '',
     spatial: void 0,
     spatialMinDistance: void 0,
-    spatialMaxDistance: void 0
+    spatialMaxDistance: void 0,
   };
 }
 var PBAudioStream;
-(function(PBAudioStream2) {
+(function (PBAudioStream2) {
   function encode(message, writer = import_minimal4.default.Writer.create()) {
     if (message.playing !== void 0) {
       writer.uint32(8).bool(message.playing);
@@ -1781,7 +1930,7 @@ var PBAudioStream;
     if (message.volume !== void 0) {
       writer.uint32(21).float(message.volume);
     }
-    if (message.url !== "") {
+    if (message.url !== '') {
       writer.uint32(26).string(message.url);
     }
     if (message.spatial !== void 0) {
@@ -1797,7 +1946,10 @@ var PBAudioStream;
   }
   PBAudioStream2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal4.default.Reader ? input : import_minimal4.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal4.default.Reader
+        ? input
+        : import_minimal4.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAudioStream();
     while (reader.pos < end) {
@@ -1865,49 +2017,56 @@ var AudioStreamSchema = {
     return PBAudioStream.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAudioStream"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAudioStream',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/avatar_attach.gen.js
 var import_minimal5 = __toESM(require_minimal2());
 var AvatarAnchorPointType;
-(function(AvatarAnchorPointType2) {
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_POSITION"] = 0] = "AAPT_POSITION";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_NAME_TAG"] = 1] = "AAPT_NAME_TAG";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_HEAD"] = 4] = "AAPT_HEAD";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_NECK"] = 5] = "AAPT_NECK";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_SPINE"] = 6] = "AAPT_SPINE";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_SPINE1"] = 7] = "AAPT_SPINE1";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_SPINE2"] = 8] = "AAPT_SPINE2";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_HIP"] = 9] = "AAPT_HIP";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_SHOULDER"] = 10] = "AAPT_LEFT_SHOULDER";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_ARM"] = 11] = "AAPT_LEFT_ARM";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_FOREARM"] = 12] = "AAPT_LEFT_FOREARM";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_HAND"] = 2] = "AAPT_LEFT_HAND";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_HAND_INDEX"] = 13] = "AAPT_LEFT_HAND_INDEX";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_SHOULDER"] = 14] = "AAPT_RIGHT_SHOULDER";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_ARM"] = 15] = "AAPT_RIGHT_ARM";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_FOREARM"] = 16] = "AAPT_RIGHT_FOREARM";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_HAND"] = 3] = "AAPT_RIGHT_HAND";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_HAND_INDEX"] = 17] = "AAPT_RIGHT_HAND_INDEX";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_UP_LEG"] = 18] = "AAPT_LEFT_UP_LEG";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_LEG"] = 19] = "AAPT_LEFT_LEG";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_FOOT"] = 20] = "AAPT_LEFT_FOOT";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_LEFT_TOE_BASE"] = 21] = "AAPT_LEFT_TOE_BASE";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_UP_LEG"] = 22] = "AAPT_RIGHT_UP_LEG";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_LEG"] = 23] = "AAPT_RIGHT_LEG";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_FOOT"] = 24] = "AAPT_RIGHT_FOOT";
-  AvatarAnchorPointType2[AvatarAnchorPointType2["AAPT_RIGHT_TOE_BASE"] = 25] = "AAPT_RIGHT_TOE_BASE";
+(function (AvatarAnchorPointType2) {
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_POSITION'] = 0)] = 'AAPT_POSITION';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_NAME_TAG'] = 1)] = 'AAPT_NAME_TAG';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_HEAD'] = 4)] = 'AAPT_HEAD';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_NECK'] = 5)] = 'AAPT_NECK';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_SPINE'] = 6)] = 'AAPT_SPINE';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_SPINE1'] = 7)] = 'AAPT_SPINE1';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_SPINE2'] = 8)] = 'AAPT_SPINE2';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_HIP'] = 9)] = 'AAPT_HIP';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_SHOULDER'] = 10)] =
+    'AAPT_LEFT_SHOULDER';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_ARM'] = 11)] = 'AAPT_LEFT_ARM';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_FOREARM'] = 12)] = 'AAPT_LEFT_FOREARM';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_HAND'] = 2)] = 'AAPT_LEFT_HAND';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_HAND_INDEX'] = 13)] =
+    'AAPT_LEFT_HAND_INDEX';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_SHOULDER'] = 14)] =
+    'AAPT_RIGHT_SHOULDER';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_ARM'] = 15)] = 'AAPT_RIGHT_ARM';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_FOREARM'] = 16)] =
+    'AAPT_RIGHT_FOREARM';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_HAND'] = 3)] = 'AAPT_RIGHT_HAND';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_HAND_INDEX'] = 17)] =
+    'AAPT_RIGHT_HAND_INDEX';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_UP_LEG'] = 18)] = 'AAPT_LEFT_UP_LEG';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_LEG'] = 19)] = 'AAPT_LEFT_LEG';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_FOOT'] = 20)] = 'AAPT_LEFT_FOOT';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_LEFT_TOE_BASE'] = 21)] =
+    'AAPT_LEFT_TOE_BASE';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_UP_LEG'] = 22)] = 'AAPT_RIGHT_UP_LEG';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_LEG'] = 23)] = 'AAPT_RIGHT_LEG';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_FOOT'] = 24)] = 'AAPT_RIGHT_FOOT';
+  AvatarAnchorPointType2[(AvatarAnchorPointType2['AAPT_RIGHT_TOE_BASE'] = 25)] =
+    'AAPT_RIGHT_TOE_BASE';
 })(AvatarAnchorPointType || (AvatarAnchorPointType = {}));
 function createBasePBAvatarAttach() {
   return { avatarId: void 0, anchorPointId: 0 };
 }
 var PBAvatarAttach;
-(function(PBAvatarAttach2) {
+(function (PBAvatarAttach2) {
   function encode(message, writer = import_minimal5.default.Writer.create()) {
     if (message.avatarId !== void 0) {
       writer.uint32(10).string(message.avatarId);
@@ -1919,7 +2078,10 @@ var PBAvatarAttach;
   }
   PBAvatarAttach2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal5.default.Reader ? input : import_minimal5.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal5.default.Reader
+        ? input
+        : import_minimal5.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAvatarAttach();
     while (reader.pos < end) {
@@ -1963,11 +2125,11 @@ var AvatarAttachSchema = {
     return PBAvatarAttach.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAvatarAttach"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAvatarAttach',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/avatar_base.gen.js
@@ -1979,7 +2141,7 @@ function createBaseColor3() {
   return { r: 0, g: 0, b: 0 };
 }
 var Color3;
-(function(Color33) {
+(function (Color33) {
   function encode(message, writer = import_minimal6.default.Writer.create()) {
     if (message.r !== 0) {
       writer.uint32(13).float(message.r);
@@ -1994,7 +2156,10 @@ var Color3;
   }
   Color33.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal6.default.Reader ? input : import_minimal6.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal6.default.Reader
+        ? input
+        : import_minimal6.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseColor3();
     while (reader.pos < end) {
@@ -2032,7 +2197,7 @@ function createBaseColor4() {
   return { r: 0, g: 0, b: 0, a: 0 };
 }
 var Color4;
-(function(Color43) {
+(function (Color43) {
   function encode(message, writer = import_minimal6.default.Writer.create()) {
     if (message.r !== 0) {
       writer.uint32(13).float(message.r);
@@ -2050,7 +2215,10 @@ var Color4;
   }
   Color43.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal6.default.Reader ? input : import_minimal6.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal6.default.Reader
+        ? input
+        : import_minimal6.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseColor4();
     while (reader.pos < end) {
@@ -2093,10 +2261,10 @@ var Color4;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/avatar_base.gen.js
 function createBasePBAvatarBase() {
-  return { skinColor: void 0, eyesColor: void 0, hairColor: void 0, bodyShapeUrn: "", name: "" };
+  return { skinColor: void 0, eyesColor: void 0, hairColor: void 0, bodyShapeUrn: '', name: '' };
 }
 var PBAvatarBase;
-(function(PBAvatarBase2) {
+(function (PBAvatarBase2) {
   function encode(message, writer = import_minimal7.default.Writer.create()) {
     if (message.skinColor !== void 0) {
       Color3.encode(message.skinColor, writer.uint32(10).fork()).ldelim();
@@ -2107,17 +2275,20 @@ var PBAvatarBase;
     if (message.hairColor !== void 0) {
       Color3.encode(message.hairColor, writer.uint32(26).fork()).ldelim();
     }
-    if (message.bodyShapeUrn !== "") {
+    if (message.bodyShapeUrn !== '') {
       writer.uint32(34).string(message.bodyShapeUrn);
     }
-    if (message.name !== "") {
+    if (message.name !== '') {
       writer.uint32(42).string(message.name);
     }
     return writer;
   }
   PBAvatarBase2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal7.default.Reader ? input : import_minimal7.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal7.default.Reader
+        ? input
+        : import_minimal7.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAvatarBase();
     while (reader.pos < end) {
@@ -2179,22 +2350,22 @@ var AvatarBaseSchema = {
     return PBAvatarBase.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAvatarBase"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAvatarBase',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/avatar_emote_command.gen.js
 var import_minimal8 = __toESM(require_minimal2());
 function createBasePBAvatarEmoteCommand() {
-  return { emoteUrn: "", loop: false, timestamp: 0 };
+  return { emoteUrn: '', loop: false, timestamp: 0 };
 }
 var PBAvatarEmoteCommand;
-(function(PBAvatarEmoteCommand2) {
+(function (PBAvatarEmoteCommand2) {
   function encode(message, writer = import_minimal8.default.Writer.create()) {
-    if (message.emoteUrn !== "") {
+    if (message.emoteUrn !== '') {
       writer.uint32(10).string(message.emoteUrn);
     }
     if (message.loop === true) {
@@ -2207,7 +2378,10 @@ var PBAvatarEmoteCommand;
   }
   PBAvatarEmoteCommand2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal8.default.Reader ? input : import_minimal8.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal8.default.Reader
+        ? input
+        : import_minimal8.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAvatarEmoteCommand();
     while (reader.pos < end) {
@@ -2257,11 +2431,11 @@ var AvatarEmoteCommandSchema = {
     return PBAvatarEmoteCommand.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAvatarEmoteCommand"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAvatarEmoteCommand',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/avatar_equipped_data.gen.js
@@ -2270,7 +2444,7 @@ function createBasePBAvatarEquippedData() {
   return { wearableUrns: [], emoteUrns: [] };
 }
 var PBAvatarEquippedData;
-(function(PBAvatarEquippedData2) {
+(function (PBAvatarEquippedData2) {
   function encode(message, writer = import_minimal9.default.Writer.create()) {
     for (const v of message.wearableUrns) {
       writer.uint32(10).string(v);
@@ -2282,7 +2456,10 @@ var PBAvatarEquippedData;
   }
   PBAvatarEquippedData2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal9.default.Reader ? input : import_minimal9.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal9.default.Reader
+        ? input
+        : import_minimal9.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAvatarEquippedData();
     while (reader.pos < end) {
@@ -2326,11 +2503,11 @@ var AvatarEquippedDataSchema = {
     return PBAvatarEquippedData.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAvatarEquippedData"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAvatarEquippedData',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/avatar_modifier_area.gen.js
@@ -2342,7 +2519,7 @@ function createBasePosition() {
   return { x: 0, y: 0, z: 0 };
 }
 var Position;
-(function(Position2) {
+(function (Position2) {
   function encode(message, writer = import_minimal10.default.Writer.create()) {
     if (message.x !== 0) {
       writer.uint32(13).float(message.x);
@@ -2357,7 +2534,10 @@ var Position;
   }
   Position2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal10.default.Reader ? input : import_minimal10.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal10.default.Reader
+        ? input
+        : import_minimal10.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePosition();
     while (reader.pos < end) {
@@ -2395,7 +2575,7 @@ function createBaseVector3() {
   return { x: 0, y: 0, z: 0 };
 }
 var Vector3;
-(function(Vector33) {
+(function (Vector33) {
   function encode(message, writer = import_minimal10.default.Writer.create()) {
     if (message.x !== 0) {
       writer.uint32(13).float(message.x);
@@ -2410,7 +2590,10 @@ var Vector3;
   }
   Vector33.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal10.default.Reader ? input : import_minimal10.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal10.default.Reader
+        ? input
+        : import_minimal10.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseVector3();
     while (reader.pos < end) {
@@ -2448,7 +2631,7 @@ function createBaseVector2() {
   return { x: 0, y: 0 };
 }
 var Vector2;
-(function(Vector23) {
+(function (Vector23) {
   function encode(message, writer = import_minimal10.default.Writer.create()) {
     if (message.x !== 0) {
       writer.uint32(13).float(message.x);
@@ -2460,7 +2643,10 @@ var Vector2;
   }
   Vector23.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal10.default.Reader ? input : import_minimal10.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal10.default.Reader
+        ? input
+        : import_minimal10.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseVector2();
     while (reader.pos < end) {
@@ -2492,7 +2678,7 @@ function createBaseQuaternion() {
   return { x: 0, y: 0, z: 0, w: 0 };
 }
 var Quaternion;
-(function(Quaternion3) {
+(function (Quaternion3) {
   function encode(message, writer = import_minimal10.default.Writer.create()) {
     if (message.x !== 0) {
       writer.uint32(13).float(message.x);
@@ -2510,7 +2696,10 @@ var Quaternion;
   }
   Quaternion3.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal10.default.Reader ? input : import_minimal10.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal10.default.Reader
+        ? input
+        : import_minimal10.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseQuaternion();
     while (reader.pos < end) {
@@ -2553,15 +2742,15 @@ var Quaternion;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/avatar_modifier_area.gen.js
 var AvatarModifierType;
-(function(AvatarModifierType2) {
-  AvatarModifierType2[AvatarModifierType2["AMT_HIDE_AVATARS"] = 0] = "AMT_HIDE_AVATARS";
-  AvatarModifierType2[AvatarModifierType2["AMT_DISABLE_PASSPORTS"] = 1] = "AMT_DISABLE_PASSPORTS";
+(function (AvatarModifierType2) {
+  AvatarModifierType2[(AvatarModifierType2['AMT_HIDE_AVATARS'] = 0)] = 'AMT_HIDE_AVATARS';
+  AvatarModifierType2[(AvatarModifierType2['AMT_DISABLE_PASSPORTS'] = 1)] = 'AMT_DISABLE_PASSPORTS';
 })(AvatarModifierType || (AvatarModifierType = {}));
 function createBasePBAvatarModifierArea() {
   return { area: void 0, excludeIds: [], modifiers: [] };
 }
 var PBAvatarModifierArea;
-(function(PBAvatarModifierArea2) {
+(function (PBAvatarModifierArea2) {
   function encode(message, writer = import_minimal11.default.Writer.create()) {
     if (message.area !== void 0) {
       Vector3.encode(message.area, writer.uint32(10).fork()).ldelim();
@@ -2578,7 +2767,10 @@ var PBAvatarModifierArea;
   }
   PBAvatarModifierArea2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal11.default.Reader ? input : import_minimal11.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal11.default.Reader
+        ? input
+        : import_minimal11.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAvatarModifierArea();
     while (reader.pos < end) {
@@ -2635,11 +2827,11 @@ var AvatarModifierAreaSchema = {
     return PBAvatarModifierArea.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAvatarModifierArea"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAvatarModifierArea',
+  },
 };
 
 // ../../node_modules/.pnpm/long@5.3.2/node_modules/long/index.js
@@ -2649,37 +2841,17 @@ try {
     new WebAssembly.Module(
       new Uint8Array([
         // \0asm
-        0,
-        97,
-        115,
-        109,
+        0, 97, 115, 109,
         // version 1
-        1,
-        0,
-        0,
-        0,
+        1, 0, 0, 0,
         // section "type"
-        1,
-        13,
-        2,
+        1, 13, 2,
         // 0, () => i32
-        96,
-        0,
-        1,
-        127,
+        96, 0, 1, 127,
         // 1, (i32, i32, i32, i32) => i32
-        96,
-        4,
-        127,
-        127,
-        127,
-        127,
-        1,
-        127,
+        96, 4, 127, 127, 127, 127, 1, 127,
         // section "function"
-        3,
-        7,
-        6,
+        3, 7, 6,
         // 0, type 0
         0,
         // 1, type 1
@@ -2693,290 +2865,56 @@ try {
         // 5, type 1
         1,
         // section "global"
-        6,
-        6,
-        1,
+        6, 6, 1,
         // 0, "high", mutable i32
-        127,
-        1,
-        65,
-        0,
-        11,
+        127, 1, 65, 0, 11,
         // section "export"
-        7,
-        50,
-        6,
+        7, 50, 6,
         // 0, "mul"
-        3,
-        109,
-        117,
-        108,
-        0,
-        1,
+        3, 109, 117, 108, 0, 1,
         // 1, "div_s"
-        5,
-        100,
-        105,
-        118,
-        95,
-        115,
-        0,
-        2,
+        5, 100, 105, 118, 95, 115, 0, 2,
         // 2, "div_u"
-        5,
-        100,
-        105,
-        118,
-        95,
-        117,
-        0,
-        3,
+        5, 100, 105, 118, 95, 117, 0, 3,
         // 3, "rem_s"
-        5,
-        114,
-        101,
-        109,
-        95,
-        115,
-        0,
-        4,
+        5, 114, 101, 109, 95, 115, 0, 4,
         // 4, "rem_u"
-        5,
-        114,
-        101,
-        109,
-        95,
-        117,
-        0,
-        5,
+        5, 114, 101, 109, 95, 117, 0, 5,
         // 5, "get_high"
-        8,
-        103,
-        101,
-        116,
-        95,
-        104,
-        105,
-        103,
-        104,
-        0,
-        0,
+        8, 103, 101, 116, 95, 104, 105, 103, 104, 0, 0,
         // section "code"
-        10,
-        191,
-        1,
-        6,
+        10, 191, 1, 6,
         // 0, "get_high"
-        4,
-        0,
-        35,
-        0,
-        11,
+        4, 0, 35, 0, 11,
         // 1, "mul"
-        36,
-        1,
-        1,
-        126,
-        32,
-        0,
-        173,
-        32,
-        1,
-        173,
-        66,
-        32,
-        134,
-        132,
-        32,
-        2,
-        173,
-        32,
-        3,
-        173,
-        66,
-        32,
-        134,
-        132,
-        126,
-        34,
-        4,
-        66,
-        32,
-        135,
-        167,
-        36,
-        0,
-        32,
-        4,
-        167,
-        11,
+        36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32,
+        134, 132, 126, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11,
         // 2, "div_s"
-        36,
-        1,
-        1,
-        126,
-        32,
-        0,
-        173,
-        32,
-        1,
-        173,
-        66,
-        32,
-        134,
-        132,
-        32,
-        2,
-        173,
-        32,
-        3,
-        173,
-        66,
-        32,
-        134,
-        132,
-        127,
-        34,
-        4,
-        66,
-        32,
-        135,
-        167,
-        36,
-        0,
-        32,
-        4,
-        167,
-        11,
+        36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32,
+        134, 132, 127, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11,
         // 3, "div_u"
-        36,
-        1,
-        1,
-        126,
-        32,
-        0,
-        173,
-        32,
-        1,
-        173,
-        66,
-        32,
-        134,
-        132,
-        32,
-        2,
-        173,
-        32,
-        3,
-        173,
-        66,
-        32,
-        134,
-        132,
-        128,
-        34,
-        4,
-        66,
-        32,
-        135,
-        167,
-        36,
-        0,
-        32,
-        4,
-        167,
-        11,
+        36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32,
+        134, 132, 128, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11,
         // 4, "rem_s"
-        36,
-        1,
-        1,
-        126,
-        32,
-        0,
-        173,
-        32,
-        1,
-        173,
-        66,
-        32,
-        134,
-        132,
-        32,
-        2,
-        173,
-        32,
-        3,
-        173,
-        66,
-        32,
-        134,
-        132,
-        129,
-        34,
-        4,
-        66,
-        32,
-        135,
-        167,
-        36,
-        0,
-        32,
-        4,
-        167,
-        11,
+        36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32,
+        134, 132, 129, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11,
         // 5, "rem_u"
-        36,
-        1,
-        1,
-        126,
-        32,
-        0,
-        173,
-        32,
-        1,
-        173,
-        66,
-        32,
-        134,
-        132,
-        32,
-        2,
-        173,
-        32,
-        3,
-        173,
-        66,
-        32,
-        134,
-        132,
-        130,
-        34,
-        4,
-        66,
-        32,
-        135,
-        167,
-        36,
-        0,
-        32,
-        4,
-        167,
-        11
+        36, 1, 1, 126, 32, 0, 173, 32, 1, 173, 66, 32, 134, 132, 32, 2, 173, 32, 3, 173, 66, 32,
+        134, 132, 130, 34, 4, 66, 32, 135, 167, 36, 0, 32, 4, 167, 11,
       ])
     ),
     {}
   ).exports;
-} catch {
-}
+} catch {}
 function Long(low, high, unsigned) {
   this.low = low | 0;
   this.high = high | 0;
   this.unsigned = !!unsigned;
 }
 Long.prototype.__isLong__;
-Object.defineProperty(Long.prototype, "__isLong__", { value: true });
+Object.defineProperty(Long.prototype, '__isLong__', { value: true });
 function isLong(obj) {
-  return (obj && obj["__isLong__"]) === true;
+  return (obj && obj['__isLong__']) === true;
 }
 function ctz32(value) {
   var c = Math.clz32(value & -value);
@@ -2989,50 +2927,36 @@ function fromInt(value, unsigned) {
   var obj, cachedObj, cache;
   if (unsigned) {
     value >>>= 0;
-    if (cache = 0 <= value && value < 256) {
+    if ((cache = 0 <= value && value < 256)) {
       cachedObj = UINT_CACHE[value];
-      if (cachedObj)
-        return cachedObj;
+      if (cachedObj) return cachedObj;
     }
     obj = fromBits(value, 0, true);
-    if (cache)
-      UINT_CACHE[value] = obj;
+    if (cache) UINT_CACHE[value] = obj;
     return obj;
   } else {
     value |= 0;
-    if (cache = -128 <= value && value < 128) {
+    if ((cache = -128 <= value && value < 128)) {
       cachedObj = INT_CACHE[value];
-      if (cachedObj)
-        return cachedObj;
+      if (cachedObj) return cachedObj;
     }
     obj = fromBits(value, value < 0 ? -1 : 0, false);
-    if (cache)
-      INT_CACHE[value] = obj;
+    if (cache) INT_CACHE[value] = obj;
     return obj;
   }
 }
 Long.fromInt = fromInt;
 function fromNumber(value, unsigned) {
-  if (isNaN(value))
-    return unsigned ? UZERO : ZERO;
+  if (isNaN(value)) return unsigned ? UZERO : ZERO;
   if (unsigned) {
-    if (value < 0)
-      return UZERO;
-    if (value >= TWO_PWR_64_DBL)
-      return MAX_UNSIGNED_VALUE;
+    if (value < 0) return UZERO;
+    if (value >= TWO_PWR_64_DBL) return MAX_UNSIGNED_VALUE;
   } else {
-    if (value <= -TWO_PWR_63_DBL)
-      return MIN_VALUE;
-    if (value + 1 >= TWO_PWR_63_DBL)
-      return MAX_VALUE;
+    if (value <= -TWO_PWR_63_DBL) return MIN_VALUE;
+    if (value + 1 >= TWO_PWR_63_DBL) return MAX_VALUE;
   }
-  if (value < 0)
-    return fromNumber(-value, unsigned).neg();
-  return fromBits(
-    value % TWO_PWR_32_DBL | 0,
-    value / TWO_PWR_32_DBL | 0,
-    unsigned
-  );
+  if (value < 0) return fromNumber(-value, unsigned).neg();
+  return fromBits((value % TWO_PWR_32_DBL) | 0, (value / TWO_PWR_32_DBL) | 0, unsigned);
 }
 Long.fromNumber = fromNumber;
 function fromBits(lowBits, highBits, unsigned) {
@@ -3041,29 +2965,27 @@ function fromBits(lowBits, highBits, unsigned) {
 Long.fromBits = fromBits;
 var pow_dbl = Math.pow;
 function fromString(str, unsigned, radix) {
-  if (str.length === 0)
-    throw Error("empty string");
-  if (typeof unsigned === "number") {
+  if (str.length === 0) throw Error('empty string');
+  if (typeof unsigned === 'number') {
     radix = unsigned;
     unsigned = false;
   } else {
     unsigned = !!unsigned;
   }
-  if (str === "NaN" || str === "Infinity" || str === "+Infinity" || str === "-Infinity")
+  if (str === 'NaN' || str === 'Infinity' || str === '+Infinity' || str === '-Infinity')
     return unsigned ? UZERO : ZERO;
   radix = radix || 10;
-  if (radix < 2 || 36 < radix)
-    throw RangeError("radix");
+  if (radix < 2 || 36 < radix) throw RangeError('radix');
   var p;
-  if ((p = str.indexOf("-")) > 0)
-    throw Error("interior hyphen");
+  if ((p = str.indexOf('-')) > 0) throw Error('interior hyphen');
   else if (p === 0) {
     return fromString(str.substring(1), unsigned, radix).neg();
   }
   var radixToPower = fromNumber(pow_dbl(radix, 8));
   var result = ZERO;
   for (var i = 0; i < str.length; i += 8) {
-    var size = Math.min(8, str.length - i), value = parseInt(str.substring(i, i + size), radix);
+    var size = Math.min(8, str.length - i),
+      value = parseInt(str.substring(i, i + size), radix);
     if (size < 8) {
       var power = fromNumber(pow_dbl(radix, size));
       result = result.mul(power).add(fromNumber(value));
@@ -3077,15 +2999,9 @@ function fromString(str, unsigned, radix) {
 }
 Long.fromString = fromString;
 function fromValue(val, unsigned) {
-  if (typeof val === "number")
-    return fromNumber(val, unsigned);
-  if (typeof val === "string")
-    return fromString(val, unsigned);
-  return fromBits(
-    val.low,
-    val.high,
-    typeof unsigned === "boolean" ? unsigned : val.unsigned
-  );
+  if (typeof val === 'number') return fromNumber(val, unsigned);
+  if (typeof val === 'string') return fromString(val, unsigned);
+  return fromBits(val.low, val.high, typeof unsigned === 'boolean' ? unsigned : val.unsigned);
 }
 Long.fromValue = fromValue;
 var TWO_PWR_16_DBL = 1 << 16;
@@ -3115,34 +3031,33 @@ LongPrototype.toInt = function toInt() {
   return this.unsigned ? this.low >>> 0 : this.low;
 };
 LongPrototype.toNumber = function toNumber() {
-  if (this.unsigned)
-    return (this.high >>> 0) * TWO_PWR_32_DBL + (this.low >>> 0);
+  if (this.unsigned) return (this.high >>> 0) * TWO_PWR_32_DBL + (this.low >>> 0);
   return this.high * TWO_PWR_32_DBL + (this.low >>> 0);
 };
 LongPrototype.toString = function toString(radix) {
   radix = radix || 10;
-  if (radix < 2 || 36 < radix)
-    throw RangeError("radix");
-  if (this.isZero())
-    return "0";
+  if (radix < 2 || 36 < radix) throw RangeError('radix');
+  if (this.isZero()) return '0';
   if (this.isNegative()) {
     if (this.eq(MIN_VALUE)) {
-      var radixLong = fromNumber(radix), div = this.div(radixLong), rem1 = div.mul(radixLong).sub(this);
+      var radixLong = fromNumber(radix),
+        div = this.div(radixLong),
+        rem1 = div.mul(radixLong).sub(this);
       return div.toString(radix) + rem1.toInt().toString(radix);
-    } else
-      return "-" + this.neg().toString(radix);
+    } else return '-' + this.neg().toString(radix);
   }
-  var radixToPower = fromNumber(pow_dbl(radix, 6), this.unsigned), rem = this;
-  var result = "";
+  var radixToPower = fromNumber(pow_dbl(radix, 6), this.unsigned),
+    rem = this;
+  var result = '';
   while (true) {
-    var remDiv = rem.div(radixToPower), intval = rem.sub(remDiv.mul(radixToPower)).toInt() >>> 0, digits = intval.toString(radix);
+    var remDiv = rem.div(radixToPower),
+      intval = rem.sub(remDiv.mul(radixToPower)).toInt() >>> 0,
+      digits = intval.toString(radix);
     rem = remDiv;
-    if (rem.isZero())
-      return digits + result;
+    if (rem.isZero()) return digits + result;
     else {
-      while (digits.length < 6)
-        digits = "0" + digits;
-      result = "" + digits + result;
+      while (digits.length < 6) digits = '0' + digits;
+      result = '' + digits + result;
     }
   }
 };
@@ -3159,20 +3074,15 @@ LongPrototype.getLowBitsUnsigned = function getLowBitsUnsigned() {
   return this.low >>> 0;
 };
 LongPrototype.getNumBitsAbs = function getNumBitsAbs() {
-  if (this.isNegative())
-    return this.eq(MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
+  if (this.isNegative()) return this.eq(MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
   var val = this.high != 0 ? this.high : this.low;
-  for (var bit = 31; bit > 0; bit--)
-    if ((val & 1 << bit) != 0)
-      break;
+  for (var bit = 31; bit > 0; bit--) if ((val & (1 << bit)) != 0) break;
   return this.high != 0 ? bit + 33 : bit + 1;
 };
 LongPrototype.isSafeInteger = function isSafeInteger() {
   var top11Bits = this.high >> 21;
-  if (!top11Bits)
-    return true;
-  if (this.unsigned)
-    return false;
+  if (!top11Bits) return true;
+  if (this.unsigned) return false;
   return top11Bits === -1 && !(this.low === 0 && this.high === -2097152);
 };
 LongPrototype.isZero = function isZero() {
@@ -3192,8 +3102,7 @@ LongPrototype.isEven = function isEven() {
   return (this.low & 1) === 0;
 };
 LongPrototype.equals = function equals(other) {
-  if (!isLong(other))
-    other = fromValue(other);
+  if (!isLong(other)) other = fromValue(other);
   if (this.unsigned !== other.unsigned && this.high >>> 31 === 1 && other.high >>> 31 === 1)
     return false;
   return this.high === other.high && this.low === other.low;
@@ -3208,59 +3117,64 @@ LongPrototype.notEquals = function notEquals(other) {
 LongPrototype.neq = LongPrototype.notEquals;
 LongPrototype.ne = LongPrototype.notEquals;
 LongPrototype.lessThan = function lessThan(other) {
-  return this.comp(
-    /* validates */
-    other
-  ) < 0;
+  return (
+    this.comp(
+      /* validates */
+      other
+    ) < 0
+  );
 };
 LongPrototype.lt = LongPrototype.lessThan;
 LongPrototype.lessThanOrEqual = function lessThanOrEqual(other) {
-  return this.comp(
-    /* validates */
-    other
-  ) <= 0;
+  return (
+    this.comp(
+      /* validates */
+      other
+    ) <= 0
+  );
 };
 LongPrototype.lte = LongPrototype.lessThanOrEqual;
 LongPrototype.le = LongPrototype.lessThanOrEqual;
 LongPrototype.greaterThan = function greaterThan(other) {
-  return this.comp(
-    /* validates */
-    other
-  ) > 0;
+  return (
+    this.comp(
+      /* validates */
+      other
+    ) > 0
+  );
 };
 LongPrototype.gt = LongPrototype.greaterThan;
 LongPrototype.greaterThanOrEqual = function greaterThanOrEqual(other) {
-  return this.comp(
-    /* validates */
-    other
-  ) >= 0;
+  return (
+    this.comp(
+      /* validates */
+      other
+    ) >= 0
+  );
 };
 LongPrototype.gte = LongPrototype.greaterThanOrEqual;
 LongPrototype.ge = LongPrototype.greaterThanOrEqual;
 LongPrototype.compare = function compare(other) {
-  if (!isLong(other))
-    other = fromValue(other);
-  if (this.eq(other))
-    return 0;
-  var thisNeg = this.isNegative(), otherNeg = other.isNegative();
-  if (thisNeg && !otherNeg)
-    return -1;
-  if (!thisNeg && otherNeg)
-    return 1;
-  if (!this.unsigned)
-    return this.sub(other).isNegative() ? -1 : 1;
-  return other.high >>> 0 > this.high >>> 0 || other.high === this.high && other.low >>> 0 > this.low >>> 0 ? -1 : 1;
+  if (!isLong(other)) other = fromValue(other);
+  if (this.eq(other)) return 0;
+  var thisNeg = this.isNegative(),
+    otherNeg = other.isNegative();
+  if (thisNeg && !otherNeg) return -1;
+  if (!thisNeg && otherNeg) return 1;
+  if (!this.unsigned) return this.sub(other).isNegative() ? -1 : 1;
+  return other.high >>> 0 > this.high >>> 0 ||
+    (other.high === this.high && other.low >>> 0 > this.low >>> 0)
+    ? -1
+    : 1;
 };
 LongPrototype.comp = LongPrototype.compare;
 LongPrototype.negate = function negate() {
-  if (!this.unsigned && this.eq(MIN_VALUE))
-    return MIN_VALUE;
+  if (!this.unsigned && this.eq(MIN_VALUE)) return MIN_VALUE;
   return this.not().add(ONE);
 };
 LongPrototype.neg = LongPrototype.negate;
 LongPrototype.add = function add(addend) {
-  if (!isLong(addend))
-    addend = fromValue(addend);
+  if (!isLong(addend)) addend = fromValue(addend);
   var a48 = this.high >>> 16;
   var a32 = this.high & 65535;
   var a16 = this.low >>> 16;
@@ -3269,7 +3183,10 @@ LongPrototype.add = function add(addend) {
   var b32 = addend.high & 65535;
   var b16 = addend.low >>> 16;
   var b00 = addend.low & 65535;
-  var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+  var c48 = 0,
+    c32 = 0,
+    c16 = 0,
+    c00 = 0;
   c00 += a00 + b00;
   c16 += c00 >>> 16;
   c00 &= 65535;
@@ -3281,36 +3198,27 @@ LongPrototype.add = function add(addend) {
   c32 &= 65535;
   c48 += a48 + b48;
   c48 &= 65535;
-  return fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
+  return fromBits((c16 << 16) | c00, (c48 << 16) | c32, this.unsigned);
 };
 LongPrototype.subtract = function subtract(subtrahend) {
-  if (!isLong(subtrahend))
-    subtrahend = fromValue(subtrahend);
+  if (!isLong(subtrahend)) subtrahend = fromValue(subtrahend);
   return this.add(subtrahend.neg());
 };
 LongPrototype.sub = LongPrototype.subtract;
 LongPrototype.multiply = function multiply(multiplier) {
-  if (this.isZero())
-    return this;
-  if (!isLong(multiplier))
-    multiplier = fromValue(multiplier);
+  if (this.isZero()) return this;
+  if (!isLong(multiplier)) multiplier = fromValue(multiplier);
   if (wasm) {
-    var low = wasm["mul"](this.low, this.high, multiplier.low, multiplier.high);
-    return fromBits(low, wasm["get_high"](), this.unsigned);
+    var low = wasm['mul'](this.low, this.high, multiplier.low, multiplier.high);
+    return fromBits(low, wasm['get_high'](), this.unsigned);
   }
-  if (multiplier.isZero())
-    return this.unsigned ? UZERO : ZERO;
-  if (this.eq(MIN_VALUE))
-    return multiplier.isOdd() ? MIN_VALUE : ZERO;
-  if (multiplier.eq(MIN_VALUE))
-    return this.isOdd() ? MIN_VALUE : ZERO;
+  if (multiplier.isZero()) return this.unsigned ? UZERO : ZERO;
+  if (this.eq(MIN_VALUE)) return multiplier.isOdd() ? MIN_VALUE : ZERO;
+  if (multiplier.eq(MIN_VALUE)) return this.isOdd() ? MIN_VALUE : ZERO;
   if (this.isNegative()) {
-    if (multiplier.isNegative())
-      return this.neg().mul(multiplier.neg());
-    else
-      return this.neg().mul(multiplier).neg();
-  } else if (multiplier.isNegative())
-    return this.mul(multiplier.neg()).neg();
+    if (multiplier.isNegative()) return this.neg().mul(multiplier.neg());
+    else return this.neg().mul(multiplier).neg();
+  } else if (multiplier.isNegative()) return this.mul(multiplier.neg()).neg();
   if (this.lt(TWO_PWR_24) && multiplier.lt(TWO_PWR_24))
     return fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
   var a48 = this.high >>> 16;
@@ -3321,7 +3229,10 @@ LongPrototype.multiply = function multiply(multiplier) {
   var b32 = multiplier.high & 65535;
   var b16 = multiplier.low >>> 16;
   var b00 = multiplier.low & 65535;
-  var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+  var c48 = 0,
+    c32 = 0,
+    c16 = 0,
+    c00 = 0;
   c00 += a00 * b00;
   c16 += c00 >>> 16;
   c00 &= 65535;
@@ -3342,35 +3253,30 @@ LongPrototype.multiply = function multiply(multiplier) {
   c32 &= 65535;
   c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
   c48 &= 65535;
-  return fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
+  return fromBits((c16 << 16) | c00, (c48 << 16) | c32, this.unsigned);
 };
 LongPrototype.mul = LongPrototype.multiply;
 LongPrototype.divide = function divide(divisor) {
-  if (!isLong(divisor))
-    divisor = fromValue(divisor);
-  if (divisor.isZero())
-    throw Error("division by zero");
+  if (!isLong(divisor)) divisor = fromValue(divisor);
+  if (divisor.isZero()) throw Error('division by zero');
   if (wasm) {
     if (!this.unsigned && this.high === -2147483648 && divisor.low === -1 && divisor.high === -1) {
       return this;
     }
-    var low = (this.unsigned ? wasm["div_u"] : wasm["div_s"])(
+    var low = (this.unsigned ? wasm['div_u'] : wasm['div_s'])(
       this.low,
       this.high,
       divisor.low,
       divisor.high
     );
-    return fromBits(low, wasm["get_high"](), this.unsigned);
+    return fromBits(low, wasm['get_high'](), this.unsigned);
   }
-  if (this.isZero())
-    return this.unsigned ? UZERO : ZERO;
+  if (this.isZero()) return this.unsigned ? UZERO : ZERO;
   var approx, rem, res;
   if (!this.unsigned) {
     if (this.eq(MIN_VALUE)) {
-      if (divisor.eq(ONE) || divisor.eq(NEG_ONE))
-        return MIN_VALUE;
-      else if (divisor.eq(MIN_VALUE))
-        return ONE;
+      if (divisor.eq(ONE) || divisor.eq(NEG_ONE)) return MIN_VALUE;
+      else if (divisor.eq(MIN_VALUE)) return ONE;
       else {
         var halfThis = this.shr(1);
         approx = halfThis.div(divisor).shl(1);
@@ -3382,35 +3288,31 @@ LongPrototype.divide = function divide(divisor) {
           return res;
         }
       }
-    } else if (divisor.eq(MIN_VALUE))
-      return this.unsigned ? UZERO : ZERO;
+    } else if (divisor.eq(MIN_VALUE)) return this.unsigned ? UZERO : ZERO;
     if (this.isNegative()) {
-      if (divisor.isNegative())
-        return this.neg().div(divisor.neg());
+      if (divisor.isNegative()) return this.neg().div(divisor.neg());
       return this.neg().div(divisor).neg();
-    } else if (divisor.isNegative())
-      return this.div(divisor.neg()).neg();
+    } else if (divisor.isNegative()) return this.div(divisor.neg()).neg();
     res = ZERO;
   } else {
-    if (!divisor.unsigned)
-      divisor = divisor.toUnsigned();
-    if (divisor.gt(this))
-      return UZERO;
-    if (divisor.gt(this.shru(1)))
-      return UONE;
+    if (!divisor.unsigned) divisor = divisor.toUnsigned();
+    if (divisor.gt(this)) return UZERO;
+    if (divisor.gt(this.shru(1))) return UONE;
     res = UZERO;
   }
   rem = this;
   while (rem.gte(divisor)) {
     approx = Math.max(1, Math.floor(rem.toNumber() / divisor.toNumber()));
-    var log2 = Math.ceil(Math.log(approx) / Math.LN2), delta = log2 <= 48 ? 1 : pow_dbl(2, log2 - 48), approxRes = fromNumber(approx), approxRem = approxRes.mul(divisor);
+    var log2 = Math.ceil(Math.log(approx) / Math.LN2),
+      delta = log2 <= 48 ? 1 : pow_dbl(2, log2 - 48),
+      approxRes = fromNumber(approx),
+      approxRem = approxRes.mul(divisor);
     while (approxRem.isNegative() || approxRem.gt(rem)) {
       approx -= delta;
       approxRes = fromNumber(approx, this.unsigned);
       approxRem = approxRes.mul(divisor);
     }
-    if (approxRes.isZero())
-      approxRes = ONE;
+    if (approxRes.isZero()) approxRes = ONE;
     res = res.add(approxRes);
     rem = rem.sub(approxRem);
   }
@@ -3418,16 +3320,15 @@ LongPrototype.divide = function divide(divisor) {
 };
 LongPrototype.div = LongPrototype.divide;
 LongPrototype.modulo = function modulo(divisor) {
-  if (!isLong(divisor))
-    divisor = fromValue(divisor);
+  if (!isLong(divisor)) divisor = fromValue(divisor);
   if (wasm) {
-    var low = (this.unsigned ? wasm["rem_u"] : wasm["rem_s"])(
+    var low = (this.unsigned ? wasm['rem_u'] : wasm['rem_s'])(
       this.low,
       this.high,
       divisor.low,
       divisor.high
     );
-    return fromBits(low, wasm["get_high"](), this.unsigned);
+    return fromBits(low, wasm['get_high'](), this.unsigned);
   }
   return this.sub(this.div(divisor).mul(divisor));
 };
@@ -3445,158 +3346,136 @@ LongPrototype.countTrailingZeros = function countTrailingZeros() {
 };
 LongPrototype.ctz = LongPrototype.countTrailingZeros;
 LongPrototype.and = function and(other) {
-  if (!isLong(other))
-    other = fromValue(other);
+  if (!isLong(other)) other = fromValue(other);
   return fromBits(this.low & other.low, this.high & other.high, this.unsigned);
 };
 LongPrototype.or = function or(other) {
-  if (!isLong(other))
-    other = fromValue(other);
+  if (!isLong(other)) other = fromValue(other);
   return fromBits(this.low | other.low, this.high | other.high, this.unsigned);
 };
 LongPrototype.xor = function xor(other) {
-  if (!isLong(other))
-    other = fromValue(other);
+  if (!isLong(other)) other = fromValue(other);
   return fromBits(this.low ^ other.low, this.high ^ other.high, this.unsigned);
 };
 LongPrototype.shiftLeft = function shiftLeft(numBits) {
-  if (isLong(numBits))
-    numBits = numBits.toInt();
-  if ((numBits &= 63) === 0)
-    return this;
+  if (isLong(numBits)) numBits = numBits.toInt();
+  if ((numBits &= 63) === 0) return this;
   else if (numBits < 32)
     return fromBits(
       this.low << numBits,
-      this.high << numBits | this.low >>> 32 - numBits,
+      (this.high << numBits) | (this.low >>> (32 - numBits)),
       this.unsigned
     );
-  else
-    return fromBits(0, this.low << numBits - 32, this.unsigned);
+  else return fromBits(0, this.low << (numBits - 32), this.unsigned);
 };
 LongPrototype.shl = LongPrototype.shiftLeft;
 LongPrototype.shiftRight = function shiftRight(numBits) {
-  if (isLong(numBits))
-    numBits = numBits.toInt();
-  if ((numBits &= 63) === 0)
-    return this;
+  if (isLong(numBits)) numBits = numBits.toInt();
+  if ((numBits &= 63) === 0) return this;
   else if (numBits < 32)
     return fromBits(
-      this.low >>> numBits | this.high << 32 - numBits,
+      (this.low >>> numBits) | (this.high << (32 - numBits)),
       this.high >> numBits,
       this.unsigned
     );
-  else
-    return fromBits(
-      this.high >> numBits - 32,
-      this.high >= 0 ? 0 : -1,
-      this.unsigned
-    );
+  else return fromBits(this.high >> (numBits - 32), this.high >= 0 ? 0 : -1, this.unsigned);
 };
 LongPrototype.shr = LongPrototype.shiftRight;
 LongPrototype.shiftRightUnsigned = function shiftRightUnsigned(numBits) {
-  if (isLong(numBits))
-    numBits = numBits.toInt();
-  if ((numBits &= 63) === 0)
-    return this;
+  if (isLong(numBits)) numBits = numBits.toInt();
+  if ((numBits &= 63) === 0) return this;
   if (numBits < 32)
     return fromBits(
-      this.low >>> numBits | this.high << 32 - numBits,
+      (this.low >>> numBits) | (this.high << (32 - numBits)),
       this.high >>> numBits,
       this.unsigned
     );
-  if (numBits === 32)
-    return fromBits(this.high, 0, this.unsigned);
-  return fromBits(this.high >>> numBits - 32, 0, this.unsigned);
+  if (numBits === 32) return fromBits(this.high, 0, this.unsigned);
+  return fromBits(this.high >>> (numBits - 32), 0, this.unsigned);
 };
 LongPrototype.shru = LongPrototype.shiftRightUnsigned;
 LongPrototype.shr_u = LongPrototype.shiftRightUnsigned;
 LongPrototype.rotateLeft = function rotateLeft(numBits) {
   var b;
-  if (isLong(numBits))
-    numBits = numBits.toInt();
-  if ((numBits &= 63) === 0)
-    return this;
-  if (numBits === 32)
-    return fromBits(this.high, this.low, this.unsigned);
+  if (isLong(numBits)) numBits = numBits.toInt();
+  if ((numBits &= 63) === 0) return this;
+  if (numBits === 32) return fromBits(this.high, this.low, this.unsigned);
   if (numBits < 32) {
     b = 32 - numBits;
     return fromBits(
-      this.low << numBits | this.high >>> b,
-      this.high << numBits | this.low >>> b,
+      (this.low << numBits) | (this.high >>> b),
+      (this.high << numBits) | (this.low >>> b),
       this.unsigned
     );
   }
   numBits -= 32;
   b = 32 - numBits;
   return fromBits(
-    this.high << numBits | this.low >>> b,
-    this.low << numBits | this.high >>> b,
+    (this.high << numBits) | (this.low >>> b),
+    (this.low << numBits) | (this.high >>> b),
     this.unsigned
   );
 };
 LongPrototype.rotl = LongPrototype.rotateLeft;
 LongPrototype.rotateRight = function rotateRight(numBits) {
   var b;
-  if (isLong(numBits))
-    numBits = numBits.toInt();
-  if ((numBits &= 63) === 0)
-    return this;
-  if (numBits === 32)
-    return fromBits(this.high, this.low, this.unsigned);
+  if (isLong(numBits)) numBits = numBits.toInt();
+  if ((numBits &= 63) === 0) return this;
+  if (numBits === 32) return fromBits(this.high, this.low, this.unsigned);
   if (numBits < 32) {
     b = 32 - numBits;
     return fromBits(
-      this.high << b | this.low >>> numBits,
-      this.low << b | this.high >>> numBits,
+      (this.high << b) | (this.low >>> numBits),
+      (this.low << b) | (this.high >>> numBits),
       this.unsigned
     );
   }
   numBits -= 32;
   b = 32 - numBits;
   return fromBits(
-    this.low << b | this.high >>> numBits,
-    this.high << b | this.low >>> numBits,
+    (this.low << b) | (this.high >>> numBits),
+    (this.high << b) | (this.low >>> numBits),
     this.unsigned
   );
 };
 LongPrototype.rotr = LongPrototype.rotateRight;
 LongPrototype.toSigned = function toSigned() {
-  if (!this.unsigned)
-    return this;
+  if (!this.unsigned) return this;
   return fromBits(this.low, this.high, false);
 };
 LongPrototype.toUnsigned = function toUnsigned() {
-  if (this.unsigned)
-    return this;
+  if (this.unsigned) return this;
   return fromBits(this.low, this.high, true);
 };
 LongPrototype.toBytes = function toBytes(le) {
   return le ? this.toBytesLE() : this.toBytesBE();
 };
 LongPrototype.toBytesLE = function toBytesLE() {
-  var hi = this.high, lo = this.low;
+  var hi = this.high,
+    lo = this.low;
   return [
     lo & 255,
-    lo >>> 8 & 255,
-    lo >>> 16 & 255,
+    (lo >>> 8) & 255,
+    (lo >>> 16) & 255,
     lo >>> 24,
     hi & 255,
-    hi >>> 8 & 255,
-    hi >>> 16 & 255,
-    hi >>> 24
+    (hi >>> 8) & 255,
+    (hi >>> 16) & 255,
+    hi >>> 24,
   ];
 };
 LongPrototype.toBytesBE = function toBytesBE() {
-  var hi = this.high, lo = this.low;
+  var hi = this.high,
+    lo = this.low;
   return [
     hi >>> 24,
-    hi >>> 16 & 255,
-    hi >>> 8 & 255,
+    (hi >>> 16) & 255,
+    (hi >>> 8) & 255,
     hi & 255,
     lo >>> 24,
-    lo >>> 16 & 255,
-    lo >>> 8 & 255,
-    lo & 255
+    (lo >>> 16) & 255,
+    (lo >>> 8) & 255,
+    lo & 255,
   ];
 };
 Long.fromBytes = function fromBytes(bytes, unsigned, le) {
@@ -3604,33 +3483,32 @@ Long.fromBytes = function fromBytes(bytes, unsigned, le) {
 };
 Long.fromBytesLE = function fromBytesLE(bytes, unsigned) {
   return new Long(
-    bytes[0] | bytes[1] << 8 | bytes[2] << 16 | bytes[3] << 24,
-    bytes[4] | bytes[5] << 8 | bytes[6] << 16 | bytes[7] << 24,
+    bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24),
+    bytes[4] | (bytes[5] << 8) | (bytes[6] << 16) | (bytes[7] << 24),
     unsigned
   );
 };
 Long.fromBytesBE = function fromBytesBE(bytes, unsigned) {
   return new Long(
-    bytes[4] << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7],
-    bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3],
+    (bytes[4] << 24) | (bytes[5] << 16) | (bytes[6] << 8) | bytes[7],
+    (bytes[0] << 24) | (bytes[1] << 16) | (bytes[2] << 8) | bytes[3],
     unsigned
   );
 };
-if (typeof BigInt === "function") {
+if (typeof BigInt === 'function') {
   Long.fromBigInt = function fromBigInt(value, unsigned) {
     var lowBits = Number(BigInt.asIntN(32, value));
     var highBits = Number(BigInt.asIntN(32, value >> BigInt(32)));
     return fromBits(lowBits, highBits, unsigned);
   };
   Long.fromValue = function fromValueWithBigInt(value, unsigned) {
-    if (typeof value === "bigint")
-      return Long.fromBigInt(value, unsigned);
+    if (typeof value === 'bigint') return Long.fromBigInt(value, unsigned);
     return fromValue(value, unsigned);
   };
   LongPrototype.toBigInt = function toBigInt() {
     var lowBigInt = BigInt(this.low >>> 0);
     var highBigInt = BigInt(this.unsigned ? this.high >>> 0 : this.high);
-    return highBigInt << BigInt(32) | lowBigInt;
+    return (highBigInt << BigInt(32)) | lowBigInt;
   };
 }
 var long_default = Long;
@@ -3639,7 +3517,7 @@ var long_default = Long;
 var import_minimal12 = __toESM(require_minimal2());
 function createBasePBAvatarShape() {
   return {
-    id: "",
+    id: '',
     name: void 0,
     bodyShape: void 0,
     skinColor: void 0,
@@ -3650,13 +3528,13 @@ function createBasePBAvatarShape() {
     talking: void 0,
     wearables: [],
     emotes: [],
-    showOnlyWearables: void 0
+    showOnlyWearables: void 0,
   };
 }
 var PBAvatarShape;
-(function(PBAvatarShape2) {
+(function (PBAvatarShape2) {
   function encode(message, writer = import_minimal12.default.Writer.create()) {
-    if (message.id !== "") {
+    if (message.id !== '') {
       writer.uint32(10).string(message.id);
     }
     if (message.name !== void 0) {
@@ -3696,7 +3574,10 @@ var PBAvatarShape;
   }
   PBAvatarShape2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal12.default.Reader ? input : import_minimal12.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal12.default.Reader
+        ? input
+        : import_minimal12.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBAvatarShape();
     while (reader.pos < end) {
@@ -3785,23 +3666,23 @@ var PBAvatarShape;
   PBAvatarShape2.decode = decode;
 })(PBAvatarShape || (PBAvatarShape = {}));
 var tsProtoGlobalThis = (() => {
-  if (typeof globalThis !== "undefined") {
+  if (typeof globalThis !== 'undefined') {
     return globalThis;
   }
-  if (typeof self !== "undefined") {
+  if (typeof self !== 'undefined') {
     return self;
   }
   if (false) {
     return void 0;
   }
-  if (typeof global !== "undefined") {
+  if (typeof global !== 'undefined') {
     return global;
   }
-  throw "Unable to locate global object";
+  throw 'Unable to locate global object';
 })();
 function longToNumber(long) {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+    throw new tsProtoGlobalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
   }
   return long.toNumber();
 }
@@ -3825,28 +3706,28 @@ var AvatarShapeSchema = {
     return PBAvatarShape.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBAvatarShape"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBAvatarShape',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/billboard.gen.js
 var import_minimal13 = __toESM(require_minimal2());
 var BillboardMode;
-(function(BillboardMode2) {
-  BillboardMode2[BillboardMode2["BM_NONE"] = 0] = "BM_NONE";
-  BillboardMode2[BillboardMode2["BM_X"] = 1] = "BM_X";
-  BillboardMode2[BillboardMode2["BM_Y"] = 2] = "BM_Y";
-  BillboardMode2[BillboardMode2["BM_Z"] = 4] = "BM_Z";
-  BillboardMode2[BillboardMode2["BM_ALL"] = 7] = "BM_ALL";
+(function (BillboardMode2) {
+  BillboardMode2[(BillboardMode2['BM_NONE'] = 0)] = 'BM_NONE';
+  BillboardMode2[(BillboardMode2['BM_X'] = 1)] = 'BM_X';
+  BillboardMode2[(BillboardMode2['BM_Y'] = 2)] = 'BM_Y';
+  BillboardMode2[(BillboardMode2['BM_Z'] = 4)] = 'BM_Z';
+  BillboardMode2[(BillboardMode2['BM_ALL'] = 7)] = 'BM_ALL';
 })(BillboardMode || (BillboardMode = {}));
 function createBasePBBillboard() {
   return { billboardMode: void 0 };
 }
 var PBBillboard;
-(function(PBBillboard2) {
+(function (PBBillboard2) {
   function encode(message, writer = import_minimal13.default.Writer.create()) {
     if (message.billboardMode !== void 0) {
       writer.uint32(8).int32(message.billboardMode);
@@ -3855,7 +3736,10 @@ var PBBillboard;
   }
   PBBillboard2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal13.default.Reader ? input : import_minimal13.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal13.default.Reader
+        ? input
+        : import_minimal13.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBBillboard();
     while (reader.pos < end) {
@@ -3893,11 +3777,11 @@ var BillboardSchema = {
     return PBBillboard.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBBillboard"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBBillboard',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/camera_mode.gen.js
@@ -3906,7 +3790,7 @@ function createBasePBCameraMode() {
   return { mode: 0 };
 }
 var PBCameraMode;
-(function(PBCameraMode2) {
+(function (PBCameraMode2) {
   function encode(message, writer = import_minimal14.default.Writer.create()) {
     if (message.mode !== 0) {
       writer.uint32(8).int32(message.mode);
@@ -3915,7 +3799,10 @@ var PBCameraMode;
   }
   PBCameraMode2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal14.default.Reader ? input : import_minimal14.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal14.default.Reader
+        ? input
+        : import_minimal14.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBCameraMode();
     while (reader.pos < end) {
@@ -3953,11 +3840,11 @@ var CameraModeSchema = {
     return PBCameraMode.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBCameraMode"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBCameraMode',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/camera_mode_area.gen.js
@@ -3966,7 +3853,7 @@ function createBasePBCameraModeArea() {
   return { area: void 0, mode: 0 };
 }
 var PBCameraModeArea;
-(function(PBCameraModeArea2) {
+(function (PBCameraModeArea2) {
   function encode(message, writer = import_minimal15.default.Writer.create()) {
     if (message.area !== void 0) {
       Vector3.encode(message.area, writer.uint32(10).fork()).ldelim();
@@ -3978,7 +3865,10 @@ var PBCameraModeArea;
   }
   PBCameraModeArea2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal15.default.Reader ? input : import_minimal15.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal15.default.Reader
+        ? input
+        : import_minimal15.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBCameraModeArea();
     while (reader.pos < end) {
@@ -4022,11 +3912,11 @@ var CameraModeAreaSchema = {
     return PBCameraModeArea.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBCameraModeArea"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBCameraModeArea',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/engine_info.gen.js
@@ -4035,7 +3925,7 @@ function createBasePBEngineInfo() {
   return { frameNumber: 0, totalRuntime: 0, tickNumber: 0 };
 }
 var PBEngineInfo;
-(function(PBEngineInfo2) {
+(function (PBEngineInfo2) {
   function encode(message, writer = import_minimal16.default.Writer.create()) {
     if (message.frameNumber !== 0) {
       writer.uint32(8).uint32(message.frameNumber);
@@ -4050,7 +3940,10 @@ var PBEngineInfo;
   }
   PBEngineInfo2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal16.default.Reader ? input : import_minimal16.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal16.default.Reader
+        ? input
+        : import_minimal16.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBEngineInfo();
     while (reader.pos < end) {
@@ -4100,22 +3993,22 @@ var EngineInfoSchema = {
     return PBEngineInfo.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBEngineInfo"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBEngineInfo',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/gltf_container.gen.js
 var import_minimal17 = __toESM(require_minimal2());
 function createBasePBGltfContainer() {
-  return { src: "", visibleMeshesCollisionMask: void 0, invisibleMeshesCollisionMask: void 0 };
+  return { src: '', visibleMeshesCollisionMask: void 0, invisibleMeshesCollisionMask: void 0 };
 }
 var PBGltfContainer;
-(function(PBGltfContainer2) {
+(function (PBGltfContainer2) {
   function encode(message, writer = import_minimal17.default.Writer.create()) {
-    if (message.src !== "") {
+    if (message.src !== '') {
       writer.uint32(10).string(message.src);
     }
     if (message.visibleMeshesCollisionMask !== void 0) {
@@ -4128,7 +4021,10 @@ var PBGltfContainer;
   }
   PBGltfContainer2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal17.default.Reader ? input : import_minimal17.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal17.default.Reader
+        ? input
+        : import_minimal17.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBGltfContainer();
     while (reader.pos < end) {
@@ -4178,11 +4074,11 @@ var GltfContainerSchema = {
     return PBGltfContainer.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBGltfContainer"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBGltfContainer',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/gltf_container_loading_state.gen.js
@@ -4191,7 +4087,7 @@ function createBasePBGltfContainerLoadingState() {
   return { currentState: 0 };
 }
 var PBGltfContainerLoadingState;
-(function(PBGltfContainerLoadingState2) {
+(function (PBGltfContainerLoadingState2) {
   function encode(message, writer = import_minimal18.default.Writer.create()) {
     if (message.currentState !== 0) {
       writer.uint32(8).int32(message.currentState);
@@ -4200,7 +4096,10 @@ var PBGltfContainerLoadingState;
   }
   PBGltfContainerLoadingState2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal18.default.Reader ? input : import_minimal18.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal18.default.Reader
+        ? input
+        : import_minimal18.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBGltfContainerLoadingState();
     while (reader.pos < end) {
@@ -4238,11 +4137,11 @@ var GltfContainerLoadingStateSchema = {
     return PBGltfContainerLoadingState.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBGltfContainerLoadingState"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBGltfContainerLoadingState',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/gltf_node_modifiers.gen.js
@@ -4254,24 +4153,24 @@ var import_minimal20 = __toESM(require_minimal2());
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/common/texture.gen.js
 var import_minimal19 = __toESM(require_minimal2());
 var TextureWrapMode;
-(function(TextureWrapMode2) {
-  TextureWrapMode2[TextureWrapMode2["TWM_REPEAT"] = 0] = "TWM_REPEAT";
-  TextureWrapMode2[TextureWrapMode2["TWM_CLAMP"] = 1] = "TWM_CLAMP";
-  TextureWrapMode2[TextureWrapMode2["TWM_MIRROR"] = 2] = "TWM_MIRROR";
+(function (TextureWrapMode2) {
+  TextureWrapMode2[(TextureWrapMode2['TWM_REPEAT'] = 0)] = 'TWM_REPEAT';
+  TextureWrapMode2[(TextureWrapMode2['TWM_CLAMP'] = 1)] = 'TWM_CLAMP';
+  TextureWrapMode2[(TextureWrapMode2['TWM_MIRROR'] = 2)] = 'TWM_MIRROR';
 })(TextureWrapMode || (TextureWrapMode = {}));
 var TextureFilterMode;
-(function(TextureFilterMode2) {
-  TextureFilterMode2[TextureFilterMode2["TFM_POINT"] = 0] = "TFM_POINT";
-  TextureFilterMode2[TextureFilterMode2["TFM_BILINEAR"] = 1] = "TFM_BILINEAR";
-  TextureFilterMode2[TextureFilterMode2["TFM_TRILINEAR"] = 2] = "TFM_TRILINEAR";
+(function (TextureFilterMode2) {
+  TextureFilterMode2[(TextureFilterMode2['TFM_POINT'] = 0)] = 'TFM_POINT';
+  TextureFilterMode2[(TextureFilterMode2['TFM_BILINEAR'] = 1)] = 'TFM_BILINEAR';
+  TextureFilterMode2[(TextureFilterMode2['TFM_TRILINEAR'] = 2)] = 'TFM_TRILINEAR';
 })(TextureFilterMode || (TextureFilterMode = {}));
 function createBaseTexture() {
-  return { src: "", wrapMode: void 0, filterMode: void 0, offset: void 0, tiling: void 0 };
+  return { src: '', wrapMode: void 0, filterMode: void 0, offset: void 0, tiling: void 0 };
 }
 var Texture;
-(function(Texture2) {
+(function (Texture2) {
   function encode(message, writer = import_minimal19.default.Writer.create()) {
-    if (message.src !== "") {
+    if (message.src !== '') {
       writer.uint32(10).string(message.src);
     }
     if (message.wrapMode !== void 0) {
@@ -4290,7 +4189,10 @@ var Texture;
   }
   Texture2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal19.default.Reader ? input : import_minimal19.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal19.default.Reader
+        ? input
+        : import_minimal19.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseTexture();
     while (reader.pos < end) {
@@ -4337,12 +4239,12 @@ var Texture;
   Texture2.decode = decode;
 })(Texture || (Texture = {}));
 function createBaseAvatarTexture() {
-  return { userId: "", wrapMode: void 0, filterMode: void 0 };
+  return { userId: '', wrapMode: void 0, filterMode: void 0 };
 }
 var AvatarTexture;
-(function(AvatarTexture2) {
+(function (AvatarTexture2) {
   function encode(message, writer = import_minimal19.default.Writer.create()) {
-    if (message.userId !== "") {
+    if (message.userId !== '') {
       writer.uint32(10).string(message.userId);
     }
     if (message.wrapMode !== void 0) {
@@ -4355,7 +4257,10 @@ var AvatarTexture;
   }
   AvatarTexture2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal19.default.Reader ? input : import_minimal19.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal19.default.Reader
+        ? input
+        : import_minimal19.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseAvatarTexture();
     while (reader.pos < end) {
@@ -4393,7 +4298,7 @@ function createBaseVideoTexture() {
   return { videoPlayerEntity: 0, wrapMode: void 0, filterMode: void 0 };
 }
 var VideoTexture;
-(function(VideoTexture2) {
+(function (VideoTexture2) {
   function encode(message, writer = import_minimal19.default.Writer.create()) {
     if (message.videoPlayerEntity !== 0) {
       writer.uint32(8).uint32(message.videoPlayerEntity);
@@ -4408,7 +4313,10 @@ var VideoTexture;
   }
   VideoTexture2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal19.default.Reader ? input : import_minimal19.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal19.default.Reader
+        ? input
+        : import_minimal19.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseVideoTexture();
     while (reader.pos < end) {
@@ -4446,16 +4354,16 @@ function createBaseTextureUnion() {
   return { tex: void 0 };
 }
 var TextureUnion;
-(function(TextureUnion2) {
+(function (TextureUnion2) {
   function encode(message, writer = import_minimal19.default.Writer.create()) {
     switch (message.tex?.$case) {
-      case "texture":
+      case 'texture':
         Texture.encode(message.tex.texture, writer.uint32(10).fork()).ldelim();
         break;
-      case "avatarTexture":
+      case 'avatarTexture':
         AvatarTexture.encode(message.tex.avatarTexture, writer.uint32(18).fork()).ldelim();
         break;
-      case "videoTexture":
+      case 'videoTexture':
         VideoTexture.encode(message.tex.videoTexture, writer.uint32(26).fork()).ldelim();
         break;
     }
@@ -4463,7 +4371,10 @@ var TextureUnion;
   }
   TextureUnion2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal19.default.Reader ? input : import_minimal19.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal19.default.Reader
+        ? input
+        : import_minimal19.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseTextureUnion();
     while (reader.pos < end) {
@@ -4473,19 +4384,25 @@ var TextureUnion;
           if (tag !== 10) {
             break;
           }
-          message.tex = { $case: "texture", texture: Texture.decode(reader, reader.uint32()) };
+          message.tex = { $case: 'texture', texture: Texture.decode(reader, reader.uint32()) };
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
-          message.tex = { $case: "avatarTexture", avatarTexture: AvatarTexture.decode(reader, reader.uint32()) };
+          message.tex = {
+            $case: 'avatarTexture',
+            avatarTexture: AvatarTexture.decode(reader, reader.uint32()),
+          };
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
-          message.tex = { $case: "videoTexture", videoTexture: VideoTexture.decode(reader, reader.uint32()) };
+          message.tex = {
+            $case: 'videoTexture',
+            videoTexture: VideoTexture.decode(reader, reader.uint32()),
+          };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -4500,24 +4417,25 @@ var TextureUnion;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/material.gen.js
 var MaterialTransparencyMode;
-(function(MaterialTransparencyMode2) {
-  MaterialTransparencyMode2[MaterialTransparencyMode2["MTM_OPAQUE"] = 0] = "MTM_OPAQUE";
-  MaterialTransparencyMode2[MaterialTransparencyMode2["MTM_ALPHA_TEST"] = 1] = "MTM_ALPHA_TEST";
-  MaterialTransparencyMode2[MaterialTransparencyMode2["MTM_ALPHA_BLEND"] = 2] = "MTM_ALPHA_BLEND";
-  MaterialTransparencyMode2[MaterialTransparencyMode2["MTM_ALPHA_TEST_AND_ALPHA_BLEND"] = 3] = "MTM_ALPHA_TEST_AND_ALPHA_BLEND";
-  MaterialTransparencyMode2[MaterialTransparencyMode2["MTM_AUTO"] = 4] = "MTM_AUTO";
+(function (MaterialTransparencyMode2) {
+  MaterialTransparencyMode2[(MaterialTransparencyMode2['MTM_OPAQUE'] = 0)] = 'MTM_OPAQUE';
+  MaterialTransparencyMode2[(MaterialTransparencyMode2['MTM_ALPHA_TEST'] = 1)] = 'MTM_ALPHA_TEST';
+  MaterialTransparencyMode2[(MaterialTransparencyMode2['MTM_ALPHA_BLEND'] = 2)] = 'MTM_ALPHA_BLEND';
+  MaterialTransparencyMode2[(MaterialTransparencyMode2['MTM_ALPHA_TEST_AND_ALPHA_BLEND'] = 3)] =
+    'MTM_ALPHA_TEST_AND_ALPHA_BLEND';
+  MaterialTransparencyMode2[(MaterialTransparencyMode2['MTM_AUTO'] = 4)] = 'MTM_AUTO';
 })(MaterialTransparencyMode || (MaterialTransparencyMode = {}));
 function createBasePBMaterial() {
   return { material: void 0 };
 }
 var PBMaterial;
-(function(PBMaterial2) {
+(function (PBMaterial2) {
   function encode(message, writer = import_minimal20.default.Writer.create()) {
     switch (message.material?.$case) {
-      case "unlit":
+      case 'unlit':
         PBMaterial_UnlitMaterial.encode(message.material.unlit, writer.uint32(10).fork()).ldelim();
         break;
-      case "pbr":
+      case 'pbr':
         PBMaterial_PbrMaterial.encode(message.material.pbr, writer.uint32(18).fork()).ldelim();
         break;
     }
@@ -4525,7 +4443,10 @@ var PBMaterial;
   }
   PBMaterial2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal20.default.Reader ? input : import_minimal20.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal20.default.Reader
+        ? input
+        : import_minimal20.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMaterial();
     while (reader.pos < end) {
@@ -4535,13 +4456,19 @@ var PBMaterial;
           if (tag !== 10) {
             break;
           }
-          message.material = { $case: "unlit", unlit: PBMaterial_UnlitMaterial.decode(reader, reader.uint32()) };
+          message.material = {
+            $case: 'unlit',
+            unlit: PBMaterial_UnlitMaterial.decode(reader, reader.uint32()),
+          };
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
-          message.material = { $case: "pbr", pbr: PBMaterial_PbrMaterial.decode(reader, reader.uint32()) };
+          message.material = {
+            $case: 'pbr',
+            pbr: PBMaterial_PbrMaterial.decode(reader, reader.uint32()),
+          };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -4559,11 +4486,11 @@ function createBasePBMaterial_UnlitMaterial() {
     alphaTest: void 0,
     castShadows: void 0,
     diffuseColor: void 0,
-    alphaTexture: void 0
+    alphaTexture: void 0,
   };
 }
 var PBMaterial_UnlitMaterial;
-(function(PBMaterial_UnlitMaterial2) {
+(function (PBMaterial_UnlitMaterial2) {
   function encode(message, writer = import_minimal20.default.Writer.create()) {
     if (message.texture !== void 0) {
       TextureUnion.encode(message.texture, writer.uint32(10).fork()).ldelim();
@@ -4584,7 +4511,10 @@ var PBMaterial_UnlitMaterial;
   }
   PBMaterial_UnlitMaterial2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal20.default.Reader ? input : import_minimal20.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal20.default.Reader
+        ? input
+        : import_minimal20.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMaterial_UnlitMaterial();
     while (reader.pos < end) {
@@ -4646,11 +4576,11 @@ function createBasePBMaterial_PbrMaterial() {
     roughness: void 0,
     specularIntensity: void 0,
     emissiveIntensity: void 0,
-    directIntensity: void 0
+    directIntensity: void 0,
   };
 }
 var PBMaterial_PbrMaterial;
-(function(PBMaterial_PbrMaterial2) {
+(function (PBMaterial_PbrMaterial2) {
   function encode(message, writer = import_minimal20.default.Writer.create()) {
     if (message.texture !== void 0) {
       TextureUnion.encode(message.texture, writer.uint32(10).fork()).ldelim();
@@ -4701,7 +4631,10 @@ var PBMaterial_PbrMaterial;
   }
   PBMaterial_PbrMaterial2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal20.default.Reader ? input : import_minimal20.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal20.default.Reader
+        ? input
+        : import_minimal20.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMaterial_PbrMaterial();
     while (reader.pos < end) {
@@ -4813,7 +4746,7 @@ function createBasePBGltfNodeModifiers() {
   return { modifiers: [] };
 }
 var PBGltfNodeModifiers;
-(function(PBGltfNodeModifiers2) {
+(function (PBGltfNodeModifiers2) {
   function encode(message, writer = import_minimal21.default.Writer.create()) {
     for (const v of message.modifiers) {
       PBGltfNodeModifiers_GltfNodeModifier.encode(v, writer.uint32(10).fork()).ldelim();
@@ -4822,7 +4755,10 @@ var PBGltfNodeModifiers;
   }
   PBGltfNodeModifiers2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal21.default.Reader ? input : import_minimal21.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal21.default.Reader
+        ? input
+        : import_minimal21.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBGltfNodeModifiers();
     while (reader.pos < end) {
@@ -4832,7 +4768,9 @@ var PBGltfNodeModifiers;
           if (tag !== 10) {
             break;
           }
-          message.modifiers.push(PBGltfNodeModifiers_GltfNodeModifier.decode(reader, reader.uint32()));
+          message.modifiers.push(
+            PBGltfNodeModifiers_GltfNodeModifier.decode(reader, reader.uint32())
+          );
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -4845,12 +4783,12 @@ var PBGltfNodeModifiers;
   PBGltfNodeModifiers2.decode = decode;
 })(PBGltfNodeModifiers || (PBGltfNodeModifiers = {}));
 function createBasePBGltfNodeModifiers_GltfNodeModifier() {
-  return { path: "", castShadows: void 0, material: void 0 };
+  return { path: '', castShadows: void 0, material: void 0 };
 }
 var PBGltfNodeModifiers_GltfNodeModifier;
-(function(PBGltfNodeModifiers_GltfNodeModifier2) {
+(function (PBGltfNodeModifiers_GltfNodeModifier2) {
   function encode(message, writer = import_minimal21.default.Writer.create()) {
-    if (message.path !== "") {
+    if (message.path !== '') {
       writer.uint32(10).string(message.path);
     }
     if (message.castShadows !== void 0) {
@@ -4863,7 +4801,10 @@ var PBGltfNodeModifiers_GltfNodeModifier;
   }
   PBGltfNodeModifiers_GltfNodeModifier2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal21.default.Reader ? input : import_minimal21.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal21.default.Reader
+        ? input
+        : import_minimal21.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBGltfNodeModifiers_GltfNodeModifier();
     while (reader.pos < end) {
@@ -4913,11 +4854,11 @@ var GltfNodeModifiersSchema = {
     return PBGltfNodeModifiers.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBGltfNodeModifiers"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBGltfNodeModifiers',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/input_modifier.gen.js
@@ -4926,18 +4867,24 @@ function createBasePBInputModifier() {
   return { mode: void 0 };
 }
 var PBInputModifier;
-(function(PBInputModifier2) {
+(function (PBInputModifier2) {
   function encode(message, writer = import_minimal22.default.Writer.create()) {
     switch (message.mode?.$case) {
-      case "standard":
-        PBInputModifier_StandardInput.encode(message.mode.standard, writer.uint32(10).fork()).ldelim();
+      case 'standard':
+        PBInputModifier_StandardInput.encode(
+          message.mode.standard,
+          writer.uint32(10).fork()
+        ).ldelim();
         break;
     }
     return writer;
   }
   PBInputModifier2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal22.default.Reader ? input : import_minimal22.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal22.default.Reader
+        ? input
+        : import_minimal22.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBInputModifier();
     while (reader.pos < end) {
@@ -4947,7 +4894,10 @@ var PBInputModifier;
           if (tag !== 10) {
             break;
           }
-          message.mode = { $case: "standard", standard: PBInputModifier_StandardInput.decode(reader, reader.uint32()) };
+          message.mode = {
+            $case: 'standard',
+            standard: PBInputModifier_StandardInput.decode(reader, reader.uint32()),
+          };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -4966,11 +4916,11 @@ function createBasePBInputModifier_StandardInput() {
     disableJog: void 0,
     disableRun: void 0,
     disableJump: void 0,
-    disableEmote: void 0
+    disableEmote: void 0,
   };
 }
 var PBInputModifier_StandardInput;
-(function(PBInputModifier_StandardInput2) {
+(function (PBInputModifier_StandardInput2) {
   function encode(message, writer = import_minimal22.default.Writer.create()) {
     if (message.disableAll !== void 0) {
       writer.uint32(8).bool(message.disableAll);
@@ -4994,7 +4944,10 @@ var PBInputModifier_StandardInput;
   }
   PBInputModifier_StandardInput2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal22.default.Reader ? input : import_minimal22.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal22.default.Reader
+        ? input
+        : import_minimal22.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBInputModifier_StandardInput();
     while (reader.pos < end) {
@@ -5062,11 +5015,11 @@ var InputModifierSchema = {
     return PBInputModifier.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBInputModifier"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBInputModifier',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/light_source.gen.js
@@ -5079,11 +5032,11 @@ function createBasePBLightSource() {
     range: void 0,
     shadow: void 0,
     shadowMaskTexture: void 0,
-    type: void 0
+    type: void 0,
   };
 }
 var PBLightSource;
-(function(PBLightSource2) {
+(function (PBLightSource2) {
   function encode(message, writer = import_minimal23.default.Writer.create()) {
     if (message.active !== void 0) {
       writer.uint32(8).bool(message.active);
@@ -5104,10 +5057,10 @@ var PBLightSource;
       TextureUnion.encode(message.shadowMaskTexture, writer.uint32(50).fork()).ldelim();
     }
     switch (message.type?.$case) {
-      case "point":
+      case 'point':
         PBLightSource_Point.encode(message.type.point, writer.uint32(58).fork()).ldelim();
         break;
-      case "spot":
+      case 'spot':
         PBLightSource_Spot.encode(message.type.spot, writer.uint32(66).fork()).ldelim();
         break;
     }
@@ -5115,7 +5068,10 @@ var PBLightSource;
   }
   PBLightSource2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal23.default.Reader ? input : import_minimal23.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal23.default.Reader
+        ? input
+        : import_minimal23.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBLightSource();
     while (reader.pos < end) {
@@ -5161,13 +5117,19 @@ var PBLightSource;
           if (tag !== 58) {
             break;
           }
-          message.type = { $case: "point", point: PBLightSource_Point.decode(reader, reader.uint32()) };
+          message.type = {
+            $case: 'point',
+            point: PBLightSource_Point.decode(reader, reader.uint32()),
+          };
           continue;
         case 8:
           if (tag !== 66) {
             break;
           }
-          message.type = { $case: "spot", spot: PBLightSource_Spot.decode(reader, reader.uint32()) };
+          message.type = {
+            $case: 'spot',
+            spot: PBLightSource_Spot.decode(reader, reader.uint32()),
+          };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -5183,13 +5145,16 @@ function createBasePBLightSource_Point() {
   return {};
 }
 var PBLightSource_Point;
-(function(PBLightSource_Point2) {
+(function (PBLightSource_Point2) {
   function encode(_, writer = import_minimal23.default.Writer.create()) {
     return writer;
   }
   PBLightSource_Point2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal23.default.Reader ? input : import_minimal23.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal23.default.Reader
+        ? input
+        : import_minimal23.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBLightSource_Point();
     while (reader.pos < end) {
@@ -5209,7 +5174,7 @@ function createBasePBLightSource_Spot() {
   return { innerAngle: void 0, outerAngle: void 0 };
 }
 var PBLightSource_Spot;
-(function(PBLightSource_Spot2) {
+(function (PBLightSource_Spot2) {
   function encode(message, writer = import_minimal23.default.Writer.create()) {
     if (message.innerAngle !== void 0) {
       writer.uint32(77).float(message.innerAngle);
@@ -5221,7 +5186,10 @@ var PBLightSource_Spot;
   }
   PBLightSource_Spot2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal23.default.Reader ? input : import_minimal23.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal23.default.Reader
+        ? input
+        : import_minimal23.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBLightSource_Spot();
     while (reader.pos < end) {
@@ -5265,11 +5233,11 @@ var LightSourceSchema = {
     return PBLightSource.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBLightSource"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBLightSource',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/main_camera.gen.js
@@ -5278,7 +5246,7 @@ function createBasePBMainCamera() {
   return { virtualCameraEntity: void 0 };
 }
 var PBMainCamera;
-(function(PBMainCamera2) {
+(function (PBMainCamera2) {
   function encode(message, writer = import_minimal24.default.Writer.create()) {
     if (message.virtualCameraEntity !== void 0) {
       writer.uint32(8).uint32(message.virtualCameraEntity);
@@ -5287,7 +5255,10 @@ var PBMainCamera;
   }
   PBMainCamera2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal24.default.Reader ? input : import_minimal24.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal24.default.Reader
+        ? input
+        : import_minimal24.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMainCamera();
     while (reader.pos < end) {
@@ -5325,11 +5296,11 @@ var MainCameraSchema = {
     return PBMainCamera.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBMainCamera"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBMainCamera',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/Material.gen.js
@@ -5347,55 +5318,58 @@ var MaterialSchema = {
     return PBMaterial.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBMaterial"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBMaterial',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/mesh_collider.gen.js
 var import_minimal25 = __toESM(require_minimal2());
 var ColliderLayer;
-(function(ColliderLayer2) {
-  ColliderLayer2[ColliderLayer2["CL_NONE"] = 0] = "CL_NONE";
-  ColliderLayer2[ColliderLayer2["CL_POINTER"] = 1] = "CL_POINTER";
-  ColliderLayer2[ColliderLayer2["CL_PHYSICS"] = 2] = "CL_PHYSICS";
-  ColliderLayer2[ColliderLayer2["CL_PLAYER"] = 4] = "CL_PLAYER";
-  ColliderLayer2[ColliderLayer2["CL_RESERVED2"] = 8] = "CL_RESERVED2";
-  ColliderLayer2[ColliderLayer2["CL_RESERVED3"] = 16] = "CL_RESERVED3";
-  ColliderLayer2[ColliderLayer2["CL_RESERVED4"] = 32] = "CL_RESERVED4";
-  ColliderLayer2[ColliderLayer2["CL_RESERVED5"] = 64] = "CL_RESERVED5";
-  ColliderLayer2[ColliderLayer2["CL_RESERVED6"] = 128] = "CL_RESERVED6";
-  ColliderLayer2[ColliderLayer2["CL_CUSTOM1"] = 256] = "CL_CUSTOM1";
-  ColliderLayer2[ColliderLayer2["CL_CUSTOM2"] = 512] = "CL_CUSTOM2";
-  ColliderLayer2[ColliderLayer2["CL_CUSTOM3"] = 1024] = "CL_CUSTOM3";
-  ColliderLayer2[ColliderLayer2["CL_CUSTOM4"] = 2048] = "CL_CUSTOM4";
-  ColliderLayer2[ColliderLayer2["CL_CUSTOM5"] = 4096] = "CL_CUSTOM5";
-  ColliderLayer2[ColliderLayer2["CL_CUSTOM6"] = 8192] = "CL_CUSTOM6";
-  ColliderLayer2[ColliderLayer2["CL_CUSTOM7"] = 16384] = "CL_CUSTOM7";
-  ColliderLayer2[ColliderLayer2["CL_CUSTOM8"] = 32768] = "CL_CUSTOM8";
+(function (ColliderLayer2) {
+  ColliderLayer2[(ColliderLayer2['CL_NONE'] = 0)] = 'CL_NONE';
+  ColliderLayer2[(ColliderLayer2['CL_POINTER'] = 1)] = 'CL_POINTER';
+  ColliderLayer2[(ColliderLayer2['CL_PHYSICS'] = 2)] = 'CL_PHYSICS';
+  ColliderLayer2[(ColliderLayer2['CL_PLAYER'] = 4)] = 'CL_PLAYER';
+  ColliderLayer2[(ColliderLayer2['CL_RESERVED2'] = 8)] = 'CL_RESERVED2';
+  ColliderLayer2[(ColliderLayer2['CL_RESERVED3'] = 16)] = 'CL_RESERVED3';
+  ColliderLayer2[(ColliderLayer2['CL_RESERVED4'] = 32)] = 'CL_RESERVED4';
+  ColliderLayer2[(ColliderLayer2['CL_RESERVED5'] = 64)] = 'CL_RESERVED5';
+  ColliderLayer2[(ColliderLayer2['CL_RESERVED6'] = 128)] = 'CL_RESERVED6';
+  ColliderLayer2[(ColliderLayer2['CL_CUSTOM1'] = 256)] = 'CL_CUSTOM1';
+  ColliderLayer2[(ColliderLayer2['CL_CUSTOM2'] = 512)] = 'CL_CUSTOM2';
+  ColliderLayer2[(ColliderLayer2['CL_CUSTOM3'] = 1024)] = 'CL_CUSTOM3';
+  ColliderLayer2[(ColliderLayer2['CL_CUSTOM4'] = 2048)] = 'CL_CUSTOM4';
+  ColliderLayer2[(ColliderLayer2['CL_CUSTOM5'] = 4096)] = 'CL_CUSTOM5';
+  ColliderLayer2[(ColliderLayer2['CL_CUSTOM6'] = 8192)] = 'CL_CUSTOM6';
+  ColliderLayer2[(ColliderLayer2['CL_CUSTOM7'] = 16384)] = 'CL_CUSTOM7';
+  ColliderLayer2[(ColliderLayer2['CL_CUSTOM8'] = 32768)] = 'CL_CUSTOM8';
 })(ColliderLayer || (ColliderLayer = {}));
 function createBasePBMeshCollider() {
   return { collisionMask: void 0, mesh: void 0 };
 }
 var PBMeshCollider;
-(function(PBMeshCollider2) {
+(function (PBMeshCollider2) {
   function encode(message, writer = import_minimal25.default.Writer.create()) {
     if (message.collisionMask !== void 0) {
       writer.uint32(8).uint32(message.collisionMask);
     }
     switch (message.mesh?.$case) {
-      case "box":
+      case 'box':
         PBMeshCollider_BoxMesh.encode(message.mesh.box, writer.uint32(18).fork()).ldelim();
         break;
-      case "sphere":
+      case 'sphere':
         PBMeshCollider_SphereMesh.encode(message.mesh.sphere, writer.uint32(26).fork()).ldelim();
         break;
-      case "cylinder":
-        PBMeshCollider_CylinderMesh.encode(message.mesh.cylinder, writer.uint32(34).fork()).ldelim();
+      case 'cylinder':
+        PBMeshCollider_CylinderMesh.encode(
+          message.mesh.cylinder,
+          writer.uint32(34).fork()
+        ).ldelim();
         break;
-      case "plane":
+      case 'plane':
         PBMeshCollider_PlaneMesh.encode(message.mesh.plane, writer.uint32(42).fork()).ldelim();
         break;
     }
@@ -5403,7 +5377,10 @@ var PBMeshCollider;
   }
   PBMeshCollider2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal25.default.Reader ? input : import_minimal25.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal25.default.Reader
+        ? input
+        : import_minimal25.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshCollider();
     while (reader.pos < end) {
@@ -5419,25 +5396,37 @@ var PBMeshCollider;
           if (tag !== 18) {
             break;
           }
-          message.mesh = { $case: "box", box: PBMeshCollider_BoxMesh.decode(reader, reader.uint32()) };
+          message.mesh = {
+            $case: 'box',
+            box: PBMeshCollider_BoxMesh.decode(reader, reader.uint32()),
+          };
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
-          message.mesh = { $case: "sphere", sphere: PBMeshCollider_SphereMesh.decode(reader, reader.uint32()) };
+          message.mesh = {
+            $case: 'sphere',
+            sphere: PBMeshCollider_SphereMesh.decode(reader, reader.uint32()),
+          };
           continue;
         case 4:
           if (tag !== 34) {
             break;
           }
-          message.mesh = { $case: "cylinder", cylinder: PBMeshCollider_CylinderMesh.decode(reader, reader.uint32()) };
+          message.mesh = {
+            $case: 'cylinder',
+            cylinder: PBMeshCollider_CylinderMesh.decode(reader, reader.uint32()),
+          };
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
-          message.mesh = { $case: "plane", plane: PBMeshCollider_PlaneMesh.decode(reader, reader.uint32()) };
+          message.mesh = {
+            $case: 'plane',
+            plane: PBMeshCollider_PlaneMesh.decode(reader, reader.uint32()),
+          };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -5453,13 +5442,16 @@ function createBasePBMeshCollider_BoxMesh() {
   return {};
 }
 var PBMeshCollider_BoxMesh;
-(function(PBMeshCollider_BoxMesh2) {
+(function (PBMeshCollider_BoxMesh2) {
   function encode(_, writer = import_minimal25.default.Writer.create()) {
     return writer;
   }
   PBMeshCollider_BoxMesh2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal25.default.Reader ? input : import_minimal25.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal25.default.Reader
+        ? input
+        : import_minimal25.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshCollider_BoxMesh();
     while (reader.pos < end) {
@@ -5479,7 +5471,7 @@ function createBasePBMeshCollider_CylinderMesh() {
   return { radiusTop: void 0, radiusBottom: void 0 };
 }
 var PBMeshCollider_CylinderMesh;
-(function(PBMeshCollider_CylinderMesh2) {
+(function (PBMeshCollider_CylinderMesh2) {
   function encode(message, writer = import_minimal25.default.Writer.create()) {
     if (message.radiusTop !== void 0) {
       writer.uint32(13).float(message.radiusTop);
@@ -5491,7 +5483,10 @@ var PBMeshCollider_CylinderMesh;
   }
   PBMeshCollider_CylinderMesh2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal25.default.Reader ? input : import_minimal25.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal25.default.Reader
+        ? input
+        : import_minimal25.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshCollider_CylinderMesh();
     while (reader.pos < end) {
@@ -5523,13 +5518,16 @@ function createBasePBMeshCollider_PlaneMesh() {
   return {};
 }
 var PBMeshCollider_PlaneMesh;
-(function(PBMeshCollider_PlaneMesh2) {
+(function (PBMeshCollider_PlaneMesh2) {
   function encode(_, writer = import_minimal25.default.Writer.create()) {
     return writer;
   }
   PBMeshCollider_PlaneMesh2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal25.default.Reader ? input : import_minimal25.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal25.default.Reader
+        ? input
+        : import_minimal25.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshCollider_PlaneMesh();
     while (reader.pos < end) {
@@ -5549,13 +5547,16 @@ function createBasePBMeshCollider_SphereMesh() {
   return {};
 }
 var PBMeshCollider_SphereMesh;
-(function(PBMeshCollider_SphereMesh2) {
+(function (PBMeshCollider_SphereMesh2) {
   function encode(_, writer = import_minimal25.default.Writer.create()) {
     return writer;
   }
   PBMeshCollider_SphereMesh2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal25.default.Reader ? input : import_minimal25.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal25.default.Reader
+        ? input
+        : import_minimal25.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshCollider_SphereMesh();
     while (reader.pos < end) {
@@ -5587,11 +5588,11 @@ var MeshColliderSchema = {
     return PBMeshCollider.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBMeshCollider"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBMeshCollider',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/mesh_renderer.gen.js
@@ -5600,19 +5601,22 @@ function createBasePBMeshRenderer() {
   return { mesh: void 0 };
 }
 var PBMeshRenderer;
-(function(PBMeshRenderer2) {
+(function (PBMeshRenderer2) {
   function encode(message, writer = import_minimal26.default.Writer.create()) {
     switch (message.mesh?.$case) {
-      case "box":
+      case 'box':
         PBMeshRenderer_BoxMesh.encode(message.mesh.box, writer.uint32(10).fork()).ldelim();
         break;
-      case "sphere":
+      case 'sphere':
         PBMeshRenderer_SphereMesh.encode(message.mesh.sphere, writer.uint32(18).fork()).ldelim();
         break;
-      case "cylinder":
-        PBMeshRenderer_CylinderMesh.encode(message.mesh.cylinder, writer.uint32(26).fork()).ldelim();
+      case 'cylinder':
+        PBMeshRenderer_CylinderMesh.encode(
+          message.mesh.cylinder,
+          writer.uint32(26).fork()
+        ).ldelim();
         break;
-      case "plane":
+      case 'plane':
         PBMeshRenderer_PlaneMesh.encode(message.mesh.plane, writer.uint32(34).fork()).ldelim();
         break;
     }
@@ -5620,7 +5624,10 @@ var PBMeshRenderer;
   }
   PBMeshRenderer2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal26.default.Reader ? input : import_minimal26.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal26.default.Reader
+        ? input
+        : import_minimal26.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshRenderer();
     while (reader.pos < end) {
@@ -5630,25 +5637,37 @@ var PBMeshRenderer;
           if (tag !== 10) {
             break;
           }
-          message.mesh = { $case: "box", box: PBMeshRenderer_BoxMesh.decode(reader, reader.uint32()) };
+          message.mesh = {
+            $case: 'box',
+            box: PBMeshRenderer_BoxMesh.decode(reader, reader.uint32()),
+          };
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
-          message.mesh = { $case: "sphere", sphere: PBMeshRenderer_SphereMesh.decode(reader, reader.uint32()) };
+          message.mesh = {
+            $case: 'sphere',
+            sphere: PBMeshRenderer_SphereMesh.decode(reader, reader.uint32()),
+          };
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
-          message.mesh = { $case: "cylinder", cylinder: PBMeshRenderer_CylinderMesh.decode(reader, reader.uint32()) };
+          message.mesh = {
+            $case: 'cylinder',
+            cylinder: PBMeshRenderer_CylinderMesh.decode(reader, reader.uint32()),
+          };
           continue;
         case 4:
           if (tag !== 34) {
             break;
           }
-          message.mesh = { $case: "plane", plane: PBMeshRenderer_PlaneMesh.decode(reader, reader.uint32()) };
+          message.mesh = {
+            $case: 'plane',
+            plane: PBMeshRenderer_PlaneMesh.decode(reader, reader.uint32()),
+          };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -5664,7 +5683,7 @@ function createBasePBMeshRenderer_BoxMesh() {
   return { uvs: [] };
 }
 var PBMeshRenderer_BoxMesh;
-(function(PBMeshRenderer_BoxMesh2) {
+(function (PBMeshRenderer_BoxMesh2) {
   function encode(message, writer = import_minimal26.default.Writer.create()) {
     writer.uint32(10).fork();
     for (const v of message.uvs) {
@@ -5675,7 +5694,10 @@ var PBMeshRenderer_BoxMesh;
   }
   PBMeshRenderer_BoxMesh2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal26.default.Reader ? input : import_minimal26.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal26.default.Reader
+        ? input
+        : import_minimal26.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshRenderer_BoxMesh();
     while (reader.pos < end) {
@@ -5708,7 +5730,7 @@ function createBasePBMeshRenderer_CylinderMesh() {
   return { radiusTop: void 0, radiusBottom: void 0 };
 }
 var PBMeshRenderer_CylinderMesh;
-(function(PBMeshRenderer_CylinderMesh2) {
+(function (PBMeshRenderer_CylinderMesh2) {
   function encode(message, writer = import_minimal26.default.Writer.create()) {
     if (message.radiusTop !== void 0) {
       writer.uint32(13).float(message.radiusTop);
@@ -5720,7 +5742,10 @@ var PBMeshRenderer_CylinderMesh;
   }
   PBMeshRenderer_CylinderMesh2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal26.default.Reader ? input : import_minimal26.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal26.default.Reader
+        ? input
+        : import_minimal26.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshRenderer_CylinderMesh();
     while (reader.pos < end) {
@@ -5752,7 +5777,7 @@ function createBasePBMeshRenderer_PlaneMesh() {
   return { uvs: [] };
 }
 var PBMeshRenderer_PlaneMesh;
-(function(PBMeshRenderer_PlaneMesh2) {
+(function (PBMeshRenderer_PlaneMesh2) {
   function encode(message, writer = import_minimal26.default.Writer.create()) {
     writer.uint32(10).fork();
     for (const v of message.uvs) {
@@ -5763,7 +5788,10 @@ var PBMeshRenderer_PlaneMesh;
   }
   PBMeshRenderer_PlaneMesh2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal26.default.Reader ? input : import_minimal26.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal26.default.Reader
+        ? input
+        : import_minimal26.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshRenderer_PlaneMesh();
     while (reader.pos < end) {
@@ -5796,13 +5824,16 @@ function createBasePBMeshRenderer_SphereMesh() {
   return {};
 }
 var PBMeshRenderer_SphereMesh;
-(function(PBMeshRenderer_SphereMesh2) {
+(function (PBMeshRenderer_SphereMesh2) {
   function encode(_, writer = import_minimal26.default.Writer.create()) {
     return writer;
   }
   PBMeshRenderer_SphereMesh2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal26.default.Reader ? input : import_minimal26.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal26.default.Reader
+        ? input
+        : import_minimal26.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBMeshRenderer_SphereMesh();
     while (reader.pos < end) {
@@ -5834,48 +5865,48 @@ var MeshRendererSchema = {
     return PBMeshRenderer.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBMeshRenderer"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBMeshRenderer',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/nft_shape.gen.js
 var import_minimal27 = __toESM(require_minimal2());
 var NftFrameType;
-(function(NftFrameType2) {
-  NftFrameType2[NftFrameType2["NFT_CLASSIC"] = 0] = "NFT_CLASSIC";
-  NftFrameType2[NftFrameType2["NFT_BAROQUE_ORNAMENT"] = 1] = "NFT_BAROQUE_ORNAMENT";
-  NftFrameType2[NftFrameType2["NFT_DIAMOND_ORNAMENT"] = 2] = "NFT_DIAMOND_ORNAMENT";
-  NftFrameType2[NftFrameType2["NFT_MINIMAL_WIDE"] = 3] = "NFT_MINIMAL_WIDE";
-  NftFrameType2[NftFrameType2["NFT_MINIMAL_GREY"] = 4] = "NFT_MINIMAL_GREY";
-  NftFrameType2[NftFrameType2["NFT_BLOCKY"] = 5] = "NFT_BLOCKY";
-  NftFrameType2[NftFrameType2["NFT_GOLD_EDGES"] = 6] = "NFT_GOLD_EDGES";
-  NftFrameType2[NftFrameType2["NFT_GOLD_CARVED"] = 7] = "NFT_GOLD_CARVED";
-  NftFrameType2[NftFrameType2["NFT_GOLD_WIDE"] = 8] = "NFT_GOLD_WIDE";
-  NftFrameType2[NftFrameType2["NFT_GOLD_ROUNDED"] = 9] = "NFT_GOLD_ROUNDED";
-  NftFrameType2[NftFrameType2["NFT_METAL_MEDIUM"] = 10] = "NFT_METAL_MEDIUM";
-  NftFrameType2[NftFrameType2["NFT_METAL_WIDE"] = 11] = "NFT_METAL_WIDE";
-  NftFrameType2[NftFrameType2["NFT_METAL_SLIM"] = 12] = "NFT_METAL_SLIM";
-  NftFrameType2[NftFrameType2["NFT_METAL_ROUNDED"] = 13] = "NFT_METAL_ROUNDED";
-  NftFrameType2[NftFrameType2["NFT_PINS"] = 14] = "NFT_PINS";
-  NftFrameType2[NftFrameType2["NFT_MINIMAL_BLACK"] = 15] = "NFT_MINIMAL_BLACK";
-  NftFrameType2[NftFrameType2["NFT_MINIMAL_WHITE"] = 16] = "NFT_MINIMAL_WHITE";
-  NftFrameType2[NftFrameType2["NFT_TAPE"] = 17] = "NFT_TAPE";
-  NftFrameType2[NftFrameType2["NFT_WOOD_SLIM"] = 18] = "NFT_WOOD_SLIM";
-  NftFrameType2[NftFrameType2["NFT_WOOD_WIDE"] = 19] = "NFT_WOOD_WIDE";
-  NftFrameType2[NftFrameType2["NFT_WOOD_TWIGS"] = 20] = "NFT_WOOD_TWIGS";
-  NftFrameType2[NftFrameType2["NFT_CANVAS"] = 21] = "NFT_CANVAS";
-  NftFrameType2[NftFrameType2["NFT_NONE"] = 22] = "NFT_NONE";
+(function (NftFrameType2) {
+  NftFrameType2[(NftFrameType2['NFT_CLASSIC'] = 0)] = 'NFT_CLASSIC';
+  NftFrameType2[(NftFrameType2['NFT_BAROQUE_ORNAMENT'] = 1)] = 'NFT_BAROQUE_ORNAMENT';
+  NftFrameType2[(NftFrameType2['NFT_DIAMOND_ORNAMENT'] = 2)] = 'NFT_DIAMOND_ORNAMENT';
+  NftFrameType2[(NftFrameType2['NFT_MINIMAL_WIDE'] = 3)] = 'NFT_MINIMAL_WIDE';
+  NftFrameType2[(NftFrameType2['NFT_MINIMAL_GREY'] = 4)] = 'NFT_MINIMAL_GREY';
+  NftFrameType2[(NftFrameType2['NFT_BLOCKY'] = 5)] = 'NFT_BLOCKY';
+  NftFrameType2[(NftFrameType2['NFT_GOLD_EDGES'] = 6)] = 'NFT_GOLD_EDGES';
+  NftFrameType2[(NftFrameType2['NFT_GOLD_CARVED'] = 7)] = 'NFT_GOLD_CARVED';
+  NftFrameType2[(NftFrameType2['NFT_GOLD_WIDE'] = 8)] = 'NFT_GOLD_WIDE';
+  NftFrameType2[(NftFrameType2['NFT_GOLD_ROUNDED'] = 9)] = 'NFT_GOLD_ROUNDED';
+  NftFrameType2[(NftFrameType2['NFT_METAL_MEDIUM'] = 10)] = 'NFT_METAL_MEDIUM';
+  NftFrameType2[(NftFrameType2['NFT_METAL_WIDE'] = 11)] = 'NFT_METAL_WIDE';
+  NftFrameType2[(NftFrameType2['NFT_METAL_SLIM'] = 12)] = 'NFT_METAL_SLIM';
+  NftFrameType2[(NftFrameType2['NFT_METAL_ROUNDED'] = 13)] = 'NFT_METAL_ROUNDED';
+  NftFrameType2[(NftFrameType2['NFT_PINS'] = 14)] = 'NFT_PINS';
+  NftFrameType2[(NftFrameType2['NFT_MINIMAL_BLACK'] = 15)] = 'NFT_MINIMAL_BLACK';
+  NftFrameType2[(NftFrameType2['NFT_MINIMAL_WHITE'] = 16)] = 'NFT_MINIMAL_WHITE';
+  NftFrameType2[(NftFrameType2['NFT_TAPE'] = 17)] = 'NFT_TAPE';
+  NftFrameType2[(NftFrameType2['NFT_WOOD_SLIM'] = 18)] = 'NFT_WOOD_SLIM';
+  NftFrameType2[(NftFrameType2['NFT_WOOD_WIDE'] = 19)] = 'NFT_WOOD_WIDE';
+  NftFrameType2[(NftFrameType2['NFT_WOOD_TWIGS'] = 20)] = 'NFT_WOOD_TWIGS';
+  NftFrameType2[(NftFrameType2['NFT_CANVAS'] = 21)] = 'NFT_CANVAS';
+  NftFrameType2[(NftFrameType2['NFT_NONE'] = 22)] = 'NFT_NONE';
 })(NftFrameType || (NftFrameType = {}));
 function createBasePBNftShape() {
-  return { urn: "", style: void 0, color: void 0 };
+  return { urn: '', style: void 0, color: void 0 };
 }
 var PBNftShape;
-(function(PBNftShape2) {
+(function (PBNftShape2) {
   function encode(message, writer = import_minimal27.default.Writer.create()) {
-    if (message.urn !== "") {
+    if (message.urn !== '') {
       writer.uint32(10).string(message.urn);
     }
     if (message.style !== void 0) {
@@ -5888,7 +5919,10 @@ var PBNftShape;
   }
   PBNftShape2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal27.default.Reader ? input : import_minimal27.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal27.default.Reader
+        ? input
+        : import_minimal27.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBNftShape();
     while (reader.pos < end) {
@@ -5938,22 +5972,22 @@ var NftShapeSchema = {
     return PBNftShape.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBNftShape"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBNftShape',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/player_identity_data.gen.js
 var import_minimal28 = __toESM(require_minimal2());
 function createBasePBPlayerIdentityData() {
-  return { address: "", isGuest: false };
+  return { address: '', isGuest: false };
 }
 var PBPlayerIdentityData;
-(function(PBPlayerIdentityData2) {
+(function (PBPlayerIdentityData2) {
   function encode(message, writer = import_minimal28.default.Writer.create()) {
-    if (message.address !== "") {
+    if (message.address !== '') {
       writer.uint32(10).string(message.address);
     }
     if (message.isGuest === true) {
@@ -5963,7 +5997,10 @@ var PBPlayerIdentityData;
   }
   PBPlayerIdentityData2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal28.default.Reader ? input : import_minimal28.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal28.default.Reader
+        ? input
+        : import_minimal28.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBPlayerIdentityData();
     while (reader.pos < end) {
@@ -6007,11 +6044,11 @@ var PlayerIdentityDataSchema = {
     return PBPlayerIdentityData.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBPlayerIdentityData"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBPlayerIdentityData',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/pointer_events.gen.js
@@ -6020,7 +6057,7 @@ function createBasePBPointerEvents() {
   return { pointerEvents: [] };
 }
 var PBPointerEvents;
-(function(PBPointerEvents2) {
+(function (PBPointerEvents2) {
   function encode(message, writer = import_minimal29.default.Writer.create()) {
     for (const v of message.pointerEvents) {
       PBPointerEvents_Entry.encode(v, writer.uint32(10).fork()).ldelim();
@@ -6029,7 +6066,10 @@ var PBPointerEvents;
   }
   PBPointerEvents2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal29.default.Reader ? input : import_minimal29.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal29.default.Reader
+        ? input
+        : import_minimal29.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBPointerEvents();
     while (reader.pos < end) {
@@ -6057,11 +6097,11 @@ function createBasePBPointerEvents_Info() {
     hoverText: void 0,
     maxDistance: void 0,
     showFeedback: void 0,
-    showHighlight: void 0
+    showHighlight: void 0,
   };
 }
 var PBPointerEvents_Info;
-(function(PBPointerEvents_Info2) {
+(function (PBPointerEvents_Info2) {
   function encode(message, writer = import_minimal29.default.Writer.create()) {
     if (message.button !== void 0) {
       writer.uint32(8).int32(message.button);
@@ -6082,7 +6122,10 @@ var PBPointerEvents_Info;
   }
   PBPointerEvents_Info2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal29.default.Reader ? input : import_minimal29.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal29.default.Reader
+        ? input
+        : import_minimal29.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBPointerEvents_Info();
     while (reader.pos < end) {
@@ -6132,7 +6175,7 @@ function createBasePBPointerEvents_Entry() {
   return { eventType: 0, eventInfo: void 0 };
 }
 var PBPointerEvents_Entry;
-(function(PBPointerEvents_Entry2) {
+(function (PBPointerEvents_Entry2) {
   function encode(message, writer = import_minimal29.default.Writer.create()) {
     if (message.eventType !== 0) {
       writer.uint32(8).int32(message.eventType);
@@ -6144,7 +6187,10 @@ var PBPointerEvents_Entry;
   }
   PBPointerEvents_Entry2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal29.default.Reader ? input : import_minimal29.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal29.default.Reader
+        ? input
+        : import_minimal29.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBPointerEvents_Entry();
     while (reader.pos < end) {
@@ -6188,11 +6234,11 @@ var PointerEventsSchema = {
     return PBPointerEvents.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBPointerEvents"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBPointerEvents',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/pointer_events_result.gen.js
@@ -6208,11 +6254,11 @@ function createBaseRaycastHit() {
     normalHit: void 0,
     length: 0,
     meshName: void 0,
-    entityId: void 0
+    entityId: void 0,
   };
 }
 var RaycastHit;
-(function(RaycastHit2) {
+(function (RaycastHit2) {
   function encode(message, writer = import_minimal30.default.Writer.create()) {
     if (message.position !== void 0) {
       Vector3.encode(message.position, writer.uint32(10).fork()).ldelim();
@@ -6239,7 +6285,10 @@ var RaycastHit;
   }
   RaycastHit2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal30.default.Reader ? input : import_minimal30.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal30.default.Reader
+        ? input
+        : import_minimal30.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseRaycastHit();
     while (reader.pos < end) {
@@ -6303,7 +6352,7 @@ function createBasePBPointerEventsResult() {
   return { button: 0, hit: void 0, state: 0, timestamp: 0, analog: void 0, tickNumber: 0 };
 }
 var PBPointerEventsResult;
-(function(PBPointerEventsResult2) {
+(function (PBPointerEventsResult2) {
   function encode(message, writer = import_minimal31.default.Writer.create()) {
     if (message.button !== 0) {
       writer.uint32(8).int32(message.button);
@@ -6327,7 +6376,10 @@ var PBPointerEventsResult;
   }
   PBPointerEventsResult2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal31.default.Reader ? input : import_minimal31.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal31.default.Reader
+        ? input
+        : import_minimal31.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBPointerEventsResult();
     while (reader.pos < end) {
@@ -6395,11 +6447,11 @@ var PointerEventsResultSchema = {
     return PBPointerEventsResult.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBPointerEventsResult"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBPointerEventsResult',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/pointer_lock.gen.js
@@ -6408,7 +6460,7 @@ function createBasePBPointerLock() {
   return { isPointerLocked: false };
 }
 var PBPointerLock;
-(function(PBPointerLock2) {
+(function (PBPointerLock2) {
   function encode(message, writer = import_minimal32.default.Writer.create()) {
     if (message.isPointerLocked === true) {
       writer.uint32(8).bool(message.isPointerLocked);
@@ -6417,7 +6469,10 @@ var PBPointerLock;
   }
   PBPointerLock2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal32.default.Reader ? input : import_minimal32.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal32.default.Reader
+        ? input
+        : import_minimal32.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBPointerLock();
     while (reader.pos < end) {
@@ -6455,25 +6510,30 @@ var PointerLockSchema = {
     return PBPointerLock.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBPointerLock"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBPointerLock',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/primary_pointer_info.gen.js
 var import_minimal33 = __toESM(require_minimal2());
 var PointerType;
-(function(PointerType2) {
-  PointerType2[PointerType2["POT_NONE"] = 0] = "POT_NONE";
-  PointerType2[PointerType2["POT_MOUSE"] = 1] = "POT_MOUSE";
+(function (PointerType2) {
+  PointerType2[(PointerType2['POT_NONE'] = 0)] = 'POT_NONE';
+  PointerType2[(PointerType2['POT_MOUSE'] = 1)] = 'POT_MOUSE';
 })(PointerType || (PointerType = {}));
 function createBasePBPrimaryPointerInfo() {
-  return { pointerType: void 0, screenCoordinates: void 0, screenDelta: void 0, worldRayDirection: void 0 };
+  return {
+    pointerType: void 0,
+    screenCoordinates: void 0,
+    screenDelta: void 0,
+    worldRayDirection: void 0,
+  };
 }
 var PBPrimaryPointerInfo;
-(function(PBPrimaryPointerInfo2) {
+(function (PBPrimaryPointerInfo2) {
   function encode(message, writer = import_minimal33.default.Writer.create()) {
     if (message.pointerType !== void 0) {
       writer.uint32(8).int32(message.pointerType);
@@ -6491,7 +6551,10 @@ var PBPrimaryPointerInfo;
   }
   PBPrimaryPointerInfo2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal33.default.Reader ? input : import_minimal33.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal33.default.Reader
+        ? input
+        : import_minimal33.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBPrimaryPointerInfo();
     while (reader.pos < end) {
@@ -6547,20 +6610,20 @@ var PrimaryPointerInfoSchema = {
     return PBPrimaryPointerInfo.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBPrimaryPointerInfo"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBPrimaryPointerInfo',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/raycast.gen.js
 var import_minimal34 = __toESM(require_minimal2());
 var RaycastQueryType;
-(function(RaycastQueryType2) {
-  RaycastQueryType2[RaycastQueryType2["RQT_HIT_FIRST"] = 0] = "RQT_HIT_FIRST";
-  RaycastQueryType2[RaycastQueryType2["RQT_QUERY_ALL"] = 1] = "RQT_QUERY_ALL";
-  RaycastQueryType2[RaycastQueryType2["RQT_NONE"] = 2] = "RQT_NONE";
+(function (RaycastQueryType2) {
+  RaycastQueryType2[(RaycastQueryType2['RQT_HIT_FIRST'] = 0)] = 'RQT_HIT_FIRST';
+  RaycastQueryType2[(RaycastQueryType2['RQT_QUERY_ALL'] = 1)] = 'RQT_QUERY_ALL';
+  RaycastQueryType2[(RaycastQueryType2['RQT_NONE'] = 2)] = 'RQT_NONE';
 })(RaycastQueryType || (RaycastQueryType = {}));
 function createBasePBRaycast() {
   return {
@@ -6570,11 +6633,11 @@ function createBasePBRaycast() {
     maxDistance: 0,
     queryType: 0,
     continuous: void 0,
-    collisionMask: void 0
+    collisionMask: void 0,
   };
 }
 var PBRaycast;
-(function(PBRaycast2) {
+(function (PBRaycast2) {
   function encode(message, writer = import_minimal34.default.Writer.create()) {
     if (message.timestamp !== void 0) {
       writer.uint32(8).uint32(message.timestamp);
@@ -6583,16 +6646,16 @@ var PBRaycast;
       Vector3.encode(message.originOffset, writer.uint32(18).fork()).ldelim();
     }
     switch (message.direction?.$case) {
-      case "localDirection":
+      case 'localDirection':
         Vector3.encode(message.direction.localDirection, writer.uint32(50).fork()).ldelim();
         break;
-      case "globalDirection":
+      case 'globalDirection':
         Vector3.encode(message.direction.globalDirection, writer.uint32(26).fork()).ldelim();
         break;
-      case "globalTarget":
+      case 'globalTarget':
         Vector3.encode(message.direction.globalTarget, writer.uint32(58).fork()).ldelim();
         break;
-      case "targetEntity":
+      case 'targetEntity':
         writer.uint32(80).uint32(message.direction.targetEntity);
         break;
     }
@@ -6612,7 +6675,10 @@ var PBRaycast;
   }
   PBRaycast2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal34.default.Reader ? input : import_minimal34.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal34.default.Reader
+        ? input
+        : import_minimal34.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBRaycast();
     while (reader.pos < end) {
@@ -6634,25 +6700,34 @@ var PBRaycast;
           if (tag !== 50) {
             break;
           }
-          message.direction = { $case: "localDirection", localDirection: Vector3.decode(reader, reader.uint32()) };
+          message.direction = {
+            $case: 'localDirection',
+            localDirection: Vector3.decode(reader, reader.uint32()),
+          };
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
-          message.direction = { $case: "globalDirection", globalDirection: Vector3.decode(reader, reader.uint32()) };
+          message.direction = {
+            $case: 'globalDirection',
+            globalDirection: Vector3.decode(reader, reader.uint32()),
+          };
           continue;
         case 7:
           if (tag !== 58) {
             break;
           }
-          message.direction = { $case: "globalTarget", globalTarget: Vector3.decode(reader, reader.uint32()) };
+          message.direction = {
+            $case: 'globalTarget',
+            globalTarget: Vector3.decode(reader, reader.uint32()),
+          };
           continue;
         case 10:
           if (tag !== 80) {
             break;
           }
-          message.direction = { $case: "targetEntity", targetEntity: reader.uint32() };
+          message.direction = { $case: 'targetEntity', targetEntity: reader.uint32() };
           continue;
         case 4:
           if (tag !== 37) {
@@ -6704,11 +6779,11 @@ var RaycastSchema = {
     return PBRaycast.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBRaycast"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBRaycast',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/raycast_result.gen.js
@@ -6717,7 +6792,7 @@ function createBasePBRaycastResult() {
   return { timestamp: void 0, globalOrigin: void 0, direction: void 0, hits: [], tickNumber: 0 };
 }
 var PBRaycastResult;
-(function(PBRaycastResult2) {
+(function (PBRaycastResult2) {
   function encode(message, writer = import_minimal35.default.Writer.create()) {
     if (message.timestamp !== void 0) {
       writer.uint32(8).uint32(message.timestamp);
@@ -6738,7 +6813,10 @@ var PBRaycastResult;
   }
   PBRaycastResult2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal35.default.Reader ? input : import_minimal35.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal35.default.Reader
+        ? input
+        : import_minimal35.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBRaycastResult();
     while (reader.pos < end) {
@@ -6800,39 +6878,39 @@ var RaycastResultSchema = {
     return PBRaycastResult.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBRaycastResult"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBRaycastResult',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/realm_info.gen.js
 var import_minimal36 = __toESM(require_minimal2());
 function createBasePBRealmInfo() {
   return {
-    baseUrl: "",
-    realmName: "",
+    baseUrl: '',
+    realmName: '',
     networkId: 0,
-    commsAdapter: "",
+    commsAdapter: '',
     isPreview: false,
     room: void 0,
-    isConnectedSceneRoom: void 0
+    isConnectedSceneRoom: void 0,
   };
 }
 var PBRealmInfo;
-(function(PBRealmInfo2) {
+(function (PBRealmInfo2) {
   function encode(message, writer = import_minimal36.default.Writer.create()) {
-    if (message.baseUrl !== "") {
+    if (message.baseUrl !== '') {
       writer.uint32(10).string(message.baseUrl);
     }
-    if (message.realmName !== "") {
+    if (message.realmName !== '') {
       writer.uint32(18).string(message.realmName);
     }
     if (message.networkId !== 0) {
       writer.uint32(24).int32(message.networkId);
     }
-    if (message.commsAdapter !== "") {
+    if (message.commsAdapter !== '') {
       writer.uint32(34).string(message.commsAdapter);
     }
     if (message.isPreview === true) {
@@ -6848,7 +6926,10 @@ var PBRealmInfo;
   }
   PBRealmInfo2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal36.default.Reader ? input : import_minimal36.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal36.default.Reader
+        ? input
+        : import_minimal36.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBRealmInfo();
     while (reader.pos < end) {
@@ -6922,25 +7003,25 @@ var RealmInfoSchema = {
     return PBRealmInfo.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBRealmInfo"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBRealmInfo',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/skybox_time.gen.js
 var import_minimal37 = __toESM(require_minimal2());
 var TransitionMode;
-(function(TransitionMode2) {
-  TransitionMode2[TransitionMode2["TM_FORWARD"] = 0] = "TM_FORWARD";
-  TransitionMode2[TransitionMode2["TM_BACKWARD"] = 1] = "TM_BACKWARD";
+(function (TransitionMode2) {
+  TransitionMode2[(TransitionMode2['TM_FORWARD'] = 0)] = 'TM_FORWARD';
+  TransitionMode2[(TransitionMode2['TM_BACKWARD'] = 1)] = 'TM_BACKWARD';
 })(TransitionMode || (TransitionMode = {}));
 function createBasePBSkyboxTime() {
   return { fixedTime: 0, transitionMode: void 0 };
 }
 var PBSkyboxTime;
-(function(PBSkyboxTime2) {
+(function (PBSkyboxTime2) {
   function encode(message, writer = import_minimal37.default.Writer.create()) {
     if (message.fixedTime !== 0) {
       writer.uint32(8).uint32(message.fixedTime);
@@ -6952,7 +7033,10 @@ var PBSkyboxTime;
   }
   PBSkyboxTime2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal37.default.Reader ? input : import_minimal37.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal37.default.Reader
+        ? input
+        : import_minimal37.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBSkyboxTime();
     while (reader.pos < end) {
@@ -6996,18 +7080,18 @@ var SkyboxTimeSchema = {
     return PBSkyboxTime.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBSkyboxTime"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBSkyboxTime',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/text_shape.gen.js
 var import_minimal38 = __toESM(require_minimal2());
 function createBasePBTextShape() {
   return {
-    text: "",
+    text: '',
     font: void 0,
     fontSize: void 0,
     fontAutoSize: void 0,
@@ -7027,13 +7111,13 @@ function createBasePBTextShape() {
     outlineWidth: void 0,
     shadowColor: void 0,
     outlineColor: void 0,
-    textColor: void 0
+    textColor: void 0,
   };
 }
 var PBTextShape;
-(function(PBTextShape2) {
+(function (PBTextShape2) {
   function encode(message, writer = import_minimal38.default.Writer.create()) {
-    if (message.text !== "") {
+    if (message.text !== '') {
       writer.uint32(10).string(message.text);
     }
     if (message.font !== void 0) {
@@ -7100,7 +7184,10 @@ var PBTextShape;
   }
   PBTextShape2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal38.default.Reader ? input : import_minimal38.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal38.default.Reader
+        ? input
+        : import_minimal38.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBTextShape();
     while (reader.pos < end) {
@@ -7258,25 +7345,25 @@ var TextShapeSchema = {
     return PBTextShape.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBTextShape"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBTextShape',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/trigger_area.gen.js
 var import_minimal39 = __toESM(require_minimal2());
 var TriggerAreaMeshType;
-(function(TriggerAreaMeshType2) {
-  TriggerAreaMeshType2[TriggerAreaMeshType2["TAMT_BOX"] = 0] = "TAMT_BOX";
-  TriggerAreaMeshType2[TriggerAreaMeshType2["TAMT_SPHERE"] = 1] = "TAMT_SPHERE";
+(function (TriggerAreaMeshType2) {
+  TriggerAreaMeshType2[(TriggerAreaMeshType2['TAMT_BOX'] = 0)] = 'TAMT_BOX';
+  TriggerAreaMeshType2[(TriggerAreaMeshType2['TAMT_SPHERE'] = 1)] = 'TAMT_SPHERE';
 })(TriggerAreaMeshType || (TriggerAreaMeshType = {}));
 function createBasePBTriggerArea() {
   return { mesh: void 0, collisionMask: void 0 };
 }
 var PBTriggerArea;
-(function(PBTriggerArea2) {
+(function (PBTriggerArea2) {
   function encode(message, writer = import_minimal39.default.Writer.create()) {
     if (message.mesh !== void 0) {
       writer.uint32(8).int32(message.mesh);
@@ -7288,7 +7375,10 @@ var PBTriggerArea;
   }
   PBTriggerArea2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal39.default.Reader ? input : import_minimal39.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal39.default.Reader
+        ? input
+        : import_minimal39.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBTriggerArea();
     while (reader.pos < end) {
@@ -7332,20 +7422,20 @@ var TriggerAreaSchema = {
     return PBTriggerArea.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBTriggerArea"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBTriggerArea',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/trigger_area_result.gen.js
 var import_minimal40 = __toESM(require_minimal2());
 var TriggerAreaEventType;
-(function(TriggerAreaEventType2) {
-  TriggerAreaEventType2[TriggerAreaEventType2["TAET_ENTER"] = 0] = "TAET_ENTER";
-  TriggerAreaEventType2[TriggerAreaEventType2["TAET_STAY"] = 1] = "TAET_STAY";
-  TriggerAreaEventType2[TriggerAreaEventType2["TAET_EXIT"] = 2] = "TAET_EXIT";
+(function (TriggerAreaEventType2) {
+  TriggerAreaEventType2[(TriggerAreaEventType2['TAET_ENTER'] = 0)] = 'TAET_ENTER';
+  TriggerAreaEventType2[(TriggerAreaEventType2['TAET_STAY'] = 1)] = 'TAET_STAY';
+  TriggerAreaEventType2[(TriggerAreaEventType2['TAET_EXIT'] = 2)] = 'TAET_EXIT';
 })(TriggerAreaEventType || (TriggerAreaEventType = {}));
 function createBasePBTriggerAreaResult() {
   return {
@@ -7354,11 +7444,11 @@ function createBasePBTriggerAreaResult() {
     triggeredEntityRotation: void 0,
     eventType: 0,
     timestamp: 0,
-    trigger: void 0
+    trigger: void 0,
   };
 }
 var PBTriggerAreaResult;
-(function(PBTriggerAreaResult2) {
+(function (PBTriggerAreaResult2) {
   function encode(message, writer = import_minimal40.default.Writer.create()) {
     if (message.triggeredEntity !== 0) {
       writer.uint32(8).uint32(message.triggeredEntity);
@@ -7382,7 +7472,10 @@ var PBTriggerAreaResult;
   }
   PBTriggerAreaResult2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal40.default.Reader ? input : import_minimal40.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal40.default.Reader
+        ? input
+        : import_minimal40.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBTriggerAreaResult();
     while (reader.pos < end) {
@@ -7438,7 +7531,7 @@ function createBasePBTriggerAreaResult_Trigger() {
   return { entity: 0, layers: 0, position: void 0, rotation: void 0, scale: void 0 };
 }
 var PBTriggerAreaResult_Trigger;
-(function(PBTriggerAreaResult_Trigger2) {
+(function (PBTriggerAreaResult_Trigger2) {
   function encode(message, writer = import_minimal40.default.Writer.create()) {
     if (message.entity !== 0) {
       writer.uint32(8).uint32(message.entity);
@@ -7459,7 +7552,10 @@ var PBTriggerAreaResult_Trigger;
   }
   PBTriggerAreaResult_Trigger2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal40.default.Reader ? input : import_minimal40.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal40.default.Reader
+        ? input
+        : import_minimal40.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBTriggerAreaResult_Trigger();
     while (reader.pos < end) {
@@ -7521,59 +7617,59 @@ var TriggerAreaResultSchema = {
     return PBTriggerAreaResult.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBTriggerAreaResult"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBTriggerAreaResult',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/tween.gen.js
 var import_minimal41 = __toESM(require_minimal2());
 var TextureMovementType;
-(function(TextureMovementType2) {
-  TextureMovementType2[TextureMovementType2["TMT_OFFSET"] = 0] = "TMT_OFFSET";
-  TextureMovementType2[TextureMovementType2["TMT_TILING"] = 1] = "TMT_TILING";
+(function (TextureMovementType2) {
+  TextureMovementType2[(TextureMovementType2['TMT_OFFSET'] = 0)] = 'TMT_OFFSET';
+  TextureMovementType2[(TextureMovementType2['TMT_TILING'] = 1)] = 'TMT_TILING';
 })(TextureMovementType || (TextureMovementType = {}));
 var EasingFunction;
-(function(EasingFunction2) {
-  EasingFunction2[EasingFunction2["EF_LINEAR"] = 0] = "EF_LINEAR";
-  EasingFunction2[EasingFunction2["EF_EASEINQUAD"] = 1] = "EF_EASEINQUAD";
-  EasingFunction2[EasingFunction2["EF_EASEOUTQUAD"] = 2] = "EF_EASEOUTQUAD";
-  EasingFunction2[EasingFunction2["EF_EASEQUAD"] = 3] = "EF_EASEQUAD";
-  EasingFunction2[EasingFunction2["EF_EASEINSINE"] = 4] = "EF_EASEINSINE";
-  EasingFunction2[EasingFunction2["EF_EASEOUTSINE"] = 5] = "EF_EASEOUTSINE";
-  EasingFunction2[EasingFunction2["EF_EASESINE"] = 6] = "EF_EASESINE";
-  EasingFunction2[EasingFunction2["EF_EASEINEXPO"] = 7] = "EF_EASEINEXPO";
-  EasingFunction2[EasingFunction2["EF_EASEOUTEXPO"] = 8] = "EF_EASEOUTEXPO";
-  EasingFunction2[EasingFunction2["EF_EASEEXPO"] = 9] = "EF_EASEEXPO";
-  EasingFunction2[EasingFunction2["EF_EASEINELASTIC"] = 10] = "EF_EASEINELASTIC";
-  EasingFunction2[EasingFunction2["EF_EASEOUTELASTIC"] = 11] = "EF_EASEOUTELASTIC";
-  EasingFunction2[EasingFunction2["EF_EASEELASTIC"] = 12] = "EF_EASEELASTIC";
-  EasingFunction2[EasingFunction2["EF_EASEINBOUNCE"] = 13] = "EF_EASEINBOUNCE";
-  EasingFunction2[EasingFunction2["EF_EASEOUTBOUNCE"] = 14] = "EF_EASEOUTBOUNCE";
-  EasingFunction2[EasingFunction2["EF_EASEBOUNCE"] = 15] = "EF_EASEBOUNCE";
-  EasingFunction2[EasingFunction2["EF_EASEINCUBIC"] = 16] = "EF_EASEINCUBIC";
-  EasingFunction2[EasingFunction2["EF_EASEOUTCUBIC"] = 17] = "EF_EASEOUTCUBIC";
-  EasingFunction2[EasingFunction2["EF_EASECUBIC"] = 18] = "EF_EASECUBIC";
-  EasingFunction2[EasingFunction2["EF_EASEINQUART"] = 19] = "EF_EASEINQUART";
-  EasingFunction2[EasingFunction2["EF_EASEOUTQUART"] = 20] = "EF_EASEOUTQUART";
-  EasingFunction2[EasingFunction2["EF_EASEQUART"] = 21] = "EF_EASEQUART";
-  EasingFunction2[EasingFunction2["EF_EASEINQUINT"] = 22] = "EF_EASEINQUINT";
-  EasingFunction2[EasingFunction2["EF_EASEOUTQUINT"] = 23] = "EF_EASEOUTQUINT";
-  EasingFunction2[EasingFunction2["EF_EASEQUINT"] = 24] = "EF_EASEQUINT";
-  EasingFunction2[EasingFunction2["EF_EASEINCIRC"] = 25] = "EF_EASEINCIRC";
-  EasingFunction2[EasingFunction2["EF_EASEOUTCIRC"] = 26] = "EF_EASEOUTCIRC";
-  EasingFunction2[EasingFunction2["EF_EASECIRC"] = 27] = "EF_EASECIRC";
-  EasingFunction2[EasingFunction2["EF_EASEINBACK"] = 28] = "EF_EASEINBACK";
-  EasingFunction2[EasingFunction2["EF_EASEOUTBACK"] = 29] = "EF_EASEOUTBACK";
-  EasingFunction2[EasingFunction2["EF_EASEBACK"] = 30] = "EF_EASEBACK";
+(function (EasingFunction2) {
+  EasingFunction2[(EasingFunction2['EF_LINEAR'] = 0)] = 'EF_LINEAR';
+  EasingFunction2[(EasingFunction2['EF_EASEINQUAD'] = 1)] = 'EF_EASEINQUAD';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTQUAD'] = 2)] = 'EF_EASEOUTQUAD';
+  EasingFunction2[(EasingFunction2['EF_EASEQUAD'] = 3)] = 'EF_EASEQUAD';
+  EasingFunction2[(EasingFunction2['EF_EASEINSINE'] = 4)] = 'EF_EASEINSINE';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTSINE'] = 5)] = 'EF_EASEOUTSINE';
+  EasingFunction2[(EasingFunction2['EF_EASESINE'] = 6)] = 'EF_EASESINE';
+  EasingFunction2[(EasingFunction2['EF_EASEINEXPO'] = 7)] = 'EF_EASEINEXPO';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTEXPO'] = 8)] = 'EF_EASEOUTEXPO';
+  EasingFunction2[(EasingFunction2['EF_EASEEXPO'] = 9)] = 'EF_EASEEXPO';
+  EasingFunction2[(EasingFunction2['EF_EASEINELASTIC'] = 10)] = 'EF_EASEINELASTIC';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTELASTIC'] = 11)] = 'EF_EASEOUTELASTIC';
+  EasingFunction2[(EasingFunction2['EF_EASEELASTIC'] = 12)] = 'EF_EASEELASTIC';
+  EasingFunction2[(EasingFunction2['EF_EASEINBOUNCE'] = 13)] = 'EF_EASEINBOUNCE';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTBOUNCE'] = 14)] = 'EF_EASEOUTBOUNCE';
+  EasingFunction2[(EasingFunction2['EF_EASEBOUNCE'] = 15)] = 'EF_EASEBOUNCE';
+  EasingFunction2[(EasingFunction2['EF_EASEINCUBIC'] = 16)] = 'EF_EASEINCUBIC';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTCUBIC'] = 17)] = 'EF_EASEOUTCUBIC';
+  EasingFunction2[(EasingFunction2['EF_EASECUBIC'] = 18)] = 'EF_EASECUBIC';
+  EasingFunction2[(EasingFunction2['EF_EASEINQUART'] = 19)] = 'EF_EASEINQUART';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTQUART'] = 20)] = 'EF_EASEOUTQUART';
+  EasingFunction2[(EasingFunction2['EF_EASEQUART'] = 21)] = 'EF_EASEQUART';
+  EasingFunction2[(EasingFunction2['EF_EASEINQUINT'] = 22)] = 'EF_EASEINQUINT';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTQUINT'] = 23)] = 'EF_EASEOUTQUINT';
+  EasingFunction2[(EasingFunction2['EF_EASEQUINT'] = 24)] = 'EF_EASEQUINT';
+  EasingFunction2[(EasingFunction2['EF_EASEINCIRC'] = 25)] = 'EF_EASEINCIRC';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTCIRC'] = 26)] = 'EF_EASEOUTCIRC';
+  EasingFunction2[(EasingFunction2['EF_EASECIRC'] = 27)] = 'EF_EASECIRC';
+  EasingFunction2[(EasingFunction2['EF_EASEINBACK'] = 28)] = 'EF_EASEINBACK';
+  EasingFunction2[(EasingFunction2['EF_EASEOUTBACK'] = 29)] = 'EF_EASEOUTBACK';
+  EasingFunction2[(EasingFunction2['EF_EASEBACK'] = 30)] = 'EF_EASEBACK';
 })(EasingFunction || (EasingFunction = {}));
 function createBasePBTween() {
   return { duration: 0, easingFunction: 0, mode: void 0, playing: void 0, currentTime: void 0 };
 }
 var PBTween;
-(function(PBTween2) {
+(function (PBTween2) {
   function encode(message, writer = import_minimal41.default.Writer.create()) {
     if (message.duration !== 0) {
       writer.uint32(13).float(message.duration);
@@ -7582,26 +7678,29 @@ var PBTween;
       writer.uint32(16).int32(message.easingFunction);
     }
     switch (message.mode?.$case) {
-      case "move":
+      case 'move':
         Move.encode(message.mode.move, writer.uint32(26).fork()).ldelim();
         break;
-      case "rotate":
+      case 'rotate':
         Rotate.encode(message.mode.rotate, writer.uint32(34).fork()).ldelim();
         break;
-      case "scale":
+      case 'scale':
         Scale.encode(message.mode.scale, writer.uint32(42).fork()).ldelim();
         break;
-      case "textureMove":
+      case 'textureMove':
         TextureMove.encode(message.mode.textureMove, writer.uint32(66).fork()).ldelim();
         break;
-      case "rotateContinuous":
+      case 'rotateContinuous':
         RotateContinuous.encode(message.mode.rotateContinuous, writer.uint32(74).fork()).ldelim();
         break;
-      case "moveContinuous":
+      case 'moveContinuous':
         MoveContinuous.encode(message.mode.moveContinuous, writer.uint32(82).fork()).ldelim();
         break;
-      case "textureMoveContinuous":
-        TextureMoveContinuous.encode(message.mode.textureMoveContinuous, writer.uint32(90).fork()).ldelim();
+      case 'textureMoveContinuous':
+        TextureMoveContinuous.encode(
+          message.mode.textureMoveContinuous,
+          writer.uint32(90).fork()
+        ).ldelim();
         break;
     }
     if (message.playing !== void 0) {
@@ -7614,7 +7713,10 @@ var PBTween;
   }
   PBTween2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal41.default.Reader ? input : import_minimal41.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal41.default.Reader
+        ? input
+        : import_minimal41.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBTween();
     while (reader.pos < end) {
@@ -7636,48 +7738,54 @@ var PBTween;
           if (tag !== 26) {
             break;
           }
-          message.mode = { $case: "move", move: Move.decode(reader, reader.uint32()) };
+          message.mode = { $case: 'move', move: Move.decode(reader, reader.uint32()) };
           continue;
         case 4:
           if (tag !== 34) {
             break;
           }
-          message.mode = { $case: "rotate", rotate: Rotate.decode(reader, reader.uint32()) };
+          message.mode = { $case: 'rotate', rotate: Rotate.decode(reader, reader.uint32()) };
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
-          message.mode = { $case: "scale", scale: Scale.decode(reader, reader.uint32()) };
+          message.mode = { $case: 'scale', scale: Scale.decode(reader, reader.uint32()) };
           continue;
         case 8:
           if (tag !== 66) {
             break;
           }
-          message.mode = { $case: "textureMove", textureMove: TextureMove.decode(reader, reader.uint32()) };
+          message.mode = {
+            $case: 'textureMove',
+            textureMove: TextureMove.decode(reader, reader.uint32()),
+          };
           continue;
         case 9:
           if (tag !== 74) {
             break;
           }
           message.mode = {
-            $case: "rotateContinuous",
-            rotateContinuous: RotateContinuous.decode(reader, reader.uint32())
+            $case: 'rotateContinuous',
+            rotateContinuous: RotateContinuous.decode(reader, reader.uint32()),
           };
           continue;
         case 10:
           if (tag !== 82) {
             break;
           }
-          message.mode = { $case: "moveContinuous", moveContinuous: MoveContinuous.decode(reader, reader.uint32()) };
+          message.mode = {
+            $case: 'moveContinuous',
+            moveContinuous: MoveContinuous.decode(reader, reader.uint32()),
+          };
           continue;
         case 11:
           if (tag !== 90) {
             break;
           }
           message.mode = {
-            $case: "textureMoveContinuous",
-            textureMoveContinuous: TextureMoveContinuous.decode(reader, reader.uint32())
+            $case: 'textureMoveContinuous',
+            textureMoveContinuous: TextureMoveContinuous.decode(reader, reader.uint32()),
           };
           continue;
         case 6:
@@ -7706,7 +7814,7 @@ function createBaseMove() {
   return { start: void 0, end: void 0, faceDirection: void 0 };
 }
 var Move;
-(function(Move2) {
+(function (Move2) {
   function encode(message, writer = import_minimal41.default.Writer.create()) {
     if (message.start !== void 0) {
       Vector3.encode(message.start, writer.uint32(10).fork()).ldelim();
@@ -7721,7 +7829,10 @@ var Move;
   }
   Move2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal41.default.Reader ? input : import_minimal41.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal41.default.Reader
+        ? input
+        : import_minimal41.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseMove();
     while (reader.pos < end) {
@@ -7759,7 +7870,7 @@ function createBaseRotate() {
   return { start: void 0, end: void 0 };
 }
 var Rotate;
-(function(Rotate2) {
+(function (Rotate2) {
   function encode(message, writer = import_minimal41.default.Writer.create()) {
     if (message.start !== void 0) {
       Quaternion.encode(message.start, writer.uint32(10).fork()).ldelim();
@@ -7771,7 +7882,10 @@ var Rotate;
   }
   Rotate2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal41.default.Reader ? input : import_minimal41.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal41.default.Reader
+        ? input
+        : import_minimal41.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseRotate();
     while (reader.pos < end) {
@@ -7803,7 +7917,7 @@ function createBaseScale() {
   return { start: void 0, end: void 0 };
 }
 var Scale;
-(function(Scale2) {
+(function (Scale2) {
   function encode(message, writer = import_minimal41.default.Writer.create()) {
     if (message.start !== void 0) {
       Vector3.encode(message.start, writer.uint32(10).fork()).ldelim();
@@ -7815,7 +7929,10 @@ var Scale;
   }
   Scale2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal41.default.Reader ? input : import_minimal41.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal41.default.Reader
+        ? input
+        : import_minimal41.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseScale();
     while (reader.pos < end) {
@@ -7847,7 +7964,7 @@ function createBaseTextureMove() {
   return { start: void 0, end: void 0, movementType: void 0 };
 }
 var TextureMove;
-(function(TextureMove2) {
+(function (TextureMove2) {
   function encode(message, writer = import_minimal41.default.Writer.create()) {
     if (message.start !== void 0) {
       Vector2.encode(message.start, writer.uint32(10).fork()).ldelim();
@@ -7862,7 +7979,10 @@ var TextureMove;
   }
   TextureMove2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal41.default.Reader ? input : import_minimal41.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal41.default.Reader
+        ? input
+        : import_minimal41.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseTextureMove();
     while (reader.pos < end) {
@@ -7900,7 +8020,7 @@ function createBaseRotateContinuous() {
   return { direction: void 0, speed: 0 };
 }
 var RotateContinuous;
-(function(RotateContinuous2) {
+(function (RotateContinuous2) {
   function encode(message, writer = import_minimal41.default.Writer.create()) {
     if (message.direction !== void 0) {
       Quaternion.encode(message.direction, writer.uint32(10).fork()).ldelim();
@@ -7912,7 +8032,10 @@ var RotateContinuous;
   }
   RotateContinuous2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal41.default.Reader ? input : import_minimal41.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal41.default.Reader
+        ? input
+        : import_minimal41.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseRotateContinuous();
     while (reader.pos < end) {
@@ -7944,7 +8067,7 @@ function createBaseMoveContinuous() {
   return { direction: void 0, speed: 0 };
 }
 var MoveContinuous;
-(function(MoveContinuous2) {
+(function (MoveContinuous2) {
   function encode(message, writer = import_minimal41.default.Writer.create()) {
     if (message.direction !== void 0) {
       Vector3.encode(message.direction, writer.uint32(10).fork()).ldelim();
@@ -7956,7 +8079,10 @@ var MoveContinuous;
   }
   MoveContinuous2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal41.default.Reader ? input : import_minimal41.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal41.default.Reader
+        ? input
+        : import_minimal41.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseMoveContinuous();
     while (reader.pos < end) {
@@ -7988,7 +8114,7 @@ function createBaseTextureMoveContinuous() {
   return { direction: void 0, speed: 0, movementType: void 0 };
 }
 var TextureMoveContinuous;
-(function(TextureMoveContinuous2) {
+(function (TextureMoveContinuous2) {
   function encode(message, writer = import_minimal41.default.Writer.create()) {
     if (message.direction !== void 0) {
       Vector2.encode(message.direction, writer.uint32(10).fork()).ldelim();
@@ -8003,7 +8129,10 @@ var TextureMoveContinuous;
   }
   TextureMoveContinuous2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal41.default.Reader ? input : import_minimal41.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal41.default.Reader
+        ? input
+        : import_minimal41.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseTextureMoveContinuous();
     while (reader.pos < end) {
@@ -8053,25 +8182,25 @@ var TweenSchema = {
     return PBTween.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBTween"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBTween',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/tween_sequence.gen.js
 var import_minimal42 = __toESM(require_minimal2());
 var TweenLoop;
-(function(TweenLoop2) {
-  TweenLoop2[TweenLoop2["TL_RESTART"] = 0] = "TL_RESTART";
-  TweenLoop2[TweenLoop2["TL_YOYO"] = 1] = "TL_YOYO";
+(function (TweenLoop2) {
+  TweenLoop2[(TweenLoop2['TL_RESTART'] = 0)] = 'TL_RESTART';
+  TweenLoop2[(TweenLoop2['TL_YOYO'] = 1)] = 'TL_YOYO';
 })(TweenLoop || (TweenLoop = {}));
 function createBasePBTweenSequence() {
   return { sequence: [], loop: void 0 };
 }
 var PBTweenSequence;
-(function(PBTweenSequence2) {
+(function (PBTweenSequence2) {
   function encode(message, writer = import_minimal42.default.Writer.create()) {
     for (const v of message.sequence) {
       PBTween.encode(v, writer.uint32(10).fork()).ldelim();
@@ -8083,7 +8212,10 @@ var PBTweenSequence;
   }
   PBTweenSequence2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal42.default.Reader ? input : import_minimal42.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal42.default.Reader
+        ? input
+        : import_minimal42.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBTweenSequence();
     while (reader.pos < end) {
@@ -8127,26 +8259,26 @@ var TweenSequenceSchema = {
     return PBTweenSequence.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBTweenSequence"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBTweenSequence',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/tween_state.gen.js
 var import_minimal43 = __toESM(require_minimal2());
 var TweenStateStatus;
-(function(TweenStateStatus2) {
-  TweenStateStatus2[TweenStateStatus2["TS_ACTIVE"] = 0] = "TS_ACTIVE";
-  TweenStateStatus2[TweenStateStatus2["TS_COMPLETED"] = 1] = "TS_COMPLETED";
-  TweenStateStatus2[TweenStateStatus2["TS_PAUSED"] = 2] = "TS_PAUSED";
+(function (TweenStateStatus2) {
+  TweenStateStatus2[(TweenStateStatus2['TS_ACTIVE'] = 0)] = 'TS_ACTIVE';
+  TweenStateStatus2[(TweenStateStatus2['TS_COMPLETED'] = 1)] = 'TS_COMPLETED';
+  TweenStateStatus2[(TweenStateStatus2['TS_PAUSED'] = 2)] = 'TS_PAUSED';
 })(TweenStateStatus || (TweenStateStatus = {}));
 function createBasePBTweenState() {
   return { state: 0, currentTime: 0 };
 }
 var PBTweenState;
-(function(PBTweenState2) {
+(function (PBTweenState2) {
   function encode(message, writer = import_minimal43.default.Writer.create()) {
     if (message.state !== 0) {
       writer.uint32(8).int32(message.state);
@@ -8158,7 +8290,10 @@ var PBTweenState;
   }
   PBTweenState2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal43.default.Reader ? input : import_minimal43.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal43.default.Reader
+        ? input
+        : import_minimal43.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBTweenState();
     while (reader.pos < end) {
@@ -8202,11 +8337,11 @@ var TweenStateSchema = {
     return PBTweenState.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBTweenState"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBTweenState',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_background.gen.js
@@ -8218,7 +8353,7 @@ function createBaseBorderRect() {
   return { top: 0, left: 0, right: 0, bottom: 0 };
 }
 var BorderRect;
-(function(BorderRect2) {
+(function (BorderRect2) {
   function encode(message, writer = import_minimal44.default.Writer.create()) {
     if (message.top !== 0) {
       writer.uint32(13).float(message.top);
@@ -8236,7 +8371,10 @@ var BorderRect;
   }
   BorderRect2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal44.default.Reader ? input : import_minimal44.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal44.default.Reader
+        ? input
+        : import_minimal44.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseBorderRect();
     while (reader.pos < end) {
@@ -8280,7 +8418,7 @@ function createBaseRect() {
   return { x: 0, y: 0, width: 0, height: 0 };
 }
 var Rect;
-(function(Rect2) {
+(function (Rect2) {
   function encode(message, writer = import_minimal44.default.Writer.create()) {
     if (message.x !== 0) {
       writer.uint32(13).float(message.x);
@@ -8298,7 +8436,10 @@ var Rect;
   }
   Rect2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal44.default.Reader ? input : import_minimal44.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal44.default.Reader
+        ? input
+        : import_minimal44.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseRect();
     while (reader.pos < end) {
@@ -8341,16 +8482,16 @@ var Rect;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_background.gen.js
 var BackgroundTextureMode;
-(function(BackgroundTextureMode2) {
-  BackgroundTextureMode2[BackgroundTextureMode2["NINE_SLICES"] = 0] = "NINE_SLICES";
-  BackgroundTextureMode2[BackgroundTextureMode2["CENTER"] = 1] = "CENTER";
-  BackgroundTextureMode2[BackgroundTextureMode2["STRETCH"] = 2] = "STRETCH";
+(function (BackgroundTextureMode2) {
+  BackgroundTextureMode2[(BackgroundTextureMode2['NINE_SLICES'] = 0)] = 'NINE_SLICES';
+  BackgroundTextureMode2[(BackgroundTextureMode2['CENTER'] = 1)] = 'CENTER';
+  BackgroundTextureMode2[(BackgroundTextureMode2['STRETCH'] = 2)] = 'STRETCH';
 })(BackgroundTextureMode || (BackgroundTextureMode = {}));
 function createBasePBUiBackground() {
   return { color: void 0, texture: void 0, textureMode: 0, textureSlices: void 0, uvs: [] };
 }
 var PBUiBackground;
-(function(PBUiBackground2) {
+(function (PBUiBackground2) {
   function encode(message, writer = import_minimal45.default.Writer.create()) {
     if (message.color !== void 0) {
       Color4.encode(message.color, writer.uint32(10).fork()).ldelim();
@@ -8373,7 +8514,10 @@ var PBUiBackground;
   }
   PBUiBackground2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal45.default.Reader ? input : import_minimal45.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal45.default.Reader
+        ? input
+        : import_minimal45.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBUiBackground();
     while (reader.pos < end) {
@@ -8442,11 +8586,11 @@ var UiBackgroundSchema = {
     return PBUiBackground.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBUiBackground"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBUiBackground',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_canvas_information.gen.js
@@ -8455,7 +8599,7 @@ function createBasePBUiCanvasInformation() {
   return { devicePixelRatio: 0, width: 0, height: 0, interactableArea: void 0 };
 }
 var PBUiCanvasInformation;
-(function(PBUiCanvasInformation2) {
+(function (PBUiCanvasInformation2) {
   function encode(message, writer = import_minimal46.default.Writer.create()) {
     if (message.devicePixelRatio !== 0) {
       writer.uint32(13).float(message.devicePixelRatio);
@@ -8473,7 +8617,10 @@ var PBUiCanvasInformation;
   }
   PBUiCanvasInformation2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal46.default.Reader ? input : import_minimal46.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal46.default.Reader
+        ? input
+        : import_minimal46.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBUiCanvasInformation();
     while (reader.pos < end) {
@@ -8529,11 +8676,11 @@ var UiCanvasInformationSchema = {
     return PBUiCanvasInformation.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBUiCanvasInformation"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBUiCanvasInformation',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_dropdown.gen.js
@@ -8548,11 +8695,11 @@ function createBasePBUiDropdown() {
     color: void 0,
     textAlign: void 0,
     font: void 0,
-    fontSize: void 0
+    fontSize: void 0,
   };
 }
 var PBUiDropdown;
-(function(PBUiDropdown2) {
+(function (PBUiDropdown2) {
   function encode(message, writer = import_minimal47.default.Writer.create()) {
     if (message.acceptEmpty === true) {
       writer.uint32(8).bool(message.acceptEmpty);
@@ -8585,7 +8732,10 @@ var PBUiDropdown;
   }
   PBUiDropdown2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal47.default.Reader ? input : import_minimal47.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal47.default.Reader
+        ? input
+        : import_minimal47.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBUiDropdown();
     while (reader.pos < end) {
@@ -8671,11 +8821,11 @@ var UiDropdownSchema = {
     return PBUiDropdown.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBUiDropdown"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBUiDropdown',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_dropdown_result.gen.js
@@ -8684,7 +8834,7 @@ function createBasePBUiDropdownResult() {
   return { value: 0 };
 }
 var PBUiDropdownResult;
-(function(PBUiDropdownResult2) {
+(function (PBUiDropdownResult2) {
   function encode(message, writer = import_minimal48.default.Writer.create()) {
     if (message.value !== 0) {
       writer.uint32(8).int32(message.value);
@@ -8693,7 +8843,10 @@ var PBUiDropdownResult;
   }
   PBUiDropdownResult2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal48.default.Reader ? input : import_minimal48.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal48.default.Reader
+        ? input
+        : import_minimal48.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBUiDropdownResult();
     while (reader.pos < end) {
@@ -8731,31 +8884,31 @@ var UiDropdownResultSchema = {
     return PBUiDropdownResult.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBUiDropdownResult"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBUiDropdownResult',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_input.gen.js
 var import_minimal49 = __toESM(require_minimal2());
 function createBasePBUiInput() {
   return {
-    placeholder: "",
+    placeholder: '',
     color: void 0,
     placeholderColor: void 0,
     disabled: false,
     textAlign: void 0,
     font: void 0,
     fontSize: void 0,
-    value: void 0
+    value: void 0,
   };
 }
 var PBUiInput;
-(function(PBUiInput2) {
+(function (PBUiInput2) {
   function encode(message, writer = import_minimal49.default.Writer.create()) {
-    if (message.placeholder !== "") {
+    if (message.placeholder !== '') {
       writer.uint32(10).string(message.placeholder);
     }
     if (message.color !== void 0) {
@@ -8783,7 +8936,10 @@ var PBUiInput;
   }
   PBUiInput2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal49.default.Reader ? input : import_minimal49.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal49.default.Reader
+        ? input
+        : import_minimal49.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBUiInput();
     while (reader.pos < end) {
@@ -8863,22 +9019,22 @@ var UiInputSchema = {
     return PBUiInput.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBUiInput"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBUiInput',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_input_result.gen.js
 var import_minimal50 = __toESM(require_minimal2());
 function createBasePBUiInputResult() {
-  return { value: "", isSubmit: void 0 };
+  return { value: '', isSubmit: void 0 };
 }
 var PBUiInputResult;
-(function(PBUiInputResult2) {
+(function (PBUiInputResult2) {
   function encode(message, writer = import_minimal50.default.Writer.create()) {
-    if (message.value !== "") {
+    if (message.value !== '') {
       writer.uint32(10).string(message.value);
     }
     if (message.isSubmit !== void 0) {
@@ -8888,7 +9044,10 @@ var PBUiInputResult;
   }
   PBUiInputResult2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal50.default.Reader ? input : import_minimal50.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal50.default.Reader
+        ? input
+        : import_minimal50.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBUiInputResult();
     while (reader.pos < end) {
@@ -8932,34 +9091,34 @@ var UiInputResultSchema = {
     return PBUiInputResult.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBUiInputResult"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBUiInputResult',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_text.gen.js
 var import_minimal51 = __toESM(require_minimal2());
 var TextWrap;
-(function(TextWrap2) {
-  TextWrap2[TextWrap2["TW_WRAP"] = 0] = "TW_WRAP";
-  TextWrap2[TextWrap2["TW_NO_WRAP"] = 1] = "TW_NO_WRAP";
+(function (TextWrap2) {
+  TextWrap2[(TextWrap2['TW_WRAP'] = 0)] = 'TW_WRAP';
+  TextWrap2[(TextWrap2['TW_NO_WRAP'] = 1)] = 'TW_NO_WRAP';
 })(TextWrap || (TextWrap = {}));
 function createBasePBUiText() {
   return {
-    value: "",
+    value: '',
     color: void 0,
     textAlign: void 0,
     font: void 0,
     fontSize: void 0,
-    textWrap: void 0
+    textWrap: void 0,
   };
 }
 var PBUiText;
-(function(PBUiText2) {
+(function (PBUiText2) {
   function encode(message, writer = import_minimal51.default.Writer.create()) {
-    if (message.value !== "") {
+    if (message.value !== '') {
       writer.uint32(10).string(message.value);
     }
     if (message.color !== void 0) {
@@ -8981,7 +9140,10 @@ var PBUiText;
   }
   PBUiText2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal51.default.Reader ? input : import_minimal51.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal51.default.Reader
+        ? input
+        : import_minimal51.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBUiText();
     while (reader.pos < end) {
@@ -9049,87 +9211,87 @@ var UiTextSchema = {
     return PBUiText.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBUiText"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBUiText',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/ui_transform.gen.js
 var import_minimal52 = __toESM(require_minimal2());
 var YGPositionType;
-(function(YGPositionType2) {
-  YGPositionType2[YGPositionType2["YGPT_RELATIVE"] = 0] = "YGPT_RELATIVE";
-  YGPositionType2[YGPositionType2["YGPT_ABSOLUTE"] = 1] = "YGPT_ABSOLUTE";
+(function (YGPositionType2) {
+  YGPositionType2[(YGPositionType2['YGPT_RELATIVE'] = 0)] = 'YGPT_RELATIVE';
+  YGPositionType2[(YGPositionType2['YGPT_ABSOLUTE'] = 1)] = 'YGPT_ABSOLUTE';
 })(YGPositionType || (YGPositionType = {}));
 var YGAlign;
-(function(YGAlign2) {
-  YGAlign2[YGAlign2["YGA_AUTO"] = 0] = "YGA_AUTO";
-  YGAlign2[YGAlign2["YGA_FLEX_START"] = 1] = "YGA_FLEX_START";
-  YGAlign2[YGAlign2["YGA_CENTER"] = 2] = "YGA_CENTER";
-  YGAlign2[YGAlign2["YGA_FLEX_END"] = 3] = "YGA_FLEX_END";
-  YGAlign2[YGAlign2["YGA_STRETCH"] = 4] = "YGA_STRETCH";
-  YGAlign2[YGAlign2["YGA_BASELINE"] = 5] = "YGA_BASELINE";
-  YGAlign2[YGAlign2["YGA_SPACE_BETWEEN"] = 6] = "YGA_SPACE_BETWEEN";
-  YGAlign2[YGAlign2["YGA_SPACE_AROUND"] = 7] = "YGA_SPACE_AROUND";
+(function (YGAlign2) {
+  YGAlign2[(YGAlign2['YGA_AUTO'] = 0)] = 'YGA_AUTO';
+  YGAlign2[(YGAlign2['YGA_FLEX_START'] = 1)] = 'YGA_FLEX_START';
+  YGAlign2[(YGAlign2['YGA_CENTER'] = 2)] = 'YGA_CENTER';
+  YGAlign2[(YGAlign2['YGA_FLEX_END'] = 3)] = 'YGA_FLEX_END';
+  YGAlign2[(YGAlign2['YGA_STRETCH'] = 4)] = 'YGA_STRETCH';
+  YGAlign2[(YGAlign2['YGA_BASELINE'] = 5)] = 'YGA_BASELINE';
+  YGAlign2[(YGAlign2['YGA_SPACE_BETWEEN'] = 6)] = 'YGA_SPACE_BETWEEN';
+  YGAlign2[(YGAlign2['YGA_SPACE_AROUND'] = 7)] = 'YGA_SPACE_AROUND';
 })(YGAlign || (YGAlign = {}));
 var YGUnit;
-(function(YGUnit2) {
-  YGUnit2[YGUnit2["YGU_UNDEFINED"] = 0] = "YGU_UNDEFINED";
-  YGUnit2[YGUnit2["YGU_POINT"] = 1] = "YGU_POINT";
-  YGUnit2[YGUnit2["YGU_PERCENT"] = 2] = "YGU_PERCENT";
-  YGUnit2[YGUnit2["YGU_AUTO"] = 3] = "YGU_AUTO";
+(function (YGUnit2) {
+  YGUnit2[(YGUnit2['YGU_UNDEFINED'] = 0)] = 'YGU_UNDEFINED';
+  YGUnit2[(YGUnit2['YGU_POINT'] = 1)] = 'YGU_POINT';
+  YGUnit2[(YGUnit2['YGU_PERCENT'] = 2)] = 'YGU_PERCENT';
+  YGUnit2[(YGUnit2['YGU_AUTO'] = 3)] = 'YGU_AUTO';
 })(YGUnit || (YGUnit = {}));
 var YGFlexDirection;
-(function(YGFlexDirection2) {
-  YGFlexDirection2[YGFlexDirection2["YGFD_ROW"] = 0] = "YGFD_ROW";
-  YGFlexDirection2[YGFlexDirection2["YGFD_COLUMN"] = 1] = "YGFD_COLUMN";
-  YGFlexDirection2[YGFlexDirection2["YGFD_COLUMN_REVERSE"] = 2] = "YGFD_COLUMN_REVERSE";
-  YGFlexDirection2[YGFlexDirection2["YGFD_ROW_REVERSE"] = 3] = "YGFD_ROW_REVERSE";
+(function (YGFlexDirection2) {
+  YGFlexDirection2[(YGFlexDirection2['YGFD_ROW'] = 0)] = 'YGFD_ROW';
+  YGFlexDirection2[(YGFlexDirection2['YGFD_COLUMN'] = 1)] = 'YGFD_COLUMN';
+  YGFlexDirection2[(YGFlexDirection2['YGFD_COLUMN_REVERSE'] = 2)] = 'YGFD_COLUMN_REVERSE';
+  YGFlexDirection2[(YGFlexDirection2['YGFD_ROW_REVERSE'] = 3)] = 'YGFD_ROW_REVERSE';
 })(YGFlexDirection || (YGFlexDirection = {}));
 var YGWrap;
-(function(YGWrap2) {
-  YGWrap2[YGWrap2["YGW_NO_WRAP"] = 0] = "YGW_NO_WRAP";
-  YGWrap2[YGWrap2["YGW_WRAP"] = 1] = "YGW_WRAP";
-  YGWrap2[YGWrap2["YGW_WRAP_REVERSE"] = 2] = "YGW_WRAP_REVERSE";
+(function (YGWrap2) {
+  YGWrap2[(YGWrap2['YGW_NO_WRAP'] = 0)] = 'YGW_NO_WRAP';
+  YGWrap2[(YGWrap2['YGW_WRAP'] = 1)] = 'YGW_WRAP';
+  YGWrap2[(YGWrap2['YGW_WRAP_REVERSE'] = 2)] = 'YGW_WRAP_REVERSE';
 })(YGWrap || (YGWrap = {}));
 var YGJustify;
-(function(YGJustify2) {
-  YGJustify2[YGJustify2["YGJ_FLEX_START"] = 0] = "YGJ_FLEX_START";
-  YGJustify2[YGJustify2["YGJ_CENTER"] = 1] = "YGJ_CENTER";
-  YGJustify2[YGJustify2["YGJ_FLEX_END"] = 2] = "YGJ_FLEX_END";
-  YGJustify2[YGJustify2["YGJ_SPACE_BETWEEN"] = 3] = "YGJ_SPACE_BETWEEN";
-  YGJustify2[YGJustify2["YGJ_SPACE_AROUND"] = 4] = "YGJ_SPACE_AROUND";
-  YGJustify2[YGJustify2["YGJ_SPACE_EVENLY"] = 5] = "YGJ_SPACE_EVENLY";
+(function (YGJustify2) {
+  YGJustify2[(YGJustify2['YGJ_FLEX_START'] = 0)] = 'YGJ_FLEX_START';
+  YGJustify2[(YGJustify2['YGJ_CENTER'] = 1)] = 'YGJ_CENTER';
+  YGJustify2[(YGJustify2['YGJ_FLEX_END'] = 2)] = 'YGJ_FLEX_END';
+  YGJustify2[(YGJustify2['YGJ_SPACE_BETWEEN'] = 3)] = 'YGJ_SPACE_BETWEEN';
+  YGJustify2[(YGJustify2['YGJ_SPACE_AROUND'] = 4)] = 'YGJ_SPACE_AROUND';
+  YGJustify2[(YGJustify2['YGJ_SPACE_EVENLY'] = 5)] = 'YGJ_SPACE_EVENLY';
 })(YGJustify || (YGJustify = {}));
 var YGOverflow;
-(function(YGOverflow2) {
-  YGOverflow2[YGOverflow2["YGO_VISIBLE"] = 0] = "YGO_VISIBLE";
-  YGOverflow2[YGOverflow2["YGO_HIDDEN"] = 1] = "YGO_HIDDEN";
-  YGOverflow2[YGOverflow2["YGO_SCROLL"] = 2] = "YGO_SCROLL";
+(function (YGOverflow2) {
+  YGOverflow2[(YGOverflow2['YGO_VISIBLE'] = 0)] = 'YGO_VISIBLE';
+  YGOverflow2[(YGOverflow2['YGO_HIDDEN'] = 1)] = 'YGO_HIDDEN';
+  YGOverflow2[(YGOverflow2['YGO_SCROLL'] = 2)] = 'YGO_SCROLL';
 })(YGOverflow || (YGOverflow = {}));
 var YGDisplay;
-(function(YGDisplay2) {
-  YGDisplay2[YGDisplay2["YGD_FLEX"] = 0] = "YGD_FLEX";
-  YGDisplay2[YGDisplay2["YGD_NONE"] = 1] = "YGD_NONE";
+(function (YGDisplay2) {
+  YGDisplay2[(YGDisplay2['YGD_FLEX'] = 0)] = 'YGD_FLEX';
+  YGDisplay2[(YGDisplay2['YGD_NONE'] = 1)] = 'YGD_NONE';
 })(YGDisplay || (YGDisplay = {}));
 var YGEdge;
-(function(YGEdge2) {
-  YGEdge2[YGEdge2["YGE_LEFT"] = 0] = "YGE_LEFT";
-  YGEdge2[YGEdge2["YGE_TOP"] = 1] = "YGE_TOP";
-  YGEdge2[YGEdge2["YGE_RIGHT"] = 2] = "YGE_RIGHT";
-  YGEdge2[YGEdge2["YGE_BOTTOM"] = 3] = "YGE_BOTTOM";
-  YGEdge2[YGEdge2["YGE_START"] = 4] = "YGE_START";
-  YGEdge2[YGEdge2["YGE_END"] = 5] = "YGE_END";
-  YGEdge2[YGEdge2["YGE_HORIZONTAL"] = 6] = "YGE_HORIZONTAL";
-  YGEdge2[YGEdge2["YGE_VERTICAL"] = 7] = "YGE_VERTICAL";
-  YGEdge2[YGEdge2["YGE_ALL"] = 8] = "YGE_ALL";
+(function (YGEdge2) {
+  YGEdge2[(YGEdge2['YGE_LEFT'] = 0)] = 'YGE_LEFT';
+  YGEdge2[(YGEdge2['YGE_TOP'] = 1)] = 'YGE_TOP';
+  YGEdge2[(YGEdge2['YGE_RIGHT'] = 2)] = 'YGE_RIGHT';
+  YGEdge2[(YGEdge2['YGE_BOTTOM'] = 3)] = 'YGE_BOTTOM';
+  YGEdge2[(YGEdge2['YGE_START'] = 4)] = 'YGE_START';
+  YGEdge2[(YGEdge2['YGE_END'] = 5)] = 'YGE_END';
+  YGEdge2[(YGEdge2['YGE_HORIZONTAL'] = 6)] = 'YGE_HORIZONTAL';
+  YGEdge2[(YGEdge2['YGE_VERTICAL'] = 7)] = 'YGE_VERTICAL';
+  YGEdge2[(YGEdge2['YGE_ALL'] = 8)] = 'YGE_ALL';
 })(YGEdge || (YGEdge = {}));
 var PointerFilterMode;
-(function(PointerFilterMode2) {
-  PointerFilterMode2[PointerFilterMode2["PFM_NONE"] = 0] = "PFM_NONE";
-  PointerFilterMode2[PointerFilterMode2["PFM_BLOCK"] = 1] = "PFM_BLOCK";
+(function (PointerFilterMode2) {
+  PointerFilterMode2[(PointerFilterMode2['PFM_NONE'] = 0)] = 'PFM_NONE';
+  PointerFilterMode2[(PointerFilterMode2['PFM_BLOCK'] = 1)] = 'PFM_BLOCK';
 })(PointerFilterMode || (PointerFilterMode = {}));
 function createBasePBUiTransform() {
   return {
@@ -9206,11 +9368,11 @@ function createBasePBUiTransform() {
     borderLeftColor: void 0,
     borderRightColor: void 0,
     opacity: void 0,
-    zIndex: void 0
+    zIndex: void 0,
   };
 }
 var PBUiTransform;
-(function(PBUiTransform2) {
+(function (PBUiTransform2) {
   function encode(message, writer = import_minimal52.default.Writer.create()) {
     if (message.parent !== 0) {
       writer.uint32(8).int32(message.parent);
@@ -9438,7 +9600,10 @@ var PBUiTransform;
   }
   PBUiTransform2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal52.default.Reader ? input : import_minimal52.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal52.default.Reader
+        ? input
+        : import_minimal52.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBUiTransform();
     while (reader.pos < end) {
@@ -9914,31 +10079,31 @@ var UiTransformSchema = {
     return PBUiTransform.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBUiTransform"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBUiTransform',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/video_event.gen.js
 var import_minimal53 = __toESM(require_minimal2());
 var VideoState;
-(function(VideoState2) {
-  VideoState2[VideoState2["VS_NONE"] = 0] = "VS_NONE";
-  VideoState2[VideoState2["VS_ERROR"] = 1] = "VS_ERROR";
-  VideoState2[VideoState2["VS_LOADING"] = 2] = "VS_LOADING";
-  VideoState2[VideoState2["VS_READY"] = 3] = "VS_READY";
-  VideoState2[VideoState2["VS_PLAYING"] = 4] = "VS_PLAYING";
-  VideoState2[VideoState2["VS_BUFFERING"] = 5] = "VS_BUFFERING";
-  VideoState2[VideoState2["VS_SEEKING"] = 6] = "VS_SEEKING";
-  VideoState2[VideoState2["VS_PAUSED"] = 7] = "VS_PAUSED";
+(function (VideoState2) {
+  VideoState2[(VideoState2['VS_NONE'] = 0)] = 'VS_NONE';
+  VideoState2[(VideoState2['VS_ERROR'] = 1)] = 'VS_ERROR';
+  VideoState2[(VideoState2['VS_LOADING'] = 2)] = 'VS_LOADING';
+  VideoState2[(VideoState2['VS_READY'] = 3)] = 'VS_READY';
+  VideoState2[(VideoState2['VS_PLAYING'] = 4)] = 'VS_PLAYING';
+  VideoState2[(VideoState2['VS_BUFFERING'] = 5)] = 'VS_BUFFERING';
+  VideoState2[(VideoState2['VS_SEEKING'] = 6)] = 'VS_SEEKING';
+  VideoState2[(VideoState2['VS_PAUSED'] = 7)] = 'VS_PAUSED';
 })(VideoState || (VideoState = {}));
 function createBasePBVideoEvent() {
   return { timestamp: 0, tickNumber: 0, currentOffset: 0, videoLength: 0, state: 0 };
 }
 var PBVideoEvent;
-(function(PBVideoEvent2) {
+(function (PBVideoEvent2) {
   function encode(message, writer = import_minimal53.default.Writer.create()) {
     if (message.timestamp !== 0) {
       writer.uint32(8).uint32(message.timestamp);
@@ -9959,7 +10124,10 @@ var PBVideoEvent;
   }
   PBVideoEvent2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal53.default.Reader ? input : import_minimal53.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal53.default.Reader
+        ? input
+        : import_minimal53.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBVideoEvent();
     while (reader.pos < end) {
@@ -10021,18 +10189,18 @@ var VideoEventSchema = {
     return PBVideoEvent.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBVideoEvent"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBVideoEvent',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/video_player.gen.js
 var import_minimal54 = __toESM(require_minimal2());
 function createBasePBVideoPlayer() {
   return {
-    src: "",
+    src: '',
     playing: void 0,
     position: void 0,
     volume: void 0,
@@ -10040,13 +10208,13 @@ function createBasePBVideoPlayer() {
     loop: void 0,
     spatial: void 0,
     spatialMinDistance: void 0,
-    spatialMaxDistance: void 0
+    spatialMaxDistance: void 0,
   };
 }
 var PBVideoPlayer;
-(function(PBVideoPlayer2) {
+(function (PBVideoPlayer2) {
   function encode(message, writer = import_minimal54.default.Writer.create()) {
-    if (message.src !== "") {
+    if (message.src !== '') {
       writer.uint32(10).string(message.src);
     }
     if (message.playing !== void 0) {
@@ -10077,7 +10245,10 @@ var PBVideoPlayer;
   }
   PBVideoPlayer2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal54.default.Reader ? input : import_minimal54.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal54.default.Reader
+        ? input
+        : import_minimal54.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBVideoPlayer();
     while (reader.pos < end) {
@@ -10163,11 +10334,11 @@ var VideoPlayerSchema = {
     return PBVideoPlayer.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBVideoPlayer"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBVideoPlayer',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/virtual_camera.gen.js
@@ -10179,13 +10350,13 @@ function createBaseCameraTransition() {
   return { transitionMode: void 0 };
 }
 var CameraTransition;
-(function(CameraTransition2) {
+(function (CameraTransition2) {
   function encode(message, writer = import_minimal55.default.Writer.create()) {
     switch (message.transitionMode?.$case) {
-      case "time":
+      case 'time':
         writer.uint32(13).float(message.transitionMode.time);
         break;
-      case "speed":
+      case 'speed':
         writer.uint32(21).float(message.transitionMode.speed);
         break;
     }
@@ -10193,7 +10364,10 @@ var CameraTransition;
   }
   CameraTransition2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal55.default.Reader ? input : import_minimal55.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal55.default.Reader
+        ? input
+        : import_minimal55.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseCameraTransition();
     while (reader.pos < end) {
@@ -10203,13 +10377,13 @@ var CameraTransition;
           if (tag !== 13) {
             break;
           }
-          message.transitionMode = { $case: "time", time: reader.float() };
+          message.transitionMode = { $case: 'time', time: reader.float() };
           continue;
         case 2:
           if (tag !== 21) {
             break;
           }
-          message.transitionMode = { $case: "speed", speed: reader.float() };
+          message.transitionMode = { $case: 'speed', speed: reader.float() };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -10227,7 +10401,7 @@ function createBasePBVirtualCamera() {
   return { defaultTransition: void 0, lookAtEntity: void 0 };
 }
 var PBVirtualCamera;
-(function(PBVirtualCamera2) {
+(function (PBVirtualCamera2) {
   function encode(message, writer = import_minimal56.default.Writer.create()) {
     if (message.defaultTransition !== void 0) {
       CameraTransition.encode(message.defaultTransition, writer.uint32(10).fork()).ldelim();
@@ -10239,7 +10413,10 @@ var PBVirtualCamera;
   }
   PBVirtualCamera2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal56.default.Reader ? input : import_minimal56.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal56.default.Reader
+        ? input
+        : import_minimal56.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBVirtualCamera();
     while (reader.pos < end) {
@@ -10283,11 +10460,11 @@ var VirtualCameraSchema = {
     return PBVirtualCamera.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBVirtualCamera"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBVirtualCamera',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/visibility_component.gen.js
@@ -10296,7 +10473,7 @@ function createBasePBVisibilityComponent() {
   return { visible: void 0, propagateToChildren: void 0 };
 }
 var PBVisibilityComponent;
-(function(PBVisibilityComponent2) {
+(function (PBVisibilityComponent2) {
   function encode(message, writer = import_minimal57.default.Writer.create()) {
     if (message.visible !== void 0) {
       writer.uint32(8).bool(message.visible);
@@ -10308,7 +10485,10 @@ var PBVisibilityComponent;
   }
   PBVisibilityComponent2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal57.default.Reader ? input : import_minimal57.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal57.default.Reader
+        ? input
+        : import_minimal57.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBasePBVisibilityComponent();
     while (reader.pos < end) {
@@ -10352,132 +10532,222 @@ var VisibilityComponentSchema = {
     return PBVisibilityComponent.decode(new Uint8Array());
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {},
-    serializationType: "protocol-buffer",
-    protocolBuffer: "PBVisibilityComponent"
-  }
+    serializationType: 'protocol-buffer',
+    protocolBuffer: 'PBVisibilityComponent',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/index.gen.js
-var Animator = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::Animator", AnimatorSchema);
-var AudioEvent = (engine2) => /* @__PURE__ */ engine2.defineValueSetComponentFromSchema("core::AudioEvent", AudioEventSchema, {
-  timestampFunction: (t) => t.timestamp,
-  maxElements: 100
-});
-var AudioSource = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::AudioSource", AudioSourceSchema);
-var AudioStream = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::AudioStream", AudioStreamSchema);
-var AvatarAttach = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::AvatarAttach", AvatarAttachSchema);
-var AvatarBase = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::AvatarBase", AvatarBaseSchema);
-var AvatarEmoteCommand = (engine2) => /* @__PURE__ */ engine2.defineValueSetComponentFromSchema("core::AvatarEmoteCommand", AvatarEmoteCommandSchema, {
-  timestampFunction: (t) => t.timestamp,
-  maxElements: 100
-});
-var AvatarEquippedData = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::AvatarEquippedData", AvatarEquippedDataSchema);
-var AvatarModifierArea = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::AvatarModifierArea", AvatarModifierAreaSchema);
-var AvatarShape = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::AvatarShape", AvatarShapeSchema);
-var Billboard = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::Billboard", BillboardSchema);
-var CameraMode = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::CameraMode", CameraModeSchema);
-var CameraModeArea = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::CameraModeArea", CameraModeAreaSchema);
-var EngineInfo = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::EngineInfo", EngineInfoSchema);
-var GltfContainer = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::GltfContainer", GltfContainerSchema);
-var GltfContainerLoadingState = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::GltfContainerLoadingState", GltfContainerLoadingStateSchema);
-var GltfNodeModifiers = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::GltfNodeModifiers", GltfNodeModifiersSchema);
-var InputModifier = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::InputModifier", InputModifierSchema);
-var LightSource = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::LightSource", LightSourceSchema);
-var MainCamera = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::MainCamera", MainCameraSchema);
-var Material = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::Material", MaterialSchema);
-var MeshCollider = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::MeshCollider", MeshColliderSchema);
-var MeshRenderer = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::MeshRenderer", MeshRendererSchema);
-var NftShape = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::NftShape", NftShapeSchema);
-var PlayerIdentityData = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::PlayerIdentityData", PlayerIdentityDataSchema);
-var PointerEvents = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::PointerEvents", PointerEventsSchema);
-var PointerEventsResult = (engine2) => /* @__PURE__ */ engine2.defineValueSetComponentFromSchema("core::PointerEventsResult", PointerEventsResultSchema, {
-  timestampFunction: (t) => t.timestamp,
-  maxElements: 100
-});
-var PointerLock = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::PointerLock", PointerLockSchema);
-var PrimaryPointerInfo = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::PrimaryPointerInfo", PrimaryPointerInfoSchema);
-var Raycast = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::Raycast", RaycastSchema);
-var RaycastResult = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::RaycastResult", RaycastResultSchema);
-var RealmInfo = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::RealmInfo", RealmInfoSchema);
-var SkyboxTime = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::SkyboxTime", SkyboxTimeSchema);
-var TextShape2 = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::TextShape", TextShapeSchema);
-var TriggerArea = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::TriggerArea", TriggerAreaSchema);
-var TriggerAreaResult = (engine2) => /* @__PURE__ */ engine2.defineValueSetComponentFromSchema("core::TriggerAreaResult", TriggerAreaResultSchema, {
-  timestampFunction: (t) => t.timestamp,
-  maxElements: 100
-});
-var Tween = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::Tween", TweenSchema);
-var TweenSequence = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::TweenSequence", TweenSequenceSchema);
-var TweenState = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::TweenState", TweenStateSchema);
-var UiBackground = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::UiBackground", UiBackgroundSchema);
-var UiCanvasInformation = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::UiCanvasInformation", UiCanvasInformationSchema);
-var UiDropdown = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::UiDropdown", UiDropdownSchema);
-var UiDropdownResult = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::UiDropdownResult", UiDropdownResultSchema);
-var UiInput = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::UiInput", UiInputSchema);
-var UiInputResult = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::UiInputResult", UiInputResultSchema);
-var UiText = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::UiText", UiTextSchema);
-var UiTransform = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::UiTransform", UiTransformSchema);
-var VideoEvent = (engine2) => /* @__PURE__ */ engine2.defineValueSetComponentFromSchema("core::VideoEvent", VideoEventSchema, {
-  timestampFunction: (t) => t.timestamp,
-  maxElements: 100
-});
-var VideoPlayer = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::VideoPlayer", VideoPlayerSchema);
-var VirtualCamera = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::VirtualCamera", VirtualCameraSchema);
-var VisibilityComponent = (engine2) => /* @__PURE__ */ engine2.defineComponentFromSchema("core::VisibilityComponent", VisibilityComponentSchema);
+var Animator = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::Animator', AnimatorSchema);
+var AudioEvent = engine2 =>
+  /* @__PURE__ */ engine2.defineValueSetComponentFromSchema('core::AudioEvent', AudioEventSchema, {
+    timestampFunction: t => t.timestamp,
+    maxElements: 100,
+  });
+var AudioSource = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::AudioSource', AudioSourceSchema);
+var AudioStream = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::AudioStream', AudioStreamSchema);
+var AvatarAttach = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::AvatarAttach', AvatarAttachSchema);
+var AvatarBase = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::AvatarBase', AvatarBaseSchema);
+var AvatarEmoteCommand = engine2 =>
+  /* @__PURE__ */ engine2.defineValueSetComponentFromSchema(
+    'core::AvatarEmoteCommand',
+    AvatarEmoteCommandSchema,
+    {
+      timestampFunction: t => t.timestamp,
+      maxElements: 100,
+    }
+  );
+var AvatarEquippedData = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::AvatarEquippedData',
+    AvatarEquippedDataSchema
+  );
+var AvatarModifierArea = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::AvatarModifierArea',
+    AvatarModifierAreaSchema
+  );
+var AvatarShape = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::AvatarShape', AvatarShapeSchema);
+var Billboard = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::Billboard', BillboardSchema);
+var CameraMode = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::CameraMode', CameraModeSchema);
+var CameraModeArea = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::CameraModeArea', CameraModeAreaSchema);
+var EngineInfo = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::EngineInfo', EngineInfoSchema);
+var GltfContainer = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::GltfContainer', GltfContainerSchema);
+var GltfContainerLoadingState = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::GltfContainerLoadingState',
+    GltfContainerLoadingStateSchema
+  );
+var GltfNodeModifiers = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::GltfNodeModifiers',
+    GltfNodeModifiersSchema
+  );
+var InputModifier = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::InputModifier', InputModifierSchema);
+var LightSource = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::LightSource', LightSourceSchema);
+var MainCamera = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::MainCamera', MainCameraSchema);
+var Material = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::Material', MaterialSchema);
+var MeshCollider = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::MeshCollider', MeshColliderSchema);
+var MeshRenderer = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::MeshRenderer', MeshRendererSchema);
+var NftShape = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::NftShape', NftShapeSchema);
+var PlayerIdentityData = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::PlayerIdentityData',
+    PlayerIdentityDataSchema
+  );
+var PointerEvents = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::PointerEvents', PointerEventsSchema);
+var PointerEventsResult = engine2 =>
+  /* @__PURE__ */ engine2.defineValueSetComponentFromSchema(
+    'core::PointerEventsResult',
+    PointerEventsResultSchema,
+    {
+      timestampFunction: t => t.timestamp,
+      maxElements: 100,
+    }
+  );
+var PointerLock = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::PointerLock', PointerLockSchema);
+var PrimaryPointerInfo = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::PrimaryPointerInfo',
+    PrimaryPointerInfoSchema
+  );
+var Raycast = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::Raycast', RaycastSchema);
+var RaycastResult = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::RaycastResult', RaycastResultSchema);
+var RealmInfo = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::RealmInfo', RealmInfoSchema);
+var SkyboxTime = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::SkyboxTime', SkyboxTimeSchema);
+var TextShape2 = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::TextShape', TextShapeSchema);
+var TriggerArea = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::TriggerArea', TriggerAreaSchema);
+var TriggerAreaResult = engine2 =>
+  /* @__PURE__ */ engine2.defineValueSetComponentFromSchema(
+    'core::TriggerAreaResult',
+    TriggerAreaResultSchema,
+    {
+      timestampFunction: t => t.timestamp,
+      maxElements: 100,
+    }
+  );
+var Tween = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::Tween', TweenSchema);
+var TweenSequence = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::TweenSequence', TweenSequenceSchema);
+var TweenState = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::TweenState', TweenStateSchema);
+var UiBackground = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::UiBackground', UiBackgroundSchema);
+var UiCanvasInformation = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::UiCanvasInformation',
+    UiCanvasInformationSchema
+  );
+var UiDropdown = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::UiDropdown', UiDropdownSchema);
+var UiDropdownResult = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::UiDropdownResult',
+    UiDropdownResultSchema
+  );
+var UiInput = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::UiInput', UiInputSchema);
+var UiInputResult = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::UiInputResult', UiInputResultSchema);
+var UiText = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::UiText', UiTextSchema);
+var UiTransform = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::UiTransform', UiTransformSchema);
+var VideoEvent = engine2 =>
+  /* @__PURE__ */ engine2.defineValueSetComponentFromSchema('core::VideoEvent', VideoEventSchema, {
+    timestampFunction: t => t.timestamp,
+    maxElements: 100,
+  });
+var VideoPlayer = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::VideoPlayer', VideoPlayerSchema);
+var VirtualCamera = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema('core::VirtualCamera', VirtualCameraSchema);
+var VisibilityComponent = engine2 =>
+  /* @__PURE__ */ engine2.defineComponentFromSchema(
+    'core::VisibilityComponent',
+    VisibilityComponentSchema
+  );
 var componentDefinitionByName = {
-  "core::Animator": Animator,
-  "core::AudioEvent": AudioEvent,
-  "core::AudioSource": AudioSource,
-  "core::AudioStream": AudioStream,
-  "core::AvatarAttach": AvatarAttach,
-  "core::AvatarBase": AvatarBase,
-  "core::AvatarEmoteCommand": AvatarEmoteCommand,
-  "core::AvatarEquippedData": AvatarEquippedData,
-  "core::AvatarModifierArea": AvatarModifierArea,
-  "core::AvatarShape": AvatarShape,
-  "core::Billboard": Billboard,
-  "core::CameraMode": CameraMode,
-  "core::CameraModeArea": CameraModeArea,
-  "core::EngineInfo": EngineInfo,
-  "core::GltfContainer": GltfContainer,
-  "core::GltfContainerLoadingState": GltfContainerLoadingState,
-  "core::GltfNodeModifiers": GltfNodeModifiers,
-  "core::InputModifier": InputModifier,
-  "core::LightSource": LightSource,
-  "core::MainCamera": MainCamera,
-  "core::Material": Material,
-  "core::MeshCollider": MeshCollider,
-  "core::MeshRenderer": MeshRenderer,
-  "core::NftShape": NftShape,
-  "core::PlayerIdentityData": PlayerIdentityData,
-  "core::PointerEvents": PointerEvents,
-  "core::PointerEventsResult": PointerEventsResult,
-  "core::PointerLock": PointerLock,
-  "core::PrimaryPointerInfo": PrimaryPointerInfo,
-  "core::Raycast": Raycast,
-  "core::RaycastResult": RaycastResult,
-  "core::RealmInfo": RealmInfo,
-  "core::SkyboxTime": SkyboxTime,
-  "core::TextShape": TextShape2,
-  "core::TriggerArea": TriggerArea,
-  "core::TriggerAreaResult": TriggerAreaResult,
-  "core::Tween": Tween,
-  "core::TweenSequence": TweenSequence,
-  "core::TweenState": TweenState,
-  "core::UiBackground": UiBackground,
-  "core::UiCanvasInformation": UiCanvasInformation,
-  "core::UiDropdown": UiDropdown,
-  "core::UiDropdownResult": UiDropdownResult,
-  "core::UiInput": UiInput,
-  "core::UiInputResult": UiInputResult,
-  "core::UiText": UiText,
-  "core::UiTransform": UiTransform,
-  "core::VideoEvent": VideoEvent,
-  "core::VideoPlayer": VideoPlayer,
-  "core::VirtualCamera": VirtualCamera,
-  "core::VisibilityComponent": VisibilityComponent
+  'core::Animator': Animator,
+  'core::AudioEvent': AudioEvent,
+  'core::AudioSource': AudioSource,
+  'core::AudioStream': AudioStream,
+  'core::AvatarAttach': AvatarAttach,
+  'core::AvatarBase': AvatarBase,
+  'core::AvatarEmoteCommand': AvatarEmoteCommand,
+  'core::AvatarEquippedData': AvatarEquippedData,
+  'core::AvatarModifierArea': AvatarModifierArea,
+  'core::AvatarShape': AvatarShape,
+  'core::Billboard': Billboard,
+  'core::CameraMode': CameraMode,
+  'core::CameraModeArea': CameraModeArea,
+  'core::EngineInfo': EngineInfo,
+  'core::GltfContainer': GltfContainer,
+  'core::GltfContainerLoadingState': GltfContainerLoadingState,
+  'core::GltfNodeModifiers': GltfNodeModifiers,
+  'core::InputModifier': InputModifier,
+  'core::LightSource': LightSource,
+  'core::MainCamera': MainCamera,
+  'core::Material': Material,
+  'core::MeshCollider': MeshCollider,
+  'core::MeshRenderer': MeshRenderer,
+  'core::NftShape': NftShape,
+  'core::PlayerIdentityData': PlayerIdentityData,
+  'core::PointerEvents': PointerEvents,
+  'core::PointerEventsResult': PointerEventsResult,
+  'core::PointerLock': PointerLock,
+  'core::PrimaryPointerInfo': PrimaryPointerInfo,
+  'core::Raycast': Raycast,
+  'core::RaycastResult': RaycastResult,
+  'core::RealmInfo': RealmInfo,
+  'core::SkyboxTime': SkyboxTime,
+  'core::TextShape': TextShape2,
+  'core::TriggerArea': TriggerArea,
+  'core::TriggerAreaResult': TriggerAreaResult,
+  'core::Tween': Tween,
+  'core::TweenSequence': TweenSequence,
+  'core::TweenState': TweenState,
+  'core::UiBackground': UiBackground,
+  'core::UiCanvasInformation': UiCanvasInformation,
+  'core::UiDropdown': UiDropdown,
+  'core::UiDropdownResult': UiDropdownResult,
+  'core::UiInput': UiInput,
+  'core::UiInputResult': UiInputResult,
+  'core::UiText': UiText,
+  'core::UiTransform': UiTransform,
+  'core::VideoEvent': VideoEvent,
+  'core::VideoPlayer': VideoPlayer,
+  'core::VirtualCamera': VirtualCamera,
+  'core::VisibilityComponent': VisibilityComponent,
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/extended/AudioSource.js
@@ -10487,8 +10757,7 @@ function defineAudioSourceComponent(engine2) {
     ...theComponent,
     playSound(entity, src, resetCursor = true) {
       const audioSource = theComponent.getMutableOrNull(entity);
-      if (!audioSource)
-        return false;
+      if (!audioSource) return false;
       audioSource.audioClipUrl = src;
       audioSource.playing = true;
       audioSource.currentTime = resetCursor ? 0 : audioSource.currentTime;
@@ -10496,12 +10765,11 @@ function defineAudioSourceComponent(engine2) {
     },
     stopSound(entity, resetCursor = true) {
       const audioSource = theComponent.getMutableOrNull(entity);
-      if (!audioSource)
-        return false;
+      if (!audioSource) return false;
       audioSource.playing = false;
       audioSource.currentTime = resetCursor ? 0 : audioSource.currentTime;
       return true;
-    }
+    },
   };
 }
 
@@ -10510,27 +10778,27 @@ var TextureHelper = {
   Common(texture) {
     return {
       tex: {
-        $case: "texture",
-        texture
-      }
+        $case: 'texture',
+        texture,
+      },
     };
   },
   Avatar(avatarTexture) {
     return {
       tex: {
-        $case: "avatarTexture",
-        avatarTexture
-      }
+        $case: 'avatarTexture',
+        avatarTexture,
+      },
     };
   },
   Video(videoTexture) {
     return {
       tex: {
-        $case: "videoTexture",
-        videoTexture
-      }
+        $case: 'videoTexture',
+        videoTexture,
+      },
     };
-  }
+  },
 };
 function defineMaterialComponent(engine2) {
   const theComponent = Material(engine2);
@@ -10540,19 +10808,19 @@ function defineMaterialComponent(engine2) {
     setBasicMaterial(entity, material) {
       theComponent.createOrReplace(entity, {
         material: {
-          $case: "unlit",
-          unlit: material
-        }
+          $case: 'unlit',
+          unlit: material,
+        },
       });
     },
     setPbrMaterial(entity, material) {
       theComponent.createOrReplace(entity, {
         material: {
-          $case: "pbr",
-          pbr: material
-        }
+          $case: 'pbr',
+          pbr: material,
+        },
       });
-    }
+    },
   };
 }
 
@@ -10561,7 +10829,7 @@ function defineMeshColliderComponent(engine2) {
   const theComponent = MeshCollider(engine2);
   function getCollisionMask(layers) {
     if (Array.isArray(layers)) {
-      return layers.map((item) => item).reduce((prev, item) => prev | item, 0);
+      return layers.map(item => item).reduce((prev, item) => prev | item, 0);
     } else if (layers) {
       return layers;
     }
@@ -10570,28 +10838,28 @@ function defineMeshColliderComponent(engine2) {
     ...theComponent,
     setBox(entity, colliderLayers) {
       theComponent.createOrReplace(entity, {
-        mesh: { $case: "box", box: {} },
-        collisionMask: getCollisionMask(colliderLayers)
+        mesh: { $case: 'box', box: {} },
+        collisionMask: getCollisionMask(colliderLayers),
       });
     },
     setPlane(entity, colliderLayers) {
       theComponent.createOrReplace(entity, {
-        mesh: { $case: "plane", plane: {} },
-        collisionMask: getCollisionMask(colliderLayers)
+        mesh: { $case: 'plane', plane: {} },
+        collisionMask: getCollisionMask(colliderLayers),
       });
     },
     setCylinder(entity, radiusBottom, radiusTop, colliderLayers) {
       theComponent.createOrReplace(entity, {
-        mesh: { $case: "cylinder", cylinder: { radiusBottom, radiusTop } },
-        collisionMask: getCollisionMask(colliderLayers)
+        mesh: { $case: 'cylinder', cylinder: { radiusBottom, radiusTop } },
+        collisionMask: getCollisionMask(colliderLayers),
       });
     },
     setSphere(entity, colliderLayers) {
       theComponent.createOrReplace(entity, {
-        mesh: { $case: "sphere", sphere: {} },
-        collisionMask: getCollisionMask(colliderLayers)
+        mesh: { $case: 'sphere', sphere: {} },
+        collisionMask: getCollisionMask(colliderLayers),
       });
-    }
+    },
   };
 }
 
@@ -10602,24 +10870,24 @@ function defineMeshRendererComponent(engine2) {
     ...theComponent,
     setBox(entity, uvs) {
       theComponent.createOrReplace(entity, {
-        mesh: { $case: "box", box: { uvs: uvs || [] } }
+        mesh: { $case: 'box', box: { uvs: uvs || [] } },
       });
     },
     setPlane(entity, uvs) {
       theComponent.createOrReplace(entity, {
-        mesh: { $case: "plane", plane: { uvs: uvs || [] } }
+        mesh: { $case: 'plane', plane: { uvs: uvs || [] } },
       });
     },
     setCylinder(entity, radiusBottom, radiusTop) {
       theComponent.createOrReplace(entity, {
-        mesh: { $case: "cylinder", cylinder: { radiusBottom, radiusTop } }
+        mesh: { $case: 'cylinder', cylinder: { radiusBottom, radiusTop } },
       });
     },
     setSphere(entity) {
       theComponent.createOrReplace(entity, {
-        mesh: { $case: "sphere", sphere: {} }
+        mesh: { $case: 'sphere', sphere: {} },
       });
-    }
+    },
   };
 }
 
@@ -10627,46 +10895,46 @@ function defineMeshRendererComponent(engine2) {
 var TweenHelper = {
   Move(move) {
     return {
-      $case: "move",
-      move
+      $case: 'move',
+      move,
     };
   },
   MoveContinuous(moveContinuous) {
     return {
-      $case: "moveContinuous",
-      moveContinuous
+      $case: 'moveContinuous',
+      moveContinuous,
     };
   },
   Rotate(rotate) {
     return {
-      $case: "rotate",
-      rotate
+      $case: 'rotate',
+      rotate,
     };
   },
   RotateContinuous(rotateContinuous) {
     return {
-      $case: "rotateContinuous",
-      rotateContinuous
+      $case: 'rotateContinuous',
+      rotateContinuous,
     };
   },
   Scale(scale) {
     return {
-      $case: "scale",
-      scale
+      $case: 'scale',
+      scale,
     };
   },
   TextureMove(textureMove) {
     return {
-      $case: "textureMove",
-      textureMove
+      $case: 'textureMove',
+      textureMove,
     };
   },
   TextureMoveContinuous(textureMoveContinuous) {
     return {
-      $case: "textureMoveContinuous",
-      textureMoveContinuous
+      $case: 'textureMoveContinuous',
+      textureMoveContinuous,
     };
-  }
+  },
 };
 function defineTweenComponent(engine2) {
   const theComponent = Tween(engine2);
@@ -10676,108 +10944,108 @@ function defineTweenComponent(engine2) {
     setMove(entity, start, end, duration, easingFunction = 0) {
       theComponent.createOrReplace(entity, {
         mode: {
-          $case: "move",
+          $case: 'move',
           move: {
             start,
-            end
-          }
+            end,
+          },
         },
         duration,
         easingFunction,
-        playing: true
+        playing: true,
       });
     },
     setScale(entity, start, end, duration, easingFunction = 0) {
       theComponent.createOrReplace(entity, {
         mode: {
-          $case: "scale",
+          $case: 'scale',
           scale: {
             start,
-            end
-          }
+            end,
+          },
         },
         duration,
         easingFunction,
-        playing: true
+        playing: true,
       });
     },
     setRotate(entity, start, end, duration, easingFunction = 0) {
       theComponent.createOrReplace(entity, {
         mode: {
-          $case: "rotate",
+          $case: 'rotate',
           rotate: {
             start,
-            end
-          }
+            end,
+          },
         },
         duration,
         easingFunction,
-        playing: true
+        playing: true,
       });
     },
     setTextureMove(entity, start, end, duration, movementType = 0, easingFunction = 0) {
       theComponent.createOrReplace(entity, {
         mode: {
-          $case: "textureMove",
+          $case: 'textureMove',
           textureMove: {
             start,
             end,
-            movementType
-          }
+            movementType,
+          },
         },
         duration,
         easingFunction,
-        playing: true
+        playing: true,
       });
     },
     setMoveContinuous(entity, direction, speed, duration = 0) {
       theComponent.createOrReplace(entity, {
         mode: {
-          $case: "moveContinuous",
+          $case: 'moveContinuous',
           moveContinuous: {
             direction,
-            speed
-          }
+            speed,
+          },
         },
         duration,
         easingFunction: 0,
-        playing: true
+        playing: true,
       });
     },
     setRotateContinuous(entity, direction, speed, duration = 0) {
       theComponent.createOrReplace(entity, {
         mode: {
-          $case: "rotateContinuous",
+          $case: 'rotateContinuous',
           rotateContinuous: {
             direction,
-            speed
-          }
+            speed,
+          },
         },
         duration,
         easingFunction: 0,
-        playing: true
+        playing: true,
       });
     },
     setTextureMoveContinuous(entity, direction, speed, movementType = 0, duration = 0) {
       theComponent.createOrReplace(entity, {
         mode: {
-          $case: "textureMoveContinuous",
+          $case: 'textureMoveContinuous',
           textureMoveContinuous: {
             direction,
             speed,
-            movementType
-          }
+            movementType,
+          },
         },
         duration,
         easingFunction: 0,
-        playing: true
+        playing: true,
       });
-    }
+    },
   };
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/Array.js
-var IArray = (type) => {
+var IArray = type => {
   return {
     serialize(value, builder) {
       builder.writeUint32(value.length);
@@ -10797,10 +11065,10 @@ var IArray = (type) => {
       return [];
     },
     jsonSchema: {
-      type: "array",
+      type: 'array',
       items: type.jsonSchema,
-      serializationType: "array"
-    }
+      serializationType: 'array',
+    },
   };
 };
 
@@ -10816,9 +11084,9 @@ var Bool = {
     return false;
   },
   jsonSchema: {
-    type: "boolean",
-    serializationType: "boolean"
-  }
+    type: 'boolean',
+    serializationType: 'boolean',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/basic/Integer.js
@@ -10833,9 +11101,9 @@ var Int64 = {
     return 0;
   },
   jsonSchema: {
-    type: "integer",
-    serializationType: "int64"
-  }
+    type: 'integer',
+    serializationType: 'int64',
+  },
 };
 var Int32 = {
   serialize(value, builder) {
@@ -10848,9 +11116,9 @@ var Int32 = {
     return 0;
   },
   jsonSchema: {
-    type: "integer",
-    serializationType: "int32"
-  }
+    type: 'integer',
+    serializationType: 'int32',
+  },
 };
 var Int16 = {
   serialize(value, builder) {
@@ -10863,9 +11131,9 @@ var Int16 = {
     return 0;
   },
   jsonSchema: {
-    type: "integer",
-    serializationType: "int16"
-  }
+    type: 'integer',
+    serializationType: 'int16',
+  },
 };
 var Int8 = {
   serialize(value, builder) {
@@ -10878,9 +11146,9 @@ var Int8 = {
     return 0;
   },
   jsonSchema: {
-    type: "integer",
-    serializationType: "int8"
-  }
+    type: 'integer',
+    serializationType: 'int8',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/basic/String.js
@@ -10892,40 +11160,44 @@ var FlatString = {
     return reader.readUtf8String();
   },
   create() {
-    return "";
+    return '';
   },
   jsonSchema: {
-    type: "string",
-    serializationType: "utf8-string"
-  }
+    type: 'string',
+    serializationType: 'utf8-string',
+  },
 };
 var EcsString = FlatString;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/basic/Enum.js
 function validateMemberValuesAreNumbersAndInRangeInt32(enumValue) {
-  const MIN_VALUE2 = -(2 ** 31), MAX_VALUE2 = 2 ** 31 - 1;
-  let valueCount = 0, totalCount = 0;
+  const MIN_VALUE2 = -(2 ** 31),
+    MAX_VALUE2 = 2 ** 31 - 1;
+  let valueCount = 0,
+    totalCount = 0;
   for (const key in enumValue) {
-    if (typeof enumValue[key] === "number") {
+    if (typeof enumValue[key] === 'number') {
       if (enumValue[key] > MAX_VALUE2 || enumValue[key] < MIN_VALUE2) {
-        throw new Error(`Enum member values must be numbers within the range of ${MIN_VALUE2} to ${MAX_VALUE2}.`);
+        throw new Error(
+          `Enum member values must be numbers within the range of ${MIN_VALUE2} to ${MAX_VALUE2}.`
+        );
       }
       valueCount++;
     }
     totalCount++;
   }
   if (totalCount !== valueCount * 2) {
-    throw new Error("All enum member values must be of numeric type.");
+    throw new Error('All enum member values must be of numeric type.');
   }
 }
 function validateMemberValuesAreStrings(enumValue) {
   for (const key in enumValue) {
-    if (typeof enumValue[key] !== "string") {
-      throw new Error("All enum member values must be of string type.");
+    if (typeof enumValue[key] !== 'string') {
+      throw new Error('All enum member values must be of string type.');
     }
   }
 }
-var IntEnumReflectionType = "enum-int";
+var IntEnumReflectionType = 'enum-int';
 var IntEnum = (enumObject, defaultValue) => {
   validateMemberValuesAreNumbersAndInRangeInt32(enumObject);
   return {
@@ -10940,16 +11212,16 @@ var IntEnum = (enumObject, defaultValue) => {
     },
     jsonSchema: {
       // JSON-schema
-      type: "integer",
-      enum: Object.values(enumObject).filter((item) => Number.isInteger(item)),
+      type: 'integer',
+      enum: Object.values(enumObject).filter(item => Number.isInteger(item)),
       default: defaultValue,
       // @dcl/ecs Schema Spec
       serializationType: IntEnumReflectionType,
-      enumObject
-    }
+      enumObject,
+    },
   };
 };
-var StringEnumReflectionType = "enum-string";
+var StringEnumReflectionType = 'enum-string';
 var StringEnum = (enumObject, defaultValue) => {
   validateMemberValuesAreStrings(enumObject);
   return {
@@ -10964,13 +11236,13 @@ var StringEnum = (enumObject, defaultValue) => {
     },
     jsonSchema: {
       // JSON-schema
-      type: "string",
+      type: 'string',
       enum: Object.values(enumObject),
       default: defaultValue,
       // @dcl/ecs Schema Spec
       serializationType: StringEnumReflectionType,
-      enumObject
-    }
+      enumObject,
+    },
   };
 };
 
@@ -10986,9 +11258,9 @@ var Float32 = {
     return 0;
   },
   jsonSchema: {
-    type: "number",
-    serializationType: "float32"
-  }
+    type: 'number',
+    serializationType: 'float32',
+  },
 };
 var Float64 = {
   serialize(value, builder) {
@@ -11001,9 +11273,9 @@ var Float64 = {
     return 0;
   },
   jsonSchema: {
-    type: "number",
-    serializationType: "float64"
-  }
+    type: 'number',
+    serializationType: 'float64',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/custom/Color3.js
@@ -11017,21 +11289,21 @@ var Color3Schema = {
     return {
       r: reader.readFloat32(),
       g: reader.readFloat32(),
-      b: reader.readFloat32()
+      b: reader.readFloat32(),
     };
   },
   create() {
     return { r: 0, g: 0, b: 0 };
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {
-      r: { type: "number" },
-      g: { type: "number" },
-      b: { type: "number" }
+      r: { type: 'number' },
+      g: { type: 'number' },
+      b: { type: 'number' },
     },
-    serializationType: "color3"
-  }
+    serializationType: 'color3',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/custom/Color4.js
@@ -11047,22 +11319,22 @@ var Color4Schema = {
       r: reader.readFloat32(),
       g: reader.readFloat32(),
       b: reader.readFloat32(),
-      a: reader.readFloat32()
+      a: reader.readFloat32(),
     };
   },
   create() {
     return { r: 0, g: 0, b: 0, a: 0 };
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {
-      r: { type: "number" },
-      g: { type: "number" },
-      b: { type: "number" },
-      a: { type: "number" }
+      r: { type: 'number' },
+      g: { type: 'number' },
+      b: { type: 'number' },
+      a: { type: 'number' },
     },
-    serializationType: "color4"
-  }
+    serializationType: 'color4',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/custom/Entity.js
@@ -11077,9 +11349,9 @@ var EntitySchema = {
     return 0;
   },
   jsonSchema: {
-    type: "integer",
-    serializationType: "entity"
-  }
+    type: 'integer',
+    serializationType: 'entity',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/custom/Quaternion.js
@@ -11095,22 +11367,22 @@ var QuaternionSchema = {
       x: reader.readFloat32(),
       y: reader.readFloat32(),
       z: reader.readFloat32(),
-      w: reader.readFloat32()
+      w: reader.readFloat32(),
     };
   },
   create() {
     return { x: 0, y: 0, z: 0, w: 0 };
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {
-      x: { type: "number" },
-      y: { type: "number" },
-      z: { type: "number" },
-      w: { type: "number" }
+      x: { type: 'number' },
+      y: { type: 'number' },
+      z: { type: 'number' },
+      w: { type: 'number' },
     },
-    serializationType: "quaternion"
-  }
+    serializationType: 'quaternion',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/custom/Vector3.js
@@ -11124,22 +11396,22 @@ var Vector3Schema = {
     return {
       x: reader.readFloat32(),
       y: reader.readFloat32(),
-      z: reader.readFloat32()
+      z: reader.readFloat32(),
     };
   },
   create() {
     return { x: 0, y: 0, z: 0 };
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {
-      x: { type: "number" },
-      y: { type: "number" },
-      z: { type: "number" },
-      w: { type: "number" }
+      x: { type: 'number' },
+      y: { type: 'number' },
+      z: { type: 'number' },
+      w: { type: 'number' },
     },
-    serializationType: "vector3"
-  }
+    serializationType: 'vector3',
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/Map.js
@@ -11157,7 +11429,6 @@ var IMap = (spec, defaultValue) => {
     deserialize(reader) {
       const newValue = {};
       for (const key in spec) {
-        ;
         newValue[key] = spec[key].deserialize(reader);
       }
       return newValue;
@@ -11165,29 +11436,27 @@ var IMap = (spec, defaultValue) => {
     create() {
       const newValue = {};
       for (const key in spec) {
-        ;
         newValue[key] = spec[key].create();
       }
       return { ...newValue, ...defaultValue };
     },
-    extend: (base) => {
+    extend: base => {
       const newValue = {};
       for (const key in spec) {
-        ;
         newValue[key] = spec[key].create();
       }
       return { ...newValue, ...defaultValue, ...base };
     },
     jsonSchema: {
-      type: "object",
+      type: 'object',
       properties: specReflection,
-      serializationType: "map"
-    }
+      serializationType: 'map',
+    },
   };
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/Optional.js
-var IOptional = (spec) => {
+var IOptional = spec => {
   return {
     serialize(value, builder) {
       if (value) {
@@ -11208,14 +11477,14 @@ var IOptional = (spec) => {
     },
     jsonSchema: {
       type: spec.jsonSchema.type,
-      serializationType: "optional",
-      optionalJsonSchema: spec.jsonSchema
-    }
+      serializationType: 'optional',
+      optionalJsonSchema: spec.jsonSchema,
+    },
   };
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/OneOf.js
-var IOneOf = (specs) => {
+var IOneOf = specs => {
   const specKeys = Object.keys(specs);
   const keyToIndex = specKeys.reduce((dict, key, index) => {
     dict[key] = index;
@@ -11240,31 +11509,29 @@ var IOneOf = (specs) => {
       return {};
     },
     jsonSchema: {
-      type: "object",
+      type: 'object',
       properties: specReflection,
-      serializationType: "one-of"
-    }
+      serializationType: 'one-of',
+    },
   };
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/buildSchema/utils.js
 var isSchemaType = (value, types) => types.includes(value.serializationType);
-var isOneOfJsonSchema = (type) => isSchemaType(type, ["one-of"]);
+var isOneOfJsonSchema = type => isSchemaType(type, ['one-of']);
 var getUnknownSchema = () => ({
-  type: { type: "object", serializationType: "unknown" },
-  value: void 0
+  type: { type: 'object', serializationType: 'unknown' },
+  value: void 0,
 });
-var isCompoundType = (type) => isSchemaType(type, ["array", "map"]);
+var isCompoundType = type => isSchemaType(type, ['array', 'map']);
 var getTypeAndValue = (properties, value, key) => {
   const type = properties[key];
   const valueKey = value[key];
   if (isOneOfJsonSchema(type)) {
     const typedMapValue = valueKey;
-    if (!typedMapValue.$case)
-      return getUnknownSchema();
+    if (!typedMapValue.$case) return getUnknownSchema();
     const propType = type.properties[typedMapValue.$case];
-    if (isCompoundType(propType))
-      value[key] = { [typedMapValue.$case]: typedMapValue.value };
+    if (isCompoundType(propType)) value[key] = { [typedMapValue.$case]: typedMapValue.value };
     return { type: propType, value: typedMapValue.value };
   }
   return { type, value: valueKey };
@@ -11284,13 +11551,13 @@ var primitiveSchemas = {
   [QuaternionSchema.jsonSchema.serializationType]: QuaternionSchema,
   [Color3Schema.jsonSchema.serializationType]: Color3Schema,
   [Color4Schema.jsonSchema.serializationType]: Color4Schema,
-  [EntitySchema.jsonSchema.serializationType]: EntitySchema
+  [EntitySchema.jsonSchema.serializationType]: EntitySchema,
 };
 function jsonSchemaToSchema(jsonSchema) {
   if (primitiveSchemas[jsonSchema.serializationType]) {
     return primitiveSchemas[jsonSchema.serializationType];
   }
-  if (jsonSchema.serializationType === "map") {
+  if (jsonSchema.serializationType === 'map') {
     const mapJsonSchema = jsonSchema;
     const spec = {};
     for (const key in mapJsonSchema.properties) {
@@ -11298,23 +11565,23 @@ function jsonSchemaToSchema(jsonSchema) {
     }
     return IMap(spec);
   }
-  if (jsonSchema.serializationType === "optional") {
+  if (jsonSchema.serializationType === 'optional') {
     const withItemsJsonSchema = jsonSchema;
     return IOptional(jsonSchemaToSchema(withItemsJsonSchema.optionalJsonSchema));
   }
-  if (jsonSchema.serializationType === "array") {
+  if (jsonSchema.serializationType === 'array') {
     const withItemsJsonSchema = jsonSchema;
     return IArray(jsonSchemaToSchema(withItemsJsonSchema.items));
   }
-  if (jsonSchema.serializationType === "enum-int") {
+  if (jsonSchema.serializationType === 'enum-int') {
     const enumJsonSchema = jsonSchema;
     return IntEnum(enumJsonSchema.enumObject, enumJsonSchema.default);
   }
-  if (jsonSchema.serializationType === "enum-string") {
+  if (jsonSchema.serializationType === 'enum-string') {
     const enumJsonSchema = jsonSchema;
     return StringEnum(enumJsonSchema.enumObject, enumJsonSchema.default);
   }
-  if (jsonSchema.serializationType === "one-of") {
+  if (jsonSchema.serializationType === 'one-of') {
     const oneOfJsonSchema = jsonSchema;
     const spec = {};
     for (const key in oneOfJsonSchema.properties) {
@@ -11325,13 +11592,12 @@ function jsonSchemaToSchema(jsonSchema) {
   throw new Error(`${jsonSchema.serializationType} is not supported as reverse schema generation.`);
 }
 function mutateValues(jsonSchema, value, mutateFn) {
-  if (jsonSchema.serializationType === "map") {
+  if (jsonSchema.serializationType === 'map') {
     const { properties } = jsonSchema;
     const typedValue = value;
     for (const key in properties) {
       const { type, value: mapValue } = getTypeAndValue(properties, typedValue, key);
-      if (type.serializationType === "unknown")
-        continue;
+      if (type.serializationType === 'unknown') continue;
       if (isCompoundType(type)) {
         mutateValues(type, mapValue, mutateFn);
       } else {
@@ -11341,11 +11607,11 @@ function mutateValues(jsonSchema, value, mutateFn) {
         }
       }
     }
-  } else if (jsonSchema.serializationType === "array") {
+  } else if (jsonSchema.serializationType === 'array') {
     const { items } = jsonSchema;
     const arrayValue = value;
     for (let i = 0, n = arrayValue.length; i < n; i++) {
-      const { type, value: value2 } = getTypeAndValue({ items }, { items: arrayValue[i] }, "items");
+      const { type, value: value2 } = getTypeAndValue({ items }, { items: arrayValue[i] }, 'items');
       if (isCompoundType(type)) {
         mutateValues(type, value2, mutateFn);
       } else {
@@ -11360,7 +11626,7 @@ function mutateValues(jsonSchema, value, mutateFn) {
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/schemas/index.js
 var Schemas;
-(function(Schemas2) {
+(function (Schemas2) {
   Schemas2.Boolean = Bool;
   Schemas2.String = EcsString;
   Schemas2.Float = Float32;
@@ -11387,8 +11653,8 @@ var Schemas;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/manual/Name.js
 function defineNameComponent(engine2) {
-  const Name3 = engine2.defineComponent("core-schema::Name", {
-    value: Schemas.String
+  const Name3 = engine2.defineComponent('core-schema::Name', {
+    value: Schemas.String,
   });
   return Name3;
 }
@@ -11396,9 +11662,9 @@ var Name_default = defineNameComponent;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/manual/NetworkEntity.js
 function defineNetworkEntityComponent(engine2) {
-  const EntityNetwork = engine2.defineComponent("core-schema::Network-Entity", {
+  const EntityNetwork = engine2.defineComponent('core-schema::Network-Entity', {
     networkId: Schemas.Int64,
-    entityId: Schemas.Entity
+    entityId: Schemas.Entity,
   });
   return EntityNetwork;
 }
@@ -11406,9 +11672,9 @@ var NetworkEntity_default = defineNetworkEntityComponent;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/manual/NetworkParent.js
 function defineNetworkParentComponent(engine2) {
-  const EntityNetwork = engine2.defineComponent("core-schema::Network-Parent", {
+  const EntityNetwork = engine2.defineComponent('core-schema::Network-Parent', {
     networkId: Schemas.Int64,
-    entityId: Schemas.Entity
+    entityId: Schemas.Entity,
   });
   return EntityNetwork;
 }
@@ -11437,20 +11703,20 @@ var TransformSchema = {
       position: {
         x: reader.getFloat32(ptr),
         y: reader.getFloat32(ptr + 4),
-        z: reader.getFloat32(ptr + 8)
+        z: reader.getFloat32(ptr + 8),
       },
       rotation: {
         x: reader.getFloat32(ptr + 12),
         y: reader.getFloat32(ptr + 16),
         z: reader.getFloat32(ptr + 20),
-        w: reader.getFloat32(ptr + 24)
+        w: reader.getFloat32(ptr + 24),
       },
       scale: {
         x: reader.getFloat32(ptr + 28),
         y: reader.getFloat32(ptr + 32),
-        z: reader.getFloat32(ptr + 36)
+        z: reader.getFloat32(ptr + 36),
       },
-      parent: reader.getUint32(ptr + 40)
+      parent: reader.getUint32(ptr + 40),
     };
   },
   create() {
@@ -11458,7 +11724,7 @@ var TransformSchema = {
       position: { x: 0, y: 0, z: 0 },
       scale: { x: 1, y: 1, z: 1 },
       rotation: { x: 0, y: 0, z: 0, w: 1 },
-      parent: 0
+      parent: 0,
     };
   },
   extend(value) {
@@ -11467,44 +11733,44 @@ var TransformSchema = {
       scale: { x: 1, y: 1, z: 1 },
       rotation: { x: 0, y: 0, z: 0, w: 1 },
       parent: 0,
-      ...value
+      ...value,
     };
   },
   jsonSchema: {
-    type: "object",
+    type: 'object',
     properties: {
       position: {
-        type: "object",
+        type: 'object',
         properties: {
-          x: { type: "number" },
-          y: { type: "number" },
-          z: { type: "number" }
-        }
+          x: { type: 'number' },
+          y: { type: 'number' },
+          z: { type: 'number' },
+        },
       },
       scale: {
-        type: "object",
+        type: 'object',
         properties: {
-          x: { type: "number" },
-          y: { type: "number" },
-          z: { type: "number" }
-        }
+          x: { type: 'number' },
+          y: { type: 'number' },
+          z: { type: 'number' },
+        },
       },
       rotation: {
-        type: "object",
+        type: 'object',
         properties: {
-          x: { type: "number" },
-          y: { type: "number" },
-          z: { type: "number" },
-          w: { type: "number" }
-        }
+          x: { type: 'number' },
+          y: { type: 'number' },
+          z: { type: 'number' },
+          w: { type: 'number' },
+        },
       },
-      parent: { type: "integer" }
+      parent: { type: 'integer' },
     },
-    serializationType: "transform"
-  }
+    serializationType: 'transform',
+  },
 };
 function defineTransformComponent(engine2) {
-  const transformDef = engine2.defineComponentFromSchema("core::Transform", TransformSchema);
+  const transformDef = engine2.defineComponentFromSchema('core::Transform', TransformSchema);
   return {
     ...transformDef,
     create(entity, val) {
@@ -11512,27 +11778,27 @@ function defineTransformComponent(engine2) {
     },
     createOrReplace(entity, val) {
       return transformDef.createOrReplace(entity, TransformSchema.extend(val));
-    }
+    },
   };
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/common/media_state.gen.js
 var MediaState;
-(function(MediaState2) {
-  MediaState2[MediaState2["MS_NONE"] = 0] = "MS_NONE";
-  MediaState2[MediaState2["MS_ERROR"] = 1] = "MS_ERROR";
-  MediaState2[MediaState2["MS_LOADING"] = 2] = "MS_LOADING";
-  MediaState2[MediaState2["MS_READY"] = 3] = "MS_READY";
-  MediaState2[MediaState2["MS_PLAYING"] = 4] = "MS_PLAYING";
-  MediaState2[MediaState2["MS_BUFFERING"] = 5] = "MS_BUFFERING";
-  MediaState2[MediaState2["MS_SEEKING"] = 6] = "MS_SEEKING";
-  MediaState2[MediaState2["MS_PAUSED"] = 7] = "MS_PAUSED";
+(function (MediaState2) {
+  MediaState2[(MediaState2['MS_NONE'] = 0)] = 'MS_NONE';
+  MediaState2[(MediaState2['MS_ERROR'] = 1)] = 'MS_ERROR';
+  MediaState2[(MediaState2['MS_LOADING'] = 2)] = 'MS_LOADING';
+  MediaState2[(MediaState2['MS_READY'] = 3)] = 'MS_READY';
+  MediaState2[(MediaState2['MS_PLAYING'] = 4)] = 'MS_PLAYING';
+  MediaState2[(MediaState2['MS_BUFFERING'] = 5)] = 'MS_BUFFERING';
+  MediaState2[(MediaState2['MS_SEEKING'] = 6)] = 'MS_SEEKING';
+  MediaState2[(MediaState2['MS_PAUSED'] = 7)] = 'MS_PAUSED';
 })(MediaState || (MediaState = {}));
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/manual/Tags.js
 function defineTagsComponent(engine2) {
-  const Tags3 = engine2.defineComponent("core-schema::Tags", {
-    tags: Schemas.Array(Schemas.String)
+  const Tags3 = engine2.defineComponent('core-schema::Tags', {
+    tags: Schemas.Array(Schemas.String),
   });
   return {
     ...Tags3,
@@ -11547,85 +11813,83 @@ function defineTagsComponent(engine2) {
     },
     remove(entity, tagName) {
       const tagsComponent = Tags3.getMutableOrNull(entity);
-      if (!tagsComponent || !tagsComponent.tags)
-        return false;
-      const newTags = tagsComponent.tags.filter((tag) => tag !== tagName);
-      if (newTags.length === tagsComponent.tags.length)
-        return false;
+      if (!tagsComponent || !tagsComponent.tags) return false;
+      const newTags = tagsComponent.tags.filter(tag => tag !== tagName);
+      if (newTags.length === tagsComponent.tags.length) return false;
       tagsComponent.tags = newTags;
       return true;
-    }
+    },
   };
 }
 var Tags_default = defineTagsComponent;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/index.js
-var Transform = (engine2) => defineTransformComponent(engine2);
-var Material2 = (engine2) => defineMaterialComponent(engine2);
-var AudioSource2 = (engine2) => defineAudioSourceComponent(engine2);
-var MeshRenderer2 = (engine2) => defineMeshRendererComponent(engine2);
-var MeshCollider2 = (engine2) => defineMeshColliderComponent(engine2);
-var Tween2 = (engine2) => defineTweenComponent(engine2);
-var Name = (engine2) => Name_default(engine2);
-var Tags = (engine2) => Tags_default(engine2);
-var NetworkEntity = (engine2) => NetworkEntity_default(engine2);
-var NetworkParent = (engine2) => NetworkParent_default(engine2);
+var Transform = engine2 => defineTransformComponent(engine2);
+var Material2 = engine2 => defineMaterialComponent(engine2);
+var AudioSource2 = engine2 => defineAudioSourceComponent(engine2);
+var MeshRenderer2 = engine2 => defineMeshRendererComponent(engine2);
+var MeshCollider2 = engine2 => defineMeshColliderComponent(engine2);
+var Tween2 = engine2 => defineTweenComponent(engine2);
+var Name = engine2 => Name_default(engine2);
+var Tags = engine2 => Tags_default(engine2);
+var NetworkEntity = engine2 => NetworkEntity_default(engine2);
+var NetworkParent = engine2 => NetworkParent_default(engine2);
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/component-names.gen.js
 var coreComponentMappings = {
-  "core::Transform": 1,
-  "core::Animator": 1042,
-  "core::AudioEvent": 1105,
-  "core::AudioSource": 1020,
-  "core::AudioStream": 1021,
-  "core::AvatarAttach": 1073,
-  "core::AvatarBase": 1087,
-  "core::AvatarEmoteCommand": 1088,
-  "core::AvatarEquippedData": 1091,
-  "core::AvatarModifierArea": 1070,
-  "core::AvatarShape": 1080,
-  "core::Billboard": 1090,
-  "core::CameraMode": 1072,
-  "core::CameraModeArea": 1071,
-  "core::EngineInfo": 1048,
-  "core::GltfContainer": 1041,
-  "core::GltfContainerLoadingState": 1049,
-  "core::GltfNodeModifiers": 1099,
-  "core::InputModifier": 1078,
-  "core::LightSource": 1079,
-  "core::MainCamera": 1075,
-  "core::MapPin": 1097,
-  "core::Material": 1017,
-  "core::MeshCollider": 1019,
-  "core::MeshRenderer": 1018,
-  "core::NftShape": 1040,
-  "core::PlayerIdentityData": 1089,
-  "core::PointerEvents": 1062,
-  "core::PointerEventsResult": 1063,
-  "core::PointerLock": 1074,
-  "core::PrimaryPointerInfo": 1209,
-  "core::Raycast": 1067,
-  "core::RaycastResult": 1068,
-  "core::RealmInfo": 1106,
-  "core::SkyboxTime": 1210,
-  "core::TextShape": 1030,
-  "core::TriggerArea": 1060,
-  "core::TriggerAreaResult": 1061,
-  "core::Tween": 1102,
-  "core::TweenSequence": 1104,
-  "core::TweenState": 1103,
-  "core::UiBackground": 1053,
-  "core::UiCanvasInformation": 1054,
-  "core::UiDropdown": 1094,
-  "core::UiDropdownResult": 1096,
-  "core::UiInput": 1093,
-  "core::UiInputResult": 1095,
-  "core::UiText": 1052,
-  "core::UiTransform": 1050,
-  "core::VideoEvent": 1044,
-  "core::VideoPlayer": 1043,
-  "core::VirtualCamera": 1076,
-  "core::VisibilityComponent": 1081
+  'core::Transform': 1,
+  'core::Animator': 1042,
+  'core::AudioEvent': 1105,
+  'core::AudioSource': 1020,
+  'core::AudioStream': 1021,
+  'core::AvatarAttach': 1073,
+  'core::AvatarBase': 1087,
+  'core::AvatarEmoteCommand': 1088,
+  'core::AvatarEquippedData': 1091,
+  'core::AvatarModifierArea': 1070,
+  'core::AvatarShape': 1080,
+  'core::Billboard': 1090,
+  'core::CameraMode': 1072,
+  'core::CameraModeArea': 1071,
+  'core::EngineInfo': 1048,
+  'core::GltfContainer': 1041,
+  'core::GltfContainerLoadingState': 1049,
+  'core::GltfNodeModifiers': 1099,
+  'core::InputModifier': 1078,
+  'core::LightSource': 1079,
+  'core::MainCamera': 1075,
+  'core::MapPin': 1097,
+  'core::Material': 1017,
+  'core::MeshCollider': 1019,
+  'core::MeshRenderer': 1018,
+  'core::NftShape': 1040,
+  'core::PlayerIdentityData': 1089,
+  'core::PointerEvents': 1062,
+  'core::PointerEventsResult': 1063,
+  'core::PointerLock': 1074,
+  'core::PrimaryPointerInfo': 1209,
+  'core::Raycast': 1067,
+  'core::RaycastResult': 1068,
+  'core::RealmInfo': 1106,
+  'core::SkyboxTime': 1210,
+  'core::TextShape': 1030,
+  'core::TriggerArea': 1060,
+  'core::TriggerAreaResult': 1061,
+  'core::Tween': 1102,
+  'core::TweenSequence': 1104,
+  'core::TweenState': 1103,
+  'core::UiBackground': 1053,
+  'core::UiCanvasInformation': 1054,
+  'core::UiDropdown': 1094,
+  'core::UiDropdownResult': 1096,
+  'core::UiInput': 1093,
+  'core::UiInputResult': 1095,
+  'core::UiText': 1052,
+  'core::UiTransform': 1050,
+  'core::VideoEvent': 1044,
+  'core::VideoPlayer': 1043,
+  'core::VirtualCamera': 1076,
+  'core::VisibilityComponent': 1081,
 };
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/component-number.js
@@ -11633,267 +11897,43 @@ var utf8 = __toESM(require_utf8());
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/runtime/crc.js
 var CRC_TABLE = new Int32Array([
-  0,
-  1996959894,
-  3993919788,
-  2567524794,
-  124634137,
-  1886057615,
-  3915621685,
-  2657392035,
-  249268274,
-  2044508324,
-  3772115230,
-  2547177864,
-  162941995,
-  2125561021,
-  3887607047,
-  2428444049,
-  498536548,
-  1789927666,
-  4089016648,
-  2227061214,
-  450548861,
-  1843258603,
-  4107580753,
-  2211677639,
-  325883990,
-  1684777152,
-  4251122042,
-  2321926636,
-  335633487,
-  1661365465,
-  4195302755,
-  2366115317,
-  997073096,
-  1281953886,
-  3579855332,
-  2724688242,
-  1006888145,
-  1258607687,
-  3524101629,
-  2768942443,
-  901097722,
-  1119000684,
-  3686517206,
-  2898065728,
-  853044451,
-  1172266101,
-  3705015759,
-  2882616665,
-  651767980,
-  1373503546,
-  3369554304,
-  3218104598,
-  565507253,
-  1454621731,
-  3485111705,
-  3099436303,
-  671266974,
-  1594198024,
-  3322730930,
-  2970347812,
-  795835527,
-  1483230225,
-  3244367275,
-  3060149565,
-  1994146192,
-  31158534,
-  2563907772,
-  4023717930,
-  1907459465,
-  112637215,
-  2680153253,
-  3904427059,
-  2013776290,
-  251722036,
-  2517215374,
-  3775830040,
-  2137656763,
-  141376813,
-  2439277719,
-  3865271297,
-  1802195444,
-  476864866,
-  2238001368,
-  4066508878,
-  1812370925,
-  453092731,
-  2181625025,
-  4111451223,
-  1706088902,
-  314042704,
-  2344532202,
-  4240017532,
-  1658658271,
-  366619977,
-  2362670323,
-  4224994405,
-  1303535960,
-  984961486,
-  2747007092,
-  3569037538,
-  1256170817,
-  1037604311,
-  2765210733,
-  3554079995,
-  1131014506,
-  879679996,
-  2909243462,
-  3663771856,
-  1141124467,
-  855842277,
-  2852801631,
-  3708648649,
-  1342533948,
-  654459306,
-  3188396048,
-  3373015174,
-  1466479909,
-  544179635,
-  3110523913,
-  3462522015,
-  1591671054,
-  702138776,
-  2966460450,
-  3352799412,
-  1504918807,
-  783551873,
-  3082640443,
-  3233442989,
-  3988292384,
-  2596254646,
-  62317068,
-  1957810842,
-  3939845945,
-  2647816111,
-  81470997,
-  1943803523,
-  3814918930,
-  2489596804,
-  225274430,
-  2053790376,
-  3826175755,
-  2466906013,
-  167816743,
-  2097651377,
-  4027552580,
-  2265490386,
-  503444072,
-  1762050814,
-  4150417245,
-  2154129355,
-  426522225,
-  1852507879,
-  4275313526,
-  2312317920,
-  282753626,
-  1742555852,
-  4189708143,
-  2394877945,
-  397917763,
-  1622183637,
-  3604390888,
-  2714866558,
-  953729732,
-  1340076626,
-  3518719985,
-  2797360999,
-  1068828381,
-  1219638859,
-  3624741850,
-  2936675148,
-  906185462,
-  1090812512,
-  3747672003,
-  2825379669,
-  829329135,
-  1181335161,
-  3412177804,
-  3160834842,
-  628085408,
-  1382605366,
-  3423369109,
-  3138078467,
-  570562233,
-  1426400815,
-  3317316542,
-  2998733608,
-  733239954,
-  1555261956,
-  3268935591,
-  3050360625,
-  752459403,
-  1541320221,
-  2607071920,
-  3965973030,
-  1969922972,
-  40735498,
-  2617837225,
-  3943577151,
-  1913087877,
-  83908371,
-  2512341634,
-  3803740692,
-  2075208622,
-  213261112,
-  2463272603,
-  3855990285,
-  2094854071,
-  198958881,
-  2262029012,
-  4057260610,
-  1759359992,
-  534414190,
-  2176718541,
-  4139329115,
-  1873836001,
-  414664567,
-  2282248934,
-  4279200368,
-  1711684554,
-  285281116,
-  2405801727,
-  4167216745,
-  1634467795,
-  376229701,
-  2685067896,
-  3608007406,
-  1308918612,
-  956543938,
-  2808555105,
-  3495958263,
-  1231636301,
-  1047427035,
-  2932959818,
-  3654703836,
-  1088359270,
-  936918e3,
-  2847714899,
-  3736837829,
-  1202900863,
-  817233897,
-  3183342108,
-  3401237130,
-  1404277552,
-  615818150,
-  3134207493,
-  3453421203,
-  1423857449,
-  601450431,
-  3009837614,
-  3294710456,
-  1567103746,
-  711928724,
-  3020668471,
-  3272380065,
-  1510334235,
-  755167117
+  0, 1996959894, 3993919788, 2567524794, 124634137, 1886057615, 3915621685, 2657392035, 249268274,
+  2044508324, 3772115230, 2547177864, 162941995, 2125561021, 3887607047, 2428444049, 498536548,
+  1789927666, 4089016648, 2227061214, 450548861, 1843258603, 4107580753, 2211677639, 325883990,
+  1684777152, 4251122042, 2321926636, 335633487, 1661365465, 4195302755, 2366115317, 997073096,
+  1281953886, 3579855332, 2724688242, 1006888145, 1258607687, 3524101629, 2768942443, 901097722,
+  1119000684, 3686517206, 2898065728, 853044451, 1172266101, 3705015759, 2882616665, 651767980,
+  1373503546, 3369554304, 3218104598, 565507253, 1454621731, 3485111705, 3099436303, 671266974,
+  1594198024, 3322730930, 2970347812, 795835527, 1483230225, 3244367275, 3060149565, 1994146192,
+  31158534, 2563907772, 4023717930, 1907459465, 112637215, 2680153253, 3904427059, 2013776290,
+  251722036, 2517215374, 3775830040, 2137656763, 141376813, 2439277719, 3865271297, 1802195444,
+  476864866, 2238001368, 4066508878, 1812370925, 453092731, 2181625025, 4111451223, 1706088902,
+  314042704, 2344532202, 4240017532, 1658658271, 366619977, 2362670323, 4224994405, 1303535960,
+  984961486, 2747007092, 3569037538, 1256170817, 1037604311, 2765210733, 3554079995, 1131014506,
+  879679996, 2909243462, 3663771856, 1141124467, 855842277, 2852801631, 3708648649, 1342533948,
+  654459306, 3188396048, 3373015174, 1466479909, 544179635, 3110523913, 3462522015, 1591671054,
+  702138776, 2966460450, 3352799412, 1504918807, 783551873, 3082640443, 3233442989, 3988292384,
+  2596254646, 62317068, 1957810842, 3939845945, 2647816111, 81470997, 1943803523, 3814918930,
+  2489596804, 225274430, 2053790376, 3826175755, 2466906013, 167816743, 2097651377, 4027552580,
+  2265490386, 503444072, 1762050814, 4150417245, 2154129355, 426522225, 1852507879, 4275313526,
+  2312317920, 282753626, 1742555852, 4189708143, 2394877945, 397917763, 1622183637, 3604390888,
+  2714866558, 953729732, 1340076626, 3518719985, 2797360999, 1068828381, 1219638859, 3624741850,
+  2936675148, 906185462, 1090812512, 3747672003, 2825379669, 829329135, 1181335161, 3412177804,
+  3160834842, 628085408, 1382605366, 3423369109, 3138078467, 570562233, 1426400815, 3317316542,
+  2998733608, 733239954, 1555261956, 3268935591, 3050360625, 752459403, 1541320221, 2607071920,
+  3965973030, 1969922972, 40735498, 2617837225, 3943577151, 1913087877, 83908371, 2512341634,
+  3803740692, 2075208622, 213261112, 2463272603, 3855990285, 2094854071, 198958881, 2262029012,
+  4057260610, 1759359992, 534414190, 2176718541, 4139329115, 1873836001, 414664567, 2282248934,
+  4279200368, 1711684554, 285281116, 2405801727, 4167216745, 1634467795, 376229701, 2685067896,
+  3608007406, 1308918612, 956543938, 2808555105, 3495958263, 1231636301, 1047427035, 2932959818,
+  3654703836, 1088359270, 936918e3, 2847714899, 3736837829, 1202900863, 817233897, 3183342108,
+  3401237130, 1404277552, 615818150, 3134207493, 3453421203, 1423857449, 601450431, 3009837614,
+  3294710456, 1567103746, 711928724, 3020668471, 3272380065, 1510334235, 755167117,
 ]);
 function _crc32(buf, previous) {
   let crc = ~~previous ^ -1;
   for (let n = 0; n < buf.length; n++) {
-    crc = CRC_TABLE[(crc ^ buf[n]) & 255] ^ crc >>> 8;
+    crc = CRC_TABLE[(crc ^ buf[n]) & 255] ^ (crc >>> 8);
   }
   return crc ^ -1;
 }
@@ -11904,18 +11944,17 @@ function unsignedCRC32(data, prev = 0) {
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/component-number.js
 var MAX_STATIC_COMPONENT = 1 << 11;
 function componentNumberFromName(componentName) {
-  if (coreComponentMappings[componentName])
-    return coreComponentMappings[componentName];
+  if (coreComponentMappings[componentName]) return coreComponentMappings[componentName];
   const bytes = new Uint8Array(128);
   utf8.write(componentName, bytes, 0);
-  return (unsignedCRC32(bytes) + MAX_STATIC_COMPONENT & 4294967295) >>> 0;
+  return ((unsignedCRC32(bytes) + MAX_STATIC_COMPONENT) & 4294967295) >>> 0;
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/runtime/invariant.js
 var __DEV__ = true;
 function checkNotThenable(t, error) {
   if (__DEV__) {
-    if (t && typeof t === "object" && typeof t.then === "function") {
+    if (t && typeof t === 'object' && typeof t.then === 'function') {
       throw new Error(error);
     }
   }
@@ -11962,7 +12001,7 @@ function createVersionGSet() {
      */
     getMap() {
       return lastVersion;
-    }
+    },
   };
 }
 
@@ -11973,22 +12012,22 @@ var AMOUNT_VERSION_AVAILABLE = MAX_U16 + 1;
 var MAX_ENTITY_NUMBER = MAX_U16;
 var RESERVED_STATIC_ENTITIES = 512;
 var EntityUtils;
-(function(EntityUtils2) {
+(function (EntityUtils2) {
   function fromEntityId(entityId) {
-    return [(entityId & MAX_U16) >>> 0, ((entityId & MASK_UPPER_16_ON_32) >> 16 & MAX_U16) >>> 0];
+    return [(entityId & MAX_U16) >>> 0, (((entityId & MASK_UPPER_16_ON_32) >> 16) & MAX_U16) >>> 0];
   }
   EntityUtils2.fromEntityId = fromEntityId;
   function toEntityId(entityNumber, entityVersion) {
-    return (entityNumber & MAX_U16 | (entityVersion & MAX_U16) << 16) >>> 0;
+    return ((entityNumber & MAX_U16) | ((entityVersion & MAX_U16) << 16)) >>> 0;
   }
   EntityUtils2.toEntityId = toEntityId;
 })(EntityUtils || (EntityUtils = {}));
 var EntityState;
-(function(EntityState2) {
-  EntityState2[EntityState2["Unknown"] = 0] = "Unknown";
-  EntityState2[EntityState2["UsedEntity"] = 1] = "UsedEntity";
-  EntityState2[EntityState2["Removed"] = 2] = "Removed";
-  EntityState2[EntityState2["Reserved"] = 3] = "Reserved";
+(function (EntityState2) {
+  EntityState2[(EntityState2['Unknown'] = 0)] = 'Unknown';
+  EntityState2[(EntityState2['UsedEntity'] = 1)] = 'UsedEntity';
+  EntityState2[(EntityState2['Removed'] = 2)] = 'Removed';
+  EntityState2[(EntityState2['Reserved'] = 3)] = 'Reserved';
 })(EntityState || (EntityState = {}));
 function createEntityContainer(opts) {
   const reservedStaticEntities = opts?.reservedStaticEntities ?? RESERVED_STATIC_ENTITIES;
@@ -12001,7 +12040,9 @@ function createEntityContainer(opts) {
       throw new Error(`It fails trying to generate an entity out of range ${MAX_ENTITY_NUMBER}.`);
     }
     const entityNumber = entityCounter++;
-    const entityVersion = removedEntities.getMap().has(entityNumber) ? removedEntities.getMap().get(entityNumber) + 1 : 0;
+    const entityVersion = removedEntities.getMap().has(entityNumber)
+      ? removedEntities.getMap().get(entityNumber) + 1
+      : 0;
     const entity = EntityUtils.toEntityId(entityNumber, entityVersion);
     if (usedEntities.has(entity)) {
       return generateNewEntity();
@@ -12026,8 +12067,7 @@ function createEntityContainer(opts) {
     return generateNewEntity();
   }
   function removeEntity(entity) {
-    if (entity < reservedStaticEntities)
-      return false;
+    if (entity < reservedStaticEntities) return false;
     if (usedEntities.has(entity)) {
       usedEntities.delete(entity);
       toRemoveEntities.push(entity);
@@ -12057,8 +12097,7 @@ function createEntityContainer(opts) {
   }
   function updateUsedEntity(entity) {
     const [n, v] = EntityUtils.fromEntityId(entity);
-    if (removedEntities.has(n, v))
-      return false;
+    if (removedEntities.has(n, v)) return false;
     if (v > 0) {
       for (let i = 0; i <= v - 1; i++) {
         usedEntities.delete(EntityUtils.toEntityId(n, i));
@@ -12091,18 +12130,17 @@ function createEntityContainer(opts) {
     getEntityState,
     releaseRemovedEntities,
     updateRemovedEntity,
-    updateUsedEntity
+    updateUsedEntity,
   };
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/ByteBuffer/index.js
 var utf82 = __toESM(require_utf8());
-var __classPrivateFieldGet = function(receiver, state, kind, f) {
-  if (kind === "a" && !f)
-    throw new TypeError("Private accessor was defined without a getter");
-  if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
-    throw new TypeError("Cannot read private member from an object whose class did not declare it");
-  return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+var __classPrivateFieldGet = function (receiver, state, kind, f) {
+  if (kind === 'a' && !f) throw new TypeError('Private accessor was defined without a getter');
+  if (typeof state === 'function' ? receiver !== state || !f : !state.has(receiver))
+    throw new TypeError('Cannot read private member from an object whose class did not declare it');
+  return kind === 'm' ? f : kind === 'a' ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
 var _ReadWriteByteBuffer_instances;
 var _ReadWriteByteBuffer_woAdd;
@@ -12142,51 +12180,182 @@ var ReadWriteByteBuffer = class {
     return this.woffset;
   }
   incrementReadOffset(amount) {
-    return __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, amount);
+    return __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_roAdd
+    ).call(this, amount);
   }
   remainingBytes() {
     return this.woffset - this.roffset;
   }
   readFloat32() {
-    return this.view.getFloat32(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 4), true);
+    return this.view.getFloat32(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 4),
+      true
+    );
   }
   readFloat64() {
-    return this.view.getFloat64(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 8), true);
+    return this.view.getFloat64(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 8),
+      true
+    );
   }
   readInt8() {
-    return this.view.getInt8(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 1));
+    return this.view.getInt8(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 1)
+    );
   }
   readInt16() {
-    return this.view.getInt16(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 2), true);
+    return this.view.getInt16(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 2),
+      true
+    );
   }
   readInt32() {
-    return this.view.getInt32(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 4), true);
+    return this.view.getInt32(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 4),
+      true
+    );
   }
   readInt64() {
-    return this.view.getBigInt64(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 8), true);
+    return this.view.getBigInt64(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 8),
+      true
+    );
   }
   readUint8() {
-    return this.view.getUint8(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 1));
+    return this.view.getUint8(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 1)
+    );
   }
   readUint16() {
-    return this.view.getUint16(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 2), true);
+    return this.view.getUint16(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 2),
+      true
+    );
   }
   readUint32() {
-    return this.view.getUint32(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 4), true);
+    return this.view.getUint32(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 4),
+      true
+    );
   }
   readUint64() {
-    return this.view.getBigUint64(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 8), true);
+    return this.view.getBigUint64(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 8),
+      true
+    );
   }
   readBuffer() {
-    const length2 = this.view.getUint32(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 4), true);
-    return this._buffer.subarray(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, length2), __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 0));
+    const length2 = this.view.getUint32(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 4),
+      true
+    );
+    return this._buffer.subarray(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, length2),
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 0)
+    );
   }
   readUtf8String() {
-    const length2 = this.view.getUint32(__classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 4), true);
-    return utf82.read(this._buffer, __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, length2), __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_roAdd).call(this, 0));
+    const length2 = this.view.getUint32(
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 4),
+      true
+    );
+    return utf82.read(
+      this._buffer,
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, length2),
+      __classPrivateFieldGet(
+        this,
+        _ReadWriteByteBuffer_instances,
+        'm',
+        _ReadWriteByteBuffer_roAdd
+      ).call(this, 0)
+    );
   }
   incrementWriteOffset(amount) {
-    return __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, amount);
+    return __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, amount);
   }
   toBinary() {
     return this._buffer.subarray(0, this.woffset);
@@ -12198,7 +12367,12 @@ var ReadWriteByteBuffer = class {
     if (writeLength) {
       this.writeUint32(value.byteLength);
     }
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, value.byteLength);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, value.byteLength);
     this._buffer.set(value, o);
   }
   writeUtf8String(value, writeLength = true) {
@@ -12206,47 +12380,102 @@ var ReadWriteByteBuffer = class {
     if (writeLength) {
       this.writeUint32(byteLength);
     }
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, byteLength);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, byteLength);
     utf82.write(value, this._buffer, o);
   }
   writeFloat32(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 4);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 4);
     this.view.setFloat32(o, value, true);
   }
   writeFloat64(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 8);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 8);
     this.view.setFloat64(o, value, true);
   }
   writeInt8(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 1);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 1);
     this.view.setInt8(o, value);
   }
   writeInt16(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 2);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 2);
     this.view.setInt16(o, value, true);
   }
   writeInt32(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 4);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 4);
     this.view.setInt32(o, value, true);
   }
   writeInt64(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 8);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 8);
     this.view.setBigInt64(o, value, true);
   }
   writeUint8(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 1);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 1);
     this.view.setUint8(o, value);
   }
   writeUint16(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 2);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 2);
     this.view.setUint16(o, value, true);
   }
   writeUint32(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 4);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 4);
     this.view.setUint32(o, value, true);
   }
   writeUint64(value) {
-    const o = __classPrivateFieldGet(this, _ReadWriteByteBuffer_instances, "m", _ReadWriteByteBuffer_woAdd).call(this, 8);
+    const o = __classPrivateFieldGet(
+      this,
+      _ReadWriteByteBuffer_instances,
+      'm',
+      _ReadWriteByteBuffer_woAdd
+    ).call(this, 8);
     this.view.setBigUint64(o, value, true);
   }
   // DataView Proxy
@@ -12311,53 +12540,60 @@ var ReadWriteByteBuffer = class {
     this.view.setBigUint64(offset, value, true);
   }
 };
-_ReadWriteByteBuffer_instances = /* @__PURE__ */ new WeakSet(), _ReadWriteByteBuffer_woAdd = function _ReadWriteByteBuffer_woAdd2(amount) {
-  if (this.woffset + amount > this._buffer.byteLength) {
-    const newsize = getNextSize(this._buffer.byteLength, this.woffset + amount);
-    const newBuffer = new Uint8Array(newsize);
-    newBuffer.set(this._buffer);
-    const oldOffset = this._buffer.byteOffset;
-    this._buffer = newBuffer;
-    this.view = new DataView(this._buffer.buffer, oldOffset);
-  }
-  this.woffset += amount;
-  return this.woffset - amount;
-}, _ReadWriteByteBuffer_roAdd = function _ReadWriteByteBuffer_roAdd2(amount) {
-  if (this.roffset + amount > this.woffset) {
-    throw new Error("Outside of the bounds of writen data.");
-  }
-  this.roffset += amount;
-  return this.roffset - amount;
-};
+((_ReadWriteByteBuffer_instances = /* @__PURE__ */ new WeakSet()),
+  (_ReadWriteByteBuffer_woAdd = function _ReadWriteByteBuffer_woAdd2(amount) {
+    if (this.woffset + amount > this._buffer.byteLength) {
+      const newsize = getNextSize(this._buffer.byteLength, this.woffset + amount);
+      const newBuffer = new Uint8Array(newsize);
+      newBuffer.set(this._buffer);
+      const oldOffset = this._buffer.byteOffset;
+      this._buffer = newBuffer;
+      this.view = new DataView(this._buffer.buffer, oldOffset);
+    }
+    this.woffset += amount;
+    return this.woffset - amount;
+  }),
+  (_ReadWriteByteBuffer_roAdd = function _ReadWriteByteBuffer_roAdd2(amount) {
+    if (this.roffset + amount > this.woffset) {
+      throw new Error('Outside of the bounds of writen data.');
+    }
+    this.roffset += amount;
+    return this.roffset - amount;
+  }));
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/types.js
 var CrdtMessageType;
-(function(CrdtMessageType2) {
-  CrdtMessageType2[CrdtMessageType2["RESERVED"] = 0] = "RESERVED";
-  CrdtMessageType2[CrdtMessageType2["PUT_COMPONENT"] = 1] = "PUT_COMPONENT";
-  CrdtMessageType2[CrdtMessageType2["DELETE_COMPONENT"] = 2] = "DELETE_COMPONENT";
-  CrdtMessageType2[CrdtMessageType2["DELETE_ENTITY"] = 3] = "DELETE_ENTITY";
-  CrdtMessageType2[CrdtMessageType2["APPEND_VALUE"] = 4] = "APPEND_VALUE";
-  CrdtMessageType2[CrdtMessageType2["PUT_COMPONENT_NETWORK"] = 5] = "PUT_COMPONENT_NETWORK";
-  CrdtMessageType2[CrdtMessageType2["DELETE_COMPONENT_NETWORK"] = 6] = "DELETE_COMPONENT_NETWORK";
-  CrdtMessageType2[CrdtMessageType2["DELETE_ENTITY_NETWORK"] = 7] = "DELETE_ENTITY_NETWORK";
-  CrdtMessageType2[CrdtMessageType2["MAX_MESSAGE_TYPE"] = 8] = "MAX_MESSAGE_TYPE";
+(function (CrdtMessageType2) {
+  CrdtMessageType2[(CrdtMessageType2['RESERVED'] = 0)] = 'RESERVED';
+  CrdtMessageType2[(CrdtMessageType2['PUT_COMPONENT'] = 1)] = 'PUT_COMPONENT';
+  CrdtMessageType2[(CrdtMessageType2['DELETE_COMPONENT'] = 2)] = 'DELETE_COMPONENT';
+  CrdtMessageType2[(CrdtMessageType2['DELETE_ENTITY'] = 3)] = 'DELETE_ENTITY';
+  CrdtMessageType2[(CrdtMessageType2['APPEND_VALUE'] = 4)] = 'APPEND_VALUE';
+  CrdtMessageType2[(CrdtMessageType2['PUT_COMPONENT_NETWORK'] = 5)] = 'PUT_COMPONENT_NETWORK';
+  CrdtMessageType2[(CrdtMessageType2['DELETE_COMPONENT_NETWORK'] = 6)] = 'DELETE_COMPONENT_NETWORK';
+  CrdtMessageType2[(CrdtMessageType2['DELETE_ENTITY_NETWORK'] = 7)] = 'DELETE_ENTITY_NETWORK';
+  CrdtMessageType2[(CrdtMessageType2['MAX_MESSAGE_TYPE'] = 8)] = 'MAX_MESSAGE_TYPE';
 })(CrdtMessageType || (CrdtMessageType = {}));
 var CRDT_MESSAGE_HEADER_LENGTH = 8;
 var ProcessMessageResultType;
-(function(ProcessMessageResultType2) {
-  ProcessMessageResultType2[ProcessMessageResultType2["StateUpdatedTimestamp"] = 1] = "StateUpdatedTimestamp";
-  ProcessMessageResultType2[ProcessMessageResultType2["StateOutdatedTimestamp"] = 2] = "StateOutdatedTimestamp";
-  ProcessMessageResultType2[ProcessMessageResultType2["NoChanges"] = 3] = "NoChanges";
-  ProcessMessageResultType2[ProcessMessageResultType2["StateOutdatedData"] = 4] = "StateOutdatedData";
-  ProcessMessageResultType2[ProcessMessageResultType2["StateUpdatedData"] = 5] = "StateUpdatedData";
-  ProcessMessageResultType2[ProcessMessageResultType2["EntityWasDeleted"] = 6] = "EntityWasDeleted";
-  ProcessMessageResultType2[ProcessMessageResultType2["EntityDeleted"] = 7] = "EntityDeleted";
+(function (ProcessMessageResultType2) {
+  ProcessMessageResultType2[(ProcessMessageResultType2['StateUpdatedTimestamp'] = 1)] =
+    'StateUpdatedTimestamp';
+  ProcessMessageResultType2[(ProcessMessageResultType2['StateOutdatedTimestamp'] = 2)] =
+    'StateOutdatedTimestamp';
+  ProcessMessageResultType2[(ProcessMessageResultType2['NoChanges'] = 3)] = 'NoChanges';
+  ProcessMessageResultType2[(ProcessMessageResultType2['StateOutdatedData'] = 4)] =
+    'StateOutdatedData';
+  ProcessMessageResultType2[(ProcessMessageResultType2['StateUpdatedData'] = 5)] =
+    'StateUpdatedData';
+  ProcessMessageResultType2[(ProcessMessageResultType2['EntityWasDeleted'] = 6)] =
+    'EntityWasDeleted';
+  ProcessMessageResultType2[(ProcessMessageResultType2['EntityDeleted'] = 7)] = 'EntityDeleted';
 })(ProcessMessageResultType || (ProcessMessageResultType = {}));
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/crdtMessageProtocol.js
 var CrdtMessageProtocol;
-(function(CrdtMessageProtocol2) {
+(function (CrdtMessageProtocol2) {
   function validate(buf) {
     const rem = buf.remainingBytes();
     if (rem < CRDT_MESSAGE_HEADER_LENGTH) {
@@ -12376,7 +12612,7 @@ var CrdtMessageProtocol;
     }
     return {
       length: buf.readUint32(),
-      type: buf.readUint32()
+      type: buf.readUint32(),
     };
   }
   CrdtMessageProtocol2.readHeader = readHeader;
@@ -12387,7 +12623,7 @@ var CrdtMessageProtocol;
     const currentOffset = buf.currentReadOffset();
     return {
       length: buf.getUint32(currentOffset),
-      type: buf.getUint32(currentOffset + 4)
+      type: buf.getUint32(currentOffset + 4),
     };
   }
   CrdtMessageProtocol2.getHeader = getHeader;
@@ -12404,7 +12640,7 @@ var CrdtMessageProtocol;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/deleteComponent.js
 var DeleteComponent;
-(function(DeleteComponent2) {
+(function (DeleteComponent2) {
   DeleteComponent2.MESSAGE_HEADER_LENGTH = 12;
   function write3(entity, componentId, timestamp, buf) {
     const messageLength = CRDT_MESSAGE_HEADER_LENGTH + DeleteComponent2.MESSAGE_HEADER_LENGTH;
@@ -12422,13 +12658,13 @@ var DeleteComponent;
       return null;
     }
     if (header.type !== CrdtMessageType.DELETE_COMPONENT) {
-      throw new Error("DeleteComponentOperation tried to read another message type.");
+      throw new Error('DeleteComponentOperation tried to read another message type.');
     }
     const msg = {
       ...header,
       entityId: buf.readUint32(),
       componentId: buf.readUint32(),
-      timestamp: buf.readUint32()
+      timestamp: buf.readUint32(),
     };
     return msg;
   }
@@ -12437,10 +12673,12 @@ var DeleteComponent;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/appendValue.js
 var AppendValueOperation;
-(function(AppendValueOperation2) {
+(function (AppendValueOperation2) {
   AppendValueOperation2.MESSAGE_HEADER_LENGTH = 16;
   function write3(entity, timestamp, componentId, data, buf) {
-    const startMessageOffset = buf.incrementWriteOffset(CRDT_MESSAGE_HEADER_LENGTH + AppendValueOperation2.MESSAGE_HEADER_LENGTH);
+    const startMessageOffset = buf.incrementWriteOffset(
+      CRDT_MESSAGE_HEADER_LENGTH + AppendValueOperation2.MESSAGE_HEADER_LENGTH
+    );
     buf.writeBuffer(data, false);
     const messageLength = buf.currentWriteOffset() - startMessageOffset;
     buf.setUint32(startMessageOffset, messageLength);
@@ -12448,7 +12686,8 @@ var AppendValueOperation;
     buf.setUint32(startMessageOffset + 8, entity);
     buf.setUint32(startMessageOffset + 12, componentId);
     buf.setUint32(startMessageOffset + 16, timestamp);
-    const newLocal = messageLength - AppendValueOperation2.MESSAGE_HEADER_LENGTH - CRDT_MESSAGE_HEADER_LENGTH;
+    const newLocal =
+      messageLength - AppendValueOperation2.MESSAGE_HEADER_LENGTH - CRDT_MESSAGE_HEADER_LENGTH;
     buf.setUint32(startMessageOffset + 20, newLocal);
   }
   AppendValueOperation2.write = write3;
@@ -12458,14 +12697,14 @@ var AppendValueOperation;
       return null;
     }
     if (header.type !== CrdtMessageType.APPEND_VALUE) {
-      throw new Error("AppendValueOperation tried to read another message type.");
+      throw new Error('AppendValueOperation tried to read another message type.');
     }
     return {
       ...header,
       entityId: buf.readUint32(),
       componentId: buf.readUint32(),
       timestamp: buf.readUint32(),
-      data: buf.readBuffer()
+      data: buf.readBuffer(),
     };
   }
   AppendValueOperation2.read = read2;
@@ -12473,7 +12712,7 @@ var AppendValueOperation;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/deleteEntity.js
 var DeleteEntity;
-(function(DeleteEntity2) {
+(function (DeleteEntity2) {
   DeleteEntity2.MESSAGE_HEADER_LENGTH = 4;
   function write3(entity, buf) {
     buf.writeUint32(CRDT_MESSAGE_HEADER_LENGTH + 4);
@@ -12487,11 +12726,11 @@ var DeleteEntity;
       return null;
     }
     if (header.type !== CrdtMessageType.DELETE_ENTITY) {
-      throw new Error("DeleteEntity tried to read another message type.");
+      throw new Error('DeleteEntity tried to read another message type.');
     }
     return {
       ...header,
-      entityId: buf.readUint32()
+      entityId: buf.readUint32(),
     };
   }
   DeleteEntity2.read = read2;
@@ -12499,10 +12738,12 @@ var DeleteEntity;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/putComponent.js
 var PutComponentOperation;
-(function(PutComponentOperation2) {
+(function (PutComponentOperation2) {
   PutComponentOperation2.MESSAGE_HEADER_LENGTH = 16;
   function write3(entity, timestamp, componentId, data, buf) {
-    const startMessageOffset = buf.incrementWriteOffset(CRDT_MESSAGE_HEADER_LENGTH + PutComponentOperation2.MESSAGE_HEADER_LENGTH);
+    const startMessageOffset = buf.incrementWriteOffset(
+      CRDT_MESSAGE_HEADER_LENGTH + PutComponentOperation2.MESSAGE_HEADER_LENGTH
+    );
     buf.writeBuffer(data, false);
     const messageLength = buf.currentWriteOffset() - startMessageOffset;
     buf.setUint32(startMessageOffset, messageLength);
@@ -12510,7 +12751,8 @@ var PutComponentOperation;
     buf.setUint32(startMessageOffset + 8, entity);
     buf.setUint32(startMessageOffset + 12, componentId);
     buf.setUint32(startMessageOffset + 16, timestamp);
-    const newLocal = messageLength - PutComponentOperation2.MESSAGE_HEADER_LENGTH - CRDT_MESSAGE_HEADER_LENGTH;
+    const newLocal =
+      messageLength - PutComponentOperation2.MESSAGE_HEADER_LENGTH - CRDT_MESSAGE_HEADER_LENGTH;
     buf.setUint32(startMessageOffset + 20, newLocal);
   }
   PutComponentOperation2.write = write3;
@@ -12520,14 +12762,14 @@ var PutComponentOperation;
       return null;
     }
     if (header.type !== CrdtMessageType.PUT_COMPONENT) {
-      throw new Error("PutComponentOperation tried to read another message type.");
+      throw new Error('PutComponentOperation tried to read another message type.');
     }
     return {
       ...header,
       entityId: buf.readUint32(),
       componentId: buf.readUint32(),
       timestamp: buf.readUint32(),
-      data: buf.readBuffer()
+      data: buf.readBuffer(),
     };
   }
   PutComponentOperation2.read = read2;
@@ -12535,10 +12777,12 @@ var PutComponentOperation;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/network/putComponentNetwork.js
 var PutNetworkComponentOperation;
-(function(PutNetworkComponentOperation2) {
+(function (PutNetworkComponentOperation2) {
   PutNetworkComponentOperation2.MESSAGE_HEADER_LENGTH = 20;
   function write3(entity, timestamp, componentId, networkId, data, buf) {
-    const startMessageOffset = buf.incrementWriteOffset(CRDT_MESSAGE_HEADER_LENGTH + PutNetworkComponentOperation2.MESSAGE_HEADER_LENGTH);
+    const startMessageOffset = buf.incrementWriteOffset(
+      CRDT_MESSAGE_HEADER_LENGTH + PutNetworkComponentOperation2.MESSAGE_HEADER_LENGTH
+    );
     buf.writeBuffer(data, false);
     const messageLength = buf.currentWriteOffset() - startMessageOffset;
     buf.setUint32(startMessageOffset, messageLength);
@@ -12547,7 +12791,10 @@ var PutNetworkComponentOperation;
     buf.setUint32(startMessageOffset + 12, componentId);
     buf.setUint32(startMessageOffset + 16, timestamp);
     buf.setUint32(startMessageOffset + 20, networkId);
-    const dataLength = messageLength - PutNetworkComponentOperation2.MESSAGE_HEADER_LENGTH - CRDT_MESSAGE_HEADER_LENGTH;
+    const dataLength =
+      messageLength -
+      PutNetworkComponentOperation2.MESSAGE_HEADER_LENGTH -
+      CRDT_MESSAGE_HEADER_LENGTH;
     buf.setUint32(startMessageOffset + 24, dataLength);
   }
   PutNetworkComponentOperation2.write = write3;
@@ -12557,7 +12804,7 @@ var PutNetworkComponentOperation;
       return null;
     }
     if (header.type !== CrdtMessageType.PUT_COMPONENT_NETWORK) {
-      throw new Error("PutComponentNetworkOperation tried to read another message type.");
+      throw new Error('PutComponentNetworkOperation tried to read another message type.');
     }
     return {
       ...header,
@@ -12565,7 +12812,7 @@ var PutNetworkComponentOperation;
       componentId: buf.readUint32(),
       timestamp: buf.readUint32(),
       networkId: buf.readUint32(),
-      data: buf.readBuffer()
+      data: buf.readBuffer(),
     };
   }
   PutNetworkComponentOperation2.read = read2;
@@ -12573,10 +12820,11 @@ var PutNetworkComponentOperation;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/network/deleteComponentNetwork.js
 var DeleteComponentNetwork;
-(function(DeleteComponentNetwork2) {
+(function (DeleteComponentNetwork2) {
   DeleteComponentNetwork2.MESSAGE_HEADER_LENGTH = 16;
   function write3(entity, componentId, timestamp, networkId, buf) {
-    const messageLength = CRDT_MESSAGE_HEADER_LENGTH + DeleteComponentNetwork2.MESSAGE_HEADER_LENGTH;
+    const messageLength =
+      CRDT_MESSAGE_HEADER_LENGTH + DeleteComponentNetwork2.MESSAGE_HEADER_LENGTH;
     const startMessageOffset = buf.incrementWriteOffset(messageLength);
     buf.setUint32(startMessageOffset, messageLength);
     buf.setUint32(startMessageOffset + 4, CrdtMessageType.DELETE_COMPONENT_NETWORK);
@@ -12592,14 +12840,14 @@ var DeleteComponentNetwork;
       return null;
     }
     if (header.type !== CrdtMessageType.DELETE_COMPONENT_NETWORK) {
-      throw new Error("DeleteComponentOperation tried to read another message type.");
+      throw new Error('DeleteComponentOperation tried to read another message type.');
     }
     return {
       ...header,
       entityId: buf.readUint32(),
       componentId: buf.readUint32(),
       timestamp: buf.readUint32(),
-      networkId: buf.readUint32()
+      networkId: buf.readUint32(),
     };
   }
   DeleteComponentNetwork2.read = read2;
@@ -12607,7 +12855,7 @@ var DeleteComponentNetwork;
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/serialization/crdt/network/deleteEntityNetwork.js
 var DeleteEntityNetwork;
-(function(DeleteEntityNetwork2) {
+(function (DeleteEntityNetwork2) {
   DeleteEntityNetwork2.MESSAGE_HEADER_LENGTH = 8;
   function write3(entity, networkId, buf) {
     buf.writeUint32(CRDT_MESSAGE_HEADER_LENGTH + 4);
@@ -12622,12 +12870,12 @@ var DeleteEntityNetwork;
       return null;
     }
     if (header.type !== CrdtMessageType.DELETE_ENTITY_NETWORK) {
-      throw new Error("DeleteEntityNetwork tried to read another message type.");
+      throw new Error('DeleteEntityNetwork tried to read another message type.');
     }
     return {
       ...header,
       entityId: buf.readUint32(),
-      networkId: buf.readUint32()
+      networkId: buf.readUint32(),
     };
   }
   DeleteEntityNetwork2.read = read2;
@@ -12638,40 +12886,64 @@ function isNetworkMessage(message) {
   return [
     CrdtMessageType.DELETE_COMPONENT_NETWORK,
     CrdtMessageType.DELETE_ENTITY_NETWORK,
-    CrdtMessageType.PUT_COMPONENT_NETWORK
+    CrdtMessageType.PUT_COMPONENT_NETWORK,
   ].includes(message.type);
 }
 function networkMessageToLocal(message, localEntityId, buffer2, destinationBuffer) {
   const offset = buffer2.currentWriteOffset();
   if (message.type === CrdtMessageType.PUT_COMPONENT_NETWORK) {
-    PutComponentOperation.write(localEntityId, message.timestamp, message.componentId, message.data, buffer2);
+    PutComponentOperation.write(
+      localEntityId,
+      message.timestamp,
+      message.componentId,
+      message.data,
+      buffer2
+    );
   } else if (message.type === CrdtMessageType.DELETE_COMPONENT_NETWORK) {
     DeleteComponent.write(localEntityId, message.componentId, message.timestamp, buffer2);
   } else if (message.type === CrdtMessageType.DELETE_ENTITY_NETWORK) {
     DeleteEntity.write(localEntityId, buffer2);
   }
-  destinationBuffer.writeBuffer(buffer2.buffer().subarray(offset, buffer2.currentWriteOffset()), false);
+  destinationBuffer.writeBuffer(
+    buffer2.buffer().subarray(offset, buffer2.currentWriteOffset()),
+    false
+  );
 }
 function localMessageToNetwork(message, network, buffer2, destinationBuffer) {
   const offset = buffer2.currentWriteOffset();
   if (message.type === CrdtMessageType.PUT_COMPONENT) {
-    PutNetworkComponentOperation.write(network.entityId, message.timestamp, message.componentId, network.networkId, message.data, buffer2);
+    PutNetworkComponentOperation.write(
+      network.entityId,
+      message.timestamp,
+      message.componentId,
+      network.networkId,
+      message.data,
+      buffer2
+    );
   } else if (message.type === CrdtMessageType.DELETE_COMPONENT) {
-    DeleteComponentNetwork.write(network.entityId, message.componentId, message.timestamp, network.networkId, buffer2);
+    DeleteComponentNetwork.write(
+      network.entityId,
+      message.componentId,
+      message.timestamp,
+      network.networkId,
+      buffer2
+    );
   } else if (message.type === CrdtMessageType.DELETE_ENTITY) {
     DeleteEntityNetwork.write(network.entityId, network.networkId, buffer2);
   }
-  destinationBuffer.writeBuffer(buffer2.buffer().subarray(offset, buffer2.currentWriteOffset()), false);
+  destinationBuffer.writeBuffer(
+    buffer2.buffer().subarray(offset, buffer2.currentWriteOffset()),
+    false
+  );
 }
 var buffer = new ReadWriteByteBuffer();
 function fixTransformParent(message, transformValue, parent) {
   buffer.resetBuffer();
   let transform = transformValue;
-  if (!transform && "data" in message) {
+  if (!transform && 'data' in message) {
     transform = TransformSchema.deserialize(new ReadWriteByteBuffer(message.data));
   }
-  if (!transform)
-    throw new Error("Invalid parent transform");
+  if (!transform) throw new Error('Invalid parent transform');
   const newTransform = { ...transform, parent };
   TransformSchema.serialize(newTransform, buffer);
   return buffer.toBinary();
@@ -12690,7 +12962,7 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
     return function parseChunkMessage2(chunkMessage) {
       const buffer2 = new ReadWriteByteBuffer(chunkMessage);
       let header;
-      while (header = CrdtMessageProtocol.getHeader(buffer2)) {
+      while ((header = CrdtMessageProtocol.getHeader(buffer2))) {
         const offset = buffer2.currentReadOffset();
         let message = void 0;
         if (header.type === CrdtMessageType.DELETE_COMPONENT) {
@@ -12714,7 +12986,7 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
           receivedMessages.push({
             ...message,
             transportId,
-            messageBuffer: buffer2.buffer().subarray(offset, buffer2.currentReadOffset())
+            messageBuffer: buffer2.buffer().subarray(offset, buffer2.currentReadOffset()),
           });
         }
       }
@@ -12725,7 +12997,7 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
     return messagesToProcess;
   }
   function findNetworkId(msg) {
-    const hasNetworkId = "networkId" in msg;
+    const hasNetworkId = 'networkId' in msg;
     if (hasNetworkId) {
       for (const [entityId, network] of engine2.getEntitiesWith(NetworkEntity3)) {
         if (network.networkId === msg.networkId && network.entityId === msg.entityId) {
@@ -12745,25 +13017,33 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
         network = { entityId: msg.entityId, networkId: msg.networkId };
         NetworkEntity3.createOrReplace(entityId, network);
       }
-      if (msg.type === CrdtMessageType.DELETE_ENTITY || msg.type === CrdtMessageType.DELETE_ENTITY_NETWORK) {
+      if (
+        msg.type === CrdtMessageType.DELETE_ENTITY ||
+        msg.type === CrdtMessageType.DELETE_ENTITY_NETWORK
+      ) {
         entitiesShouldBeCleaned.push(entityId);
         broadcastMessages.push(msg);
       } else {
         const entityState = engine2.entityContainer.getEntityState(entityId);
-        if (entityState === EntityState.Removed)
-          continue;
+        if (entityState === EntityState.Removed) continue;
         if (entityState === EntityState.Unknown) {
           engine2.entityContainer.updateUsedEntity(entityId);
         }
         const component = engine2.getComponentOrNull(msg.componentId);
         if (component) {
-          if (msg.type === CrdtMessageType.PUT_COMPONENT && component.componentId === Transform3.componentId && NetworkEntity3.has(entityId) && NetworkParent2.has(entityId)) {
+          if (
+            msg.type === CrdtMessageType.PUT_COMPONENT &&
+            component.componentId === Transform3.componentId &&
+            NetworkEntity3.has(entityId) &&
+            NetworkParent2.has(entityId)
+          ) {
             msg.data = fixTransformParent(msg);
           }
           const [conflictMessage, value] = component.updateFromCrdt({ ...msg, entityId });
           if (!conflictMessage) {
             broadcastMessages.push(msg);
-            onProcessEntityComponentChange && onProcessEntityComponentChange(entityId, msg.type, component, value);
+            onProcessEntityComponentChange &&
+              onProcessEntityComponentChange(entityId, msg.type, component, value);
           }
         } else {
           broadcastMessages.push(msg);
@@ -12775,7 +13055,8 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
         definition.entityDeleted(entity, true);
       }
       engine2.entityContainer.updateRemovedEntity(entity);
-      onProcessEntityComponentChange && onProcessEntityComponentChange(entity, CrdtMessageType.DELETE_ENTITY);
+      onProcessEntityComponentChange &&
+        onProcessEntityComponentChange(entity, CrdtMessageType.DELETE_ENTITY);
     }
   }
   async function sendMessages(entitiesDeletedThisTick) {
@@ -12784,21 +13065,42 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
     for (const component of engine2.componentsIter()) {
       for (const message of component.getCrdtUpdates()) {
         const offset = buffer2.currentWriteOffset();
-        if (transports.some((t) => t.filter(message))) {
+        if (transports.some(t => t.filter(message))) {
           if (message.type === CrdtMessageType.PUT_COMPONENT) {
-            PutComponentOperation.write(message.entityId, message.timestamp, message.componentId, message.data, buffer2);
+            PutComponentOperation.write(
+              message.entityId,
+              message.timestamp,
+              message.componentId,
+              message.data,
+              buffer2
+            );
           } else if (message.type === CrdtMessageType.DELETE_COMPONENT) {
-            DeleteComponent.write(message.entityId, component.componentId, message.timestamp, buffer2);
+            DeleteComponent.write(
+              message.entityId,
+              component.componentId,
+              message.timestamp,
+              buffer2
+            );
           } else if (message.type === CrdtMessageType.APPEND_VALUE) {
-            AppendValueOperation.write(message.entityId, message.timestamp, message.componentId, message.data, buffer2);
+            AppendValueOperation.write(
+              message.entityId,
+              message.timestamp,
+              message.componentId,
+              message.data,
+              buffer2
+            );
           }
           crdtMessages.push({
             ...message,
-            messageBuffer: buffer2.buffer().subarray(offset, buffer2.currentWriteOffset())
+            messageBuffer: buffer2.buffer().subarray(offset, buffer2.currentWriteOffset()),
           });
         }
         if (onProcessEntityComponentChange) {
-          const rawValue = message.type === CrdtMessageType.PUT_COMPONENT || message.type === CrdtMessageType.APPEND_VALUE ? component.get(message.entityId) : void 0;
+          const rawValue =
+            message.type === CrdtMessageType.PUT_COMPONENT ||
+            message.type === CrdtMessageType.APPEND_VALUE
+              ? component.get(message.entityId)
+              : void 0;
           onProcessEntityComponentChange(message.entityId, message.type, component, rawValue);
         }
       }
@@ -12809,17 +13111,18 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
       crdtMessages.push({
         type: CrdtMessageType.DELETE_ENTITY,
         entityId,
-        messageBuffer: buffer2.buffer().subarray(offset, buffer2.currentWriteOffset())
+        messageBuffer: buffer2.buffer().subarray(offset, buffer2.currentWriteOffset()),
       });
-      onProcessEntityComponentChange && onProcessEntityComponentChange(entityId, CrdtMessageType.DELETE_ENTITY);
+      onProcessEntityComponentChange &&
+        onProcessEntityComponentChange(entityId, CrdtMessageType.DELETE_ENTITY);
     }
     const transportBuffer = new ReadWriteByteBuffer();
     for (const index in transports) {
       const __NetworkMessagesBuffer = [];
       const transportIndex = Number(index);
       const transport = transports[transportIndex];
-      const isRendererTransport = transport.type === "renderer";
-      const isNetworkTransport = transport.type === "network";
+      const isRendererTransport = transport.type === 'renderer';
+      const isNetworkTransport = transport.type === 'network';
       transportBuffer.resetBuffer();
       const buffer3 = new ReadWriteByteBuffer();
       for (const message2 of crdtMessages) {
@@ -12831,31 +13134,58 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
             transportBuffer.resetBuffer();
           }
           if (messageSize / 1024 > LIVEKIT_MAX_SIZE) {
-            console.error(`Message too large (${messageSize} bytes), skipping message for entity ${message2.entityId}`);
+            console.error(
+              `Message too large (${messageSize} bytes), skipping message for entity ${message2.entityId}`
+            );
             continue;
           }
         }
-        if (message2.transportId === transportIndex)
-          continue;
-        if (!transport.filter(message2))
-          continue;
+        if (message2.transportId === transportIndex) continue;
+        if (!transport.filter(message2)) continue;
         const { entityId } = findNetworkId(message2);
-        const transformNeedsFix = "componentId" in message2 && message2.componentId === Transform3.componentId && Transform3.has(entityId) && NetworkParent2.has(entityId) && NetworkEntity3.has(entityId);
-        if (isRendererTransport && message2.type === CrdtMessageType.PUT_COMPONENT && transformNeedsFix) {
+        const transformNeedsFix =
+          'componentId' in message2 &&
+          message2.componentId === Transform3.componentId &&
+          Transform3.has(entityId) &&
+          NetworkParent2.has(entityId) &&
+          NetworkEntity3.has(entityId);
+        if (
+          isRendererTransport &&
+          message2.type === CrdtMessageType.PUT_COMPONENT &&
+          transformNeedsFix
+        ) {
           const parent = findNetworkId(NetworkParent2.get(entityId));
-          const transformData = fixTransformParent(message2, Transform3.get(entityId), parent.entityId);
+          const transformData = fixTransformParent(
+            message2,
+            Transform3.get(entityId),
+            parent.entityId
+          );
           const offset = buffer3.currentWriteOffset();
-          PutComponentOperation.write(entityId, message2.timestamp, message2.componentId, transformData, buffer3);
-          transportBuffer.writeBuffer(buffer3.buffer().subarray(offset, buffer3.currentWriteOffset()), false);
+          PutComponentOperation.write(
+            entityId,
+            message2.timestamp,
+            message2.componentId,
+            transformData,
+            buffer3
+          );
+          transportBuffer.writeBuffer(
+            buffer3.buffer().subarray(offset, buffer3.currentWriteOffset()),
+            false
+          );
           continue;
         }
         if (isRendererTransport && isNetworkMessage(message2)) {
-          let transformData = "data" in message2 ? message2.data : new Uint8Array();
+          let transformData = 'data' in message2 ? message2.data : new Uint8Array();
           if (transformNeedsFix) {
             const parent = findNetworkId(NetworkParent2.get(entityId));
             transformData = fixTransformParent(message2, Transform3.get(entityId), parent.entityId);
           }
-          networkMessageToLocal({ ...message2, data: transformData }, entityId, buffer3, transportBuffer);
+          networkMessageToLocal(
+            { ...message2, data: transformData },
+            entityId,
+            buffer3,
+            transportBuffer
+          );
           continue;
         }
         if (isNetworkTransport && !isNetworkMessage(message2)) {
@@ -12881,26 +13211,26 @@ function crdtSceneSystem(engine2, onProcessEntityComponentChange) {
   return {
     sendMessages,
     receiveMessages,
-    addTransport
+    addTransport,
   };
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/systems/crdt/utils.js
 var CrdtUtils;
-(function(CrdtUtils2) {
+(function (CrdtUtils2) {
   let SynchronizedEntityType;
-  (function(SynchronizedEntityType2) {
-    SynchronizedEntityType2[SynchronizedEntityType2["NETWORKED"] = 0] = "NETWORKED";
-    SynchronizedEntityType2[SynchronizedEntityType2["RENDERER"] = 1] = "RENDERER";
-  })(SynchronizedEntityType = CrdtUtils2.SynchronizedEntityType || (CrdtUtils2.SynchronizedEntityType = {}));
+  (function (SynchronizedEntityType2) {
+    SynchronizedEntityType2[(SynchronizedEntityType2['NETWORKED'] = 0)] = 'NETWORKED';
+    SynchronizedEntityType2[(SynchronizedEntityType2['RENDERER'] = 1)] = 'RENDERER';
+  })(
+    (SynchronizedEntityType =
+      CrdtUtils2.SynchronizedEntityType || (CrdtUtils2.SynchronizedEntityType = {}))
+  );
 })(CrdtUtils || (CrdtUtils = {}));
 function dataCompare(a, b) {
-  if (a === b)
-    return 0;
-  if (a === null && b !== null)
-    return -1;
-  if (a !== null && b === null)
-    return 1;
+  if (a === b) return 0;
+  if (a === null && b !== null) return -1;
+  if (a !== null && b === null) return 1;
   if (a instanceof Uint8Array && b instanceof Uint8Array) {
     const lengthDifference = a.byteLength - b.byteLength;
     if (lengthDifference !== 0) {
@@ -12915,7 +13245,7 @@ function dataCompare(a, b) {
     }
     return 0;
   }
-  if (typeof a === "string") {
+  if (typeof a === 'string') {
     const lengthDifference = a.length - b.length;
     if (lengthDifference !== 0) {
       return lengthDifference > 0 ? 1 : -1;
@@ -12940,8 +13270,7 @@ function createDumpLwwFunctionFromCrdt(componentId, timestamps, schema, data) {
   return function dumpCrdtState(buffer2, filterEntity) {
     for (const [entity, timestamp] of timestamps) {
       if (filterEntity) {
-        if (!filterEntity(entity))
-          continue;
+        if (!filterEntity(entity)) continue;
       }
       if (data.has(entity)) {
         const it = data.get(entity);
@@ -12983,8 +13312,13 @@ function createUpdateLwwFromCrdt(componentId, timestamps, schema, data) {
       return ProcessMessageResultType.StateUpdatedData;
     }
   }
-  return (msg) => {
-    if (msg.type !== CrdtMessageType.PUT_COMPONENT && msg.type !== CrdtMessageType.PUT_COMPONENT_NETWORK && msg.type !== CrdtMessageType.DELETE_COMPONENT && msg.type !== CrdtMessageType.DELETE_COMPONENT_NETWORK)
+  return msg => {
+    if (
+      msg.type !== CrdtMessageType.PUT_COMPONENT &&
+      msg.type !== CrdtMessageType.PUT_COMPONENT_NETWORK &&
+      msg.type !== CrdtMessageType.DELETE_COMPONENT &&
+      msg.type !== CrdtMessageType.DELETE_COMPONENT_NETWORK
+    )
       return [null, data.get(msg.entityId)];
     const action = crdtRuleForCurrentState(msg);
     const entity = msg.entityId;
@@ -12992,7 +13326,10 @@ function createUpdateLwwFromCrdt(componentId, timestamps, schema, data) {
       case ProcessMessageResultType.StateUpdatedData:
       case ProcessMessageResultType.StateUpdatedTimestamp: {
         timestamps.set(entity, msg.timestamp);
-        if (msg.type === CrdtMessageType.PUT_COMPONENT || msg.type === CrdtMessageType.PUT_COMPONENT_NETWORK) {
+        if (
+          msg.type === CrdtMessageType.PUT_COMPONENT ||
+          msg.type === CrdtMessageType.PUT_COMPONENT_NETWORK
+        ) {
           const buf = new ReadWriteByteBuffer(msg.data);
           data.set(entity, schema.deserialize(buf));
         } else {
@@ -13011,9 +13348,9 @@ function createUpdateLwwFromCrdt(componentId, timestamps, schema, data) {
               componentId,
               data: writeBuffer.toBinary(),
               entityId: entity,
-              timestamp: timestamps.get(entity)
+              timestamp: timestamps.get(entity),
             },
-            data.get(entity)
+            data.get(entity),
           ];
         } else {
           return [
@@ -13021,9 +13358,9 @@ function createUpdateLwwFromCrdt(componentId, timestamps, schema, data) {
               type: CrdtMessageType.DELETE_COMPONENT,
               componentId,
               entityId: entity,
-              timestamp: timestamps.get(entity)
+              timestamp: timestamps.get(entity),
             },
-            void 0
+            void 0,
           ];
         }
       }
@@ -13043,7 +13380,7 @@ function createGetCrdtMessagesForLww(componentId, timestamps, dirtyIterator, sch
           componentId,
           entityId: entity,
           data: writeBuffer.toBinary(),
-          timestamp: newTimestamp
+          timestamp: newTimestamp,
         };
         yield msg;
       } else {
@@ -13051,7 +13388,7 @@ function createGetCrdtMessagesForLww(componentId, timestamps, dirtyIterator, sch
           type: CrdtMessageType.DELETE_COMPONENT,
           componentId,
           entityId: entity,
-          timestamp: newTimestamp
+          timestamp: newTimestamp,
         };
         yield msg;
       }
@@ -13106,13 +13443,15 @@ function createComponentDefinitionFromSchema(componentName, componentId, schema)
       if (component) {
         throw new Error(`[create] Component ${componentName} for ${entity} already exists`);
       }
-      const usedValue = value === void 0 ? schema.create() : schema.extend ? schema.extend(value) : value;
+      const usedValue =
+        value === void 0 ? schema.create() : schema.extend ? schema.extend(value) : value;
       data.set(entity, usedValue);
       dirtyIterator.add(entity);
       return usedValue;
     },
     createOrReplace(entity, value) {
-      const usedValue = value === void 0 ? schema.create() : schema.extend ? schema.extend(value) : value;
+      const usedValue =
+        value === void 0 ? schema.create() : schema.extend ? schema.extend(value) : value;
       data.set(entity, usedValue);
       dirtyIterator.add(entity);
       return usedValue;
@@ -13151,7 +13490,13 @@ function createComponentDefinitionFromSchema(componentName, componentId, schema)
         yield entity;
       }
     },
-    getCrdtUpdates: createGetCrdtMessagesForLww(componentId, timestamps, dirtyIterator, schema, data),
+    getCrdtUpdates: createGetCrdtMessagesForLww(
+      componentId,
+      timestamps,
+      dirtyIterator,
+      schema,
+      data
+    ),
     updateFromCrdt: createUpdateLwwFromCrdt(componentId, timestamps, schema, data),
     dumpCrdtStateToBuffer: createDumpLwwFunctionFromCrdt(componentId, timestamps, schema, data),
     onChange(entity, cb) {
@@ -13161,12 +13506,11 @@ function createComponentDefinitionFromSchema(componentName, componentId, schema)
     },
     __onChangeCallbacks(entity, value) {
       const cbs = onChangeCallbacks.get(entity);
-      if (!cbs)
-        return;
+      if (!cbs) return;
       for (const cb of cbs) {
         cb(value);
       }
-    }
+    },
   };
 }
 
@@ -13179,22 +13523,22 @@ function SystemContainer() {
   }
   function add2(fn, priority, name) {
     const systemName = name ?? fn.name;
-    if (systems.find((item) => item.fn === fn)) {
+    if (systems.find(item => item.fn === fn)) {
       throw new Error(`System ${JSON.stringify(systemName)} already added to the engine`);
     }
     systems.push({
       fn,
       priority,
-      name: systemName
+      name: systemName,
     });
     sort();
   }
   function remove(selector) {
     let index = -1;
-    if (typeof selector === "string") {
-      index = systems.findIndex((item) => item.name === selector);
+    if (typeof selector === 'string') {
+      index = systems.findIndex(item => item.name === selector);
     } else {
-      index = systems.findIndex((item) => item.fn === selector);
+      index = systems.findIndex(item => item.fn === selector);
     }
     if (index === -1) {
       return false;
@@ -13208,17 +13552,16 @@ function SystemContainer() {
     remove,
     getSystems() {
       return systems;
-    }
+    },
   };
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/engine/grow-only-value-set-component-definition.js
 var emptyReadonlySet = freezeSet(/* @__PURE__ */ new Set());
 function frozenError() {
-  throw new Error("The set is frozen");
+  throw new Error('The set is frozen');
 }
 function freezeSet(set) {
-  ;
   set.add = frozenError;
   set.clear = frozenError;
   return set;
@@ -13247,7 +13590,7 @@ function createValueSetComponentDefinitionFromSchema(componentName, componentId,
       while (row.raw.length > options.maxElements) {
         row.raw.shift();
       }
-      const frozenSet = freezeSet(new Set(row?.raw.map(($) => $.value)));
+      const frozenSet = freezeSet(new Set(row?.raw.map($ => $.value)));
       row.frozenSet = frozenSet;
       return frozenSet;
     } else {
@@ -13303,7 +13646,7 @@ function createValueSetComponentDefinitionFromSchema(componentName, componentId,
         data: buf.toBinary(),
         entityId: entity,
         timestamp: 0,
-        type: CrdtMessageType.APPEND_VALUE
+        type: CrdtMessageType.APPEND_VALUE,
       });
       return set;
     },
@@ -13329,10 +13672,9 @@ function createValueSetComponentDefinitionFromSchema(componentName, componentId,
       }
       return [null, void 0];
     },
-    dumpCrdtStateToBuffer: function(buffer2, filterEntity) {
+    dumpCrdtStateToBuffer: function (buffer2, filterEntity) {
       for (const [entity, { raw }] of data) {
-        if (filterEntity && !filterEntity(entity))
-          continue;
+        if (filterEntity && !filterEntity(entity)) continue;
         for (const it of raw) {
           const buf = new ReadWriteByteBuffer();
           schema.serialize(it.value, buf);
@@ -13347,20 +13689,18 @@ function createValueSetComponentDefinitionFromSchema(componentName, componentId,
     },
     __onChangeCallbacks(entity, value) {
       const cbs = onChangeCallbacks.get(entity);
-      if (!cbs)
-        return;
+      if (!cbs) return;
       for (const cb of cbs) {
         cb(value);
       }
-    }
+    },
   };
   return ret;
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/runtime/helpers/tree.js
 function* genEntityTree(entity, entities) {
-  if (!entities.has(entity))
-    return;
+  if (!entities.has(entity)) return;
   entities.delete(entity);
   for (const [_entity, value] of entities) {
     if (value.parent === entity) {
@@ -13400,19 +13740,7 @@ function removeEntityWithChildren(engine2, entity) {
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/engine/input.js
 var InputCommands = [
-  0,
-  1,
-  2,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10,
-  11,
-  12,
-  13
+  0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
   /* InputAction.IA_ACTION_6 */
 ];
 var InputStateUpdateSystemPriority = 1 << 20;
@@ -13422,7 +13750,7 @@ function createInputSystem(engine2) {
     previousFrameMaxTimestamp: 0,
     currentFrameMaxTimestamp: 0,
     buttonState: /* @__PURE__ */ new Map(),
-    thisFrameCommands: []
+    thisFrameCommands: [],
   };
   function findLastAction(pointerEventType, inputAction, entity) {
     const ascendingTimestampIterator = PointerEventsResult3.get(entity);
@@ -13468,9 +13796,16 @@ function createInputSystem(engine2) {
     }
     globalState.currentFrameMaxTimestamp = maxTimestamp;
   }
-  engine2.addSystem(buttonStateUpdateSystem, InputStateUpdateSystemPriority, "@dcl/ecs#inputSystem");
+  engine2.addSystem(
+    buttonStateUpdateSystem,
+    InputStateUpdateSystemPriority,
+    '@dcl/ecs#inputSystem'
+  );
   function timestampIsCurrentFrame(timestamp) {
-    if (timestamp > globalState.previousFrameMaxTimestamp && timestamp <= globalState.currentFrameMaxTimestamp) {
+    if (
+      timestamp > globalState.previousFrameMaxTimestamp &&
+      timestamp <= globalState.currentFrameMaxTimestamp
+    ) {
       return true;
     } else {
       return false;
@@ -13482,8 +13817,7 @@ function createInputSystem(engine2) {
     }
     for (const input of InputCommands) {
       const cmd = findClick(input, entity);
-      if (cmd)
-        return cmd;
+      if (cmd) return cmd;
     }
     return null;
   }
@@ -13503,8 +13837,7 @@ function createInputSystem(engine2) {
         }
       }
     }
-    if (!up || !down)
-      return null;
+    if (!up || !down) return null;
     if (down.timestamp < up.timestamp && timestampIsCurrentFrame(up.timestamp)) {
       return { up, down };
     }
@@ -13516,8 +13849,7 @@ function createInputSystem(engine2) {
     }
     for (const input of InputCommands) {
       const cmd = findInputCommand(input, pointerEventType, entity);
-      if (cmd)
-        return cmd;
+      if (cmd) return cmd;
     }
     return null;
   }
@@ -13526,7 +13858,10 @@ function createInputSystem(engine2) {
       return getInputCommandFromEntity(inputAction, pointerEventType, entity);
     } else {
       for (const command of globalState.thisFrameCommands) {
-        if ((command.button === inputAction || inputAction === 3) && command.state === pointerEventType) {
+        if (
+          (command.button === inputAction || inputAction === 3) &&
+          command.state === pointerEventType
+        ) {
           return command;
         }
       }
@@ -13535,8 +13870,7 @@ function createInputSystem(engine2) {
   }
   function findInputCommand(inputAction, pointerEventType, entity) {
     const command = findLastAction(pointerEventType, inputAction, entity);
-    if (!command)
-      return null;
+    if (!command) return null;
     if (timestampIsCurrentFrame(command.timestamp)) {
       return command;
     } else {
@@ -13549,10 +13883,13 @@ function createInputSystem(engine2) {
   function isTriggered(inputAction, pointerEventType, entity) {
     if (entity) {
       const command = findLastAction(pointerEventType, inputAction, entity);
-      return command && timestampIsCurrentFrame(command.timestamp) || false;
+      return (command && timestampIsCurrentFrame(command.timestamp)) || false;
     } else {
       for (const command of globalState.thisFrameCommands) {
-        if ((command.button === inputAction || inputAction === 3) && command.state === pointerEventType) {
+        if (
+          (command.button === inputAction || inputAction === 3) &&
+          command.state === pointerEventType
+        ) {
           return true;
         }
       }
@@ -13567,15 +13904,15 @@ function createInputSystem(engine2) {
     getClick,
     getInputCommand,
     isClicked,
-    isTriggered
+    isTriggered,
   };
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/engine/component.js
 var ComponentType;
-(function(ComponentType2) {
-  ComponentType2[ComponentType2["LastWriteWinElementSet"] = 0] = "LastWriteWinElementSet";
-  ComponentType2[ComponentType2["GrowOnlyValueSet"] = 1] = "GrowOnlyValueSet";
+(function (ComponentType2) {
+  ComponentType2[(ComponentType2['LastWriteWinElementSet'] = 0)] = 'LastWriteWinElementSet';
+  ComponentType2[(ComponentType2['GrowOnlyValueSet'] = 1)] = 'GrowOnlyValueSet';
 })(ComponentType || (ComponentType = {}));
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/engine/index.js
@@ -13596,28 +13933,34 @@ function preEngine(options) {
   }
   function removeEntity(entity) {
     for (const [, component] of componentsDefinition) {
-      if (component.componentName === "core-schema::Network-Entity")
-        continue;
+      if (component.componentName === 'core-schema::Network-Entity') continue;
       component.entityDeleted(entity, true);
     }
     return entityContainer.removeEntity(entity);
   }
   function removeEntityWithChildren2(entity) {
-    return removeEntityWithChildren({ removeEntity, defineComponentFromSchema, getEntitiesWith, defineComponent }, entity);
+    return removeEntityWithChildren(
+      { removeEntity, defineComponentFromSchema, getEntitiesWith, defineComponent },
+      entity
+    );
   }
   function registerComponentDefinition(componentName, component) {
     if (sealed)
-      throw new Error("Engine is already sealed. No components can be added at this stage");
+      throw new Error('Engine is already sealed. No components can be added at this stage');
     const componentId = componentNumberFromName(componentName);
     const prev = componentsDefinition.get(componentId);
     if (prev) {
       throw new Error(`Component number ${componentId} was already registered.`);
     }
     if (component.componentName !== componentName) {
-      throw new Error(`Component name doesn't match componentDefinition.componentName ${componentName} != ${component.componentName}`);
+      throw new Error(
+        `Component name doesn't match componentDefinition.componentName ${componentName} != ${component.componentName}`
+      );
     }
     if (component.componentId !== componentId) {
-      throw new Error(`Component number doesn't match componentDefinition.componentId ${componentId} != ${component.componentId}`);
+      throw new Error(
+        `Component number doesn't match componentDefinition.componentId ${componentId} != ${component.componentId}`
+      );
     }
     componentsDefinition.set(componentId, component);
     return component;
@@ -13629,7 +13972,7 @@ function preEngine(options) {
       return prev;
     }
     if (sealed)
-      throw new Error("Engine is already sealed. No components can be added at this stage");
+      throw new Error('Engine is already sealed. No components can be added at this stage');
     const newComponent = createComponentDefinitionFromSchema(componentName, componentId, schema);
     componentsDefinition.set(componentId, newComponent);
     return newComponent;
@@ -13641,8 +13984,13 @@ function preEngine(options) {
       return prev;
     }
     if (sealed)
-      throw new Error("Engine is already sealed. No components can be added at this stage");
-    const newComponent = createValueSetComponentDefinitionFromSchema(componentName, componentId, schema, options2);
+      throw new Error('Engine is already sealed. No components can be added at this stage');
+    const newComponent = createValueSetComponentDefinitionFromSchema(
+      componentName,
+      componentId,
+      schema,
+      options2
+    );
     componentsDefinition.set(componentId, newComponent);
     return newComponent;
   }
@@ -13653,7 +14001,7 @@ function preEngine(options) {
       return prev;
     }
     if (sealed)
-      throw new Error("Engine is already sealed. No components can be added at this stage");
+      throw new Error('Engine is already sealed. No components can be added at this stage');
     const schemaSpec = Schemas.Map(mapSpec, constructorDefault);
     const def = createComponentDefinitionFromSchema(componentName, componentId, schemaSpec);
     const newComponent = {
@@ -13663,34 +14011,40 @@ function preEngine(options) {
       },
       createOrReplace(entity, val) {
         return def.createOrReplace(entity, val);
-      }
+      },
     };
     componentsDefinition.set(componentId, newComponent);
     return newComponent;
   }
   function getComponent(componentIdOrName) {
-    const componentId = typeof componentIdOrName === "number" ? componentIdOrName : componentNumberFromName(componentIdOrName);
+    const componentId =
+      typeof componentIdOrName === 'number'
+        ? componentIdOrName
+        : componentNumberFromName(componentIdOrName);
     const component = componentsDefinition.get(componentId);
     if (!component) {
-      throw new Error(`Component ${componentIdOrName} not found. You need to declare the components at the beginnig of the engine declaration`);
+      throw new Error(
+        `Component ${componentIdOrName} not found. You need to declare the components at the beginnig of the engine declaration`
+      );
     }
     return component;
   }
   function getComponentOrNull(componentIdOrName) {
-    const componentId = typeof componentIdOrName === "number" ? componentIdOrName : componentNumberFromName(componentIdOrName);
-    return componentsDefinition.get(componentId) ?? /* istanbul ignore next */
-    null;
+    const componentId =
+      typeof componentIdOrName === 'number'
+        ? componentIdOrName
+        : componentNumberFromName(componentIdOrName);
+    return componentsDefinition.get(componentId) /* istanbul ignore next */ ?? null;
   }
   function* getEntitiesWith(...components) {
     for (const [entity, ...groupComp] of getComponentDefGroup(...components)) {
-      yield [entity, ...groupComp.map((c) => c.get(entity))];
+      yield [entity, ...groupComp.map(c => c.get(entity))];
     }
   }
   function getEntityOrNullByName(value) {
     const NameComponent = Name({ defineComponent });
     for (const [entity, name] of getEntitiesWith(NameComponent)) {
-      if (name.value === value)
-        return entity;
+      if (name.value === value) return entity;
     }
     return null;
   }
@@ -13701,7 +14055,7 @@ function preEngine(options) {
   function* getEntitiesByTag(tagName) {
     const TagComponent = Tags({ defineComponent });
     for (const [entity, component] of getEntitiesWith(TagComponent)) {
-      if (entity !== 0 && component.tags?.some((tag) => tag === tagName)) {
+      if (entity !== 0 && component.tags?.some(tag => tag === tagName)) {
         yield entity;
       }
     }
@@ -13729,8 +14083,11 @@ function preEngine(options) {
   }
   function removeComponentDefinition(componentIdOrName) {
     if (sealed)
-      throw new Error("Engine is already sealed. No components can be removed at this stage");
-    const componentId = typeof componentIdOrName === "number" ? componentIdOrName : componentNumberFromName(componentIdOrName);
+      throw new Error('Engine is already sealed. No components can be removed at this stage');
+    const componentId =
+      typeof componentIdOrName === 'number'
+        ? componentIdOrName
+        : componentNumberFromName(componentIdOrName);
     componentsDefinition.delete(componentId);
   }
   Transform({ defineComponentFromSchema });
@@ -13759,7 +14116,7 @@ function preEngine(options) {
     registerComponentDefinition,
     entityContainer,
     componentsIter,
-    seal
+    seal,
   };
 }
 function Engine(options) {
@@ -13779,7 +14136,10 @@ function Engine(options) {
     await crdtSystem.receiveMessages();
     for (const system of partialEngine.getSystems()) {
       const ret = system.fn(dt);
-      checkNotThenable(ret, `A system (${system.name || "anonymous"}) returned a thenable. Systems cannot be async functions. Documentation: https://dcl.gg/sdk/sync-systems`);
+      checkNotThenable(
+        ret,
+        `A system (${system.name || 'anonymous'}) returned a thenable. Systems cannot be async functions. Documentation: https://dcl.gg/sdk/sync-systems`
+      );
     }
     const deletedEntites = partialEngine.entityContainer.releaseRemovedEntities();
     await crdtSystem.sendMessages(deletedEntites);
@@ -13810,24 +14170,24 @@ function Engine(options) {
     CameraEntity: 2,
     getEntityState: partialEngine.entityContainer.getEntityState,
     addTransport: crdtSystem.addTransport,
-    entityContainer: partialEngine.entityContainer
+    entityContainer: partialEngine.entityContainer,
   };
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/systems/events.js
 var getDefaultOpts = (opts = {}) => ({
   button: 3,
-  ...opts
+  ...opts,
 });
 function createPointerEventsSystem(engine2, inputSystem2) {
   const PointerEvents2 = PointerEvents(engine2);
   let EventType;
-  (function(EventType2) {
-    EventType2[EventType2["Click"] = 0] = "Click";
-    EventType2[EventType2["Down"] = 1] = "Down";
-    EventType2[EventType2["Up"] = 2] = "Up";
-    EventType2[EventType2["HoverEnter"] = 3] = "HoverEnter";
-    EventType2[EventType2["HoverLeave"] = 4] = "HoverLeave";
+  (function (EventType2) {
+    EventType2[(EventType2['Click'] = 0)] = 'Click';
+    EventType2[(EventType2['Down'] = 1)] = 'Down';
+    EventType2[(EventType2['Up'] = 2)] = 'Up';
+    EventType2[(EventType2['HoverEnter'] = 3)] = 'HoverEnter';
+    EventType2[(EventType2['HoverLeave'] = 4)] = 'HoverLeave';
   })(EventType || (EventType = {}));
   const eventsMap = /* @__PURE__ */ new Map();
   function getEvent(entity) {
@@ -13842,15 +14202,16 @@ function createPointerEventsSystem(engine2, inputSystem2) {
         showFeedback: opts.showFeedback,
         showHighlight: opts.showHighlight,
         hoverText: opts.hoverText,
-        maxDistance: opts.maxDistance
-      }
+        maxDistance: opts.maxDistance,
+      },
     });
   }
   function removePointerEvent(entity, type, button) {
     const pointerEvent = PointerEvents2.getMutableOrNull(entity);
-    if (!pointerEvent)
-      return;
-    pointerEvent.pointerEvents = pointerEvent.pointerEvents.filter((pointer) => !(pointer.eventInfo?.button === button && pointer.eventType === type));
+    if (!pointerEvent) return;
+    pointerEvent.pointerEvents = pointerEvent.pointerEvents.filter(
+      pointer => !(pointer.eventInfo?.button === button && pointer.eventType === type)
+    );
   }
   function getPointerEvent(eventType) {
     if (eventType === EventType.Up) {
@@ -13880,12 +14241,27 @@ function createPointerEventsSystem(engine2, inputSystem2) {
         if (eventType === EventType.Click) {
           const command = inputSystem2.getClick(opts.button, entity);
           if (command)
-            checkNotThenable(cb(command.up), "Click event returned a thenable. Only synchronous functions are allowed");
+            checkNotThenable(
+              cb(command.up),
+              'Click event returned a thenable. Only synchronous functions are allowed'
+            );
         }
-        if (eventType === EventType.Down || eventType === EventType.Up || eventType === EventType.HoverEnter || eventType === EventType.HoverLeave) {
-          const command = inputSystem2.getInputCommand(opts.button, getPointerEvent(eventType), entity);
+        if (
+          eventType === EventType.Down ||
+          eventType === EventType.Up ||
+          eventType === EventType.HoverEnter ||
+          eventType === EventType.HoverLeave
+        ) {
+          const command = inputSystem2.getInputCommand(
+            opts.button,
+            getPointerEvent(eventType),
+            entity
+          );
           if (command) {
-            checkNotThenable(cb(command), "Event handler returned a thenable. Only synchronous functions are allowed");
+            checkNotThenable(
+              cb(command),
+              'Event handler returned a thenable. Only synchronous functions are allowed'
+            );
           }
         }
       }
@@ -13893,7 +14269,7 @@ function createPointerEventsSystem(engine2, inputSystem2) {
   });
   const onPointerDown = (...args) => {
     const [data, cb, maybeOpts] = args;
-    if (typeof data === "number") {
+    if (typeof data === 'number') {
       return onPointerDown({ entity: data, opts: maybeOpts ?? {} }, cb);
     }
     const { entity, opts } = data;
@@ -13904,7 +14280,7 @@ function createPointerEventsSystem(engine2, inputSystem2) {
   };
   const onPointerUp = (...args) => {
     const [data, cb, maybeOpts] = args;
-    if (typeof data === "number") {
+    if (typeof data === 'number') {
       return onPointerUp({ entity: data, opts: maybeOpts ?? {} }, cb);
     }
     const { entity, opts } = data;
@@ -13955,7 +14331,7 @@ function createPointerEventsSystem(engine2, inputSystem2) {
     onPointerDown,
     onPointerUp,
     onPointerHoverEnter,
-    onPointerHoverLeave
+    onPointerHoverLeave,
   };
 }
 
@@ -13973,12 +14349,12 @@ function createTweenSystem(engine2) {
     const tweenState = TweenState2.getOrNull(entity);
     const tween = Tween3.getOrNull(entity);
     const tweenCache = cache.get(entity);
-    if (!tweenState || !tween || !tweenCache)
-      return false;
+    if (!tweenState || !tween || !tweenCache) return false;
     if (
       // Renderer notified that the tween is completed
       // Only consider it completed if the tween hasn't changed this frame (to avoid false positives after YOYO/sequence processing)
-      (tweenState.state === 1 && !tweenCache.changed || tweenChanged(entity) && !tweenCache.changed) && // Avoid sending isCompleted multiple times
+      ((tweenState.state === 1 && !tweenCache.changed) ||
+        (tweenChanged(entity) && !tweenCache.changed)) && // Avoid sending isCompleted multiple times
       !tweenCache.completed
     ) {
       return true;
@@ -13988,11 +14364,10 @@ function createTweenSystem(engine2) {
   function tweenChanged(entity) {
     const currentTween = Tween3.getOrNull(entity);
     const prevTween = cache.get(entity)?.tween;
-    if (currentTween && !prevTween || !currentTween && prevTween) {
+    if ((currentTween && !prevTween) || (!currentTween && prevTween)) {
       return true;
     }
-    if (!currentTween || !prevTween)
-      return false;
+    if (!currentTween || !prevTween) return false;
     const currentBuff = new ReadWriteByteBuffer();
     Tween3.schema.serialize(currentTween, currentBuff);
     const compareResult = dataCompare(currentBuff.toBinary(), prevTween);
@@ -14006,7 +14381,7 @@ function createTweenSystem(engine2) {
         cache.set(entity, {
           tween: buffer2.toBinary(),
           completed: false,
-          changed: true
+          changed: true,
         });
         continue;
       }
@@ -14022,28 +14397,40 @@ function createTweenSystem(engine2) {
   function initializeTweenSequenceSystem() {
     const restartTweens = [];
     function backwardsTween(tween) {
-      if (tween.mode?.$case === "move" && tween.mode.move) {
-        return { ...tween, mode: { ...tween.mode, move: { start: tween.mode.move.end, end: tween.mode.move.start } } };
-      }
-      if (tween.mode?.$case === "rotate" && tween.mode.rotate) {
+      if (tween.mode?.$case === 'move' && tween.mode.move) {
         return {
           ...tween,
-          mode: { ...tween.mode, rotate: { start: tween.mode.rotate.end, end: tween.mode.rotate.start } }
+          mode: { ...tween.mode, move: { start: tween.mode.move.end, end: tween.mode.move.start } },
         };
       }
-      if (tween.mode?.$case === "scale" && tween.mode.scale) {
+      if (tween.mode?.$case === 'rotate' && tween.mode.rotate) {
         return {
           ...tween,
-          mode: { ...tween.mode, scale: { start: tween.mode.scale.end, end: tween.mode.scale.start } }
+          mode: {
+            ...tween.mode,
+            rotate: { start: tween.mode.rotate.end, end: tween.mode.rotate.start },
+          },
         };
       }
-      if (tween.mode?.$case === "textureMove" && tween.mode.textureMove) {
+      if (tween.mode?.$case === 'scale' && tween.mode.scale) {
         return {
           ...tween,
-          mode: { ...tween.mode, textureMove: { start: tween.mode.textureMove.end, end: tween.mode.textureMove.start } }
+          mode: {
+            ...tween.mode,
+            scale: { start: tween.mode.scale.end, end: tween.mode.scale.start },
+          },
         };
       }
-      throw new Error("Invalid tween");
+      if (tween.mode?.$case === 'textureMove' && tween.mode.textureMove) {
+        return {
+          ...tween,
+          mode: {
+            ...tween.mode,
+            textureMove: { start: tween.mode.textureMove.end, end: tween.mode.textureMove.start },
+          },
+        };
+      }
+      throw new Error('Invalid tween');
     }
     engine2.addSystem(() => {
       for (const restart of restartTweens) {
@@ -14052,12 +14439,10 @@ function createTweenSystem(engine2) {
       restartTweens.length = 0;
       for (const [entity, tween] of engine2.getEntitiesWith(Tween3)) {
         const tweenCache = cache.get(entity);
-        if (!tweenCache)
-          continue;
+        if (!tweenCache) continue;
         if (tweenCache.completed) {
           const tweenSequence = TweenSequence2.getOrNull(entity);
-          if (!tweenSequence)
-            continue;
+          if (!tweenSequence) continue;
           const { sequence } = tweenSequence;
           if (sequence && sequence.length) {
             const [nextTweenSequence, ...otherTweens] = sequence;
@@ -14085,11 +14470,10 @@ function createTweenSystem(engine2) {
     }, Number.NEGATIVE_INFINITY);
   }
   const enableTweenSequenceLogic = globalThis.ENABLE_SDK_TWEEN_SEQUENCE;
-  if (enableTweenSequenceLogic !== false)
-    initializeTweenSequenceSystem();
+  if (enableTweenSequenceLogic !== false) initializeTweenSequenceSystem();
   const tweenSystem2 = {
     // This event is fired only once per tween
-    tweenCompleted: isCompleted
+    tweenCompleted: isCompleted,
   };
   cacheTween.set(engine2._id, tweenSystem2);
   return tweenSystem2;
@@ -14110,12 +14494,9 @@ function pointerEventColliderChecker(engine2) {
     }
     timer = 0;
     for (const [entity] of engine2.getEntitiesWith(PointerEvents2)) {
-      if (alreadyShownlog.has(entity))
-        continue;
-      if (GltfContainer2.has(entity))
-        continue;
-      if (UiTransform2.has(entity))
-        continue;
+      if (alreadyShownlog.has(entity)) continue;
+      if (GltfContainer2.has(entity)) continue;
+      if (UiTransform2.has(entity)) continue;
       const mesh = MeshCollider3.getOrNull(entity);
       if (mesh) {
         if (mesh.collisionMask === void 0 || mesh.collisionMask & 1) {
@@ -14149,118 +14530,122 @@ var TextShape3 = /* @__PURE__ */ TextShape2(engine);
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/common/camera_type.gen.js
 var CameraType;
-(function(CameraType2) {
-  CameraType2[CameraType2["CT_FIRST_PERSON"] = 0] = "CT_FIRST_PERSON";
-  CameraType2[CameraType2["CT_THIRD_PERSON"] = 1] = "CT_THIRD_PERSON";
-  CameraType2[CameraType2["CT_CINEMATIC"] = 2] = "CT_CINEMATIC";
+(function (CameraType2) {
+  CameraType2[(CameraType2['CT_FIRST_PERSON'] = 0)] = 'CT_FIRST_PERSON';
+  CameraType2[(CameraType2['CT_THIRD_PERSON'] = 1)] = 'CT_THIRD_PERSON';
+  CameraType2[(CameraType2['CT_CINEMATIC'] = 2)] = 'CT_CINEMATIC';
 })(CameraType || (CameraType = {}));
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/common/input_action.gen.js
 var InputAction;
-(function(InputAction2) {
-  InputAction2[InputAction2["IA_POINTER"] = 0] = "IA_POINTER";
-  InputAction2[InputAction2["IA_PRIMARY"] = 1] = "IA_PRIMARY";
-  InputAction2[InputAction2["IA_SECONDARY"] = 2] = "IA_SECONDARY";
-  InputAction2[InputAction2["IA_ANY"] = 3] = "IA_ANY";
-  InputAction2[InputAction2["IA_FORWARD"] = 4] = "IA_FORWARD";
-  InputAction2[InputAction2["IA_BACKWARD"] = 5] = "IA_BACKWARD";
-  InputAction2[InputAction2["IA_RIGHT"] = 6] = "IA_RIGHT";
-  InputAction2[InputAction2["IA_LEFT"] = 7] = "IA_LEFT";
-  InputAction2[InputAction2["IA_JUMP"] = 8] = "IA_JUMP";
-  InputAction2[InputAction2["IA_WALK"] = 9] = "IA_WALK";
-  InputAction2[InputAction2["IA_ACTION_3"] = 10] = "IA_ACTION_3";
-  InputAction2[InputAction2["IA_ACTION_4"] = 11] = "IA_ACTION_4";
-  InputAction2[InputAction2["IA_ACTION_5"] = 12] = "IA_ACTION_5";
-  InputAction2[InputAction2["IA_ACTION_6"] = 13] = "IA_ACTION_6";
+(function (InputAction2) {
+  InputAction2[(InputAction2['IA_POINTER'] = 0)] = 'IA_POINTER';
+  InputAction2[(InputAction2['IA_PRIMARY'] = 1)] = 'IA_PRIMARY';
+  InputAction2[(InputAction2['IA_SECONDARY'] = 2)] = 'IA_SECONDARY';
+  InputAction2[(InputAction2['IA_ANY'] = 3)] = 'IA_ANY';
+  InputAction2[(InputAction2['IA_FORWARD'] = 4)] = 'IA_FORWARD';
+  InputAction2[(InputAction2['IA_BACKWARD'] = 5)] = 'IA_BACKWARD';
+  InputAction2[(InputAction2['IA_RIGHT'] = 6)] = 'IA_RIGHT';
+  InputAction2[(InputAction2['IA_LEFT'] = 7)] = 'IA_LEFT';
+  InputAction2[(InputAction2['IA_JUMP'] = 8)] = 'IA_JUMP';
+  InputAction2[(InputAction2['IA_WALK'] = 9)] = 'IA_WALK';
+  InputAction2[(InputAction2['IA_ACTION_3'] = 10)] = 'IA_ACTION_3';
+  InputAction2[(InputAction2['IA_ACTION_4'] = 11)] = 'IA_ACTION_4';
+  InputAction2[(InputAction2['IA_ACTION_5'] = 12)] = 'IA_ACTION_5';
+  InputAction2[(InputAction2['IA_ACTION_6'] = 13)] = 'IA_ACTION_6';
 })(InputAction || (InputAction = {}));
 var PointerEventType;
-(function(PointerEventType2) {
-  PointerEventType2[PointerEventType2["PET_UP"] = 0] = "PET_UP";
-  PointerEventType2[PointerEventType2["PET_DOWN"] = 1] = "PET_DOWN";
-  PointerEventType2[PointerEventType2["PET_HOVER_ENTER"] = 2] = "PET_HOVER_ENTER";
-  PointerEventType2[PointerEventType2["PET_HOVER_LEAVE"] = 3] = "PET_HOVER_LEAVE";
+(function (PointerEventType2) {
+  PointerEventType2[(PointerEventType2['PET_UP'] = 0)] = 'PET_UP';
+  PointerEventType2[(PointerEventType2['PET_DOWN'] = 1)] = 'PET_DOWN';
+  PointerEventType2[(PointerEventType2['PET_HOVER_ENTER'] = 2)] = 'PET_HOVER_ENTER';
+  PointerEventType2[(PointerEventType2['PET_HOVER_LEAVE'] = 3)] = 'PET_HOVER_LEAVE';
 })(PointerEventType || (PointerEventType = {}));
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/common/loading_state.gen.js
 var LoadingState;
-(function(LoadingState2) {
-  LoadingState2[LoadingState2["UNKNOWN"] = 0] = "UNKNOWN";
-  LoadingState2[LoadingState2["LOADING"] = 1] = "LOADING";
-  LoadingState2[LoadingState2["NOT_FOUND"] = 2] = "NOT_FOUND";
-  LoadingState2[LoadingState2["FINISHED_WITH_ERROR"] = 3] = "FINISHED_WITH_ERROR";
-  LoadingState2[LoadingState2["FINISHED"] = 4] = "FINISHED";
+(function (LoadingState2) {
+  LoadingState2[(LoadingState2['UNKNOWN'] = 0)] = 'UNKNOWN';
+  LoadingState2[(LoadingState2['LOADING'] = 1)] = 'LOADING';
+  LoadingState2[(LoadingState2['NOT_FOUND'] = 2)] = 'NOT_FOUND';
+  LoadingState2[(LoadingState2['FINISHED_WITH_ERROR'] = 3)] = 'FINISHED_WITH_ERROR';
+  LoadingState2[(LoadingState2['FINISHED'] = 4)] = 'FINISHED';
 })(LoadingState || (LoadingState = {}));
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/components/generated/pb/decentraland/sdk/components/common/texts.gen.js
 var TextAlignMode;
-(function(TextAlignMode2) {
-  TextAlignMode2[TextAlignMode2["TAM_TOP_LEFT"] = 0] = "TAM_TOP_LEFT";
-  TextAlignMode2[TextAlignMode2["TAM_TOP_CENTER"] = 1] = "TAM_TOP_CENTER";
-  TextAlignMode2[TextAlignMode2["TAM_TOP_RIGHT"] = 2] = "TAM_TOP_RIGHT";
-  TextAlignMode2[TextAlignMode2["TAM_MIDDLE_LEFT"] = 3] = "TAM_MIDDLE_LEFT";
-  TextAlignMode2[TextAlignMode2["TAM_MIDDLE_CENTER"] = 4] = "TAM_MIDDLE_CENTER";
-  TextAlignMode2[TextAlignMode2["TAM_MIDDLE_RIGHT"] = 5] = "TAM_MIDDLE_RIGHT";
-  TextAlignMode2[TextAlignMode2["TAM_BOTTOM_LEFT"] = 6] = "TAM_BOTTOM_LEFT";
-  TextAlignMode2[TextAlignMode2["TAM_BOTTOM_CENTER"] = 7] = "TAM_BOTTOM_CENTER";
-  TextAlignMode2[TextAlignMode2["TAM_BOTTOM_RIGHT"] = 8] = "TAM_BOTTOM_RIGHT";
+(function (TextAlignMode2) {
+  TextAlignMode2[(TextAlignMode2['TAM_TOP_LEFT'] = 0)] = 'TAM_TOP_LEFT';
+  TextAlignMode2[(TextAlignMode2['TAM_TOP_CENTER'] = 1)] = 'TAM_TOP_CENTER';
+  TextAlignMode2[(TextAlignMode2['TAM_TOP_RIGHT'] = 2)] = 'TAM_TOP_RIGHT';
+  TextAlignMode2[(TextAlignMode2['TAM_MIDDLE_LEFT'] = 3)] = 'TAM_MIDDLE_LEFT';
+  TextAlignMode2[(TextAlignMode2['TAM_MIDDLE_CENTER'] = 4)] = 'TAM_MIDDLE_CENTER';
+  TextAlignMode2[(TextAlignMode2['TAM_MIDDLE_RIGHT'] = 5)] = 'TAM_MIDDLE_RIGHT';
+  TextAlignMode2[(TextAlignMode2['TAM_BOTTOM_LEFT'] = 6)] = 'TAM_BOTTOM_LEFT';
+  TextAlignMode2[(TextAlignMode2['TAM_BOTTOM_CENTER'] = 7)] = 'TAM_BOTTOM_CENTER';
+  TextAlignMode2[(TextAlignMode2['TAM_BOTTOM_RIGHT'] = 8)] = 'TAM_BOTTOM_RIGHT';
 })(TextAlignMode || (TextAlignMode = {}));
 var Font;
-(function(Font2) {
-  Font2[Font2["F_SANS_SERIF"] = 0] = "F_SANS_SERIF";
-  Font2[Font2["F_SERIF"] = 1] = "F_SERIF";
-  Font2[Font2["F_MONOSPACE"] = 2] = "F_MONOSPACE";
+(function (Font2) {
+  Font2[(Font2['F_SANS_SERIF'] = 0)] = 'F_SANS_SERIF';
+  Font2[(Font2['F_SERIF'] = 1)] = 'F_SERIF';
+  Font2[(Font2['F_MONOSPACE'] = 2)] = 'F_MONOSPACE';
 })(Font || (Font = {}));
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/composite/components.js
 function getCompositeRootComponent(engine2) {
-  const component = engine2.getComponentOrNull("composite::root");
+  const component = engine2.getComponentOrNull('composite::root');
   if (component) {
     return component;
   }
-  return engine2.defineComponent("composite::root", {
+  return engine2.defineComponent('composite::root', {
     src: Schemas.String,
-    entities: Schemas.Array(Schemas.Map({
-      src: Schemas.Entity,
-      dest: Schemas.Entity
-    }))
+    entities: Schemas.Array(
+      Schemas.Map({
+        src: Schemas.Entity,
+        dest: Schemas.Entity,
+      })
+    ),
   });
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/composite/path.js
-var currentWorkingDir = "/";
+var currentWorkingDir = '/';
 function normalizeStringPosix(path, allowAboveRoot = false) {
-  let res = "";
+  let res = '';
   let lastSegmentLength = 0;
   let lastSlash = -1;
   let dots = 0;
   let code;
   for (let i = 0; i <= path.length; ++i) {
-    if (i < path.length)
-      code = path.charCodeAt(i);
-    else if (code === 47)
-      break;
-    else
-      code = 47;
+    if (i < path.length) code = path.charCodeAt(i);
+    else if (code === 47) break;
+    else code = 47;
     if (code === 47) {
       if (lastSlash === i - 1 || dots === 1) {
       } else if (lastSlash !== i - 1 && dots === 2) {
-        if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== 46 || res.charCodeAt(res.length - 2) !== 46) {
+        if (
+          res.length < 2 ||
+          lastSegmentLength !== 2 ||
+          res.charCodeAt(res.length - 1) !== 46 ||
+          res.charCodeAt(res.length - 2) !== 46
+        ) {
           if (res.length > 2) {
-            const lastSlashIndex = res.lastIndexOf("/");
+            const lastSlashIndex = res.lastIndexOf('/');
             if (lastSlashIndex !== res.length - 1) {
               if (lastSlashIndex === -1) {
-                res = "";
+                res = '';
                 lastSegmentLength = 0;
               } else {
                 res = res.slice(0, lastSlashIndex);
-                lastSegmentLength = res.length - 1 - res.lastIndexOf("/");
+                lastSegmentLength = res.length - 1 - res.lastIndexOf('/');
               }
               lastSlash = i;
               dots = 0;
               continue;
             }
           } else if (res.length === 2 || res.length === 1) {
-            res = "";
+            res = '';
             lastSegmentLength = 0;
             lastSlash = i;
             dots = 0;
@@ -14268,17 +14653,13 @@ function normalizeStringPosix(path, allowAboveRoot = false) {
           }
         }
         if (allowAboveRoot) {
-          if (res.length > 0)
-            res += "/..";
-          else
-            res = "..";
+          if (res.length > 0) res += '/..';
+          else res = '..';
           lastSegmentLength = 2;
         }
       } else {
-        if (res.length > 0)
-          res += "/" + path.slice(lastSlash + 1, i);
-        else
-          res = path.slice(lastSlash + 1, i);
+        if (res.length > 0) res += '/' + path.slice(lastSlash + 1, i);
+        else res = path.slice(lastSlash + 1, i);
         lastSegmentLength = i - lastSlash - 1;
       }
       lastSlash = i;
@@ -14292,39 +14673,34 @@ function normalizeStringPosix(path, allowAboveRoot = false) {
   return res;
 }
 function resolve(...args) {
-  let resolvedPath = "";
+  let resolvedPath = '';
   let resolvedAbsolute = false;
   let cwd;
   for (let i = args.length - 1; i >= -1 && !resolvedAbsolute; i--) {
     let path;
-    if (i >= 0)
-      path = args[i];
+    if (i >= 0) path = args[i];
     else {
-      if (cwd === void 0)
-        cwd = currentWorkingDir;
+      if (cwd === void 0) cwd = currentWorkingDir;
       path = cwd;
     }
     if (path.length === 0) {
       continue;
     }
-    resolvedPath = path + "/" + resolvedPath;
+    resolvedPath = path + '/' + resolvedPath;
     resolvedAbsolute = path.charCodeAt(0) === 47;
   }
   resolvedPath = normalizeStringPosix(resolvedPath, !resolvedAbsolute);
   if (resolvedAbsolute) {
-    if (resolvedPath.length > 0)
-      return "/" + resolvedPath;
-    else
-      return "/";
+    if (resolvedPath.length > 0) return '/' + resolvedPath;
+    else return '/';
   } else if (resolvedPath.length > 0) {
     return resolvedPath;
   } else {
-    return ".";
+    return '.';
   }
 }
 function dirname(path) {
-  if (path.length === 0)
-    return ".";
+  if (path.length === 0) return '.';
   let code = path.charCodeAt(0);
   const hasRoot = code === 47;
   let end = -1;
@@ -14340,26 +14716,24 @@ function dirname(path) {
       matchedSlash = false;
     }
   }
-  if (end === -1)
-    return hasRoot ? "/" : ".";
-  if (hasRoot && end === 1)
-    return "//";
+  if (end === -1) return hasRoot ? '/' : '.';
+  if (hasRoot && end === 1) return '//';
   return path.slice(0, end);
 }
 function resolveComposite(path, cwd) {
-  const absolutePath = path.startsWith(".") ? resolve(cwd, path) : resolve(path);
+  const absolutePath = path.startsWith('.') ? resolve(cwd, path) : resolve(path);
   return absolutePath.substring(1);
 }
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/composite/instance.js
 var EntityMappingMode;
-(function(EntityMappingMode2) {
-  EntityMappingMode2[EntityMappingMode2["EMM_NONE"] = 0] = "EMM_NONE";
-  EntityMappingMode2[EntityMappingMode2["EMM_NEXT_AVAILABLE"] = 1] = "EMM_NEXT_AVAILABLE";
-  EntityMappingMode2[EntityMappingMode2["EMM_DIRECT_MAPPING"] = 2] = "EMM_DIRECT_MAPPING";
+(function (EntityMappingMode2) {
+  EntityMappingMode2[(EntityMappingMode2['EMM_NONE'] = 0)] = 'EMM_NONE';
+  EntityMappingMode2[(EntityMappingMode2['EMM_NEXT_AVAILABLE'] = 1)] = 'EMM_NEXT_AVAILABLE';
+  EntityMappingMode2[(EntityMappingMode2['EMM_DIRECT_MAPPING'] = 2)] = 'EMM_DIRECT_MAPPING';
 })(EntityMappingMode || (EntityMappingMode = {}));
 function getComponentValue(componentDefinition, component) {
-  if (component.data?.$case === "json") {
+  if (component.data?.$case === 'json') {
     return component.data.json;
   } else {
     return componentDefinition.schema.deserialize(new ReadWriteByteBuffer(component.data?.binary));
@@ -14368,14 +14742,17 @@ function getComponentValue(componentDefinition, component) {
 function getComponentDefinition(engine2, component) {
   const existingComponentDefinition = engine2.getComponentOrNull(component.name);
   if (!existingComponentDefinition) {
-    if (component.name.startsWith("core::")) {
+    if (component.name.startsWith('core::')) {
       if (component.name in componentDefinitionByName) {
         return componentDefinitionByName[component.name](engine2);
       } else {
         throw new Error(`The core component ${component.name} was not found.`);
       }
     } else if (component.jsonSchema) {
-      return engine2.defineComponentFromSchema(component.name, Schemas.fromJson(component.jsonSchema));
+      return engine2.defineComponentFromSchema(
+        component.name,
+        Schemas.fromJson(component.jsonSchema)
+      );
     } else {
       throw new Error(`${component.name} is not defined and there is no schema to define it.`);
     }
@@ -14393,9 +14770,12 @@ function getEntityMapping(engine2, compositeEntity, mappedEntities, { entityMapp
     mappedEntities.set(compositeEntity, entity);
     return entity;
   }
-  const newEntity = entityMapping?.type === EntityMappingMode.EMM_NEXT_AVAILABLE ? entityMapping.getNextAvailableEntity() : engine2.addEntity();
+  const newEntity =
+    entityMapping?.type === EntityMappingMode.EMM_NEXT_AVAILABLE
+      ? entityMapping.getNextAvailableEntity()
+      : engine2.addEntity();
   if (newEntity === null) {
-    throw new Error("There is no more entities to allocate");
+    throw new Error('There is no more entities to allocate');
   }
   mappedEntities.set(compositeEntity, newEntity);
   return newEntity;
@@ -14404,15 +14784,18 @@ function instanceComposite(engine2, compositeResource, compositeProvider2, optio
   const { rootEntity, alreadyRequestedSrc: optionalAlreadyRequestedSrc, entityMapping } = options;
   const alreadyRequestedSrc = optionalAlreadyRequestedSrc || /* @__PURE__ */ new Set();
   const compositeDirectoryPath = dirname(resolve(compositeResource.src));
-  const TransformComponentNumber = componentNumberFromName("core::Transform");
+  const TransformComponentNumber = componentNumberFromName('core::Transform');
   const CompositeRootComponent = getCompositeRootComponent(engine2);
   const mappedEntities = /* @__PURE__ */ new Map();
-  const getCompositeEntity = (compositeEntity) => getEntityMapping(engine2, compositeEntity, mappedEntities, options);
+  const getCompositeEntity = compositeEntity =>
+    getEntityMapping(engine2, compositeEntity, mappedEntities, options);
   const compositeRootEntity = rootEntity ?? getCompositeEntity(0);
   if (rootEntity) {
     mappedEntities.set(0, rootEntity);
   }
-  const childrenComposite = compositeResource.composite.components.find((item) => item.name === CompositeRootComponent.componentName);
+  const childrenComposite = compositeResource.composite.components.find(
+    item => item.name === CompositeRootComponent.componentName
+  );
   if (childrenComposite) {
     for (const [childCompositeEntity, compositeRawData] of childrenComposite.data) {
       const childComposite = getComponentValue(CompositeRootComponent, compositeRawData);
@@ -14420,23 +14803,31 @@ function instanceComposite(engine2, compositeResource, compositeProvider2, optio
       const childCompositeResource = compositeProvider2.getCompositeOrNull(childCompositePath);
       const targetEntity = getCompositeEntity(childCompositeEntity);
       if (childCompositeResource) {
-        if (alreadyRequestedSrc.has(childCompositeResource.src) || childCompositeResource.src === compositeResource.src) {
-          throw new Error(`Composite ${compositeResource.src} has a recursive instanciation while try to instance ${childCompositeResource.src}. Previous instances: ${alreadyRequestedSrc.toString()}`);
+        if (
+          alreadyRequestedSrc.has(childCompositeResource.src) ||
+          childCompositeResource.src === compositeResource.src
+        ) {
+          throw new Error(
+            `Composite ${compositeResource.src} has a recursive instanciation while try to instance ${childCompositeResource.src}. Previous instances: ${alreadyRequestedSrc.toString()}`
+          );
         }
         instanceComposite(engine2, childCompositeResource, compositeProvider2, {
           rootEntity: targetEntity,
           alreadyRequestedSrc: new Set(alreadyRequestedSrc).add(childCompositeResource.src),
-          entityMapping: entityMapping?.type === EntityMappingMode.EMM_NEXT_AVAILABLE ? entityMapping : void 0
+          entityMapping:
+            entityMapping?.type === EntityMappingMode.EMM_NEXT_AVAILABLE ? entityMapping : void 0,
         });
       }
     }
   }
   for (const component of compositeResource.composite.components) {
-    if (component.name === CompositeRootComponent.componentName)
-      continue;
+    if (component.name === CompositeRootComponent.componentName) continue;
     const componentDefinition = getComponentDefinition(engine2, component);
     for (const [entity, compositeComponentValue] of component.data) {
-      const componentValueDeserialized = getComponentValue(componentDefinition, compositeComponentValue);
+      const componentValueDeserialized = getComponentValue(
+        componentDefinition,
+        compositeComponentValue
+      );
       const targetEntity = getCompositeEntity(entity);
       const componentValue = componentDefinition.create(targetEntity, componentValueDeserialized);
       if (componentDefinition.componentId === TransformComponentNumber) {
@@ -14447,21 +14838,27 @@ function instanceComposite(engine2, compositeResource, compositeProvider2, optio
           transform.parent = getCompositeEntity(0);
         }
       } else {
-        Schemas.mutateNestedValues(componentDefinition.schema.jsonSchema, componentValue, (value, valueType) => {
-          if (valueType.serializationType === "entity") {
-            return { changed: true, value: getCompositeEntity(value) };
-          } else {
-            return { changed: false };
+        Schemas.mutateNestedValues(
+          componentDefinition.schema.jsonSchema,
+          componentValue,
+          (value, valueType) => {
+            if (valueType.serializationType === 'entity') {
+              return { changed: true, value: getCompositeEntity(value) };
+            } else {
+              return { changed: false };
+            }
           }
-        });
+        );
       }
     }
   }
-  const composite = CompositeRootComponent.getMutableOrNull(compositeRootEntity) || CompositeRootComponent.create(compositeRootEntity);
+  const composite =
+    CompositeRootComponent.getMutableOrNull(compositeRootEntity) ||
+    CompositeRootComponent.create(compositeRootEntity);
   for (const [entitySource, targetEntity] of mappedEntities) {
     composite.entities.push({
       src: entitySource,
-      dest: targetEntity
+      dest: targetEntity,
     });
   }
   composite.src = compositeResource.src;
@@ -14474,31 +14871,35 @@ var import_minimal59 = __toESM(require_minimal2());
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/composite/proto/gen/google/protobuf/struct.gen.js
 var import_minimal58 = __toESM(require_minimal2());
 var NullValue;
-(function(NullValue2) {
-  NullValue2[NullValue2["NULL_VALUE"] = 0] = "NULL_VALUE";
+(function (NullValue2) {
+  NullValue2[(NullValue2['NULL_VALUE'] = 0)] = 'NULL_VALUE';
 })(NullValue || (NullValue = {}));
 function nullValueFromJSON(object) {
   switch (object) {
     case 0:
-    case "NULL_VALUE":
+    case 'NULL_VALUE':
       return 0;
     default:
-      throw new tsProtoGlobalThis2.Error("Unrecognized enum value " + object + " for enum NullValue");
+      throw new tsProtoGlobalThis2.Error(
+        'Unrecognized enum value ' + object + ' for enum NullValue'
+      );
   }
 }
 function nullValueToJSON(object) {
   switch (object) {
     case 0:
-      return "NULL_VALUE";
+      return 'NULL_VALUE';
     default:
-      throw new tsProtoGlobalThis2.Error("Unrecognized enum value " + object + " for enum NullValue");
+      throw new tsProtoGlobalThis2.Error(
+        'Unrecognized enum value ' + object + ' for enum NullValue'
+      );
   }
 }
 function createBaseStruct() {
   return { fields: /* @__PURE__ */ new Map() };
 }
 var Struct;
-(function(Struct2) {
+(function (Struct2) {
   function encode(message, writer = import_minimal58.default.Writer.create()) {
     message.fields.forEach((value, key) => {
       if (value !== void 0) {
@@ -14509,7 +14910,10 @@ var Struct;
   }
   Struct2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal58.default.Reader ? input : import_minimal58.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal58.default.Reader
+        ? input
+        : import_minimal58.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseStruct();
     while (reader.pos < end) {
@@ -14535,10 +14939,12 @@ var Struct;
   Struct2.decode = decode;
   function fromJSON(object) {
     return {
-      fields: isObject(object.fields) ? Object.entries(object.fields).reduce((acc, [key, value]) => {
-        acc.set(key, value);
-        return acc;
-      }, /* @__PURE__ */ new Map()) : /* @__PURE__ */ new Map()
+      fields: isObject(object.fields)
+        ? Object.entries(object.fields).reduce((acc, [key, value]) => {
+            acc.set(key, value);
+            return acc;
+          }, /* @__PURE__ */ new Map())
+        : /* @__PURE__ */ new Map(),
     };
   }
   Struct2.fromJSON = fromJSON;
@@ -14556,7 +14962,7 @@ var Struct;
   function wrap(object) {
     const struct = createBaseStruct();
     if (object !== void 0) {
-      Object.keys(object).forEach((key) => {
+      Object.keys(object).forEach(key => {
         struct.fields.set(key, object[key]);
       });
     }
@@ -14565,7 +14971,7 @@ var Struct;
   Struct2.wrap = wrap;
   function unwrap(message) {
     const object = {};
-    [...message.fields.keys()].forEach((key) => {
+    [...message.fields.keys()].forEach(key => {
       object[key] = message.fields.get(key);
     });
     return object;
@@ -14573,12 +14979,12 @@ var Struct;
   Struct2.unwrap = unwrap;
 })(Struct || (Struct = {}));
 function createBaseStruct_FieldsEntry() {
-  return { key: "", value: void 0 };
+  return { key: '', value: void 0 };
 }
 var Struct_FieldsEntry;
-(function(Struct_FieldsEntry2) {
+(function (Struct_FieldsEntry2) {
   function encode(message, writer = import_minimal58.default.Writer.create()) {
-    if (message.key !== "") {
+    if (message.key !== '') {
       writer.uint32(10).string(message.key);
     }
     if (message.value !== void 0) {
@@ -14588,7 +14994,10 @@ var Struct_FieldsEntry;
   }
   Struct_FieldsEntry2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal58.default.Reader ? input : import_minimal58.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal58.default.Reader
+        ? input
+        : import_minimal58.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseStruct_FieldsEntry();
     while (reader.pos < end) {
@@ -14616,7 +15025,10 @@ var Struct_FieldsEntry;
   }
   Struct_FieldsEntry2.decode = decode;
   function fromJSON(object) {
-    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object?.value) ? object.value : void 0 };
+    return {
+      key: isSet(object.key) ? String(object.key) : '',
+      value: isSet(object?.value) ? object.value : void 0,
+    };
   }
   Struct_FieldsEntry2.fromJSON = fromJSON;
   function toJSON(message) {
@@ -14631,25 +15043,25 @@ function createBaseValue() {
   return { kind: void 0 };
 }
 var Value;
-(function(Value2) {
+(function (Value2) {
   function encode(message, writer = import_minimal58.default.Writer.create()) {
     switch (message.kind?.$case) {
-      case "nullValue":
+      case 'nullValue':
         writer.uint32(8).int32(message.kind.nullValue);
         break;
-      case "numberValue":
+      case 'numberValue':
         writer.uint32(17).double(message.kind.numberValue);
         break;
-      case "stringValue":
+      case 'stringValue':
         writer.uint32(26).string(message.kind.stringValue);
         break;
-      case "boolValue":
+      case 'boolValue':
         writer.uint32(32).bool(message.kind.boolValue);
         break;
-      case "structValue":
+      case 'structValue':
         Struct.encode(Struct.wrap(message.kind.structValue), writer.uint32(42).fork()).ldelim();
         break;
-      case "listValue":
+      case 'listValue':
         ListValue.encode(ListValue.wrap(message.kind.listValue), writer.uint32(50).fork()).ldelim();
         break;
     }
@@ -14657,7 +15069,10 @@ var Value;
   }
   Value2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal58.default.Reader ? input : import_minimal58.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal58.default.Reader
+        ? input
+        : import_minimal58.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseValue();
     while (reader.pos < end) {
@@ -14667,37 +15082,43 @@ var Value;
           if (tag !== 8) {
             break;
           }
-          message.kind = { $case: "nullValue", nullValue: reader.int32() };
+          message.kind = { $case: 'nullValue', nullValue: reader.int32() };
           continue;
         case 2:
           if (tag !== 17) {
             break;
           }
-          message.kind = { $case: "numberValue", numberValue: reader.double() };
+          message.kind = { $case: 'numberValue', numberValue: reader.double() };
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
-          message.kind = { $case: "stringValue", stringValue: reader.string() };
+          message.kind = { $case: 'stringValue', stringValue: reader.string() };
           continue;
         case 4:
           if (tag !== 32) {
             break;
           }
-          message.kind = { $case: "boolValue", boolValue: reader.bool() };
+          message.kind = { $case: 'boolValue', boolValue: reader.bool() };
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
-          message.kind = { $case: "structValue", structValue: Struct.unwrap(Struct.decode(reader, reader.uint32())) };
+          message.kind = {
+            $case: 'structValue',
+            structValue: Struct.unwrap(Struct.decode(reader, reader.uint32())),
+          };
           continue;
         case 6:
           if (tag !== 50) {
             break;
           }
-          message.kind = { $case: "listValue", listValue: ListValue.unwrap(ListValue.decode(reader, reader.uint32())) };
+          message.kind = {
+            $case: 'listValue',
+            listValue: ListValue.unwrap(ListValue.decode(reader, reader.uint32())),
+          };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -14710,18 +15131,32 @@ var Value;
   Value2.decode = decode;
   function fromJSON(object) {
     return {
-      kind: isSet(object.nullValue) ? { $case: "nullValue", nullValue: nullValueFromJSON(object.nullValue) } : isSet(object.numberValue) ? { $case: "numberValue", numberValue: Number(object.numberValue) } : isSet(object.stringValue) ? { $case: "stringValue", stringValue: String(object.stringValue) } : isSet(object.boolValue) ? { $case: "boolValue", boolValue: Boolean(object.boolValue) } : isSet(object.structValue) ? { $case: "structValue", structValue: object.structValue } : isSet(object.listValue) ? { $case: "listValue", listValue: [...object.listValue] } : void 0
+      kind: isSet(object.nullValue)
+        ? { $case: 'nullValue', nullValue: nullValueFromJSON(object.nullValue) }
+        : isSet(object.numberValue)
+          ? { $case: 'numberValue', numberValue: Number(object.numberValue) }
+          : isSet(object.stringValue)
+            ? { $case: 'stringValue', stringValue: String(object.stringValue) }
+            : isSet(object.boolValue)
+              ? { $case: 'boolValue', boolValue: Boolean(object.boolValue) }
+              : isSet(object.structValue)
+                ? { $case: 'structValue', structValue: object.structValue }
+                : isSet(object.listValue)
+                  ? { $case: 'listValue', listValue: [...object.listValue] }
+                  : void 0,
     };
   }
   Value2.fromJSON = fromJSON;
   function toJSON(message) {
     const obj = {};
-    message.kind?.$case === "nullValue" && (obj.nullValue = message.kind?.nullValue !== void 0 ? nullValueToJSON(message.kind?.nullValue) : void 0);
-    message.kind?.$case === "numberValue" && (obj.numberValue = message.kind?.numberValue);
-    message.kind?.$case === "stringValue" && (obj.stringValue = message.kind?.stringValue);
-    message.kind?.$case === "boolValue" && (obj.boolValue = message.kind?.boolValue);
-    message.kind?.$case === "structValue" && (obj.structValue = message.kind?.structValue);
-    message.kind?.$case === "listValue" && (obj.listValue = message.kind?.listValue);
+    message.kind?.$case === 'nullValue' &&
+      (obj.nullValue =
+        message.kind?.nullValue !== void 0 ? nullValueToJSON(message.kind?.nullValue) : void 0);
+    message.kind?.$case === 'numberValue' && (obj.numberValue = message.kind?.numberValue);
+    message.kind?.$case === 'stringValue' && (obj.stringValue = message.kind?.stringValue);
+    message.kind?.$case === 'boolValue' && (obj.boolValue = message.kind?.boolValue);
+    message.kind?.$case === 'structValue' && (obj.structValue = message.kind?.structValue);
+    message.kind?.$case === 'listValue' && (obj.listValue = message.kind?.listValue);
     return obj;
   }
   Value2.toJSON = toJSON;
@@ -14729,38 +15164,38 @@ var Value;
     const result = createBaseValue();
     if (value === null) {
       result.kind = {
-        $case: "nullValue",
-        nullValue: 0
+        $case: 'nullValue',
+        nullValue: 0,
         /* NullValue.NULL_VALUE */
       };
-    } else if (typeof value === "boolean") {
-      result.kind = { $case: "boolValue", boolValue: value };
-    } else if (typeof value === "number") {
-      result.kind = { $case: "numberValue", numberValue: value };
-    } else if (typeof value === "string") {
-      result.kind = { $case: "stringValue", stringValue: value };
+    } else if (typeof value === 'boolean') {
+      result.kind = { $case: 'boolValue', boolValue: value };
+    } else if (typeof value === 'number') {
+      result.kind = { $case: 'numberValue', numberValue: value };
+    } else if (typeof value === 'string') {
+      result.kind = { $case: 'stringValue', stringValue: value };
     } else if (Array.isArray(value)) {
-      result.kind = { $case: "listValue", listValue: value };
-    } else if (typeof value === "object") {
-      result.kind = { $case: "structValue", structValue: value };
-    } else if (typeof value !== "undefined") {
-      throw new Error("Unsupported any value type: " + typeof value);
+      result.kind = { $case: 'listValue', listValue: value };
+    } else if (typeof value === 'object') {
+      result.kind = { $case: 'structValue', structValue: value };
+    } else if (typeof value !== 'undefined') {
+      throw new Error('Unsupported any value type: ' + typeof value);
     }
     return result;
   }
   Value2.wrap = wrap;
   function unwrap(message) {
-    if (message.kind?.$case === "nullValue") {
+    if (message.kind?.$case === 'nullValue') {
       return null;
-    } else if (message.kind?.$case === "numberValue") {
+    } else if (message.kind?.$case === 'numberValue') {
       return message.kind?.numberValue;
-    } else if (message.kind?.$case === "stringValue") {
+    } else if (message.kind?.$case === 'stringValue') {
       return message.kind?.stringValue;
-    } else if (message.kind?.$case === "boolValue") {
+    } else if (message.kind?.$case === 'boolValue') {
       return message.kind?.boolValue;
-    } else if (message.kind?.$case === "structValue") {
+    } else if (message.kind?.$case === 'structValue') {
       return message.kind?.structValue;
-    } else if (message.kind?.$case === "listValue") {
+    } else if (message.kind?.$case === 'listValue') {
       return message.kind?.listValue;
     } else {
       return void 0;
@@ -14772,7 +15207,7 @@ function createBaseListValue() {
   return { values: [] };
 }
 var ListValue;
-(function(ListValue2) {
+(function (ListValue2) {
   function encode(message, writer = import_minimal58.default.Writer.create()) {
     for (const v of message.values) {
       Value.encode(Value.wrap(v), writer.uint32(10).fork()).ldelim();
@@ -14781,7 +15216,10 @@ var ListValue;
   }
   ListValue2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal58.default.Reader ? input : import_minimal58.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal58.default.Reader
+        ? input
+        : import_minimal58.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseListValue();
     while (reader.pos < end) {
@@ -14809,7 +15247,7 @@ var ListValue;
   function toJSON(message) {
     const obj = {};
     if (message.values) {
-      obj.values = message.values.map((e) => e);
+      obj.values = message.values.map(e => e);
     } else {
       obj.values = [];
     }
@@ -14823,7 +15261,7 @@ var ListValue;
   }
   ListValue2.wrap = wrap;
   function unwrap(message) {
-    if (message?.hasOwnProperty("values") && Array.isArray(message.values)) {
+    if (message?.hasOwnProperty('values') && Array.isArray(message.values)) {
       return message.values;
     } else {
       return message;
@@ -14832,22 +15270,22 @@ var ListValue;
   ListValue2.unwrap = unwrap;
 })(ListValue || (ListValue = {}));
 var tsProtoGlobalThis2 = (() => {
-  if (typeof globalThis !== "undefined") {
+  if (typeof globalThis !== 'undefined') {
     return globalThis;
   }
-  if (typeof self !== "undefined") {
+  if (typeof self !== 'undefined') {
     return self;
   }
   if (false) {
     return void 0;
   }
-  if (typeof global !== "undefined") {
+  if (typeof global !== 'undefined') {
     return global;
   }
-  throw "Unable to locate global object";
+  throw 'Unable to locate global object';
 })();
 function isObject(value) {
-  return typeof value === "object" && value !== null;
+  return typeof value === 'object' && value !== null;
 }
 function isSet(value) {
   return value !== null && value !== void 0;
@@ -14858,13 +15296,13 @@ function createBaseComponentData() {
   return { data: void 0 };
 }
 var ComponentData;
-(function(ComponentData2) {
+(function (ComponentData2) {
   function encode(message, writer = import_minimal59.default.Writer.create()) {
     switch (message.data?.$case) {
-      case "json":
+      case 'json':
         Value.encode(Value.wrap(message.data.json), writer.uint32(10).fork()).ldelim();
         break;
-      case "binary":
+      case 'binary':
         writer.uint32(18).bytes(message.data.binary);
         break;
     }
@@ -14872,7 +15310,10 @@ var ComponentData;
   }
   ComponentData2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal59.default.Reader ? input : import_minimal59.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal59.default.Reader
+        ? input
+        : import_minimal59.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseComponentData();
     while (reader.pos < end) {
@@ -14882,13 +15323,16 @@ var ComponentData;
           if (tag !== 10) {
             break;
           }
-          message.data = { $case: "json", json: Value.unwrap(Value.decode(reader, reader.uint32())) };
+          message.data = {
+            $case: 'json',
+            json: Value.unwrap(Value.decode(reader, reader.uint32())),
+          };
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
-          message.data = { $case: "binary", binary: reader.bytes() };
+          message.data = { $case: 'binary', binary: reader.bytes() };
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -14901,25 +15345,31 @@ var ComponentData;
   ComponentData2.decode = decode;
   function fromJSON(object) {
     return {
-      data: isSet2(object.json) ? { $case: "json", json: object.json } : isSet2(object.binary) ? { $case: "binary", binary: bytesFromBase64(object.binary) } : void 0
+      data: isSet2(object.json)
+        ? { $case: 'json', json: object.json }
+        : isSet2(object.binary)
+          ? { $case: 'binary', binary: bytesFromBase64(object.binary) }
+          : void 0,
     };
   }
   ComponentData2.fromJSON = fromJSON;
   function toJSON(message) {
     const obj = {};
-    message.data?.$case === "json" && (obj.json = message.data?.json);
-    message.data?.$case === "binary" && (obj.binary = message.data?.binary !== void 0 ? base64FromBytes(message.data?.binary) : void 0);
+    message.data?.$case === 'json' && (obj.json = message.data?.json);
+    message.data?.$case === 'binary' &&
+      (obj.binary =
+        message.data?.binary !== void 0 ? base64FromBytes(message.data?.binary) : void 0);
     return obj;
   }
   ComponentData2.toJSON = toJSON;
 })(ComponentData || (ComponentData = {}));
 function createBaseCompositeComponent() {
-  return { name: "", jsonSchema: void 0, data: /* @__PURE__ */ new Map() };
+  return { name: '', jsonSchema: void 0, data: /* @__PURE__ */ new Map() };
 }
 var CompositeComponent;
-(function(CompositeComponent2) {
+(function (CompositeComponent2) {
   function encode(message, writer = import_minimal59.default.Writer.create()) {
-    if (message.name !== "") {
+    if (message.name !== '') {
       writer.uint32(10).string(message.name);
     }
     if (message.jsonSchema !== void 0) {
@@ -14932,7 +15382,10 @@ var CompositeComponent;
   }
   CompositeComponent2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal59.default.Reader ? input : import_minimal59.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal59.default.Reader
+        ? input
+        : import_minimal59.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseCompositeComponent();
     while (reader.pos < end) {
@@ -14970,12 +15423,14 @@ var CompositeComponent;
   CompositeComponent2.decode = decode;
   function fromJSON(object) {
     return {
-      name: isSet2(object.name) ? String(object.name) : "",
+      name: isSet2(object.name) ? String(object.name) : '',
       jsonSchema: isSet2(object?.jsonSchema) ? object.jsonSchema : void 0,
-      data: isObject2(object.data) ? Object.entries(object.data).reduce((acc, [key, value]) => {
-        acc.set(Number(key), ComponentData.fromJSON(value));
-        return acc;
-      }, /* @__PURE__ */ new Map()) : /* @__PURE__ */ new Map()
+      data: isObject2(object.data)
+        ? Object.entries(object.data).reduce((acc, [key, value]) => {
+            acc.set(Number(key), ComponentData.fromJSON(value));
+            return acc;
+          }, /* @__PURE__ */ new Map())
+        : /* @__PURE__ */ new Map(),
     };
   }
   CompositeComponent2.fromJSON = fromJSON;
@@ -14997,7 +15452,7 @@ function createBaseCompositeComponent_DataEntry() {
   return { key: 0, value: void 0 };
 }
 var CompositeComponent_DataEntry;
-(function(CompositeComponent_DataEntry2) {
+(function (CompositeComponent_DataEntry2) {
   function encode(message, writer = import_minimal59.default.Writer.create()) {
     if (message.key !== 0) {
       writer.uint32(8).int32(message.key);
@@ -15009,7 +15464,10 @@ var CompositeComponent_DataEntry;
   }
   CompositeComponent_DataEntry2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal59.default.Reader ? input : import_minimal59.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal59.default.Reader
+        ? input
+        : import_minimal59.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseCompositeComponent_DataEntry();
     while (reader.pos < end) {
@@ -15039,14 +15497,15 @@ var CompositeComponent_DataEntry;
   function fromJSON(object) {
     return {
       key: isSet2(object.key) ? Number(object.key) : 0,
-      value: isSet2(object.value) ? ComponentData.fromJSON(object.value) : void 0
+      value: isSet2(object.value) ? ComponentData.fromJSON(object.value) : void 0,
     };
   }
   CompositeComponent_DataEntry2.fromJSON = fromJSON;
   function toJSON(message) {
     const obj = {};
     message.key !== void 0 && (obj.key = Math.round(message.key));
-    message.value !== void 0 && (obj.value = message.value ? ComponentData.toJSON(message.value) : void 0);
+    message.value !== void 0 &&
+      (obj.value = message.value ? ComponentData.toJSON(message.value) : void 0);
     return obj;
   }
   CompositeComponent_DataEntry2.toJSON = toJSON;
@@ -15055,7 +15514,7 @@ function createBaseCompositeDefinition() {
   return { version: 0, components: [] };
 }
 var CompositeDefinition;
-(function(CompositeDefinition2) {
+(function (CompositeDefinition2) {
   function encode(message, writer = import_minimal59.default.Writer.create()) {
     if (message.version !== 0) {
       writer.uint32(8).int32(message.version);
@@ -15067,7 +15526,10 @@ var CompositeDefinition;
   }
   CompositeDefinition2.encode = encode;
   function decode(input, length2) {
-    const reader = input instanceof import_minimal59.default.Reader ? input : import_minimal59.default.Reader.create(input);
+    const reader =
+      input instanceof import_minimal59.default.Reader
+        ? input
+        : import_minimal59.default.Reader.create(input);
     let end = length2 === void 0 ? reader.len : reader.pos + length2;
     const message = createBaseCompositeDefinition();
     while (reader.pos < end) {
@@ -15097,7 +15559,9 @@ var CompositeDefinition;
   function fromJSON(object) {
     return {
       version: isSet2(object.version) ? Number(object.version) : 0,
-      components: Array.isArray(object?.components) ? object.components.map((e) => CompositeComponent.fromJSON(e)) : []
+      components: Array.isArray(object?.components)
+        ? object.components.map(e => CompositeComponent.fromJSON(e))
+        : [],
     };
   }
   CompositeDefinition2.fromJSON = fromJSON;
@@ -15105,7 +15569,7 @@ var CompositeDefinition;
     const obj = {};
     message.version !== void 0 && (obj.version = Math.round(message.version));
     if (message.components) {
-      obj.components = message.components.map((e) => e ? CompositeComponent.toJSON(e) : void 0);
+      obj.components = message.components.map(e => (e ? CompositeComponent.toJSON(e) : void 0));
     } else {
       obj.components = [];
     }
@@ -15114,23 +15578,23 @@ var CompositeDefinition;
   CompositeDefinition2.toJSON = toJSON;
 })(CompositeDefinition || (CompositeDefinition = {}));
 var tsProtoGlobalThis3 = (() => {
-  if (typeof globalThis !== "undefined") {
+  if (typeof globalThis !== 'undefined') {
     return globalThis;
   }
-  if (typeof self !== "undefined") {
+  if (typeof self !== 'undefined') {
     return self;
   }
   if (false) {
     return void 0;
   }
-  if (typeof global !== "undefined") {
+  if (typeof global !== 'undefined') {
     return global;
   }
-  throw "Unable to locate global object";
+  throw 'Unable to locate global object';
 })();
 function bytesFromBase64(b64) {
   if (tsProtoGlobalThis3.Buffer) {
-    return Uint8Array.from(tsProtoGlobalThis3.Buffer.from(b64, "base64"));
+    return Uint8Array.from(tsProtoGlobalThis3.Buffer.from(b64, 'base64'));
   } else {
     const bin = tsProtoGlobalThis3.atob(b64);
     const arr = new Uint8Array(bin.length);
@@ -15142,17 +15606,17 @@ function bytesFromBase64(b64) {
 }
 function base64FromBytes(arr) {
   if (tsProtoGlobalThis3.Buffer) {
-    return tsProtoGlobalThis3.Buffer.from(arr).toString("base64");
+    return tsProtoGlobalThis3.Buffer.from(arr).toString('base64');
   } else {
     const bin = [];
-    arr.forEach((byte) => {
+    arr.forEach(byte => {
       bin.push(String.fromCharCode(byte));
     });
-    return tsProtoGlobalThis3.btoa(bin.join(""));
+    return tsProtoGlobalThis3.btoa(bin.join(''));
   }
 }
 function isObject2(value) {
-  return typeof value === "object" && value !== null;
+  return typeof value === 'object' && value !== null;
 }
 function isSet2(value) {
   return value !== null && value !== void 0;
@@ -15160,7 +15624,7 @@ function isSet2(value) {
 
 // ../../node_modules/.pnpm/@dcl+ecs@7.17.0/node_modules/@dcl/ecs/dist/composite/index.js
 var Composite;
-(function(Composite2) {
+(function (Composite2) {
   function fromJson(object) {
     return CompositeDefinition.fromJSON(object);
   }
@@ -15181,7 +15645,7 @@ var Composite;
     instanceComposite(engine2, compositeData, compositeProvider2, options);
   }
   Composite2.instance = instance;
-  function resolveAndNormalizePath(src, cwd = "/") {
+  function resolveAndNormalizePath(src, cwd = '/') {
     return resolveComposite(src, cwd);
   }
   Composite2.resolveAndNormalizePath = resolveAndNormalizePath;
@@ -15204,7 +15668,7 @@ var RAD2DEG = 360 / (Math.PI * 2);
 
 // ../../node_modules/.pnpm/@dcl+ecs-math@2.1.0/node_modules/@dcl/ecs-math/dist/Scalar.js
 var Scalar;
-(function(Scalar2) {
+(function (Scalar2) {
   Scalar2.TwoPi = Math.PI * 2;
   function withinEpsilon(a, b, epsilon = 1401298e-51) {
     const num = a - b;
@@ -15214,7 +15678,7 @@ var Scalar;
   function toHex(i) {
     const str = i.toString(16);
     if (i <= 15) {
-      return ("0" + str).toUpperCase();
+      return ('0' + str).toUpperCase();
     }
     return str.toUpperCase();
   }
@@ -15342,7 +15806,7 @@ var Scalar;
 
 // ../../node_modules/.pnpm/@dcl+ecs-math@2.1.0/node_modules/@dcl/ecs-math/dist/Vector3.js
 var Vector32;
-(function(Vector33) {
+(function (Vector33) {
   function isNonUniform(vector) {
     const absX = Math.abs(vector.x);
     const absY = Math.abs(vector.y);
@@ -15364,7 +15828,7 @@ var Vector32;
     return {
       x: vector1.x + vector2.x,
       y: vector1.y + vector2.y,
-      z: vector1.z + vector2.z
+      z: vector1.z + vector2.z,
     };
   }
   Vector33.add = add2;
@@ -15378,7 +15842,7 @@ var Vector32;
     return {
       x: vector1.x - vector2.x,
       y: vector1.y - vector2.y,
-      z: vector1.z - vector2.z
+      z: vector1.z - vector2.z,
     };
   }
   Vector33.subtract = subtract2;
@@ -15559,7 +16023,13 @@ var Vector32;
   }
   Vector33.transformCoordinates = transformCoordinates;
   function transformCoordinatesToRef(vector, transformation, result) {
-    return transformCoordinatesFromFloatsToRef(vector.x, vector.y, vector.z, transformation, result);
+    return transformCoordinatesFromFloatsToRef(
+      vector.x,
+      vector.y,
+      vector.z,
+      transformation,
+      result
+    );
   }
   Vector33.transformCoordinatesToRef = transformCoordinatesToRef;
   function transformCoordinatesFromFloatsToRef(x, y, z, transformation, result) {
@@ -15593,9 +16063,24 @@ var Vector32;
   function catmullRom(value1, value2, value3, value4, amount) {
     const squared = amount * amount;
     const cubed = amount * squared;
-    const x = 0.5 * (2 * value2.x + (-value1.x + value3.x) * amount + (2 * value1.x - 5 * value2.x + 4 * value3.x - value4.x) * squared + (-value1.x + 3 * value2.x - 3 * value3.x + value4.x) * cubed);
-    const y = 0.5 * (2 * value2.y + (-value1.y + value3.y) * amount + (2 * value1.y - 5 * value2.y + 4 * value3.y - value4.y) * squared + (-value1.y + 3 * value2.y - 3 * value3.y + value4.y) * cubed);
-    const z = 0.5 * (2 * value2.z + (-value1.z + value3.z) * amount + (2 * value1.z - 5 * value2.z + 4 * value3.z - value4.z) * squared + (-value1.z + 3 * value2.z - 3 * value3.z + value4.z) * cubed);
+    const x =
+      0.5 *
+      (2 * value2.x +
+        (-value1.x + value3.x) * amount +
+        (2 * value1.x - 5 * value2.x + 4 * value3.x - value4.x) * squared +
+        (-value1.x + 3 * value2.x - 3 * value3.x + value4.x) * cubed);
+    const y =
+      0.5 *
+      (2 * value2.y +
+        (-value1.y + value3.y) * amount +
+        (2 * value1.y - 5 * value2.y + 4 * value3.y - value4.y) * squared +
+        (-value1.y + 3 * value2.y - 3 * value3.y + value4.y) * cubed);
+    const z =
+      0.5 *
+      (2 * value2.z +
+        (-value1.z + value3.z) * amount +
+        (2 * value1.z - 5 * value2.z + 4 * value3.z - value4.z) * squared +
+        (-value1.z + 3 * value2.z - 3 * value3.z + value4.z) * cubed);
     return create(x, y, z);
   }
   Vector33.catmullRom = catmullRom;
@@ -15678,8 +16163,8 @@ var Vector32;
   Vector33.toString = toString2;
   function getHashCode(vector) {
     let hash = vector.x || 0;
-    hash = hash * 397 ^ (vector.y || 0);
-    hash = hash * 397 ^ (vector.z || 0);
+    hash = (hash * 397) ^ (vector.y || 0);
+    hash = (hash * 397) ^ (vector.z || 0);
     return hash;
   }
   Vector33.getHashCode = getHashCode;
@@ -15688,7 +16173,11 @@ var Vector32;
   }
   Vector33.equals = equals2;
   function equalsWithEpsilon(vector1, vector2, epsilon = Epsilon) {
-    return Scalar.withinEpsilon(vector1.x, vector2.x, epsilon) && Scalar.withinEpsilon(vector1.y, vector2.y, epsilon) && Scalar.withinEpsilon(vector1.z, vector2.z, epsilon);
+    return (
+      Scalar.withinEpsilon(vector1.x, vector2.x, epsilon) &&
+      Scalar.withinEpsilon(vector1.y, vector2.y, epsilon) &&
+      Scalar.withinEpsilon(vector1.z, vector2.z, epsilon)
+    );
   }
   Vector33.equalsWithEpsilon = equalsWithEpsilon;
   function equalsToFloats(vector, x, y, z) {
@@ -15723,7 +16212,7 @@ var Vector32;
     return {
       x: vector1.x / vector2.x,
       y: vector1.y / vector2.y,
-      z: vector1.z / vector2.z
+      z: vector1.z / vector2.z,
     };
   }
   Vector33.divide = divide2;
@@ -15774,7 +16263,11 @@ var Vector32;
   }
   Vector33.floor = floor;
   function fract(vector1) {
-    return create(vector1.x - Math.floor(vector1.x), vector1.y - Math.floor(vector1.y), vector1.z - Math.floor(vector1.z));
+    return create(
+      vector1.x - Math.floor(vector1.x),
+      vector1.y - Math.floor(vector1.y),
+      vector1.z - Math.floor(vector1.z)
+    );
   }
   Vector33.fract = fract;
   function Zero() {
@@ -15817,11 +16310,11 @@ var Vector32;
 
 // ../../node_modules/.pnpm/@dcl+ecs-math@2.1.0/node_modules/@dcl/ecs-math/dist/Plane.js
 var Plane;
-(function(Plane2) {
+(function (Plane2) {
   function create(a, b, c, d) {
     return {
       normal: Vector32.create(a, b, c),
-      d
+      d,
     };
   }
   Plane2.create = create;
@@ -15860,7 +16353,11 @@ var Plane;
   Plane2.getHashCode = getHashCode;
   function normalize(plane) {
     const result = create(0, 0, 0, 0);
-    const norm = Math.sqrt(plane.normal.x * plane.normal.x + plane.normal.y * plane.normal.y + plane.normal.z * plane.normal.z);
+    const norm = Math.sqrt(
+      plane.normal.x * plane.normal.x +
+        plane.normal.y * plane.normal.y +
+        plane.normal.z * plane.normal.z
+    );
     let magnitude = 0;
     if (norm !== 0) {
       magnitude = 1 / norm;
@@ -15911,7 +16408,7 @@ var Plane;
     const normal = Vector32.create(yz * invPyth, xz * invPyth, xy * invPyth);
     return {
       normal,
-      d: -(normal.x * point1.x + normal.y * point1.y + normal.z * point1.z)
+      d: -(normal.x * point1.x + normal.y * point1.y + normal.z * point1.z),
     };
   }
   Plane2.copyFromPoints = copyFromPoints;
@@ -15928,7 +16425,7 @@ var Plane;
 
 // ../../node_modules/.pnpm/@dcl+ecs-math@2.1.0/node_modules/@dcl/ecs-math/dist/Matrix.js
 var Matrix;
-(function(Matrix2) {
+(function (Matrix2) {
   function m(self2) {
     return self2._m;
   }
@@ -15946,7 +16443,7 @@ var Matrix;
       isIdentity3x2: true,
       _isIdentityDirty: true,
       _isIdentity3x2Dirty: true,
-      _m: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      _m: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     };
     _updateIdentityStatus(newMatrix, false);
     return newMatrix;
@@ -15972,7 +16469,25 @@ var Matrix;
     _markAsUpdated(result);
   }
   Matrix2.fromFloatArrayToRefScaled = fromFloatArrayToRefScaled;
-  function fromValuesToRef(initialM11, initialM12, initialM13, initialM14, initialM21, initialM22, initialM23, initialM24, initialM31, initialM32, initialM33, initialM34, initialM41, initialM42, initialM43, initialM44, result) {
+  function fromValuesToRef(
+    initialM11,
+    initialM12,
+    initialM13,
+    initialM14,
+    initialM21,
+    initialM22,
+    initialM23,
+    initialM24,
+    initialM31,
+    initialM32,
+    initialM33,
+    initialM34,
+    initialM41,
+    initialM42,
+    initialM43,
+    initialM44,
+    result
+  ) {
     const m2 = result._m;
     m2[0] = initialM11;
     m2[1] = initialM12;
@@ -15993,7 +16508,24 @@ var Matrix;
     _markAsUpdated(result);
   }
   Matrix2.fromValuesToRef = fromValuesToRef;
-  function fromValues(initialM11, initialM12, initialM13, initialM14, initialM21, initialM22, initialM23, initialM24, initialM31, initialM32, initialM33, initialM34, initialM41, initialM42, initialM43, initialM44) {
+  function fromValues(
+    initialM11,
+    initialM12,
+    initialM13,
+    initialM14,
+    initialM21,
+    initialM22,
+    initialM23,
+    initialM24,
+    initialM31,
+    initialM32,
+    initialM33,
+    initialM34,
+    initialM41,
+    initialM42,
+    initialM43,
+    initialM44
+  ) {
     const result = create();
     const m2 = result._m;
     m2[0] = initialM11;
@@ -16212,7 +16744,25 @@ var Matrix;
     const ex = -Vector32.dot(xAxis, eye);
     const ey = -Vector32.dot(yAxis, eye);
     const ez = -Vector32.dot(zAxis, eye);
-    fromValuesToRef(xAxis.x, yAxis.x, zAxis.x, 0, xAxis.y, yAxis.y, zAxis.y, 0, xAxis.z, yAxis.z, zAxis.z, 0, ex, ey, ez, 1, result);
+    fromValuesToRef(
+      xAxis.x,
+      yAxis.x,
+      zAxis.x,
+      0,
+      xAxis.y,
+      yAxis.y,
+      zAxis.y,
+      0,
+      xAxis.z,
+      yAxis.z,
+      zAxis.z,
+      0,
+      ex,
+      ey,
+      ez,
+      1,
+      result
+    );
   }
   Matrix2.lookAtLHToRef = lookAtLHToRef;
   function lookAtRH(eye, target, up) {
@@ -16239,7 +16789,25 @@ var Matrix;
     const ex = -Vector32.dot(xAxis, eye);
     const ey = -Vector32.dot(yAxis, eye);
     const ez = -Vector32.dot(zAxis, eye);
-    fromValuesToRef(xAxis.x, yAxis.x, zAxis.x, 0, xAxis.y, yAxis.y, zAxis.y, 0, xAxis.z, yAxis.z, zAxis.z, 0, ex, ey, ez, 1, result);
+    fromValuesToRef(
+      xAxis.x,
+      yAxis.x,
+      zAxis.x,
+      0,
+      xAxis.y,
+      yAxis.y,
+      zAxis.y,
+      0,
+      xAxis.z,
+      yAxis.z,
+      zAxis.z,
+      0,
+      ex,
+      ey,
+      ez,
+      1,
+      result
+    );
   }
   Matrix2.lookAtRHToRef = lookAtRHToRef;
   function orthoLH(width, height, znear, zfar) {
@@ -16293,10 +16861,10 @@ var Matrix;
     const matrix = create();
     const n = znear;
     const f = zfar;
-    const a = 2 * n / width;
-    const b = 2 * n / height;
+    const a = (2 * n) / width;
+    const b = (2 * n) / height;
     const c = (f + n) / (f - n);
-    const d = -2 * f * n / (f - n);
+    const d = (-2 * f * n) / (f - n);
     fromValuesToRef(a, 0, 0, 0, 0, b, 0, 0, 0, 0, c, 1, 0, 0, d, 0, matrix);
     _updateIdentityStatus(matrix, false);
     return matrix;
@@ -16315,7 +16883,7 @@ var Matrix;
     const a = isVerticalFovFixed ? t / aspect : t;
     const b = isVerticalFovFixed ? t : t * aspect;
     const c = (f + n) / (f - n);
-    const d = -2 * f * n / (f - n);
+    const d = (-2 * f * n) / (f - n);
     fromValuesToRef(a, 0, 0, 0, 0, b, 0, 0, 0, 0, c, 1, 0, 0, d, 0, result);
     _updateIdentityStatus(result, false);
   }
@@ -16333,17 +16901,17 @@ var Matrix;
     const a = isVerticalFovFixed ? t / aspect : t;
     const b = isVerticalFovFixed ? t : t * aspect;
     const c = -(f + n) / (f - n);
-    const d = -2 * f * n / (f - n);
+    const d = (-2 * f * n) / (f - n);
     fromValuesToRef(a, 0, 0, 0, 0, b, 0, 0, 0, 0, c, -1, 0, 0, d, 0, result);
     _updateIdentityStatus(result, false);
   }
   Matrix2.perspectiveFovRHToRef = perspectiveFovRHToRef;
   function perspectiveFovWebVRToRef(fov, znear, zfar, result, rightHanded = false) {
     const rightHandedFactor = rightHanded ? -1 : 1;
-    const upTan = Math.tan(fov.upDegrees * Math.PI / 180);
-    const downTan = Math.tan(fov.downDegrees * Math.PI / 180);
-    const leftTan = Math.tan(fov.leftDegrees * Math.PI / 180);
-    const rightTan = Math.tan(fov.rightDegrees * Math.PI / 180);
+    const upTan = Math.tan((fov.upDegrees * Math.PI) / 180);
+    const downTan = Math.tan((fov.downDegrees * Math.PI) / 180);
+    const leftTan = Math.tan((fov.leftDegrees * Math.PI) / 180);
+    const rightTan = Math.tan((fov.rightDegrees * Math.PI) / 180);
     const xScale = 2 / (leftTan + rightTan);
     const yScale = 2 / (upTan + downTan);
     const m2 = result._m;
@@ -16374,7 +16942,7 @@ var Matrix;
       matrix._m[6],
       matrix._m[8],
       matrix._m[9],
-      matrix._m[10]
+      matrix._m[10],
     ];
   }
   Matrix2.GetAsMatrix3x3 = GetAsMatrix3x3;
@@ -16420,11 +16988,47 @@ var Matrix;
     const temp = -2 * x;
     const temp2 = -2 * y;
     const temp3 = -2 * z;
-    fromValuesToRef(temp * x + 1, temp2 * x, temp3 * x, 0, temp * y, temp2 * y + 1, temp3 * y, 0, temp * z, temp2 * z, temp3 * z + 1, 0, temp * plane.d, temp2 * plane.d, temp3 * plane.d, 1, result);
+    fromValuesToRef(
+      temp * x + 1,
+      temp2 * x,
+      temp3 * x,
+      0,
+      temp * y,
+      temp2 * y + 1,
+      temp3 * y,
+      0,
+      temp * z,
+      temp2 * z,
+      temp3 * z + 1,
+      0,
+      temp * plane.d,
+      temp2 * plane.d,
+      temp3 * plane.d,
+      1,
+      result
+    );
   }
   Matrix2.reflectionToRef = reflectionToRef;
   function fromXYZAxesToRef(xaxis, yaxis, zaxis, result) {
-    fromValuesToRef(xaxis.x, xaxis.y, xaxis.z, 0, yaxis.x, yaxis.y, yaxis.z, 0, zaxis.x, zaxis.y, zaxis.z, 0, 0, 0, 0, 1, result);
+    fromValuesToRef(
+      xaxis.x,
+      xaxis.y,
+      xaxis.z,
+      0,
+      yaxis.x,
+      yaxis.y,
+      yaxis.z,
+      0,
+      zaxis.x,
+      zaxis.y,
+      zaxis.z,
+      0,
+      0,
+      0,
+      0,
+      1,
+      result
+    );
   }
   Matrix2.fromXYZAxesToRef = fromXYZAxesToRef;
   function fromQuaternionToRef(quat, result) {
@@ -16467,7 +17071,23 @@ var Matrix;
     if (self2._isIdentityDirty) {
       self2._isIdentityDirty = false;
       const m2 = self2._m;
-      self2.isIdentity = m2[0] === 1 && m2[1] === 0 && m2[2] === 0 && m2[3] === 0 && m2[4] === 0 && m2[5] === 1 && m2[6] === 0 && m2[7] === 0 && m2[8] === 0 && m2[9] === 0 && m2[10] === 1 && m2[11] === 0 && m2[12] === 0 && m2[13] === 0 && m2[14] === 0 && m2[15] === 1;
+      self2.isIdentity =
+        m2[0] === 1 &&
+        m2[1] === 0 &&
+        m2[2] === 0 &&
+        m2[3] === 0 &&
+        m2[4] === 0 &&
+        m2[5] === 1 &&
+        m2[6] === 0 &&
+        m2[7] === 0 &&
+        m2[8] === 0 &&
+        m2[9] === 0 &&
+        m2[10] === 1 &&
+        m2[11] === 0 &&
+        m2[12] === 0 &&
+        m2[13] === 0 &&
+        m2[14] === 0 &&
+        m2[15] === 1;
     }
     return self2.isIdentity;
   }
@@ -16477,7 +17097,21 @@ var Matrix;
       self2._isIdentity3x2Dirty = false;
       if (self2._m[0] !== 1 || self2._m[5] !== 1 || self2._m[15] !== 1) {
         self2.isIdentity3x2 = false;
-      } else if (self2._m[1] !== 0 || self2._m[2] !== 0 || self2._m[3] !== 0 || self2._m[4] !== 0 || self2._m[6] !== 0 || self2._m[7] !== 0 || self2._m[8] !== 0 || self2._m[9] !== 0 || self2._m[10] !== 0 || self2._m[11] !== 0 || self2._m[12] !== 0 || self2._m[13] !== 0 || self2._m[14] !== 0) {
+      } else if (
+        self2._m[1] !== 0 ||
+        self2._m[2] !== 0 ||
+        self2._m[3] !== 0 ||
+        self2._m[4] !== 0 ||
+        self2._m[6] !== 0 ||
+        self2._m[7] !== 0 ||
+        self2._m[8] !== 0 ||
+        self2._m[9] !== 0 ||
+        self2._m[10] !== 0 ||
+        self2._m[11] !== 0 ||
+        self2._m[12] !== 0 ||
+        self2._m[13] !== 0 ||
+        self2._m[14] !== 0
+      ) {
         self2.isIdentity3x2 = false;
       } else {
         self2.isIdentity3x2 = true;
@@ -16491,10 +17125,22 @@ var Matrix;
       return 1;
     }
     const m2 = self2._m;
-    const m00 = m2[0], m01 = m2[1], m02 = m2[2], m03 = m2[3];
-    const m10 = m2[4], m11 = m2[5], m12 = m2[6], m13 = m2[7];
-    const m20 = m2[8], m21 = m2[9], m22 = m2[10], m23 = m2[11];
-    const m30 = m2[12], m31 = m2[13], m32 = m2[14], m33 = m2[15];
+    const m00 = m2[0],
+      m01 = m2[1],
+      m02 = m2[2],
+      m03 = m2[3];
+    const m10 = m2[4],
+      m11 = m2[5],
+      m12 = m2[6],
+      m13 = m2[7];
+    const m20 = m2[8],
+      m21 = m2[9],
+      m22 = m2[10],
+      m23 = m2[11];
+    const m30 = m2[12],
+      m31 = m2[13],
+      m32 = m2[14],
+      m33 = m2[15];
     const det_22_33 = m22 * m33 - m32 * m23;
     const det_21_33 = m21 * m33 - m31 * m23;
     const det_21_32 = m21 * m32 - m31 * m22;
@@ -16553,10 +17199,22 @@ var Matrix;
       return;
     }
     const m2 = source._m;
-    const m00 = m2[0], m01 = m2[1], m02 = m2[2], m03 = m2[3];
-    const m10 = m2[4], m11 = m2[5], m12 = m2[6], m13 = m2[7];
-    const m20 = m2[8], m21 = m2[9], m22 = m2[10], m23 = m2[11];
-    const m30 = m2[12], m31 = m2[13], m32 = m2[14], m33 = m2[15];
+    const m00 = m2[0],
+      m01 = m2[1],
+      m02 = m2[2],
+      m03 = m2[3];
+    const m10 = m2[4],
+      m11 = m2[5],
+      m12 = m2[6],
+      m13 = m2[7];
+    const m20 = m2[8],
+      m21 = m2[9],
+      m22 = m2[10],
+      m23 = m2[11];
+    const m30 = m2[12],
+      m31 = m2[13],
+      m32 = m2[14],
+      m33 = m2[15];
     const det_22_33 = m22 * m33 - m32 * m23;
     const det_21_33 = m21 * m33 - m31 * m23;
     const det_21_32 = m21 * m32 - m31 * m22;
@@ -16597,7 +17255,25 @@ var Matrix;
     const cofact_31 = +(m00 * det_12_23 - m02 * det_10_23 + m03 * det_10_22);
     const cofact_32 = -(m00 * det_11_23 - m01 * det_10_23 + m03 * det_10_21);
     const cofact_33 = +(m00 * det_11_22 - m01 * det_10_22 + m02 * det_10_21);
-    fromValuesToRef(cofact_00 * detInv, cofact_10 * detInv, cofact_20 * detInv, cofact_30 * detInv, cofact_01 * detInv, cofact_11 * detInv, cofact_21 * detInv, cofact_31 * detInv, cofact_02 * detInv, cofact_12 * detInv, cofact_22 * detInv, cofact_32 * detInv, cofact_03 * detInv, cofact_13 * detInv, cofact_23 * detInv, cofact_33 * detInv, result);
+    fromValuesToRef(
+      cofact_00 * detInv,
+      cofact_10 * detInv,
+      cofact_20 * detInv,
+      cofact_30 * detInv,
+      cofact_01 * detInv,
+      cofact_11 * detInv,
+      cofact_21 * detInv,
+      cofact_31 * detInv,
+      cofact_02 * detInv,
+      cofact_12 * detInv,
+      cofact_22 * detInv,
+      cofact_32 * detInv,
+      cofact_03 * detInv,
+      cofact_13 * detInv,
+      cofact_23 * detInv,
+      cofact_33 * detInv,
+      result
+    );
   }
   Matrix2.invertToRef = invertToRef;
   function addAtIndex(self2, index, value) {
@@ -16647,7 +17323,13 @@ var Matrix;
   Matrix2.multiply = multiply2;
   function copy(from, dest) {
     copyToArray(from, dest._m);
-    _updateIdentityStatus(dest, from.isIdentity, from._isIdentityDirty, from.isIdentity3x2, from._isIdentity3x2Dirty);
+    _updateIdentityStatus(
+      dest,
+      from.isIdentity,
+      from._isIdentityDirty,
+      from.isIdentity3x2,
+      from._isIdentity3x2Dirty
+    );
   }
   Matrix2.copy = copy;
   function copyToArray(self2, arrayDest, offsetDest = 0) {
@@ -16672,14 +17354,38 @@ var Matrix;
   function multiplyToArray(self2, other, result, offset) {
     const m2 = self2._m;
     const otherM = other._m;
-    const tm0 = m2[0], tm1 = m2[1], tm2 = m2[2], tm3 = m2[3];
-    const tm4 = m2[4], tm5 = m2[5], tm6 = m2[6], tm7 = m2[7];
-    const tm8 = m2[8], tm9 = m2[9], tm10 = m2[10], tm11 = m2[11];
-    const tm12 = m2[12], tm13 = m2[13], tm14 = m2[14], tm15 = m2[15];
-    const om0 = otherM[0], om1 = otherM[1], om2 = otherM[2], om3 = otherM[3];
-    const om4 = otherM[4], om5 = otherM[5], om6 = otherM[6], om7 = otherM[7];
-    const om8 = otherM[8], om9 = otherM[9], om10 = otherM[10], om11 = otherM[11];
-    const om12 = otherM[12], om13 = otherM[13], om14 = otherM[14], om15 = otherM[15];
+    const tm0 = m2[0],
+      tm1 = m2[1],
+      tm2 = m2[2],
+      tm3 = m2[3];
+    const tm4 = m2[4],
+      tm5 = m2[5],
+      tm6 = m2[6],
+      tm7 = m2[7];
+    const tm8 = m2[8],
+      tm9 = m2[9],
+      tm10 = m2[10],
+      tm11 = m2[11];
+    const tm12 = m2[12],
+      tm13 = m2[13],
+      tm14 = m2[14],
+      tm15 = m2[15];
+    const om0 = otherM[0],
+      om1 = otherM[1],
+      om2 = otherM[2],
+      om3 = otherM[3];
+    const om4 = otherM[4],
+      om5 = otherM[5],
+      om6 = otherM[6],
+      om7 = otherM[7];
+    const om8 = otherM[8],
+      om9 = otherM[9],
+      om10 = otherM[10],
+      om11 = otherM[11];
+    const om12 = otherM[12],
+      om13 = otherM[13],
+      om14 = otherM[14],
+      om15 = otherM[15];
     result[offset] = tm0 * om0 + tm1 * om4 + tm2 * om8 + tm3 * om12;
     result[offset + 1] = tm0 * om1 + tm1 * om5 + tm2 * om9 + tm3 * om13;
     result[offset + 2] = tm0 * om2 + tm1 * om6 + tm2 * om10 + tm3 * om14;
@@ -16710,7 +17416,24 @@ var Matrix;
     }
     const m2 = self2._m;
     const om = other._m;
-    return m2[0] === om[0] && m2[1] === om[1] && m2[2] === om[2] && m2[3] === om[3] && m2[4] === om[4] && m2[5] === om[5] && m2[6] === om[6] && m2[7] === om[7] && m2[8] === om[8] && m2[9] === om[9] && m2[10] === om[10] && m2[11] === om[11] && m2[12] === om[12] && m2[13] === om[13] && m2[14] === om[14] && m2[15] === om[15];
+    return (
+      m2[0] === om[0] &&
+      m2[1] === om[1] &&
+      m2[2] === om[2] &&
+      m2[3] === om[3] &&
+      m2[4] === om[4] &&
+      m2[5] === om[5] &&
+      m2[6] === om[6] &&
+      m2[7] === om[7] &&
+      m2[8] === om[8] &&
+      m2[9] === om[9] &&
+      m2[10] === om[10] &&
+      m2[11] === om[11] &&
+      m2[12] === om[12] &&
+      m2[13] === om[13] &&
+      m2[14] === om[14] &&
+      m2[15] === om[15]
+    );
   }
   Matrix2.equals = equals2;
   function clone(self2) {
@@ -16722,7 +17445,7 @@ var Matrix;
   function getHashCode(self2) {
     let hash = self2._m[0] || 0;
     for (let i = 1; i < 16; i++) {
-      hash = hash * 397 ^ (self2._m[i] || 0);
+      hash = (hash * 397) ^ (self2._m[i] || 0);
     }
     return hash;
   }
@@ -16770,9 +17493,29 @@ var Matrix;
       return false;
     }
     if (rotation) {
-      const sx = 1 / usedScale.x, sy = 1 / usedScale.y, sz = 1 / usedScale.z;
+      const sx = 1 / usedScale.x,
+        sy = 1 / usedScale.y,
+        sz = 1 / usedScale.z;
       const tmpMatrix = create();
-      fromValuesToRef(m2[0] * sx, m2[1] * sx, m2[2] * sx, 0, m2[4] * sy, m2[5] * sy, m2[6] * sy, 0, m2[8] * sz, m2[9] * sz, m2[10] * sz, 0, 0, 0, 0, 1, tmpMatrix);
+      fromValuesToRef(
+        m2[0] * sx,
+        m2[1] * sx,
+        m2[2] * sx,
+        0,
+        m2[4] * sy,
+        m2[5] * sy,
+        m2[6] * sy,
+        0,
+        m2[8] * sz,
+        m2[9] * sz,
+        m2[10] * sz,
+        0,
+        0,
+        0,
+        0,
+        1,
+        tmpMatrix
+      );
       Quaternion2.fromRotationMatrixToRef(tmpMatrix, rotation);
     }
     return true;
@@ -16815,7 +17558,25 @@ var Matrix;
     invertToRef(self2, tmp);
     transposeToRef(tmp, ref);
     const m2 = ref._m;
-    fromValuesToRef(m2[0], m2[1], m2[2], 0, m2[4], m2[5], m2[6], 0, m2[8], m2[9], m2[10], 0, 0, 0, 0, 1, ref);
+    fromValuesToRef(
+      m2[0],
+      m2[1],
+      m2[2],
+      0,
+      m2[4],
+      m2[5],
+      m2[6],
+      0,
+      m2[8],
+      m2[9],
+      m2[10],
+      0,
+      0,
+      0,
+      0,
+      1,
+      ref
+    );
   }
   Matrix2.normalMatrixToRef = normalMatrixToRef;
   function getRotationMatrix(self2) {
@@ -16831,8 +17592,28 @@ var Matrix;
       return;
     }
     const m2 = self2._m;
-    const sx = 1 / scale2.x, sy = 1 / scale2.y, sz = 1 / scale2.z;
-    fromValuesToRef(m2[0] * sx, m2[1] * sx, m2[2] * sx, 0, m2[4] * sy, m2[5] * sy, m2[6] * sy, 0, m2[8] * sz, m2[9] * sz, m2[10] * sz, 0, 0, 0, 0, 1, result);
+    const sx = 1 / scale2.x,
+      sy = 1 / scale2.y,
+      sz = 1 / scale2.z;
+    fromValuesToRef(
+      m2[0] * sx,
+      m2[1] * sx,
+      m2[2] * sx,
+      0,
+      m2[4] * sy,
+      m2[5] * sy,
+      m2[6] * sy,
+      0,
+      m2[8] * sz,
+      m2[9] * sz,
+      m2[10] * sz,
+      0,
+      0,
+      0,
+      0,
+      1,
+      result
+    );
   }
   Matrix2.getRotationMatrixToRef = getRotationMatrixToRef;
   function toggleModelMatrixHandInPlace(self2) {
@@ -16852,7 +17633,13 @@ var Matrix;
     _markAsUpdated(self2);
   }
   Matrix2.toggleProjectionMatrixHandInPlace = toggleProjectionMatrixHandInPlace;
-  function _updateIdentityStatus(self2, isIdentity, isIdentityDirty = false, isIdentity3x2 = false, isIdentity3x2Dirty = true) {
+  function _updateIdentityStatus(
+    self2,
+    isIdentity,
+    isIdentityDirty = false,
+    isIdentity3x2 = false,
+    isIdentity3x2Dirty = true
+  ) {
     self2.updateFlag = _updateFlagSeed++;
     self2.isIdentity = isIdentity;
     self2.isIdentity3x2 = isIdentity || isIdentity3x2;
@@ -16863,7 +17650,7 @@ var Matrix;
 
 // ../../node_modules/.pnpm/@dcl+ecs-math@2.1.0/node_modules/@dcl/ecs-math/dist/Quaternion.js
 var Quaternion2;
-(function(Quaternion3) {
+(function (Quaternion3) {
   function create(x = 0, y = 0, z = 0, w = 1) {
     return { x, y, z, w };
   }
@@ -16882,7 +17669,12 @@ var Quaternion2;
     const s1 = Math.sin(halfPitch);
     const s2 = Math.sin(halfYaw);
     const s3 = Math.sin(halfRoll);
-    return create(c2 * s1 * c3 + s2 * c1 * s3, s2 * c1 * c3 - c2 * s1 * s3, c2 * c1 * s3 - s2 * s1 * c3, c2 * c1 * c3 + s2 * s1 * s3);
+    return create(
+      c2 * s1 * c3 + s2 * c1 * s3,
+      s2 * c1 * c3 - c2 * s1 * s3,
+      c2 * c1 * s3 - s2 * s1 * c3,
+      c2 * c1 * c3 + s2 * s1 * s3
+    );
   }
   Quaternion3.fromRotationYawPitchRoll = fromRotationYawPitchRoll;
   function fromEulerDegrees(x, y, z) {
@@ -16975,7 +17767,8 @@ var Quaternion2;
     const v0 = Vector32.normalize(from);
     const v1 = Vector32.normalize(to);
     const a = Vector32.cross(v0, v1);
-    const w = Math.sqrt(Vector32.lengthSquared(v0) * Vector32.lengthSquared(v1)) + Vector32.dot(v0, v1);
+    const w =
+      Math.sqrt(Vector32.lengthSquared(v0) * Vector32.lengthSquared(v1)) + Vector32.dot(v0, v1);
     if (Vector32.lengthSquared(a) < 1e-4) {
       return Math.abs(w) < 1e-4 ? normalize(create(up.x, up.y, up.z, 0)) : Identity();
     } else {
@@ -17031,9 +17824,15 @@ var Quaternion2;
   Quaternion3.fromRotationYawPitchRollToRef = fromRotationYawPitchRollToRef;
   function fromRotationMatrixToRef(matrix, result) {
     const data = matrix._m;
-    const m11 = data[0], m12 = data[4], m13 = data[8];
-    const m21 = data[1], m22 = data[5], m23 = data[9];
-    const m31 = data[2], m32 = data[6], m33 = data[10];
+    const m11 = data[0],
+      m12 = data[4],
+      m13 = data[8];
+    const m21 = data[1],
+      m22 = data[5],
+      m23 = data[9];
+    const m31 = data[2],
+      m32 = data[6],
+      m33 = data[10];
     const trace = m11 + m22 + m33;
     let s;
     if (trace > 0) {
@@ -17130,7 +17929,12 @@ var Quaternion2;
   Quaternion3.fromAxisToRotationQuaternion = fromAxisToRotationQuaternion;
   function fromAxisToRotationQuaternionToRef(axis1, axis2, axis3, ref) {
     const rotMat = Matrix.create();
-    Matrix.fromXYZAxesToRef(Vector32.normalize(axis1), Vector32.normalize(axis2), Vector32.normalize(axis3), rotMat);
+    Matrix.fromXYZAxesToRef(
+      Vector32.normalize(axis1),
+      Vector32.normalize(axis2),
+      Vector32.normalize(axis3),
+      rotMat
+    );
     Quaternion3.fromRotationMatrixToRef(rotMat, ref);
   }
   Quaternion3.fromAxisToRotationQuaternionToRef = fromAxisToRotationQuaternionToRef;
@@ -17155,7 +17959,7 @@ var Quaternion2;
 
 // ../../node_modules/.pnpm/@dcl+ecs-math@2.1.0/node_modules/@dcl/ecs-math/dist/Vector2.js
 var Vector22;
-(function(Vector23) {
+(function (Vector23) {
   function create(x = 0, y = 0) {
     return { x, y };
   }
@@ -17172,13 +17976,13 @@ var Vector22;
 
 // ../../node_modules/.pnpm/@dcl+ecs-math@2.1.0/node_modules/@dcl/ecs-math/dist/Color4.js
 var Color42;
-(function(Color43) {
+(function (Color43) {
   function create(r = 0, g = 0, b = 0, a = 1) {
     return { r, g, b, a };
   }
   Color43.create = create;
   function fromHexString(hex) {
-    if (hex.substring(0, 1) !== "#" || hex.length !== 7 && hex.length !== 9) {
+    if (hex.substring(0, 1) !== '#' || (hex.length !== 7 && hex.length !== 9)) {
       return create(0, 0, 0, 1);
     }
     const r = parseInt(hex.substring(1, 3), 16);
@@ -17262,7 +18066,7 @@ var Color42;
     if (colors.length === count * 3) {
       const colors4 = [];
       for (let index = 0; index < colors.length; index += 3) {
-        const newIndex = index / 3 * 4;
+        const newIndex = (index / 3) * 4;
         colors4[newIndex] = colors[index];
         colors4[newIndex + 1] = colors[index + 1];
         colors4[newIndex + 2] = colors[index + 2];
@@ -17343,14 +18147,14 @@ var Color42;
   }
   Color43.multiplyToRef = multiplyToRef;
   function toString2(value) {
-    return "{R: " + value.r + " G:" + value.g + " B:" + value.b + " A:" + value.a + "}";
+    return '{R: ' + value.r + ' G:' + value.g + ' B:' + value.b + ' A:' + value.a + '}';
   }
   Color43.toString = toString2;
   function getHashCode(value) {
     let hash = value.r || 0;
-    hash = hash * 397 ^ (value.g || 0);
-    hash = hash * 397 ^ (value.b || 0);
-    hash = hash * 397 ^ (value.a || 0);
+    hash = (hash * 397) ^ (value.g || 0);
+    hash = (hash * 397) ^ (value.b || 0);
+    hash = (hash * 397) ^ (value.a || 0);
     return hash;
   }
   Color43.getHashCode = getHashCode;
@@ -17380,11 +18184,11 @@ var Color42;
   }
   Color43.set = set;
   function toHexString(value) {
-    const intR = value.r * 255 | 0;
-    const intG = value.g * 255 | 0;
-    const intB = value.b * 255 | 0;
-    const intA = value.a * 255 | 0;
-    return "#" + Scalar.toHex(intR) + Scalar.toHex(intG) + Scalar.toHex(intB) + Scalar.toHex(intA);
+    const intR = (value.r * 255) | 0;
+    const intG = (value.g * 255) | 0;
+    const intB = (value.b * 255) | 0;
+    const intA = (value.a * 255) | 0;
+    return '#' + Scalar.toHex(intR) + Scalar.toHex(intG) + Scalar.toHex(intB) + Scalar.toHex(intA);
   }
   Color43.toHexString = toHexString;
   function toLinearSpace(value) {
@@ -17417,13 +18221,13 @@ var Color42;
 
 // ../../node_modules/.pnpm/@dcl+ecs-math@2.1.0/node_modules/@dcl/ecs-math/dist/Color3.js
 var Color32;
-(function(Color33) {
+(function (Color33) {
   function create(r = 0, g = 0, b = 0) {
     return { r, g, b };
   }
   Color33.create = create;
   function fromHexString(hex) {
-    if (hex.substring(0, 1) !== "#" || hex.length !== 7) {
+    if (hex.substring(0, 1) !== '#' || hex.length !== 7) {
       return create(0, 0, 0);
     }
     const r = parseInt(hex.substring(1, 3), 16);
@@ -17497,13 +18301,13 @@ var Color32;
   }
   Color33.Random = Random;
   function toString2(value) {
-    return "{R: " + value.r + " G:" + value.g + " B:" + value.b + "}";
+    return '{R: ' + value.r + ' G:' + value.g + ' B:' + value.b + '}';
   }
   Color33.toString = toString2;
   function getHashCode(value) {
     let hash = value.r || 0;
-    hash = hash * 397 ^ (value.g || 0);
-    hash = hash * 397 ^ (value.b || 0);
+    hash = (hash * 397) ^ (value.g || 0);
+    hash = (hash * 397) ^ (value.b || 0);
     return hash;
   }
   Color33.getHashCode = getHashCode;
@@ -17538,7 +18342,9 @@ var Color32;
   }
   Color33.multiplyToRef = multiplyToRef;
   function equals2(value, otherColor) {
-    return otherColor && value.r === otherColor.r && value.g === otherColor.g && value.b === otherColor.b;
+    return (
+      otherColor && value.r === otherColor.r && value.g === otherColor.g && value.b === otherColor.b
+    );
   }
   Color33.equals = equals2;
   function equalsFloats(value, r, g, b) {
@@ -17610,10 +18416,10 @@ var Color32;
   }
   Color33.set = set;
   function toHexString(value) {
-    const intR = value.r * 255 | 0;
-    const intG = value.g * 255 | 0;
-    const intB = value.b * 255 | 0;
-    return "#" + Scalar.toHex(intR) + Scalar.toHex(intG) + Scalar.toHex(intB);
+    const intR = (value.r * 255) | 0;
+    const intG = (value.g * 255) | 0;
+    const intB = (value.b * 255) | 0;
+    return '#' + Scalar.toHex(intR) + Scalar.toHex(intG) + Scalar.toHex(intB);
   }
   Color33.toHexString = toHexString;
   function toLinearSpace(value) {
@@ -17645,7 +18451,7 @@ var Color32;
 // src/utils/timers.ts
 var timers = /* @__PURE__ */ new Map();
 var timerIdCounter = 0;
-engine.addSystem((dt) => {
+engine.addSystem(dt => {
   for (const [id, timer] of timers.entries()) {
     timer.time -= dt;
     if (timer.time <= 0) {
@@ -17664,7 +18470,7 @@ function setTimeout2(callback, ms) {
     callback,
     time: ms / 1e3,
     loop: false,
-    originalTime: ms / 1e3
+    originalTime: ms / 1e3,
   });
   return id;
 }
@@ -17674,7 +18480,7 @@ function setInterval2(callback, ms) {
     callback,
     time: ms / 1e3,
     loop: true,
-    originalTime: ms / 1e3
+    originalTime: ms / 1e3,
   });
   return id;
 }
@@ -17694,40 +18500,40 @@ var AdvancedLightingSystem = class {
   }
   // Initialize advanced lighting
   initialize() {
-    console.log("\u{1F4A1} Advanced Lighting System Initializing...");
+    console.log('\u{1F4A1} Advanced Lighting System Initializing...');
     this.createGlobalIllumination();
     this.createDynamicShadows();
     this.createVolumetricLighting();
     this.createHDRSystem();
     this.startDayNightCycle();
-    console.log("\u{1F4A1} Advanced Lighting System Ready!");
+    console.log('\u{1F4A1} Advanced Lighting System Ready!');
   }
   // Create global illumination system
   createGlobalIllumination() {
     const sunLight = engine.addEntity();
     Transform2.create(sunLight, {
       position: Vector32.create(8, 20, 8),
-      scale: Vector32.create(2, 2, 2)
+      scale: Vector32.create(2, 2, 2),
     });
     MeshRenderer3.setBox(sunLight);
     Material3.setPbrMaterial(sunLight, {
       albedoColor: Color42.create(1, 0.95, 0.8, 0.8),
       emissiveColor: Color42.create(1, 0.95, 0.8, 1),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
-    this.lights.set("sun", sunLight);
+    this.lights.set('sun', sunLight);
     const ambientLight = engine.addEntity();
     Transform2.create(ambientLight, {
       position: Vector32.create(8, 15, 8),
-      scale: Vector32.create(30, 30, 30)
+      scale: Vector32.create(30, 30, 30),
     });
     MeshRenderer3.setSphere(ambientLight);
     Material3.setPbrMaterial(ambientLight, {
       albedoColor: Color42.create(0.4, 0.45, 0.5, 0.1),
       emissiveColor: Color42.create(0.4, 0.45, 0.5, 0.3),
-      emissiveIntensity: 0.5
+      emissiveIntensity: 0.5,
     });
-    this.lights.set("ambient", ambientLight);
+    this.lights.set('ambient', ambientLight);
   }
   // Create dynamic shadow system
   createDynamicShadows() {
@@ -17738,20 +18544,20 @@ var AdvancedLightingSystem = class {
       // Back wall
       { pos: Vector32.create(2, 3, 0.5), scale: Vector32.create(1.2, 6, 1.2) },
       // Pillar 1
-      { pos: Vector32.create(14, 3, 0.5), scale: Vector32.create(1.2, 6, 1.2) }
+      { pos: Vector32.create(14, 3, 0.5), scale: Vector32.create(1.2, 6, 1.2) },
       // Pillar 2
     ];
     shadowCasterPositions.forEach((config, index) => {
       const shadowCaster = engine.addEntity();
       Transform2.create(shadowCaster, {
         position: config.pos,
-        scale: config.scale
+        scale: config.scale,
       });
       MeshRenderer3.setBox(shadowCaster);
       Material3.setPbrMaterial(shadowCaster, {
         alphaTest: 0.01,
         castShadows: true,
-        receiveShadows: true
+        receiveShadows: true,
       });
       this.shadowCasters.push(shadowCaster);
     });
@@ -17763,20 +18569,20 @@ var AdvancedLightingSystem = class {
       Vector32.create(14, 6, 2),
       Vector32.create(8, 6, 8),
       Vector32.create(2, 6, 14),
-      Vector32.create(14, 6, 14)
+      Vector32.create(14, 6, 14),
     ];
     beamPositions.forEach((pos, index) => {
       const volumetricLight = engine.addEntity();
       Transform2.create(volumetricLight, {
         position: pos,
-        scale: Vector32.create(0.3, 8, 0.3)
+        scale: Vector32.create(0.3, 8, 0.3),
       });
       MeshRenderer3.setBox(volumetricLight);
       Material3.setPbrMaterial(volumetricLight, {
         albedoColor: Color42.create(0.8, 0.9, 1, 0.3),
         emissiveColor: Color42.create(0.6, 0.7, 1, 0.8),
         emissiveIntensity: 5,
-        alphaTest: 0.01
+        alphaTest: 0.01,
       });
       this.volumetricLights.push(volumetricLight);
     });
@@ -17792,20 +18598,20 @@ var AdvancedLightingSystem = class {
       // Corner 2
       { pos: Vector32.create(2, 2, 14), intensity: 0.8, color: Color32.create(0.8, 0.9, 1) },
       // Corner 3
-      { pos: Vector32.create(14, 2, 14), intensity: 0.8, color: Color32.create(0.8, 0.9, 1) }
+      { pos: Vector32.create(14, 2, 14), intensity: 0.8, color: Color32.create(0.8, 0.9, 1) },
       // Corner 4
     ];
     exposureZones.forEach((zone, index) => {
       const exposureLight = engine.addEntity();
       Transform2.create(exposureLight, {
         position: zone.pos,
-        scale: Vector32.create(4, 4, 4)
+        scale: Vector32.create(4, 4, 4),
       });
       MeshRenderer3.setSphere(exposureLight);
       Material3.setPbrMaterial(exposureLight, {
         albedoColor: Color42.create(zone.color.r, zone.color.g, zone.color.b, 0.2),
         emissiveColor: Color42.create(zone.color.r, zone.color.g, zone.color.b, 0.6),
-        emissiveIntensity: zone.intensity
+        emissiveIntensity: zone.intensity,
       });
       this.lights.set(`exposure_${index}`, exposureLight);
     });
@@ -17820,20 +18626,16 @@ var AdvancedLightingSystem = class {
   }
   // Update day/night cycle lighting
   updateDayNightCycle() {
-    const sunLight = this.lights.get("sun");
-    const ambientLight = this.lights.get("ambient");
+    const sunLight = this.lights.get('sun');
+    const ambientLight = this.lights.get('ambient');
     if (sunLight && ambientLight) {
       const sunAngle = this.timeOfDay * Math.PI * 2;
       const sunHeight = Math.sin(sunAngle);
       const sunIntensity = Math.max(0, sunHeight);
       const sunTransform = Transform2.getMutable(sunLight);
-      sunTransform.rotation = Quaternion2.fromEulerDegrees(
-        sunAngle * 180 / Math.PI - 90,
-        0,
-        0
-      );
+      sunTransform.rotation = Quaternion2.fromEulerDegrees((sunAngle * 180) / Math.PI - 90, 0, 0);
       const sunMaterial = Material3.getMutable(sunLight);
-      if (sunMaterial && sunMaterial.$case === "pbr") {
+      if (sunMaterial && sunMaterial.$case === 'pbr') {
         sunMaterial.pbr.emissiveIntensity = sunIntensity * 2;
         if (sunIntensity > 0.5) {
           sunMaterial.pbr.albedoColor = Color42.create(1, 0.95, 0.8, 0.8);
@@ -17847,7 +18649,7 @@ var AdvancedLightingSystem = class {
         }
       }
       const ambientMaterial = Material3.getMutable(ambientLight);
-      if (ambientMaterial && ambientMaterial.$case === "pbr") {
+      if (ambientMaterial && ambientMaterial.$case === 'pbr') {
         ambientMaterial.pbr.emissiveIntensity = 0.3 + sunIntensity * 0.2;
         if (sunIntensity < 0.1) {
           ambientMaterial.pbr.albedoColor = Color42.create(0.1, 0.15, 0.3, 0.1);
@@ -17865,7 +18667,7 @@ var AdvancedLightingSystem = class {
       const time = this.timeOfDay * 2 + index * 0.5;
       const pulse = Math.sin(time) * 0.3 + 0.7;
       const material = Material3.getMutable(light);
-      if (material && material.$case === "pbr") {
+      if (material && material.$case === 'pbr') {
         material.pbr.emissiveIntensity = pulse * 5;
       }
     });
@@ -17876,13 +18678,13 @@ var AdvancedLightingSystem = class {
     Transform2.create(spotlight, {
       position: Vector32.create(position.x, position.y + 5, position.z),
       rotation: Quaternion2.fromEulerDegrees(90, 0, 0),
-      scale: Vector32.create(2, 8, 2)
+      scale: Vector32.create(2, 8, 2),
     });
     MeshRenderer3.setCylinder(spotlight);
     Material3.setPbrMaterial(spotlight, {
       albedoColor: Color42.create(color.r, color.g, color.b, 0.3),
       emissiveColor: Color42.create(color.r, color.g, color.b, 0.8),
-      emissiveIntensity: 3
+      emissiveIntensity: 3,
     });
     setTimeout(() => {
       engine.removeEntity(spotlight);
@@ -17895,25 +18697,25 @@ var AdvancedLightingSystem = class {
       Vector32.create(1, 4, 1),
       Vector32.create(15, 4, 1),
       Vector32.create(1, 4, 15),
-      Vector32.create(15, 4, 15)
+      Vector32.create(15, 4, 15),
     ];
-    emergencyPositions.forEach((pos) => {
+    emergencyPositions.forEach(pos => {
       const emergencyLight = engine.addEntity();
       Transform2.create(emergencyLight, {
         position: pos,
-        scale: Vector32.create(1, 1, 1)
+        scale: Vector32.create(1, 1, 1),
       });
       MeshRenderer3.setBox(emergencyLight);
       Material3.setPbrMaterial(emergencyLight, {
         albedoColor: Color42.create(1, 0.2, 0.2, 0.8),
         emissiveColor: Color42.create(1, 0.2, 0.2, 1),
-        emissiveIntensity: 4
+        emissiveIntensity: 4,
       });
       engine.addSystem(() => {
         const time = Date.now() / 200;
         const pulse = Math.sin(time) > 0 ? 1 : 0.2;
         const material = Material3.getMutable(emergencyLight);
-        if (material && material.$case === "pbr") {
+        if (material && material.$case === 'pbr') {
           material.pbr.emissiveIntensity = pulse * 4;
         }
       });
@@ -17921,13 +18723,13 @@ var AdvancedLightingSystem = class {
   }
   // Cleanup lighting system
   cleanup() {
-    this.lights.forEach((light) => {
+    this.lights.forEach(light => {
       engine.removeEntity(light);
     });
-    this.shadowCasters.forEach((caster) => {
+    this.shadowCasters.forEach(caster => {
       engine.removeEntity(caster);
     });
-    this.volumetricLights.forEach((light) => {
+    this.volumetricLights.forEach(light => {
       engine.removeEntity(light);
     });
     this.lights.clear();
@@ -17945,10 +18747,10 @@ var SoundSystem = class {
   }
   // Initialize sound system
   initialize() {
-    console.log("\u{1F50A} Sound System Initializing...");
+    console.log('\u{1F50A} Sound System Initializing...');
     this.createAmbientSound();
     this.createInteractionSounds();
-    console.log("\u{1F50A} Sound System Ready!");
+    console.log('\u{1F50A} Sound System Ready!');
   }
   // Create ambient background sound
   createAmbientSound() {
@@ -17957,9 +18759,9 @@ var SoundSystem = class {
       playing: true,
       loop: true,
       volume: this.masterVolume * 0.3,
-      audioClipUrl: "sounds/ambient-quantum.mp3"
+      audioClipUrl: 'sounds/ambient-quantum.mp3',
     });
-    this.audioSources.set("ambient", ambientSource);
+    this.audioSources.set('ambient', ambientSource);
   }
   // Create interaction sound effects
   createInteractionSounds() {
@@ -17968,25 +18770,25 @@ var SoundSystem = class {
       playing: false,
       loop: false,
       volume: this.masterVolume * 0.8,
-      audioClipUrl: "sounds/interface-click.mp3"
+      audioClipUrl: 'sounds/interface-click.mp3',
     });
-    this.audioSources.set("click", clickSource);
+    this.audioSources.set('click', clickSource);
     const alertSource = engine.addEntity();
     AudioSource3.create(alertSource, {
       playing: false,
       loop: false,
       volume: this.masterVolume * 0.9,
-      audioClipUrl: "sounds/alert-chime.mp3"
+      audioClipUrl: 'sounds/alert-chime.mp3',
     });
-    this.audioSources.set("alert", alertSource);
+    this.audioSources.set('alert', alertSource);
     const powerUpSource = engine.addEntity();
     AudioSource3.create(powerUpSource, {
       playing: false,
       loop: false,
       volume: this.masterVolume * 0.7,
-      audioClipUrl: "sounds/power-up.mp3"
+      audioClipUrl: 'sounds/power-up.mp3',
     });
-    this.audioSources.set("powerup", powerUpSource);
+    this.audioSources.set('powerup', powerUpSource);
   }
   // Play specific sound
   playSound(soundName) {
@@ -18013,7 +18815,7 @@ var SoundSystem = class {
     this.masterVolume = Math.max(0, Math.min(1, volume));
     this.audioSources.forEach((source, name) => {
       const audioSource = AudioSource3.getMutable(source);
-      if (name === "ambient") {
+      if (name === 'ambient') {
         audioSource.volume = this.masterVolume * 0.3;
       } else {
         audioSource.volume = this.masterVolume * 0.8;
@@ -18023,23 +18825,23 @@ var SoundSystem = class {
   // Play interaction sound based on type
   playInteractionSound(type) {
     switch (type) {
-      case "click":
-        this.playSound("click");
+      case 'click':
+        this.playSound('click');
         break;
-      case "alert":
-        this.playSound("alert");
+      case 'alert':
+        this.playSound('alert');
         break;
-      case "powerup":
-        this.playSound("powerup");
+      case 'powerup':
+        this.playSound('powerup');
         break;
-      case "error":
-        this.playSound("alert");
+      case 'error':
+        this.playSound('alert');
         break;
     }
   }
   // Cleanup sound system
   cleanup() {
-    this.audioSources.forEach((source) => {
+    this.audioSources.forEach(source => {
       engine.removeEntity(source);
     });
     this.audioSources.clear();
@@ -18052,9 +18854,9 @@ var NPCAssistant = class {
   constructor(name, role, position) {
     this.dialogueTree = /* @__PURE__ */ new Map();
     this.memory = /* @__PURE__ */ new Map();
-    this.currentDialogue = "greeting";
+    this.currentDialogue = 'greeting';
     this.isProcessing = false;
-    this.emotionalState = "neutral";
+    this.emotionalState = 'neutral';
     this.name = name;
     this.role = role;
     this.createNPC(position);
@@ -18065,7 +18867,7 @@ var NPCAssistant = class {
     this.entity = engine.addEntity();
     Transform2.create(this.entity, {
       position,
-      scale: Vector32.create(1, 2, 1)
+      scale: Vector32.create(1, 2, 1),
     });
     MeshRenderer3.setBox(this.entity);
     Material3.setPbrMaterial(this.entity, {
@@ -18073,25 +18875,25 @@ var NPCAssistant = class {
       roughness: 0.2,
       metallic: 0.3,
       emissiveColor: Color42.create(0.1, 0.2, 0.4, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const head = engine.addEntity();
     Transform2.create(head, {
       parent: this.entity,
       position: Vector32.create(0, 1.2, 0),
-      scale: Vector32.create(0.8, 0.8, 0.8)
+      scale: Vector32.create(0.8, 0.8, 0.8),
     });
     MeshRenderer3.setSphere(head);
     Material3.setPbrMaterial(head, {
       albedoColor: Color42.create(0.9, 0.8, 0.7, 1),
       roughness: 0.1,
-      metallic: 0.1
+      metallic: 0.1,
     });
     const nameTag = engine.addEntity();
     Transform2.create(nameTag, {
       parent: this.entity,
       position: Vector32.create(0, 2.5, 0),
-      scale: Vector32.create(0.5, 0.5, 0.5)
+      scale: Vector32.create(0.5, 0.5, 0.5),
     });
     TextShape3.create(nameTag, {
       text: `${this.name}
@@ -18100,84 +18902,66 @@ ${this.role}`,
       fontSize: 3,
       textAlign: 3,
       outlineWidth: 0.1,
-      outlineColor: Color42.create(0, 0, 0, 1)
+      outlineColor: Color42.create(0, 0, 0, 1),
     });
     pointerEventsSystem.onPointerDown(
       {
         entity: this.entity,
         opts: {
           button: InputAction.IA_POINTER,
-          hoverText: `\u{1F916} Talk to ${this.name}`
-        }
+          hoverText: `\u{1F916} Talk to ${this.name}`,
+        },
       },
       () => this.handleInteraction()
     );
   }
   initializeDialogueTree() {
-    this.dialogueTree.set("greeting", {
-      id: "greeting",
+    this.dialogueTree.set('greeting', {
+      id: 'greeting',
       text: `Hello! I'm ${this.name}, your ${this.role}. How can I assist you today?`,
       responses: [
-        "Tell me about the system status",
-        "Help me with a task",
-        "What can you do?",
-        "Goodbye"
+        'Tell me about the system status',
+        'Help me with a task',
+        'What can you do?',
+        'Goodbye',
       ],
-      emotion: "happy"
+      emotion: 'happy',
     });
-    this.dialogueTree.set("system_status", {
-      id: "system_status",
-      text: "All systems are operating at optimal efficiency. Quantum core is stable, network latency is under 10ms, and security protocols are active.",
-      responses: [
-        "Show me detailed metrics",
-        "Run diagnostics",
-        "Back to main menu"
-      ],
-      emotion: "neutral"
+    this.dialogueTree.set('system_status', {
+      id: 'system_status',
+      text: 'All systems are operating at optimal efficiency. Quantum core is stable, network latency is under 10ms, and security protocols are active.',
+      responses: ['Show me detailed metrics', 'Run diagnostics', 'Back to main menu'],
+      emotion: 'neutral',
     });
-    this.dialogueTree.set("task_help", {
-      id: "task_help",
-      text: "I can help you with various tasks: system monitoring, data analysis, security checks, or collaborative projects. What would you like to work on?",
-      responses: [
-        "System monitoring",
-        "Data analysis",
-        "Security check",
-        "Collaboration"
-      ],
-      emotion: "excited"
+    this.dialogueTree.set('task_help', {
+      id: 'task_help',
+      text: 'I can help you with various tasks: system monitoring, data analysis, security checks, or collaborative projects. What would you like to work on?',
+      responses: ['System monitoring', 'Data analysis', 'Security check', 'Collaboration'],
+      emotion: 'excited',
     });
-    this.dialogueTree.set("capabilities", {
-      id: "capabilities",
-      text: "I have advanced AI capabilities including natural language processing, predictive analytics, real-time monitoring, and adaptive learning. I can also integrate with external systems and provide intelligent recommendations.",
-      responses: [
-        "Show me examples",
-        "Teach me something",
-        "Back to main menu"
-      ],
-      emotion: "excited"
+    this.dialogueTree.set('capabilities', {
+      id: 'capabilities',
+      text: 'I have advanced AI capabilities including natural language processing, predictive analytics, real-time monitoring, and adaptive learning. I can also integrate with external systems and provide intelligent recommendations.',
+      responses: ['Show me examples', 'Teach me something', 'Back to main menu'],
+      emotion: 'excited',
     });
-    this.dialogueTree.set("detailed_metrics", {
-      id: "detailed_metrics",
-      text: "Current metrics: CPU usage at 42%, memory at 68%, network throughput at 1.2GB/s, and quantum coherence at 98.7%. All parameters within acceptable ranges.",
-      responses: [
-        "Show historical trends",
-        "Export report",
-        "Back to system status"
-      ],
-      emotion: "neutral"
+    this.dialogueTree.set('detailed_metrics', {
+      id: 'detailed_metrics',
+      text: 'Current metrics: CPU usage at 42%, memory at 68%, network throughput at 1.2GB/s, and quantum coherence at 98.7%. All parameters within acceptable ranges.',
+      responses: ['Show historical trends', 'Export report', 'Back to system status'],
+      emotion: 'neutral',
     });
-    this.dialogueTree.set("farewell", {
-      id: "farewell",
+    this.dialogueTree.set('farewell', {
+      id: 'farewell',
       text: "It was great assisting you! Feel free to return anytime. I'll be here monitoring the systems and learning from our interactions.",
       responses: [],
-      emotion: "happy"
+      emotion: 'happy',
     });
   }
   async handleInteraction() {
-    if (this.isProcessing)
-      return;
+    if (this.isProcessing) return;
     this.isProcessing = true;
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
     const dialogue = this.dialogueTree.get(this.currentDialogue);
     if (!dialogue) {
       this.isProcessing = false;
@@ -18192,22 +18976,22 @@ ${this.role}`,
     const dialogueEntity = engine.addEntity();
     Transform2.create(dialogueEntity, {
       position: Vector32.create(8, 4, 8),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(dialogueEntity, {
-      text: "",
+      text: '',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 4,
       textAlign: 3,
       outlineWidth: 0.1,
-      outlineColor: Color42.create(0, 0, 0, 1)
+      outlineColor: Color42.create(0, 0, 0, 1),
     });
     const fullText = `${this.name}: ${dialogue.text}`;
-    let currentText = "";
+    let currentText = '';
     for (let i = 0; i <= fullText.length; i++) {
       currentText = fullText.substring(0, i);
       TextShape3.getMutable(dialogueEntity).text = currentText;
-      await new Promise((resolve2) => setTimeout(resolve2, 50));
+      await new Promise(resolve2 => setTimeout(resolve2, 50));
     }
     setTimeout(() => {
       engine.removeEntity(dialogueEntity);
@@ -18218,21 +19002,21 @@ ${this.role}`,
       const responseEntity = engine.addEntity();
       Transform2.create(responseEntity, {
         position: Vector32.create(4 + index * 2, 3, 10),
-        scale: Vector32.create(0.2, 0.2, 0.2)
+        scale: Vector32.create(0.2, 0.2, 0.2),
       });
       TextShape3.create(responseEntity, {
         text: `${index + 1}. ${response}`,
         textColor: Color42.create(0.8, 0.8, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: responseEntity,
           opts: {
             button: InputAction.IA_POINTER,
-            hoverText: response
-          }
+            hoverText: response,
+          },
         },
         () => {
           this.handleResponse(index);
@@ -18243,27 +19027,26 @@ ${this.role}`,
   }
   handleResponse(responseIndex) {
     const dialogue = this.dialogueTree.get(this.currentDialogue);
-    if (!dialogue || responseIndex >= dialogue.responses.length)
-      return;
+    if (!dialogue || responseIndex >= dialogue.responses.length) return;
     const response = dialogue.responses[responseIndex];
     switch (response) {
-      case "Tell me about the system status":
-        this.currentDialogue = "system_status";
+      case 'Tell me about the system status':
+        this.currentDialogue = 'system_status';
         break;
-      case "Help me with a task":
-        this.currentDialogue = "task_help";
+      case 'Help me with a task':
+        this.currentDialogue = 'task_help';
         break;
-      case "What can you do?":
-        this.currentDialogue = "capabilities";
+      case 'What can you do?':
+        this.currentDialogue = 'capabilities';
         break;
-      case "Show me detailed metrics":
-        this.currentDialogue = "detailed_metrics";
+      case 'Show me detailed metrics':
+        this.currentDialogue = 'detailed_metrics';
         break;
-      case "Goodbye":
-        this.currentDialogue = "farewell";
+      case 'Goodbye':
+        this.currentDialogue = 'farewell';
         break;
       default:
-        this.currentDialogue = "greeting";
+        this.currentDialogue = 'greeting';
     }
     setTimeout(() => {
       this.handleInteraction();
@@ -18272,17 +19055,17 @@ ${this.role}`,
   updateEmotionalState(emotion) {
     this.emotionalState = emotion;
     const material = Material3.getMutable(this.entity);
-    if (material && material.$case === "pbr") {
+    if (material && material.$case === 'pbr') {
       switch (emotion) {
-        case "happy":
+        case 'happy':
           material.pbr.emissiveColor = Color42.create(0.2, 0.8, 0.2, 0.5);
           material.pbr.emissiveIntensity = 2;
           break;
-        case "excited":
+        case 'excited':
           material.pbr.emissiveColor = Color42.create(1, 0.8, 0.2, 0.5);
           material.pbr.emissiveIntensity = 3;
           break;
-        case "concerned":
+        case 'concerned':
           material.pbr.emissiveColor = Color42.create(0.8, 0.2, 0.2, 0.5);
           material.pbr.emissiveIntensity = 1.5;
           break;
@@ -18296,7 +19079,7 @@ ${this.role}`,
     engine.addSystem(() => {
       if (Math.random() > 0.98) {
         const material = Material3.getMutable(this.entity);
-        if (material && material.$case === "pbr") {
+        if (material && material.$case === 'pbr') {
           material.pbr.emissiveIntensity = 1 + Math.random() * 0.5;
         }
       }
@@ -18304,15 +19087,15 @@ ${this.role}`,
   }
   // Advanced AI methods
   async processNaturalLanguage(input) {
-    await new Promise((resolve2) => setTimeout(resolve2, 1e3));
-    if (input.toLowerCase().includes("hello") || input.toLowerCase().includes("hi")) {
+    await new Promise(resolve2 => setTimeout(resolve2, 1e3));
+    if (input.toLowerCase().includes('hello') || input.toLowerCase().includes('hi')) {
       return `Hello! I'm ${this.name}. How can I help you today?`;
-    } else if (input.toLowerCase().includes("status")) {
-      return "All systems are operational. Would you like detailed metrics?";
-    } else if (input.toLowerCase().includes("help")) {
-      return "I can assist with system monitoring, data analysis, and security checks. What do you need?";
+    } else if (input.toLowerCase().includes('status')) {
+      return 'All systems are operational. Would you like detailed metrics?';
+    } else if (input.toLowerCase().includes('help')) {
+      return 'I can assist with system monitoring, data analysis, and security checks. What do you need?';
     } else {
-      return "I understand you need assistance. Let me help you with that.";
+      return 'I understand you need assistance. Let me help you with that.';
     }
   }
   learnFromInteraction(playerId, topic) {
@@ -18321,7 +19104,7 @@ ${this.role}`,
         playerName: playerId,
         lastInteraction: Date.now(),
         topics: [],
-        preferences: []
+        preferences: [],
       });
     }
     const playerMemory = this.memory.get(playerId);
@@ -18335,7 +19118,7 @@ ${this.role}`,
     }
     const timeSinceLastInteraction = Date.now() - playerMemory.lastInteraction;
     if (timeSinceLastInteraction < 6e4) {
-      return "Welcome back! Is there anything else I can help you with?";
+      return 'Welcome back! Is there anything else I can help you with?';
     } else {
       return `It's been a while! Last time we discussed ${playerMemory.topics[playerMemory.topics.length - 1]}. How can I assist you today?`;
     }
@@ -18362,7 +19145,7 @@ var NPCManager = class {
     return Array.from(this.npcs.values());
   }
   cleanup() {
-    this.npcs.forEach((npc) => npc.cleanup());
+    this.npcs.forEach(npc => npc.cleanup());
     this.npcs.clear();
   }
 };
@@ -18384,43 +19167,43 @@ var AnalyticsDashboardSystem = class {
   }
   // Initialize analytics dashboard system
   initialize() {
-    console.log("\u{1F4CA} Analytics Dashboard System Initializing...");
+    console.log('\u{1F4CA} Analytics Dashboard System Initializing...');
     this.createDashboardUI();
     this.createDefaultWidgets();
     this.createDefaultReports();
     this.startAnalyticsEngine();
     this.generateSampleData();
     this.isInitialized = true;
-    console.log("\u{1F4CA} Analytics Dashboard System Ready!");
+    console.log('\u{1F4CA} Analytics Dashboard System Ready!');
   }
   // Initialize data sources
   initializeDataSources() {
-    console.log("\u{1F4E1} Initializing analytics data sources...");
+    console.log('\u{1F4E1} Initializing analytics data sources...');
   }
   // Create dashboard UI
   createDashboardUI() {
     this.dashboardUI = engine.addEntity();
     Transform2.create(this.dashboardUI, {
       position: Vector32.create(8, 4, 2),
-      scale: Vector32.create(6, 4, 0.1)
+      scale: Vector32.create(6, 4, 0.1),
     });
     MeshRenderer3.setBox(this.dashboardUI);
     Material3.setPbrMaterial(this.dashboardUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.dashboardUI,
       position: Vector32.create(0, 1.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F4CA} ANALYTICS DASHBOARD",
+      text: '\u{1F4CA} ANALYTICS DASHBOARD',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createWidgetContainers();
     this.createControlPanel();
@@ -18432,77 +19215,77 @@ var AnalyticsDashboardSystem = class {
     Transform2.create(mainChart, {
       parent: this.dashboardUI,
       position: Vector32.create(-1.5, 0.5, 0.1),
-      scale: Vector32.create(2.5, 1.5, 0.1)
+      scale: Vector32.create(2.5, 1.5, 0.1),
     });
     MeshRenderer3.setBox(mainChart);
     Material3.setPbrMaterial(mainChart, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const kpiArea = engine.addEntity();
     Transform2.create(kpiArea, {
       parent: this.dashboardUI,
       position: Vector32.create(1.5, 0.5, 0.1),
-      scale: Vector32.create(2.5, 1.5, 0.1)
+      scale: Vector32.create(2.5, 1.5, 0.1),
     });
     MeshRenderer3.setBox(kpiArea);
     Material3.setPbrMaterial(kpiArea, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const realtimeArea = engine.addEntity();
     Transform2.create(realtimeArea, {
       parent: this.dashboardUI,
       position: Vector32.create(0, -0.8, 0.1),
-      scale: Vector32.create(5, 0.8, 0.1)
+      scale: Vector32.create(5, 0.8, 0.1),
     });
     MeshRenderer3.setBox(realtimeArea);
     Material3.setPbrMaterial(realtimeArea, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
   }
   // Create control panel
   createControlPanel() {
     const controls = [
-      { id: "refresh", icon: "\u{1F504}", name: "Refresh Data" },
-      { id: "export", icon: "\u{1F4E4}", name: "Export Report" },
-      { id: "settings", icon: "\u2699\uFE0F", name: "Settings" },
-      { id: "fullscreen", icon: "\u{1F50D}", name: "Fullscreen" }
+      { id: 'refresh', icon: '\u{1F504}', name: 'Refresh Data' },
+      { id: 'export', icon: '\u{1F4E4}', name: 'Export Report' },
+      { id: 'settings', icon: '\u2699\uFE0F', name: 'Settings' },
+      { id: 'fullscreen', icon: '\u{1F50D}', name: 'Fullscreen' },
     ];
     let xOffset = -1.5;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.dashboardUI,
         position: Vector32.create(xOffset, -1.5, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleControl(control.id)
       );
@@ -18515,139 +19298,138 @@ var AnalyticsDashboardSystem = class {
     Transform2.create(statusBar, {
       parent: this.dashboardUI,
       position: Vector32.create(0, -1.9, 0.1),
-      scale: Vector32.create(5.5, 0.2, 0.1)
+      scale: Vector32.create(5.5, 0.2, 0.1),
     });
     MeshRenderer3.setBox(statusBar);
     Material3.setPbrMaterial(statusBar, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const statusText = engine.addEntity();
     Transform2.create(statusText, {
       parent: statusBar,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(statusText, {
-      text: "\u{1F4CA} Last Update: Just Now | Events: 0",
+      text: '\u{1F4CA} Last Update: Just Now | Events: 0',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.2,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create default widgets
   createDefaultWidgets() {
     const userActivityChart = {
-      id: "widget_user_activity",
-      type: "chart",
-      title: "User Activity",
+      id: 'widget_user_activity',
+      type: 'chart',
+      title: 'User Activity',
       position: Vector32.create(-1.5, 0.5, 0.1),
       size: Vector32.create(2.5, 1.5, 0.1),
-      dataSource: "user_behavior",
+      dataSource: 'user_behavior',
       refreshInterval: 1e4,
       config: {
-        chartType: "line",
-        timeRange: "day",
-        aggregation: "count",
+        chartType: 'line',
+        timeRange: 'day',
+        aggregation: 'count',
         colors: [Color32.create(0.2, 0.6, 1), Color32.create(1, 0.6, 0.2)],
         showLegend: true,
-        showGrid: true
+        showGrid: true,
       },
-      isVisible: true
+      isVisible: true,
     };
     const systemPerformanceGauge = {
-      id: "widget_system_performance",
-      type: "gauge",
-      title: "System Performance",
+      id: 'widget_system_performance',
+      type: 'gauge',
+      title: 'System Performance',
       position: Vector32.create(1.5, 0.8, 0.1),
       size: Vector32.create(1, 0.6, 0.1),
-      dataSource: "system_performance",
+      dataSource: 'system_performance',
       refreshInterval: 5e3,
       config: {
-        timeRange: "hour",
-        aggregation: "avg"
+        timeRange: 'hour',
+        aggregation: 'avg',
       },
-      isVisible: true
+      isVisible: true,
     };
     const businessMetrics = {
-      id: "widget_business_metrics",
-      type: "metric",
-      title: "Business Metrics",
+      id: 'widget_business_metrics',
+      type: 'metric',
+      title: 'Business Metrics',
       position: Vector32.create(1.5, 0.2, 0.1),
       size: Vector32.create(2.5, 0.6, 0.1),
-      dataSource: "business_metrics",
+      dataSource: 'business_metrics',
       refreshInterval: 15e3,
       config: {
-        timeRange: "week",
-        aggregation: "sum"
+        timeRange: 'week',
+        aggregation: 'sum',
       },
-      isVisible: true
+      isVisible: true,
     };
     const realtimeEvents = {
-      id: "widget_realtime_events",
-      type: "realtime",
-      title: "Real-time Events",
+      id: 'widget_realtime_events',
+      type: 'realtime',
+      title: 'Real-time Events',
       position: Vector32.create(0, -0.8, 0.1),
       size: Vector32.create(5, 0.8, 0.1),
-      dataSource: "realtime",
+      dataSource: 'realtime',
       refreshInterval: 1e3,
       config: {
-        timeRange: "hour"
+        timeRange: 'hour',
       },
-      isVisible: true
+      isVisible: true,
     };
     this.widgets.set(userActivityChart.id, userActivityChart);
     this.widgets.set(systemPerformanceGauge.id, systemPerformanceGauge);
     this.widgets.set(businessMetrics.id, businessMetrics);
     this.widgets.set(realtimeEvents.id, realtimeEvents);
-    console.log("\u{1F4C8} Default widgets created");
+    console.log('\u{1F4C8} Default widgets created');
   }
   // Create default reports
   createDefaultReports() {
     const dailyReport = {
-      id: "report_daily_performance",
-      name: "Daily Performance Report",
-      description: "Comprehensive daily performance metrics",
-      category: "system_performance",
-      widgets: ["widget_user_activity", "widget_system_performance"],
+      id: 'report_daily_performance',
+      name: 'Daily Performance Report',
+      description: 'Comprehensive daily performance metrics',
+      category: 'system_performance',
+      widgets: ['widget_user_activity', 'widget_system_performance'],
       schedule: {
-        frequency: "daily",
+        frequency: 'daily',
         enabled: true,
         nextRun: Date.now() + 864e5,
         // Tomorrow
-        timezone: "UTC"
+        timezone: 'UTC',
       },
-      recipients: ["admin@aigestion.com"],
-      format: "pdf",
-      isTemplate: false
+      recipients: ['admin@aigestion.com'],
+      format: 'pdf',
+      isTemplate: false,
     };
     const weeklyReport = {
-      id: "report_weekly_business",
-      name: "Weekly Business Report",
-      description: "Weekly business metrics and KPIs",
-      category: "business_metrics",
-      widgets: ["widget_business_metrics"],
+      id: 'report_weekly_business',
+      name: 'Weekly Business Report',
+      description: 'Weekly business metrics and KPIs',
+      category: 'business_metrics',
+      widgets: ['widget_business_metrics'],
       schedule: {
-        frequency: "weekly",
+        frequency: 'weekly',
         enabled: true,
         nextRun: Date.now() + 6048e5,
         // Next week
-        timezone: "UTC"
+        timezone: 'UTC',
       },
-      recipients: ["management@aigestion.com"],
-      format: "html",
-      isTemplate: false
+      recipients: ['management@aigestion.com'],
+      format: 'html',
+      isTemplate: false,
     };
     this.reports.set(dailyReport.id, dailyReport);
     this.reports.set(weeklyReport.id, weeklyReport);
-    console.log("\u{1F4CB} Default reports created");
+    console.log('\u{1F4CB} Default reports created');
   }
   // Start analytics engine
   startAnalyticsEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateRealTimeData();
       this.refreshWidgets();
       this.processReports();
@@ -18656,20 +19438,20 @@ var AnalyticsDashboardSystem = class {
   }
   // Generate sample data
   generateSampleData() {
-    const categories = ["user_behavior", "system_performance", "business_metrics", "engagement"];
-    categories.forEach((category) => {
+    const categories = ['user_behavior', 'system_performance', 'business_metrics', 'engagement'];
+    categories.forEach(category => {
       const data = {
         id: `data_${category}_${Date.now()}`,
         timestamp: Date.now(),
         category,
         metrics: this.generateMetrics(category),
         dimensions: /* @__PURE__ */ new Map([
-          ["platform", "web"],
-          ["version", "1.0.0"],
-          ["environment", "production"]
+          ['platform', 'web'],
+          ['version', '1.0.0'],
+          ['environment', 'production'],
         ]),
         events: [],
-        kpis: this.generateKPIs(category)
+        kpis: this.generateKPIs(category),
       };
       this.analyticsData.set(data.id, data);
     });
@@ -18683,43 +19465,43 @@ var AnalyticsDashboardSystem = class {
         userId: `user_${Math.floor(Math.random() * 100)}`,
         sessionId: `session_${Math.floor(Math.random() * 20)}`,
         properties: /* @__PURE__ */ new Map([
-          ["action", this.getRandomAction()],
-          ["page", this.getRandomPage()],
-          ["duration", Math.floor(Math.random() * 300)]
+          ['action', this.getRandomAction()],
+          ['page', this.getRandomPage()],
+          ['duration', Math.floor(Math.random() * 300)],
         ]),
-        value: Math.random() * 100
+        value: Math.random() * 100,
       };
       this.realTimeData.push(event);
     }
-    console.log("\u{1F4CA} Sample analytics data generated");
+    console.log('\u{1F4CA} Sample analytics data generated');
   }
   // Generate metrics
   generateMetrics(category) {
     const metrics = /* @__PURE__ */ new Map();
     switch (category) {
-      case "user_behavior":
-        metrics.set("active_users", Math.floor(Math.random() * 1e3) + 500);
-        metrics.set("page_views", Math.floor(Math.random() * 1e4) + 5e3);
-        metrics.set("session_duration", Math.random() * 600 + 120);
-        metrics.set("bounce_rate", Math.random() * 0.5 + 0.2);
+      case 'user_behavior':
+        metrics.set('active_users', Math.floor(Math.random() * 1e3) + 500);
+        metrics.set('page_views', Math.floor(Math.random() * 1e4) + 5e3);
+        metrics.set('session_duration', Math.random() * 600 + 120);
+        metrics.set('bounce_rate', Math.random() * 0.5 + 0.2);
         break;
-      case "system_performance":
-        metrics.set("cpu_usage", Math.random() * 80 + 10);
-        metrics.set("memory_usage", Math.random() * 70 + 20);
-        metrics.set("response_time", Math.random() * 500 + 100);
-        metrics.set("error_rate", Math.random() * 5);
+      case 'system_performance':
+        metrics.set('cpu_usage', Math.random() * 80 + 10);
+        metrics.set('memory_usage', Math.random() * 70 + 20);
+        metrics.set('response_time', Math.random() * 500 + 100);
+        metrics.set('error_rate', Math.random() * 5);
         break;
-      case "business_metrics":
-        metrics.set("revenue", Math.random() * 1e4 + 5e3);
-        metrics.set("conversion_rate", Math.random() * 0.1 + 0.02);
-        metrics.set("customer_acquisition", Math.floor(Math.random() * 100) + 50);
-        metrics.set("retention_rate", Math.random() * 0.3 + 0.6);
+      case 'business_metrics':
+        metrics.set('revenue', Math.random() * 1e4 + 5e3);
+        metrics.set('conversion_rate', Math.random() * 0.1 + 0.02);
+        metrics.set('customer_acquisition', Math.floor(Math.random() * 100) + 50);
+        metrics.set('retention_rate', Math.random() * 0.3 + 0.6);
         break;
-      case "engagement":
-        metrics.set("interaction_rate", Math.random() * 0.8 + 0.1);
-        metrics.set("social_shares", Math.floor(Math.random() * 500) + 100);
-        metrics.set("comments", Math.floor(Math.random() * 200) + 50);
-        metrics.set("likes", Math.floor(Math.random() * 1e3) + 200);
+      case 'engagement':
+        metrics.set('interaction_rate', Math.random() * 0.8 + 0.1);
+        metrics.set('social_shares', Math.floor(Math.random() * 500) + 100);
+        metrics.set('comments', Math.floor(Math.random() * 200) + 50);
+        metrics.set('likes', Math.floor(Math.random() * 1e3) + 200);
         break;
     }
     return metrics;
@@ -18728,40 +19510,40 @@ var AnalyticsDashboardSystem = class {
   generateKPIs(category) {
     const kpis = [];
     switch (category) {
-      case "user_behavior":
+      case 'user_behavior':
         kpis.push({
-          id: "kpi_daily_active_users",
-          name: "Daily Active Users",
+          id: 'kpi_daily_active_users',
+          name: 'Daily Active Users',
           value: Math.floor(Math.random() * 1e3) + 500,
           target: 1500,
-          unit: "users",
-          trend: Math.random() > 0.5 ? "up" : "down",
+          unit: 'users',
+          trend: Math.random() > 0.5 ? 'up' : 'down',
           change: (Math.random() - 0.5) * 20,
-          status: "good"
+          status: 'good',
         });
         break;
-      case "system_performance":
+      case 'system_performance':
         kpis.push({
-          id: "kpi_uptime",
-          name: "System Uptime",
+          id: 'kpi_uptime',
+          name: 'System Uptime',
           value: 99.5 + Math.random() * 0.5,
           target: 99.9,
-          unit: "%",
-          trend: "stable",
+          unit: '%',
+          trend: 'stable',
           change: 0.1,
-          status: "good"
+          status: 'good',
         });
         break;
-      case "business_metrics":
+      case 'business_metrics':
         kpis.push({
-          id: "kpi_monthly_revenue",
-          name: "Monthly Revenue",
+          id: 'kpi_monthly_revenue',
+          name: 'Monthly Revenue',
           value: Math.floor(Math.random() * 5e4) + 1e5,
           target: 2e5,
-          unit: "$",
-          trend: Math.random() > 0.3 ? "up" : "down",
+          unit: '$',
+          trend: Math.random() > 0.3 ? 'up' : 'down',
           change: (Math.random() - 0.5) * 15,
-          status: Math.random() > 0.2 ? "good" : "warning"
+          status: Math.random() > 0.2 ? 'good' : 'warning',
         });
         break;
     }
@@ -18770,49 +19552,49 @@ var AnalyticsDashboardSystem = class {
   // Get random event name
   getRandomEventName() {
     const events = [
-      "page_view",
-      "button_click",
-      "form_submit",
-      "video_play",
-      "download",
-      "login",
-      "logout",
-      "search",
-      "filter",
-      "sort",
-      "share",
-      "comment",
-      "purchase",
-      "add_to_cart",
-      "checkout",
-      "sign_up",
-      "subscribe"
+      'page_view',
+      'button_click',
+      'form_submit',
+      'video_play',
+      'download',
+      'login',
+      'logout',
+      'search',
+      'filter',
+      'sort',
+      'share',
+      'comment',
+      'purchase',
+      'add_to_cart',
+      'checkout',
+      'sign_up',
+      'subscribe',
     ];
     return events[Math.floor(Math.random() * events.length)];
   }
   // Get random event category
   getRandomEventCategory() {
-    const categories = ["navigation", "interaction", "conversion", "engagement", "error"];
+    const categories = ['navigation', 'interaction', 'conversion', 'engagement', 'error'];
     return categories[Math.floor(Math.random() * categories.length)];
   }
   // Get random action
   getRandomAction() {
-    const actions = ["click", "hover", "scroll", "swipe", "tap", "drag", "drop"];
+    const actions = ['click', 'hover', 'scroll', 'swipe', 'tap', 'drag', 'drop'];
     return actions[Math.floor(Math.random() * actions.length)];
   }
   // Get random page
   getRandomPage() {
     const pages = [
-      "/dashboard",
-      "/profile",
-      "/settings",
-      "/analytics",
-      "/reports",
-      "/products",
-      "/services",
-      "/about",
-      "/contact",
-      "/help"
+      '/dashboard',
+      '/profile',
+      '/settings',
+      '/analytics',
+      '/reports',
+      '/products',
+      '/services',
+      '/about',
+      '/contact',
+      '/help',
     ];
     return pages[Math.floor(Math.random() * pages.length)];
   }
@@ -18827,10 +19609,10 @@ var AnalyticsDashboardSystem = class {
         userId: `user_${Math.floor(Math.random() * 100)}`,
         sessionId: `session_${Math.floor(Math.random() * 20)}`,
         properties: /* @__PURE__ */ new Map([
-          ["action", this.getRandomAction()],
-          ["page", this.getRandomPage()]
+          ['action', this.getRandomAction()],
+          ['page', this.getRandomPage()],
         ]),
-        value: Math.random() * 100
+        value: Math.random() * 100,
       };
       this.realTimeData.push(event);
       if (this.realTimeData.length > this.maxRealTimeEvents) {
@@ -18841,24 +19623,23 @@ var AnalyticsDashboardSystem = class {
   // Refresh widgets
   refreshWidgets() {
     this.widgets.forEach((widget, id) => {
-      if (Date.now() - widget.refreshInterval < 0)
-        return;
+      if (Date.now() - widget.refreshInterval < 0) return;
       this.updateWidgetData(widget);
     });
   }
   // Update widget data
   updateWidgetData(widget) {
     switch (widget.type) {
-      case "chart":
+      case 'chart':
         this.updateChartData(widget);
         break;
-      case "gauge":
+      case 'gauge':
         this.updateGaugeData(widget);
         break;
-      case "metric":
+      case 'metric':
         this.updateMetricData(widget);
         break;
-      case "realtime":
+      case 'realtime':
         this.updateRealtimeData(widget);
         break;
     }
@@ -18895,28 +19676,34 @@ var AnalyticsDashboardSystem = class {
     const reportData = {
       reportId: report.id,
       reportName: report.name,
-      generatedAt: (/* @__PURE__ */ new Date()).toISOString(),
-      widgets: report.widgets.map((widgetId) => {
-        const widget = this.widgets.get(widgetId);
-        return widget ? {
-          id: widget.id,
-          title: widget.title,
-          data: this.getWidgetData(widget)
-        } : null;
-      }).filter(Boolean)
+      generatedAt: /* @__PURE__ */ new Date().toISOString(),
+      widgets: report.widgets
+        .map(widgetId => {
+          const widget = this.widgets.get(widgetId);
+          return widget
+            ? {
+                id: widget.id,
+                title: widget.title,
+                data: this.getWidgetData(widget),
+              }
+            : null;
+        })
+        .filter(Boolean),
     };
-    report.recipients.forEach((recipient) => {
+    report.recipients.forEach(recipient => {
       console.log(`\u{1F4E7} Sending report to: ${recipient}`);
     });
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Get widget data
   getWidgetData(widget) {
-    const data = Array.from(this.analyticsData.values()).filter((d) => d.category === widget.dataSource).map((d) => ({
-      timestamp: d.timestamp,
-      metrics: Object.fromEntries(d.metrics),
-      kpis: d.kpis
-    }));
+    const data = Array.from(this.analyticsData.values())
+      .filter(d => d.category === widget.dataSource)
+      .map(d => ({
+        timestamp: d.timestamp,
+        metrics: Object.fromEntries(d.metrics),
+        kpis: d.kpis,
+      }));
     return data;
   }
   // Calculate next run time
@@ -18924,16 +19711,16 @@ var AnalyticsDashboardSystem = class {
     const now = Date.now();
     let nextRun = now;
     switch (schedule.frequency) {
-      case "hourly":
+      case 'hourly':
         nextRun = now + 36e5;
         break;
-      case "daily":
+      case 'daily':
         nextRun = now + 864e5;
         break;
-      case "weekly":
+      case 'weekly':
         nextRun = now + 6048e5;
         break;
-      case "monthly":
+      case 'monthly':
         nextRun = now + 2592e6;
         break;
     }
@@ -18947,56 +19734,56 @@ var AnalyticsDashboardSystem = class {
         this.analyticsData.delete(id);
       }
     });
-    this.realTimeData = this.realTimeData.filter((event) => event.timestamp > cutoffTime);
+    this.realTimeData = this.realTimeData.filter(event => event.timestamp > cutoffTime);
   }
   // Handle control
   handleControl(controlId) {
     switch (controlId) {
-      case "refresh":
+      case 'refresh':
         this.refreshAllWidgets();
         break;
-      case "export":
+      case 'export':
         this.exportData();
         break;
-      case "settings":
+      case 'settings':
         this.openSettings();
         break;
-      case "fullscreen":
+      case 'fullscreen':
         this.toggleFullscreen();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Refresh all widgets
   refreshAllWidgets() {
-    console.log("\u{1F504} Refreshing all widgets...");
-    this.widgets.forEach((widget) => {
+    console.log('\u{1F504} Refreshing all widgets...');
+    this.widgets.forEach(widget => {
       this.updateWidgetData(widget);
     });
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Export data
   exportData() {
-    console.log("\u{1F4E4} Exporting analytics data...");
+    console.log('\u{1F4E4} Exporting analytics data...');
     const exportData = {
-      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      timestamp: /* @__PURE__ */ new Date().toISOString(),
       analyticsData: Array.from(this.analyticsData.values()),
       widgets: Array.from(this.widgets.values()),
-      realTimeEvents: this.realTimeData.slice(-100)
+      realTimeEvents: this.realTimeData.slice(-100),
       // Last 100 events
     };
-    console.log("\u{1F4CA} Data exported successfully");
-    soundSystem.playInteractionSound("powerup");
+    console.log('\u{1F4CA} Data exported successfully');
+    soundSystem.playInteractionSound('powerup');
   }
   // Open settings
   openSettings() {
-    console.log("\u2699\uFE0F Opening analytics settings...");
-    soundSystem.playInteractionSound("click");
+    console.log('\u2699\uFE0F Opening analytics settings...');
+    soundSystem.playInteractionSound('click');
   }
   // Toggle fullscreen
   toggleFullscreen() {
-    console.log("\u{1F50D} Toggling fullscreen mode...");
-    soundSystem.playInteractionSound("click");
+    console.log('\u{1F50D} Toggling fullscreen mode...');
+    soundSystem.playInteractionSound('click');
   }
   // Track event
   trackEvent(event) {
@@ -19009,7 +19796,7 @@ var AnalyticsDashboardSystem = class {
   // Get analytics data
   getAnalyticsData(category) {
     const data = Array.from(this.analyticsData.values());
-    return category ? data.filter((d) => d.category === category) : data;
+    return category ? data.filter(d => d.category === category) : data;
   }
   // Get real-time events
   getRealTimeEvents(limit) {
@@ -19037,7 +19824,7 @@ var AnalyticsDashboardSystem = class {
   createReport(report) {
     const newReport = {
       ...report,
-      id: `report_${Date.now()}_${Math.random()}`
+      id: `report_${Date.now()}_${Math.random()}`,
     };
     this.reports.set(newReport.id, newReport);
     console.log(`\u{1F4CB} Created report: ${newReport.name}`);
@@ -19057,7 +19844,7 @@ var AnalyticsDashboardSystem = class {
       realTimeEvents: this.realTimeData.length,
       dataRetentionDays: this.dataRetentionDays,
       maxRealTimeEvents: this.maxRealTimeEvents,
-      refreshInterval: this.refreshInterval
+      refreshInterval: this.refreshInterval,
     };
   }
   // Cleanup system
@@ -19088,13 +19875,13 @@ var ARIntegrationSystem = class {
   }
   // Initialize AR system
   initialize() {
-    console.log("\u{1F4F1} AR Integration System Initializing...");
+    console.log('\u{1F4F1} AR Integration System Initializing...');
     this.setupARDevices();
     this.createARUI();
     this.startAREngine();
     this.setupARInteractions();
     this.isInitialized = true;
-    console.log("\u{1F4F1} AR Integration System Ready!");
+    console.log('\u{1F4F1} AR Integration System Ready!');
   }
   // Initialize AR engine
   initializeAREngine() {
@@ -19103,61 +19890,61 @@ var ARIntegrationSystem = class {
       isInitialized: false,
       session: null,
       initialize: () => {
-        console.log("\u{1F527} Initializing AR engine...");
+        console.log('\u{1F527} Initializing AR engine...');
         this.arEngine.isInitialized = true;
       },
-      startSession: (device) => {
+      startSession: device => {
         console.log(`\u{1F680} Starting AR session on ${device.name}`);
         return {
           id: `session_${Date.now()}`,
           device,
-          isActive: true
+          isActive: true,
         };
       },
-      stopSession: (sessionId) => {
+      stopSession: sessionId => {
         console.log(`\u{1F6D1} Stopping AR session: ${sessionId}`);
-      }
+      },
     };
   }
   // Initialize tracking system
   initializeTrackingSystem() {
     this.trackingSystem = {
       isTracking: false,
-      trackingQuality: "high",
+      trackingQuality: 'high',
       detectedAnchors: [],
       startTracking: () => {
-        console.log("\u{1F3AF} Starting AR tracking...");
+        console.log('\u{1F3AF} Starting AR tracking...');
         this.trackingSystem.isTracking = true;
       },
       stopTracking: () => {
-        console.log("\u{1F6D1} Stopping AR tracking...");
+        console.log('\u{1F6D1} Stopping AR tracking...');
         this.trackingSystem.isTracking = false;
       },
       detectPlanes: () => {
         return [
           {
-            id: "plane_floor",
-            type: "horizontal",
+            id: 'plane_floor',
+            type: 'horizontal',
             position: Vector32.create(0, 0, 0),
-            size: Vector32.create(10, 0, 10)
+            size: Vector32.create(10, 0, 10),
           },
           {
-            id: "plane_wall",
-            type: "vertical",
+            id: 'plane_wall',
+            type: 'vertical',
             position: Vector32.create(0, 2, -5),
-            size: Vector32.create(10, 4, 0)
-          }
+            size: Vector32.create(10, 4, 0),
+          },
         ];
       },
       detectImages: () => {
         return [
           {
-            id: "image_logo",
+            id: 'image_logo',
             position: Vector32.create(2, 1, 0),
-            confidence: 0.95
-          }
+            confidence: 0.95,
+          },
         ];
-      }
+      },
     };
   }
   // Initialize rendering system
@@ -19167,28 +19954,28 @@ var ARIntegrationSystem = class {
       frameRate: 60,
       resolution: { width: 1920, height: 1080 },
       startRendering: () => {
-        console.log("\u{1F3A8} Starting AR rendering...");
+        console.log('\u{1F3A8} Starting AR rendering...');
         this.renderingSystem.isRendering = true;
       },
       stopRendering: () => {
-        console.log("\u{1F6D1} Stopping AR rendering...");
+        console.log('\u{1F6D1} Stopping AR rendering...');
         this.renderingSystem.isRendering = false;
       },
-      renderFrame: (overlays) => {
-        overlays.forEach((overlay) => {
+      renderFrame: overlays => {
+        overlays.forEach(overlay => {
           if (overlay.isVisible) {
             console.log(`\u{1F3A8} Rendering overlay: ${overlay.type}`);
           }
         });
-      }
+      },
     };
   }
   // Setup AR devices
   setupARDevices() {
     const smartphone = {
-      id: "device_smartphone",
-      name: "Smartphone AR",
-      type: "smartphone",
+      id: 'device_smartphone',
+      name: 'Smartphone AR',
+      type: 'smartphone',
       isConnected: false,
       position: Vector32.create(0, 0, 0),
       rotation: Quaternion2.fromEulerDegrees(0, 0, 0),
@@ -19197,7 +19984,7 @@ var ARIntegrationSystem = class {
         aspectRatio: 16 / 9,
         nearPlane: 0.1,
         farPlane: 100,
-        trackingMode: "world"
+        trackingMode: 'world',
       },
       capabilities: {
         supportsPlaneDetection: true,
@@ -19205,13 +19992,13 @@ var ARIntegrationSystem = class {
         supportsFaceTracking: false,
         supportsOcclusion: true,
         supportsLightEstimation: true,
-        maxAnchors: 20
-      }
+        maxAnchors: 20,
+      },
     };
     const tablet = {
-      id: "device_tablet",
-      name: "Tablet AR",
-      type: "tablet",
+      id: 'device_tablet',
+      name: 'Tablet AR',
+      type: 'tablet',
       isConnected: false,
       position: Vector32.create(0, 0, 0),
       rotation: Quaternion2.fromEulerDegrees(0, 0, 0),
@@ -19220,7 +20007,7 @@ var ARIntegrationSystem = class {
         aspectRatio: 4 / 3,
         nearPlane: 0.1,
         farPlane: 100,
-        trackingMode: "world"
+        trackingMode: 'world',
       },
       capabilities: {
         supportsPlaneDetection: true,
@@ -19228,13 +20015,13 @@ var ARIntegrationSystem = class {
         supportsFaceTracking: false,
         supportsOcclusion: true,
         supportsLightEstimation: true,
-        maxAnchors: 30
-      }
+        maxAnchors: 30,
+      },
     };
     const arGlasses = {
-      id: "device_ar_glasses",
-      name: "AR Glasses",
-      type: "ar_glasses",
+      id: 'device_ar_glasses',
+      name: 'AR Glasses',
+      type: 'ar_glasses',
       isConnected: false,
       position: Vector32.create(0, 0, 0),
       rotation: Quaternion2.fromEulerDegrees(0, 0, 0),
@@ -19243,7 +20030,7 @@ var ARIntegrationSystem = class {
         aspectRatio: 16 / 9,
         nearPlane: 0.05,
         farPlane: 50,
-        trackingMode: "world"
+        trackingMode: 'world',
       },
       capabilities: {
         supportsPlaneDetection: true,
@@ -19251,38 +20038,38 @@ var ARIntegrationSystem = class {
         supportsFaceTracking: true,
         supportsOcclusion: true,
         supportsLightEstimation: true,
-        maxAnchors: 50
-      }
+        maxAnchors: 50,
+      },
     };
     this.devices.set(smartphone.id, smartphone);
     this.devices.set(tablet.id, tablet);
     this.devices.set(arGlasses.id, arGlasses);
-    console.log("\u{1F4F1} AR devices configured");
+    console.log('\u{1F4F1} AR devices configured');
   }
   // Create AR UI
   createARUI() {
     this.arUI = engine.addEntity();
     Transform2.create(this.arUI, {
       position: Vector32.create(14, 3, 8),
-      scale: Vector32.create(3, 4, 0.1)
+      scale: Vector32.create(3, 4, 0.1),
     });
     MeshRenderer3.setBox(this.arUI);
     Material3.setPbrMaterial(this.arUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.arUI,
       position: Vector32.create(0, 1.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F4F1} AR OVERLAY SYSTEM",
+      text: '\u{1F4F1} AR OVERLAY SYSTEM',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createDeviceSelection();
     this.createSessionControls();
@@ -19295,25 +20082,25 @@ var ARIntegrationSystem = class {
     Transform2.create(deviceSection, {
       parent: this.arUI,
       position: Vector32.create(0, 1.2, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(deviceSection);
     Material3.setPbrMaterial(deviceSection, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const deviceText = engine.addEntity();
     Transform2.create(deviceText, {
       parent: deviceSection,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(deviceText, {
-      text: "\u{1F4F1} Select Device",
+      text: '\u{1F4F1} Select Device',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
     let xOffset = -0.6;
     this.devices.forEach((device, id) => {
@@ -19321,30 +20108,39 @@ var ARIntegrationSystem = class {
       Transform2.create(button, {
         parent: this.arUI,
         position: Vector32.create(xOffset, 0.8, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
-        albedoColor: device.isConnected ? Color42.create(0.2, 0.8, 0.2, 1) : Color42.create(0.8, 0.2, 0.2, 1),
-        emissiveColor: device.isConnected ? Color42.create(0.2, 0.8, 0.2, 0.5) : Color42.create(0.8, 0.2, 0.2, 0.5),
-        emissiveIntensity: 2
+        albedoColor: device.isConnected
+          ? Color42.create(0.2, 0.8, 0.2, 1)
+          : Color42.create(0.8, 0.2, 0.2, 1),
+        emissiveColor: device.isConnected
+          ? Color42.create(0.2, 0.8, 0.2, 0.5)
+          : Color42.create(0.8, 0.2, 0.2, 0.5),
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
-        text: device.type === "smartphone" ? "\u{1F4F1}" : device.type === "tablet" ? "\u{1F4F1}" : "\u{1F97D}",
+        text:
+          device.type === 'smartphone'
+            ? '\u{1F4F1}'
+            : device.type === 'tablet'
+              ? '\u{1F4F1}'
+              : '\u{1F97D}',
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: device.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: device.name },
         },
         () => this.connectDevice(id)
       );
@@ -19354,40 +20150,40 @@ var ARIntegrationSystem = class {
   // Create session controls
   createSessionControls() {
     const controls = [
-      { id: "start", icon: "\u25B6\uFE0F", name: "Start Session" },
-      { id: "stop", icon: "\u23F9\uFE0F", name: "Stop Session" },
-      { id: "reset", icon: "\u{1F504}", name: "Reset Tracking" }
+      { id: 'start', icon: '\u25B6\uFE0F', name: 'Start Session' },
+      { id: 'stop', icon: '\u23F9\uFE0F', name: 'Stop Session' },
+      { id: 'reset', icon: '\u{1F504}', name: 'Reset Tracking' },
     ];
     let xOffset = -0.8;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.arUI,
         position: Vector32.create(xOffset, 0.4, 0.1),
-        scale: Vector32.create(0.25, 0.25, 0.1)
+        scale: Vector32.create(0.25, 0.25, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleSessionControl(control.id)
       );
@@ -19397,41 +20193,41 @@ var ARIntegrationSystem = class {
   // Create overlay controls
   createOverlayControls() {
     const overlayTypes = [
-      { id: "ui", icon: "\u{1F5BC}\uFE0F", name: "UI Overlay" },
-      { id: "3d", icon: "\u{1F3AE}", name: "3D Model" },
-      { id: "text", icon: "\u{1F4DD}", name: "Text" },
-      { id: "data", icon: "\u{1F4CA}", name: "Data" }
+      { id: 'ui', icon: '\u{1F5BC}\uFE0F', name: 'UI Overlay' },
+      { id: '3d', icon: '\u{1F3AE}', name: '3D Model' },
+      { id: 'text', icon: '\u{1F4DD}', name: 'Text' },
+      { id: 'data', icon: '\u{1F4CA}', name: 'Data' },
     ];
     let xOffset = -0.9;
-    overlayTypes.forEach((type) => {
+    overlayTypes.forEach(type => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.arUI,
         position: Vector32.create(xOffset, 0, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.6, 0.3, 0.8, 1),
         emissiveColor: Color42.create(0.6, 0.3, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: type.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: type.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: type.name },
         },
         () => this.createOverlay(type.id)
       );
@@ -19444,25 +20240,25 @@ var ARIntegrationSystem = class {
     Transform2.create(statusDisplay, {
       parent: this.arUI,
       position: Vector32.create(0, -0.4, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(statusDisplay);
     Material3.setPbrMaterial(statusDisplay, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const statusText = engine.addEntity();
     Transform2.create(statusText, {
       parent: statusDisplay,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(statusText, {
-      text: "\u{1F4CA} Status: Ready",
+      text: '\u{1F4CA} Status: Ready',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Start AR engine
@@ -19471,37 +20267,33 @@ var ARIntegrationSystem = class {
     this.trackingSystem.startTracking();
     this.renderingSystem.startRendering();
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateARSession();
       this.processOverlays();
       this.updateTracking();
     });
   }
   // Setup AR interactions
-  setupARInteractions() {
-  }
+  setupARInteractions() {}
   // Connect device
   connectDevice(deviceId) {
     const device = this.devices.get(deviceId);
-    if (!device)
-      return;
+    if (!device) return;
     device.isConnected = true;
     console.log(`\u{1F4F1} Connected to ${device.name}`);
     this.startARSession(device);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Disconnect device
   disconnectDevice(deviceId) {
     const device = this.devices.get(deviceId);
-    if (!device)
-      return;
+    if (!device) return;
     device.isConnected = false;
     console.log(`\u{1F4F1} Disconnected from ${device.name}`);
     if (this.currentSession && this.currentSession.device.id === deviceId) {
       this.stopARSession();
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Start AR session
   startARSession(device) {
@@ -19512,9 +20304,9 @@ var ARIntegrationSystem = class {
       isActive: true,
       anchors: /* @__PURE__ */ new Map(),
       overlays: /* @__PURE__ */ new Map(),
-      trackingQuality: "high",
+      trackingQuality: 'high',
       planeDetection: true,
-      lightEstimation: true
+      lightEstimation: true,
     };
     this.sessions.set(session.id, session);
     this.currentSession = session;
@@ -19523,41 +20315,39 @@ var ARIntegrationSystem = class {
   }
   // Stop AR session
   stopARSession() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     this.arEngine.stopSession(this.currentSession.id);
     this.sessions.delete(this.currentSession.id);
     this.currentSession = null;
-    console.log("\u{1F6D1} AR session stopped");
+    console.log('\u{1F6D1} AR session stopped');
   }
   // Start anchor detection
   startAnchorDetection() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     if (this.currentSession.device.capabilities.supportsPlaneDetection) {
       const planes = this.trackingSystem.detectPlanes();
-      planes.forEach((plane) => {
+      planes.forEach(plane => {
         const anchor = {
           id: plane.id,
-          type: "plane",
+          type: 'plane',
           position: plane.position,
           rotation: Quaternion2.fromEulerDegrees(0, 0, 0),
           confidence: 0.9,
-          trackingState: "tracking"
+          trackingState: 'tracking',
         };
         this.currentSession.anchors.set(anchor.id, anchor);
       });
     }
     if (this.currentSession.device.capabilities.supportsImageTracking) {
       const images = this.trackingSystem.detectImages();
-      images.forEach((image) => {
+      images.forEach(image => {
         const anchor = {
           id: image.id,
-          type: "image",
+          type: 'image',
           position: image.position,
           rotation: Quaternion2.fromEulerDegrees(0, 0, 0),
           confidence: image.confidence,
-          trackingState: "tracking"
+          trackingState: 'tracking',
         };
         this.currentSession.anchors.set(anchor.id, anchor);
       });
@@ -19566,9 +20356,9 @@ var ARIntegrationSystem = class {
   // Handle session control
   handleSessionControl(controlId) {
     switch (controlId) {
-      case "start":
+      case 'start':
         if (this.currentSession) {
-          console.log("\u{1F680} Session already active");
+          console.log('\u{1F680} Session already active');
         } else {
           const firstDevice = Array.from(this.devices.values())[0];
           if (firstDevice) {
@@ -19576,19 +20366,19 @@ var ARIntegrationSystem = class {
           }
         }
         break;
-      case "stop":
+      case 'stop':
         this.stopARSession();
         break;
-      case "reset":
+      case 'reset':
         this.resetTracking();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Create overlay
   createOverlay(type) {
     if (!this.currentSession) {
-      console.log("\u274C No active AR session");
+      console.log('\u274C No active AR session');
       return;
     }
     const overlay = {
@@ -19602,42 +20392,42 @@ var ARIntegrationSystem = class {
       ),
       rotation: Quaternion2.fromEulerDegrees(0, Math.random() * 360, 0),
       scale: Vector32.create(1, 1, 1),
-      anchorType: "world",
+      anchorType: 'world',
       isVisible: true,
-      isInteractive: true
+      isInteractive: true,
     };
     this.overlays.set(overlay.id, overlay);
     this.currentSession.overlays.set(overlay.id, overlay);
     console.log(`\u{1F3A8} Created ${type} overlay: ${overlay.id}`);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Generate overlay content
   generateOverlayContent(type) {
     switch (type) {
-      case "ui":
+      case 'ui':
         return {
-          title: "AR UI Panel",
-          elements: ["Button", "Slider", "Text"],
-          layout: "vertical"
+          title: 'AR UI Panel',
+          elements: ['Button', 'Slider', 'Text'],
+          layout: 'vertical',
         };
-      case "3d":
+      case '3d':
         return {
-          model: "cube",
-          material: "metallic",
-          animations: ["rotate", "pulse"]
+          model: 'cube',
+          material: 'metallic',
+          animations: ['rotate', 'pulse'],
         };
-      case "text":
+      case 'text':
         return {
-          text: "Hello AR World!",
+          text: 'Hello AR World!',
           fontSize: 24,
-          color: "#FFFFFF",
-          font: "Arial"
+          color: '#FFFFFF',
+          font: 'Arial',
         };
-      case "data":
+      case 'data':
         return {
-          chartType: "bar",
+          chartType: 'bar',
           data: [10, 20, 30, 40, 50],
-          labels: ["A", "B", "C", "D", "E"]
+          labels: ['A', 'B', 'C', 'D', 'E'],
         };
       default:
         return {};
@@ -19645,10 +20435,9 @@ var ARIntegrationSystem = class {
   }
   // Update AR session
   updateARSession() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     const time = Date.now() / 1e3;
-    const quality = Math.sin(time * 0.5) > 0 ? "high" : "medium";
+    const quality = Math.sin(time * 0.5) > 0 ? 'high' : 'medium';
     this.currentSession.trackingQuality = quality;
     const device = this.currentSession.device;
     device.position = Vector32.create(
@@ -19659,11 +20448,10 @@ var ARIntegrationSystem = class {
   }
   // Process overlays
   processOverlays() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     const overlays = Array.from(this.currentSession.overlays.values());
     this.renderingSystem.renderFrame(overlays);
-    overlays.forEach((overlay) => {
+    overlays.forEach(overlay => {
       if (overlay.isVisible) {
         const time = Date.now() / 1e3;
         overlay.position.y += Math.sin(time * 2 + parseInt(overlay.id)) * 1e-3;
@@ -19672,11 +20460,10 @@ var ARIntegrationSystem = class {
   }
   // Update tracking
   updateTracking() {
-    if (!this.currentSession)
-      return;
-    this.currentSession.anchors.forEach((anchor) => {
+    if (!this.currentSession) return;
+    this.currentSession.anchors.forEach(anchor => {
       if (Math.random() < 0.01) {
-        anchor.trackingState = anchor.trackingState === "tracking" ? "limited" : "tracking";
+        anchor.trackingState = anchor.trackingState === 'tracking' ? 'limited' : 'tracking';
       }
     });
     if (Math.random() < 5e-3) {
@@ -19685,12 +20472,11 @@ var ARIntegrationSystem = class {
   }
   // Reset tracking
   resetTracking() {
-    if (!this.currentSession)
-      return;
-    console.log("\u{1F504} Resetting AR tracking...");
+    if (!this.currentSession) return;
+    console.log('\u{1F504} Resetting AR tracking...');
     this.currentSession.anchors.clear();
     this.startAnchorDetection();
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Get current session
   getCurrentSession() {
@@ -19702,7 +20488,7 @@ var ARIntegrationSystem = class {
   }
   // Get connected devices
   getConnectedDevices() {
-    return Array.from(this.devices.values()).filter((device) => device.isConnected);
+    return Array.from(this.devices.values()).filter(device => device.isConnected);
   }
   // Get overlays
   getOverlays() {
@@ -19713,7 +20499,7 @@ var ARIntegrationSystem = class {
     const overlay = this.overlays.get(overlayId);
     if (overlay) {
       overlay.isVisible = isVisible;
-      console.log(`\u{1F441}\uFE0F Overlay ${overlayId} ${isVisible ? "shown" : "hidden"}`);
+      console.log(`\u{1F441}\uFE0F Overlay ${overlayId} ${isVisible ? 'shown' : 'hidden'}`);
     }
   }
   // Update overlay position
@@ -19759,123 +20545,138 @@ var AvatarSystem = class {
     this.isInitialized = false;
     this.currentAvatar = this.createDefaultAvatar();
     this.animationState = {
-      currentAnimation: "idle",
+      currentAnimation: 'idle',
       isPlaying: true,
       speed: 1,
-      loop: true
+      loop: true,
     };
   }
   // Initialize avatar system
   initialize() {
-    console.log("\u{1F464} Avatar System Initializing...");
+    console.log('\u{1F464} Avatar System Initializing...');
     this.loadAvatarPresets();
     this.createAvatar();
     this.createCustomizationUI();
     this.setupAvatarAnimations();
     this.isInitialized = true;
-    console.log("\u{1F464} Avatar System Ready!");
+    console.log('\u{1F464} Avatar System Ready!');
   }
   // Create default avatar
   createDefaultAvatar() {
     return {
-      id: "default",
-      name: "Default Avatar",
-      bodyType: "humanoid",
+      id: 'default',
+      name: 'Default Avatar',
+      bodyType: 'humanoid',
       primaryColor: Color32.create(0.3, 0.5, 0.8),
       secondaryColor: Color32.create(0.8, 0.6, 0.2),
       accessories: [],
-      animations: ["idle", "walk", "wave", "dance"],
+      animations: ['idle', 'walk', 'wave', 'dance'],
       effects: [],
       scale: Vector32.create(1, 2, 1),
-      position: Vector32.create(8, 1, 8)
+      position: Vector32.create(8, 1, 8),
     };
   }
   // Load avatar presets
   loadAvatarPresets() {
     const presets = [
       {
-        id: "professional",
-        name: "Professional",
-        category: "professional",
-        thumbnail: "\u{1F454}",
+        id: 'professional',
+        name: 'Professional',
+        category: 'professional',
+        thumbnail: '\u{1F454}',
         customization: {
-          id: "professional",
-          name: "Professional Avatar",
-          bodyType: "humanoid",
+          id: 'professional',
+          name: 'Professional Avatar',
+          bodyType: 'humanoid',
           primaryColor: Color32.create(0.2, 0.3, 0.6),
           secondaryColor: Color32.create(0.8, 0.8, 0.8),
-          accessories: ["tie", "briefcase"],
-          animations: ["idle", "walk", "type", "present"],
+          accessories: ['tie', 'briefcase'],
+          animations: ['idle', 'walk', 'type', 'present'],
           effects: [],
           scale: Vector32.create(1, 2, 1),
-          position: Vector32.create(8, 1, 8)
-        }
+          position: Vector32.create(8, 1, 8),
+        },
       },
       {
-        id: "cyberpunk",
-        name: "Cyberpunk",
-        category: "futuristic",
-        thumbnail: "\u{1F916}",
+        id: 'cyberpunk',
+        name: 'Cyberpunk',
+        category: 'futuristic',
+        thumbnail: '\u{1F916}',
         customization: {
-          id: "cyberpunk",
-          name: "Cyberpunk Avatar",
-          bodyType: "cyborg",
+          id: 'cyberpunk',
+          name: 'Cyberpunk Avatar',
+          bodyType: 'cyborg',
           primaryColor: Color32.create(0.8, 0.2, 0.8),
           secondaryColor: Color32.create(0.2, 0.8, 0.8),
-          accessories: ["helmet", "armor", "glowing-eyes"],
-          animations: ["idle", "walk", "hack", "transform"],
+          accessories: ['helmet', 'armor', 'glowing-eyes'],
+          animations: ['idle', 'walk', 'hack', 'transform'],
           effects: [
-            { type: "glow", intensity: 0.8, color: Color32.create(0.8, 0.2, 0.8), enabled: true },
-            { type: "particles", intensity: 0.5, color: Color32.create(0.2, 0.8, 0.8), enabled: true }
+            { type: 'glow', intensity: 0.8, color: Color32.create(0.8, 0.2, 0.8), enabled: true },
+            {
+              type: 'particles',
+              intensity: 0.5,
+              color: Color32.create(0.2, 0.8, 0.8),
+              enabled: true,
+            },
           ],
           scale: Vector32.create(1.1, 2.1, 1.1),
-          position: Vector32.create(8, 1, 8)
-        }
+          position: Vector32.create(8, 1, 8),
+        },
       },
       {
-        id: "energy",
-        name: "Energy Being",
-        category: "futuristic",
-        thumbnail: "\u2728",
+        id: 'energy',
+        name: 'Energy Being',
+        category: 'futuristic',
+        thumbnail: '\u2728',
         customization: {
-          id: "energy",
-          name: "Energy Being",
-          bodyType: "energy",
+          id: 'energy',
+          name: 'Energy Being',
+          bodyType: 'energy',
           primaryColor: Color32.create(0.8, 0.8, 1),
           secondaryColor: Color32.create(1, 0.8, 0.8),
-          accessories: ["energy-orbs"],
-          animations: ["idle", "float", "pulse", "teleport"],
+          accessories: ['energy-orbs'],
+          animations: ['idle', 'float', 'pulse', 'teleport'],
           effects: [
-            { type: "glow", intensity: 1, color: Color32.create(0.8, 0.8, 1), enabled: true },
-            { type: "particles", intensity: 0.8, color: Color32.create(1, 0.8, 0.8), enabled: true },
-            { type: "hologram", intensity: 0.6, color: Color32.create(0.8, 1, 0.8), enabled: true }
+            { type: 'glow', intensity: 1, color: Color32.create(0.8, 0.8, 1), enabled: true },
+            {
+              type: 'particles',
+              intensity: 0.8,
+              color: Color32.create(1, 0.8, 0.8),
+              enabled: true,
+            },
+            { type: 'hologram', intensity: 0.6, color: Color32.create(0.8, 1, 0.8), enabled: true },
           ],
           scale: Vector32.create(0.9, 2.2, 0.9),
-          position: Vector32.create(8, 1, 8)
-        }
+          position: Vector32.create(8, 1, 8),
+        },
       },
       {
-        id: "artist",
-        name: "Artist",
-        category: "artistic",
-        thumbnail: "\u{1F3A8}",
+        id: 'artist',
+        name: 'Artist',
+        category: 'artistic',
+        thumbnail: '\u{1F3A8}',
         customization: {
-          id: "artist",
-          name: "Artist Avatar",
-          bodyType: "humanoid",
+          id: 'artist',
+          name: 'Artist Avatar',
+          bodyType: 'humanoid',
           primaryColor: Color32.create(0.8, 0.4, 0.2),
           secondaryColor: Color32.create(0.2, 0.8, 0.4),
-          accessories: ["beret", "palette"],
-          animations: ["idle", "walk", "paint", "dance"],
+          accessories: ['beret', 'palette'],
+          animations: ['idle', 'walk', 'paint', 'dance'],
           effects: [
-            { type: "particles", intensity: 0.3, color: Color32.create(0.8, 0.4, 0.2), enabled: true }
+            {
+              type: 'particles',
+              intensity: 0.3,
+              color: Color32.create(0.8, 0.4, 0.2),
+              enabled: true,
+            },
           ],
           scale: Vector32.create(1, 2, 1),
-          position: Vector32.create(8, 1, 8)
-        }
-      }
+          position: Vector32.create(8, 1, 8),
+        },
+      },
     ];
-    presets.forEach((preset) => {
+    presets.forEach(preset => {
       this.presets.set(preset.id, preset);
     });
   }
@@ -19885,7 +20686,7 @@ var AvatarSystem = class {
     Transform2.create(this.avatarEntity, {
       position: this.currentAvatar.position,
       scale: this.currentAvatar.scale,
-      rotation: Quaternion2.fromEulerDegrees(0, 0, 0)
+      rotation: Quaternion2.fromEulerDegrees(0, 0, 0),
     });
     this.createAvatarBody();
     this.createAvatarAccessories();
@@ -19897,10 +20698,10 @@ var AvatarSystem = class {
     Transform2.create(body, {
       parent: this.avatarEntity,
       position: Vector32.create(0, 0, 0),
-      scale: Vector32.create(0.8, 1.6, 0.4)
+      scale: Vector32.create(0.8, 1.6, 0.4),
     });
     switch (this.currentAvatar.bodyType) {
-      case "humanoid":
+      case 'humanoid':
         MeshRenderer3.setBox(body);
         Material3.setPbrMaterial(body, {
           albedoColor: Color42.create(
@@ -19910,10 +20711,10 @@ var AvatarSystem = class {
             1
           ),
           roughness: 0.3,
-          metallic: 0.1
+          metallic: 0.1,
         });
         break;
-      case "robot":
+      case 'robot':
         MeshRenderer3.setBox(body);
         Material3.setPbrMaterial(body, {
           albedoColor: Color42.create(
@@ -19930,10 +20731,10 @@ var AvatarSystem = class {
             this.currentAvatar.primaryColor.b * 0.3,
             0.5
           ),
-          emissiveIntensity: 2
+          emissiveIntensity: 2,
         });
         break;
-      case "cyborg":
+      case 'cyborg':
         MeshRenderer3.setBox(body);
         Material3.setPbrMaterial(body, {
           albedoColor: Color42.create(
@@ -19950,10 +20751,10 @@ var AvatarSystem = class {
             this.currentAvatar.secondaryColor.b * 0.5,
             0.6
           ),
-          emissiveIntensity: 3
+          emissiveIntensity: 3,
         });
         break;
-      case "energy":
+      case 'energy':
         MeshRenderer3.setSphere(body);
         Material3.setPbrMaterial(body, {
           albedoColor: Color42.create(
@@ -19970,11 +20771,11 @@ var AvatarSystem = class {
             this.currentAvatar.primaryColor.b,
             1
           ),
-          emissiveIntensity: 5
+          emissiveIntensity: 5,
         });
         break;
     }
-    this.avatarParts.set("body", body);
+    this.avatarParts.set('body', body);
     this.createAvatarHead();
   }
   // Create avatar head
@@ -19983,9 +20784,9 @@ var AvatarSystem = class {
     Transform2.create(head, {
       parent: this.avatarEntity,
       position: Vector32.create(0, 1.2, 0),
-      scale: Vector32.create(0.4, 0.4, 0.4)
+      scale: Vector32.create(0.4, 0.4, 0.4),
     });
-    if (this.currentAvatar.bodyType === "energy") {
+    if (this.currentAvatar.bodyType === 'energy') {
       MeshRenderer3.setSphere(head);
     } else {
       MeshRenderer3.setBox(head);
@@ -19998,13 +20799,13 @@ var AvatarSystem = class {
         1
       ),
       roughness: 0.2,
-      metallic: 0.1
+      metallic: 0.1,
     });
-    this.avatarParts.set("head", head);
+    this.avatarParts.set('head', head);
   }
   // Create avatar accessories
   createAvatarAccessories() {
-    this.currentAvatar.accessories.forEach((accessory) => {
+    this.currentAvatar.accessories.forEach(accessory => {
       this.createAccessory(accessory);
     });
   }
@@ -20012,24 +20813,24 @@ var AvatarSystem = class {
   createAccessory(accessory) {
     const accessoryEntity = engine.addEntity();
     switch (accessory) {
-      case "tie":
+      case 'tie':
         Transform2.create(accessoryEntity, {
           parent: this.avatarEntity,
           position: Vector32.create(0, 0.2, 0.21),
-          scale: Vector32.create(0.1, 0.8, 0.05)
+          scale: Vector32.create(0.1, 0.8, 0.05),
         });
         MeshRenderer3.setBox(accessoryEntity);
         Material3.setPbrMaterial(accessoryEntity, {
           albedoColor: Color42.create(0.8, 0.2, 0.2, 1),
           roughness: 0.1,
-          metallic: 0.1
+          metallic: 0.1,
         });
         break;
-      case "helmet":
+      case 'helmet':
         Transform2.create(accessoryEntity, {
           parent: this.avatarEntity,
           position: Vector32.create(0, 1.6, 0),
-          scale: Vector32.create(0.5, 0.3, 0.5)
+          scale: Vector32.create(0.5, 0.3, 0.5),
         });
         MeshRenderer3.setBox(accessoryEntity);
         Material3.setPbrMaterial(accessoryEntity, {
@@ -20037,41 +20838,41 @@ var AvatarSystem = class {
           roughness: 0.1,
           metallic: 0.9,
           emissiveColor: Color42.create(0.2, 0.2, 0.8, 0.5),
-          emissiveIntensity: 2
+          emissiveIntensity: 2,
         });
         break;
-      case "energy-orbs":
+      case 'energy-orbs':
         for (let i = 0; i < 3; i++) {
           const orb = engine.addEntity();
           Transform2.create(orb, {
             parent: this.avatarEntity,
             position: Vector32.create(
-              Math.cos(i * 120 * Math.PI / 180) * 0.8,
-              1 + Math.sin(i * 120 * Math.PI / 180) * 0.3,
-              Math.sin(i * 120 * Math.PI / 180) * 0.8
+              Math.cos((i * 120 * Math.PI) / 180) * 0.8,
+              1 + Math.sin((i * 120 * Math.PI) / 180) * 0.3,
+              Math.sin((i * 120 * Math.PI) / 180) * 0.8
             ),
-            scale: Vector32.create(0.1, 0.1, 0.1)
+            scale: Vector32.create(0.1, 0.1, 0.1),
           });
           MeshRenderer3.setSphere(orb);
           Material3.setPbrMaterial(orb, {
             albedoColor: Color42.create(1, 0.8, 0.2, 0.8),
             emissiveColor: Color42.create(1, 0.8, 0.2, 1),
-            emissiveIntensity: 4
+            emissiveIntensity: 4,
           });
           this.avatarParts.set(`orb_${i}`, orb);
         }
         break;
-      case "beret":
+      case 'beret':
         Transform2.create(accessoryEntity, {
           parent: this.avatarEntity,
           position: Vector32.create(0, 1.45, 0),
-          scale: Vector32.create(0.5, 0.1, 0.5)
+          scale: Vector32.create(0.5, 0.1, 0.5),
         });
         MeshRenderer3.setBox(accessoryEntity);
         Material3.setPbrMaterial(accessoryEntity, {
           albedoColor: Color42.create(0.8, 0.2, 0.2, 1),
           roughness: 0.3,
-          metallic: 0.1
+          metallic: 0.1,
         });
         break;
     }
@@ -20079,7 +20880,7 @@ var AvatarSystem = class {
   }
   // Apply avatar effects
   applyAvatarEffects() {
-    this.currentAvatar.effects.forEach((effect) => {
+    this.currentAvatar.effects.forEach(effect => {
       if (effect.enabled) {
         this.createEffect(effect);
       }
@@ -20088,13 +20889,13 @@ var AvatarSystem = class {
   // Create individual effect
   createEffect(effect) {
     switch (effect.type) {
-      case "glow":
+      case 'glow':
         this.createGlowEffect(effect);
         break;
-      case "particles":
+      case 'particles':
         this.createParticleEffect(effect);
         break;
-      case "hologram":
+      case 'hologram':
         this.createHologramEffect(effect);
         break;
     }
@@ -20105,15 +20906,15 @@ var AvatarSystem = class {
     Transform2.create(glow, {
       parent: this.avatarEntity,
       position: Vector32.create(0, 1, 0),
-      scale: Vector32.create(1.5, 2.5, 1.5)
+      scale: Vector32.create(1.5, 2.5, 1.5),
     });
     MeshRenderer3.setSphere(glow);
     Material3.setPbrMaterial(glow, {
       albedoColor: Color42.create(effect.color.r, effect.color.g, effect.color.b, 0.3),
       emissiveColor: Color42.create(effect.color.r, effect.color.g, effect.color.b, 0.8),
-      emissiveIntensity: effect.intensity * 3
+      emissiveIntensity: effect.intensity * 3,
     });
-    this.avatarParts.set("glow", glow);
+    this.avatarParts.set('glow', glow);
   }
   // Create particle effect
   createParticleEffect(effect) {
@@ -20126,13 +20927,13 @@ var AvatarSystem = class {
           Math.random() * 2,
           (Math.random() - 0.5) * 2
         ),
-        scale: Vector32.create(0.05, 0.05, 0.05)
+        scale: Vector32.create(0.05, 0.05, 0.05),
       });
       MeshRenderer3.setSphere(particle);
       Material3.setPbrMaterial(particle, {
         albedoColor: Color42.create(effect.color.r, effect.color.g, effect.color.b, 0.8),
         emissiveColor: Color42.create(effect.color.r, effect.color.g, effect.color.b, 1),
-        emissiveIntensity: effect.intensity * 2
+        emissiveIntensity: effect.intensity * 2,
       });
       this.avatarParts.set(`particle_${i}`, particle);
     }
@@ -20143,40 +20944,40 @@ var AvatarSystem = class {
     Transform2.create(hologram, {
       parent: this.avatarEntity,
       position: Vector32.create(0, 0, 0),
-      scale: Vector32.create(1.1, 2.1, 1.1)
+      scale: Vector32.create(1.1, 2.1, 1.1),
     });
     MeshRenderer3.setBox(hologram);
     Material3.setPbrMaterial(hologram, {
       albedoColor: Color42.create(effect.color.r, effect.color.g, effect.color.b, 0.2),
       emissiveColor: Color42.create(effect.color.r, effect.color.g, effect.color.b, 0.6),
-      emissiveIntensity: effect.intensity * 2
+      emissiveIntensity: effect.intensity * 2,
     });
-    this.avatarParts.set("hologram", hologram);
+    this.avatarParts.set('hologram', hologram);
   }
   // Create customization UI
   createCustomizationUI() {
     const uiPanel = engine.addEntity();
     Transform2.create(uiPanel, {
       position: Vector32.create(14, 3, 8),
-      scale: Vector32.create(3, 4, 0.1)
+      scale: Vector32.create(3, 4, 0.1),
     });
     MeshRenderer3.setBox(uiPanel);
     Material3.setPbrMaterial(uiPanel, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: uiPanel,
       position: Vector32.create(0, 1.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(title, {
-      text: "\u{1F464} AVATAR CUSTOMIZE",
+      text: '\u{1F464} AVATAR CUSTOMIZE',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createPresetButtons(uiPanel);
     this.createColorCustomization(uiPanel);
@@ -20191,30 +20992,30 @@ var AvatarSystem = class {
       Transform2.create(button, {
         parent,
         position: Vector32.create(0, yOffset, 0.1),
-        scale: Vector32.create(0.4, 0.3, 0.1)
+        scale: Vector32.create(0.4, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.2, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.2, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape3.create(buttonText, {
         text: `${preset.thumbnail} ${preset.name}`,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: `Select ${preset.name}` }
+          opts: { button: InputAction.IA_POINTER, hoverText: `Select ${preset.name}` },
         },
         () => this.applyPreset(preset.id)
       );
@@ -20227,25 +21028,25 @@ var AvatarSystem = class {
     Transform2.create(colorPanel, {
       parent,
       position: Vector32.create(0, -0.5, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(colorPanel);
     Material3.setPbrMaterial(colorPanel, {
       albedoColor: Color42.create(0.3, 0.3, 0.3, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const colorText = engine.addEntity();
     Transform2.create(colorText, {
       parent: colorPanel,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.5, 0.5, 0.5)
+      scale: Vector32.create(0.5, 0.5, 0.5),
     });
     TextShape3.create(colorText, {
-      text: "\u{1F3A8} COLORS",
+      text: '\u{1F3A8} COLORS',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create effect toggles
@@ -20254,60 +21055,54 @@ var AvatarSystem = class {
     Transform2.create(effectPanel, {
       parent,
       position: Vector32.create(0, -1.2, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(effectPanel);
     Material3.setPbrMaterial(effectPanel, {
       albedoColor: Color42.create(0.3, 0.3, 0.3, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const effectText = engine.addEntity();
     Transform2.create(effectText, {
       parent: effectPanel,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.5, 0.5, 0.5)
+      scale: Vector32.create(0.5, 0.5, 0.5),
     });
     TextShape3.create(effectText, {
-      text: "\u2728 EFFECTS",
+      text: '\u2728 EFFECTS',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Setup avatar animations
   setupAvatarAnimations() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateAnimations();
       this.updateEffects();
     });
   }
   // Update animations
   updateAnimations() {
-    if (!this.animationState.isPlaying)
-      return;
+    if (!this.animationState.isPlaying) return;
     const time = Date.now() / 1e3;
-    const body = this.avatarParts.get("body");
+    const body = this.avatarParts.get('body');
     if (body) {
       switch (this.animationState.currentAnimation) {
-        case "idle":
+        case 'idle':
           const idleBob = Math.sin(time * 2) * 0.02;
           const transform = Transform2.getMutable(body);
           transform.position.y = idleBob;
           break;
-        case "walk":
+        case 'walk':
           const walkBob = Math.abs(Math.sin(time * 4)) * 0.05;
           const walkTransform = Transform2.getMutable(body);
           walkTransform.position.y = walkBob;
-          walkTransform.rotation = Quaternion2.fromEulerDegrees(
-            Math.sin(time * 4) * 5,
-            0,
-            0
-          );
+          walkTransform.rotation = Quaternion2.fromEulerDegrees(Math.sin(time * 4) * 5, 0, 0);
           break;
-        case "dance":
+        case 'dance':
           const danceTransform = Transform2.getMutable(body);
           danceTransform.rotation = Quaternion2.fromEulerDegrees(
             Math.sin(time * 3) * 10,
@@ -20315,7 +21110,7 @@ var AvatarSystem = class {
             Math.sin(time * 4) * 5
           );
           break;
-        case "float":
+        case 'float':
           const floatTransform = Transform2.getMutable(body);
           floatTransform.position.y = Math.sin(time * 1.5) * 0.1;
           break;
@@ -20325,35 +21120,34 @@ var AvatarSystem = class {
   // Update effects
   updateEffects() {
     this.avatarParts.forEach((part, key) => {
-      if (key.startsWith("particle_")) {
+      if (key.startsWith('particle_')) {
         const time = Date.now() / 1e3;
         const transform = Transform2.getMutable(part);
-        transform.position.y += Math.sin(time + parseInt(key.split("_")[1])) * 0.01;
+        transform.position.y += Math.sin(time + parseInt(key.split('_')[1])) * 0.01;
       }
-      if (key.startsWith("orb_")) {
+      if (key.startsWith('orb_')) {
         const time = Date.now() / 1e3;
-        const index = parseInt(key.split("_")[1]);
-        const radius = 0.8 + Math.sin(time * 2 + index * 120 * Math.PI / 180) * 0.2;
+        const index = parseInt(key.split('_')[1]);
+        const radius = 0.8 + Math.sin(time * 2 + (index * 120 * Math.PI) / 180) * 0.2;
         const transform = Transform2.getMutable(part);
-        transform.position.x = Math.cos(time + index * 120 * Math.PI / 180) * radius;
-        transform.position.z = Math.sin(time + index * 120 * Math.PI / 180) * radius;
+        transform.position.x = Math.cos(time + (index * 120 * Math.PI) / 180) * radius;
+        transform.position.z = Math.sin(time + (index * 120 * Math.PI) / 180) * radius;
       }
     });
   }
   // Apply preset
   applyPreset(presetId) {
     const preset = this.presets.get(presetId);
-    if (!preset)
-      return;
+    if (!preset) return;
     console.log(`\u{1F464} Applying preset: ${preset.name}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
     this.clearCurrentAvatar();
     this.currentAvatar = { ...preset.customization };
     this.createAvatar();
   }
   // Clear current avatar
   clearCurrentAvatar() {
-    this.avatarParts.forEach((part) => {
+    this.avatarParts.forEach(part => {
       engine.removeEntity(part);
     });
     this.avatarParts.clear();
@@ -20382,18 +21176,28 @@ var AvatarSystem = class {
   customizeColors(primaryColor, secondaryColor) {
     this.currentAvatar.primaryColor = primaryColor;
     this.currentAvatar.secondaryColor = secondaryColor;
-    const body = this.avatarParts.get("body");
+    const body = this.avatarParts.get('body');
     if (body) {
       const material = Material3.getMutable(body);
-      if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = Color42.create(primaryColor.r, primaryColor.g, primaryColor.b, 1);
+      if (material && material.$case === 'pbr') {
+        material.pbr.albedoColor = Color42.create(
+          primaryColor.r,
+          primaryColor.g,
+          primaryColor.b,
+          1
+        );
       }
     }
-    const head = this.avatarParts.get("head");
+    const head = this.avatarParts.get('head');
     if (head) {
       const material = Material3.getMutable(head);
-      if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = Color42.create(secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
+      if (material && material.$case === 'pbr') {
+        material.pbr.albedoColor = Color42.create(
+          secondaryColor.r,
+          secondaryColor.g,
+          secondaryColor.b,
+          1
+        );
       }
     }
   }
@@ -20402,7 +21206,7 @@ var AvatarSystem = class {
     if (!this.currentAvatar.accessories.includes(accessory)) {
       this.currentAvatar.accessories.push(accessory);
       this.createAccessory(accessory);
-      soundSystem.playInteractionSound("click");
+      soundSystem.playInteractionSound('click');
     }
   }
   // Remove accessory
@@ -20415,12 +21219,12 @@ var AvatarSystem = class {
         engine.removeEntity(part);
         this.avatarParts.delete(accessory);
       }
-      soundSystem.playInteractionSound("click");
+      soundSystem.playInteractionSound('click');
     }
   }
   // Toggle effect
   toggleEffect(effectType) {
-    const effect = this.currentAvatar.effects.find((e) => e.type === effectType);
+    const effect = this.currentAvatar.effects.find(e => e.type === effectType);
     if (effect) {
       effect.enabled = !effect.enabled;
       if (effect.enabled) {
@@ -20433,7 +21237,7 @@ var AvatarSystem = class {
           }
         });
       }
-      soundSystem.playInteractionSound("click");
+      soundSystem.playInteractionSound('click');
     }
   }
   // Cleanup system
@@ -20460,115 +21264,129 @@ var BlockchainIntegrationSystem = class {
     this.contracts = /* @__PURE__ */ new Map();
     this.isInitialized = false;
     this.currentWallet = null;
-    this.supportedChains = ["ethereum", "polygon", "arbitrum", "optimism"];
+    this.supportedChains = ['ethereum', 'polygon', 'arbitrum', 'optimism'];
     this.gasPrices = /* @__PURE__ */ new Map();
     this.initializeGasPrices();
   }
   // Initialize blockchain system
   initialize() {
-    console.log("\u26D3\uFE0F Blockchain Integration System Initializing...");
+    console.log('\u26D3\uFE0F Blockchain Integration System Initializing...');
     this.setupSmartContracts();
     this.createBlockchainUI();
     this.createDefaultWallet();
     this.initializeBlockchainConnection();
     this.startBlockchainEngine();
     this.isInitialized = true;
-    console.log("\u26D3\uFE0F Blockchain Integration System Ready!");
+    console.log('\u26D3\uFE0F Blockchain Integration System Ready!');
   }
   // Initialize gas prices
   initializeGasPrices() {
-    this.gasPrices.set("ethereum", 20);
-    this.gasPrices.set("polygon", 30);
-    this.gasPrices.set("arbitrum", 0.1);
-    this.gasPrices.set("optimism", 0.1);
+    this.gasPrices.set('ethereum', 20);
+    this.gasPrices.set('polygon', 30);
+    this.gasPrices.set('arbitrum', 0.1);
+    this.gasPrices.set('optimism', 0.1);
   }
   // Setup smart contracts
   setupSmartContracts() {
-    this.contracts.set("asset_registry", {
-      id: "asset_registry",
-      name: "Asset Registry",
-      address: "0x1234567890123456789012345678901234567890",
+    this.contracts.set('asset_registry', {
+      id: 'asset_registry',
+      name: 'Asset Registry',
+      address: '0x1234567890123456789012345678901234567890',
       abi: [],
       functions: /* @__PURE__ */ new Map([
-        ["mintAsset", {
-          name: "mintAsset",
-          inputs: [
-            { name: "to", type: "address" },
-            { name: "uri", type: "string" }
-          ],
-          outputs: [{ name: "tokenId", type: "uint256" }],
-          isPayable: false,
-          isView: false
-        }],
-        ["transferAsset", {
-          name: "transferAsset",
-          inputs: [
-            { name: "from", type: "address" },
-            { name: "to", type: "address" },
-            { name: "tokenId", type: "uint256" }
-          ],
-          outputs: [],
-          isPayable: false,
-          isView: false
-        }]
+        [
+          'mintAsset',
+          {
+            name: 'mintAsset',
+            inputs: [
+              { name: 'to', type: 'address' },
+              { name: 'uri', type: 'string' },
+            ],
+            outputs: [{ name: 'tokenId', type: 'uint256' }],
+            isPayable: false,
+            isView: false,
+          },
+        ],
+        [
+          'transferAsset',
+          {
+            name: 'transferAsset',
+            inputs: [
+              { name: 'from', type: 'address' },
+              { name: 'to', type: 'address' },
+              { name: 'tokenId', type: 'uint256' },
+            ],
+            outputs: [],
+            isPayable: false,
+            isView: false,
+          },
+        ],
       ]),
-      isActive: true
+      isActive: true,
     });
-    this.contracts.set("certificate", {
-      id: "certificate",
-      name: "Certificate Registry",
-      address: "0x2345678901234567890123456789012345678901",
+    this.contracts.set('certificate', {
+      id: 'certificate',
+      name: 'Certificate Registry',
+      address: '0x2345678901234567890123456789012345678901',
       abi: [],
       functions: /* @__PURE__ */ new Map([
-        ["issueCertificate", {
-          name: "issueCertificate",
-          inputs: [
-            { name: "recipient", type: "address" },
-            { name: "metadata", type: "string" }
-          ],
-          outputs: [{ name: "certificateId", type: "uint256" }],
-          isPayable: false,
-          isView: false
-        }],
-        ["verifyCertificate", {
-          name: "verifyCertificate",
-          inputs: [
-            { name: "certificateId", type: "uint256" }
-          ],
-          outputs: [{ name: "isValid", type: "bool" }],
-          isPayable: false,
-          isView: true
-        }]
+        [
+          'issueCertificate',
+          {
+            name: 'issueCertificate',
+            inputs: [
+              { name: 'recipient', type: 'address' },
+              { name: 'metadata', type: 'string' },
+            ],
+            outputs: [{ name: 'certificateId', type: 'uint256' }],
+            isPayable: false,
+            isView: false,
+          },
+        ],
+        [
+          'verifyCertificate',
+          {
+            name: 'verifyCertificate',
+            inputs: [{ name: 'certificateId', type: 'uint256' }],
+            outputs: [{ name: 'isValid', type: 'bool' }],
+            isPayable: false,
+            isView: true,
+          },
+        ],
       ]),
-      isActive: true
+      isActive: true,
     });
-    this.contracts.set("badge", {
-      id: "badge",
-      name: "Achievement Badges",
-      address: "0x3456789012345678901234567890123456789012",
+    this.contracts.set('badge', {
+      id: 'badge',
+      name: 'Achievement Badges',
+      address: '0x3456789012345678901234567890123456789012',
       abi: [],
       functions: /* @__PURE__ */ new Map([
-        ["awardBadge", {
-          name: "awardBadge",
-          inputs: [
-            { name: "user", type: "address" },
-            { name: "badgeType", type: "uint256" }
-          ],
-          outputs: [],
-          isPayable: false,
-          isView: false
-        }],
-        ["getUserBadges", {
-          name: "getUserBadges",
-          inputs: [
-            { name: "user", type: "address" }
-          ],
-          outputs: [{ name: "badgeIds", type: "uint256[]" }],
-          isPayable: false,
-          isView: true
-        }]
+        [
+          'awardBadge',
+          {
+            name: 'awardBadge',
+            inputs: [
+              { name: 'user', type: 'address' },
+              { name: 'badgeType', type: 'uint256' },
+            ],
+            outputs: [],
+            isPayable: false,
+            isView: false,
+          },
+        ],
+        [
+          'getUserBadges',
+          {
+            name: 'getUserBadges',
+            inputs: [{ name: 'user', type: 'address' }],
+            outputs: [{ name: 'badgeIds', type: 'uint256[]' }],
+            isPayable: false,
+            isView: true,
+          },
+        ],
       ]),
-      isActive: true
+      isActive: true,
     });
   }
   // Create blockchain UI
@@ -20576,25 +21394,25 @@ var BlockchainIntegrationSystem = class {
     this.blockchainUI = engine.addEntity();
     Transform2.create(this.blockchainUI, {
       position: Vector32.create(2, 3, 8),
-      scale: Vector32.create(3, 4, 0.1)
+      scale: Vector32.create(3, 4, 0.1),
     });
     MeshRenderer3.setBox(this.blockchainUI);
     Material3.setPbrMaterial(this.blockchainUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.blockchainUI,
       position: Vector32.create(0, 1.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u26D3\uFE0F BLOCKCHAIN ASSETS",
+      text: '\u26D3\uFE0F BLOCKCHAIN ASSETS',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createWalletSection();
     this.createAssetsSection();
@@ -20607,25 +21425,25 @@ var BlockchainIntegrationSystem = class {
     Transform2.create(walletSection, {
       parent: this.blockchainUI,
       position: Vector32.create(0, 1.2, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(walletSection);
     Material3.setPbrMaterial(walletSection, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const walletText = engine.addEntity();
     Transform2.create(walletText, {
       parent: walletSection,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(walletText, {
-      text: "\u{1F45B} WALLET: Not Connected",
+      text: '\u{1F45B} WALLET: Not Connected',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create assets section
@@ -20634,25 +21452,25 @@ var BlockchainIntegrationSystem = class {
     Transform2.create(assetsSection, {
       parent: this.blockchainUI,
       position: Vector32.create(0, 0.5, 0.1),
-      scale: Vector32.create(0.8, 0.4, 0.1)
+      scale: Vector32.create(0.8, 0.4, 0.1),
     });
     MeshRenderer3.setBox(assetsSection);
     Material3.setPbrMaterial(assetsSection, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const assetsText = engine.addEntity();
     Transform2.create(assetsText, {
       parent: assetsSection,
       position: Vector32.create(0, 0.1, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(assetsText, {
-      text: "\u{1F3A8} ASSETS: 0",
+      text: '\u{1F3A8} ASSETS: 0',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create transactions section
@@ -20661,65 +21479,65 @@ var BlockchainIntegrationSystem = class {
     Transform2.create(transactionsSection, {
       parent: this.blockchainUI,
       position: Vector32.create(0, -0.2, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(transactionsSection);
     Material3.setPbrMaterial(transactionsSection, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const transactionsText = engine.addEntity();
     Transform2.create(transactionsText, {
       parent: transactionsSection,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(transactionsText, {
-      text: "\u{1F4CA} TRANSACTIONS: 0",
+      text: '\u{1F4CA} TRANSACTIONS: 0',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create blockchain controls
   createBlockchainControls() {
     const controls = [
-      { id: "connect", icon: "\u{1F517}", name: "Connect Wallet" },
-      { id: "mint", icon: "\u{1F3A8}", name: "Mint Asset" },
-      { id: "transfer", icon: "\u{1F4B8}", name: "Transfer" },
-      { id: "verify", icon: "\u2705", name: "Verify" }
+      { id: 'connect', icon: '\u{1F517}', name: 'Connect Wallet' },
+      { id: 'mint', icon: '\u{1F3A8}', name: 'Mint Asset' },
+      { id: 'transfer', icon: '\u{1F4B8}', name: 'Transfer' },
+      { id: 'verify', icon: '\u2705', name: 'Verify' },
     ];
     let xOffset = -0.9;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.blockchainUI,
         position: Vector32.create(xOffset, -0.7, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleBlockchainControl(control.id)
       );
@@ -20729,33 +21547,32 @@ var BlockchainIntegrationSystem = class {
   // Create default wallet
   createDefaultWallet() {
     const wallet = {
-      id: "wallet_default",
-      address: "0xabcdef1234567890abcdef1234567890abcdef12",
-      chain: "ethereum",
+      id: 'wallet_default',
+      address: '0xabcdef1234567890abcdef1234567890abcdef12',
+      chain: 'ethereum',
       balance: /* @__PURE__ */ new Map([
-        ["ETH", 2.5],
-        ["USDC", 1e3],
-        ["AIG", 500]
+        ['ETH', 2.5],
+        ['USDC', 1e3],
+        ['AIG', 500],
       ]),
       assets: [],
       isConnected: false,
-      permissions: ["read", "write", "admin"]
+      permissions: ['read', 'write', 'admin'],
     };
     this.wallets.set(wallet.id, wallet);
-    console.log("\u{1F45B} Default wallet created");
+    console.log('\u{1F45B} Default wallet created');
   }
   // Initialize blockchain connection
   initializeBlockchainConnection() {
-    console.log("\u{1F517} Initializing blockchain connections...");
-    this.supportedChains.forEach((chain) => {
+    console.log('\u{1F517} Initializing blockchain connections...');
+    this.supportedChains.forEach(chain => {
       console.log(`\u{1F4E1} Connected to ${chain}`);
     });
   }
   // Start blockchain engine
   startBlockchainEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateBlockchainUI();
       this.simulateBlockchainActivity();
       this.updateGasPrices();
@@ -20764,120 +21581,118 @@ var BlockchainIntegrationSystem = class {
   // Handle blockchain control
   handleBlockchainControl(controlId) {
     switch (controlId) {
-      case "connect":
+      case 'connect':
         this.connectWallet();
         break;
-      case "mint":
+      case 'mint':
         this.mintAsset();
         break;
-      case "transfer":
+      case 'transfer':
         this.transferAsset();
         break;
-      case "verify":
+      case 'verify':
         this.verifyAsset();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Connect wallet
   connectWallet() {
     if (this.currentWallet && this.currentWallet.isConnected) {
-      console.log("\u{1F45B} Wallet already connected");
+      console.log('\u{1F45B} Wallet already connected');
       return;
     }
-    const wallet = this.wallets.get("wallet_default");
-    if (!wallet)
-      return;
+    const wallet = this.wallets.get('wallet_default');
+    if (!wallet) return;
     wallet.isConnected = true;
     this.currentWallet = wallet;
-    console.log("\u{1F517} Wallet connected successfully");
+    console.log('\u{1F517} Wallet connected successfully');
     console.log(`\u{1F4CD} Address: ${wallet.address}`);
     console.log(`\u26D3\uFE0F Chain: ${wallet.chain}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Disconnect wallet
   disconnectWallet() {
-    if (!this.currentWallet)
-      return;
+    if (!this.currentWallet) return;
     this.currentWallet.isConnected = false;
-    console.log("\u{1F50C} Wallet disconnected");
-    soundSystem.playInteractionSound("click");
+    console.log('\u{1F50C} Wallet disconnected');
+    soundSystem.playInteractionSound('click');
   }
   // Mint asset
   mintAsset() {
     if (!this.currentWallet || !this.currentWallet.isConnected) {
-      console.log("\u274C Please connect wallet first");
+      console.log('\u274C Please connect wallet first');
       return;
     }
     const asset = {
       id: `asset_${Date.now()}`,
       name: `AIG Asset #${this.assets.size + 1}`,
-      type: "nft",
+      type: 'nft',
       blockchain: this.currentWallet.chain,
-      contractAddress: this.contracts.get("asset_registry")?.address || "",
+      contractAddress: this.contracts.get('asset_registry')?.address || '',
       tokenId: (this.assets.size + 1).toString(),
       owner: this.currentWallet.address,
       metadata: {
-        description: "AIGestion Virtual Office Asset",
-        image: "ipfs://QmHash...",
+        description: 'AIGestion Virtual Office Asset',
+        image: 'ipfs://QmHash...',
         attributes: /* @__PURE__ */ new Map([
-          ["created_by", "AIGestion"],
-          ["office_space", "virtual"],
-          ["utility", "productivity"]
+          ['created_by', 'AIGestion'],
+          ['office_space', 'virtual'],
+          ['utility', 'productivity'],
         ]),
-        rarity: "rare",
-        category: "office",
-        creator: "AIGestion",
-        royalties: 2.5
+        rarity: 'rare',
+        category: 'office',
+        creator: 'AIGestion',
+        royalties: 2.5,
       },
       value: 0.1,
-      currency: "ETH",
+      currency: 'ETH',
       isVerified: true,
       createdAt: Date.now(),
-      lastTransferred: Date.now()
+      lastTransferred: Date.now(),
     };
     this.assets.set(asset.id, asset);
     this.currentWallet.assets.push(asset);
     const transaction = {
       id: `tx_${Date.now()}`,
-      type: "mint",
-      from: "0x0000000000000000000000000000000000000000",
+      type: 'mint',
+      from: '0x0000000000000000000000000000000000000000',
       to: this.currentWallet.address,
       asset,
       amount: 1,
       gasFee: this.gasPrices.get(this.currentWallet.chain) || 20,
-      status: "confirmed",
+      status: 'confirmed',
       timestamp: Date.now(),
-      blockNumber: 12345678
+      blockNumber: 12345678,
     };
     this.transactions.set(transaction.id, transaction);
     console.log(`\u{1F3A8} Minted new asset: ${asset.name}`);
     console.log(`\u{1F194} Token ID: ${asset.tokenId}`);
     console.log(`\u{1F4B0} Value: ${asset.value} ${asset.currency}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Transfer asset
   transferAsset() {
     if (!this.currentWallet || !this.currentWallet.isConnected) {
-      console.log("\u274C Please connect wallet first");
+      console.log('\u274C Please connect wallet first');
       return;
     }
     if (this.currentWallet.assets.length === 0) {
-      console.log("\u274C No assets to transfer");
+      console.log('\u274C No assets to transfer');
       return;
     }
     const asset = this.currentWallet.assets[0];
-    const recipient = "0x1234567890123456789012345678901234567890";
+    const recipient = '0x1234567890123456789012345678901234567890';
     const transaction = {
       id: `tx_${Date.now()}`,
-      type: "transfer",
+      type: 'transfer',
       from: this.currentWallet.address,
       to: recipient,
       asset,
       amount: 1,
       gasFee: this.gasPrices.get(this.currentWallet.chain) || 20,
-      status: "pending",
-      timestamp: Date.now()
+      status: 'pending',
+      timestamp: Date.now(),
     };
     this.transactions.set(transaction.id, transaction);
     asset.owner = recipient;
@@ -20888,122 +21703,121 @@ var BlockchainIntegrationSystem = class {
     }
     console.log(`\u{1F4B8} Transferred ${asset.name} to ${recipient}`);
     setTimeout(() => {
-      transaction.status = "confirmed";
+      transaction.status = 'confirmed';
       transaction.blockNumber = 12345679;
       console.log(`\u2705 Transaction confirmed: ${transaction.id}`);
     }, 3e3);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Verify asset
   verifyAsset() {
     if (this.assets.size === 0) {
-      console.log("\u274C No assets to verify");
+      console.log('\u274C No assets to verify');
       return;
     }
     const asset = Array.from(this.assets.values())[0];
     console.log(`\u{1F50D} Verifying asset: ${asset.name}`);
     console.log(`\u{1F194} Token ID: ${asset.tokenId}`);
     console.log(`\u26D3\uFE0F Blockchain: ${asset.blockchain}`);
-    console.log(`\u2705 Verification: ${asset.isVerified ? "VALID" : "INVALID"}`);
+    console.log(`\u2705 Verification: ${asset.isVerified ? 'VALID' : 'INVALID'}`);
     console.log(`\u{1F464} Owner: ${asset.owner}`);
     console.log(`\u{1F4C5} Created: ${new Date(asset.createdAt).toLocaleString()}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Issue certificate
   issueCertificate(recipient, metadata) {
     const certificate = {
       id: `cert_${Date.now()}`,
       name: `Certificate #${this.assets.size + 1}`,
-      type: "certificate",
-      blockchain: this.currentWallet?.chain || "ethereum",
-      contractAddress: this.contracts.get("certificate")?.address || "",
+      type: 'certificate',
+      blockchain: this.currentWallet?.chain || 'ethereum',
+      contractAddress: this.contracts.get('certificate')?.address || '',
       tokenId: (this.assets.size + 1).toString(),
       owner: recipient,
       metadata: {
-        description: "AIGestion Achievement Certificate",
-        image: "ipfs://QmCertHash...",
+        description: 'AIGestion Achievement Certificate',
+        image: 'ipfs://QmCertHash...',
         attributes: /* @__PURE__ */ new Map([
-          ["type", "achievement"],
-          ["issuer", "AIGestion"],
-          ["metadata", metadata]
+          ['type', 'achievement'],
+          ['issuer', 'AIGestion'],
+          ['metadata', metadata],
         ]),
-        rarity: "uncommon",
-        category: "certificate",
-        creator: "AIGestion",
-        royalties: 0
+        rarity: 'uncommon',
+        category: 'certificate',
+        creator: 'AIGestion',
+        royalties: 0,
       },
       value: 0,
-      currency: "ETH",
+      currency: 'ETH',
       isVerified: true,
       createdAt: Date.now(),
-      lastTransferred: Date.now()
+      lastTransferred: Date.now(),
     };
     this.assets.set(certificate.id, certificate);
     const transaction = {
       id: `tx_${Date.now()}`,
-      type: "mint",
-      from: "0x0000000000000000000000000000000000000000",
+      type: 'mint',
+      from: '0x0000000000000000000000000000000000000000',
       to: recipient,
       asset: certificate,
       amount: 1,
-      gasFee: this.gasPrices.get(this.currentWallet?.chain || "ethereum") || 20,
-      status: "confirmed",
+      gasFee: this.gasPrices.get(this.currentWallet?.chain || 'ethereum') || 20,
+      status: 'confirmed',
       timestamp: Date.now(),
-      blockNumber: 12345680
+      blockNumber: 12345680,
     };
     this.transactions.set(transaction.id, transaction);
     console.log(`\u{1F4DC} Issued certificate to ${recipient}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Award badge
   awardBadge(user, badgeType) {
     const badge = {
       id: `badge_${Date.now()}`,
       name: `${badgeType} Badge`,
-      type: "badge",
-      blockchain: this.currentWallet?.chain || "ethereum",
-      contractAddress: this.contracts.get("badge")?.address || "",
+      type: 'badge',
+      blockchain: this.currentWallet?.chain || 'ethereum',
+      contractAddress: this.contracts.get('badge')?.address || '',
       tokenId: (this.assets.size + 1).toString(),
       owner: user,
       metadata: {
         description: `${badgeType} Achievement Badge`,
-        image: "ipfs://QmBadgeHash...",
+        image: 'ipfs://QmBadgeHash...',
         attributes: /* @__PURE__ */ new Map([
-          ["type", badgeType],
-          ["issuer", "AIGestion"],
-          ["achievement_level", "gold"]
+          ['type', badgeType],
+          ['issuer', 'AIGestion'],
+          ['achievement_level', 'gold'],
         ]),
-        rarity: "rare",
-        category: "badge",
-        creator: "AIGestion",
-        royalties: 0
+        rarity: 'rare',
+        category: 'badge',
+        creator: 'AIGestion',
+        royalties: 0,
       },
       value: 0,
-      currency: "ETH",
+      currency: 'ETH',
       isVerified: true,
       createdAt: Date.now(),
-      lastTransferred: Date.now()
+      lastTransferred: Date.now(),
     };
     this.assets.set(badge.id, badge);
     const transaction = {
       id: `tx_${Date.now()}`,
-      type: "mint",
-      from: "0x0000000000000000000000000000000000000000",
+      type: 'mint',
+      from: '0x0000000000000000000000000000000000000000',
       to: user,
       asset: badge,
       amount: 1,
-      gasFee: this.gasPrices.get(this.currentWallet?.chain || "ethereum") || 20,
-      status: "confirmed",
+      gasFee: this.gasPrices.get(this.currentWallet?.chain || 'ethereum') || 20,
+      status: 'confirmed',
       timestamp: Date.now(),
-      blockNumber: 12345681
+      blockNumber: 12345681,
     };
     this.transactions.set(transaction.id, transaction);
     console.log(`\u{1F3C6} Awarded ${badgeType} badge to ${user}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Update blockchain UI
-  updateBlockchainUI() {
-  }
+  updateBlockchainUI() {}
   // Simulate blockchain activity
   simulateBlockchainActivity() {
     if (Math.random() < 0.01) {
@@ -21012,49 +21826,48 @@ var BlockchainIntegrationSystem = class {
   }
   // Simulate incoming transaction
   simulateIncomingTransaction() {
-    if (!this.currentWallet || !this.currentWallet.isConnected)
-      return;
-    const assetTypes = ["nft", "badge", "certificate"];
+    if (!this.currentWallet || !this.currentWallet.isConnected) return;
+    const assetTypes = ['nft', 'badge', 'certificate'];
     const randomType = assetTypes[Math.floor(Math.random() * assetTypes.length)];
     const asset = {
       id: `asset_${Date.now()}`,
       name: `Received ${randomType}`,
       type: randomType,
       blockchain: this.currentWallet.chain,
-      contractAddress: this.contracts.get("asset_registry")?.address || "",
+      contractAddress: this.contracts.get('asset_registry')?.address || '',
       tokenId: Math.floor(Math.random() * 1e4).toString(),
       owner: this.currentWallet.address,
       metadata: {
-        description: "Received asset",
-        image: "ipfs://QmReceivedHash...",
+        description: 'Received asset',
+        image: 'ipfs://QmReceivedHash...',
         attributes: /* @__PURE__ */ new Map([
-          ["received", "true"],
-          ["sender", "0xSenderAddress"]
+          ['received', 'true'],
+          ['sender', '0xSenderAddress'],
         ]),
-        rarity: "common",
+        rarity: 'common',
         category: randomType,
-        creator: "Unknown",
-        royalties: 0
+        creator: 'Unknown',
+        royalties: 0,
       },
       value: Math.random() * 0.5,
-      currency: "ETH",
+      currency: 'ETH',
       isVerified: true,
       createdAt: Date.now(),
-      lastTransferred: Date.now()
+      lastTransferred: Date.now(),
     };
     this.assets.set(asset.id, asset);
     this.currentWallet.assets.push(asset);
     const transaction = {
       id: `tx_${Date.now()}`,
-      type: "transfer",
-      from: "0xSenderAddress",
+      type: 'transfer',
+      from: '0xSenderAddress',
       to: this.currentWallet.address,
       asset,
       amount: 1,
       gasFee: this.gasPrices.get(this.currentWallet.chain) || 20,
-      status: "confirmed",
+      status: 'confirmed',
       timestamp: Date.now(),
-      blockNumber: 12345682
+      blockNumber: 12345682,
     };
     this.transactions.set(transaction.id, transaction);
     console.log(`\u{1F4E5} Received new asset: ${asset.name}`);
@@ -21096,7 +21909,7 @@ var BlockchainIntegrationSystem = class {
     if (this.currentWallet) {
       this.currentWallet.chain = chain;
       console.log(`\u26D3\uFE0F Switched to ${chain}`);
-      soundSystem.playInteractionSound("click");
+      soundSystem.playInteractionSound('click');
     }
   }
   // Get contract
@@ -21114,10 +21927,10 @@ var BlockchainIntegrationSystem = class {
       throw new Error(`Function ${functionName} not found in contract ${contractId}`);
     }
     console.log(`\u{1F4DE} Calling ${contractId}.${functionName} with parameters:`, parameters);
-    return new Promise((resolve2) => {
+    return new Promise(resolve2 => {
       setTimeout(() => {
         console.log(`\u2705 Contract call completed`);
-        resolve2({ success: true, result: "mock_result" });
+        resolve2({ success: true, result: 'mock_result' });
       }, 1e3);
     });
   }
@@ -21149,65 +21962,65 @@ var CollaborationWhiteboardSystem = class {
     this.currentDrawing = null;
     this.drawingHistory = [];
     this.currentUser = {
-      id: "user_main",
-      name: "Main User",
+      id: 'user_main',
+      name: 'Main User',
       color: Color32.create(0.2, 0.6, 1),
       cursor: Vector32.create(0, 0, 0),
       isDrawing: false,
-      currentTool: this.createDefaultTool()
+      currentTool: this.createDefaultTool(),
     };
   }
   // Initialize whiteboard system
   initialize() {
-    console.log("\u{1F3A8} Collaboration Whiteboard System Initializing...");
+    console.log('\u{1F3A8} Collaboration Whiteboard System Initializing...');
     this.setupDrawingTools();
     this.createWhiteboard();
     this.createToolbar();
     this.startDrawingEngine();
     this.createDefaultSession();
     this.isInitialized = true;
-    console.log("\u{1F3A8} Collaboration Whiteboard System Ready!");
+    console.log('\u{1F3A8} Collaboration Whiteboard System Ready!');
   }
   // Setup drawing tools
   setupDrawingTools() {
-    this.drawingTools.set("pen", {
-      type: "pen",
+    this.drawingTools.set('pen', {
+      type: 'pen',
       color: Color32.create(0, 0, 0),
       strokeWidth: 2,
-      isActive: true
+      isActive: true,
     });
-    this.drawingTools.set("eraser", {
-      type: "eraser",
+    this.drawingTools.set('eraser', {
+      type: 'eraser',
       color: Color32.create(1, 1, 1),
       strokeWidth: 10,
-      isActive: false
+      isActive: false,
     });
-    this.drawingTools.set("text", {
-      type: "text",
+    this.drawingTools.set('text', {
+      type: 'text',
       color: Color32.create(0, 0, 0),
       strokeWidth: 1,
-      isActive: false
+      isActive: false,
     });
-    this.drawingTools.set("shape", {
-      type: "shape",
+    this.drawingTools.set('shape', {
+      type: 'shape',
       color: Color32.create(0.2, 0.6, 1),
       strokeWidth: 2,
-      isActive: false
+      isActive: false,
     });
-    this.drawingTools.set("selection", {
-      type: "selection",
+    this.drawingTools.set('selection', {
+      type: 'selection',
       color: Color32.create(0.8, 0.8, 0.8),
       strokeWidth: 1,
-      isActive: false
+      isActive: false,
     });
   }
   // Create default tool
   createDefaultTool() {
     return {
-      type: "pen",
+      type: 'pen',
       color: Color32.create(0, 0, 0),
       strokeWidth: 2,
-      isActive: true
+      isActive: true,
     };
   }
   // Create whiteboard surface
@@ -21215,13 +22028,13 @@ var CollaborationWhiteboardSystem = class {
     this.whiteboardEntity = engine.addEntity();
     Transform2.create(this.whiteboardEntity, {
       position: Vector32.create(8, 3, 2),
-      scale: Vector32.create(6, 4, 0.1)
+      scale: Vector32.create(6, 4, 0.1),
     });
     MeshRenderer3.setBox(this.whiteboardEntity);
     Material3.setPbrMaterial(this.whiteboardEntity, {
       albedoColor: Color42.create(1, 1, 1, 1),
       roughness: 0.1,
-      metallic: 0
+      metallic: 0,
     });
     this.createWhiteboardBorder();
     this.setupWhiteboardInteraction();
@@ -21232,13 +22045,13 @@ var CollaborationWhiteboardSystem = class {
     Transform2.create(border, {
       parent: this.whiteboardEntity,
       position: Vector32.create(0, 0, -0.05),
-      scale: Vector32.create(6.1, 4.1, 0.05)
+      scale: Vector32.create(6.1, 4.1, 0.05),
     });
     MeshRenderer3.setBox(border);
     Material3.setPbrMaterial(border, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 1),
       roughness: 0.3,
-      metallic: 0.8
+      metallic: 0.8,
     });
   }
   // Setup whiteboard interaction
@@ -21246,23 +22059,23 @@ var CollaborationWhiteboardSystem = class {
     pointerEventsSystem.onPointerDown(
       {
         entity: this.whiteboardEntity,
-        opts: { button: InputAction.IA_POINTER, hoverText: "Start Drawing" }
+        opts: { button: InputAction.IA_POINTER, hoverText: 'Start Drawing' },
       },
-      (e) => this.startDrawing(e)
+      e => this.startDrawing(e)
     );
     pointerEventsSystem.onPointerUp(
       {
         entity: this.whiteboardEntity,
-        opts: { button: InputAction.IA_POINTER }
+        opts: { button: InputAction.IA_POINTER },
       },
       () => this.stopDrawing()
     );
     pointerEventsSystem.onPointerMove(
       {
         entity: this.whiteboardEntity,
-        opts: { button: InputAction.IA_POINTER }
+        opts: { button: InputAction.IA_POINTER },
       },
-      (e) => this.continueDrawing(e)
+      e => this.continueDrawing(e)
     );
   }
   // Create toolbar
@@ -21270,13 +22083,13 @@ var CollaborationWhiteboardSystem = class {
     this.toolbarEntity = engine.addEntity();
     Transform2.create(this.toolbarEntity, {
       position: Vector32.create(8, 5, 2),
-      scale: Vector32.create(4, 0.8, 0.1)
+      scale: Vector32.create(4, 0.8, 0.1),
     });
     MeshRenderer3.setBox(this.toolbarEntity);
     Material3.setPbrMaterial(this.toolbarEntity, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     this.createToolButtons();
     this.createColorPalette();
@@ -21285,42 +22098,42 @@ var CollaborationWhiteboardSystem = class {
   // Create tool buttons
   createToolButtons() {
     const tools = [
-      { id: "pen", icon: "\u270F\uFE0F", name: "Pen" },
-      { id: "eraser", icon: "\u{1F9F9}", name: "Eraser" },
-      { id: "text", icon: "\u{1F4DD}", name: "Text" },
-      { id: "shape", icon: "\u2B55", name: "Shape" },
-      { id: "selection", icon: "\u{1F446}", name: "Select" }
+      { id: 'pen', icon: '\u270F\uFE0F', name: 'Pen' },
+      { id: 'eraser', icon: '\u{1F9F9}', name: 'Eraser' },
+      { id: 'text', icon: '\u{1F4DD}', name: 'Text' },
+      { id: 'shape', icon: '\u2B55', name: 'Shape' },
+      { id: 'selection', icon: '\u{1F446}', name: 'Select' },
     ];
     let xOffset = -1.5;
-    tools.forEach((tool) => {
+    tools.forEach(tool => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.toolbarEntity,
         position: Vector32.create(xOffset, 0, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: tool.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: tool.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: tool.name },
         },
         () => this.selectTool(tool.id)
       );
@@ -21344,7 +22157,7 @@ var CollaborationWhiteboardSystem = class {
       // Magenta
       Color32.create(0, 1, 1),
       // Cyan
-      Color32.create(0.5, 0.5, 0.5)
+      Color32.create(0.5, 0.5, 0.5),
       // Gray
     ];
     let xOffset = -1.5;
@@ -21353,18 +22166,18 @@ var CollaborationWhiteboardSystem = class {
       Transform2.create(colorButton, {
         parent: this.toolbarEntity,
         position: Vector32.create(xOffset, -0.3, 0.1),
-        scale: Vector32.create(0.15, 0.15, 0.1)
+        scale: Vector32.create(0.15, 0.15, 0.1),
       });
       MeshRenderer3.setBox(colorButton);
       Material3.setPbrMaterial(colorButton, {
         albedoColor: Color42.create(color.r, color.g, color.b, 1),
         roughness: 0.2,
-        metallic: 0.1
+        metallic: 0.1,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: colorButton,
-          opts: { button: InputAction.IA_POINTER, hoverText: `Select Color ${index + 1}` }
+          opts: { button: InputAction.IA_POINTER, hoverText: `Select Color ${index + 1}` },
         },
         () => this.selectColor(color)
       );
@@ -21374,41 +22187,41 @@ var CollaborationWhiteboardSystem = class {
   // Create session controls
   createSessionControls() {
     const controls = [
-      { id: "new", icon: "\u{1F195}", name: "New Session" },
-      { id: "save", icon: "\u{1F4BE}", name: "Save" },
-      { id: "share", icon: "\u{1F517}", name: "Share" },
-      { id: "clear", icon: "\u{1F5D1}\uFE0F", name: "Clear" }
+      { id: 'new', icon: '\u{1F195}', name: 'New Session' },
+      { id: 'save', icon: '\u{1F4BE}', name: 'Save' },
+      { id: 'share', icon: '\u{1F517}', name: 'Share' },
+      { id: 'clear', icon: '\u{1F5D1}\uFE0F', name: 'Clear' },
     ];
     let xOffset = 1.5;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.toolbarEntity,
         position: Vector32.create(xOffset, 0, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.8, 0.4, 0.2, 1),
         emissiveColor: Color42.create(0.8, 0.4, 0.2, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleSessionControl(control.id)
       );
@@ -21418,8 +22231,7 @@ var CollaborationWhiteboardSystem = class {
   // Start drawing engine
   startDrawingEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateDrawingEntities();
       this.syncWithRemoteUsers();
     });
@@ -21427,56 +22239,51 @@ var CollaborationWhiteboardSystem = class {
   // Create default session
   createDefaultSession() {
     const session = {
-      id: "session_default",
-      name: "Default Whiteboard",
+      id: 'session_default',
+      name: 'Default Whiteboard',
       participants: [this.currentUser.id],
       drawings: [],
       isActive: true,
       createdAt: Date.now(),
-      lastModified: Date.now()
+      lastModified: Date.now(),
     };
     this.sessions.set(session.id, session);
     this.currentSession = session;
     this.users.set(this.currentUser.id, this.currentUser);
-    console.log("\u{1F3A8} Default whiteboard session created");
+    console.log('\u{1F3A8} Default whiteboard session created');
   }
   // Start drawing
   startDrawing(event) {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     const point = this.getDrawingPoint(event);
-    if (!point)
-      return;
+    if (!point) return;
     this.isDrawing = true;
     this.currentUser.isDrawing = true;
     const drawing = {
       id: `drawing_${Date.now()}`,
       userId: this.currentUser.id,
-      type: this.currentUser.currentTool.type === "eraser" ? "freehand" : "line",
+      type: this.currentUser.currentTool.type === 'eraser' ? 'freehand' : 'line',
       points: [point],
       color: this.currentUser.currentTool.color,
       strokeWidth: this.currentUser.currentTool.strokeWidth,
       timestamp: Date.now(),
-      isShared: true
+      isShared: true,
     };
     this.currentDrawing = drawing;
     this.drawingHistory.push(drawing);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Continue drawing
   continueDrawing(event) {
-    if (!this.isDrawing || !this.currentDrawing)
-      return;
+    if (!this.isDrawing || !this.currentDrawing) return;
     const point = this.getDrawingPoint(event);
-    if (!point)
-      return;
+    if (!point) return;
     this.currentDrawing.points.push(point);
     this.renderDrawing(this.currentDrawing);
   }
   // Stop drawing
   stopDrawing() {
-    if (!this.isDrawing || !this.currentDrawing)
-      return;
+    if (!this.isDrawing || !this.currentDrawing) return;
     this.isDrawing = false;
     this.currentUser.isDrawing = false;
     if (this.currentDrawing.points.length > 1) {
@@ -21485,12 +22292,11 @@ var CollaborationWhiteboardSystem = class {
       this.shareDrawing(this.currentDrawing);
     }
     this.currentDrawing = null;
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Get drawing point from event
   getDrawingPoint(event) {
-    if (!event.hit || !this.whiteboardEntity)
-      return null;
+    if (!event.hit || !this.whiteboardEntity) return null;
     const localPoint = Vector32.create(
       event.hit.hitPoint.x - Transform2.get(this.whiteboardEntity).position.x,
       event.hit.hitPoint.y - Transform2.get(this.whiteboardEntity).position.y,
@@ -21504,20 +22310,20 @@ var CollaborationWhiteboardSystem = class {
       this.drawingEntities.set(drawing.id, []);
     }
     const entities = this.drawingEntities.get(drawing.id);
-    entities.forEach((entity) => engine.removeEntity(entity));
+    entities.forEach(entity => engine.removeEntity(entity));
     entities.length = 0;
     switch (drawing.type) {
-      case "line":
-      case "freehand":
+      case 'line':
+      case 'freehand':
         this.renderFreehandDrawing(drawing, entities);
         break;
-      case "circle":
+      case 'circle':
         this.renderCircleDrawing(drawing, entities);
         break;
-      case "rectangle":
+      case 'rectangle':
         this.renderRectangleDrawing(drawing, entities);
         break;
-      case "arrow":
+      case 'arrow':
         this.renderArrowDrawing(drawing, entities);
         break;
     }
@@ -21530,98 +22336,64 @@ var CollaborationWhiteboardSystem = class {
       const line = engine.addEntity();
       Transform2.create(line, {
         parent: this.whiteboardEntity,
-        position: Vector32.create(
-          (start.x + end.x) / 2,
-          (start.y + end.y) / 2,
-          0.05
-        ),
-        scale: Vector32.create(
-          Vector32.distance(start, end),
-          drawing.strokeWidth * 0.01,
-          0.01
-        ),
+        position: Vector32.create((start.x + end.x) / 2, (start.y + end.y) / 2, 0.05),
+        scale: Vector32.create(Vector32.distance(start, end), drawing.strokeWidth * 0.01, 0.01),
         rotation: Quaternion2.fromEulerDegrees(
           0,
           0,
-          Math.atan2(end.y - start.y, end.x - start.x) * 180 / Math.PI
-        )
+          (Math.atan2(end.y - start.y, end.x - start.x) * 180) / Math.PI
+        ),
       });
       MeshRenderer3.setBox(line);
       Material3.setPbrMaterial(line, {
-        albedoColor: Color42.create(
-          drawing.color.r,
-          drawing.color.g,
-          drawing.color.b,
-          1
-        ),
+        albedoColor: Color42.create(drawing.color.r, drawing.color.g, drawing.color.b, 1),
         roughness: 0.1,
-        metallic: 0
+        metallic: 0,
       });
       entities.push(line);
     }
   }
   // Render circle drawing
   renderCircleDrawing(drawing, entities) {
-    if (drawing.points.length < 2)
-      return;
+    if (drawing.points.length < 2) return;
     const center = drawing.points[0];
     const radius = Vector32.distance(center, drawing.points[1]);
     const circle = engine.addEntity();
     Transform2.create(circle, {
       parent: this.whiteboardEntity,
       position: Vector32.create(center.x, center.y, 0.05),
-      scale: Vector32.create(radius * 2, radius * 2, 0.01)
+      scale: Vector32.create(radius * 2, radius * 2, 0.01),
     });
     MeshRenderer3.setBox(circle);
     Material3.setPbrMaterial(circle, {
-      albedoColor: Color42.create(
-        drawing.color.r,
-        drawing.color.g,
-        drawing.color.b,
-        1
-      ),
+      albedoColor: Color42.create(drawing.color.r, drawing.color.g, drawing.color.b, 1),
       roughness: 0.1,
-      metallic: 0
+      metallic: 0,
     });
     entities.push(circle);
   }
   // Render rectangle drawing
   renderRectangleDrawing(drawing, entities) {
-    if (drawing.points.length < 2)
-      return;
+    if (drawing.points.length < 2) return;
     const start = drawing.points[0];
     const end = drawing.points[1];
     const rectangle = engine.addEntity();
     Transform2.create(rectangle, {
       parent: this.whiteboardEntity,
-      position: Vector32.create(
-        (start.x + end.x) / 2,
-        (start.y + end.y) / 2,
-        0.05
-      ),
-      scale: Vector32.create(
-        Math.abs(end.x - start.x),
-        Math.abs(end.y - start.y),
-        0.01
-      )
+      position: Vector32.create((start.x + end.x) / 2, (start.y + end.y) / 2, 0.05),
+      scale: Vector32.create(Math.abs(end.x - start.x), Math.abs(end.y - start.y), 0.01),
     });
     MeshRenderer3.setBox(rectangle);
     Material3.setPbrMaterial(rectangle, {
-      albedoColor: Color42.create(
-        drawing.color.r,
-        drawing.color.g,
-        drawing.color.b,
-        1
-      ),
+      albedoColor: Color42.create(drawing.color.r, drawing.color.g, drawing.color.b, 1),
       roughness: 0.1,
-      metallic: 0
+      metallic: 0,
     });
     entities.push(rectangle);
   }
   // Render arrow drawing
   renderArrowDrawing(drawing, entities) {
-    if (drawing.points.length < 2)
-      return;
+    if (drawing.points.length < 2) return;
     const start = drawing.points[0];
     const end = drawing.points[1];
     this.renderFreehandDrawing(drawing, entities);
@@ -21631,22 +22403,13 @@ var CollaborationWhiteboardSystem = class {
       parent: this.whiteboardEntity,
       position: Vector32.create(end.x, end.y, 0.05),
       scale: Vector32.create(0.1, 0.1, 0.01),
-      rotation: Quaternion2.fromEulerDegrees(
-        0,
-        0,
-        angle * 180 / Math.PI
-      )
+      rotation: Quaternion2.fromEulerDegrees(0, 0, (angle * 180) / Math.PI),
     });
     MeshRenderer3.setBox(arrowHead);
     Material3.setPbrMaterial(arrowHead, {
-      albedoColor: Color42.create(
-        drawing.color.r,
-        drawing.color.g,
-        drawing.color.b,
-        1
-      ),
+      albedoColor: Color42.create(drawing.color.r, drawing.color.g, drawing.color.b, 1),
       roughness: 0.1,
-      metallic: 0
+      metallic: 0,
     });
     entities.push(arrowHead);
   }
@@ -21672,11 +22435,7 @@ var CollaborationWhiteboardSystem = class {
         const transform = Transform2.getMutable(entity);
         const scale = transform.scale;
         const pulse = 1 + Math.sin(time * 2 + index * 0.1) * 0.02;
-        transform.scale = Vector32.create(
-          scale.x * pulse,
-          scale.y * pulse,
-          scale.z
-        );
+        transform.scale = Vector32.create(scale.x * pulse, scale.y * pulse, scale.z);
       });
     });
   }
@@ -21689,33 +22448,29 @@ var CollaborationWhiteboardSystem = class {
   // Simulate remote user drawing
   simulateRemoteUserDrawing() {
     const remoteUser = {
-      id: "user_remote",
-      name: "Remote User",
+      id: 'user_remote',
+      name: 'Remote User',
       color: Color32.create(1, 0.5, 0),
-      cursor: Vector32.create(
-        Math.random() * 4 - 2,
-        Math.random() * 2 - 1,
-        0.05
-      ),
+      cursor: Vector32.create(Math.random() * 4 - 2, Math.random() * 2 - 1, 0.05),
       isDrawing: true,
-      currentTool: this.createDefaultTool()
+      currentTool: this.createDefaultTool(),
     };
     const drawing = {
       id: `drawing_remote_${Date.now()}`,
       userId: remoteUser.id,
-      type: "freehand",
+      type: 'freehand',
       points: [
         remoteUser.cursor,
         Vector32.create(
           remoteUser.cursor.x + Math.random() * 0.5,
           remoteUser.cursor.y + Math.random() * 0.5,
           0.05
-        )
+        ),
       ],
       color: remoteUser.color,
       strokeWidth: 2,
       timestamp: Date.now(),
-      isShared: true
+      isShared: true,
     };
     if (this.currentSession) {
       this.currentSession.drawings.push(drawing);
@@ -21725,37 +22480,36 @@ var CollaborationWhiteboardSystem = class {
   // Select tool
   selectTool(toolId) {
     const tool = this.drawingTools.get(toolId);
-    if (!tool)
-      return;
-    this.drawingTools.forEach((t) => t.isActive = false);
+    if (!tool) return;
+    this.drawingTools.forEach(t => (t.isActive = false));
     tool.isActive = true;
     this.currentUser.currentTool = tool;
     console.log(`\u{1F3A8} Selected tool: ${toolId}`);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Select color
   selectColor(color) {
     this.currentUser.currentTool.color = color;
     console.log(`\u{1F3A8} Selected color: RGB(${color.r}, ${color.g}, ${color.b})`);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Handle session control
   handleSessionControl(controlId) {
     switch (controlId) {
-      case "new":
+      case 'new':
         this.createNewSession();
         break;
-      case "save":
+      case 'save':
         this.saveSession();
         break;
-      case "share":
+      case 'share':
         this.shareSession();
         break;
-      case "clear":
+      case 'clear':
         this.clearWhiteboard();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Create new session
   createNewSession() {
@@ -21766,7 +22520,7 @@ var CollaborationWhiteboardSystem = class {
       drawings: [],
       isActive: true,
       createdAt: Date.now(),
-      lastModified: Date.now()
+      lastModified: Date.now(),
     };
     this.sessions.set(session.id, session);
     this.currentSession = session;
@@ -21775,33 +22529,30 @@ var CollaborationWhiteboardSystem = class {
   }
   // Save session
   saveSession() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     console.log(`\u{1F4BE} Saving session: ${this.currentSession.name}`);
     console.log(`\u{1F4CA} Drawings: ${this.currentSession.drawings.length}`);
     console.log(`\u{1F465} Participants: ${this.currentSession.participants.length}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Share session
   shareSession() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     console.log(`\u{1F517} Sharing session: ${this.currentSession.name}`);
     console.log(`\u{1F517} Share link: https://aigestion.dev/whiteboard/${this.currentSession.id}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Clear whiteboard
   clearWhiteboard() {
-    if (!this.currentSession)
-      return;
-    this.drawingEntities.forEach((entities) => {
-      entities.forEach((entity) => engine.removeEntity(entity));
+    if (!this.currentSession) return;
+    this.drawingEntities.forEach(entities => {
+      entities.forEach(entity => engine.removeEntity(entity));
     });
     this.drawingEntities.clear();
     this.currentSession.drawings = [];
     this.currentSession.lastModified = Date.now();
-    console.log("\u{1F5D1}\uFE0F Whiteboard cleared");
-    soundSystem.playInteractionSound("click");
+    console.log('\u{1F5D1}\uFE0F Whiteboard cleared');
+    soundSystem.playInteractionSound('click');
   }
   // Share drawing with other users
   shareDrawing(drawing) {
@@ -21810,18 +22561,16 @@ var CollaborationWhiteboardSystem = class {
   // Join session
   joinSession(sessionId) {
     const session = this.sessions.get(sessionId);
-    if (!session)
-      return;
+    if (!session) return;
     this.currentSession = session;
     session.participants.push(this.currentUser.id);
     session.lastModified = Date.now();
-    session.drawings.forEach((drawing) => this.renderDrawing(drawing));
+    session.drawings.forEach(drawing => this.renderDrawing(drawing));
     console.log(`\u{1F3A8} Joined session: ${session.name}`);
   }
   // Leave session
   leaveSession() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     const index = this.currentSession.participants.indexOf(this.currentUser.id);
     if (index > -1) {
       this.currentSession.participants.splice(index, 1);
@@ -21846,14 +22595,10 @@ var CollaborationWhiteboardSystem = class {
     const user = {
       id: userId,
       name: userName,
-      color: Color32.create(
-        Math.random(),
-        Math.random(),
-        Math.random()
-      ),
+      color: Color32.create(Math.random(), Math.random(), Math.random()),
       cursor: Vector32.create(0, 0, 0),
       isDrawing: false,
-      currentTool: this.createDefaultTool()
+      currentTool: this.createDefaultTool(),
     };
     this.users.set(userId, user);
     if (this.currentSession) {
@@ -21865,8 +22610,7 @@ var CollaborationWhiteboardSystem = class {
   // Remove user from session
   removeUserFromSession(userId) {
     const user = this.users.get(userId);
-    if (!user)
-      return;
+    if (!user) return;
     this.users.delete(userId);
     if (this.currentSession) {
       const index = this.currentSession.participants.indexOf(userId);
@@ -21879,8 +22623,8 @@ var CollaborationWhiteboardSystem = class {
   }
   // Cleanup system
   cleanup() {
-    this.drawingEntities.forEach((entities) => {
-      entities.forEach((entity) => engine.removeEntity(entity));
+    this.drawingEntities.forEach(entities => {
+      entities.forEach(entity => engine.removeEntity(entity));
     });
     this.drawingEntities.clear();
     this.sessions.clear();
@@ -21912,14 +22656,14 @@ var ContentManagementSystem = class {
   }
   // Initialize content management system
   initialize() {
-    console.log("\u{1F4DA} Dynamic Content Management System Initializing...");
+    console.log('\u{1F4DA} Dynamic Content Management System Initializing...');
     this.setupContentTemplates();
     this.createContentUI();
     this.createDefaultCollections();
     this.initializeSearchIndex();
     this.startContentEngine();
     this.isInitialized = true;
-    console.log("\u{1F4DA} Dynamic Content Management System Ready!");
+    console.log('\u{1F4DA} Dynamic Content Management System Ready!');
   }
   // Initialize analytics engine
   initializeAnalyticsEngine() {
@@ -21927,15 +22671,15 @@ var ContentManagementSystem = class {
       track: (event, data) => {
         console.log(`\u{1F4CA} Analytics: ${event}`, data);
       },
-      getMetrics: (contentId) => {
+      getMetrics: contentId => {
         return {
           views: Math.floor(Math.random() * 1e3),
           downloads: Math.floor(Math.random() * 100),
           shares: Math.floor(Math.random() * 50),
           averageRating: (Math.random() * 2 + 3).toFixed(1),
-          timeSpent: Math.floor(Math.random() * 300)
+          timeSpent: Math.floor(Math.random() * 300),
         };
-      }
+      },
     };
   }
   // Initialize version control
@@ -21948,147 +22692,145 @@ var ContentManagementSystem = class {
           contentId,
           changes,
           timestamp: Date.now(),
-          author: "system"
+          author: 'system',
         };
       },
-      getVersionHistory: (contentId) => {
+      getVersionHistory: contentId => {
         return [
           {
-            id: "v_1",
+            id: 'v_1',
             contentId,
-            changes: "Initial version",
+            changes: 'Initial version',
             timestamp: Date.now() - 864e5,
-            author: "creator"
-          }
+            author: 'creator',
+          },
         ];
-      }
+      },
     };
   }
   // Setup content templates
   setupContentTemplates() {
     const documentTemplate = {
-      id: "template_document",
-      name: "Document",
-      type: "document",
+      id: 'template_document',
+      name: 'Document',
+      type: 'document',
       structure: {
-        sections: ["title", "content", "attachments"],
-        layout: "standard"
+        sections: ['title', 'content', 'attachments'],
+        layout: 'standard',
       },
       fields: [
         {
-          id: "title",
-          name: "Title",
-          type: "text",
+          id: 'title',
+          name: 'Title',
+          type: 'text',
           required: true,
           validation: [
-            { type: "required", value: true, message: "Title is required" },
-            { type: "minLength", value: 3, message: "Title must be at least 3 characters" }
-          ]
+            { type: 'required', value: true, message: 'Title is required' },
+            { type: 'minLength', value: 3, message: 'Title must be at least 3 characters' },
+          ],
         },
         {
-          id: "content",
-          name: "Content",
-          type: "text",
+          id: 'content',
+          name: 'Content',
+          type: 'text',
           required: true,
-          validation: [
-            { type: "required", value: true, message: "Content is required" }
-          ]
+          validation: [{ type: 'required', value: true, message: 'Content is required' }],
         },
         {
-          id: "category",
-          name: "Category",
-          type: "select",
+          id: 'category',
+          name: 'Category',
+          type: 'select',
           required: true,
-          options: ["Report", "Proposal", "Manual", "Guide", "Other"]
-        }
+          options: ['Report', 'Proposal', 'Manual', 'Guide', 'Other'],
+        },
       ],
-      isDefault: true
+      isDefault: true,
     };
     const presentationTemplate = {
-      id: "template_presentation",
-      name: "Presentation",
-      type: "presentation",
+      id: 'template_presentation',
+      name: 'Presentation',
+      type: 'presentation',
       structure: {
-        slides: ["title", "content", "media"],
-        layout: "slides"
+        slides: ['title', 'content', 'media'],
+        layout: 'slides',
       },
       fields: [
         {
-          id: "title",
-          name: "Title",
-          type: "text",
-          required: true
+          id: 'title',
+          name: 'Title',
+          type: 'text',
+          required: true,
         },
         {
-          id: "slides",
-          name: "Slides",
-          type: "multiselect",
+          id: 'slides',
+          name: 'Slides',
+          type: 'multiselect',
           required: true,
-          options: ["Title Slide", "Content Slide", "Image Slide", "Chart Slide"]
-        }
+          options: ['Title Slide', 'Content Slide', 'Image Slide', 'Chart Slide'],
+        },
       ],
-      isDefault: false
+      isDefault: false,
     };
     const datasetTemplate = {
-      id: "template_dataset",
-      name: "Dataset",
-      type: "dataset",
+      id: 'template_dataset',
+      name: 'Dataset',
+      type: 'dataset',
       structure: {
-        schema: ["columns", "types", "constraints"],
-        format: "structured"
+        schema: ['columns', 'types', 'constraints'],
+        format: 'structured',
       },
       fields: [
         {
-          id: "name",
-          name: "Dataset Name",
-          type: "text",
-          required: true
-        },
-        {
-          id: "format",
-          name: "Format",
-          type: "select",
+          id: 'name',
+          name: 'Dataset Name',
+          type: 'text',
           required: true,
-          options: ["CSV", "JSON", "XML", "Parquet"]
         },
         {
-          id: "size",
-          name: "Size (MB)",
-          type: "number",
-          required: true
-        }
+          id: 'format',
+          name: 'Format',
+          type: 'select',
+          required: true,
+          options: ['CSV', 'JSON', 'XML', 'Parquet'],
+        },
+        {
+          id: 'size',
+          name: 'Size (MB)',
+          type: 'number',
+          required: true,
+        },
       ],
-      isDefault: false
+      isDefault: false,
     };
     this.templates.set(documentTemplate.id, documentTemplate);
     this.templates.set(presentationTemplate.id, presentationTemplate);
     this.templates.set(datasetTemplate.id, datasetTemplate);
-    console.log("\u{1F4CB} Content templates configured");
+    console.log('\u{1F4CB} Content templates configured');
   }
   // Create content UI
   createContentUI() {
     this.contentUI = engine.addEntity();
     Transform2.create(this.contentUI, {
       position: Vector32.create(8, 3, 14),
-      scale: Vector32.create(4, 4, 0.1)
+      scale: Vector32.create(4, 4, 0.1),
     });
     MeshRenderer3.setBox(this.contentUI);
     Material3.setPbrMaterial(this.contentUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.contentUI,
       position: Vector32.create(0, 1.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F4DA} CONTENT MANAGEMENT",
+      text: '\u{1F4DA} CONTENT MANAGEMENT',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createContentBrowser();
     this.createContentEditor();
@@ -22101,66 +22843,66 @@ var ContentManagementSystem = class {
     Transform2.create(browser, {
       parent: this.contentUI,
       position: Vector32.create(0, 1, 0.1),
-      scale: Vector32.create(0.9, 0.4, 0.1)
+      scale: Vector32.create(0.9, 0.4, 0.1),
     });
     MeshRenderer3.setBox(browser);
     Material3.setPbrMaterial(browser, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const browserText = engine.addEntity();
     Transform2.create(browserText, {
       parent: browser,
       position: Vector32.create(0, 0.1, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(browserText, {
-      text: "\u{1F4C2} Content Browser",
+      text: '\u{1F4C2} Content Browser',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createBrowserControls();
   }
   // Create browser controls
   createBrowserControls() {
     const controls = [
-      { id: "search", icon: "\u{1F50D}", name: "Search" },
-      { id: "filter", icon: "\u{1F53D}", name: "Filter" },
-      { id: "sort", icon: "\u2195\uFE0F", name: "Sort" },
-      { id: "new", icon: "\u2795", name: "New Content" }
+      { id: 'search', icon: '\u{1F50D}', name: 'Search' },
+      { id: 'filter', icon: '\u{1F53D}', name: 'Filter' },
+      { id: 'sort', icon: '\u2195\uFE0F', name: 'Sort' },
+      { id: 'new', icon: '\u2795', name: 'New Content' },
     ];
     let xOffset = -0.6;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.contentUI,
         position: Vector32.create(xOffset, 0.6, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleBrowserControl(control.id)
       );
@@ -22173,25 +22915,25 @@ var ContentManagementSystem = class {
     Transform2.create(editor, {
       parent: this.contentUI,
       position: Vector32.create(0, 0.1, 0.1),
-      scale: Vector32.create(0.9, 0.4, 0.1)
+      scale: Vector32.create(0.9, 0.4, 0.1),
     });
     MeshRenderer3.setBox(editor);
     Material3.setPbrMaterial(editor, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const editorText = engine.addEntity();
     Transform2.create(editorText, {
       parent: editor,
       position: Vector32.create(0, 0.1, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(editorText, {
-      text: "\u270F\uFE0F Content Editor",
+      text: '\u270F\uFE0F Content Editor',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create collection manager
@@ -22200,25 +22942,25 @@ var ContentManagementSystem = class {
     Transform2.create(manager, {
       parent: this.contentUI,
       position: Vector32.create(0, -0.4, 0.1),
-      scale: Vector32.create(0.9, 0.3, 0.1)
+      scale: Vector32.create(0.9, 0.3, 0.1),
     });
     MeshRenderer3.setBox(manager);
     Material3.setPbrMaterial(manager, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const managerText = engine.addEntity();
     Transform2.create(managerText, {
       parent: manager,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(managerText, {
-      text: "\u{1F4C1} Collections",
+      text: '\u{1F4C1} Collections',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create analytics panel
@@ -22227,188 +22969,182 @@ var ContentManagementSystem = class {
     Transform2.create(analytics, {
       parent: this.contentUI,
       position: Vector32.create(0, -0.9, 0.1),
-      scale: Vector32.create(0.9, 0.3, 0.1)
+      scale: Vector32.create(0.9, 0.3, 0.1),
     });
     MeshRenderer3.setBox(analytics);
     Material3.setPbrMaterial(analytics, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const analyticsText = engine.addEntity();
     Transform2.create(analyticsText, {
       parent: analytics,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(analyticsText, {
-      text: "\u{1F4CA} Analytics",
+      text: '\u{1F4CA} Analytics',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create default collections
   createDefaultCollections() {
     const documentsCollection = {
-      id: "collection_documents",
-      name: "Documents",
-      description: "All documents and text files",
+      id: 'collection_documents',
+      name: 'Documents',
+      description: 'All documents and text files',
       items: [],
-      layout: "grid",
-      filters: [
-        { field: "type", operator: "equals", value: "document" }
-      ],
-      sortBy: "date",
-      sortOrder: "desc",
-      isPublic: true
+      layout: 'grid',
+      filters: [{ field: 'type', operator: 'equals', value: 'document' }],
+      sortBy: 'date',
+      sortOrder: 'desc',
+      isPublic: true,
     };
     const mediaCollection = {
-      id: "collection_media",
-      name: "Media",
-      description: "Images, videos, and audio files",
+      id: 'collection_media',
+      name: 'Media',
+      description: 'Images, videos, and audio files',
       items: [],
-      layout: "masonry",
-      filters: [
-        { field: "type", operator: "contains", value: "image" }
-      ],
-      sortBy: "title",
-      sortOrder: "asc",
-      isPublic: true
+      layout: 'masonry',
+      filters: [{ field: 'type', operator: 'contains', value: 'image' }],
+      sortBy: 'title',
+      sortOrder: 'asc',
+      isPublic: true,
     };
     const presentationsCollection = {
-      id: "collection_presentations",
-      name: "Presentations",
-      description: "Slides and presentations",
+      id: 'collection_presentations',
+      name: 'Presentations',
+      description: 'Slides and presentations',
       items: [],
-      layout: "carousel",
-      filters: [
-        { field: "type", operator: "equals", value: "presentation" }
-      ],
-      sortBy: "date",
-      sortOrder: "desc",
-      isPublic: false
+      layout: 'carousel',
+      filters: [{ field: 'type', operator: 'equals', value: 'presentation' }],
+      sortBy: 'date',
+      sortOrder: 'desc',
+      isPublic: false,
     };
     this.collections.set(documentsCollection.id, documentsCollection);
     this.collections.set(mediaCollection.id, mediaCollection);
     this.collections.set(presentationsCollection.id, presentationsCollection);
     this.currentCollection = documentsCollection;
-    console.log("\u{1F4C1} Default collections created");
+    console.log('\u{1F4C1} Default collections created');
   }
   // Initialize search index
   initializeSearchIndex() {
-    console.log("\u{1F50D} Initializing search index...");
+    console.log('\u{1F50D} Initializing search index...');
     this.createSampleContent();
   }
   // Create sample content
   createSampleContent() {
     const sampleContent = [
       {
-        id: "content_1",
-        title: "Q4 Financial Report",
-        type: "document",
-        category: "Report",
-        tags: ["finance", "quarterly", "2024"],
+        id: 'content_1',
+        title: 'Q4 Financial Report',
+        type: 'document',
+        category: 'Report',
+        tags: ['finance', 'quarterly', '2024'],
         metadata: {
-          author: "Finance Team",
-          description: "Quarterly financial report for Q4 2024",
+          author: 'Finance Team',
+          description: 'Quarterly financial report for Q4 2024',
           size: 2048e3,
-          format: "PDF",
-          language: "en",
+          format: 'PDF',
+          language: 'en',
           accessibility: {
             hasCaptions: false,
             hasAudioDescription: false,
             hasTranscript: true,
             hasAltText: true,
-            language: "en"
-          }
+            language: 'en',
+          },
         },
-        content: { url: "/files/q4_report.pdf" },
+        content: { url: '/files/q4_report.pdf' },
         permissions: {
-          canView: ["all"],
-          canEdit: ["finance_team"],
-          canDelete: ["finance_manager"],
+          canView: ['all'],
+          canEdit: ['finance_team'],
+          canDelete: ['finance_manager'],
           canShare: true,
-          isPublic: false
+          isPublic: false,
         },
         createdAt: Date.now() - 864e5,
         updatedAt: Date.now() - 36e5,
         version: 2,
-        status: "published"
+        status: 'published',
       },
       {
-        id: "content_2",
-        title: "Product Launch Presentation",
-        type: "presentation",
-        category: "Marketing",
-        tags: ["product", "launch", "marketing"],
+        id: 'content_2',
+        title: 'Product Launch Presentation',
+        type: 'presentation',
+        category: 'Marketing',
+        tags: ['product', 'launch', 'marketing'],
         metadata: {
-          author: "Marketing Team",
-          description: "New product launch presentation",
+          author: 'Marketing Team',
+          description: 'New product launch presentation',
           size: 512e4,
-          format: "PPTX",
+          format: 'PPTX',
           duration: 1800,
-          language: "en",
+          language: 'en',
           accessibility: {
             hasCaptions: true,
             hasAudioDescription: false,
             hasTranscript: true,
             hasAltText: true,
-            language: "en"
-          }
+            language: 'en',
+          },
         },
-        content: { url: "/files/product_launch.pptx" },
+        content: { url: '/files/product_launch.pptx' },
         permissions: {
-          canView: ["all"],
-          canEdit: ["marketing_team"],
-          canDelete: ["marketing_manager"],
+          canView: ['all'],
+          canEdit: ['marketing_team'],
+          canDelete: ['marketing_manager'],
           canShare: true,
-          isPublic: true
+          isPublic: true,
         },
         createdAt: Date.now() - 1728e5,
         updatedAt: Date.now() - 72e5,
         version: 3,
-        status: "published"
+        status: 'published',
       },
       {
-        id: "content_3",
-        title: "Customer Analytics Dataset",
-        type: "dataset",
-        category: "Analytics",
-        tags: ["customer", "analytics", "data"],
+        id: 'content_3',
+        title: 'Customer Analytics Dataset',
+        type: 'dataset',
+        category: 'Analytics',
+        tags: ['customer', 'analytics', 'data'],
         metadata: {
-          author: "Data Team",
-          description: "Customer behavior analytics dataset",
+          author: 'Data Team',
+          description: 'Customer behavior analytics dataset',
           size: 1024e4,
-          format: "CSV",
-          language: "en",
+          format: 'CSV',
+          language: 'en',
           accessibility: {
             hasCaptions: false,
             hasAudioDescription: false,
             hasTranscript: false,
             hasAltText: true,
-            language: "en"
-          }
+            language: 'en',
+          },
         },
-        content: { url: "/data/customer_analytics.csv" },
+        content: { url: '/data/customer_analytics.csv' },
         permissions: {
-          canView: ["data_team", "analysts"],
-          canEdit: ["data_team"],
-          canDelete: ["data_manager"],
+          canView: ['data_team', 'analysts'],
+          canEdit: ['data_team'],
+          canDelete: ['data_manager'],
           canShare: false,
-          isPublic: false
+          isPublic: false,
         },
         createdAt: Date.now() - 2592e5,
         updatedAt: Date.now() - 864e5,
         version: 1,
-        status: "published"
-      }
+        status: 'published',
+      },
     ];
-    sampleContent.forEach((item) => {
+    sampleContent.forEach(item => {
       this.content.set(item.id, item);
       this.updateSearchIndex(item);
     });
-    console.log("\u{1F4C4} Sample content created");
+    console.log('\u{1F4C4} Sample content created');
   }
   // Update search index
   updateSearchIndex(item) {
@@ -22417,15 +23153,16 @@ var ContentManagementSystem = class {
       item.description,
       item.category,
       ...item.tags,
-      item.metadata.author
-    ].join(" ").toLowerCase();
-    this.searchIndex.set(item.id, searchableText.split(" "));
+      item.metadata.author,
+    ]
+      .join(' ')
+      .toLowerCase();
+    this.searchIndex.set(item.id, searchableText.split(' '));
   }
   // Start content engine
   startContentEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateContentMetrics();
       this.processContentUpdates();
       this.optimizeSearchIndex();
@@ -22434,39 +23171,38 @@ var ContentManagementSystem = class {
   // Handle browser control
   handleBrowserControl(controlId) {
     switch (controlId) {
-      case "search":
+      case 'search':
         this.openSearchDialog();
         break;
-      case "filter":
+      case 'filter':
         this.openFilterDialog();
         break;
-      case "sort":
+      case 'sort':
         this.toggleSortOrder();
         break;
-      case "new":
+      case 'new':
         this.openContentCreator();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Open search dialog
   openSearchDialog() {
-    console.log("\u{1F50D} Opening search dialog...");
+    console.log('\u{1F50D} Opening search dialog...');
   }
   // Open filter dialog
   openFilterDialog() {
-    console.log("\u{1F53D} Opening filter dialog...");
+    console.log('\u{1F53D} Opening filter dialog...');
   }
   // Toggle sort order
   toggleSortOrder() {
-    if (!this.currentCollection)
-      return;
-    this.currentCollection.sortOrder = this.currentCollection.sortOrder === "asc" ? "desc" : "asc";
+    if (!this.currentCollection) return;
+    this.currentCollection.sortOrder = this.currentCollection.sortOrder === 'asc' ? 'desc' : 'asc';
     console.log(`\u{1F504} Sort order: ${this.currentCollection.sortOrder}`);
   }
   // Open content creator
   openContentCreator() {
-    console.log("\u2795 Opening content creator...");
+    console.log('\u2795 Opening content creator...');
   }
   // Create content
   createContent(templateId, data) {
@@ -22476,43 +23212,43 @@ var ContentManagementSystem = class {
     }
     const content = {
       id: `content_${Date.now()}`,
-      title: data.title || "Untitled",
+      title: data.title || 'Untitled',
       type: template.type,
-      category: data.category || "General",
+      category: data.category || 'General',
       tags: data.tags || [],
       metadata: {
-        author: data.author || "Unknown",
-        description: data.description || "",
+        author: data.author || 'Unknown',
+        description: data.description || '',
         size: 0,
         format: template.type,
-        language: data.language || "en",
+        language: data.language || 'en',
         accessibility: {
           hasCaptions: false,
           hasAudioDescription: false,
           hasTranscript: false,
           hasAltText: false,
-          language: data.language || "en"
-        }
+          language: data.language || 'en',
+        },
       },
       content: data.content || {},
       permissions: {
-        canView: data.canView || ["all"],
-        canEdit: data.canEdit || [data.author || "Unknown"],
-        canDelete: data.canDelete || [data.author || "Unknown"],
+        canView: data.canView || ['all'],
+        canEdit: data.canEdit || [data.author || 'Unknown'],
+        canDelete: data.canDelete || [data.author || 'Unknown'],
         canShare: data.canShare !== void 0 ? data.canShare : true,
-        isPublic: data.isPublic !== void 0 ? data.isPublic : false
+        isPublic: data.isPublic !== void 0 ? data.isPublic : false,
       },
       createdAt: Date.now(),
       updatedAt: Date.now(),
       version: 1,
-      status: "draft"
+      status: 'draft',
     };
     this.content.set(content.id, content);
     this.updateSearchIndex(content);
-    this.analyticsEngine.track("content_created", {
+    this.analyticsEngine.track('content_created', {
       contentId: content.id,
       type: content.type,
-      author: content.metadata.author
+      author: content.metadata.author,
     });
     console.log(`\u{1F4DD} Created content: ${content.title}`);
     return content;
@@ -22520,16 +23256,15 @@ var ContentManagementSystem = class {
   // Update content
   updateContent(contentId, updates) {
     const content = this.content.get(contentId);
-    if (!content)
-      return null;
+    if (!content) return null;
     const version = this.versionControl.createVersion(contentId, updates);
     Object.assign(content, updates);
     content.updatedAt = Date.now();
     content.version += 1;
     this.updateSearchIndex(content);
-    this.analyticsEngine.track("content_updated", {
+    this.analyticsEngine.track('content_updated', {
       contentId,
-      version: content.version
+      version: content.version,
     });
     console.log(`\u270F\uFE0F Updated content: ${content.title}`);
     return content;
@@ -22537,24 +23272,22 @@ var ContentManagementSystem = class {
   // Delete content
   deleteContent(contentId) {
     const content = this.content.get(contentId);
-    if (!content)
-      return false;
-    content.status = "deleted";
+    if (!content) return false;
+    content.status = 'deleted';
     this.searchIndex.delete(contentId);
-    this.analyticsEngine.track("content_deleted", {
+    this.analyticsEngine.track('content_deleted', {
       contentId,
-      type: content.type
+      type: content.type,
     });
     console.log(`\u{1F5D1}\uFE0F Deleted content: ${content.title}`);
     return true;
   }
   // Search content
   searchContent(query) {
-    const terms = query.toLowerCase().split(" ");
+    const terms = query.toLowerCase().split(' ');
     const results = [];
     this.content.forEach((content, id) => {
-      if (content.status === "deleted")
-        return;
+      if (content.status === 'deleted') return;
       const indexTerms = this.searchIndex.get(id) || [];
       const score = this.calculateSearchScore(terms, indexTerms);
       if (score > 0) {
@@ -22570,7 +23303,7 @@ var ContentManagementSystem = class {
   // Calculate search score
   calculateSearchScore(queryTerms, indexTerms) {
     let score = 0;
-    queryTerms.forEach((term) => {
+    queryTerms.forEach(term => {
       if (indexTerms.includes(term)) {
         score += 1;
       }
@@ -22580,12 +23313,10 @@ var ContentManagementSystem = class {
   // Get content by collection
   getContentByCollection(collectionId) {
     const collection = this.collections.get(collectionId);
-    if (!collection)
-      return [];
-    let results = Array.from(this.content.values()).filter((content) => {
-      if (content.status === "deleted")
-        return false;
-      return collection.filters.every((filter) => {
+    if (!collection) return [];
+    let results = Array.from(this.content.values()).filter(content => {
+      if (content.status === 'deleted') return false;
+      return collection.filters.every(filter => {
         const fieldValue = this.getFieldValue(content, filter.field);
         return this.applyFilter(fieldValue, filter.operator, filter.value);
       });
@@ -22593,7 +23324,7 @@ var ContentManagementSystem = class {
     results.sort((a, b) => {
       const aValue = this.getFieldValue(a, collection.sortBy);
       const bValue = this.getFieldValue(b, collection.sortBy);
-      if (collection.sortOrder === "asc") {
+      if (collection.sortOrder === 'asc') {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -22604,32 +23335,32 @@ var ContentManagementSystem = class {
   // Get field value
   getFieldValue(content, field) {
     switch (field) {
-      case "title":
+      case 'title':
         return content.title;
-      case "date":
+      case 'date':
         return content.createdAt;
-      case "author":
+      case 'author':
         return content.metadata.author;
-      case "type":
+      case 'type':
         return content.type;
-      case "popularity":
+      case 'popularity':
         return this.analyticsEngine.getMetrics(content.id).views;
       default:
-        return "";
+        return '';
     }
   }
   // Apply filter
   applyFilter(value, operator, filterValue) {
     switch (operator) {
-      case "equals":
+      case 'equals':
         return value === filterValue;
-      case "contains":
+      case 'contains':
         return String(value).toLowerCase().includes(String(filterValue).toLowerCase());
-      case "greater":
+      case 'greater':
         return value > filterValue;
-      case "less":
+      case 'less':
         return value < filterValue;
-      case "between":
+      case 'between':
         return value >= filterValue[0] && value <= filterValue[1];
       default:
         return false;
@@ -22642,18 +23373,16 @@ var ContentManagementSystem = class {
     });
   }
   // Process content updates
-  processContentUpdates() {
-  }
+  processContentUpdates() {}
   // Optimize search index
-  optimizeSearchIndex() {
-  }
+  optimizeSearchIndex() {}
   // Get content
   getContent(contentId) {
     return this.content.get(contentId);
   }
   // Get all content
   getAllContent() {
-    return Array.from(this.content.values()).filter((content) => content.status !== "deleted");
+    return Array.from(this.content.values()).filter(content => content.status !== 'deleted');
   }
   // Get collections
   getCollections() {
@@ -22698,40 +23427,40 @@ var CrossPlatformSyncSystem = class {
   }
   // Initialize cross-platform sync system
   initialize() {
-    console.log("\u{1F504} Cross-Platform Sync System Initializing...");
+    console.log('\u{1F504} Cross-Platform Sync System Initializing...');
     this.createSyncUI();
     this.startSyncEngine();
     this.createDefaultSession();
     this.isInitialized = true;
-    console.log("\u{1F504} Cross-Platform Sync System Ready!");
+    console.log('\u{1F504} Cross-Platform Sync System Ready!');
   }
   // Initialize networks
   initializeNetworks() {
-    this.networks.set("websocket", {
-      id: "network_websocket",
-      type: "websocket",
+    this.networks.set('websocket', {
+      id: 'network_websocket',
+      type: 'websocket',
       isConnected: false,
       latency: 50,
       bandwidth: 1e3,
-      reliability: 0.95
+      reliability: 0.95,
     });
-    this.networks.set("webrtc", {
-      id: "network_webrtc",
-      type: "webrtc",
+    this.networks.set('webrtc', {
+      id: 'network_webrtc',
+      type: 'webrtc',
       isConnected: false,
       latency: 20,
       bandwidth: 5e3,
-      reliability: 0.98
+      reliability: 0.98,
     });
-    this.networks.set("http", {
-      id: "network_http",
-      type: "http",
+    this.networks.set('http', {
+      id: 'network_http',
+      type: 'http',
       isConnected: true,
       latency: 200,
       bandwidth: 2e3,
-      reliability: 0.99
+      reliability: 0.99,
     });
-    console.log("\u{1F310} Sync networks initialized");
+    console.log('\u{1F310} Sync networks initialized');
   }
   // Setup conflict resolver
   setupConflictResolver() {
@@ -22739,30 +23468,30 @@ var CrossPlatformSyncSystem = class {
       resolve: (conflict, strategy) => {
         console.log(`\u{1F527} Resolving conflict ${conflict.id} with strategy: ${strategy}`);
         switch (strategy) {
-          case "last_write_wins":
+          case 'last_write_wins':
             return conflict.changes[conflict.changes.length - 1];
-          case "first_write_wins":
+          case 'first_write_wins':
             return conflict.changes[0];
-          case "merge":
+          case 'merge':
             return this.mergeChanges(conflict.changes);
-          case "manual":
+          case 'manual':
             return null;
-          case "voting":
+          case 'voting':
             return this.resolveByVoting(conflict.changes);
           default:
             return conflict.changes[conflict.changes.length - 1];
         }
       },
-      merge: (changes) => {
+      merge: changes => {
         const merged = { ...changes[0].data };
         for (let i = 1; i < changes.length; i++) {
           Object.assign(merged, changes[i].data);
         }
         return merged;
       },
-      resolveByVoting: (changes) => {
+      resolveByVoting: changes => {
         const votes = /* @__PURE__ */ new Map();
-        changes.forEach((change) => {
+        changes.forEach(change => {
           votes.set(change.author, Math.random());
         });
         let maxVotes = 0;
@@ -22770,11 +23499,11 @@ var CrossPlatformSyncSystem = class {
         votes.forEach((votes2, author) => {
           if (votes2 > maxVotes) {
             maxVotes = votes2;
-            winner = changes.find((c) => c.author === author) || changes[0];
+            winner = changes.find(c => c.author === author) || changes[0];
           }
         });
         return winner;
-      }
+      },
     };
   }
   // Create sync UI
@@ -22782,25 +23511,25 @@ var CrossPlatformSyncSystem = class {
     this.syncUI = engine.addEntity();
     Transform2.create(this.syncUI, {
       position: Vector32.create(2, 3, 8),
-      scale: Vector32.create(3, 4, 0.1)
+      scale: Vector32.create(3, 4, 0.1),
     });
     MeshRenderer3.setBox(this.syncUI);
     Material3.setPbrMaterial(this.syncUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.syncUI,
       position: Vector32.create(0, 1.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F504} CROSS-PLATFORM SYNC",
+      text: '\u{1F504} CROSS-PLATFORM SYNC',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createSessionControls();
     this.createPlatformIndicators();
@@ -22810,41 +23539,41 @@ var CrossPlatformSyncSystem = class {
   // Create session controls
   createSessionControls() {
     const controls = [
-      { id: "create_session", icon: "\u2795", name: "Create Session" },
-      { id: "join_session", icon: "\u{1F517}", name: "Join Session" },
-      { id: "sync_now", icon: "\u{1F504}", name: "Sync Now" },
-      { id: "leave_session", icon: "\u{1F6AA}", name: "Leave Session" }
+      { id: 'create_session', icon: '\u2795', name: 'Create Session' },
+      { id: 'join_session', icon: '\u{1F517}', name: 'Join Session' },
+      { id: 'sync_now', icon: '\u{1F504}', name: 'Sync Now' },
+      { id: 'leave_session', icon: '\u{1F6AA}', name: 'Leave Session' },
     ];
     let xOffset = -0.9;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.syncUI,
         position: Vector32.create(xOffset, 1.2, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleSessionControl(control.id)
       );
@@ -22853,37 +23582,37 @@ var CrossPlatformSyncSystem = class {
   }
   // Create platform indicators
   createPlatformIndicators() {
-    const platforms = ["web", "mobile", "desktop", "vr", "ar", "console"];
+    const platforms = ['web', 'mobile', 'desktop', 'vr', 'ar', 'console'];
     let xOffset = -1.2;
-    platforms.forEach((platform) => {
+    platforms.forEach(platform => {
       const indicator = engine.addEntity();
       Transform2.create(indicator, {
         parent: this.syncUI,
         position: Vector32.create(xOffset, 0.6, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(indicator);
       Material3.setPbrMaterial(indicator, {
         albedoColor: this.getPlatformColor(platform),
         emissiveColor: this.getPlatformColor(platform),
-        emissiveIntensity: 0.5
+        emissiveIntensity: 0.5,
       });
       const platformText = engine.addEntity();
       Transform2.create(platformText, {
         parent: indicator,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(platformText, {
         text: this.getPlatformIcon(platform),
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: indicator,
-          opts: { button: InputAction.IA_POINTER, hoverText: platform }
+          opts: { button: InputAction.IA_POINTER, hoverText: platform },
         },
         () => this.connectPlatform(platform)
       );
@@ -22896,25 +23625,25 @@ var CrossPlatformSyncSystem = class {
     Transform2.create(statusDisplay, {
       parent: this.syncUI,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(statusDisplay);
     Material3.setPbrMaterial(statusDisplay, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const statusText = engine.addEntity();
     Transform2.create(statusText, {
       parent: statusDisplay,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(statusText, {
-      text: "\u{1F4CA} Status: Ready",
+      text: '\u{1F4CA} Status: Ready',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create conflict display
@@ -22923,41 +23652,41 @@ var CrossPlatformSyncSystem = class {
     Transform2.create(conflictDisplay, {
       parent: this.syncUI,
       position: Vector32.create(0, -0.6, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(conflictDisplay);
     Material3.setPbrMaterial(conflictDisplay, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const conflictText = engine.addEntity();
     Transform2.create(conflictText, {
       parent: conflictDisplay,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(conflictText, {
-      text: "\u26A0\uFE0F Conflicts: 0",
+      text: '\u26A0\uFE0F Conflicts: 0',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Get platform color
   getPlatformColor(platform) {
     switch (platform) {
-      case "web":
+      case 'web':
         return Color42.create(0.2, 0.6, 1, 1);
-      case "mobile":
+      case 'mobile':
         return Color42.create(0.8, 0.4, 0.2, 1);
-      case "desktop":
+      case 'desktop':
         return Color42.create(0.2, 0.8, 0.4, 1);
-      case "vr":
+      case 'vr':
         return Color42.create(0.8, 0.2, 0.8, 1);
-      case "ar":
+      case 'ar':
         return Color42.create(0.2, 0.8, 0.8, 1);
-      case "console":
+      case 'console':
         return Color42.create(0.8, 0.8, 0.2, 1);
       default:
         return Color42.create(0.5, 0.5, 0.5, 1);
@@ -22966,27 +23695,26 @@ var CrossPlatformSyncSystem = class {
   // Get platform icon
   getPlatformIcon(platform) {
     switch (platform) {
-      case "web":
-        return "\u{1F310}";
-      case "mobile":
-        return "\u{1F4F1}";
-      case "desktop":
-        return "\u{1F5A5}\uFE0F";
-      case "vr":
-        return "\u{1F97D}";
-      case "ar":
-        return "\u{1F4F7}";
-      case "console":
-        return "\u{1F3AE}";
+      case 'web':
+        return '\u{1F310}';
+      case 'mobile':
+        return '\u{1F4F1}';
+      case 'desktop':
+        return '\u{1F5A5}\uFE0F';
+      case 'vr':
+        return '\u{1F97D}';
+      case 'ar':
+        return '\u{1F4F7}';
+      case 'console':
+        return '\u{1F3AE}';
       default:
-        return "\u2753";
+        return '\u2753';
     }
   }
   // Start sync engine
   startSyncEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.processSyncQueue();
       this.checkConnections();
       this.detectConflicts();
@@ -22996,27 +23724,27 @@ var CrossPlatformSyncSystem = class {
   // Create default session
   createDefaultSession() {
     const session = {
-      id: "session_default",
-      name: "Default Sync Session",
-      platform: "web",
-      status: "active",
+      id: 'session_default',
+      name: 'Default Sync Session',
+      platform: 'web',
+      status: 'active',
       participants: [
         {
-          id: "user_main",
-          name: "Main User",
-          platform: "web",
-          role: "host",
+          id: 'user_main',
+          name: 'Main User',
+          platform: 'web',
+          role: 'host',
           permissions: {
             canRead: true,
             canWrite: true,
             canDelete: true,
             canInvite: true,
             canKick: true,
-            canChangeSettings: true
+            canChangeSettings: true,
           },
-          status: "online",
-          lastSeen: Date.now()
-        }
+          status: 'online',
+          lastSeen: Date.now(),
+        },
       ],
       lastSync: Date.now(),
       syncInterval: 100,
@@ -23025,35 +23753,35 @@ var CrossPlatformSyncSystem = class {
         settings: /* @__PURE__ */ new Map(),
         events: [],
         conflicts: [],
-        version: 1
+        version: 1,
       },
       conflictResolution: {
-        strategy: "last_write_wins",
+        strategy: 'last_write_wins',
         autoResolve: true,
-        timeout: 5e3
-      }
+        timeout: 5e3,
+      },
     };
     this.sessions.set(session.id, session);
     this.currentSession = session;
-    console.log("\u{1F504} Default sync session created");
+    console.log('\u{1F504} Default sync session created');
   }
   // Handle session control
   handleSessionControl(controlId) {
     switch (controlId) {
-      case "create_session":
+      case 'create_session':
         this.createSession();
         break;
-      case "join_session":
+      case 'join_session':
         this.joinSession();
         break;
-      case "sync_now":
+      case 'sync_now':
         this.forceSync();
         break;
-      case "leave_session":
+      case 'leave_session':
         this.leaveSession();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Create session
   createSession() {
@@ -23061,25 +23789,25 @@ var CrossPlatformSyncSystem = class {
     const session = {
       id: sessionId,
       name: `Sync Session ${this.sessions.size + 1}`,
-      platform: "web",
-      status: "active",
+      platform: 'web',
+      status: 'active',
       participants: [
         {
-          id: "user_main",
-          name: "Main User",
-          platform: "web",
-          role: "host",
+          id: 'user_main',
+          name: 'Main User',
+          platform: 'web',
+          role: 'host',
           permissions: {
             canRead: true,
             canWrite: true,
             canDelete: true,
             canInvite: true,
             canKick: true,
-            canChangeSettings: true
+            canChangeSettings: true,
           },
-          status: "online",
-          lastSeen: Date.now()
-        }
+          status: 'online',
+          lastSeen: Date.now(),
+        },
       ],
       lastSync: Date.now(),
       syncInterval: 100,
@@ -23088,99 +23816,92 @@ var CrossPlatformSyncSystem = class {
         settings: /* @__PURE__ */ new Map(),
         events: [],
         conflicts: [],
-        version: 1
+        version: 1,
       },
       conflictResolution: {
-        strategy: "last_write_wins",
+        strategy: 'last_write_wins',
         autoResolve: true,
-        timeout: 5e3
-      }
+        timeout: 5e3,
+      },
     };
     this.sessions.set(sessionId, session);
     this.currentSession = session;
     console.log(`\u2795 Created session: ${session.name}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Join session
   joinSession() {
-    console.log("\u{1F517} Joining session...");
-    soundSystem.playInteractionSound("click");
+    console.log('\u{1F517} Joining session...');
+    soundSystem.playInteractionSound('click');
   }
   // Force sync
   forceSync() {
-    if (!this.currentSession)
-      return;
-    console.log("\u{1F504} Forcing sync...");
-    this.currentSession.status = "syncing";
+    if (!this.currentSession) return;
+    console.log('\u{1F504} Forcing sync...');
+    this.currentSession.status = 'syncing';
     setTimeout(() => {
-      this.currentSession.status = "active";
+      this.currentSession.status = 'active';
       this.currentSession.lastSync = Date.now();
-      console.log("\u2705 Sync completed");
+      console.log('\u2705 Sync completed');
     }, 1e3);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Leave session
   leaveSession() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     console.log(`\u{1F6AA} Leaving session: ${this.currentSession.name}`);
     this.currentSession = null;
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Connect platform
   connectPlatform(platform) {
-    const network = this.networks.get(platform === "web" ? "websocket" : "webrtc");
-    if (!network)
-      return;
+    const network = this.networks.get(platform === 'web' ? 'websocket' : 'webrtc');
+    if (!network) return;
     network.isConnected = true;
     console.log(`\u{1F517} Connected to ${platform} platform`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Disconnect platform
   disconnectPlatform(platform) {
-    const network = this.networks.get(platform === "web" ? "websocket" : "webrtc");
-    if (!network)
-      return;
+    const network = this.networks.get(platform === 'web' ? 'websocket' : 'webrtc');
+    if (!network) return;
     network.isConnected = false;
     console.log(`\u{1F50C} Disconnected from ${platform} platform`);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Process sync queue
   processSyncQueue() {
-    if (this.syncQueue.length === 0)
-      return;
+    if (this.syncQueue.length === 0) return;
     const now = Date.now();
-    if (now - this.lastSyncTime < this.syncInterval)
-      return;
+    if (now - this.lastSyncTime < this.syncInterval) return;
     const eventsToProcess = this.syncQueue.splice(0, 10);
-    eventsToProcess.forEach((event) => {
+    eventsToProcess.forEach(event => {
       this.processSyncEvent(event);
     });
     this.lastSyncTime = now;
   }
   // Process sync event
   processSyncEvent(event) {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     console.log(`\u{1F4E4} Processing sync event: ${event.type} for ${event.target}`);
     this.currentSession.dataSync.events.push(event);
     if (this.currentSession.dataSync.events.length > 1e3) {
       this.currentSession.dataSync.events = this.currentSession.dataSync.events.slice(-500);
     }
     switch (event.type) {
-      case "create":
+      case 'create':
         this.handleCreateEvent(event);
         break;
-      case "update":
+      case 'update':
         this.handleUpdateEvent(event);
         break;
-      case "delete":
+      case 'delete':
         this.handleDeleteEvent(event);
         break;
-      case "move":
+      case 'move':
         this.handleMoveEvent(event);
         break;
-      case "interact":
+      case 'interact':
         this.handleInteractEvent(event);
         break;
     }
@@ -23189,12 +23910,12 @@ var CrossPlatformSyncSystem = class {
   handleCreateEvent(event) {
     const entity = {
       id: event.target,
-      type: "custom",
+      type: 'custom',
       data: event.data,
       timestamp: event.timestamp,
       author: event.author,
       version: 1,
-      conflicts: []
+      conflicts: [],
     };
     if (this.currentSession) {
       this.currentSession.dataSync.entities.set(event.target, entity);
@@ -23202,8 +23923,7 @@ var CrossPlatformSyncSystem = class {
   }
   // Handle update event
   handleUpdateEvent(event) {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     const entity = this.currentSession.dataSync.entities.get(event.target);
     if (entity) {
       if (entity.author !== event.author && entity.timestamp > event.timestamp - 1e3) {
@@ -23224,10 +23944,9 @@ var CrossPlatformSyncSystem = class {
   }
   // Handle move event
   handleMoveEvent(event) {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     const entity = this.currentSession.dataSync.entities.get(event.target);
-    if (entity && entity.type === "position") {
+    if (entity && entity.type === 'position') {
       entity.data = event.data;
       entity.timestamp = event.timestamp;
     }
@@ -23240,24 +23959,24 @@ var CrossPlatformSyncSystem = class {
   createConflict(entity, event) {
     const conflict = {
       id: `conflict_${Date.now()}_${Math.random()}`,
-      type: "data",
+      type: 'data',
       entity: entity.id,
       changes: [
         {
           author: entity.author,
           platform: this.currentSession.platform,
           data: entity.data,
-          timestamp: entity.timestamp
+          timestamp: entity.timestamp,
         },
         {
           author: event.author,
           platform: event.platform,
           data: event.data,
-          timestamp: event.timestamp
-        }
+          timestamp: event.timestamp,
+        },
       ],
       timestamp: Date.now(),
-      status: "pending"
+      status: 'pending',
     };
     if (this.currentSession) {
       this.currentSession.dataSync.conflicts.push(conflict);
@@ -23268,9 +23987,11 @@ var CrossPlatformSyncSystem = class {
   }
   // Resolve conflict
   resolveConflict(conflict) {
-    if (!this.currentSession)
-      return;
-    const resolution = this.conflictResolver.resolve(conflict, this.currentSession.conflictResolution.strategy);
+    if (!this.currentSession) return;
+    const resolution = this.conflictResolver.resolve(
+      conflict,
+      this.currentSession.conflictResolution.strategy
+    );
     if (resolution) {
       const entity = this.currentSession.dataSync.entities.get(conflict.entity);
       if (entity) {
@@ -23279,10 +24000,10 @@ var CrossPlatformSyncSystem = class {
         entity.timestamp = resolution.timestamp;
         entity.version++;
       }
-      conflict.status = "resolved";
+      conflict.status = 'resolved';
       console.log(`\u2705 Resolved conflict ${conflict.id}`);
     } else {
-      conflict.status = "ignored";
+      conflict.status = 'ignored';
       console.log(`\u26A0\uFE0F Ignored conflict ${conflict.id}`);
     }
   }
@@ -23298,21 +24019,25 @@ var CrossPlatformSyncSystem = class {
   }
   // Detect conflicts
   detectConflicts() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     const now = Date.now();
-    this.currentSession.dataSync.conflicts = this.currentSession.dataSync.conflicts.filter((conflict) => {
-      return now - conflict.timestamp < 3e4;
-    });
+    this.currentSession.dataSync.conflicts = this.currentSession.dataSync.conflicts.filter(
+      conflict => {
+        return now - conflict.timestamp < 3e4;
+      }
+    );
   }
   // Update sync status
   updateSyncStatus() {
-    if (!this.currentSession)
-      return;
+    if (!this.currentSession) return;
     const totalEntities = this.currentSession.dataSync.entities.size;
-    const pendingConflicts = this.currentSession.dataSync.conflicts.filter((c) => c.status === "pending").length;
+    const pendingConflicts = this.currentSession.dataSync.conflicts.filter(
+      c => c.status === 'pending'
+    ).length;
     const queueSize = this.syncQueue.length;
-    console.log(`\u{1F4CA} Sync Status: ${this.currentSession.status} | Entities: ${totalEntities} | Conflicts: ${pendingConflicts} | Queue: ${queueSize}`);
+    console.log(
+      `\u{1F4CA} Sync Status: ${this.currentSession.status} | Entities: ${totalEntities} | Conflicts: ${pendingConflicts} | Queue: ${queueSize}`
+    );
   }
   // Queue sync event
   queueSyncEvent(event) {
@@ -23335,8 +24060,7 @@ var CrossPlatformSyncSystem = class {
   }
   // Get sync statistics
   getSyncStatistics() {
-    if (!this.currentSession)
-      return null;
+    if (!this.currentSession) return null;
     return {
       sessionId: this.currentSession.id,
       status: this.currentSession.status,
@@ -23345,7 +24069,7 @@ var CrossPlatformSyncSystem = class {
       events: this.currentSession.dataSync.events.length,
       conflicts: this.currentSession.dataSync.conflicts.length,
       lastSync: this.currentSession.lastSync,
-      queueSize: this.syncQueue.length
+      queueSize: this.syncQueue.length,
     };
   }
   // Set conflict resolution strategy
@@ -23359,7 +24083,7 @@ var CrossPlatformSyncSystem = class {
   setAutoResolve(enabled) {
     if (this.currentSession) {
       this.currentSession.conflictResolution.autoResolve = enabled;
-      console.log(`\u{1F916} Auto-resolve ${enabled ? "enabled" : "disabled"}`);
+      console.log(`\u{1F916} Auto-resolve ${enabled ? 'enabled' : 'disabled'}`);
     }
   }
   // Cleanup system
@@ -23390,167 +24114,159 @@ var EmotionDetectionSystem = class {
   }
   // Initialize emotion detection system
   initialize() {
-    console.log("\u{1F60A} Emotion Detection System Initializing...");
+    console.log('\u{1F60A} Emotion Detection System Initializing...');
     this.createEmotionUI();
     this.createDefaultProfiles();
     this.startEmotionEngine();
     this.initializeSensors();
     this.isInitialized = true;
-    console.log("\u{1F60A} Emotion Detection System Ready!");
+    console.log('\u{1F60A} Emotion Detection System Ready!');
   }
   // Setup adaptive responses
   setupAdaptiveResponses() {
-    this.adaptiveResponses.set("joy_bright", {
-      id: "joy_bright",
-      emotionTrigger: "joy",
-      responseType: "environmental",
+    this.adaptiveResponses.set('joy_bright', {
+      id: 'joy_bright',
+      emotionTrigger: 'joy',
+      responseType: 'environmental',
       action: {
-        type: "adjust_lighting",
+        type: 'adjust_lighting',
         parameters: /* @__PURE__ */ new Map([
-          ["brightness", 1.2],
-          ["color", "warm"],
-          ["duration", 5e3]
+          ['brightness', 1.2],
+          ['color', 'warm'],
+          ['duration', 5e3],
         ]),
         duration: 5e3,
-        intensity: 0.8
+        intensity: 0.8,
       },
       priority: 1,
-      conditions: [
-        { parameter: "intensity", operator: "greater", value: 0.6 }
-      ]
+      conditions: [{ parameter: 'intensity', operator: 'greater', value: 0.6 }],
     });
-    this.adaptiveResponses.set("joy_music", {
-      id: "joy_music",
-      emotionTrigger: "joy",
-      responseType: "audio",
+    this.adaptiveResponses.set('joy_music', {
+      id: 'joy_music',
+      emotionTrigger: 'joy',
+      responseType: 'audio',
       action: {
-        type: "play_music",
+        type: 'play_music',
         parameters: /* @__PURE__ */ new Map([
-          ["genre", "upbeat"],
-          ["volume", 0.6],
-          ["duration", 3e3]
+          ['genre', 'upbeat'],
+          ['volume', 0.6],
+          ['duration', 3e3],
         ]),
         duration: 3e3,
-        intensity: 0.7
+        intensity: 0.7,
       },
       priority: 2,
-      conditions: []
+      conditions: [],
     });
-    this.adaptiveResponses.set("stress_calm", {
-      id: "stress_calm",
-      emotionTrigger: "stress",
-      responseType: "environmental",
+    this.adaptiveResponses.set('stress_calm', {
+      id: 'stress_calm',
+      emotionTrigger: 'stress',
+      responseType: 'environmental',
       action: {
-        type: "adjust_lighting",
+        type: 'adjust_lighting',
         parameters: /* @__PURE__ */ new Map([
-          ["brightness", 0.7],
-          ["color", "cool"],
-          ["duration", 1e4]
+          ['brightness', 0.7],
+          ['color', 'cool'],
+          ['duration', 1e4],
         ]),
         duration: 1e4,
-        intensity: 0.9
+        intensity: 0.9,
       },
       priority: 1,
-      conditions: [
-        { parameter: "intensity", operator: "greater", value: 0.5 }
-      ]
+      conditions: [{ parameter: 'intensity', operator: 'greater', value: 0.5 }],
     });
-    this.adaptiveResponses.set("stress_breathing", {
-      id: "stress_breathing",
-      emotionTrigger: "stress",
-      responseType: "visual",
+    this.adaptiveResponses.set('stress_breathing', {
+      id: 'stress_breathing',
+      emotionTrigger: 'stress',
+      responseType: 'visual',
       action: {
-        type: "breathing_guide",
+        type: 'breathing_guide',
         parameters: /* @__PURE__ */ new Map([
-          ["rate", 0.2],
-          ["duration", 5e3]
+          ['rate', 0.2],
+          ['duration', 5e3],
         ]),
         duration: 5e3,
-        intensity: 0.8
+        intensity: 0.8,
       },
       priority: 2,
-      conditions: []
+      conditions: [],
     });
-    this.adaptiveResponses.set("focus_minimize", {
-      id: "focus_minimize",
-      emotionTrigger: "focus",
-      responseType: "environmental",
+    this.adaptiveResponses.set('focus_minimize', {
+      id: 'focus_minimize',
+      emotionTrigger: 'focus',
+      responseType: 'environmental',
       action: {
-        type: "minimize_distractions",
+        type: 'minimize_distractions',
         parameters: /* @__PURE__ */ new Map([
-          ["ui_opacity", 0.3],
-          ["notifications", false],
-          ["duration", 15e3]
+          ['ui_opacity', 0.3],
+          ['notifications', false],
+          ['duration', 15e3],
         ]),
         duration: 15e3,
-        intensity: 0.9
+        intensity: 0.9,
       },
       priority: 1,
-      conditions: [
-        { parameter: "intensity", operator: "greater", value: 0.7 }
-      ]
+      conditions: [{ parameter: 'intensity', operator: 'greater', value: 0.7 }],
     });
-    this.adaptiveResponses.set("sadness_comfort", {
-      id: "sadness_comfort",
-      emotionTrigger: "sadness",
-      responseType: "audio",
+    this.adaptiveResponses.set('sadness_comfort', {
+      id: 'sadness_comfort',
+      emotionTrigger: 'sadness',
+      responseType: 'audio',
       action: {
-        type: "play_music",
+        type: 'play_music',
         parameters: /* @__PURE__ */ new Map([
-          ["genre", "comforting"],
-          ["volume", 0.4],
-          ["duration", 8e3]
+          ['genre', 'comforting'],
+          ['volume', 0.4],
+          ['duration', 8e3],
         ]),
         duration: 8e3,
-        intensity: 0.6
+        intensity: 0.6,
       },
       priority: 1,
-      conditions: []
+      conditions: [],
     });
-    this.adaptiveResponses.set("anger_cool", {
-      id: "anger_cool",
-      emotionTrigger: "anger",
-      responseType: "environmental",
+    this.adaptiveResponses.set('anger_cool', {
+      id: 'anger_cool',
+      emotionTrigger: 'anger',
+      responseType: 'environmental',
       action: {
-        type: "adjust_temperature",
+        type: 'adjust_temperature',
         parameters: /* @__PURE__ */ new Map([
-          ["temperature", 20],
-          ["duration", 1e4]
+          ['temperature', 20],
+          ['duration', 1e4],
         ]),
         duration: 1e4,
-        intensity: 0.8
+        intensity: 0.8,
       },
       priority: 1,
-      conditions: [
-        { parameter: "intensity", operator: "greater", value: 0.6 }
-      ]
+      conditions: [{ parameter: 'intensity', operator: 'greater', value: 0.6 }],
     });
-    console.log("\u{1F3AD} Adaptive responses configured");
+    console.log('\u{1F3AD} Adaptive responses configured');
   }
   // Create emotion UI
   createEmotionUI() {
     this.emotionUI = engine.addEntity();
     Transform2.create(this.emotionUI, {
       position: Vector32.create(8, 4, 14),
-      scale: Vector32.create(3, 3, 0.1)
+      scale: Vector32.create(3, 3, 0.1),
     });
     MeshRenderer3.setBox(this.emotionUI);
     Material3.setPbrMaterial(this.emotionUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.emotionUI,
       position: Vector32.create(0, 1.2, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F60A} EMOTION DETECTION",
+      text: '\u{1F60A} EMOTION DETECTION',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createEmotionIndicators();
     this.createResponseControls();
@@ -23558,37 +24274,37 @@ var EmotionDetectionSystem = class {
   }
   // Create emotion indicators
   createEmotionIndicators() {
-    const emotions = ["joy", "stress", "focus", "sadness", "anger", "calm"];
+    const emotions = ['joy', 'stress', 'focus', 'sadness', 'anger', 'calm'];
     let xOffset = -1.2;
-    emotions.forEach((emotion) => {
+    emotions.forEach(emotion => {
       const indicator = engine.addEntity();
       Transform2.create(indicator, {
         parent: this.emotionUI,
         position: Vector32.create(xOffset, 0.6, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(indicator);
       Material3.setPbrMaterial(indicator, {
         albedoColor: this.getEmotionColor(emotion),
         emissiveColor: this.getEmotionColor(emotion),
-        emissiveIntensity: 0.5
+        emissiveIntensity: 0.5,
       });
       const emotionText = engine.addEntity();
       Transform2.create(emotionText, {
         parent: indicator,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(emotionText, {
         text: this.getEmotionIcon(emotion),
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: indicator,
-          opts: { button: InputAction.IA_POINTER, hoverText: `Simulate ${emotion}` }
+          opts: { button: InputAction.IA_POINTER, hoverText: `Simulate ${emotion}` },
         },
         () => this.simulateEmotion(emotion)
       );
@@ -23598,40 +24314,40 @@ var EmotionDetectionSystem = class {
   // Create response controls
   createResponseControls() {
     const controls = [
-      { id: "enable_adaptation", icon: "\u{1F504}", name: "Enable Adaptation" },
-      { id: "disable_adaptation", icon: "\u23F8\uFE0F", name: "Disable Adaptation" },
-      { id: "calibrate", icon: "\u2699\uFE0F", name: "Calibrate" }
+      { id: 'enable_adaptation', icon: '\u{1F504}', name: 'Enable Adaptation' },
+      { id: 'disable_adaptation', icon: '\u23F8\uFE0F', name: 'Disable Adaptation' },
+      { id: 'calibrate', icon: '\u2699\uFE0F', name: 'Calibrate' },
     ];
     let xOffset = -0.8;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.emotionUI,
         position: Vector32.create(xOffset, 0.2, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleResponseControl(control.id)
       );
@@ -23644,41 +24360,41 @@ var EmotionDetectionSystem = class {
     Transform2.create(profileDisplay, {
       parent: this.emotionUI,
       position: Vector32.create(0, -0.4, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(profileDisplay);
     Material3.setPbrMaterial(profileDisplay, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const profileText = engine.addEntity();
     Transform2.create(profileText, {
       parent: profileDisplay,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(profileText, {
-      text: "\u{1F464} Profile: Active",
+      text: '\u{1F464} Profile: Active',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Get emotion color
   getEmotionColor(emotion) {
     switch (emotion) {
-      case "joy":
+      case 'joy':
         return Color42.create(1, 0.8, 0.2, 1);
-      case "stress":
+      case 'stress':
         return Color42.create(0.8, 0.2, 0.2, 1);
-      case "focus":
+      case 'focus':
         return Color42.create(0.2, 0.8, 0.8, 1);
-      case "sadness":
+      case 'sadness':
         return Color42.create(0.2, 0.4, 0.8, 1);
-      case "anger":
+      case 'anger':
         return Color42.create(0.8, 0.2, 0.2, 1);
-      case "calm":
+      case 'calm':
         return Color42.create(0.2, 0.8, 0.4, 1);
       default:
         return Color42.create(0.5, 0.5, 0.5, 1);
@@ -23687,60 +24403,59 @@ var EmotionDetectionSystem = class {
   // Get emotion icon
   getEmotionIcon(emotion) {
     switch (emotion) {
-      case "joy":
-        return "\u{1F60A}";
-      case "stress":
-        return "\u{1F630}";
-      case "focus":
-        return "\u{1F3AF}";
-      case "sadness":
-        return "\u{1F622}";
-      case "anger":
-        return "\u{1F620}";
-      case "calm":
-        return "\u{1F60C}";
+      case 'joy':
+        return '\u{1F60A}';
+      case 'stress':
+        return '\u{1F630}';
+      case 'focus':
+        return '\u{1F3AF}';
+      case 'sadness':
+        return '\u{1F622}';
+      case 'anger':
+        return '\u{1F620}';
+      case 'calm':
+        return '\u{1F60C}';
       default:
-        return "\u{1F610}";
+        return '\u{1F610}';
     }
   }
   // Create default profiles
   createDefaultProfiles() {
     const defaultProfile = {
-      userId: "user_default",
+      userId: 'user_default',
       baselineEmotions: /* @__PURE__ */ new Map([
-        ["joy", 0.3],
-        ["stress", 0.2],
-        ["focus", 0.4],
-        ["sadness", 0.1],
-        ["anger", 0.1],
-        ["calm", 0.5],
-        ["neutral", 0.6]
+        ['joy', 0.3],
+        ['stress', 0.2],
+        ['focus', 0.4],
+        ['sadness', 0.1],
+        ['anger', 0.1],
+        ['calm', 0.5],
+        ['neutral', 0.6],
       ]),
       personalityTraits: [
-        { trait: "openness", value: 0.7 },
-        { trait: "conscientiousness", value: 0.8 },
-        { trait: "extraversion", value: 0.6 },
-        { trait: "agreeableness", value: 0.7 },
-        { trait: "neuroticism", value: 0.3 }
+        { trait: 'openness', value: 0.7 },
+        { trait: 'conscientiousness', value: 0.8 },
+        { trait: 'extraversion', value: 0.6 },
+        { trait: 'agreeableness', value: 0.7 },
+        { trait: 'neuroticism', value: 0.3 },
       ],
       preferences: {
-        lightingPreference: "adaptive",
-        musicPreference: ["ambient", "classical"],
+        lightingPreference: 'adaptive',
+        musicPreference: ['ambient', 'classical'],
         colorPreference: [Color32.create(0.2, 0.4, 0.8), Color32.create(0.8, 0.6, 0.2)],
-        interactionStyle: "subtle",
-        privacyLevel: "medium"
+        interactionStyle: 'subtle',
+        privacyLevel: 'medium',
       },
       history: [],
-      adaptationLevel: 0.5
+      adaptationLevel: 0.5,
     };
     this.emotionProfiles.set(defaultProfile.userId, defaultProfile);
-    console.log("\u{1F464} Default emotion profile created");
+    console.log('\u{1F464} Default emotion profile created');
   }
   // Start emotion engine
   startEmotionEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.detectEmotions();
       this.processAdaptiveResponses();
       this.updateEmotionHistory();
@@ -23748,21 +24463,20 @@ var EmotionDetectionSystem = class {
   }
   // Initialize sensors
   initializeSensors() {
-    console.log("\u{1F4E1} Initializing emotion sensors...");
+    console.log('\u{1F4E1} Initializing emotion sensors...');
   }
   // Detect emotions
   detectEmotions() {
     if (Math.random() < 0.02) {
-      const emotions = ["joy", "stress", "focus", "calm", "sadness", "anger"];
+      const emotions = ['joy', 'stress', 'focus', 'calm', 'sadness', 'anger'];
       const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
-      this.detectEmotion("user_default", randomEmotion, Math.random() * 0.5 + 0.5);
+      this.detectEmotion('user_default', randomEmotion, Math.random() * 0.5 + 0.5);
     }
   }
   // Detect emotion
   detectEmotion(userId, emotion, intensity) {
     const profile = this.emotionProfiles.get(userId);
-    if (!profile)
-      return;
+    if (!profile) return;
     const emotionData = {
       id: `emotion_${Date.now()}_${Math.random()}`,
       userId,
@@ -23772,19 +24486,19 @@ var EmotionDetectionSystem = class {
       intensity,
       triggers: this.identifyTriggers(emotion),
       context: {
-        activity: "working",
-        location: "office",
-        participants: ["user"],
-        environment: "virtual_office",
-        timeOfDay: (/* @__PURE__ */ new Date()).getHours() < 12 ? "morning" : "afternoon"
+        activity: 'working',
+        location: 'office',
+        participants: ['user'],
+        environment: 'virtual_office',
+        timeOfDay: /* @__PURE__ */ new Date().getHours() < 12 ? 'morning' : 'afternoon',
       },
       physiological: {
         heartRate: 60 + Math.random() * 40,
         voiceTone: Math.random(),
         facialExpression: Math.random(),
         bodyLanguage: Math.random(),
-        responseTime: Math.random() * 1e3 + 200
-      }
+        responseTime: Math.random() * 1e3 + 200,
+      },
     };
     this.currentEmotions.set(userId, emotionData);
     this.emotionHistory.push(emotionData);
@@ -23799,23 +24513,23 @@ var EmotionDetectionSystem = class {
   identifyTriggers(emotion) {
     const triggers = [];
     switch (emotion) {
-      case "joy":
-        triggers.push("achievement", "social_interaction", "success");
+      case 'joy':
+        triggers.push('achievement', 'social_interaction', 'success');
         break;
-      case "stress":
-        triggers.push("deadline", "complexity", "interruption");
+      case 'stress':
+        triggers.push('deadline', 'complexity', 'interruption');
         break;
-      case "focus":
-        triggers.push("task_engagement", "goal_orientation");
+      case 'focus':
+        triggers.push('task_engagement', 'goal_orientation');
         break;
-      case "sadness":
-        triggers.push("setback", "isolation", "failure");
+      case 'sadness':
+        triggers.push('setback', 'isolation', 'failure');
         break;
-      case "anger":
-        triggers.push("frustration", "obstacle", "conflict");
+      case 'anger':
+        triggers.push('frustration', 'obstacle', 'conflict');
         break;
-      case "calm":
-        triggers.push("meditation", "completion", "satisfaction");
+      case 'calm':
+        triggers.push('meditation', 'completion', 'satisfaction');
         break;
     }
     return triggers;
@@ -23823,20 +24537,20 @@ var EmotionDetectionSystem = class {
   // Adapt profile
   adaptProfile(userId, emotionData) {
     const profile = this.emotionProfiles.get(userId);
-    if (!profile)
-      return;
+    if (!profile) return;
     const currentBaseline = profile.baselineEmotions.get(emotionData.primaryEmotion) || 0;
     const newBaseline = currentBaseline * 0.9 + emotionData.intensity * 0.1;
     profile.baselineEmotions.set(emotionData.primaryEmotion, newBaseline);
     profile.adaptationLevel = Math.min(1, profile.adaptationLevel + 0.01);
-    console.log(`\u{1F4C8} Adapted profile for ${userId} (adaptation level: ${profile.adaptationLevel.toFixed(2)})`);
+    console.log(
+      `\u{1F4C8} Adapted profile for ${userId} (adaptation level: ${profile.adaptationLevel.toFixed(2)})`
+    );
   }
   // Process adaptive responses
   processAdaptiveResponses() {
     this.currentEmotions.forEach((emotionData, userId) => {
       const profile = this.emotionProfiles.get(userId);
-      if (!profile)
-        return;
+      if (!profile) return;
       if (emotionData.intensity > this.adaptationThreshold) {
         this.triggerAdaptiveResponse(emotionData, profile);
       }
@@ -23847,16 +24561,16 @@ var EmotionDetectionSystem = class {
     const responseKey = `${emotionData.primaryEmotion}_${this.getBestResponseType(emotionData, profile)}`;
     const response = this.adaptiveResponses.get(responseKey);
     if (response) {
-      const conditionsMet = response.conditions.every((condition) => {
+      const conditionsMet = response.conditions.every(condition => {
         const value = emotionData.intensity;
         switch (condition.operator) {
-          case "greater":
+          case 'greater':
             return value > condition.value;
-          case "less":
+          case 'less':
             return value < condition.value;
-          case "equals":
+          case 'equals':
             return value === condition.value;
-          case "between":
+          case 'between':
             return value >= condition.value[0] && value <= condition.value[1];
           default:
             return false;
@@ -23870,69 +24584,75 @@ var EmotionDetectionSystem = class {
   // Get best response type
   getBestResponseType(emotionData, profile) {
     switch (profile.preferences.interactionStyle) {
-      case "direct":
-        return "environmental";
-      case "subtle":
-        return "audio";
-      case "minimal":
-        return "visual";
+      case 'direct':
+        return 'environmental';
+      case 'subtle':
+        return 'audio';
+      case 'minimal':
+        return 'visual';
       default:
-        return "environmental";
+        return 'environmental';
     }
   }
   // Execute adaptive response
   executeAdaptiveResponse(response, emotionData) {
     console.log(`\u{1F3AD} Executing adaptive response: ${response.action.type}`);
     switch (response.action.type) {
-      case "adjust_lighting":
+      case 'adjust_lighting':
         this.adjustLighting(response.action.parameters);
         break;
-      case "play_music":
+      case 'play_music':
         this.playMusic(response.action.parameters);
         break;
-      case "breathing_guide":
+      case 'breathing_guide':
         this.showBreathingGuide(response.action.parameters);
         break;
-      case "minimize_distractions":
+      case 'minimize_distractions':
         this.minimizeDistractions(response.action.parameters);
         break;
-      case "adjust_temperature":
+      case 'adjust_temperature':
         this.adjustTemperature(response.action.parameters);
         break;
     }
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Adjust lighting
   adjustLighting(parameters) {
-    const brightness = parameters.get("brightness");
-    const color = parameters.get("color");
-    const duration = parameters.get("duration");
-    console.log(`\u{1F4A1} Adjusting lighting: brightness=${brightness}, color=${color}, duration=${duration}ms`);
+    const brightness = parameters.get('brightness');
+    const color = parameters.get('color');
+    const duration = parameters.get('duration');
+    console.log(
+      `\u{1F4A1} Adjusting lighting: brightness=${brightness}, color=${color}, duration=${duration}ms`
+    );
   }
   // Play music
   playMusic(parameters) {
-    const genre = parameters.get("genre");
-    const volume = parameters.get("volume");
-    const duration = parameters.get("duration");
-    console.log(`\u{1F3B5} Playing music: genre=${genre}, volume=${volume}, duration=${duration}ms`);
+    const genre = parameters.get('genre');
+    const volume = parameters.get('volume');
+    const duration = parameters.get('duration');
+    console.log(
+      `\u{1F3B5} Playing music: genre=${genre}, volume=${volume}, duration=${duration}ms`
+    );
   }
   // Show breathing guide
   showBreathingGuide(parameters) {
-    const rate = parameters.get("rate");
-    const duration = parameters.get("duration");
+    const rate = parameters.get('rate');
+    const duration = parameters.get('duration');
     console.log(`\u{1FAC1} Showing breathing guide: rate=${rate}, duration=${duration}ms`);
   }
   // Minimize distractions
   minimizeDistractions(parameters) {
-    const uiOpacity = parameters.get("ui_opacity");
-    const notifications = parameters.get("notifications");
-    const duration = parameters.get("duration");
-    console.log(`\u{1F507} Minimizing distractions: ui_opacity=${uiOpacity}, notifications=${notifications}`);
+    const uiOpacity = parameters.get('ui_opacity');
+    const notifications = parameters.get('notifications');
+    const duration = parameters.get('duration');
+    console.log(
+      `\u{1F507} Minimizing distractions: ui_opacity=${uiOpacity}, notifications=${notifications}`
+    );
   }
   // Adjust temperature
   adjustTemperature(parameters) {
-    const temperature = parameters.get("temperature");
-    const duration = parameters.get("duration");
+    const temperature = parameters.get('temperature');
+    const duration = parameters.get('duration');
     console.log(`\u{1F321}\uFE0F Adjusting temperature: ${temperature}\xB0C for ${duration}ms`);
   }
   // Update emotion history
@@ -23947,34 +24667,34 @@ var EmotionDetectionSystem = class {
   // Handle response control
   handleResponseControl(controlId) {
     switch (controlId) {
-      case "enable_adaptation":
+      case 'enable_adaptation':
         this.adaptationThreshold = 0.5;
-        console.log("\u{1F504} Emotion adaptation enabled");
+        console.log('\u{1F504} Emotion adaptation enabled');
         break;
-      case "disable_adaptation":
+      case 'disable_adaptation':
         this.adaptationThreshold = 1;
-        console.log("\u23F8\uFE0F Emotion adaptation disabled");
+        console.log('\u23F8\uFE0F Emotion adaptation disabled');
         break;
-      case "calibrate":
+      case 'calibrate':
         this.calibrateSystem();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Simulate emotion
   simulateEmotion(emotion) {
     const intensity = Math.random() * 0.5 + 0.5;
-    this.detectEmotion("user_default", emotion, intensity);
-    soundSystem.playInteractionSound("click");
+    this.detectEmotion('user_default', emotion, intensity);
+    soundSystem.playInteractionSound('click');
   }
   // Calibrate system
   calibrateSystem() {
-    console.log("\u2699\uFE0F Calibrating emotion detection system...");
+    console.log('\u2699\uFE0F Calibrating emotion detection system...');
     this.adaptationThreshold = 0.8;
     this.currentEmotions.clear();
     this.detectionSensitivity = 0.7;
-    console.log("\u2705 Calibration complete");
-    soundSystem.playInteractionSound("powerup");
+    console.log('\u2705 Calibration complete');
+    soundSystem.playInteractionSound('powerup');
   }
   // Get current emotion
   getCurrentEmotion(userId) {
@@ -24003,31 +24723,31 @@ var EmotionDetectionSystem = class {
     const profile = {
       userId,
       baselineEmotions: /* @__PURE__ */ new Map([
-        ["joy", 0.3],
-        ["stress", 0.2],
-        ["focus", 0.4],
-        ["sadness", 0.1],
-        ["anger", 0.1],
-        ["calm", 0.5],
-        ["neutral", 0.6]
+        ['joy', 0.3],
+        ['stress', 0.2],
+        ['focus', 0.4],
+        ['sadness', 0.1],
+        ['anger', 0.1],
+        ['calm', 0.5],
+        ['neutral', 0.6],
       ]),
       personalityTraits: [
-        { trait: "openness", value: 0.5 },
-        { trait: "conscientiousness", value: 0.5 },
-        { trait: "extraversion", value: 0.5 },
-        { trait: "agreeableness", value: 0.5 },
-        { trait: "neuroticism", value: 0.5 }
+        { trait: 'openness', value: 0.5 },
+        { trait: 'conscientiousness', value: 0.5 },
+        { trait: 'extraversion', value: 0.5 },
+        { trait: 'agreeableness', value: 0.5 },
+        { trait: 'neuroticism', value: 0.5 },
       ],
       preferences: {
-        lightingPreference: "adaptive",
-        musicPreference: ["ambient"],
+        lightingPreference: 'adaptive',
+        musicPreference: ['ambient'],
         colorPreference: [Color32.create(0.5, 0.5, 0.5)],
-        interactionStyle: "subtle",
-        privacyLevel: "medium",
-        ...preferences
+        interactionStyle: 'subtle',
+        privacyLevel: 'medium',
+        ...preferences,
       },
       history: [],
-      adaptationLevel: 0.3
+      adaptationLevel: 0.3,
     };
     this.emotionProfiles.set(userId, profile);
     console.log(`\u{1F464} Created emotion profile for ${userId}`);
@@ -24059,16 +24779,12 @@ var AnimationSystem = class {
     this.animations.forEach((data, entity) => {
       data.time += deltaTime;
       const transform = Transform2.getMutable(entity);
-      if (data.type === "pulse") {
+      if (data.type === 'pulse') {
         const scale = 1 + Math.sin(data.time * data.speed) * data.intensity;
         transform.scale = Vector32.create(scale, scale, scale);
-      } else if (data.type === "rotate") {
-        transform.rotation = Quaternion2.fromEulerDegrees(
-          0,
-          data.time * data.speed * 10,
-          0
-        );
-      } else if (data.type === "float") {
+      } else if (data.type === 'rotate') {
+        transform.rotation = Quaternion2.fromEulerDegrees(0, data.time * data.speed * 10, 0);
+      } else if (data.type === 'float') {
         transform.position.y = data.baseY + Math.sin(data.time * data.speed) * data.intensity;
       }
     });
@@ -24082,7 +24798,7 @@ function createEnhancedArchitecture() {
     roughness: 0.1,
     metallic: 0.9,
     emissiveColor: Color42.create(0, 0.2, 0.4, 0.5),
-    emissiveIntensity: 2
+    emissiveIntensity: 2,
   });
   const quantumGlass = engine.addEntity();
   Material3.setPbrMaterial(quantumGlass, {
@@ -24091,12 +24807,12 @@ function createEnhancedArchitecture() {
     metallic: 0.2,
     alphaTest: 0.05,
     emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.3),
-    emissiveIntensity: 1
+    emissiveIntensity: 1,
   });
   const floor = engine.addEntity();
   Transform2.create(floor, {
     position: Vector32.create(8, 0.01, 8),
-    scale: Vector32.create(16, 0.1, 16)
+    scale: Vector32.create(16, 0.1, 16),
   });
   MeshRenderer3.setBox(floor);
   Material3.setPbrMaterial(floor, {
@@ -24104,12 +24820,12 @@ function createEnhancedArchitecture() {
     roughness: 0.1,
     metallic: 0.8,
     emissiveColor: Color42.create(0, 0.3, 0.6, 0.4),
-    emissiveIntensity: 3
+    emissiveIntensity: 3,
   });
   const ceiling = engine.addEntity();
   Transform2.create(ceiling, {
     position: Vector32.create(8, 6, 8),
-    scale: Vector32.create(16, 0.1, 16)
+    scale: Vector32.create(16, 0.1, 16),
   });
   MeshRenderer3.setBox(ceiling);
   Material3.setPbrMaterial(ceiling, {
@@ -24117,12 +24833,12 @@ function createEnhancedArchitecture() {
     roughness: 0.2,
     metallic: 0.7,
     emissiveColor: Color42.create(0.4, 0.2, 0.8, 0.3),
-    emissiveIntensity: 2
+    emissiveIntensity: 2,
   });
   const backWall = engine.addEntity();
   Transform2.create(backWall, {
     position: Vector32.create(8, 3, 15.9),
-    scale: Vector32.create(16, 6, 0.2)
+    scale: Vector32.create(16, 6, 0.2),
   });
   MeshRenderer3.setBox(backWall);
   Material3.setPbrMaterial(backWall, {
@@ -24130,12 +24846,12 @@ function createEnhancedArchitecture() {
     roughness: 0.3,
     metallic: 0.6,
     emissiveColor: Color42.create(0.3, 0.1, 0.5, 0.2),
-    emissiveIntensity: 1
+    emissiveIntensity: 1,
   });
   const leftGlass = engine.addEntity();
   Transform2.create(leftGlass, {
     position: Vector32.create(0.1, 3, 8),
-    scale: Vector32.create(0.2, 6, 16)
+    scale: Vector32.create(0.2, 6, 16),
   });
   MeshRenderer3.setBox(leftGlass);
   Material3.setPbrMaterial(leftGlass, {
@@ -24143,12 +24859,12 @@ function createEnhancedArchitecture() {
     roughness: 0,
     metallic: 0.3,
     emissiveColor: Color42.create(0.3, 0.5, 1, 0.4),
-    emissiveIntensity: 2
+    emissiveIntensity: 2,
   });
   const rightGlass = engine.addEntity();
   Transform2.create(rightGlass, {
     position: Vector32.create(15.9, 3, 8),
-    scale: Vector32.create(0.2, 6, 16)
+    scale: Vector32.create(0.2, 6, 16),
   });
   MeshRenderer3.setBox(rightGlass);
   Material3.setPbrMaterial(rightGlass, {
@@ -24156,12 +24872,12 @@ function createEnhancedArchitecture() {
     roughness: 0,
     metallic: 0.3,
     emissiveColor: Color42.create(0.3, 0.5, 1, 0.4),
-    emissiveIntensity: 2
+    emissiveIntensity: 2,
   });
   const pillar1 = engine.addEntity();
   Transform2.create(pillar1, {
     position: Vector32.create(2, 3, 0.5),
-    scale: Vector32.create(1.2, 6, 1.2)
+    scale: Vector32.create(1.2, 6, 1.2),
   });
   MeshRenderer3.setBox(pillar1);
   Material3.setPbrMaterial(pillar1, {
@@ -24169,12 +24885,12 @@ function createEnhancedArchitecture() {
     roughness: 0.2,
     metallic: 0.8,
     emissiveColor: Color42.create(0.2, 0.3, 0.7, 0.5),
-    emissiveIntensity: 3
+    emissiveIntensity: 3,
   });
   const pillar2 = engine.addEntity();
   Transform2.create(pillar2, {
     position: Vector32.create(14, 3, 0.5),
-    scale: Vector32.create(1.2, 6, 1.2)
+    scale: Vector32.create(1.2, 6, 1.2),
   });
   MeshRenderer3.setBox(pillar2);
   Material3.setPbrMaterial(pillar2, {
@@ -24182,35 +24898,35 @@ function createEnhancedArchitecture() {
     roughness: 0.2,
     metallic: 0.8,
     emissiveColor: Color42.create(0.2, 0.3, 0.7, 0.5),
-    emissiveIntensity: 3
+    emissiveIntensity: 3,
   });
   const neonStrip1 = engine.addEntity();
   Transform2.create(neonStrip1, {
     position: Vector32.create(8, 5.9, 8),
-    scale: Vector32.create(14, 0.05, 14)
+    scale: Vector32.create(14, 0.05, 14),
   });
   MeshRenderer3.setBox(neonStrip1);
   Material3.setPbrMaterial(neonStrip1, {
     albedoColor: Color42.create(0, 0, 0, 1),
     emissiveColor: Color42.create(0.8, 0.3, 1, 1),
-    emissiveIntensity: 8
+    emissiveIntensity: 8,
   });
   const neonStrip2 = engine.addEntity();
   Transform2.create(neonStrip2, {
     position: Vector32.create(8, 5.7, 8),
-    scale: Vector32.create(13, 0.05, 13)
+    scale: Vector32.create(13, 0.05, 13),
   });
   MeshRenderer3.setBox(neonStrip2);
   Material3.setPbrMaterial(neonStrip2, {
     albedoColor: Color42.create(0, 0, 0, 1),
     emissiveColor: Color42.create(0.3, 0.8, 1, 1),
-    emissiveIntensity: 6
+    emissiveIntensity: 6,
   });
   for (let i = 0; i < 5; i++) {
     const dataStream = engine.addEntity();
     Transform2.create(dataStream, {
       position: Vector32.create(3 + i * 2.5, 3, 2),
-      scale: Vector32.create(0.1, 4, 0.1)
+      scale: Vector32.create(0.1, 4, 0.1),
     });
     MeshRenderer3.setBox(dataStream);
     Material3.setPbrMaterial(dataStream, {
@@ -24218,13 +24934,13 @@ function createEnhancedArchitecture() {
       roughness: 0,
       metallic: 0.5,
       emissiveColor: Color42.create(0, 1, 0.8, 1),
-      emissiveIntensity: 4
+      emissiveIntensity: 4,
     });
   }
   const quantumPlatform = engine.addEntity();
   Transform2.create(quantumPlatform, {
     position: Vector32.create(8, 0.5, 8),
-    scale: Vector32.create(4, 0.2, 4)
+    scale: Vector32.create(4, 0.2, 4),
   });
   MeshRenderer3.setBox(quantumPlatform);
   Material3.setPbrMaterial(quantumPlatform, {
@@ -24232,13 +24948,13 @@ function createEnhancedArchitecture() {
     roughness: 0.1,
     metallic: 0.9,
     emissiveColor: Color42.create(0.6, 0.3, 1, 0.6),
-    emissiveIntensity: 5
+    emissiveIntensity: 5,
   });
   for (let i = 0; i < 3; i++) {
     const displayPanel = engine.addEntity();
     Transform2.create(displayPanel, {
       position: Vector32.create(4 + i * 4, 4, 12),
-      scale: Vector32.create(2, 1.5, 0.1)
+      scale: Vector32.create(2, 1.5, 0.1),
     });
     MeshRenderer3.setBox(displayPanel);
     Material3.setPbrMaterial(displayPanel, {
@@ -24246,13 +24962,13 @@ function createEnhancedArchitecture() {
       roughness: 0.1,
       metallic: 0.8,
       emissiveColor: Color42.create(0.2, 0.8, 1, 0.4),
-      emissiveIntensity: 3
+      emissiveIntensity: 3,
     });
   }
   const energyCore = engine.addEntity();
   Transform2.create(energyCore, {
     position: Vector32.create(8, 2, 8),
-    scale: Vector32.create(1, 1, 1)
+    scale: Vector32.create(1, 1, 1),
   });
   MeshRenderer3.setBox(energyCore);
   Material3.setPbrMaterial(energyCore, {
@@ -24260,22 +24976,22 @@ function createEnhancedArchitecture() {
     roughness: 0,
     metallic: 1,
     emissiveColor: Color42.create(1, 0.8, 0.2, 1),
-    emissiveIntensity: 10
+    emissiveIntensity: 10,
   });
   createArtGallery();
   animationSystem.addAnimation(energyCore, {
-    type: "float",
+    type: 'float',
     speed: 0.8,
     intensity: 0.3,
     time: 0,
-    baseY: 2
+    baseY: 2,
   });
   engine.addSystem(() => {
     animationSystem.update(0.016);
   });
 }
 function createArtGallery() {
-  console.log("\u{1F3A8} Creating Art Gallery...");
+  console.log('\u{1F3A8} Creating Art Gallery...');
 }
 
 // src/enhanced-interactables.ts
@@ -24285,7 +25001,7 @@ function createEnhancedInteractables() {
   const mainDashboard = engine.addEntity();
   Transform2.create(mainDashboard, {
     position: Vector32.create(8, 3, 15.5),
-    scale: Vector32.create(8, 4, 0.2)
+    scale: Vector32.create(8, 4, 0.2),
   });
   MeshRenderer3.setBox(mainDashboard);
   Material3.setPbrMaterial(mainDashboard, {
@@ -24293,50 +25009,50 @@ function createEnhancedInteractables() {
     roughness: 0.1,
     metallic: 0.9,
     emissiveColor: Color42.create(0.1, 0.3, 0.6, 0.3),
-    emissiveIntensity: 2
+    emissiveIntensity: 2,
   });
   const titleText = engine.addEntity();
   Transform2.create(titleText, {
     parent: mainDashboard,
     position: Vector32.create(0, 0.4, -0.8),
-    scale: Vector32.create(0.125, 0.25, 1)
+    scale: Vector32.create(0.125, 0.25, 1),
   });
   TextShape3.create(titleText, {
-    text: "\u26A1 AIGESTION NEXUS HQ \u26A1",
+    text: '\u26A1 AIGESTION NEXUS HQ \u26A1',
     textColor: Color42.create(0.8, 0.5, 1, 1),
     fontSize: 6,
     textAlign: 3,
     outlineWidth: 0.1,
-    outlineColor: Color42.create(0.5, 0.2, 0.8, 1)
+    outlineColor: Color42.create(0.5, 0.2, 0.8, 1),
   });
   systemStatusEntity = engine.addEntity();
   Transform2.create(systemStatusEntity, {
     parent: mainDashboard,
     position: Vector32.create(0, -0.1, -0.8),
-    scale: Vector32.create(0.125, 0.25, 1)
+    scale: Vector32.create(0.125, 0.25, 1),
   });
   TextShape3.create(systemStatusEntity, {
-    text: "\u{1F525} SYSTEMS ONLINE \u{1F525}\n\u26A1 Quantum Core: ACTIVE\n\u{1F310} Network: OPTIMAL\n\u{1F6E1}\uFE0F Security: ENHANCED",
+    text: '\u{1F525} SYSTEMS ONLINE \u{1F525}\n\u26A1 Quantum Core: ACTIVE\n\u{1F310} Network: OPTIMAL\n\u{1F6E1}\uFE0F Security: ENHANCED',
     textColor: Color42.create(0, 1, 0.8, 1),
     fontSize: 3,
-    textAlign: 3
+    textAlign: 3,
   });
   alertSystemEntity = engine.addEntity();
   Transform2.create(alertSystemEntity, {
     parent: mainDashboard,
     position: Vector32.create(0, -0.5, -0.8),
-    scale: Vector32.create(0.125, 0.25, 1)
+    scale: Vector32.create(0.125, 0.25, 1),
   });
   TextShape3.create(alertSystemEntity, {
-    text: "\u{1F4E1} Real-time Monitoring Active...",
+    text: '\u{1F4E1} Real-time Monitoring Active...',
     textColor: Color42.create(1, 1, 0, 1),
     fontSize: 2.5,
-    textAlign: 3
+    textAlign: 3,
   });
   const quantumPanel = engine.addEntity();
   Transform2.create(quantumPanel, {
     position: Vector32.create(2, 1.5, 10),
-    scale: Vector32.create(2, 2, 0.3)
+    scale: Vector32.create(2, 2, 0.3),
   });
   MeshRenderer3.setBox(quantumPanel);
   Material3.setPbrMaterial(quantumPanel, {
@@ -24344,24 +25060,24 @@ function createEnhancedInteractables() {
     roughness: 0.2,
     metallic: 0.8,
     emissiveColor: Color42.create(0.6, 0.3, 1, 0.5),
-    emissiveIntensity: 3
+    emissiveIntensity: 3,
   });
   const quantumLabel = engine.addEntity();
   Transform2.create(quantumLabel, {
     parent: quantumPanel,
     position: Vector32.create(0, 0.3, -0.6),
-    scale: Vector32.create(0.5, 0.5, 1)
+    scale: Vector32.create(0.5, 0.5, 1),
   });
   TextShape3.create(quantumLabel, {
-    text: "QUANTUM\nCORE",
+    text: 'QUANTUM\nCORE',
     textColor: Color42.create(0.8, 0.5, 1, 1),
     fontSize: 4,
-    textAlign: 3
+    textAlign: 3,
   });
   const networkPanel = engine.addEntity();
   Transform2.create(networkPanel, {
     position: Vector32.create(14, 1.5, 10),
-    scale: Vector32.create(2, 2, 0.3)
+    scale: Vector32.create(2, 2, 0.3),
   });
   MeshRenderer3.setBox(networkPanel);
   Material3.setPbrMaterial(networkPanel, {
@@ -24369,24 +25085,24 @@ function createEnhancedInteractables() {
     roughness: 0.2,
     metallic: 0.8,
     emissiveColor: Color42.create(0.2, 0.6, 1, 0.5),
-    emissiveIntensity: 3
+    emissiveIntensity: 3,
   });
   const networkLabel = engine.addEntity();
   Transform2.create(networkLabel, {
     parent: networkPanel,
     position: Vector32.create(0, 0.3, -0.6),
-    scale: Vector32.create(0.5, 0.5, 1)
+    scale: Vector32.create(0.5, 0.5, 1),
   });
   TextShape3.create(networkLabel, {
-    text: "NETWORK\nHUB",
+    text: 'NETWORK\nHUB',
     textColor: Color42.create(0.5, 0.8, 1, 1),
     fontSize: 4,
-    textAlign: 3
+    textAlign: 3,
   });
   const masterControl = engine.addEntity();
   Transform2.create(masterControl, {
     position: Vector32.create(8, 2, 8),
-    scale: Vector32.create(1.5, 1.5, 1.5)
+    scale: Vector32.create(1.5, 1.5, 1.5),
   });
   MeshRenderer3.setBox(masterControl);
   Material3.setPbrMaterial(masterControl, {
@@ -24394,46 +25110,46 @@ function createEnhancedInteractables() {
     roughness: 0.1,
     metallic: 0.9,
     emissiveColor: Color42.create(1, 0.8, 0.2, 1),
-    emissiveIntensity: 8
+    emissiveIntensity: 8,
   });
   pointerEventsSystem.onPointerDown(
     {
       entity: masterControl,
-      opts: { button: InputAction.IA_POINTER, hoverText: "\u{1F3AE} MASTER CONTROL SYSTEM" }
+      opts: { button: InputAction.IA_POINTER, hoverText: '\u{1F3AE} MASTER CONTROL SYSTEM' },
     },
     () => {
-      console.log("\u{1F3AE} Master Control Activated - Quantum Systems Online");
-      soundSystem.playInteractionSound("powerup");
-      updateSystemStatus("QUANTUM_MODE", true);
+      console.log('\u{1F3AE} Master Control Activated - Quantum Systems Online');
+      soundSystem.playInteractionSound('powerup');
+      updateSystemStatus('QUANTUM_MODE', true);
     }
   );
   pointerEventsSystem.onPointerDown(
     {
       entity: quantumPanel,
-      opts: { button: InputAction.IA_POINTER, hoverText: "\u26A1 Activate Quantum Core" }
+      opts: { button: InputAction.IA_POINTER, hoverText: '\u26A1 Activate Quantum Core' },
     },
     () => {
-      console.log("\u26A1 Quantum Core Activation Sequence");
-      soundSystem.playInteractionSound("powerup");
-      updateSystemStatus("QUANTUM_CORE", true);
+      console.log('\u26A1 Quantum Core Activation Sequence');
+      soundSystem.playInteractionSound('powerup');
+      updateSystemStatus('QUANTUM_CORE', true);
     }
   );
   pointerEventsSystem.onPointerDown(
     {
       entity: networkPanel,
-      opts: { button: InputAction.IA_POINTER, hoverText: "\u{1F310} Network Diagnostics" }
+      opts: { button: InputAction.IA_POINTER, hoverText: '\u{1F310} Network Diagnostics' },
     },
     () => {
-      console.log("\u{1F310} Network Diagnostics Running");
-      soundSystem.playInteractionSound("click");
-      updateSystemStatus("NETWORK_SCAN", true);
+      console.log('\u{1F310} Network Diagnostics Running');
+      soundSystem.playInteractionSound('click');
+      updateSystemStatus('NETWORK_SCAN', true);
     }
   );
   for (let i = 0; i < 5; i++) {
     const dataOrb = engine.addEntity();
     Transform2.create(dataOrb, {
       position: Vector32.create(3 + i * 1.5, 3.5, 5 + i * 0.5),
-      scale: Vector32.create(0.5, 0.5, 0.5)
+      scale: Vector32.create(0.5, 0.5, 0.5),
     });
     MeshRenderer3.setBox(dataOrb);
     Material3.setPbrMaterial(dataOrb, {
@@ -24441,12 +25157,12 @@ function createEnhancedInteractables() {
       roughness: 0,
       metallic: 0.8,
       emissiveColor: Color42.create(0, 1, 0.8, 1),
-      emissiveIntensity: 5
+      emissiveIntensity: 5,
     });
     pointerEventsSystem.onPointerDown(
       {
         entity: dataOrb,
-        opts: { button: InputAction.IA_POINTER, hoverText: `\u{1F4CA} Data Node ${i + 1}` }
+        opts: { button: InputAction.IA_POINTER, hoverText: `\u{1F4CA} Data Node ${i + 1}` },
       },
       () => {
         console.log(`\u{1F4CA} Accessing Data Node ${i + 1}`);
@@ -24457,7 +25173,7 @@ function createEnhancedInteractables() {
   const securityTerminal = engine.addEntity();
   Transform2.create(securityTerminal, {
     position: Vector32.create(8, 1, 2),
-    scale: Vector32.create(3, 2, 0.5)
+    scale: Vector32.create(3, 2, 0.5),
   });
   MeshRenderer3.setBox(securityTerminal);
   Material3.setPbrMaterial(securityTerminal, {
@@ -24465,35 +25181,38 @@ function createEnhancedInteractables() {
     roughness: 0.3,
     metallic: 0.7,
     emissiveColor: Color42.create(0.2, 0.4, 0.6, 0.4),
-    emissiveIntensity: 2
+    emissiveIntensity: 2,
   });
   const securityLabel = engine.addEntity();
   Transform2.create(securityLabel, {
     parent: securityTerminal,
     position: Vector32.create(0, 0.2, -0.6),
-    scale: Vector32.create(0.33, 0.5, 1)
+    scale: Vector32.create(0.33, 0.5, 1),
   });
   TextShape3.create(securityLabel, {
-    text: "\u{1F6E1}\uFE0F SECURITY\nTERMINAL",
+    text: '\u{1F6E1}\uFE0F SECURITY\nTERMINAL',
     textColor: Color42.create(0.5, 0.8, 1, 1),
     fontSize: 3,
-    textAlign: 3
+    textAlign: 3,
   });
   pointerEventsSystem.onPointerDown(
     {
       entity: securityTerminal,
-      opts: { button: InputAction.IA_POINTER, hoverText: "\u{1F6E1}\uFE0F Access Security Systems" }
+      opts: {
+        button: InputAction.IA_POINTER,
+        hoverText: '\u{1F6E1}\uFE0F Access Security Systems',
+      },
     },
     () => {
-      console.log("\u{1F6E1}\uFE0F Security Systems Accessed");
-      updateSystemStatus("SECURITY_BREACH", false);
+      console.log('\u{1F6E1}\uFE0F Security Systems Accessed');
+      updateSystemStatus('SECURITY_BREACH', false);
     }
   );
   for (let i = 0; i < 3; i++) {
     const energyCrystal = engine.addEntity();
     Transform2.create(energyCrystal, {
       position: Vector32.create(4 + i * 4, 1, 14),
-      scale: Vector32.create(0.8, 1.2, 0.8)
+      scale: Vector32.create(0.8, 1.2, 0.8),
     });
     MeshRenderer3.setBox(energyCrystal);
     Material3.setPbrMaterial(energyCrystal, {
@@ -24501,12 +25220,12 @@ function createEnhancedInteractables() {
       roughness: 0.1,
       metallic: 0.9,
       emissiveColor: Color42.create(0.8, 0.2, 1, 1),
-      emissiveIntensity: 6
+      emissiveIntensity: 6,
     });
     pointerEventsSystem.onPointerDown(
       {
         entity: energyCrystal,
-        opts: { button: InputAction.IA_POINTER, hoverText: `\u{1F48E} Energy Crystal ${i + 1}` }
+        opts: { button: InputAction.IA_POINTER, hoverText: `\u{1F48E} Energy Crystal ${i + 1}` },
       },
       () => {
         console.log(`\u{1F48E} Energy Crystal ${i + 1} Activated`);
@@ -24516,9 +25235,8 @@ function createEnhancedInteractables() {
   }
 }
 function updateSystemStatus(system, active) {
-  if (!systemStatusEntity)
-    return;
-  const status = active ? "\u2705 ACTIVE" : "\u26A0\uFE0F INACTIVE";
+  if (!systemStatusEntity) return;
+  const status = active ? '\u2705 ACTIVE' : '\u26A0\uFE0F INACTIVE';
   const color = active ? Color42.create(0, 1, 0.5, 1) : Color42.create(1, 0.5, 0, 1);
   TextShape3.getMutable(systemStatusEntity).text = `\u{1F525} SYSTEMS ONLINE \u{1F525}
 \u26A1 Quantum Core: ${status}
@@ -24527,18 +25245,17 @@ function updateSystemStatus(system, active) {
 \u{1F4E1} Last Action: ${system}`;
   TextShape3.getMutable(systemStatusEntity).textColor = color;
 }
-function updateAlert(message, alertType = "INFO") {
-  if (!alertSystemEntity)
-    return;
+function updateAlert(message, alertType = 'INFO') {
+  if (!alertSystemEntity) return;
   const colors = {
     INFO: Color42.create(0, 1, 1, 1),
     WARNING: Color42.create(1, 1, 0, 1),
-    CRITICAL: Color42.create(1, 0, 0, 1)
+    CRITICAL: Color42.create(1, 0, 0, 1),
   };
   const icons = {
-    INFO: "\u{1F4E1}",
-    WARNING: "\u26A0\uFE0F",
-    CRITICAL: "\u{1F6A8}"
+    INFO: '\u{1F4E1}',
+    WARNING: '\u26A0\uFE0F',
+    CRITICAL: '\u{1F6A8}',
   };
   TextShape3.getMutable(alertSystemEntity).text = `${icons[alertType]} ${message}`;
   TextShape3.getMutable(alertSystemEntity).textColor = colors[alertType];
@@ -24546,50 +25263,52 @@ function updateAlert(message, alertType = "INFO") {
 
 // src/enhanced-network.ts
 async function fetchEnhancedSystemStats() {
-  return new Promise((resolve2) => {
+  return new Promise(resolve2 => {
     setTimeout2(() => {
       const cpuLoad = Math.floor(Math.random() * 40) + 30;
-      const systemHealth = cpuLoad > 60 ? "CRITICAL" : cpuLoad > 45 ? "WARNING" : "OPTIMAL";
+      const systemHealth = cpuLoad > 60 ? 'CRITICAL' : cpuLoad > 45 ? 'WARNING' : 'OPTIMAL';
       resolve2({
         activeUsers: Math.floor(Math.random() * 800) + 1500,
         systemHealth,
         cpuLoad,
-        quantumCoreStatus: Math.random() > 0.95 ? "OVERLOAD" : Math.random() > 0.1 ? "ONLINE" : "OFFLINE",
+        quantumCoreStatus:
+          Math.random() > 0.95 ? 'OVERLOAD' : Math.random() > 0.1 ? 'ONLINE' : 'OFFLINE',
         networkLatency: Math.floor(Math.random() * 50) + 10,
-        securityLevel: Math.random() > 0.98 ? "COMPROMISED" : Math.random() > 0.3 ? "ENHANCED" : "STANDARD",
+        securityLevel:
+          Math.random() > 0.98 ? 'COMPROMISED' : Math.random() > 0.3 ? 'ENHANCED' : 'STANDARD',
         energyReserves: Math.floor(Math.random() * 60) + 40,
         dataStreamActive: Math.random() > 0.2,
-        lastUpdate: (/* @__PURE__ */ new Date()).toLocaleTimeString()
+        lastUpdate: /* @__PURE__ */ new Date().toLocaleTimeString(),
       });
     }, 300);
   });
 }
 async function fetchAlertMessages() {
-  return new Promise((resolve2) => {
+  return new Promise(resolve2 => {
     setTimeout2(() => {
       const alerts = [
         {
-          id: "ALERT_001",
-          message: "Quantum core synchronization complete",
-          type: "INFO",
-          timestamp: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
-          priority: 1
+          id: 'ALERT_001',
+          message: 'Quantum core synchronization complete',
+          type: 'INFO',
+          timestamp: /* @__PURE__ */ new Date().toLocaleTimeString(),
+          priority: 1,
         },
         {
-          id: "ALERT_002",
-          message: "Network latency optimization in progress",
-          type: "INFO",
-          timestamp: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
-          priority: 2
-        }
+          id: 'ALERT_002',
+          message: 'Network latency optimization in progress',
+          type: 'INFO',
+          timestamp: /* @__PURE__ */ new Date().toLocaleTimeString(),
+          priority: 2,
+        },
       ];
       if (Math.random() > 0.8) {
         alerts.push({
-          id: "ALERT_003",
-          message: "Unusual activity detected in security perimeter",
-          type: "WARNING",
-          timestamp: (/* @__PURE__ */ new Date()).toLocaleTimeString(),
-          priority: 5
+          id: 'ALERT_003',
+          message: 'Unusual activity detected in security perimeter',
+          type: 'WARNING',
+          timestamp: /* @__PURE__ */ new Date().toLocaleTimeString(),
+          priority: 5,
         });
       }
       resolve2(alerts);
@@ -24597,21 +25316,19 @@ async function fetchAlertMessages() {
   });
 }
 async function runSystemDiagnostics() {
-  return new Promise((resolve2) => {
+  return new Promise(resolve2 => {
     setTimeout2(() => {
       const components = {
-        quantumCore: Math.random() > 0.9 ? "FAIL" : Math.random() > 0.3 ? "OK" : "WARNING",
-        network: Math.random() > 0.95 ? "FAIL" : Math.random() > 0.2 ? "OK" : "WARNING",
-        security: Math.random() > 0.98 ? "FAIL" : Math.random() > 0.1 ? "OK" : "WARNING",
-        energy: Math.random() > 0.85 ? "FAIL" : Math.random() > 0.4 ? "OK" : "WARNING"
+        quantumCore: Math.random() > 0.9 ? 'FAIL' : Math.random() > 0.3 ? 'OK' : 'WARNING',
+        network: Math.random() > 0.95 ? 'FAIL' : Math.random() > 0.2 ? 'OK' : 'WARNING',
+        security: Math.random() > 0.98 ? 'FAIL' : Math.random() > 0.1 ? 'OK' : 'WARNING',
+        energy: Math.random() > 0.85 ? 'FAIL' : Math.random() > 0.4 ? 'OK' : 'WARNING',
       };
-      const failCount = Object.values(components).filter((status) => status === "FAIL").length;
-      const warningCount = Object.values(components).filter((status) => status === "WARNING").length;
-      let overall = "HEALTHY";
-      if (failCount > 0)
-        overall = "CRITICAL";
-      else if (warningCount > 1)
-        overall = "WARNING";
+      const failCount = Object.values(components).filter(status => status === 'FAIL').length;
+      const warningCount = Object.values(components).filter(status => status === 'WARNING').length;
+      let overall = 'HEALTHY';
+      if (failCount > 0) overall = 'CRITICAL';
+      else if (warningCount > 1) overall = 'WARNING';
       resolve2({ overall, components });
     }, 1200);
   });
@@ -24630,36 +25347,36 @@ var GestureRecognitionSystem = class {
       isActive: false,
       leftHand: null,
       rightHand: null,
-      lastUpdate: Date.now()
+      lastUpdate: Date.now(),
     };
   }
   // Initialize gesture recognition system
   initialize() {
-    console.log("\u{1F44B} Gesture Recognition System Initializing...");
+    console.log('\u{1F44B} Gesture Recognition System Initializing...');
     this.setupGestureActions();
     this.createGestureUI();
     this.startHandTracking();
     this.startGestureRecognition();
     this.isInitialized = true;
-    console.log("\u{1F44B} Gesture Recognition System Ready!");
+    console.log('\u{1F44B} Gesture Recognition System Ready!');
   }
   // Setup gesture actions
   setupGestureActions() {
-    this.addGestureAction("swipe_left", "navigate", { direction: "left" }, true);
-    this.addGestureAction("swipe_right", "navigate", { direction: "right" }, true);
-    this.addGestureAction("swipe_up", "navigate", { direction: "up" }, true);
-    this.addGestureAction("swipe_down", "navigate", { direction: "down" }, true);
-    this.addGestureAction("push", "push_object", { force: 1 }, true);
-    this.addGestureAction("pull", "pull_object", { force: 1 }, true);
-    this.addGestureAction("point", "select_target", { mode: "single" }, true);
-    this.addGestureAction("pinch", "zoom", { scale: 1 }, true);
-    this.addGestureAction("spread", "zoom", { scale: 2 }, true);
-    this.addGestureAction("wave", "toggle_menu", {}, true);
-    this.addGestureAction("thumbs_up", "confirm", {}, true);
-    this.addGestureAction("thumbs_down", "cancel", {}, true);
-    this.addGestureAction("circle", "rotate", { angle: 360 }, true);
-    this.addGestureAction("double_swipe", "switch_scene", {}, true);
-    this.addGestureAction("hold", "open_settings", {}, true);
+    this.addGestureAction('swipe_left', 'navigate', { direction: 'left' }, true);
+    this.addGestureAction('swipe_right', 'navigate', { direction: 'right' }, true);
+    this.addGestureAction('swipe_up', 'navigate', { direction: 'up' }, true);
+    this.addGestureAction('swipe_down', 'navigate', { direction: 'down' }, true);
+    this.addGestureAction('push', 'push_object', { force: 1 }, true);
+    this.addGestureAction('pull', 'pull_object', { force: 1 }, true);
+    this.addGestureAction('point', 'select_target', { mode: 'single' }, true);
+    this.addGestureAction('pinch', 'zoom', { scale: 1 }, true);
+    this.addGestureAction('spread', 'zoom', { scale: 2 }, true);
+    this.addGestureAction('wave', 'toggle_menu', {}, true);
+    this.addGestureAction('thumbs_up', 'confirm', {}, true);
+    this.addGestureAction('thumbs_down', 'cancel', {}, true);
+    this.addGestureAction('circle', 'rotate', { angle: 360 }, true);
+    this.addGestureAction('double_swipe', 'switch_scene', {}, true);
+    this.addGestureAction('hold', 'open_settings', {}, true);
   }
   // Add gesture action
   addGestureAction(gestureType, action, parameters, enabled) {
@@ -24667,7 +25384,7 @@ var GestureRecognitionSystem = class {
       gestureType,
       action,
       parameters,
-      enabled
+      enabled,
     };
     this.gestureActions.set(`${gestureType}_${action}`, gestureAction);
   }
@@ -24676,61 +25393,61 @@ var GestureRecognitionSystem = class {
     this.gestureUI = engine.addEntity();
     Transform2.create(this.gestureUI, {
       position: Vector32.create(8, 5, 8),
-      scale: Vector32.create(3, 1, 0.1)
+      scale: Vector32.create(3, 1, 0.1),
     });
     MeshRenderer3.setBox(this.gestureUI);
     Material3.setPbrMaterial(this.gestureUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.gestureUI,
       position: Vector32.create(0, 0.3, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F44B} GESTURE CONTROL ACTIVE",
+      text: '\u{1F44B} GESTURE CONTROL ACTIVE',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createGestureIndicators();
   }
   // Create gesture indicators
   createGestureIndicators() {
     const indicatorPositions = [
-      { x: -1, y: -0.2, gesture: "\u{1F446}" },
-      { x: -0.5, y: -0.2, gesture: "\u{1F91A}" },
-      { x: 0, y: -0.2, gesture: "\u{1F44C}" },
-      { x: 0.5, y: -0.2, gesture: "\u{1F44B}" },
-      { x: 1, y: -0.2, gesture: "\u{1F44D}" }
+      { x: -1, y: -0.2, gesture: '\u{1F446}' },
+      { x: -0.5, y: -0.2, gesture: '\u{1F91A}' },
+      { x: 0, y: -0.2, gesture: '\u{1F44C}' },
+      { x: 0.5, y: -0.2, gesture: '\u{1F44B}' },
+      { x: 1, y: -0.2, gesture: '\u{1F44D}' },
     ];
-    indicatorPositions.forEach((pos) => {
+    indicatorPositions.forEach(pos => {
       const indicator = engine.addEntity();
       Transform2.create(indicator, {
         parent: this.gestureUI,
         position: Vector32.create(pos.x, pos.y, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(indicator);
       Material3.setPbrMaterial(indicator, {
         albedoColor: Color42.create(0.2, 0.8, 0.2, 1),
         emissiveColor: Color42.create(0.2, 0.8, 0.2, 0.5),
-        emissiveIntensity: 1
+        emissiveIntensity: 1,
       });
       const gestureText = engine.addEntity();
       Transform2.create(gestureText, {
         parent: indicator,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(gestureText, {
         text: pos.gesture,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
     });
   }
@@ -24738,8 +25455,7 @@ var GestureRecognitionSystem = class {
   startHandTracking() {
     this.handTracking.isActive = true;
     engine.addSystem(() => {
-      if (!this.isInitialized || !this.handTracking.isActive)
-        return;
+      if (!this.isInitialized || !this.handTracking.isActive) return;
       this.updateHandTracking();
     });
   }
@@ -24758,7 +25474,7 @@ var GestureRecognitionSystem = class {
         Math.sin(time * 0.4) * 10
       ),
       fingers: this.simulateFingers(time),
-      confidence: 0.9
+      confidence: 0.9,
     };
     this.handTracking.leftHand = {
       position: Vector32.create(
@@ -24772,7 +25488,7 @@ var GestureRecognitionSystem = class {
         Math.cos(time * 0.2) * 8
       ),
       fingers: this.simulateFingers(time + Math.PI),
-      confidence: 0.85
+      confidence: 0.85,
     };
     this.handTracking.lastUpdate = Date.now();
   }
@@ -24780,50 +25496,48 @@ var GestureRecognitionSystem = class {
   simulateFingers(time) {
     return [
       {
-        id: "thumb",
+        id: 'thumb',
         position: Vector32.create(0.1, 0.1, 0.05),
         isExtended: Math.sin(time * 2) > 0,
-        confidence: 0.9
+        confidence: 0.9,
       },
       {
-        id: "index",
+        id: 'index',
         position: Vector32.create(0.15, 0.15, 0.1),
         isExtended: Math.sin(time * 3) > -0.5,
-        confidence: 0.95
+        confidence: 0.95,
       },
       {
-        id: "middle",
+        id: 'middle',
         position: Vector32.create(0.1, 0.2, 0.08),
         isExtended: Math.sin(time * 2.5) > -0.3,
-        confidence: 0.9
+        confidence: 0.9,
       },
       {
-        id: "ring",
+        id: 'ring',
         position: Vector32.create(0.05, 0.18, 0.06),
         isExtended: Math.sin(time * 2.2) > -0.2,
-        confidence: 0.85
+        confidence: 0.85,
       },
       {
-        id: "pinky",
+        id: 'pinky',
         position: Vector32.create(0, 0.15, 0.04),
         isExtended: Math.sin(time * 2.8) > -0.1,
-        confidence: 0.8
-      }
+        confidence: 0.8,
+      },
     ];
   }
   // Start gesture recognition
   startGestureRecognition() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.detectGestures();
       this.updateGestureTrails();
     });
   }
   // Detect gestures
   detectGestures() {
-    if (!this.handTracking.rightHand)
-      return;
+    if (!this.handTracking.rightHand) return;
     const hand = this.handTracking.rightHand;
     const currentTime = Date.now();
     this.detectSwipeGesture(hand, currentTime);
@@ -24835,19 +25549,19 @@ var GestureRecognitionSystem = class {
   }
   // Detect swipe gesture
   detectSwipeGesture(hand, currentTime) {
-    const gestureId = "swipe";
+    const gestureId = 'swipe';
     let existingGesture = this.gestures.get(gestureId);
     if (!existingGesture) {
       existingGesture = {
         id: gestureId,
-        name: "Swipe",
-        type: "swipe",
+        name: 'Swipe',
+        type: 'swipe',
         confidence: 0,
         isActive: false,
         startPoint: hand.position,
         endPoint: hand.position,
         duration: 0,
-        path: [hand.position]
+        path: [hand.position],
       };
       this.gestures.set(gestureId, existingGesture);
     }
@@ -24864,19 +25578,19 @@ var GestureRecognitionSystem = class {
   }
   // Detect circle gesture
   detectCircleGesture(hand, currentTime) {
-    const gestureId = "circle";
+    const gestureId = 'circle';
     let existingGesture = this.gestures.get(gestureId);
     if (!existingGesture) {
       existingGesture = {
         id: gestureId,
-        name: "Circle",
-        type: "circle",
+        name: 'Circle',
+        type: 'circle',
         confidence: 0,
         isActive: false,
         startPoint: hand.position,
         endPoint: hand.position,
         duration: 0,
-        path: [hand.position]
+        path: [hand.position],
       };
       this.gestures.set(gestureId, existingGesture);
     }
@@ -24894,24 +25608,24 @@ var GestureRecognitionSystem = class {
   }
   // Detect pinch gesture
   detectPinchGesture(hand, currentTime) {
-    const thumbExtended = hand.fingers.find((f) => f.id === "thumb")?.isExtended;
-    const indexExtended = hand.fingers.find((f) => f.id === "index")?.isExtended;
+    const thumbExtended = hand.fingers.find(f => f.id === 'thumb')?.isExtended;
+    const indexExtended = hand.fingers.find(f => f.id === 'index')?.isExtended;
     if (thumbExtended && indexExtended) {
-      const thumb = hand.fingers.find((f) => f.id === "thumb");
-      const index = hand.fingers.find((f) => f.id === "index");
+      const thumb = hand.fingers.find(f => f.id === 'thumb');
+      const index = hand.fingers.find(f => f.id === 'index');
       if (thumb && index) {
         const distance = Vector32.distance(thumb.position, index.position);
         if (distance < 0.05) {
           const gesture = {
-            id: "pinch",
-            name: "Pinch",
-            type: "pinch",
+            id: 'pinch',
+            name: 'Pinch',
+            type: 'pinch',
             confidence: 0.9,
             isActive: true,
             startPoint: hand.position,
             endPoint: hand.position,
             duration: 0,
-            path: [hand.position]
+            path: [hand.position],
           };
           this.onGestureDetected(gesture);
         }
@@ -24920,19 +25634,19 @@ var GestureRecognitionSystem = class {
   }
   // Detect wave gesture
   detectWaveGesture(hand, currentTime) {
-    const gestureId = "wave";
+    const gestureId = 'wave';
     let existingGesture = this.gestures.get(gestureId);
     if (!existingGesture) {
       existingGesture = {
         id: gestureId,
-        name: "Wave",
-        type: "wave",
+        name: 'Wave',
+        type: 'wave',
         confidence: 0,
         isActive: false,
         startPoint: hand.position,
         endPoint: hand.position,
         duration: 0,
-        path: [hand.position]
+        path: [hand.position],
       };
       this.gestures.set(gestureId, existingGesture);
     }
@@ -24950,46 +25664,45 @@ var GestureRecognitionSystem = class {
   }
   // Detect point gesture
   detectPointGesture(hand, currentTime) {
-    const indexExtended = hand.fingers.find((f) => f.id === "index")?.isExtended;
-    const otherFingersExtended = hand.fingers.filter((f) => f.id !== "index").some((f) => f.isExtended);
+    const indexExtended = hand.fingers.find(f => f.id === 'index')?.isExtended;
+    const otherFingersExtended = hand.fingers.filter(f => f.id !== 'index').some(f => f.isExtended);
     if (indexExtended && !otherFingersExtended) {
       const gesture = {
-        id: "point",
-        name: "Point",
-        type: "point",
+        id: 'point',
+        name: 'Point',
+        type: 'point',
         confidence: 0.85,
         isActive: true,
         startPoint: hand.position,
         endPoint: hand.position,
         duration: 0,
-        path: [hand.position]
+        path: [hand.position],
       };
       this.onGestureDetected(gesture);
     }
   }
   // Detect thumbs up/down gesture
   detectThumbsGesture(hand, currentTime) {
-    const thumbExtended = hand.fingers.find((f) => f.id === "thumb")?.isExtended;
-    const otherFingersExtended = hand.fingers.filter((f) => f.id !== "thumb").some((f) => f.isExtended);
+    const thumbExtended = hand.fingers.find(f => f.id === 'thumb')?.isExtended;
+    const otherFingersExtended = hand.fingers.filter(f => f.id !== 'thumb').some(f => f.isExtended);
     if (thumbExtended && !otherFingersExtended) {
       const gesture = {
-        id: "thumbs_up",
-        name: "Thumbs Up",
-        type: "thumbs_up",
+        id: 'thumbs_up',
+        name: 'Thumbs Up',
+        type: 'thumbs_up',
         confidence: 0.9,
         isActive: true,
         startPoint: hand.position,
         endPoint: hand.position,
         duration: 0,
-        path: [hand.position]
+        path: [hand.position],
       };
       this.onGestureDetected(gesture);
     }
   }
   // Check if path is circular
   isCircularPath(path) {
-    if (path.length < 10)
-      return false;
+    if (path.length < 10) return false;
     const center = Vector32.lerp(path[0], path[path.length - 1], 0.5);
     const radius = Vector32.distance(path[0], center);
     let isCircular = true;
@@ -25004,8 +25717,7 @@ var GestureRecognitionSystem = class {
   }
   // Check for waving motion
   isWavingMotion(path) {
-    if (path.length < 10)
-      return false;
+    if (path.length < 10) return false;
     let directionChanges = 0;
     let lastDirection = 0;
     for (let i = 1; i < path.length; i++) {
@@ -25019,7 +25731,9 @@ var GestureRecognitionSystem = class {
   }
   // Handle detected gesture
   onGestureDetected(gesture) {
-    console.log(`\u{1F44B} Gesture detected: ${gesture.name} (confidence: ${gesture.confidence.toFixed(2)})`);
+    console.log(
+      `\u{1F44B} Gesture detected: ${gesture.name} (confidence: ${gesture.confidence.toFixed(2)})`
+    );
     this.gestureHistory.push(gesture);
     if (this.gestureHistory.length > this.maxHistoryLength) {
       this.gestureHistory.shift();
@@ -25029,44 +25743,44 @@ var GestureRecognitionSystem = class {
         this.executeGestureAction(action);
       }
     });
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
     this.createGestureFeedback(gesture);
   }
   // Execute gesture action
   executeGestureAction(action) {
     console.log(`\u{1F3AF} Executing action: ${action.action} with parameters:`, action.parameters);
     switch (action.action) {
-      case "navigate":
+      case 'navigate':
         console.log(`\u{1F9ED} Navigating ${action.parameters.direction}`);
         break;
-      case "push_object":
+      case 'push_object':
         console.log(`\u{1F4AA} Pushing object with force: ${action.parameters.force}`);
         break;
-      case "pull_object":
+      case 'pull_object':
         console.log(`\u{1F3AF} Pulling object with force: ${action.parameters.force}`);
         break;
-      case "select_target":
+      case 'select_target':
         console.log(`\u{1F446} Selecting target in ${action.parameters.mode} mode`);
         break;
-      case "zoom":
+      case 'zoom':
         console.log(`\u{1F50D} Zooming to scale: ${action.parameters.scale}`);
         break;
-      case "toggle_menu":
+      case 'toggle_menu':
         console.log(`\u{1F4CB} Toggling menu`);
         break;
-      case "confirm":
+      case 'confirm':
         console.log(`\u2705 Confirming action`);
         break;
-      case "cancel":
+      case 'cancel':
         console.log(`\u274C Canceling action`);
         break;
-      case "rotate":
+      case 'rotate':
         console.log(`\u{1F504} Rotating by ${action.parameters.angle} degrees`);
         break;
-      case "switch_scene":
+      case 'switch_scene':
         console.log(`\u{1F3AC} Switching scene`);
         break;
-      case "open_settings":
+      case 'open_settings':
         console.log(`\u2699\uFE0F Opening settings`);
         break;
     }
@@ -25076,13 +25790,13 @@ var GestureRecognitionSystem = class {
     const feedback = engine.addEntity();
     Transform2.create(feedback, {
       position: gesture.endPoint,
-      scale: Vector32.create(0.2, 0.2, 0.2)
+      scale: Vector32.create(0.2, 0.2, 0.2),
     });
     MeshRenderer3.setSphere(feedback);
     Material3.setPbrMaterial(feedback, {
       albedoColor: Color42.create(0.2, 0.8, 1, 0.8),
       emissiveColor: Color42.create(0.2, 0.8, 1, 1),
-      emissiveIntensity: 3
+      emissiveIntensity: 3,
     });
     this.animateGestureFeedback(feedback);
   }
@@ -25096,7 +25810,7 @@ var GestureRecognitionSystem = class {
       const transform = Transform2.getMutable(feedback);
       transform.scale = Vector32.create(scale, scale, scale);
       const material = Material3.getMutable(feedback);
-      if (material && material.$case === "pbr") {
+      if (material && material.$case === 'pbr') {
         material.pbr.albedoColor = Color42.create(0.2, 0.8, 1, opacity);
       }
       if (opacity > 0) {
@@ -25109,10 +25823,9 @@ var GestureRecognitionSystem = class {
   }
   // Update gesture trails
   updateGestureTrails() {
-    if (!this.handTracking.rightHand)
-      return;
+    if (!this.handTracking.rightHand) return;
     const hand = this.handTracking.rightHand;
-    const trailId = "right_hand";
+    const trailId = 'right_hand';
     if (!this.gestureTrails.has(trailId)) {
       this.gestureTrails.set(trailId, []);
     }
@@ -25120,13 +25833,13 @@ var GestureRecognitionSystem = class {
     const trailPoint = engine.addEntity();
     Transform2.create(trailPoint, {
       position: hand.position,
-      scale: Vector32.create(0.05, 0.05, 0.05)
+      scale: Vector32.create(0.05, 0.05, 0.05),
     });
     MeshRenderer3.setSphere(trailPoint);
     Material3.setPbrMaterial(trailPoint, {
       albedoColor: Color42.create(0.5, 0.8, 1, 0.6),
       emissiveColor: Color42.create(0.5, 0.8, 1, 0.8),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     trail.push(trailPoint);
     if (trail.length > 20) {
@@ -25134,9 +25847,9 @@ var GestureRecognitionSystem = class {
       engine.removeEntity(oldPoint);
     }
     trail.forEach((point, index) => {
-      const opacity = index / trail.length * 0.6;
+      const opacity = (index / trail.length) * 0.6;
       const material = Material3.getMutable(point);
-      if (material && material.$case === "pbr") {
+      if (material && material.$case === 'pbr') {
         material.pbr.albedoColor = Color42.create(0.5, 0.8, 1, opacity);
       }
     });
@@ -25144,7 +25857,7 @@ var GestureRecognitionSystem = class {
   // Enable/disable gesture recognition
   setGestureRecognition(enabled) {
     this.handTracking.isActive = enabled;
-    console.log(`\u{1F44B} Gesture recognition ${enabled ? "enabled" : "disabled"}`);
+    console.log(`\u{1F44B} Gesture recognition ${enabled ? 'enabled' : 'disabled'}`);
   }
   // Get gesture history
   getGestureHistory() {
@@ -25160,13 +25873,13 @@ var GestureRecognitionSystem = class {
     const gestureAction = this.gestureActions.get(key);
     if (gestureAction) {
       gestureAction.enabled = enabled;
-      console.log(`\u{1F44B} Gesture action ${key} ${enabled ? "enabled" : "disabled"}`);
+      console.log(`\u{1F44B} Gesture action ${key} ${enabled ? 'enabled' : 'disabled'}`);
     }
   }
   // Cleanup system
   cleanup() {
-    this.gestureTrails.forEach((trail) => {
-      trail.forEach((point) => engine.removeEntity(point));
+    this.gestureTrails.forEach(trail => {
+      trail.forEach(point => engine.removeEntity(point));
     });
     this.gestureTrails.clear();
     this.gestures.clear();
@@ -25194,25 +25907,28 @@ var HapticFeedbackSystem = class {
   }
   // Initialize haptic feedback system
   initialize() {
-    console.log("\u{1F3AF} Haptic Feedback System Initializing...");
+    console.log('\u{1F3AF} Haptic Feedback System Initializing...');
     this.setupHapticDevices();
     this.createHapticPatterns();
     this.createHapticZones();
     this.createHapticUI();
     this.startHapticEngine();
     this.isInitialized = true;
-    console.log("\u{1F3AF} Haptic Feedback System Ready!");
+    console.log('\u{1F3AF} Haptic Feedback System Ready!');
   }
   // Initialize haptic engine
   initializeHapticEngine() {
     this.hapticEngine = {
       playPattern: (device, pattern, intensity) => {
         console.log(`\u{1F4F3} Playing pattern ${pattern.name} on ${device.name}`);
-        const effectiveIntensity = Math.min(intensity * device.intensity * this.globalIntensity, device.capabilities.maxIntensity);
+        const effectiveIntensity = Math.min(
+          intensity * device.intensity * this.globalIntensity,
+          device.capabilities.maxIntensity
+        );
         return {
           success: true,
           duration: pattern.duration,
-          intensity: effectiveIntensity
+          intensity: effectiveIntensity,
         };
       },
       stopPattern: (device, patternId) => {
@@ -25226,15 +25942,15 @@ var HapticFeedbackSystem = class {
       setIntensity: (device, intensity) => {
         device.intensity = Math.max(0, Math.min(1, intensity));
         return { success: true };
-      }
+      },
     };
   }
   // Setup haptic devices
   setupHapticDevices() {
     const vrController = {
-      id: "device_vr_controller",
-      name: "VR Controller",
-      type: "controller",
+      id: 'device_vr_controller',
+      name: 'VR Controller',
+      type: 'controller',
       isConnected: true,
       capabilities: {
         supportsVibration: true,
@@ -25243,15 +25959,15 @@ var HapticFeedbackSystem = class {
         supportsTexture: true,
         maxIntensity: 1,
         responseTime: 10,
-        channels: 2
+        channels: 2,
       },
       intensity: 0.8,
-      batteryLevel: 0.85
+      batteryLevel: 0.85,
     };
     const hapticGlove = {
-      id: "device_haptic_glove",
-      name: "Haptic Glove",
-      type: "glove",
+      id: 'device_haptic_glove',
+      name: 'Haptic Glove',
+      type: 'glove',
       isConnected: true,
       capabilities: {
         supportsVibration: true,
@@ -25260,15 +25976,15 @@ var HapticFeedbackSystem = class {
         supportsTexture: true,
         maxIntensity: 0.9,
         responseTime: 15,
-        channels: 5
+        channels: 5,
       },
       intensity: 0.7,
-      batteryLevel: 0.6
+      batteryLevel: 0.6,
     };
     const hapticVest = {
-      id: "device_haptic_vest",
-      name: "Haptic Vest",
-      type: "vest",
+      id: 'device_haptic_vest',
+      name: 'Haptic Vest',
+      type: 'vest',
       isConnected: false,
       capabilities: {
         supportsVibration: true,
@@ -25277,15 +25993,15 @@ var HapticFeedbackSystem = class {
         supportsTexture: false,
         maxIntensity: 1,
         responseTime: 25,
-        channels: 8
+        channels: 8,
       },
       intensity: 0.6,
-      batteryLevel: 0.4
+      batteryLevel: 0.4,
     };
     const hapticChair = {
-      id: "device_haptic_chair",
-      name: "Haptic Chair",
-      type: "chair",
+      id: 'device_haptic_chair',
+      name: 'Haptic Chair',
+      type: 'chair',
       isConnected: true,
       capabilities: {
         supportsVibration: true,
@@ -25294,15 +26010,15 @@ var HapticFeedbackSystem = class {
         supportsTexture: false,
         maxIntensity: 0.8,
         responseTime: 30,
-        channels: 4
+        channels: 4,
       },
       intensity: 0.5,
-      batteryLevel: 0.9
+      batteryLevel: 0.9,
     };
     const touchscreen = {
-      id: "device_touchscreen",
-      name: "Touchscreen",
-      type: "touchscreen",
+      id: 'device_touchscreen',
+      name: 'Touchscreen',
+      type: 'touchscreen',
       isConnected: true,
       capabilities: {
         supportsVibration: true,
@@ -25311,24 +26027,24 @@ var HapticFeedbackSystem = class {
         supportsTexture: true,
         maxIntensity: 0.7,
         responseTime: 5,
-        channels: 1
+        channels: 1,
       },
       intensity: 0.6,
-      batteryLevel: 1
+      batteryLevel: 1,
     };
     this.devices.set(vrController.id, vrController);
     this.devices.set(hapticGlove.id, hapticGlove);
     this.devices.set(hapticVest.id, hapticVest);
     this.devices.set(hapticChair.id, hapticChair);
     this.devices.set(touchscreen.id, touchscreen);
-    console.log("\u{1F4F1} Haptic devices configured");
+    console.log('\u{1F4F1} Haptic devices configured');
   }
   // Create haptic patterns
   createHapticPatterns() {
     const clickPattern = {
-      id: "pattern_click",
-      name: "Click",
-      type: "click",
+      id: 'pattern_click',
+      name: 'Click',
+      type: 'click',
       duration: 100,
       intensity: 0.6,
       waveforms: [
@@ -25337,18 +26053,18 @@ var HapticFeedbackSystem = class {
           frequency: 200,
           amplitude: 0.8,
           duration: 50,
-          waveform: "sine",
-          phase: 0
-        }
+          waveform: 'sine',
+          phase: 0,
+        },
       ],
       loops: false,
       fadeIn: 0,
-      fadeOut: 20
+      fadeOut: 20,
     };
     const impactPattern = {
-      id: "pattern_impact",
-      name: "Impact",
-      type: "impact",
+      id: 'pattern_impact',
+      name: 'Impact',
+      type: 'impact',
       duration: 200,
       intensity: 0.9,
       waveforms: [
@@ -25357,26 +26073,26 @@ var HapticFeedbackSystem = class {
           frequency: 100,
           amplitude: 1,
           duration: 100,
-          waveform: "square",
-          phase: 0
+          waveform: 'square',
+          phase: 0,
         },
         {
           channel: 1,
           frequency: 50,
           amplitude: 0.6,
           duration: 150,
-          waveform: "sine",
-          phase: 0
-        }
+          waveform: 'sine',
+          phase: 0,
+        },
       ],
       loops: false,
       fadeIn: 0,
-      fadeOut: 50
+      fadeOut: 50,
     };
     const pulsePattern = {
-      id: "pattern_pulse",
-      name: "Pulse",
-      type: "pulse",
+      id: 'pattern_pulse',
+      name: 'Pulse',
+      type: 'pulse',
       duration: 500,
       intensity: 0.7,
       waveforms: [
@@ -25385,18 +26101,18 @@ var HapticFeedbackSystem = class {
           frequency: 80,
           amplitude: 0.8,
           duration: 250,
-          waveform: "sine",
-          phase: 0
-        }
+          waveform: 'sine',
+          phase: 0,
+        },
       ],
       loops: true,
       fadeIn: 50,
-      fadeOut: 50
+      fadeOut: 50,
     };
     const texturePattern = {
-      id: "pattern_texture",
-      name: "Texture",
-      type: "texture",
+      id: 'pattern_texture',
+      name: 'Texture',
+      type: 'texture',
       duration: 1e3,
       intensity: 0.4,
       waveforms: [
@@ -25405,26 +26121,26 @@ var HapticFeedbackSystem = class {
           frequency: 150,
           amplitude: 0.5,
           duration: 100,
-          waveform: "noise",
-          phase: 0
+          waveform: 'noise',
+          phase: 0,
         },
         {
           channel: 1,
           frequency: 200,
           amplitude: 0.3,
           duration: 100,
-          waveform: "noise",
-          phase: Math.PI
-        }
+          waveform: 'noise',
+          phase: Math.PI,
+        },
       ],
       loops: true,
       fadeIn: 100,
-      fadeOut: 100
+      fadeOut: 100,
     };
     const ambientPattern = {
-      id: "pattern_ambient",
-      name: "Ambient",
-      type: "ambient",
+      id: 'pattern_ambient',
+      name: 'Ambient',
+      type: 'ambient',
       duration: 0,
       intensity: 0.2,
       waveforms: [
@@ -25433,89 +26149,89 @@ var HapticFeedbackSystem = class {
           frequency: 30,
           amplitude: 0.3,
           duration: 1e3,
-          waveform: "sine",
-          phase: 0
-        }
+          waveform: 'sine',
+          phase: 0,
+        },
       ],
       loops: true,
       fadeIn: 500,
-      fadeOut: 500
+      fadeOut: 500,
     };
     this.patterns.set(clickPattern.id, clickPattern);
     this.patterns.set(impactPattern.id, impactPattern);
     this.patterns.set(pulsePattern.id, pulsePattern);
     this.patterns.set(texturePattern.id, texturePattern);
     this.patterns.set(ambientPattern.id, ambientPattern);
-    console.log("\u{1F3B5} Haptic patterns created");
+    console.log('\u{1F3B5} Haptic patterns created');
   }
   // Create haptic zones
   createHapticZones() {
     const desktopZone = {
-      id: "zone_desktop",
-      name: "Desktop",
+      id: 'zone_desktop',
+      name: 'Desktop',
       position: Vector32.create(8, 1, 8),
       size: Vector32.create(3, 1, 3),
       sensitivity: 0.8,
-      devices: ["device_haptic_chair"],
+      devices: ['device_haptic_chair'],
       isActive: true,
       effects: [
         {
-          type: "vibration",
+          type: 'vibration',
           intensity: 0.3,
           duration: 200,
-          pattern: "pattern_ambient"
-        }
-      ]
+          pattern: 'pattern_ambient',
+        },
+      ],
     };
     const interactionZone = {
-      id: "zone_interaction",
-      name: "Interaction Area",
+      id: 'zone_interaction',
+      name: 'Interaction Area',
       position: Vector32.create(8, 2, 8),
       size: Vector32.create(2, 2, 2),
       sensitivity: 1,
-      devices: ["device_vr_controller", "device_haptic_glove"],
+      devices: ['device_vr_controller', 'device_haptic_glove'],
       isActive: true,
-      effects: []
+      effects: [],
     };
     const floorZone = {
-      id: "zone_floor",
-      name: "Floor",
+      id: 'zone_floor',
+      name: 'Floor',
       position: Vector32.create(8, 0, 8),
       size: Vector32.create(10, 0.1, 10),
       sensitivity: 0.5,
-      devices: ["device_haptic_vest"],
+      devices: ['device_haptic_vest'],
       isActive: false,
-      effects: []
+      effects: [],
     };
     this.zones.set(desktopZone.id, desktopZone);
     this.zones.set(interactionZone.id, interactionZone);
     this.zones.set(floorZone.id, floorZone);
-    console.log("\u{1F5FA}\uFE0F Haptic zones created");
+    console.log('\u{1F5FA}\uFE0F Haptic zones created');
   }
   // Create haptic UI
   createHapticUI() {
     this.hapticUI = engine.addEntity();
     Transform2.create(this.hapticUI, {
       position: Vector32.create(14, 3, 2),
-      scale: Vector32.create(3, 4, 0.1)
+      scale: Vector32.create(3, 4, 0.1),
     });
     MeshRenderer3.setBox(this.hapticUI);
     Material3.setPbrMaterial(this.hapticUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.hapticUI,
       position: Vector32.create(0, 1.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F3AF} HAPTIC FEEDBACK",
+      text: '\u{1F3AF} HAPTIC FEEDBACK',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createDeviceIndicators();
     this.createPatternControls();
@@ -25526,35 +26242,39 @@ var HapticFeedbackSystem = class {
   createDeviceIndicators() {
     const devices = Array.from(this.devices.values());
     let xOffset = -1.2;
-    devices.forEach((device) => {
+    devices.forEach(device => {
       const indicator = engine.addEntity();
       Transform2.create(indicator, {
         parent: this.hapticUI,
         position: Vector32.create(xOffset, 1.2, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(indicator);
       Material3.setPbrMaterial(indicator, {
-        albedoColor: device.isConnected ? Color42.create(0.2, 0.8, 0.2, 1) : Color42.create(0.8, 0.2, 0.2, 1),
-        emissiveColor: device.isConnected ? Color42.create(0.2, 0.8, 0.2, 0.5) : Color42.create(0.8, 0.2, 0.2, 0.5),
-        emissiveIntensity: device.isConnected ? 2 : 0.5
+        albedoColor: device.isConnected
+          ? Color42.create(0.2, 0.8, 0.2, 1)
+          : Color42.create(0.8, 0.2, 0.2, 1),
+        emissiveColor: device.isConnected
+          ? Color42.create(0.2, 0.8, 0.2, 0.5)
+          : Color42.create(0.8, 0.2, 0.2, 0.5),
+        emissiveIntensity: device.isConnected ? 2 : 0.5,
       });
       const deviceText = engine.addEntity();
       Transform2.create(deviceText, {
         parent: indicator,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(deviceText, {
         text: this.getDeviceIcon(device.type),
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: indicator,
-          opts: { button: InputAction.IA_POINTER, hoverText: device.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: device.name },
         },
         () => this.toggleDevice(device.id)
       );
@@ -25563,37 +26283,37 @@ var HapticFeedbackSystem = class {
   }
   // Create pattern controls
   createPatternControls() {
-    const patterns = ["click", "impact", "pulse", "texture", "ambient"];
+    const patterns = ['click', 'impact', 'pulse', 'texture', 'ambient'];
     let xOffset = -1;
-    patterns.forEach((pattern) => {
+    patterns.forEach(pattern => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.hapticUI,
         position: Vector32.create(xOffset, 0.6, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: this.getPatternIcon(pattern),
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: `Play ${pattern}` }
+          opts: { button: InputAction.IA_POINTER, hoverText: `Play ${pattern}` },
         },
         () => this.playPattern(pattern)
       );
@@ -25606,30 +26326,30 @@ var HapticFeedbackSystem = class {
     Transform2.create(intensitySlider, {
       parent: this.hapticUI,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(2, 0.2, 0.1)
+      scale: Vector32.create(2, 0.2, 0.1),
     });
     MeshRenderer3.setBox(intensitySlider);
     Material3.setPbrMaterial(intensitySlider, {
       albedoColor: Color42.create(0.2, 0.2, 0.2, 0.8),
       emissiveColor: Color42.create(0.2, 0.2, 0.2, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const intensityText = engine.addEntity();
     Transform2.create(intensityText, {
       parent: intensitySlider,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(intensityText, {
       text: `\u{1F50A} Intensity: ${(this.globalIntensity * 100).toFixed(0)}%`,
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
     pointerEventsSystem.onPointerDown(
       {
         entity: intensitySlider,
-        opts: { button: InputAction.IA_POINTER, hoverText: "Adjust Intensity" }
+        opts: { button: InputAction.IA_POINTER, hoverText: 'Adjust Intensity' },
       },
       () => this.adjustIntensity()
     );
@@ -25638,35 +26358,39 @@ var HapticFeedbackSystem = class {
   createZoneControls() {
     const zones = Array.from(this.zones.values());
     let xOffset = -0.8;
-    zones.forEach((zone) => {
+    zones.forEach(zone => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.hapticUI,
         position: Vector32.create(xOffset, -0.4, 0.1),
-        scale: Vector32.create(0.2, 0.2, 0.1)
+        scale: Vector32.create(0.2, 0.2, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
-        albedoColor: zone.isActive ? Color42.create(0.2, 0.8, 0.2, 1) : Color42.create(0.8, 0.2, 0.2, 1),
-        emissiveColor: zone.isActive ? Color42.create(0.2, 0.8, 0.2, 0.5) : Color42.create(0.8, 0.2, 0.2, 0.5),
-        emissiveIntensity: zone.isActive ? 2 : 0.5
+        albedoColor: zone.isActive
+          ? Color42.create(0.2, 0.8, 0.2, 1)
+          : Color42.create(0.8, 0.2, 0.2, 1),
+        emissiveColor: zone.isActive
+          ? Color42.create(0.2, 0.8, 0.2, 0.5)
+          : Color42.create(0.8, 0.2, 0.2, 0.5),
+        emissiveIntensity: zone.isActive ? 2 : 0.5,
       });
       const zoneText = engine.addEntity();
       Transform2.create(zoneText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(zoneText, {
         text: zone.name,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 1.2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: `Toggle ${zone.name}` }
+          opts: { button: InputAction.IA_POINTER, hoverText: `Toggle ${zone.name}` },
         },
         () => this.toggleZone(zone.id)
       );
@@ -25676,42 +26400,41 @@ var HapticFeedbackSystem = class {
   // Get device icon
   getDeviceIcon(type) {
     switch (type) {
-      case "controller":
-        return "\u{1F3AE}";
-      case "glove":
-        return "\u{1F9E4}";
-      case "vest":
-        return "\u{1F9BA}";
-      case "chair":
-        return "\u{1FA91}";
-      case "touchscreen":
-        return "\u{1F4F1}";
+      case 'controller':
+        return '\u{1F3AE}';
+      case 'glove':
+        return '\u{1F9E4}';
+      case 'vest':
+        return '\u{1F9BA}';
+      case 'chair':
+        return '\u{1FA91}';
+      case 'touchscreen':
+        return '\u{1F4F1}';
       default:
-        return "\u{1F4F1}";
+        return '\u{1F4F1}';
     }
   }
   // Get pattern icon
   getPatternIcon(pattern) {
     switch (pattern) {
-      case "click":
-        return "\u{1F446}";
-      case "impact":
-        return "\u{1F4A5}";
-      case "pulse":
-        return "\u{1F497}";
-      case "texture":
-        return "\u{1F30A}";
-      case "ambient":
-        return "\u{1F30A}";
+      case 'click':
+        return '\u{1F446}';
+      case 'impact':
+        return '\u{1F4A5}';
+      case 'pulse':
+        return '\u{1F497}';
+      case 'texture':
+        return '\u{1F30A}';
+      case 'ambient':
+        return '\u{1F30A}';
       default:
-        return "\u{1F4F3}";
+        return '\u{1F4F3}';
     }
   }
   // Start haptic engine
   startHapticEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.processHapticEvents();
       this.updateDeviceStatus();
       this.updateZoneEffects();
@@ -25720,14 +26443,11 @@ var HapticFeedbackSystem = class {
   // Process haptic events
   processHapticEvents() {
     this.activeEvents.forEach((event, id) => {
-      if (event.processed)
-        return;
+      if (event.processed) return;
       const zone = this.findZone(event.position);
-      if (!zone || !zone.isActive)
-        return;
+      if (!zone || !zone.isActive) return;
       const devices = this.findDevicesForZone(zone);
-      if (devices.length === 0)
-        return;
+      if (devices.length === 0) return;
       this.applyHapticFeedback(event, zone, devices);
       event.processed = true;
     });
@@ -25750,13 +26470,13 @@ var HapticFeedbackSystem = class {
   // Find devices for zone
   findDevicesForZone(zone) {
     return Array.from(this.devices.values()).filter(
-      (device) => device.isConnected && zone.devices.includes(device.id)
+      device => device.isConnected && zone.devices.includes(device.id)
     );
   }
   // Apply haptic feedback
   applyHapticFeedback(event, zone, devices) {
     const intensity = event.intensity * zone.sensitivity * this.globalIntensity;
-    devices.forEach((device) => {
+    devices.forEach(device => {
       if (event.pattern) {
         const pattern = this.patterns.get(event.pattern);
         if (pattern) {
@@ -25773,17 +26493,17 @@ var HapticFeedbackSystem = class {
   // Get default pattern
   getDefaultPattern(eventType) {
     switch (eventType) {
-      case "touch":
-      case "interaction":
-        return this.patterns.get("pattern_click");
-      case "collision":
-        return this.patterns.get("pattern_impact");
-      case "feedback":
-        return this.patterns.get("pattern_pulse");
-      case "alert":
-        return this.patterns.get("pattern_pulse");
-      case "ambient":
-        return this.patterns.get("pattern_ambient");
+      case 'touch':
+      case 'interaction':
+        return this.patterns.get('pattern_click');
+      case 'collision':
+        return this.patterns.get('pattern_impact');
+      case 'feedback':
+        return this.patterns.get('pattern_pulse');
+      case 'alert':
+        return this.patterns.get('pattern_pulse');
+      case 'ambient':
+        return this.patterns.get('pattern_ambient');
       default:
         return null;
     }
@@ -25802,12 +26522,12 @@ var HapticFeedbackSystem = class {
   }
   // Update zone effects
   updateZoneEffects() {
-    this.zones.forEach((zone) => {
+    this.zones.forEach(zone => {
       if (zone.isActive && zone.effects.length > 0) {
-        zone.effects.forEach((effect) => {
-          if (effect.type === "vibration" && effect.pattern) {
+        zone.effects.forEach(effect => {
+          if (effect.type === 'vibration' && effect.pattern) {
             const devices = this.findDevicesForZone(zone);
-            devices.forEach((device) => {
+            devices.forEach(device => {
               const pattern = this.patterns.get(effect.pattern);
               if (pattern) {
                 this.hapticEngine.playPattern(device, pattern, effect.intensity);
@@ -25820,8 +26540,7 @@ var HapticFeedbackSystem = class {
   }
   // Trigger haptic event
   triggerHapticEvent(event) {
-    if (!this.isSystemEnabled)
-      return;
+    if (!this.isSystemEnabled) return;
     event.id = `event_${Date.now()}_${Math.random()}`;
     event.timestamp = Date.now();
     event.processed = false;
@@ -25831,20 +26550,19 @@ var HapticFeedbackSystem = class {
   // Play pattern
   playPattern(patternId, intensity) {
     const pattern = this.patterns.get(patternId);
-    if (!pattern)
-      return;
+    if (!pattern) return;
     const effectiveIntensity = intensity || pattern.intensity;
-    this.devices.forEach((device) => {
+    this.devices.forEach(device => {
       if (device.isConnected) {
         this.hapticEngine.playPattern(device, pattern, effectiveIntensity);
       }
     });
     console.log(`\u{1F3B5} Playing pattern: ${pattern.name}`);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Stop pattern
   stopPattern(patternId) {
-    this.devices.forEach((device) => {
+    this.devices.forEach(device => {
       if (device.isConnected) {
         this.hapticEngine.stopPattern(device, patternId);
       }
@@ -25854,20 +26572,22 @@ var HapticFeedbackSystem = class {
   // Toggle device
   toggleDevice(deviceId) {
     const device = this.devices.get(deviceId);
-    if (!device)
-      return;
+    if (!device) return;
     device.isConnected = !device.isConnected;
-    console.log(`${device.isConnected ? "\u{1F517}" : "\u{1F50C}"} Device ${device.name} ${device.isConnected ? "connected" : "disconnected"}`);
-    soundSystem.playInteractionSound("click");
+    console.log(
+      `${device.isConnected ? '\u{1F517}' : '\u{1F50C}'} Device ${device.name} ${device.isConnected ? 'connected' : 'disconnected'}`
+    );
+    soundSystem.playInteractionSound('click');
   }
   // Toggle zone
   toggleZone(zoneId) {
     const zone = this.zones.get(zoneId);
-    if (!zone)
-      return;
+    if (!zone) return;
     zone.isActive = !zone.isActive;
-    console.log(`${zone.isActive ? "\u2705" : "\u274C"} Zone ${zone.name} ${zone.isActive ? "activated" : "deactivated"}`);
-    soundSystem.playInteractionSound("click");
+    console.log(
+      `${zone.isActive ? '\u2705' : '\u274C'} Zone ${zone.name} ${zone.isActive ? 'activated' : 'deactivated'}`
+    );
+    soundSystem.playInteractionSound('click');
   }
   // Adjust intensity
   adjustIntensity() {
@@ -25876,7 +26596,7 @@ var HapticFeedbackSystem = class {
     const nextIndex = (currentIndex + 1) % levels.length;
     this.globalIntensity = levels[nextIndex];
     console.log(`\u{1F50A} Global intensity set to: ${(this.globalIntensity * 100).toFixed(0)}%`);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Set global intensity
   setGlobalIntensity(intensity) {
@@ -25886,11 +26606,11 @@ var HapticFeedbackSystem = class {
   // Enable/disable system
   setSystemEnabled(enabled) {
     this.isSystemEnabled = enabled;
-    console.log(`\u{1F3AF} Haptic system ${enabled ? "enabled" : "disabled"}`);
+    console.log(`\u{1F3AF} Haptic system ${enabled ? 'enabled' : 'disabled'}`);
     if (!enabled) {
-      this.devices.forEach((device) => {
+      this.devices.forEach(device => {
         if (device.isConnected) {
-          this.patterns.forEach((pattern) => {
+          this.patterns.forEach(pattern => {
             this.hapticEngine.stopPattern(device, pattern.id);
           });
         }
@@ -25899,7 +26619,7 @@ var HapticFeedbackSystem = class {
   }
   // Get connected devices
   getConnectedDevices() {
-    return Array.from(this.devices.values()).filter((device) => device.isConnected);
+    return Array.from(this.devices.values()).filter(device => device.isConnected);
   }
   // Get all devices
   getAllDevices() {
@@ -25907,7 +26627,7 @@ var HapticFeedbackSystem = class {
   }
   // Get active zones
   getActiveZones() {
-    return Array.from(this.zones.values()).filter((zone) => zone.isActive);
+    return Array.from(this.zones.values()).filter(zone => zone.isActive);
   }
   // Get available patterns
   getAvailablePatterns() {
@@ -25917,7 +26637,7 @@ var HapticFeedbackSystem = class {
   createCustomPattern(pattern) {
     const newPattern = {
       ...pattern,
-      id: `pattern_custom_${Date.now()}_${Math.random()}`
+      id: `pattern_custom_${Date.now()}_${Math.random()}`,
     };
     this.patterns.set(newPattern.id, newPattern);
     console.log(`\u{1F3B5} Created custom pattern: ${newPattern.name}`);
@@ -25927,7 +26647,7 @@ var HapticFeedbackSystem = class {
   createCustomZone(zone) {
     const newZone = {
       ...zone,
-      id: `zone_custom_${Date.now()}_${Math.random()}`
+      id: `zone_custom_${Date.now()}_${Math.random()}`,
     };
     this.zones.set(newZone.id, newZone);
     console.log(`\u{1F5FA}\uFE0F Created custom zone: ${newZone.name}`);
@@ -25943,7 +26663,7 @@ var HapticFeedbackSystem = class {
       activeZones: this.getActiveZones().length,
       activeEvents: this.activeEvents.size,
       globalIntensity: this.globalIntensity,
-      systemEnabled: this.isSystemEnabled
+      systemEnabled: this.isSystemEnabled,
     };
   }
   // Cleanup system
@@ -25974,7 +26694,7 @@ var HolographicDataWall = class {
     this.entity = engine.addEntity();
     Transform2.create(this.entity, {
       position,
-      scale
+      scale,
     });
     MeshRenderer3.setBox(this.entity);
     Material3.setPbrMaterial(this.entity, {
@@ -25982,7 +26702,7 @@ var HolographicDataWall = class {
       roughness: 0.1,
       metallic: 0.8,
       emissiveColor: Color42.create(0.1, 0.1, 0.3, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     this.createGridOverlay();
     this.createTitle();
@@ -25995,18 +26715,14 @@ var HolographicDataWall = class {
         const gridCell = engine.addEntity();
         Transform2.create(gridCell, {
           parent: this.entity,
-          position: Vector32.create(
-            -7.5 + x * gridSpacing,
-            -3.5 + y * gridSpacing,
-            0.1
-          ),
-          scale: Vector32.create(1.5, 1.5, 0.05)
+          position: Vector32.create(-7.5 + x * gridSpacing, -3.5 + y * gridSpacing, 0.1),
+          scale: Vector32.create(1.5, 1.5, 0.05),
         });
         MeshRenderer3.setBox(gridCell);
         Material3.setPbrMaterial(gridCell, {
           albedoColor: Color42.create(0.2, 0.3, 0.5, 0.3),
           emissiveColor: Color42.create(0.1, 0.2, 0.4, 0.5),
-          emissiveIntensity: 1
+          emissiveIntensity: 1,
         });
         this.visualElements.push(gridCell);
       }
@@ -26017,15 +26733,15 @@ var HolographicDataWall = class {
     Transform2.create(titleEntity, {
       parent: this.entity,
       position: Vector32.create(0, 4.5, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(titleEntity, {
-      text: "\u{1F4CA} HOLOGRAPHIC DATA VISUALIZATION",
+      text: '\u{1F4CA} HOLOGRAPHIC DATA VISUALIZATION',
       textColor: Color42.create(0.5, 0.8, 1, 1),
       fontSize: 4,
       textAlign: 3,
       outlineWidth: 0.1,
-      outlineColor: Color42.create(0, 0, 0, 1)
+      outlineColor: Color42.create(0, 0, 0, 1),
     });
     this.visualElements.push(titleEntity);
   }
@@ -26041,22 +26757,21 @@ var HolographicDataWall = class {
   }
   renderChart(chartId) {
     const chart = this.charts.get(chartId);
-    if (!chart)
-      return;
+    if (!chart) return;
     switch (chart.type) {
-      case "bar":
+      case 'bar':
         this.renderBarChart(chartId, chart);
         break;
-      case "line":
+      case 'line':
         this.renderLineChart(chartId, chart);
         break;
-      case "pie":
+      case 'pie':
         this.renderPieChart(chartId, chart);
         break;
-      case "scatter":
+      case 'scatter':
         this.renderScatterChart(chartId, chart);
         break;
-      case "heatmap":
+      case 'heatmap':
         this.renderHeatmap(chartId, chart);
         break;
     }
@@ -26068,37 +26783,29 @@ var HolographicDataWall = class {
     const startX = -6;
     config.data.forEach((point, index) => {
       const bar = engine.addEntity();
-      const height = point.value / 100 * maxHeight;
+      const height = (point.value / 100) * maxHeight;
       Transform2.create(bar, {
         parent: this.entity,
-        position: Vector32.create(
-          startX + index * spacing,
-          -2 + height / 2,
-          0.2
-        ),
-        scale: Vector32.create(barWidth, height, 0.3)
+        position: Vector32.create(startX + index * spacing, -2 + height / 2, 0.2),
+        scale: Vector32.create(barWidth, height, 0.3),
       });
       MeshRenderer3.setBox(bar);
       Material3.setPbrMaterial(bar, {
         albedoColor: Color42.create(point.color.r, point.color.g, point.color.b, 0.8),
         emissiveColor: Color42.create(point.color.r, point.color.g, point.color.b, 0.6),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const label = engine.addEntity();
       Transform2.create(label, {
         parent: this.entity,
-        position: Vector32.create(
-          startX + index * spacing,
-          -3.5,
-          0.3
-        ),
-        scale: Vector32.create(0.2, 0.2, 0.2)
+        position: Vector32.create(startX + index * spacing, -3.5, 0.3),
+        scale: Vector32.create(0.2, 0.2, 0.2),
       });
       TextShape3.create(label, {
         text: point.label,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       this.visualElements.push(bar, label);
     });
@@ -26109,19 +26816,19 @@ var HolographicDataWall = class {
     const startX = -6;
     config.data.forEach((point, index) => {
       const x = startX + index * spacing;
-      const y = -2 + point.value / 100 * 3;
+      const y = -2 + (point.value / 100) * 3;
       points.push(Vector32.create(x, y, 0.2));
       const dataPoint = engine.addEntity();
       Transform2.create(dataPoint, {
         parent: this.entity,
         position: Vector32.create(x, y, 0.2),
-        scale: Vector32.create(0.2, 0.2, 0.2)
+        scale: Vector32.create(0.2, 0.2, 0.2),
       });
       MeshRenderer3.setSphere(dataPoint);
       Material3.setPbrMaterial(dataPoint, {
         albedoColor: Color42.create(point.color.r, point.color.g, point.color.b, 1),
         emissiveColor: Color42.create(point.color.r, point.color.g, point.color.b, 0.8),
-        emissiveIntensity: 3
+        emissiveIntensity: 3,
       });
       this.visualElements.push(dataPoint);
     });
@@ -26134,13 +26841,13 @@ var HolographicDataWall = class {
       Transform2.create(line, {
         parent: this.entity,
         position: Vector32.create(midpoint.x, midpoint.y, 0.15),
-        scale: Vector32.create(0.05, distance, 0.1)
+        scale: Vector32.create(0.05, distance, 0.1),
       });
       MeshRenderer3.setBox(line);
       Material3.setPbrMaterial(line, {
         albedoColor: Color42.create(0.5, 0.8, 1, 0.8),
         emissiveColor: Color42.create(0.5, 0.8, 1, 0.6),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       this.visualElements.push(line);
     }
@@ -26155,17 +26862,17 @@ var HolographicDataWall = class {
       Transform2.create(slice, {
         parent: this.entity,
         position: Vector32.create(
-          Math.cos(currentAngle * Math.PI / 180) * 2,
-          Math.sin(currentAngle * Math.PI / 180) * 2,
+          Math.cos((currentAngle * Math.PI) / 180) * 2,
+          Math.sin((currentAngle * Math.PI) / 180) * 2,
           0.2
         ),
-        scale: Vector32.create(1.5, 1.5, 0.3)
+        scale: Vector32.create(1.5, 1.5, 0.3),
       });
       MeshRenderer3.setBox(slice);
       Material3.setPbrMaterial(slice, {
         albedoColor: Color42.create(point.color.r, point.color.g, point.color.b, 0.8),
         emissiveColor: Color42.create(point.color.r, point.color.g, point.color.b, 0.6),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       this.visualElements.push(slice);
       currentAngle += angle;
@@ -26177,17 +26884,17 @@ var HolographicDataWall = class {
       Transform2.create(scatterPoint, {
         parent: this.entity,
         position: Vector32.create(
-          -6 + index / config.data.length * 12,
-          -2 + point.value / 100 * 3,
+          -6 + (index / config.data.length) * 12,
+          -2 + (point.value / 100) * 3,
           0.2
         ),
-        scale: Vector32.create(0.3, 0.3, 0.3)
+        scale: Vector32.create(0.3, 0.3, 0.3),
       });
       MeshRenderer3.setSphere(scatterPoint);
       Material3.setPbrMaterial(scatterPoint, {
         albedoColor: Color42.create(point.color.r, point.color.g, point.color.b, 0.9),
         emissiveColor: Color42.create(point.color.r, point.color.g, point.color.b, 0.7),
-        emissiveIntensity: 3
+        emissiveIntensity: 3,
       });
       this.visualElements.push(scatterPoint);
     });
@@ -26202,12 +26909,8 @@ var HolographicDataWall = class {
         const heatCell = engine.addEntity();
         Transform2.create(heatCell, {
           parent: this.entity,
-          position: Vector32.create(
-            -6 + x * cellSize,
-            -2 + y * cellSize,
-            0.2
-          ),
-          scale: Vector32.create(cellSize * 0.8, cellSize * 0.8, 0.2)
+          position: Vector32.create(-6 + x * cellSize, -2 + y * cellSize, 0.2),
+          scale: Vector32.create(cellSize * 0.8, cellSize * 0.8, 0.2),
         });
         MeshRenderer3.setBox(heatCell);
         const intensity = point.value / 100;
@@ -26224,7 +26927,7 @@ var HolographicDataWall = class {
             point.color.b * intensity,
             0.6
           ),
-          emissiveIntensity: intensity * 3
+          emissiveIntensity: intensity * 3,
         });
         this.visualElements.push(heatCell);
       }
@@ -26232,13 +26935,12 @@ var HolographicDataWall = class {
   }
   updateChart(chartId) {
     const chart = this.charts.get(chartId);
-    if (!chart)
-      return;
+    if (!chart) return;
     const newPoint = {
       label: `T${Date.now() % 1e3}`,
       value: Math.random() * 100,
       color: Color32.create(Math.random(), Math.random(), Math.random()),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     };
     chart.data.push(newPoint);
     if (chart.data.length > chart.maxDataPoints) {
@@ -26249,19 +26951,18 @@ var HolographicDataWall = class {
   }
   clearChart(chartId) {
     const elementsToRemove = this.visualElements.splice(20);
-    elementsToRemove.forEach((element) => {
+    elementsToRemove.forEach(element => {
       engine.removeEntity(element);
     });
   }
   startAnimation() {
     engine.addSystem(() => {
-      if (!this.isActive)
-        return;
+      if (!this.isActive) return;
       this.animationTime += 0.016;
       this.visualElements.forEach((element, index) => {
         if (index % 3 === 0) {
           const material = Material3.getMutable(element);
-          if (material && material.$case === "pbr") {
+          if (material && material.$case === 'pbr') {
             const pulse = Math.sin(this.animationTime * 2 + index * 0.1) * 0.3 + 0.7;
             material.pbr.emissiveIntensity = pulse * 2;
           }
@@ -26290,7 +26991,7 @@ var HolographicDataWall = class {
   }
   // Cleanup
   cleanup() {
-    this.visualElements.forEach((element) => {
+    this.visualElements.forEach(element => {
       engine.removeEntity(element);
     });
     this.visualElements = [];
@@ -26312,11 +27013,11 @@ var DataVisualizationManager = class {
   // Pre-configured data sources
   static createSystemStatusData() {
     return [
-      { label: "CPU", value: 65, color: Color32.create(0.2, 0.8, 0.2), timestamp: Date.now() },
-      { label: "Memory", value: 78, color: Color32.create(0.8, 0.6, 0.2), timestamp: Date.now() },
-      { label: "Network", value: 45, color: Color32.create(0.2, 0.6, 0.8), timestamp: Date.now() },
-      { label: "Storage", value: 32, color: Color32.create(0.8, 0.2, 0.6), timestamp: Date.now() },
-      { label: "Quantum", value: 89, color: Color32.create(0.6, 0.2, 0.8), timestamp: Date.now() }
+      { label: 'CPU', value: 65, color: Color32.create(0.2, 0.8, 0.2), timestamp: Date.now() },
+      { label: 'Memory', value: 78, color: Color32.create(0.8, 0.6, 0.2), timestamp: Date.now() },
+      { label: 'Network', value: 45, color: Color32.create(0.2, 0.6, 0.8), timestamp: Date.now() },
+      { label: 'Storage', value: 32, color: Color32.create(0.8, 0.2, 0.6), timestamp: Date.now() },
+      { label: 'Quantum', value: 89, color: Color32.create(0.6, 0.2, 0.8), timestamp: Date.now() },
     ];
   }
   static createRealtimeDataSource() {
@@ -26325,11 +27026,11 @@ var DataVisualizationManager = class {
       label: `Data${counter++}`,
       value: Math.random() * 100,
       color: Color32.create(Math.random(), Math.random(), Math.random()),
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }
   cleanup() {
-    this.walls.forEach((wall) => wall.cleanup());
+    this.walls.forEach(wall => wall.cleanup());
     this.walls.clear();
   }
 };
@@ -26343,35 +27044,35 @@ var MultiplayerSystem = class {
     this.sharedObjects = /* @__PURE__ */ new Map();
     this.voiceChannels = /* @__PURE__ */ new Map();
     this.isInitialized = false;
-    this.connectionStatus = "disconnected";
+    this.connectionStatus = 'disconnected';
     this.localPlayer = {
       id: this.generatePlayerId(),
-      name: "Player",
+      name: 'Player',
       position: Vector32.create(8, 1, 8),
       rotation: Quaternion2.fromEulerDegrees(0, 0, 0),
       avatar: null,
       isActive: true,
       lastUpdate: Date.now(),
-      color: Color32.create(Math.random(), Math.random(), Math.random())
+      color: Color32.create(Math.random(), Math.random(), Math.random()),
     };
   }
   // Initialize multiplayer system
   async initialize() {
-    console.log("\u{1F310} Multiplayer System Initializing...");
+    console.log('\u{1F310} Multiplayer System Initializing...');
     this.createLocalPlayer();
     this.setupVoiceChat();
     this.createCollaborationTools();
     this.startNetworkSync();
     await this.connectToServer();
     this.isInitialized = true;
-    console.log("\u{1F310} Multiplayer System Ready!");
+    console.log('\u{1F310} Multiplayer System Ready!');
   }
   // Create local player avatar
   createLocalPlayer() {
     const avatar = engine.addEntity();
     Transform2.create(avatar, {
       position: this.localPlayer.position,
-      scale: Vector32.create(1, 2, 1)
+      scale: Vector32.create(1, 2, 1),
     });
     MeshRenderer3.setBox(avatar);
     Material3.setPbrMaterial(avatar, {
@@ -26389,32 +27090,32 @@ var MultiplayerSystem = class {
         this.localPlayer.color.b * 0.3,
         0.5
       ),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const nameTag = engine.addEntity();
     Transform2.create(nameTag, {
       parent: avatar,
       position: Vector32.create(0, 2.5, 0),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(nameTag, {
       text: this.localPlayer.name,
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 3,
-      textAlign: 3
+      textAlign: 3,
     });
     this.localPlayer.avatar = avatar;
   }
   // Setup voice chat system
   setupVoiceChat() {
     const mainChannel = {
-      id: "main",
-      name: "Main Channel",
+      id: 'main',
+      name: 'Main Channel',
       participants: [this.localPlayer.id],
       isSpatial: true,
-      maxParticipants: 10
+      maxParticipants: 10,
     };
-    this.voiceChannels.set("main", mainChannel);
+    this.voiceChannels.set('main', mainChannel);
     this.createVoiceChannelUI();
   }
   // Create voice channel UI
@@ -26422,54 +27123,54 @@ var MultiplayerSystem = class {
     const voicePanel = engine.addEntity();
     Transform2.create(voicePanel, {
       position: Vector32.create(1, 3, 8),
-      scale: Vector32.create(1.5, 2, 0.1)
+      scale: Vector32.create(1.5, 2, 0.1),
     });
     MeshRenderer3.setBox(voicePanel);
     Material3.setPbrMaterial(voicePanel, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const voiceTitle = engine.addEntity();
     Transform2.create(voiceTitle, {
       parent: voicePanel,
       position: Vector32.create(0, 0.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(voiceTitle, {
-      text: "\u{1F3A4} VOICE CHAT",
+      text: '\u{1F3A4} VOICE CHAT',
       textColor: Color42.create(0.8, 0.8, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     const muteButton = engine.addEntity();
     Transform2.create(muteButton, {
       parent: voicePanel,
       position: Vector32.create(0, -0.2, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.1)
+      scale: Vector32.create(0.3, 0.3, 0.1),
     });
     MeshRenderer3.setBox(muteButton);
     Material3.setPbrMaterial(muteButton, {
       albedoColor: Color42.create(0.2, 0.8, 0.2, 1),
       emissiveColor: Color42.create(0.2, 0.8, 0.2, 0.8),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const muteText = engine.addEntity();
     Transform2.create(muteText, {
       parent: muteButton,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.5, 0.5, 0.5)
+      scale: Vector32.create(0.5, 0.5, 0.5),
     });
     TextShape3.create(muteText, {
-      text: "\u{1F50A}",
+      text: '\u{1F50A}',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 3,
-      textAlign: 3
+      textAlign: 3,
     });
     pointerEventsSystem.onPointerDown(
       {
         entity: muteButton,
-        opts: { button: InputAction.IA_POINTER, hoverText: "Toggle Mute" }
+        opts: { button: InputAction.IA_POINTER, hoverText: 'Toggle Mute' },
       },
       () => this.toggleMute()
     );
@@ -26485,49 +27186,49 @@ var MultiplayerSystem = class {
     const whiteboard = engine.addEntity();
     Transform2.create(whiteboard, {
       position: Vector32.create(8, 3, 12),
-      scale: Vector32.create(6, 4, 0.2)
+      scale: Vector32.create(6, 4, 0.2),
     });
     MeshRenderer3.setBox(whiteboard);
     Material3.setPbrMaterial(whiteboard, {
       albedoColor: Color42.create(1, 1, 1, 1),
       roughness: 0.1,
-      metallic: 0.1
+      metallic: 0.1,
     });
     const sharedObject = {
-      id: "main-whiteboard",
-      type: "whiteboard",
+      id: 'main-whiteboard',
+      type: 'whiteboard',
       position: Vector32.create(8, 3, 12),
       content: { drawings: [], text: [] },
       ownerId: this.localPlayer.id,
       collaborators: [],
-      isLocked: false
+      isLocked: false,
     };
-    this.sharedObjects.set("main-whiteboard", sharedObject);
+    this.sharedObjects.set('main-whiteboard', sharedObject);
   }
   // Create document sharing system
   createDocumentSharing() {
     const docSharePanel = engine.addEntity();
     Transform2.create(docSharePanel, {
       position: Vector32.create(14, 3, 8),
-      scale: Vector32.create(2, 3, 0.1)
+      scale: Vector32.create(2, 3, 0.1),
     });
     MeshRenderer3.setBox(docSharePanel);
     Material3.setPbrMaterial(docSharePanel, {
       albedoColor: Color42.create(0.1, 0.3, 0.6, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const docTitle = engine.addEntity();
     Transform2.create(docTitle, {
       parent: docSharePanel,
       position: Vector32.create(0, 1.2, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(docTitle, {
-      text: "\u{1F4C4} DOCUMENTS",
+      text: '\u{1F4C4} DOCUMENTS',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create collaboration panel
@@ -26535,54 +27236,54 @@ var MultiplayerSystem = class {
     const collabPanel = engine.addEntity();
     Transform2.create(collabPanel, {
       position: Vector32.create(2, 3, 8),
-      scale: Vector32.create(2, 3, 0.1)
+      scale: Vector32.create(2, 3, 0.1),
     });
     MeshRenderer3.setBox(collabPanel);
     Material3.setPbrMaterial(collabPanel, {
       albedoColor: Color42.create(0.2, 0.1, 0.4, 0.9),
       emissiveColor: Color42.create(0.4, 0.2, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const collabTitle = engine.addEntity();
     Transform2.create(collabTitle, {
       parent: collabPanel,
       position: Vector32.create(0, 1.2, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(collabTitle, {
-      text: "\u{1F91D} COLLABORATE",
+      text: '\u{1F91D} COLLABORATE',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     const startSessionBtn = engine.addEntity();
     Transform2.create(startSessionBtn, {
       parent: collabPanel,
       position: Vector32.create(0, 0.3, 0.1),
-      scale: Vector32.create(0.4, 0.2, 0.1)
+      scale: Vector32.create(0.4, 0.2, 0.1),
     });
     MeshRenderer3.setBox(startSessionBtn);
     Material3.setPbrMaterial(startSessionBtn, {
       albedoColor: Color42.create(0.2, 0.8, 0.2, 1),
       emissiveColor: Color42.create(0.2, 0.8, 0.2, 0.8),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const sessionText = engine.addEntity();
     Transform2.create(sessionText, {
       parent: startSessionBtn,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.5, 0.5, 0.5)
+      scale: Vector32.create(0.5, 0.5, 0.5),
     });
     TextShape3.create(sessionText, {
-      text: "START",
+      text: 'START',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     pointerEventsSystem.onPointerDown(
       {
         entity: startSessionBtn,
-        opts: { button: InputAction.IA_POINTER, hoverText: "Start Collaboration Session" }
+        opts: { button: InputAction.IA_POINTER, hoverText: 'Start Collaboration Session' },
       },
       () => this.startCollaborationSession()
     );
@@ -26590,8 +27291,7 @@ var MultiplayerSystem = class {
   // Start network synchronization
   startNetworkSync() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.syncPlayerPositions();
       this.syncSharedObjects();
       this.updateVoiceChat();
@@ -26599,16 +27299,16 @@ var MultiplayerSystem = class {
   }
   // Connect to server
   async connectToServer() {
-    this.connectionStatus = "connecting";
-    console.log("\u{1F50C} Connecting to multiplayer server...");
-    await new Promise((resolve2) => setTimeout2(resolve2, 2e3));
-    this.connectionStatus = "connected";
-    console.log("\u2705 Connected to multiplayer server");
+    this.connectionStatus = 'connecting';
+    console.log('\u{1F50C} Connecting to multiplayer server...');
+    await new Promise(resolve2 => setTimeout2(resolve2, 2e3));
+    this.connectionStatus = 'connected';
+    console.log('\u2705 Connected to multiplayer server');
     setTimeout2(() => {
-      this.simulatePlayerJoin("Alice", Color32.create(1, 0.5, 0.5));
+      this.simulatePlayerJoin('Alice', Color32.create(1, 0.5, 0.5));
     }, 3e3);
     setTimeout2(() => {
-      this.simulatePlayerJoin("Bob", Color32.create(0.5, 1, 0.5));
+      this.simulatePlayerJoin('Bob', Color32.create(0.5, 1, 0.5));
     }, 5e3);
   }
   // Simulate player joining
@@ -26616,28 +27316,24 @@ var MultiplayerSystem = class {
     const player = {
       id: this.generatePlayerId(),
       name,
-      position: Vector32.create(
-        Math.random() * 14 + 1,
-        1,
-        Math.random() * 14 + 1
-      ),
+      position: Vector32.create(Math.random() * 14 + 1, 1, Math.random() * 14 + 1),
       rotation: Quaternion2.fromEulerDegrees(0, 0, 0),
       avatar: null,
       isActive: true,
       lastUpdate: Date.now(),
-      color
+      color,
     };
     this.createRemotePlayer(player);
     this.remotePlayers.set(player.id, player);
     console.log(`\u{1F44B} ${name} joined the session`);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Create remote player avatar
   createRemotePlayer(player) {
     const avatar = engine.addEntity();
     Transform2.create(avatar, {
       position: player.position,
-      scale: Vector32.create(1, 2, 1)
+      scale: Vector32.create(1, 2, 1),
     });
     MeshRenderer3.setBox(avatar);
     Material3.setPbrMaterial(avatar, {
@@ -26650,19 +27346,19 @@ var MultiplayerSystem = class {
         player.color.b * 0.3,
         0.5
       ),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const nameTag = engine.addEntity();
     Transform2.create(nameTag, {
       parent: avatar,
       position: Vector32.create(0, 2.5, 0),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(nameTag, {
       text: player.name,
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 3,
-      textAlign: 3
+      textAlign: 3,
     });
     player.avatar = avatar;
   }
@@ -26673,7 +27369,7 @@ var MultiplayerSystem = class {
       this.localPlayer.position = transform.position;
       this.localPlayer.lastUpdate = Date.now();
     }
-    this.remotePlayers.forEach((player) => {
+    this.remotePlayers.forEach(player => {
       if (player.avatar && player.isActive) {
         if (Math.random() > 0.98) {
           const newPos = Vector32.create(
@@ -26691,16 +27387,16 @@ var MultiplayerSystem = class {
   }
   // Sync shared objects
   syncSharedObjects() {
-    const whiteboard = this.sharedObjects.get("main-whiteboard");
+    const whiteboard = this.sharedObjects.get('main-whiteboard');
     if (whiteboard && Math.random() > 0.99) {
-      console.log("\u{1F3A8} Remote whiteboard update received");
+      console.log('\u{1F3A8} Remote whiteboard update received');
     }
   }
   // Update voice chat
   updateVoiceChat() {
-    const mainChannel = this.voiceChannels.get("main");
+    const mainChannel = this.voiceChannels.get('main');
     if (mainChannel) {
-      this.remotePlayers.forEach((player) => {
+      this.remotePlayers.forEach(player => {
         if (!mainChannel.participants.includes(player.id)) {
           mainChannel.participants.push(player.id);
         }
@@ -26716,16 +27412,16 @@ var MultiplayerSystem = class {
       participants: [this.localPlayer.id],
       startTime: Date.now(),
       isActive: true,
-      sharedObjects: /* @__PURE__ */ new Map()
+      sharedObjects: /* @__PURE__ */ new Map(),
     };
     this.activeSession = session;
     console.log(`\u{1F91D} Started collaboration session: ${session.name}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Toggle mute
   toggleMute() {
-    console.log("\u{1F507} Toggle mute");
-    soundSystem.playInteractionSound("click");
+    console.log('\u{1F507} Toggle mute');
+    soundSystem.playInteractionSound('click');
   }
   // Share object with collaborators
   shareObject(objectId, collaborators) {
@@ -26747,7 +27443,7 @@ var MultiplayerSystem = class {
   leaveVoiceChannel(channelId) {
     const channel = this.voiceChannels.get(channelId);
     if (channel) {
-      channel.participants = channel.participants.filter((id) => id !== this.localPlayer.id);
+      channel.participants = channel.participants.filter(id => id !== this.localPlayer.id);
       console.log(`\u{1F507} Left voice channel: ${channel.name}`);
     }
   }
@@ -26758,7 +27454,7 @@ var MultiplayerSystem = class {
   // Get all connected players
   getConnectedPlayers() {
     const players2 = [this.localPlayer];
-    this.remotePlayers.forEach((player) => {
+    this.remotePlayers.forEach(player => {
       if (player.isActive) {
         players2.push(player);
       }
@@ -26771,29 +27467,28 @@ var MultiplayerSystem = class {
   }
   // Utility functions
   generatePlayerId() {
-    return "player_" + Math.random().toString(36).substr(2, 9);
+    return 'player_' + Math.random().toString(36).substr(2, 9);
   }
   generateSessionId() {
-    return "session_" + Math.random().toString(36).substr(2, 9);
+    return 'session_' + Math.random().toString(36).substr(2, 9);
   }
   // Cleanup system
   cleanup() {
     if (this.localPlayer.avatar) {
       engine.removeEntity(this.localPlayer.avatar);
     }
-    this.remotePlayers.forEach((player) => {
+    this.remotePlayers.forEach(player => {
       if (player.avatar) {
         engine.removeEntity(player.avatar);
       }
     });
     this.remotePlayers.clear();
-    this.sharedObjects.forEach((obj) => {
-    });
+    this.sharedObjects.forEach(obj => {});
     this.sharedObjects.clear();
     this.voiceChannels.clear();
     this.activeSession = null;
     this.isInitialized = false;
-    this.connectionStatus = "disconnected";
+    this.connectionStatus = 'disconnected';
   }
 };
 var multiplayerSystem = new MultiplayerSystem();
@@ -26815,13 +27510,13 @@ var PhysicsInteractionSystem = class {
   }
   // Initialize physics system
   initialize() {
-    console.log("\u269B\uFE0F Physics Interaction System Initializing...");
+    console.log('\u269B\uFE0F Physics Interaction System Initializing...');
     this.setupPhysicsMaterials();
     this.createPhysicsUI();
     this.createPhysicsObjects();
     this.startPhysicsEngine();
     this.isInitialized = true;
-    console.log("\u269B\uFE0F Physics Interaction System Ready!");
+    console.log('\u269B\uFE0F Physics Interaction System Ready!');
   }
   // Initialize collision matrix
   initializeCollisionMatrix() {
@@ -26835,95 +27530,95 @@ var PhysicsInteractionSystem = class {
   // Setup physics materials
   setupPhysicsMaterials() {
     const metal = {
-      id: "material_metal",
-      name: "Metal",
+      id: 'material_metal',
+      name: 'Metal',
       density: 7850,
       restitution: 0.3,
       friction: 0.7,
       durability: 100,
       soundProfile: {
-        impactSound: "metal_impact",
-        frictionSound: "metal_scrape",
-        breakSound: "metal_break",
+        impactSound: 'metal_impact',
+        frictionSound: 'metal_scrape',
+        breakSound: 'metal_break',
         volume: 0.8,
-        pitch: 1
-      }
+        pitch: 1,
+      },
     };
     const wood = {
-      id: "material_wood",
-      name: "Wood",
+      id: 'material_wood',
+      name: 'Wood',
       density: 700,
       restitution: 0.4,
       friction: 0.6,
       durability: 50,
       soundProfile: {
-        impactSound: "wood_impact",
-        frictionSound: "wood_scrape",
-        breakSound: "wood_break",
+        impactSound: 'wood_impact',
+        frictionSound: 'wood_scrape',
+        breakSound: 'wood_break',
         volume: 0.6,
-        pitch: 0.9
-      }
+        pitch: 0.9,
+      },
     };
     const glass = {
-      id: "material_glass",
-      name: "Glass",
+      id: 'material_glass',
+      name: 'Glass',
       density: 2500,
       restitution: 0.1,
       friction: 0.3,
       durability: 20,
       soundProfile: {
-        impactSound: "glass_impact",
-        frictionSound: "glass_scrape",
-        breakSound: "glass_break",
+        impactSound: 'glass_impact',
+        frictionSound: 'glass_scrape',
+        breakSound: 'glass_break',
         volume: 0.9,
-        pitch: 1.2
-      }
+        pitch: 1.2,
+      },
     };
     const rubber = {
-      id: "material_rubber",
-      name: "Rubber",
+      id: 'material_rubber',
+      name: 'Rubber',
       density: 1500,
       restitution: 0.8,
       friction: 0.9,
       durability: 80,
       soundProfile: {
-        impactSound: "rubber_impact",
-        frictionSound: "rubber_scrape",
-        breakSound: "rubber_break",
+        impactSound: 'rubber_impact',
+        frictionSound: 'rubber_scrape',
+        breakSound: 'rubber_break',
         volume: 0.5,
-        pitch: 0.8
-      }
+        pitch: 0.8,
+      },
     };
     this.materials.set(metal.id, metal);
     this.materials.set(wood.id, wood);
     this.materials.set(glass.id, glass);
     this.materials.set(rubber.id, rubber);
-    console.log("\u{1F527} Physics materials configured");
+    console.log('\u{1F527} Physics materials configured');
   }
   // Create physics UI
   createPhysicsUI() {
     this.physicsUI = engine.addEntity();
     Transform2.create(this.physicsUI, {
       position: Vector32.create(2, 3, 8),
-      scale: Vector32.create(3, 4, 0.1)
+      scale: Vector32.create(3, 4, 0.1),
     });
     MeshRenderer3.setBox(this.physicsUI);
     Material3.setPbrMaterial(this.physicsUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.physicsUI,
       position: Vector32.create(0, 1.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u269B\uFE0F PHYSICS INTERACTION",
+      text: '\u269B\uFE0F PHYSICS INTERACTION',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createObjectControls();
     this.createForceFieldControls();
@@ -26933,41 +27628,41 @@ var PhysicsInteractionSystem = class {
   // Create object controls
   createObjectControls() {
     const controls = [
-      { id: "spawn_ball", icon: "\u26AA", name: "Spawn Ball" },
-      { id: "spawn_box", icon: "\u2B1C", name: "Spawn Box" },
-      { id: "spawn_cylinder", icon: "\u{1F964}", name: "Spawn Cylinder" },
-      { id: "clear_all", icon: "\u{1F5D1}\uFE0F", name: "Clear All" }
+      { id: 'spawn_ball', icon: '\u26AA', name: 'Spawn Ball' },
+      { id: 'spawn_box', icon: '\u2B1C', name: 'Spawn Box' },
+      { id: 'spawn_cylinder', icon: '\u{1F964}', name: 'Spawn Cylinder' },
+      { id: 'clear_all', icon: '\u{1F5D1}\uFE0F', name: 'Clear All' },
     ];
     let xOffset = -0.9;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.physicsUI,
         position: Vector32.create(xOffset, 1.2, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleObjectControl(control.id)
       );
@@ -26977,41 +27672,41 @@ var PhysicsInteractionSystem = class {
   // Create force field controls
   createForceFieldControls() {
     const controls = [
-      { id: "gravity_field", icon: "\u{1F30D}", name: "Gravity Field" },
-      { id: "magnetic_field", icon: "\u{1F9F2}", name: "Magnetic Field" },
-      { id: "wind_field", icon: "\u{1F4A8}", name: "Wind Field" },
-      { id: "explosion", icon: "\u{1F4A5}", name: "Explosion" }
+      { id: 'gravity_field', icon: '\u{1F30D}', name: 'Gravity Field' },
+      { id: 'magnetic_field', icon: '\u{1F9F2}', name: 'Magnetic Field' },
+      { id: 'wind_field', icon: '\u{1F4A8}', name: 'Wind Field' },
+      { id: 'explosion', icon: '\u{1F4A5}', name: 'Explosion' },
     ];
     let xOffset = -0.9;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.physicsUI,
         position: Vector32.create(xOffset, 0.6, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.8, 0.3, 0.3, 1),
         emissiveColor: Color42.create(0.8, 0.3, 0.3, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleForceFieldControl(control.id)
       );
@@ -27021,40 +27716,40 @@ var PhysicsInteractionSystem = class {
   // Create constraint controls
   createConstraintControls() {
     const controls = [
-      { id: "spring_constraint", icon: "\u{1F300}", name: "Spring" },
-      { id: "hinge_constraint", icon: "\u{1F6AA}", name: "Hinge" },
-      { id: "fixed_constraint", icon: "\u{1F512}", name: "Fixed" }
+      { id: 'spring_constraint', icon: '\u{1F300}', name: 'Spring' },
+      { id: 'hinge_constraint', icon: '\u{1F6AA}', name: 'Hinge' },
+      { id: 'fixed_constraint', icon: '\u{1F512}', name: 'Fixed' },
     ];
     let xOffset = -0.6;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.physicsUI,
         position: Vector32.create(xOffset, 0, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.8, 0.3, 1),
         emissiveColor: Color42.create(0.3, 0.8, 0.3, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleConstraintControl(control.id)
       );
@@ -27067,25 +27762,25 @@ var PhysicsInteractionSystem = class {
     Transform2.create(statsDisplay, {
       parent: this.physicsUI,
       position: Vector32.create(0, -0.6, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(statsDisplay);
     Material3.setPbrMaterial(statsDisplay, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const statsText = engine.addEntity();
     Transform2.create(statsText, {
       parent: statsDisplay,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(statsText, {
-      text: "\u{1F4CA} Objects: 0 | Collisions: 0",
+      text: '\u{1F4CA} Objects: 0 | Collisions: 0',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create physics objects
@@ -27096,8 +27791,8 @@ var PhysicsInteractionSystem = class {
   // Create ground plane
   createGroundPlane() {
     const ground = {
-      id: "ground_plane",
-      type: "static",
+      id: 'ground_plane',
+      type: 'static',
       mass: 0,
       velocity: Vector32.create(0, 0, 0),
       acceleration: Vector32.create(0, 0, 0),
@@ -27113,19 +27808,15 @@ var PhysicsInteractionSystem = class {
       isGrounded: true,
       isColliding: false,
       collisionLayer: 0,
-      collisionMask: 255
+      collisionMask: 255,
     };
     this.objects.set(ground.id, ground);
-    this.createPhysicsEntity(ground, "material_metal");
+    this.createPhysicsEntity(ground, 'material_metal');
   }
   // Create initial objects
   createInitialObjects() {
     for (let i = 0; i < 3; i++) {
-      this.spawnPhysicsObject("ball", Vector32.create(
-        6 + i * 2,
-        3 + i,
-        6 + i
-      ));
+      this.spawnPhysicsObject('ball', Vector32.create(6 + i * 2, 3 + i, 6 + i));
     }
   }
   // Create physics entity
@@ -27134,16 +27825,15 @@ var PhysicsInteractionSystem = class {
     Transform2.create(entity, {
       position: obj.position,
       scale: obj.scale,
-      rotation: obj.rotation
+      rotation: obj.rotation,
     });
     const material = this.materials.get(materialId);
-    if (!material)
-      return;
-    if (obj.id.includes("ball")) {
+    if (!material) return;
+    if (obj.id.includes('ball')) {
       MeshRenderer3.setSphere(entity);
-    } else if (obj.id.includes("box")) {
+    } else if (obj.id.includes('box')) {
       MeshRenderer3.setBox(entity);
-    } else if (obj.id.includes("cylinder")) {
+    } else if (obj.id.includes('cylinder')) {
       MeshRenderer3.setCylinder(entity, 1, 1, 1, 1, 1);
     } else {
       MeshRenderer3.setBox(entity);
@@ -27154,12 +27844,12 @@ var PhysicsInteractionSystem = class {
       roughness: 1 - material.friction,
       metallic: material.restitution,
       emissiveColor: Color42.create(0, 0, 0, 0),
-      emissiveIntensity: 0
+      emissiveIntensity: 0,
     });
     pointerEventsSystem.onPointerDown(
       {
         entity,
-        opts: { button: InputAction.IA_POINTER, hoverText: "Interact" }
+        opts: { button: InputAction.IA_POINTER, hoverText: 'Interact' },
       },
       () => this.interactWithObject(obj.id)
     );
@@ -27168,13 +27858,13 @@ var PhysicsInteractionSystem = class {
   // Get material color
   getMaterialColor(materialId) {
     switch (materialId) {
-      case "material_metal":
+      case 'material_metal':
         return Color42.create(0.7, 0.7, 0.8, 1);
-      case "material_wood":
+      case 'material_wood':
         return Color42.create(0.6, 0.4, 0.2, 1);
-      case "material_glass":
+      case 'material_glass':
         return Color42.create(0.8, 0.9, 1, 0.7);
-      case "material_rubber":
+      case 'material_rubber':
         return Color42.create(0.2, 0.2, 0.2, 1);
       default:
         return Color42.create(0.5, 0.5, 0.5, 1);
@@ -27183,8 +27873,7 @@ var PhysicsInteractionSystem = class {
   // Start physics engine
   startPhysicsEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.simulatePhysics();
       this.detectCollisions();
       this.applyForceFields();
@@ -27196,8 +27885,7 @@ var PhysicsInteractionSystem = class {
   simulatePhysics() {
     const dt = this.timeStep;
     this.objects.forEach((obj, id) => {
-      if (obj.type === "static")
-        return;
+      if (obj.type === 'static') return;
       const gravity = Vector32.scale(this.gravity, obj.gravityScale);
       obj.acceleration = Vector32.add(obj.acceleration, gravity);
       obj.velocity = Vector32.add(obj.velocity, Vector32.scale(obj.acceleration, dt));
@@ -27224,7 +27912,7 @@ var PhysicsInteractionSystem = class {
         obj.velocity.x *= 1 - obj.friction * 0.1;
         obj.velocity.z *= 1 - obj.friction * 0.1;
         if (Math.abs(obj.velocity.y) > 0.5) {
-          soundSystem.playInteractionSound("impact");
+          soundSystem.playInteractionSound('impact');
         }
       }
       obj.isGrounded = true;
@@ -27235,8 +27923,7 @@ var PhysicsInteractionSystem = class {
   // Update entity transform
   updateEntityTransform(objectId) {
     const obj = this.objects.get(objectId);
-    if (!obj)
-      return;
+    if (!obj) return;
   }
   // Detect collisions
   detectCollisions() {
@@ -27256,7 +27943,10 @@ var PhysicsInteractionSystem = class {
   }
   // Check if objects should collide
   shouldCollide(objA, objB) {
-    return (objA.collisionMask & 1 << objB.collisionLayer) !== 0 && (objB.collisionMask & 1 << objA.collisionLayer) !== 0;
+    return (
+      (objA.collisionMask & (1 << objB.collisionLayer)) !== 0 &&
+      (objB.collisionMask & (1 << objA.collisionLayer)) !== 0
+    );
   }
   // Check collision between two objects
   checkCollision(objA, objB) {
@@ -27270,7 +27960,7 @@ var PhysicsInteractionSystem = class {
         contactPoint: Vector32.lerp(objA.position, objB.position, 0.5),
         contactNormal: Vector32.normalize(Vector32.subtract(objB.position, objA.position)),
         impulse: minDistance - distance,
-        timestamp: Date.now()
+        timestamp: Date.now(),
       };
       return collision;
     }
@@ -27280,36 +27970,33 @@ var PhysicsInteractionSystem = class {
   resolveCollision(collision) {
     const objA = this.objects.get(collision.objectA);
     const objB = this.objects.get(collision.objectB);
-    if (!objA || !objB)
-      return;
+    if (!objA || !objB) return;
     const separation = Vector32.scale(collision.contactNormal, collision.impulse / 2);
-    if (objA.type !== "static") {
+    if (objA.type !== 'static') {
       objA.position = Vector32.subtract(objA.position, separation);
     }
-    if (objB.type !== "static") {
+    if (objB.type !== 'static') {
       objB.position = Vector32.add(objB.position, separation);
     }
     const relativeVelocity = Vector32.subtract(objB.velocity, objA.velocity);
     const velocityAlongNormal = Vector32.dot(relativeVelocity, collision.contactNormal);
-    if (velocityAlongNormal > 0)
-      return;
+    if (velocityAlongNormal > 0) return;
     const restitution = Math.min(objA.restitution, objB.restitution);
     const impulseScalar = -(1 + restitution) * velocityAlongNormal;
     const impulse = Vector32.scale(collision.contactNormal, impulseScalar);
-    if (objA.type !== "static") {
+    if (objA.type !== 'static') {
       objA.velocity = Vector32.subtract(objA.velocity, impulse);
     }
-    if (objB.type !== "static") {
+    if (objB.type !== 'static') {
       objB.velocity = Vector32.add(objB.velocity, impulse);
     }
     this.collisions.set(collision.id, collision);
-    soundSystem.playInteractionSound("collision");
+    soundSystem.playInteractionSound('collision');
   }
   // Apply force fields
   applyForceFields() {
     this.forceFields.forEach((field, id) => {
-      if (!field.isActive)
-        return;
+      if (!field.isActive) return;
       this.objects.forEach((obj, objectId) => {
         if (field.affectedObjects.includes(objectId)) {
           this.applyForceField(obj, field);
@@ -27337,20 +28024,19 @@ var PhysicsInteractionSystem = class {
   applyConstraint(constraint) {
     const objA = this.objects.get(constraint.objectA);
     const objB = constraint.objectB ? this.objects.get(constraint.objectB) : null;
-    if (!objA)
-      return;
+    if (!objA) return;
     switch (constraint.type) {
-      case "spring":
+      case 'spring':
         if (objB) {
           this.applySpringConstraint(objA, objB, constraint);
         }
         break;
-      case "hinge":
+      case 'hinge':
         if (objB) {
           this.applyHingeConstraint(objA, objB, constraint);
         }
         break;
-      case "fixed":
+      case 'fixed':
         if (objB) {
           this.applyFixedConstraint(objA, objB, constraint);
         }
@@ -27391,65 +28077,61 @@ var PhysicsInteractionSystem = class {
   // Handle object control
   handleObjectControl(controlId) {
     switch (controlId) {
-      case "spawn_ball":
-        this.spawnPhysicsObject("ball", Vector32.create(8, 5, 8));
+      case 'spawn_ball':
+        this.spawnPhysicsObject('ball', Vector32.create(8, 5, 8));
         break;
-      case "spawn_box":
-        this.spawnPhysicsObject("box", Vector32.create(8, 5, 8));
+      case 'spawn_box':
+        this.spawnPhysicsObject('box', Vector32.create(8, 5, 8));
         break;
-      case "spawn_cylinder":
-        this.spawnPhysicsObject("cylinder", Vector32.create(8, 5, 8));
+      case 'spawn_cylinder':
+        this.spawnPhysicsObject('cylinder', Vector32.create(8, 5, 8));
         break;
-      case "clear_all":
+      case 'clear_all':
         this.clearAllObjects();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Handle force field control
   handleForceFieldControl(controlId) {
     switch (controlId) {
-      case "gravity_field":
-        this.createForceField("gravity");
+      case 'gravity_field':
+        this.createForceField('gravity');
         break;
-      case "magnetic_field":
-        this.createForceField("magnetic");
+      case 'magnetic_field':
+        this.createForceField('magnetic');
         break;
-      case "wind_field":
-        this.createForceField("wind");
+      case 'wind_field':
+        this.createForceField('wind');
         break;
-      case "explosion":
+      case 'explosion':
         this.createExplosion();
         break;
     }
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   // Handle constraint control
   handleConstraintControl(controlId) {
     switch (controlId) {
-      case "spring_constraint":
+      case 'spring_constraint':
         this.createSpringConstraint();
         break;
-      case "hinge_constraint":
+      case 'hinge_constraint':
         this.createHingeConstraint();
         break;
-      case "fixed_constraint":
+      case 'fixed_constraint':
         this.createFixedConstraint();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Spawn physics object
   spawnPhysicsObject(type, position) {
     const obj = {
       id: `${type}_${Date.now()}_${Math.random()}`,
-      type: "rigid_body",
+      type: 'rigid_body',
       mass: 1,
-      velocity: Vector32.create(
-        (Math.random() - 0.5) * 2,
-        0,
-        (Math.random() - 0.5) * 2
-      ),
+      velocity: Vector32.create((Math.random() - 0.5) * 2, 0, (Math.random() - 0.5) * 2),
       acceleration: Vector32.create(0, 0, 0),
       angularVelocity: Vector32.create(
         (Math.random() - 0.5) * 2,
@@ -27471,10 +28153,10 @@ var PhysicsInteractionSystem = class {
       isGrounded: false,
       isColliding: false,
       collisionLayer: 1,
-      collisionMask: 255
+      collisionMask: 255,
     };
     this.objects.set(obj.id, obj);
-    this.createPhysicsObject(obj, "material_rubber");
+    this.createPhysicsObject(obj, 'material_rubber');
     console.log(`\u{1F3BE} Spawned ${type}: ${obj.id}`);
   }
   // Create force field
@@ -27487,7 +28169,7 @@ var PhysicsInteractionSystem = class {
       strength: 10,
       direction: Vector32.create(0, 1, 0),
       isActive: true,
-      affectedObjects: Array.from(this.objects.keys()).filter((id) => id !== "ground_plane")
+      affectedObjects: Array.from(this.objects.keys()).filter(id => id !== 'ground_plane'),
     };
     this.forceFields.set(field.id, field);
     console.log(`\u26A1 Created ${type} force field: ${field.id}`);
@@ -27498,8 +28180,7 @@ var PhysicsInteractionSystem = class {
     const explosionForce = 20;
     const explosionRadius = 8;
     this.objects.forEach((obj, id) => {
-      if (obj.type === "static")
-        return;
+      if (obj.type === 'static') return;
       const distance = Vector32.distance(obj.position, explosionPos);
       if (distance <= explosionRadius) {
         const direction = Vector32.normalize(Vector32.subtract(obj.position, explosionPos));
@@ -27507,64 +28188,61 @@ var PhysicsInteractionSystem = class {
         obj.velocity = Vector32.add(obj.velocity, force);
       }
     });
-    soundSystem.playInteractionSound("explosion");
-    console.log("\u{1F4A5} Explosion created!");
+    soundSystem.playInteractionSound('explosion');
+    console.log('\u{1F4A5} Explosion created!');
   }
   // Create spring constraint
   createSpringConstraint() {
-    const objectIds = Array.from(this.objects.keys()).filter((id) => id !== "ground_plane");
-    if (objectIds.length < 2)
-      return;
+    const objectIds = Array.from(this.objects.keys()).filter(id => id !== 'ground_plane');
+    if (objectIds.length < 2) return;
     const constraint = {
       id: `constraint_spring_${Date.now()}`,
-      type: "spring",
+      type: 'spring',
       objectA: objectIds[0],
       objectB: objectIds[1],
       positionA: Vector32.create(0, 0, 0),
       positionB: Vector32.create(0, 0, 0),
       minDistance: 2,
       strength: 5,
-      damping: 0.5
+      damping: 0.5,
     };
     this.constraints.set(constraint.id, constraint);
     console.log(`\u{1F300} Created spring constraint: ${constraint.id}`);
   }
   // Create hinge constraint
   createHingeConstraint() {
-    const objectIds = Array.from(this.objects.keys()).filter((id) => id !== "ground_plane");
-    if (objectIds.length < 2)
-      return;
+    const objectIds = Array.from(this.objects.keys()).filter(id => id !== 'ground_plane');
+    if (objectIds.length < 2) return;
     const constraint = {
       id: `constraint_hinge_${Date.now()}`,
-      type: "hinge",
+      type: 'hinge',
       objectA: objectIds[0],
       objectB: objectIds[1],
       positionA: Vector32.create(0, 0, 0),
       positionB: Vector32.create(1, 0, 0),
       limits: {
         minRotation: Vector32.create(-45, 0, 0),
-        maxRotation: Vector32.create(45, 0, 0)
+        maxRotation: Vector32.create(45, 0, 0),
       },
       strength: 10,
-      damping: 0.5
+      damping: 0.5,
     };
     this.constraints.set(constraint.id, constraint);
     console.log(`\u{1F6AA} Created hinge constraint: ${constraint.id}`);
   }
   // Create fixed constraint
   createFixedConstraint() {
-    const objectIds = Array.from(this.objects.keys()).filter((id) => id !== "ground_plane");
-    if (objectIds.length < 2)
-      return;
+    const objectIds = Array.from(this.objects.keys()).filter(id => id !== 'ground_plane');
+    if (objectIds.length < 2) return;
     const constraint = {
       id: `constraint_fixed_${Date.now()}`,
-      type: "fixed",
+      type: 'fixed',
       objectA: objectIds[0],
       objectB: objectIds[1],
       positionA: Vector32.create(0, 0, 0),
       positionB: Vector32.create(0, 0, 0),
       strength: 100,
-      damping: 1
+      damping: 1,
     };
     this.constraints.set(constraint.id, constraint);
     console.log(`\u{1F512} Created fixed constraint: ${constraint.id}`);
@@ -27572,29 +28250,28 @@ var PhysicsInteractionSystem = class {
   // Interact with object
   interactWithObject(objectId) {
     const obj = this.objects.get(objectId);
-    if (!obj || obj.type === "static")
-      return;
+    if (!obj || obj.type === 'static') return;
     const impulse = Vector32.create(
       (Math.random() - 0.5) * 10,
       Math.random() * 10,
       (Math.random() - 0.5) * 10
     );
     obj.velocity = Vector32.add(obj.velocity, impulse);
-    soundSystem.playInteractionSound("impact");
+    soundSystem.playInteractionSound('impact');
     console.log(`\u{1F44A} Applied impulse to ${objectId}`);
   }
   // Clear all objects
   clearAllObjects() {
     this.objects.forEach((obj, id) => {
-      if (id !== "ground_plane") {
+      if (id !== 'ground_plane') {
         this.objects.delete(id);
       }
     });
     this.forceFields.clear();
     this.constraints.clear();
     this.collisions.clear();
-    console.log("\u{1F5D1}\uFE0F Cleared all physics objects");
-    soundSystem.playInteractionSound("click");
+    console.log('\u{1F5D1}\uFE0F Cleared all physics objects');
+    soundSystem.playInteractionSound('click');
   }
   // Get physics objects
   getObjects() {
@@ -27637,67 +28314,67 @@ var ProceduralGenerationSystem = class {
     this.renderDistance = 2;
   }
   initialize() {
-    console.log("\u{1F30D} Procedural Generation System Initializing...");
+    console.log('\u{1F30D} Procedural Generation System Initializing...');
     this.createGenerationUI();
     this.startGenerationEngine();
     this.generateInitialChunks();
     this.isInitialized = true;
-    console.log("\u{1F30D} Procedural Generation System Ready!");
+    console.log('\u{1F30D} Procedural Generation System Ready!');
   }
   createGenerationUI() {
     this.generationUI = engine.addEntity();
     Transform2.create(this.generationUI, {
       position: Vector32.create(14, 3, 8),
-      scale: Vector32.create(3, 2, 0.1)
+      scale: Vector32.create(3, 2, 0.1),
     });
     MeshRenderer3.setBox(this.generationUI);
     Material3.setPbrMaterial(this.generationUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.generationUI,
       position: Vector32.create(0, 0.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F30D} INFINITE WORLD",
+      text: '\u{1F30D} INFINITE WORLD',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     const controls = [
-      { id: "generate", icon: "\u{1F3B2}", name: "Generate" },
-      { id: "expand", icon: "\u2795", name: "Expand" },
-      { id: "reset", icon: "\u{1F5D1}\uFE0F", name: "Reset" }
+      { id: 'generate', icon: '\u{1F3B2}', name: 'Generate' },
+      { id: 'expand', icon: '\u2795', name: 'Expand' },
+      { id: 'reset', icon: '\u{1F5D1}\uFE0F', name: 'Reset' },
     ];
     let xOffset = -0.6;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.generationUI,
         position: Vector32.create(xOffset, 0, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         { entity: button, opts: { button: InputAction.IA_POINTER, hoverText: control.name } },
@@ -27708,22 +28385,21 @@ var ProceduralGenerationSystem = class {
   }
   handleControl(controlId) {
     switch (controlId) {
-      case "generate":
+      case 'generate':
         this.generateNewChunk();
         break;
-      case "expand":
+      case 'expand':
         this.expandWorld();
         break;
-      case "reset":
+      case 'reset':
         this.resetWorld();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   startGenerationEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateChunks();
     });
   }
@@ -27736,7 +28412,7 @@ var ProceduralGenerationSystem = class {
   }
   generateChunk(x, z) {
     const chunkId = `chunk_${x}_${z}`;
-    const biomes = ["office", "tech", "nature", "abstract"];
+    const biomes = ['office', 'tech', 'nature', 'abstract'];
     const biome = biomes[Math.floor(Math.random() * biomes.length)];
     const chunk = {
       id: chunkId,
@@ -27744,7 +28420,7 @@ var ProceduralGenerationSystem = class {
       biome,
       structures: [],
       entities: [],
-      isLoaded: false
+      isLoaded: false,
     };
     this.chunks.set(chunkId, chunk);
     this.generateChunkContent(chunk);
@@ -27756,12 +28432,12 @@ var ProceduralGenerationSystem = class {
     for (let i = 0; i < structureCount; i++) {
       const structure = {
         id: `struct_${chunk.id}_${i}`,
-        type: chunk.biome === "office" ? "building" : "decoration",
+        type: chunk.biome === 'office' ? 'building' : 'decoration',
         position: Vector32.create(
           chunk.position.x + Math.random() * this.chunkSize,
           2,
           chunk.position.z + Math.random() * this.chunkSize
-        )
+        ),
       };
       chunk.structures.push(structure);
     }
@@ -27769,18 +28445,18 @@ var ProceduralGenerationSystem = class {
     for (let i = 0; i < entityCount; i++) {
       const entity = {
         id: `entity_${chunk.id}_${i}`,
-        type: chunk.biome === "nature" ? "plant" : "object",
+        type: chunk.biome === 'nature' ? 'plant' : 'object',
         position: Vector32.create(
           chunk.position.x + Math.random() * this.chunkSize,
           1,
           chunk.position.z + Math.random() * this.chunkSize
-        )
+        ),
       };
       chunk.entities.push(entity);
     }
   }
   updateChunks() {
-    this.chunks.forEach((chunk) => {
+    this.chunks.forEach(chunk => {
       if (!chunk.isLoaded) {
         this.loadChunk(chunk);
       }
@@ -27790,52 +28466,52 @@ var ProceduralGenerationSystem = class {
     const terrain = engine.addEntity();
     Transform2.create(terrain, {
       position: chunk.position,
-      scale: Vector32.create(this.chunkSize, 0.1, this.chunkSize)
+      scale: Vector32.create(this.chunkSize, 0.1, this.chunkSize),
     });
     MeshRenderer3.setBox(terrain);
     const biomeColor = this.getBiomeColor(chunk.biome);
     Material3.setPbrMaterial(terrain, {
       albedoColor: biomeColor,
       roughness: 0.8,
-      metallic: 0.1
+      metallic: 0.1,
     });
-    chunk.structures.forEach((structure) => {
+    chunk.structures.forEach(structure => {
       const structEntity = engine.addEntity();
       Transform2.create(structEntity, {
         position: structure.position,
-        scale: Vector32.create(2, 4, 2)
+        scale: Vector32.create(2, 4, 2),
       });
       MeshRenderer3.setBox(structEntity);
       Material3.setPbrMaterial(structEntity, {
         albedoColor: Color42.create(0.7, 0.7, 0.7, 1),
         roughness: 0.3,
-        metallic: 0.5
+        metallic: 0.5,
       });
     });
-    chunk.entities.forEach((entity) => {
+    chunk.entities.forEach(entity => {
       const entityEntity = engine.addEntity();
       Transform2.create(entityEntity, {
         position: entity.position,
-        scale: Vector32.create(0.5, 1, 0.5)
+        scale: Vector32.create(0.5, 1, 0.5),
       });
       MeshRenderer3.setSphere(entityEntity);
       Material3.setPbrMaterial(entityEntity, {
         albedoColor: Color42.create(0.2, 0.8, 0.2, 1),
         roughness: 0.5,
-        metallic: 0.1
+        metallic: 0.1,
       });
     });
     chunk.isLoaded = true;
   }
   getBiomeColor(biome) {
     switch (biome) {
-      case "office":
+      case 'office':
         return Color42.create(0.6, 0.6, 0.7, 1);
-      case "tech":
+      case 'tech':
         return Color42.create(0.2, 0.4, 0.8, 1);
-      case "nature":
+      case 'nature':
         return Color42.create(0.2, 0.8, 0.2, 1);
-      case "abstract":
+      case 'abstract':
         return Color42.create(0.8, 0.2, 0.8, 1);
       default:
         return Color42.create(0.5, 0.5, 0.5, 1);
@@ -27845,7 +28521,7 @@ var ProceduralGenerationSystem = class {
     const x = Math.floor(Math.random() * 10) - 5;
     const z = Math.floor(Math.random() * 10) - 5;
     this.generateChunk(x, z);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   expandWorld() {
     for (let i = 0; i < 4; i++) {
@@ -27853,15 +28529,15 @@ var ProceduralGenerationSystem = class {
       const z = Math.floor(Math.random() * 20) - 10;
       this.generateChunk(x, z);
     }
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
   }
   resetWorld() {
-    this.chunks.forEach((chunk) => {
+    this.chunks.forEach(chunk => {
       chunk.isLoaded = false;
     });
     this.chunks.clear();
     this.generateInitialChunks();
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   getChunks() {
     return Array.from(this.chunks.values());
@@ -27887,18 +28563,18 @@ var ResponsiveUISystem = class {
       longPress: { minDuration: 500, maxDistance: 0.1 },
       swipe: { minVelocity: 0.5, minDistance: 0.5 },
       pinch: { minScale: 0.8, maxScale: 1.2 },
-      rotate: { minAngle: 15 }
+      rotate: { minAngle: 15 },
     };
     this.isInitialized = false;
   }
   // Initialize the UI system
   initialize() {
-    console.log("\u{1F4F1} Responsive UI System Initializing...");
+    console.log('\u{1F4F1} Responsive UI System Initializing...');
     this.createMainUI();
     this.setupGestureRecognition();
     this.startAnimationLoop();
     this.isInitialized = true;
-    console.log("\u{1F4F1} Responsive UI System Ready!");
+    console.log('\u{1F4F1} Responsive UI System Ready!');
   }
   // Create main UI interface
   createMainUI() {
@@ -27912,7 +28588,7 @@ var ResponsiveUISystem = class {
     const panel = engine.addEntity();
     Transform2.create(panel, {
       position: Vector32.create(8, 3, 2),
-      scale: Vector32.create(4, 2, 0.1)
+      scale: Vector32.create(4, 2, 0.1),
     });
     MeshRenderer3.setBox(panel);
     Material3.setPbrMaterial(panel, {
@@ -27920,33 +28596,33 @@ var ResponsiveUISystem = class {
       roughness: 0.2,
       metallic: 0.8,
       emissiveColor: Color42.create(0.2, 0.3, 0.6, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: panel,
       position: Vector32.create(0, 0.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(title, {
-      text: "\u{1F3AE} CONTROL PANEL",
+      text: '\u{1F3AE} CONTROL PANEL',
       textColor: Color42.create(0.8, 0.8, 1, 1),
       fontSize: 3,
-      textAlign: 3
+      textAlign: 3,
     });
-    this.addComponent("mainPanel", {
-      id: "mainPanel",
+    this.addComponent('mainPanel', {
+      id: 'mainPanel',
       entity: panel,
-      type: "panel",
+      type: 'panel',
       position: Vector32.create(8, 3, 2),
       size: Vector32.create(4, 2, 0.1),
       visible: true,
       interactive: true,
       gestureHandlers: /* @__PURE__ */ new Map([
-        ["drag", this.handlePanelDrag.bind(this)],
-        ["pinch", this.handlePanelPinch.bind(this)],
-        ["doubleTap", this.handlePanelDoubleTap.bind(this)]
-      ])
+        ['drag', this.handlePanelDrag.bind(this)],
+        ['pinch', this.handlePanelPinch.bind(this)],
+        ['doubleTap', this.handlePanelDoubleTap.bind(this)],
+      ]),
     });
   }
   // Create gesture tutorial
@@ -27954,52 +28630,70 @@ var ResponsiveUISystem = class {
     const tutorial = engine.addEntity();
     Transform2.create(tutorial, {
       position: Vector32.create(14, 4, 2),
-      scale: Vector32.create(2, 3, 0.1)
+      scale: Vector32.create(2, 3, 0.1),
     });
     MeshRenderer3.setBox(tutorial);
     Material3.setPbrMaterial(tutorial, {
       albedoColor: Color42.create(0.2, 0.1, 0.3, 0.8),
       emissiveColor: Color42.create(0.4, 0.2, 0.6, 0.4),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const tutorialText = engine.addEntity();
     Transform2.create(tutorialText, {
       parent: tutorial,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.2, 0.2, 0.2)
+      scale: Vector32.create(0.2, 0.2, 0.2),
     });
     TextShape3.create(tutorialText, {
-      text: "\u{1F446} TAP\n\u{1F91A} SWIPE\n\u{1F90F} PINCH\n\u{1F504} ROTATE\n\u23F0 LONG PRESS",
+      text: '\u{1F446} TAP\n\u{1F91A} SWIPE\n\u{1F90F} PINCH\n\u{1F504} ROTATE\n\u23F0 LONG PRESS',
       textColor: Color42.create(1, 1, 0.8, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
-    this.addComponent("gestureTutorial", {
-      id: "gestureTutorial",
+    this.addComponent('gestureTutorial', {
+      id: 'gestureTutorial',
       entity: tutorial,
-      type: "panel",
+      type: 'panel',
       position: Vector32.create(14, 4, 2),
       size: Vector32.create(2, 3, 0.1),
       visible: true,
       interactive: true,
-      gestureHandlers: /* @__PURE__ */ new Map([
-        ["tap", this.handleTutorialTap.bind(this)]
-      ])
+      gestureHandlers: /* @__PURE__ */ new Map([['tap', this.handleTutorialTap.bind(this)]]),
     });
   }
   // Create responsive buttons
   createResponsiveButtons() {
     const buttonConfigs = [
-      { id: "btnLights", label: "\u{1F4A1}", pos: Vector32.create(2, 1.5, 2), color: Color42.create(1, 0.8, 0.2, 1) },
-      { id: "btnSound", label: "\u{1F50A}", pos: Vector32.create(3, 1.5, 2), color: Color42.create(0.2, 0.8, 1, 1) },
-      { id: "btnData", label: "\u{1F4CA}", pos: Vector32.create(4, 1.5, 2), color: Color42.create(0.8, 0.2, 1, 1) },
-      { id: "btnNPC", label: "\u{1F916}", pos: Vector32.create(5, 1.5, 2), color: Color42.create(0.2, 1, 0.8, 1) }
+      {
+        id: 'btnLights',
+        label: '\u{1F4A1}',
+        pos: Vector32.create(2, 1.5, 2),
+        color: Color42.create(1, 0.8, 0.2, 1),
+      },
+      {
+        id: 'btnSound',
+        label: '\u{1F50A}',
+        pos: Vector32.create(3, 1.5, 2),
+        color: Color42.create(0.2, 0.8, 1, 1),
+      },
+      {
+        id: 'btnData',
+        label: '\u{1F4CA}',
+        pos: Vector32.create(4, 1.5, 2),
+        color: Color42.create(0.8, 0.2, 1, 1),
+      },
+      {
+        id: 'btnNPC',
+        label: '\u{1F916}',
+        pos: Vector32.create(5, 1.5, 2),
+        color: Color42.create(0.2, 1, 0.8, 1),
+      },
     ];
-    buttonConfigs.forEach((config) => {
+    buttonConfigs.forEach(config => {
       const button = engine.addEntity();
       Transform2.create(button, {
         position: config.pos,
-        scale: Vector32.create(0.4, 0.4, 0.1)
+        scale: Vector32.create(0.4, 0.4, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
@@ -28007,33 +28701,33 @@ var ResponsiveUISystem = class {
         roughness: 0.1,
         metallic: 0.9,
         emissiveColor: config.color,
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape3.create(buttonText, {
         text: config.label,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 4,
-        textAlign: 3
+        textAlign: 3,
       });
       this.addComponent(config.id, {
         id: config.id,
         entity: button,
-        type: "button",
+        type: 'button',
         position: config.pos,
         size: Vector32.create(0.4, 0.4, 0.1),
         visible: true,
         interactive: true,
         gestureHandlers: /* @__PURE__ */ new Map([
-          ["tap", () => this.handleButtonTap(config.id)],
-          ["longPress", () => this.handleButtonLongPress(config.id)],
-          ["swipe", (direction) => this.handleButtonSwipe(config.id, direction)]
-        ])
+          ['tap', () => this.handleButtonTap(config.id)],
+          ['longPress', () => this.handleButtonLongPress(config.id)],
+          ['swipe', direction => this.handleButtonSwipe(config.id, direction)],
+        ]),
       });
     });
   }
@@ -28043,34 +28737,34 @@ var ResponsiveUISystem = class {
     Transform2.create(rippleEffect, {
       position: Vector32.create(0, -10, 0),
       // Hidden initially
-      scale: Vector32.create(0.1, 0.1, 0.1)
+      scale: Vector32.create(0.1, 0.1, 0.1),
     });
     MeshRenderer3.setSphere(rippleEffect);
     Material3.setPbrMaterial(rippleEffect, {
       albedoColor: Color42.create(0.5, 0.8, 1, 0.6),
       emissiveColor: Color42.create(0.5, 0.8, 1, 0.8),
-      emissiveIntensity: 3
+      emissiveIntensity: 3,
     });
-    this.addComponent("touchFeedback", {
-      id: "touchFeedback",
+    this.addComponent('touchFeedback', {
+      id: 'touchFeedback',
       entity: rippleEffect,
-      type: "panel",
+      type: 'panel',
       position: Vector32.create(0, -10, 0),
       size: Vector32.create(0.1, 0.1, 0.1),
       visible: false,
       interactive: false,
-      gestureHandlers: /* @__PURE__ */ new Map()
+      gestureHandlers: /* @__PURE__ */ new Map(),
     });
   }
   // Setup gesture recognition system
   setupGestureRecognition() {
     pointerEventsSystem.onPointerDown(
       { entity: engine.RootEntity, opts: { button: InputAction.IA_POINTER } },
-      (e) => this.handleTouchStart(e)
+      e => this.handleTouchStart(e)
     );
     pointerEventsSystem.onPointerUp(
       { entity: engine.RootEntity, opts: { button: InputAction.IA_POINTER } },
-      (e) => this.handleTouchEnd(e)
+      e => this.handleTouchEnd(e)
     );
     engine.addSystem(() => {
       this.updateHoverStates();
@@ -28082,7 +28776,7 @@ var ResponsiveUISystem = class {
       id: Date.now(),
       position: Vector32.create(event.hit.hitPoint.x, event.hit.hitPoint.y, event.hit.hitPoint.z),
       timestamp: Date.now(),
-      pressure: 1
+      pressure: 1,
     };
     this.touchPoints.set(touchPoint.id, touchPoint);
     this.startGestureDetection(touchPoint);
@@ -28091,9 +28785,12 @@ var ResponsiveUISystem = class {
   // Handle touch end
   handleTouchEnd(event) {
     const touchPoint = Array.from(this.touchPoints.values()).pop();
-    if (!touchPoint)
-      return;
-    const endPosition = Vector32.create(event.hit.hitPoint.x, event.hit.hitPoint.y, event.hit.hitPoint.z);
+    if (!touchPoint) return;
+    const endPosition = Vector32.create(
+      event.hit.hitPoint.x,
+      event.hit.hitPoint.y,
+      event.hit.hitPoint.z
+    );
     const duration = Date.now() - touchPoint.timestamp;
     const distance = Vector32.distance(touchPoint.position, endPosition);
     this.detectAndTriggerGesture(touchPoint, endPosition, duration, distance);
@@ -28104,35 +28801,49 @@ var ResponsiveUISystem = class {
   startGestureDetection(touchPoint) {
     setTimeout2(() => {
       if (this.touchPoints.has(touchPoint.id)) {
-        this.triggerGesture("longPress", touchPoint.position, touchPoint.position, Date.now() - touchPoint.timestamp, 0);
+        this.triggerGesture(
+          'longPress',
+          touchPoint.position,
+          touchPoint.position,
+          Date.now() - touchPoint.timestamp,
+          0
+        );
       }
     }, this.gestureThresholds.longPress.minDuration);
   }
   // Detect and trigger gestures
   detectAndTriggerGesture(startPoint, endPosition, duration, distance) {
-    if (duration <= this.gestureThresholds.tap.maxDuration && distance <= this.gestureThresholds.tap.maxDistance) {
-      this.triggerGesture("tap", startPoint.position, endPosition, duration, distance);
+    if (
+      duration <= this.gestureThresholds.tap.maxDuration &&
+      distance <= this.gestureThresholds.tap.maxDistance
+    ) {
+      this.triggerGesture('tap', startPoint.position, endPosition, duration, distance);
       return;
     }
-    const velocity = distance / duration * 1e3;
-    if (velocity >= this.gestureThresholds.swipe.minVelocity && distance >= this.gestureThresholds.swipe.minDistance) {
+    const velocity = (distance / duration) * 1e3;
+    if (
+      velocity >= this.gestureThresholds.swipe.minVelocity &&
+      distance >= this.gestureThresholds.swipe.minDistance
+    ) {
       const direction = Vector32.subtract(endPosition, startPoint.position).normalize();
-      this.triggerGesture("swipe", startPoint.position, endPosition, duration, distance, direction);
+      this.triggerGesture('swipe', startPoint.position, endPosition, duration, distance, direction);
       return;
     }
-    if (duration >= this.gestureThresholds.longPress.minDuration && distance <= this.gestureThresholds.longPress.maxDistance) {
-      this.triggerGesture("longPress", startPoint.position, endPosition, duration, distance);
+    if (
+      duration >= this.gestureThresholds.longPress.minDuration &&
+      distance <= this.gestureThresholds.longPress.maxDistance
+    ) {
+      this.triggerGesture('longPress', startPoint.position, endPosition, duration, distance);
     }
   }
   // Trigger gesture on components
   triggerGesture(type, startPos, endPos, duration, distance, direction) {
-    this.components.forEach((component) => {
-      if (!component.interactive || !component.visible)
-        return;
+    this.components.forEach(component => {
+      if (!component.interactive || !component.visible) return;
       if (this.isPointInComponent(endPos, component)) {
         const handler = component.gestureHandlers.get(type);
         if (handler) {
-          soundSystem.playInteractionSound("click");
+          soundSystem.playInteractionSound('click');
           if (direction) {
             handler(direction);
           } else {
@@ -28147,11 +28858,18 @@ var ResponsiveUISystem = class {
     const halfSize = Vector32.scale(component.size, 0.5);
     const minBounds = Vector32.subtract(component.position, halfSize);
     const maxBounds = Vector32.add(component.position, halfSize);
-    return point.x >= minBounds.x && point.x <= maxBounds.x && point.y >= minBounds.y && point.y <= maxBounds.y && point.z >= minBounds.z && point.z <= maxBounds.z;
+    return (
+      point.x >= minBounds.x &&
+      point.x <= maxBounds.x &&
+      point.y >= minBounds.y &&
+      point.y <= maxBounds.y &&
+      point.z >= minBounds.z &&
+      point.z <= maxBounds.z
+    );
   }
   // Show touch feedback
   showTouchFeedback(position) {
-    const feedback = this.components.get("touchFeedback");
+    const feedback = this.components.get('touchFeedback');
     if (feedback) {
       const transform = Transform2.getMutable(feedback.entity);
       transform.position = position;
@@ -28161,7 +28879,7 @@ var ResponsiveUISystem = class {
   }
   // Hide touch feedback
   hideTouchFeedback() {
-    const feedback = this.components.get("touchFeedback");
+    const feedback = this.components.get('touchFeedback');
     if (feedback) {
       const transform = Transform2.getMutable(feedback.entity);
       transform.position = Vector32.create(0, -10, 0);
@@ -28177,7 +28895,7 @@ var ResponsiveUISystem = class {
       const transform = Transform2.getMutable(entity);
       transform.scale = Vector32.create(scale, scale, scale);
       const material = Material3.getMutable(entity);
-      if (material && material.$case === "pbr") {
+      if (material && material.$case === 'pbr') {
         material.pbr.albedoColor = Color42.create(0.5, 0.8, 1, opacity);
       }
       if (opacity > 0) {
@@ -28188,30 +28906,30 @@ var ResponsiveUISystem = class {
   }
   // Gesture handlers
   handlePanelDrag() {
-    console.log("\u{1F3AE} Panel dragged");
+    console.log('\u{1F3AE} Panel dragged');
   }
   handlePanelPinch() {
-    console.log("\u{1F3AE} Panel pinched");
+    console.log('\u{1F3AE} Panel pinched');
   }
   handlePanelDoubleTap() {
-    console.log("\u{1F3AE} Panel double-tapped");
+    console.log('\u{1F3AE} Panel double-tapped');
   }
   handleTutorialTap() {
-    console.log("\u{1F4DA} Tutorial tapped");
+    console.log('\u{1F4DA} Tutorial tapped');
   }
   handleButtonTap(buttonId) {
     console.log(`\u{1F518} Button ${buttonId} tapped`);
     switch (buttonId) {
-      case "btnLights":
+      case 'btnLights':
         this.toggleLights();
         break;
-      case "btnSound":
+      case 'btnSound':
         this.toggleSound();
         break;
-      case "btnData":
+      case 'btnData':
         this.toggleDataVisualization();
         break;
-      case "btnNPC":
+      case 'btnNPC':
         this.toggleNPCs();
         break;
     }
@@ -28224,24 +28942,23 @@ var ResponsiveUISystem = class {
   }
   // Control functions
   toggleLights() {
-    console.log("\u{1F4A1} Lights toggled");
+    console.log('\u{1F4A1} Lights toggled');
   }
   toggleSound() {
-    console.log("\u{1F50A} Sound toggled");
+    console.log('\u{1F50A} Sound toggled');
   }
   toggleDataVisualization() {
-    console.log("\u{1F4CA} Data visualization toggled");
+    console.log('\u{1F4CA} Data visualization toggled');
   }
   toggleNPCs() {
-    console.log("\u{1F916} NPCs toggled");
+    console.log('\u{1F916} NPCs toggled');
   }
   // Update hover states
   updateHoverStates() {
-    this.components.forEach((component) => {
-      if (!component.interactive || !component.visible)
-        return;
+    this.components.forEach(component => {
+      if (!component.interactive || !component.visible) return;
       const material = Material3.getMutable(component.entity);
-      if (material && material.$case === "pbr") {
+      if (material && material.$case === 'pbr') {
         const time = Date.now() / 1e3;
         const pulse = Math.sin(time * 3) * 0.1 + 0.9;
         material.pbr.emissiveIntensity = pulse * 2;
@@ -28251,16 +28968,14 @@ var ResponsiveUISystem = class {
   // Start animation loop
   startAnimationLoop() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateUIAnimations();
     });
   }
   // Update UI animations
   updateUIAnimations() {
-    this.components.forEach((component) => {
-      if (!component.visible)
-        return;
+    this.components.forEach(component => {
+      if (!component.visible) return;
       if (component.interactive) {
         const time = Date.now() / 1e3;
         const transform = Transform2.getMutable(component.entity);
@@ -28292,7 +29007,7 @@ var ResponsiveUISystem = class {
   }
   // Cleanup system
   cleanup() {
-    this.components.forEach((component) => {
+    this.components.forEach(component => {
       engine.removeEntity(component.entity);
     });
     this.components.clear();
@@ -28310,78 +29025,98 @@ var SmartRoomSystem = class {
     this.automationRules = /* @__PURE__ */ new Map();
     this.smartScenes = /* @__PURE__ */ new Map();
     this.isInitialized = false;
-    this.currentScene = "default";
+    this.currentScene = 'default';
     this.energyUsage = 0;
   }
   // Initialize smart room system
   initialize() {
-    console.log("\u{1F3E0} Smart Room System Initializing...");
+    console.log('\u{1F3E0} Smart Room System Initializing...');
     this.createIoTDevices();
     this.createAutomationRules();
     this.createSmartScenes();
     this.createControlPanel();
     this.startAutomationEngine();
     this.isInitialized = true;
-    console.log("\u{1F3E0} Smart Room System Ready!");
+    console.log('\u{1F3E0} Smart Room System Ready!');
   }
   // Create IoT devices
   createIoTDevices() {
-    this.createDevice("light_main", "Main Light", "light", Vector32.create(8, 4, 8));
-    this.createDevice("light_desk", "Desk Light", "light", Vector32.create(4, 2.5, 4));
-    this.createDevice("light_meeting", "Meeting Room Light", "light", Vector32.create(12, 2.5, 12));
-    this.createDevice("temp_main", "Thermostat", "temperature", Vector32.create(8, 3, 2));
-    this.createDevice("security_main", "Security System", "security", Vector32.create(1, 2, 8));
-    this.createDevice("camera_entrance", "Entrance Camera", "security", Vector32.create(8, 3, 15));
-    this.createDevice("entertainment_display", "Smart Display", "entertainment", Vector32.create(8, 3, 0.5));
-    this.createDevice("entertainment_audio", "Audio System", "entertainment", Vector32.create(14, 2, 8));
-    this.createDevice("productivity_focus", "Focus Mode", "productivity", Vector32.create(4, 3, 12));
-    this.createDevice("productivity_timer", "Work Timer", "productivity", Vector32.create(12, 3, 4));
-    this.createDevice("energy_monitor", "Energy Monitor", "energy", Vector32.create(2, 3, 2));
-    this.createDevice("energy_solar", "Solar Panels", "energy", Vector32.create(14, 5, 14));
+    this.createDevice('light_main', 'Main Light', 'light', Vector32.create(8, 4, 8));
+    this.createDevice('light_desk', 'Desk Light', 'light', Vector32.create(4, 2.5, 4));
+    this.createDevice('light_meeting', 'Meeting Room Light', 'light', Vector32.create(12, 2.5, 12));
+    this.createDevice('temp_main', 'Thermostat', 'temperature', Vector32.create(8, 3, 2));
+    this.createDevice('security_main', 'Security System', 'security', Vector32.create(1, 2, 8));
+    this.createDevice('camera_entrance', 'Entrance Camera', 'security', Vector32.create(8, 3, 15));
+    this.createDevice(
+      'entertainment_display',
+      'Smart Display',
+      'entertainment',
+      Vector32.create(8, 3, 0.5)
+    );
+    this.createDevice(
+      'entertainment_audio',
+      'Audio System',
+      'entertainment',
+      Vector32.create(14, 2, 8)
+    );
+    this.createDevice(
+      'productivity_focus',
+      'Focus Mode',
+      'productivity',
+      Vector32.create(4, 3, 12)
+    );
+    this.createDevice(
+      'productivity_timer',
+      'Work Timer',
+      'productivity',
+      Vector32.create(12, 3, 4)
+    );
+    this.createDevice('energy_monitor', 'Energy Monitor', 'energy', Vector32.create(2, 3, 2));
+    this.createDevice('energy_solar', 'Solar Panels', 'energy', Vector32.create(14, 5, 14));
   }
   // Create individual device
   createDevice(id, name, type, position) {
     const device = engine.addEntity();
     Transform2.create(device, {
       position,
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     let deviceColor;
     let deviceIcon;
     switch (type) {
-      case "light":
+      case 'light':
         deviceColor = Color42.create(1, 0.8, 0.2, 1);
-        deviceIcon = "\u{1F4A1}";
+        deviceIcon = '\u{1F4A1}';
         MeshRenderer3.setSphere(device);
         break;
-      case "temperature":
+      case 'temperature':
         deviceColor = Color42.create(0.2, 0.8, 1, 1);
-        deviceIcon = "\u{1F321}\uFE0F";
+        deviceIcon = '\u{1F321}\uFE0F';
         MeshRenderer3.setBox(device);
         break;
-      case "security":
+      case 'security':
         deviceColor = Color42.create(0.8, 0.2, 0.2, 1);
-        deviceIcon = "\u{1F6E1}\uFE0F";
+        deviceIcon = '\u{1F6E1}\uFE0F';
         MeshRenderer3.setBox(device);
         break;
-      case "entertainment":
+      case 'entertainment':
         deviceColor = Color42.create(0.8, 0.2, 0.8, 1);
-        deviceIcon = "\u{1F3AE}";
+        deviceIcon = '\u{1F3AE}';
         MeshRenderer3.setBox(device);
         break;
-      case "productivity":
+      case 'productivity':
         deviceColor = Color42.create(0.2, 0.8, 0.2, 1);
-        deviceIcon = "\u26A1";
+        deviceIcon = '\u26A1';
         MeshRenderer3.setBox(device);
         break;
-      case "energy":
+      case 'energy':
         deviceColor = Color42.create(1, 0.6, 0.2, 1);
-        deviceIcon = "\u26A1";
+        deviceIcon = '\u26A1';
         MeshRenderer3.setBox(device);
         break;
       default:
         deviceColor = Color42.create(0.5, 0.5, 0.5, 1);
-        deviceIcon = "\u{1F4F1}";
+        deviceIcon = '\u{1F4F1}';
         MeshRenderer3.setBox(device);
     }
     Material3.setPbrMaterial(device, {
@@ -28394,92 +29129,112 @@ var SmartRoomSystem = class {
         deviceColor.b * 0.5,
         0.5
       ),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const label = engine.addEntity();
     Transform2.create(label, {
       parent: device,
       position: Vector32.create(0, 0.3, 0),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(label, {
       text: deviceIcon,
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     const statusIndicator = engine.addEntity();
     Transform2.create(statusIndicator, {
       parent: device,
       position: Vector32.create(0, -0.2, 0),
-      scale: Vector32.create(0.1, 0.1, 0.1)
+      scale: Vector32.create(0.1, 0.1, 0.1),
     });
     MeshRenderer3.setSphere(statusIndicator);
     Material3.setPbrMaterial(statusIndicator, {
       albedoColor: Color42.create(0, 1, 0, 1),
       emissiveColor: Color42.create(0, 1, 0, 1),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const iotDevice = {
       id,
       name,
       type,
-      status: "online",
-      value: type === "light" ? false : type === "temperature" ? 22 : 0,
+      status: 'online',
+      value: type === 'light' ? false : type === 'temperature' ? 22 : 0,
       position,
       automationRules: [],
-      lastUpdate: Date.now()
+      lastUpdate: Date.now(),
     };
     this.devices.set(id, iotDevice);
     pointerEventsSystem.onPointerDown(
       {
         entity: device,
-        opts: { button: InputAction.IA_POINTER, hoverText: `Control ${name}` }
+        opts: { button: InputAction.IA_POINTER, hoverText: `Control ${name}` },
       },
       () => this.handleDeviceInteraction(id)
     );
   }
   // Create automation rules
   createAutomationRules() {
-    this.createAutomationRule("morning_routine", "Morning Routine", {
-      type: "time",
-      conditions: [
-        { deviceId: "temp_main", property: "hour", operator: "equals", value: 8 }
+    this.createAutomationRule(
+      'morning_routine',
+      'Morning Routine',
+      {
+        type: 'time',
+        conditions: [{ deviceId: 'temp_main', property: 'hour', operator: 'equals', value: 8 }],
+      },
+      [
+        { type: 'setDevice', target: 'light_main', parameters: { value: true } },
+        { type: 'setDevice', target: 'temp_main', parameters: { value: 22 } },
+        {
+          type: 'setDevice',
+          target: 'entertainment_audio',
+          parameters: { value: 'morning_playlist' },
+        },
       ]
-    }, [
-      { type: "setDevice", target: "light_main", parameters: { value: true } },
-      { type: "setDevice", target: "temp_main", parameters: { value: 22 } },
-      { type: "setDevice", target: "entertainment_audio", parameters: { value: "morning_playlist" } }
-    ]);
-    this.createAutomationRule("energy_saving", "Energy Saving", {
-      type: "device",
-      conditions: [
-        { deviceId: "energy_monitor", property: "usage", operator: "greater", value: 80 }
+    );
+    this.createAutomationRule(
+      'energy_saving',
+      'Energy Saving',
+      {
+        type: 'device',
+        conditions: [
+          { deviceId: 'energy_monitor', property: 'usage', operator: 'greater', value: 80 },
+        ],
+      },
+      [
+        { type: 'setDevice', target: 'light_main', parameters: { value: false } },
+        { type: 'setDevice', target: 'light_desk', parameters: { value: false } },
+        { type: 'notify', target: 'user', parameters: { message: 'High energy usage detected' } },
       ]
-    }, [
-      { type: "setDevice", target: "light_main", parameters: { value: false } },
-      { type: "setDevice", target: "light_desk", parameters: { value: false } },
-      { type: "notify", target: "user", parameters: { message: "High energy usage detected" } }
-    ]);
-    this.createAutomationRule("security_night", "Night Security", {
-      type: "time",
-      conditions: [
-        { deviceId: "temp_main", property: "hour", operator: "greater", value: 22 }
+    );
+    this.createAutomationRule(
+      'security_night',
+      'Night Security',
+      {
+        type: 'time',
+        conditions: [{ deviceId: 'temp_main', property: 'hour', operator: 'greater', value: 22 }],
+      },
+      [
+        { type: 'setDevice', target: 'security_main', parameters: { value: 'armed' } },
+        { type: 'setDevice', target: 'camera_entrance', parameters: { value: 'recording' } },
       ]
-    }, [
-      { type: "setDevice", target: "security_main", parameters: { value: "armed" } },
-      { type: "setDevice", target: "camera_entrance", parameters: { value: "recording" } }
-    ]);
-    this.createAutomationRule("focus_mode", "Focus Mode", {
-      type: "device",
-      conditions: [
-        { deviceId: "productivity_focus", property: "active", operator: "equals", value: true }
+    );
+    this.createAutomationRule(
+      'focus_mode',
+      'Focus Mode',
+      {
+        type: 'device',
+        conditions: [
+          { deviceId: 'productivity_focus', property: 'active', operator: 'equals', value: true },
+        ],
+      },
+      [
+        { type: 'setDevice', target: 'entertainment_audio', parameters: { value: false } },
+        { type: 'setDevice', target: 'light_desk', parameters: { value: true, brightness: 0.8 } },
+        { type: 'notify', target: 'user', parameters: { message: 'Focus mode activated' } },
       ]
-    }, [
-      { type: "setDevice", target: "entertainment_audio", parameters: { value: false } },
-      { type: "setDevice", target: "light_desk", parameters: { value: true, brightness: 0.8 } },
-      { type: "notify", target: "user", parameters: { message: "Focus mode activated" } }
-    ]);
+    );
   }
   // Create automation rule
   createAutomationRule(id, name, trigger, actions) {
@@ -28489,50 +29244,63 @@ var SmartRoomSystem = class {
       trigger,
       actions,
       enabled: true,
-      priority: 1
+      priority: 1,
     };
     this.automationRules.set(id, rule);
   }
   // Create smart scenes
   createSmartScenes() {
-    this.createSmartScene("work_mode", "Work Mode", "Optimized for productivity", [
-      "light_main",
-      "light_desk",
-      "productivity_timer"
-    ], /* @__PURE__ */ new Map([
-      ["light_main", { value: true, brightness: 0.9 }],
-      ["light_desk", { value: true, brightness: 0.8 }],
-      ["temp_main", { value: 21 }],
-      ["productivity_timer", { value: true, duration: 25 }]
-    ]), "\u{1F4BC}");
-    this.createSmartScene("meeting_mode", "Meeting Mode", "Optimized for collaboration", [
-      "light_main",
-      "light_meeting",
-      "entertainment_display"
-    ], /* @__PURE__ */ new Map([
-      ["light_main", { value: true, brightness: 0.7 }],
-      ["light_meeting", { value: true, brightness: 0.8 }],
-      ["entertainment_display", { value: "presentation_mode" }],
-      ["temp_main", { value: 22 }]
-    ]), "\u{1F91D}");
-    this.createSmartScene("relax_mode", "Relax Mode", "Optimized for comfort", [
-      "entertainment_audio",
-      "light_main"
-    ], /* @__PURE__ */ new Map([
-      ["light_main", { value: true, brightness: 0.3, color: "warm" }],
-      ["entertainment_audio", { value: "relax_playlist" }],
-      ["temp_main", { value: 23 }]
-    ]), "\u{1F319}");
-    this.createSmartScene("energy_saver", "Energy Saver", "Minimize energy consumption", [
-      "light_main",
-      "light_desk",
-      "entertainment_display"
-    ], /* @__PURE__ */ new Map([
-      ["light_main", { value: false }],
-      ["light_desk", { value: false }],
-      ["entertainment_display", { value: false }],
-      ["temp_main", { value: 20 }]
-    ]), "\u{1F331}");
+    this.createSmartScene(
+      'work_mode',
+      'Work Mode',
+      'Optimized for productivity',
+      ['light_main', 'light_desk', 'productivity_timer'],
+      /* @__PURE__ */ new Map([
+        ['light_main', { value: true, brightness: 0.9 }],
+        ['light_desk', { value: true, brightness: 0.8 }],
+        ['temp_main', { value: 21 }],
+        ['productivity_timer', { value: true, duration: 25 }],
+      ]),
+      '\u{1F4BC}'
+    );
+    this.createSmartScene(
+      'meeting_mode',
+      'Meeting Mode',
+      'Optimized for collaboration',
+      ['light_main', 'light_meeting', 'entertainment_display'],
+      /* @__PURE__ */ new Map([
+        ['light_main', { value: true, brightness: 0.7 }],
+        ['light_meeting', { value: true, brightness: 0.8 }],
+        ['entertainment_display', { value: 'presentation_mode' }],
+        ['temp_main', { value: 22 }],
+      ]),
+      '\u{1F91D}'
+    );
+    this.createSmartScene(
+      'relax_mode',
+      'Relax Mode',
+      'Optimized for comfort',
+      ['entertainment_audio', 'light_main'],
+      /* @__PURE__ */ new Map([
+        ['light_main', { value: true, brightness: 0.3, color: 'warm' }],
+        ['entertainment_audio', { value: 'relax_playlist' }],
+        ['temp_main', { value: 23 }],
+      ]),
+      '\u{1F319}'
+    );
+    this.createSmartScene(
+      'energy_saver',
+      'Energy Saver',
+      'Minimize energy consumption',
+      ['light_main', 'light_desk', 'entertainment_display'],
+      /* @__PURE__ */ new Map([
+        ['light_main', { value: false }],
+        ['light_desk', { value: false }],
+        ['entertainment_display', { value: false }],
+        ['temp_main', { value: 20 }],
+      ]),
+      '\u{1F331}'
+    );
   }
   // Create smart scene
   createSmartScene(id, name, description, devices, settings, icon) {
@@ -28542,7 +29310,7 @@ var SmartRoomSystem = class {
       description,
       devices,
       settings,
-      icon
+      icon,
     };
     this.smartScenes.set(id, scene);
   }
@@ -28551,25 +29319,25 @@ var SmartRoomSystem = class {
     this.controlPanel = engine.addEntity();
     Transform2.create(this.controlPanel, {
       position: Vector32.create(8, 3, 14),
-      scale: Vector32.create(4, 3, 0.1)
+      scale: Vector32.create(4, 3, 0.1),
     });
     MeshRenderer3.setBox(this.controlPanel);
     Material3.setPbrMaterial(this.controlPanel, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.controlPanel,
       position: Vector32.create(0, 1.2, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape3.create(title, {
-      text: "\u{1F3E0} SMART ROOM CONTROL",
+      text: '\u{1F3E0} SMART ROOM CONTROL',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createSceneButtons();
     this.createDeviceStatusDisplay();
@@ -28583,30 +29351,30 @@ var SmartRoomSystem = class {
       Transform2.create(button, {
         parent: this.controlPanel,
         position: Vector32.create(xOffset, 0.5, 0.1),
-        scale: Vector32.create(0.5, 0.3, 0.1)
+        scale: Vector32.create(0.5, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.2, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.2, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape3.create(buttonText, {
         text: `${scene.icon} ${scene.name}`,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 1.5,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: `Activate ${scene.name}` }
+          opts: { button: InputAction.IA_POINTER, hoverText: `Activate ${scene.name}` },
         },
         () => this.activateScene(id)
       );
@@ -28619,13 +29387,13 @@ var SmartRoomSystem = class {
     Transform2.create(statusDisplay, {
       parent: this.controlPanel,
       position: Vector32.create(0, -0.3, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(statusDisplay);
     Material3.setPbrMaterial(statusDisplay, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     this.updateDeviceStatusDisplay();
   }
@@ -28635,21 +29403,20 @@ var SmartRoomSystem = class {
     Transform2.create(energyDisplay, {
       parent: this.controlPanel,
       position: Vector32.create(0, -0.8, 0.1),
-      scale: Vector32.create(0.8, 0.2, 0.1)
+      scale: Vector32.create(0.8, 0.2, 0.1),
     });
     MeshRenderer3.setBox(energyDisplay);
     Material3.setPbrMaterial(energyDisplay, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     this.updateEnergyDisplay();
   }
   // Start automation engine
   startAutomationEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateDeviceValues();
       this.checkAutomationRules();
       this.updateDisplays();
@@ -28657,27 +29424,28 @@ var SmartRoomSystem = class {
   }
   // Update device values
   updateDeviceValues() {
-    this.devices.forEach((device) => {
+    this.devices.forEach(device => {
       switch (device.type) {
-        case "temperature":
+        case 'temperature':
           device.value = 20 + Math.sin(Date.now() / 1e4) * 3;
           break;
-        case "energy":
+        case 'energy':
           device.value = Math.random() * 100;
           break;
-        case "security":
-          device.value = Math.random() > 0.95 ? "alert" : "normal";
+        case 'security':
+          device.value = Math.random() > 0.95 ? 'alert' : 'normal';
           break;
       }
       device.lastUpdate = Date.now();
     });
-    this.energyUsage = Array.from(this.devices.values()).filter((d) => d.type === "energy").reduce((sum, d) => sum + d.value, 0);
+    this.energyUsage = Array.from(this.devices.values())
+      .filter(d => d.type === 'energy')
+      .reduce((sum, d) => sum + d.value, 0);
   }
   // Check automation rules
   checkAutomationRules() {
-    this.automationRules.forEach((rule) => {
-      if (!rule.enabled)
-        return;
+    this.automationRules.forEach(rule => {
+      if (!rule.enabled) return;
       if (this.evaluateTrigger(rule.trigger)) {
         this.executeActions(rule.actions);
       }
@@ -28685,17 +29453,17 @@ var SmartRoomSystem = class {
   }
   // Evaluate trigger conditions
   evaluateTrigger(trigger) {
-    const hour = (/* @__PURE__ */ new Date()).getHours();
+    const hour = /* @__PURE__ */ new Date().getHours();
     switch (trigger.type) {
-      case "time":
-        return trigger.conditions.some((condition) => {
-          if (condition.property === "hour") {
+      case 'time':
+        return trigger.conditions.some(condition => {
+          if (condition.property === 'hour') {
             switch (condition.operator) {
-              case "equals":
+              case 'equals':
                 return hour === condition.value;
-              case "greater":
+              case 'greater':
                 return hour > condition.value;
-              case "less":
+              case 'less':
                 return hour < condition.value;
               default:
                 return false;
@@ -28703,17 +29471,16 @@ var SmartRoomSystem = class {
           }
           return false;
         });
-      case "device":
-        return trigger.conditions.every((condition) => {
+      case 'device':
+        return trigger.conditions.every(condition => {
           const device = this.devices.get(condition.deviceId);
-          if (!device)
-            return false;
+          if (!device) return false;
           switch (condition.operator) {
-            case "equals":
+            case 'equals':
               return device.value === condition.value;
-            case "greater":
+            case 'greater':
               return device.value > condition.value;
-            case "less":
+            case 'less':
               return device.value < condition.value;
             default:
               return false;
@@ -28725,16 +29492,16 @@ var SmartRoomSystem = class {
   }
   // Execute automation actions
   executeActions(actions) {
-    actions.forEach((action) => {
+    actions.forEach(action => {
       switch (action.type) {
-        case "setDevice":
+        case 'setDevice':
           this.setDeviceValue(action.target, action.parameters);
           break;
-        case "notify":
+        case 'notify':
           console.log(`\u{1F514} Notification: ${action.parameters.message}`);
-          soundSystem.playInteractionSound("alert");
+          soundSystem.playInteractionSound('alert');
           break;
-        case "scene":
+        case 'scene':
           this.activateScene(action.target);
           break;
       }
@@ -28752,13 +29519,12 @@ var SmartRoomSystem = class {
   // Handle device interaction
   handleDeviceInteraction(deviceId) {
     const device = this.devices.get(deviceId);
-    if (!device)
-      return;
+    if (!device) return;
     console.log(`\u{1F527} Interacting with ${device.name}`);
-    soundSystem.playInteractionSound("click");
-    if (typeof device.value === "boolean") {
+    soundSystem.playInteractionSound('click');
+    if (typeof device.value === 'boolean') {
       device.value = !device.value;
-    } else if (device.type === "light") {
+    } else if (device.type === 'light') {
       device.value = !device.value;
     }
     this.updateDeviceVisual(deviceId);
@@ -28766,15 +29532,14 @@ var SmartRoomSystem = class {
   // Update device visual
   updateDeviceVisual(deviceId) {
     const device = this.devices.get(deviceId);
-    if (!device)
-      return;
-    const deviceEntity = Array.from(engine.entities).find((e) => {
+    if (!device) return;
+    const deviceEntity = Array.from(engine.entities).find(e => {
       const transform = Transform2.get(e);
       return transform && Vector32.distance(transform.position, device.position) < 0.1;
     });
     if (deviceEntity) {
       const material = Material3.getMutable(deviceEntity);
-      if (material && material.$case === "pbr") {
+      if (material && material.$case === 'pbr') {
         if (device.value === true) {
           material.pbr.emissiveIntensity = 3;
         } else {
@@ -28786,10 +29551,9 @@ var SmartRoomSystem = class {
   // Activate scene
   activateScene(sceneId) {
     const scene = this.smartScenes.get(sceneId);
-    if (!scene)
-      return;
+    if (!scene) return;
     console.log(`\u{1F3AC} Activating scene: ${scene.name}`);
-    soundSystem.playInteractionSound("powerup");
+    soundSystem.playInteractionSound('powerup');
     this.currentScene = sceneId;
     scene.settings.forEach((settings, deviceId) => {
       this.setDeviceValue(deviceId, settings);
@@ -28802,7 +29566,9 @@ var SmartRoomSystem = class {
   }
   // Update device status display
   updateDeviceStatusDisplay() {
-    const onlineDevices = Array.from(this.devices.values()).filter((d) => d.status === "online").length;
+    const onlineDevices = Array.from(this.devices.values()).filter(
+      d => d.status === 'online'
+    ).length;
     const totalDevices = this.devices.size;
     console.log(`\u{1F4CA} Device Status: ${onlineDevices}/${totalDevices} online`);
   }
@@ -28860,20 +29626,20 @@ var VoiceCommandSystem = class {
     this.commandHistory = [];
     this.isInitialized = false;
     this.isListening = false;
-    this.currentTranscript = "";
+    this.currentTranscript = '';
     this.voiceAssistant = {
-      id: "assistant_nexus",
-      name: "Nexus",
-      personality: "professional",
-      voice: "female",
-      language: "en-US",
+      id: 'assistant_nexus',
+      name: 'Nexus',
+      personality: 'professional',
+      voice: 'female',
+      language: 'en-US',
       isActive: true,
-      processingState: "idle"
+      processingState: 'idle',
     };
   }
   // Initialize voice command system
   initialize() {
-    console.log("\u{1F3A4} Voice Command System Initializing...");
+    console.log('\u{1F3A4} Voice Command System Initializing...');
     this.setupIntents();
     this.createVoiceUI();
     this.initializeSpeechRecognition();
@@ -28881,98 +29647,98 @@ var VoiceCommandSystem = class {
     this.initializeVoiceSynthesis();
     this.startVoiceEngine();
     this.isInitialized = true;
-    console.log("\u{1F3A4} Voice Command System Ready!");
+    console.log('\u{1F3A4} Voice Command System Ready!');
   }
   // Setup voice intents
   setupIntents() {
-    this.intents.set("toggle_lights", {
-      name: "toggle_lights",
+    this.intents.set('toggle_lights', {
+      name: 'toggle_lights',
       parameters: /* @__PURE__ */ new Map([
-        ["location", "string"],
-        ["action", "string"]
+        ['location', 'string'],
+        ['action', 'string'],
       ]),
-      action: "control_lighting"
+      action: 'control_lighting',
     });
-    this.intents.set("adjust_temperature", {
-      name: "adjust_temperature",
+    this.intents.set('adjust_temperature', {
+      name: 'adjust_temperature',
       parameters: /* @__PURE__ */ new Map([
-        ["temperature", "number"],
-        ["unit", "string"]
+        ['temperature', 'number'],
+        ['unit', 'string'],
       ]),
-      action: "control_climate"
+      action: 'control_climate',
     });
-    this.intents.set("start_meeting", {
-      name: "start_meeting",
+    this.intents.set('start_meeting', {
+      name: 'start_meeting',
       parameters: /* @__PURE__ */ new Map([
-        ["participants", "array"],
-        ["topic", "string"]
+        ['participants', 'array'],
+        ['topic', 'string'],
       ]),
-      action: "initiate_meeting"
+      action: 'initiate_meeting',
     });
-    this.intents.set("navigate_to", {
-      name: "navigate_to",
+    this.intents.set('navigate_to', {
+      name: 'navigate_to',
       parameters: /* @__PURE__ */ new Map([
-        ["destination", "string"],
-        ["mode", "string"]
+        ['destination', 'string'],
+        ['mode', 'string'],
       ]),
-      action: "navigate"
+      action: 'navigate',
     });
-    this.intents.set("show_dashboard", {
-      name: "show_dashboard",
+    this.intents.set('show_dashboard', {
+      name: 'show_dashboard',
       parameters: /* @__PURE__ */ new Map([
-        ["type", "string"],
-        ["data", "string"]
+        ['type', 'string'],
+        ['data', 'string'],
       ]),
-      action: "display_dashboard"
+      action: 'display_dashboard',
     });
-    this.intents.set("send_message", {
-      name: "send_message",
+    this.intents.set('send_message', {
+      name: 'send_message',
       parameters: /* @__PURE__ */ new Map([
-        ["recipient", "string"],
-        ["message", "string"]
+        ['recipient', 'string'],
+        ['message', 'string'],
       ]),
-      action: "communicate"
+      action: 'communicate',
     });
-    this.intents.set("schedule_event", {
-      name: "schedule_event",
+    this.intents.set('schedule_event', {
+      name: 'schedule_event',
       parameters: /* @__PURE__ */ new Map([
-        ["title", "string"],
-        ["time", "string"],
-        ["duration", "string"]
+        ['title', 'string'],
+        ['time', 'string'],
+        ['duration', 'string'],
       ]),
-      action: "create_calendar_event"
+      action: 'create_calendar_event',
     });
-    this.intents.set("get_status", {
-      name: "get_status",
+    this.intents.set('get_status', {
+      name: 'get_status',
       parameters: /* @__PURE__ */ new Map([
-        ["system", "string"],
-        ["metric", "string"]
+        ['system', 'string'],
+        ['metric', 'string'],
       ]),
-      action: "query_status"
+      action: 'query_status',
     });
-    this.intents.set("analyze_data", {
-      name: "analyze_data",
+    this.intents.set('analyze_data', {
+      name: 'analyze_data',
       parameters: /* @__PURE__ */ new Map([
-        ["dataset", "string"],
-        ["analysis_type", "string"]
+        ['dataset', 'string'],
+        ['analysis_type', 'string'],
       ]),
-      action: "perform_analysis"
+      action: 'perform_analysis',
     });
-    this.intents.set("lock_system", {
-      name: "lock_system",
+    this.intents.set('lock_system', {
+      name: 'lock_system',
       parameters: /* @__PURE__ */ new Map([
-        ["level", "string"],
-        ["duration", "string"]
+        ['level', 'string'],
+        ['duration', 'string'],
       ]),
-      action: "secure_system"
+      action: 'secure_system',
     });
-    this.intents.set("emergency_stop", {
-      name: "emergency_stop",
+    this.intents.set('emergency_stop', {
+      name: 'emergency_stop',
       parameters: /* @__PURE__ */ new Map([
-        ["system", "string"],
-        ["reason", "string"]
+        ['system', 'string'],
+        ['reason', 'string'],
       ]),
-      action: "emergency_shutdown"
+      action: 'emergency_shutdown',
     });
   }
   // Create voice UI
@@ -28980,25 +29746,25 @@ var VoiceCommandSystem = class {
     this.voiceUI = engine.addEntity();
     Transform2.create(this.voiceUI, {
       position: Vector32.create(8, 4, 14),
-      scale: Vector32.create(3, 2, 0.1)
+      scale: Vector32.create(3, 2, 0.1),
     });
     MeshRenderer3.setBox(this.voiceUI);
     Material3.setPbrMaterial(this.voiceUI, {
       albedoColor: Color42.create(0.1, 0.2, 0.4, 0.9),
       emissiveColor: Color42.create(0.2, 0.4, 0.8, 0.5),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     const title = engine.addEntity();
     Transform2.create(title, {
       parent: this.voiceUI,
       position: Vector32.create(0, 0.7, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: "\u{1F3A4} VOICE ASSISTANT",
+      text: '\u{1F3A4} VOICE ASSISTANT',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 2,
-      textAlign: 3
+      textAlign: 3,
     });
     this.createStatusIndicator();
     this.createTranscriptDisplay();
@@ -29010,39 +29776,38 @@ var VoiceCommandSystem = class {
     Transform2.create(statusIndicator, {
       parent: this.voiceUI,
       position: Vector32.create(0, 0.3, 0.1),
-      scale: Vector32.create(0.2, 0.2, 0.1)
+      scale: Vector32.create(0.2, 0.2, 0.1),
     });
     MeshRenderer3.setBox(statusIndicator);
     Material3.setPbrMaterial(statusIndicator, {
       albedoColor: Color42.create(0.2, 0.8, 0.2, 1),
       emissiveColor: Color42.create(0.2, 0.8, 0.2, 0.8),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
     this.animateStatusIndicator(statusIndicator);
   }
   // Animate status indicator
   animateStatusIndicator(indicator) {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       const time = Date.now() / 1e3;
       const material = Material3.getMutable(indicator);
-      if (material && material.$case === "pbr") {
+      if (material && material.$case === 'pbr') {
         switch (this.voiceAssistant.processingState) {
-          case "idle":
+          case 'idle':
             material.pbr.albedoColor = Color42.create(0.2, 0.8, 0.2, 1);
             material.pbr.emissiveIntensity = 1;
             break;
-          case "listening":
+          case 'listening':
             const pulse = Math.sin(time * 3) * 0.5 + 0.5;
             material.pbr.albedoColor = Color42.create(1, 0.8, 0.2, 1);
             material.pbr.emissiveIntensity = 2 + pulse * 2;
             break;
-          case "processing":
+          case 'processing':
             material.pbr.albedoColor = Color42.create(0.2, 0.2, 1, 1);
             material.pbr.emissiveIntensity = 3;
             break;
-          case "responding":
+          case 'responding':
             material.pbr.albedoColor = Color42.create(0.8, 0.2, 0.8, 1);
             material.pbr.emissiveIntensity = 2;
             break;
@@ -29056,64 +29821,64 @@ var VoiceCommandSystem = class {
     Transform2.create(transcriptDisplay, {
       parent: this.voiceUI,
       position: Vector32.create(0, -0.1, 0.1),
-      scale: Vector32.create(0.8, 0.3, 0.1)
+      scale: Vector32.create(0.8, 0.3, 0.1),
     });
     MeshRenderer3.setBox(transcriptDisplay);
     Material3.setPbrMaterial(transcriptDisplay, {
       albedoColor: Color42.create(0.1, 0.1, 0.1, 0.8),
       emissiveColor: Color42.create(0.1, 0.1, 0.1, 0.3),
-      emissiveIntensity: 1
+      emissiveIntensity: 1,
     });
     const transcriptText = engine.addEntity();
     Transform2.create(transcriptText, {
       parent: transcriptDisplay,
       position: Vector32.create(0, 0, 0.1),
-      scale: Vector32.create(0.3, 0.3, 0.3)
+      scale: Vector32.create(0.3, 0.3, 0.3),
     });
     TextShape.create(transcriptText, {
       text: 'Say "Hello Nexus" to start...',
       textColor: Color42.create(1, 1, 1, 1),
       fontSize: 1.5,
-      textAlign: 3
+      textAlign: 3,
     });
   }
   // Create voice controls
   createVoiceControls() {
     const controls = [
-      { id: "listen", icon: "\u{1F3A4}", name: "Start Listening" },
-      { id: "stop", icon: "\u23F9\uFE0F", name: "Stop Listening" },
-      { id: "settings", icon: "\u2699\uFE0F", name: "Voice Settings" }
+      { id: 'listen', icon: '\u{1F3A4}', name: 'Start Listening' },
+      { id: 'stop', icon: '\u23F9\uFE0F', name: 'Stop Listening' },
+      { id: 'settings', icon: '\u2699\uFE0F', name: 'Voice Settings' },
     ];
     let xOffset = -0.8;
-    controls.forEach((control) => {
+    controls.forEach(control => {
       const button = engine.addEntity();
       Transform2.create(button, {
         parent: this.voiceUI,
         position: Vector32.create(xOffset, -0.6, 0.1),
-        scale: Vector32.create(0.3, 0.3, 0.1)
+        scale: Vector32.create(0.3, 0.3, 0.1),
       });
       MeshRenderer3.setBox(button);
       Material3.setPbrMaterial(button, {
         albedoColor: Color42.create(0.3, 0.6, 0.8, 1),
         emissiveColor: Color42.create(0.3, 0.6, 0.8, 0.5),
-        emissiveIntensity: 2
+        emissiveIntensity: 2,
       });
       const buttonText = engine.addEntity();
       Transform2.create(buttonText, {
         parent: button,
         position: Vector32.create(0, 0, 0.1),
-        scale: Vector32.create(0.5, 0.5, 0.5)
+        scale: Vector32.create(0.5, 0.5, 0.5),
       });
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color42.create(1, 1, 1, 1),
         fontSize: 2,
-        textAlign: 3
+        textAlign: 3,
       });
       pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: InputAction.IA_POINTER, hoverText: control.name },
         },
         () => this.handleVoiceControl(control.id)
       );
@@ -29126,49 +29891,48 @@ var VoiceCommandSystem = class {
       isListening: false,
       continuous: true,
       interimResults: true,
-      lang: "en-US",
+      lang: 'en-US',
       start: () => {
         this.recognitionEngine.isListening = true;
-        this.voiceAssistant.processingState = "listening";
-        console.log("\u{1F3A4} Speech recognition started");
+        this.voiceAssistant.processingState = 'listening';
+        console.log('\u{1F3A4} Speech recognition started');
       },
       stop: () => {
         this.recognitionEngine.isListening = false;
-        this.voiceAssistant.processingState = "idle";
-        console.log("\u{1F3A4} Speech recognition stopped");
+        this.voiceAssistant.processingState = 'idle';
+        console.log('\u{1F3A4} Speech recognition stopped');
       },
       onresult: null,
       onerror: null,
-      onend: null
+      onend: null,
     };
-    this.recognitionEngine.onresult = (event) => this.handleSpeechResult(event);
-    this.recognitionEngine.onerror = (event) => this.handleSpeechError(event);
+    this.recognitionEngine.onresult = event => this.handleSpeechResult(event);
+    this.recognitionEngine.onerror = event => this.handleSpeechError(event);
     this.recognitionEngine.onend = () => this.handleSpeechEnd();
   }
   // Initialize AI processor
   initializeAIProcessor() {
     this.aiProcessor = {
-      processIntent: (transcript) => this.processIntentWithAI(transcript),
+      processIntent: transcript => this.processIntentWithAI(transcript),
       generateResponse: (intent, entities) => this.generateAIResponse(intent, entities),
-      confidence: 0.85
+      confidence: 0.85,
     };
   }
   // Initialize voice synthesis
   initializeVoiceSynthesis() {
     this.voiceSynthesizer = {
-      speak: (text) => this.synthesizeSpeech(text),
+      speak: text => this.synthesizeSpeech(text),
       cancel: () => this.stopSpeech(),
       voice: this.voiceAssistant.voice,
       rate: 1,
       pitch: 1,
-      volume: 1
+      volume: 1,
     };
   }
   // Start voice engine
   startVoiceEngine() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateVoiceUI();
       this.simulateVoiceInput();
     });
@@ -29176,37 +29940,35 @@ var VoiceCommandSystem = class {
   // Handle voice control
   handleVoiceControl(controlId) {
     switch (controlId) {
-      case "listen":
+      case 'listen':
         this.startListening();
         break;
-      case "stop":
+      case 'stop':
         this.stopListening();
         break;
-      case "settings":
+      case 'settings':
         this.openVoiceSettings();
         break;
     }
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Start listening
   startListening() {
-    if (this.recognitionEngine.isListening)
-      return;
+    if (this.recognitionEngine.isListening) return;
     this.recognitionEngine.start();
     this.isListening = true;
-    this.voiceAssistant.processingState = "listening";
-    console.log("\u{1F3A4} Started listening for voice commands...");
-    soundSystem.playInteractionSound("powerup");
+    this.voiceAssistant.processingState = 'listening';
+    console.log('\u{1F3A4} Started listening for voice commands...');
+    soundSystem.playInteractionSound('powerup');
   }
   // Stop listening
   stopListening() {
-    if (!this.recognitionEngine.isListening)
-      return;
+    if (!this.recognitionEngine.isListening) return;
     this.recognitionEngine.stop();
     this.isListening = false;
-    this.voiceAssistant.processingState = "idle";
-    console.log("\u{1F3A4} Stopped listening");
-    soundSystem.playInteractionSound("click");
+    this.voiceAssistant.processingState = 'idle';
+    console.log('\u{1F3A4} Stopped listening');
+    soundSystem.playInteractionSound('click');
   }
   // Handle speech result
   handleSpeechResult(event) {
@@ -29219,19 +29981,19 @@ var VoiceCommandSystem = class {
   }
   // Handle speech error
   handleSpeechError(event) {
-    console.error("\u{1F3A4} Speech recognition error:", event.error);
-    this.voiceAssistant.processingState = "idle";
+    console.error('\u{1F3A4} Speech recognition error:', event.error);
+    this.voiceAssistant.processingState = 'idle';
     this.isListening = false;
   }
   // Handle speech end
   handleSpeechEnd() {
-    this.voiceAssistant.processingState = "idle";
+    this.voiceAssistant.processingState = 'idle';
     this.isListening = false;
   }
   // Process voice command
   processVoiceCommand(transcript) {
     console.log(`\u{1F3A4} Processing command: "${transcript}"`);
-    this.voiceAssistant.processingState = "processing";
+    this.voiceAssistant.processingState = 'processing';
     const intentResult = this.aiProcessor.processIntent(transcript);
     if (intentResult.confidence > 0.7) {
       this.executeVoiceCommand(intentResult.intent, intentResult.entities);
@@ -29242,15 +30004,51 @@ var VoiceCommandSystem = class {
   // Process intent with AI
   processIntentWithAI(transcript) {
     const intents = [
-      { keywords: ["turn on", "switch on", "activate"], intent: "toggle_lights", entities: /* @__PURE__ */ new Map([["action", "on"]]) },
-      { keywords: ["turn off", "switch off", "deactivate"], intent: "toggle_lights", entities: /* @__PURE__ */ new Map([["action", "off"]]) },
-      { keywords: ["temperature", "set temp", "adjust temp"], intent: "adjust_temperature", entities: /* @__PURE__ */ new Map([["temperature", 22]]) },
-      { keywords: ["meeting", "start meeting", "schedule meeting"], intent: "start_meeting", entities: /* @__PURE__ */ new Map() },
-      { keywords: ["navigate", "go to", "take me to"], intent: "navigate_to", entities: /* @__PURE__ */ new Map() },
-      { keywords: ["dashboard", "show dashboard", "display"], intent: "show_dashboard", entities: /* @__PURE__ */ new Map() },
-      { keywords: ["status", "check status", "system status"], intent: "get_status", entities: /* @__PURE__ */ new Map() },
-      { keywords: ["lock", "secure", "lock down"], intent: "lock_system", entities: /* @__PURE__ */ new Map() },
-      { keywords: ["emergency", "stop", "emergency stop"], intent: "emergency_stop", entities: /* @__PURE__ */ new Map() }
+      {
+        keywords: ['turn on', 'switch on', 'activate'],
+        intent: 'toggle_lights',
+        entities: /* @__PURE__ */ new Map([['action', 'on']]),
+      },
+      {
+        keywords: ['turn off', 'switch off', 'deactivate'],
+        intent: 'toggle_lights',
+        entities: /* @__PURE__ */ new Map([['action', 'off']]),
+      },
+      {
+        keywords: ['temperature', 'set temp', 'adjust temp'],
+        intent: 'adjust_temperature',
+        entities: /* @__PURE__ */ new Map([['temperature', 22]]),
+      },
+      {
+        keywords: ['meeting', 'start meeting', 'schedule meeting'],
+        intent: 'start_meeting',
+        entities: /* @__PURE__ */ new Map(),
+      },
+      {
+        keywords: ['navigate', 'go to', 'take me to'],
+        intent: 'navigate_to',
+        entities: /* @__PURE__ */ new Map(),
+      },
+      {
+        keywords: ['dashboard', 'show dashboard', 'display'],
+        intent: 'show_dashboard',
+        entities: /* @__PURE__ */ new Map(),
+      },
+      {
+        keywords: ['status', 'check status', 'system status'],
+        intent: 'get_status',
+        entities: /* @__PURE__ */ new Map(),
+      },
+      {
+        keywords: ['lock', 'secure', 'lock down'],
+        intent: 'lock_system',
+        entities: /* @__PURE__ */ new Map(),
+      },
+      {
+        keywords: ['emergency', 'stop', 'emergency stop'],
+        intent: 'emergency_stop',
+        entities: /* @__PURE__ */ new Map(),
+      },
     ];
     for (const intentData of intents) {
       for (const keyword of intentData.keywords) {
@@ -29258,15 +30056,15 @@ var VoiceCommandSystem = class {
           return {
             intent: intentData.intent,
             entities: intentData.entities,
-            confidence: 0.9
+            confidence: 0.9,
           };
         }
       }
     }
     return {
-      intent: "unknown",
+      intent: 'unknown',
       entities: /* @__PURE__ */ new Map(),
-      confidence: 0.1
+      confidence: 0.1,
     };
   }
   // Execute voice command
@@ -29279,92 +30077,92 @@ var VoiceCommandSystem = class {
       entities,
       confidence: 0.9,
       timestamp: Date.now(),
-      isProcessed: false
+      isProcessed: false,
     };
     this.commands.set(command.id, command);
     this.commandHistory.push(command);
     switch (intent) {
-      case "toggle_lights":
+      case 'toggle_lights':
         this.executeLightControl(entities);
         break;
-      case "adjust_temperature":
+      case 'adjust_temperature':
         this.executeTemperatureControl(entities);
         break;
-      case "start_meeting":
+      case 'start_meeting':
         this.executeMeetingStart(entities);
         break;
-      case "navigate_to":
+      case 'navigate_to':
         this.executeNavigation(entities);
         break;
-      case "show_dashboard":
+      case 'show_dashboard':
         this.executeDashboardDisplay(entities);
         break;
-      case "get_status":
+      case 'get_status':
         this.executeStatusQuery(entities);
         break;
-      case "lock_system":
+      case 'lock_system':
         this.executeSystemLock(entities);
         break;
-      case "emergency_stop":
+      case 'emergency_stop':
         this.executeEmergencyStop(entities);
         break;
     }
     command.isProcessed = true;
-    this.voiceAssistant.processingState = "responding";
+    this.voiceAssistant.processingState = 'responding';
     const response = this.aiProcessor.generateResponse(intent, entities);
     this.speakResponse(response.text);
     setTimeout2(() => {
-      this.voiceAssistant.processingState = "idle";
+      this.voiceAssistant.processingState = 'idle';
     }, 2e3);
   }
   // Execute light control
   executeLightControl(entities) {
-    const action = entities.get("action");
-    console.log(`\u{1F4A1} ${action === "on" ? "Turning on" : "Turning off"} lights`);
-    soundSystem.playInteractionSound("powerup");
+    const action = entities.get('action');
+    console.log(`\u{1F4A1} ${action === 'on' ? 'Turning on' : 'Turning off'} lights`);
+    soundSystem.playInteractionSound('powerup');
   }
   // Execute temperature control
   executeTemperatureControl(entities) {
-    const temperature = entities.get("temperature");
+    const temperature = entities.get('temperature');
     console.log(`\u{1F321}\uFE0F Setting temperature to ${temperature}\xB0C`);
-    soundSystem.playInteractionSound("click");
+    soundSystem.playInteractionSound('click');
   }
   // Execute meeting start
   executeMeetingStart(entities) {
-    console.log("\u{1F91D} Starting meeting session");
-    soundSystem.playInteractionSound("powerup");
+    console.log('\u{1F91D} Starting meeting session');
+    soundSystem.playInteractionSound('powerup');
   }
   // Execute navigation
   executeNavigation(entities) {
-    console.log("\u{1F9ED} Navigating to destination");
-    soundSystem.playInteractionSound("click");
+    console.log('\u{1F9ED} Navigating to destination');
+    soundSystem.playInteractionSound('click');
   }
   // Execute dashboard display
   executeDashboardDisplay(entities) {
-    console.log("\u{1F4CA} Displaying dashboard");
-    soundSystem.playInteractionSound("powerup");
+    console.log('\u{1F4CA} Displaying dashboard');
+    soundSystem.playInteractionSound('powerup');
   }
   // Execute status query
   executeStatusQuery(entities) {
-    console.log("\u{1F4C8} Querying system status");
-    soundSystem.playInteractionSound("click");
+    console.log('\u{1F4C8} Querying system status');
+    soundSystem.playInteractionSound('click');
   }
   // Execute system lock
   executeSystemLock(entities) {
-    console.log("\u{1F512} Locking system");
-    soundSystem.playInteractionSound("alert");
+    console.log('\u{1F512} Locking system');
+    soundSystem.playInteractionSound('alert');
   }
   // Execute emergency stop
   executeEmergencyStop(entities) {
-    console.log("\u{1F6A8} EMERGENCY STOP ACTIVATED");
-    soundSystem.playInteractionSound("error");
+    console.log('\u{1F6A8} EMERGENCY STOP ACTIVATED');
+    soundSystem.playInteractionSound('error');
   }
   // Handle unknown command
   handleUnknownCommand(transcript) {
     console.log(`\u2753 Unknown command: "${transcript}"`);
-    const response = this.aiProcessor.generateResponse("unknown", /* @__PURE__ */ new Map());
+    const response = this.aiProcessor.generateResponse('unknown', /* @__PURE__ */ new Map());
     this.speakResponse(response.text);
-    this.voiceAssistant.processingState = "idle";
+    this.voiceAssistant.processingState = 'idle';
   }
   // Generate AI response
   generateAIResponse(intent, entities) {
@@ -29372,89 +30170,88 @@ var VoiceCommandSystem = class {
       toggle_lights: {
         text: "I've adjusted the lighting for you.",
         confidence: 0.9,
-        actions: ["light_control"],
-        emotion: "helpful"
+        actions: ['light_control'],
+        emotion: 'helpful',
       },
       adjust_temperature: {
-        text: "Temperature settings updated successfully.",
+        text: 'Temperature settings updated successfully.',
         confidence: 0.9,
-        actions: ["climate_control"],
-        emotion: "efficient"
+        actions: ['climate_control'],
+        emotion: 'efficient',
       },
       start_meeting: {
         text: "I'm setting up your meeting room now.",
         confidence: 0.9,
-        actions: ["meeting_setup"],
-        emotion: "professional"
+        actions: ['meeting_setup'],
+        emotion: 'professional',
       },
       navigate_to: {
-        text: "Taking you to your destination.",
+        text: 'Taking you to your destination.',
         confidence: 0.9,
-        actions: ["navigation"],
-        emotion: "helpful"
+        actions: ['navigation'],
+        emotion: 'helpful',
       },
       show_dashboard: {
-        text: "Displaying the dashboard you requested.",
+        text: 'Displaying the dashboard you requested.',
         confidence: 0.9,
-        actions: ["dashboard_display"],
-        emotion: "informative"
+        actions: ['dashboard_display'],
+        emotion: 'informative',
       },
       get_status: {
-        text: "All systems are operating normally.",
+        text: 'All systems are operating normally.',
         confidence: 0.9,
-        actions: ["status_report"],
-        emotion: "confident"
+        actions: ['status_report'],
+        emotion: 'confident',
       },
       lock_system: {
-        text: "System security protocols activated.",
+        text: 'System security protocols activated.',
         confidence: 0.9,
-        actions: ["security_lock"],
-        emotion: "serious"
+        actions: ['security_lock'],
+        emotion: 'serious',
       },
       emergency_stop: {
-        text: "Emergency procedures initiated immediately.",
+        text: 'Emergency procedures initiated immediately.',
         confidence: 1,
-        actions: ["emergency_shutdown"],
-        emotion: "urgent"
+        actions: ['emergency_shutdown'],
+        emotion: 'urgent',
       },
       unknown: {
         text: "I'm not sure I understand. Could you please rephrase that?",
         confidence: 0.3,
         actions: [],
-        emotion: "confused"
-      }
+        emotion: 'confused',
+      },
     };
     return responses[intent] || responses.unknown;
   }
   // Synthesize speech
   synthesizeSpeech(text) {
     console.log(`\u{1F50A} Speaking: "${text}"`);
-    this.voiceAssistant.processingState = "responding";
+    this.voiceAssistant.processingState = 'responding';
     setTimeout2(() => {
-      this.voiceAssistant.processingState = "idle";
+      this.voiceAssistant.processingState = 'idle';
     }, 2e3);
   }
   // Stop speech
   stopSpeech() {
-    console.log("\u{1F50A} Speech stopped");
-    this.voiceAssistant.processingState = "idle";
+    console.log('\u{1F50A} Speech stopped');
+    this.voiceAssistant.processingState = 'idle';
   }
   // Speak response
   speakResponse(text) {
     this.voiceSynthesizer.speak(text);
   }
   // Update voice UI
-  updateVoiceUI() {
-  }
+  updateVoiceUI() {}
   // Simulate voice input
   simulateVoiceInput() {
     if (Math.random() < 5e-3) {
       const sampleCommands = [
-        "turn on the lights",
-        "set temperature to 22 degrees",
-        "show me the dashboard",
+        'turn on the lights',
+        'set temperature to 22 degrees',
+        'show me the dashboard',
         "what's the system status",
-        "start a meeting"
+        'start a meeting',
       ];
       const randomCommand = sampleCommands[Math.floor(Math.random() * sampleCommands.length)];
       this.processVoiceCommand(randomCommand);
@@ -29462,8 +30259,8 @@ var VoiceCommandSystem = class {
   }
   // Open voice settings
   openVoiceSettings() {
-    console.log("\u2699\uFE0F Opening voice settings");
-    soundSystem.playInteractionSound("click");
+    console.log('\u2699\uFE0F Opening voice settings');
+    soundSystem.playInteractionSound('click');
   }
   // Get command history
   getCommandHistory() {
@@ -29490,7 +30287,7 @@ var VoiceCommandSystem = class {
     if (!enabled) {
       this.stopListening();
     }
-    console.log(`\u{1F3A4} Voice assistant ${enabled ? "enabled" : "disabled"}`);
+    console.log(`\u{1F3A4} Voice assistant ${enabled ? 'enabled' : 'disabled'}`);
   }
   // Cleanup system
   cleanup() {
@@ -29515,36 +30312,36 @@ var WeatherSystem = class {
     this.isInitialized = false;
     this.timeScale = 60;
     this.currentState = {
-      type: "clear",
+      type: 'clear',
       intensity: 0.3,
       temperature: 22,
       humidity: 45,
       windSpeed: 5,
-      windDirection: Vector32.create(1, 0, 0)
+      windDirection: Vector32.create(1, 0, 0),
     };
     this.currentTime = {
       hour: 12,
       minute: 0,
-      dayProgress: 0.5
+      dayProgress: 0.5,
     };
   }
   // Initialize weather system
   initialize() {
-    console.log("\u{1F324}\uFE0F Weather System Initializing...");
+    console.log('\u{1F324}\uFE0F Weather System Initializing...');
     this.createSkyDome();
     this.createCelestialBodies();
     this.createWeatherEffects();
     this.startWeatherSimulation();
     this.startDayNightCycle();
     this.isInitialized = true;
-    console.log("\u{1F324}\uFE0F Weather System Ready!");
+    console.log('\u{1F324}\uFE0F Weather System Ready!');
   }
   // Create sky dome
   createSkyDome() {
     this.skyDome = engine.addEntity();
     Transform2.create(this.skyDome, {
       position: Vector32.create(8, 50, 8),
-      scale: Vector32.create(100, 100, 100)
+      scale: Vector32.create(100, 100, 100),
     });
     MeshRenderer3.setSphere(this.skyDome);
     this.updateSkyColor();
@@ -29554,40 +30351,40 @@ var WeatherSystem = class {
     const sun = engine.addEntity();
     Transform2.create(sun, {
       position: Vector32.create(8, 30, 8),
-      scale: Vector32.create(3, 3, 3)
+      scale: Vector32.create(3, 3, 3),
     });
     MeshRenderer3.setSphere(sun);
     Material3.setPbrMaterial(sun, {
       albedoColor: Color42.create(1, 0.95, 0.8, 1),
       emissiveColor: Color42.create(1, 0.9, 0.6, 1),
-      emissiveIntensity: 5
+      emissiveIntensity: 5,
     });
-    this.celestialBodies.set("sun", {
+    this.celestialBodies.set('sun', {
       entity: sun,
-      type: "sun",
+      type: 'sun',
       basePosition: Vector32.create(8, 30, 8),
       orbitRadius: 40,
       orbitSpeed: 0.1,
-      currentAngle: 0
+      currentAngle: 0,
     });
     const moon = engine.addEntity();
     Transform2.create(moon, {
       position: Vector32.create(8, 30, 8),
-      scale: Vector32.create(2, 2, 2)
+      scale: Vector32.create(2, 2, 2),
     });
     MeshRenderer3.setSphere(moon);
     Material3.setPbrMaterial(moon, {
       albedoColor: Color42.create(0.9, 0.9, 1, 1),
       emissiveColor: Color42.create(0.6, 0.6, 0.8, 0.8),
-      emissiveIntensity: 2
+      emissiveIntensity: 2,
     });
-    this.celestialBodies.set("moon", {
+    this.celestialBodies.set('moon', {
       entity: moon,
-      type: "moon",
+      type: 'moon',
       basePosition: Vector32.create(8, 30, 8),
       orbitRadius: 40,
       orbitSpeed: 0.1,
-      currentAngle: 180
+      currentAngle: 180,
     });
   }
   // Create weather effects
@@ -29602,23 +30399,19 @@ var WeatherSystem = class {
     for (let i = 0; i < 100; i++) {
       const rainDrop = engine.addEntity();
       Transform2.create(rainDrop, {
-        position: Vector32.create(
-          Math.random() * 16,
-          Math.random() * 20 + 10,
-          Math.random() * 16
-        ),
-        scale: Vector32.create(0.02, 0.2, 0.02)
+        position: Vector32.create(Math.random() * 16, Math.random() * 20 + 10, Math.random() * 16),
+        scale: Vector32.create(0.02, 0.2, 0.02),
       });
       MeshRenderer3.setBox(rainDrop);
       Material3.setPbrMaterial(rainDrop, {
         albedoColor: Color42.create(0.6, 0.7, 0.9, 0.7),
         emissiveColor: Color42.create(0.4, 0.5, 0.8, 0.5),
-        emissiveIntensity: 1
+        emissiveIntensity: 1,
       });
       this.weatherEffects.push({
         entity: rainDrop,
-        type: "rain",
-        velocity: Vector32.create(0, -8, 0)
+        type: 'rain',
+        velocity: Vector32.create(0, -8, 0),
       });
     }
   }
@@ -29627,31 +30420,23 @@ var WeatherSystem = class {
     for (let i = 0; i < 20; i++) {
       const cloud = engine.addEntity();
       Transform2.create(cloud, {
-        position: Vector32.create(
-          Math.random() * 16,
-          Math.random() * 10 + 15,
-          Math.random() * 16
-        ),
+        position: Vector32.create(Math.random() * 16, Math.random() * 10 + 15, Math.random() * 16),
         scale: Vector32.create(
           Math.random() * 3 + 2,
           Math.random() * 1 + 0.5,
           Math.random() * 3 + 2
-        )
+        ),
       });
       MeshRenderer3.setBox(cloud);
       Material3.setPbrMaterial(cloud, {
         albedoColor: Color42.create(0.9, 0.9, 0.9, 0.8),
         roughness: 0.8,
-        metallic: 0.1
+        metallic: 0.1,
       });
       this.weatherEffects.push({
         entity: cloud,
-        type: "cloud",
-        velocity: Vector32.create(
-          (Math.random() - 0.5) * 0.5,
-          0,
-          (Math.random() - 0.5) * 0.5
-        )
+        type: 'cloud',
+        velocity: Vector32.create((Math.random() - 0.5) * 0.5, 0, (Math.random() - 0.5) * 0.5),
       });
     }
   }
@@ -29660,18 +30445,18 @@ var WeatherSystem = class {
     const fogVolume = engine.addEntity();
     Transform2.create(fogVolume, {
       position: Vector32.create(8, 2, 8),
-      scale: Vector32.create(20, 4, 20)
+      scale: Vector32.create(20, 4, 20),
     });
     MeshRenderer3.setBox(fogVolume);
     Material3.setPbrMaterial(fogVolume, {
       albedoColor: Color42.create(0.8, 0.8, 0.85, 0.3),
       emissiveColor: Color42.create(0.7, 0.7, 0.75, 0.2),
-      emissiveIntensity: 0.5
+      emissiveIntensity: 0.5,
     });
     this.weatherEffects.push({
       entity: fogVolume,
-      type: "fog",
-      velocity: Vector32.create(0, 0, 0)
+      type: 'fog',
+      velocity: Vector32.create(0, 0, 0),
     });
   }
   // Create snow effect
@@ -29679,35 +30464,26 @@ var WeatherSystem = class {
     for (let i = 0; i < 50; i++) {
       const snowFlake = engine.addEntity();
       Transform2.create(snowFlake, {
-        position: Vector32.create(
-          Math.random() * 16,
-          Math.random() * 20 + 10,
-          Math.random() * 16
-        ),
-        scale: Vector32.create(0.1, 0.1, 0.1)
+        position: Vector32.create(Math.random() * 16, Math.random() * 20 + 10, Math.random() * 16),
+        scale: Vector32.create(0.1, 0.1, 0.1),
       });
       MeshRenderer3.setSphere(snowFlake);
       Material3.setPbrMaterial(snowFlake, {
         albedoColor: Color42.create(1, 1, 1, 0.9),
         emissiveColor: Color42.create(0.8, 0.8, 1, 0.6),
-        emissiveIntensity: 1
+        emissiveIntensity: 1,
       });
       this.weatherEffects.push({
         entity: snowFlake,
-        type: "snow",
-        velocity: Vector32.create(
-          (Math.random() - 0.5) * 0.5,
-          -1,
-          (Math.random() - 0.5) * 0.5
-        )
+        type: 'snow',
+        velocity: Vector32.create((Math.random() - 0.5) * 0.5, -1, (Math.random() - 0.5) * 0.5),
       });
     }
   }
   // Start weather simulation
   startWeatherSimulation() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateWeatherEffects();
       this.simulateWeatherChanges();
     });
@@ -29715,8 +30491,7 @@ var WeatherSystem = class {
   // Start day/night cycle
   startDayNightCycle() {
     engine.addSystem(() => {
-      if (!this.isInitialized)
-        return;
+      if (!this.isInitialized) return;
       this.updateTimeOfDay();
       this.updateCelestialBodies();
       this.updateSkyColor();
@@ -29736,22 +30511,27 @@ var WeatherSystem = class {
   }
   // Update celestial bodies positions
   updateCelestialBodies() {
-    this.celestialBodies.forEach((body) => {
-      const angle = (this.currentTime.dayProgress * 360 - 90) * Math.PI / 180;
+    this.celestialBodies.forEach(body => {
+      const angle = ((this.currentTime.dayProgress * 360 - 90) * Math.PI) / 180;
       const x = body.basePosition.x + Math.cos(angle) * body.orbitRadius;
       const y = body.basePosition.y + Math.sin(angle) * body.orbitRadius;
       const z = body.basePosition.z;
       const transform = Transform2.getMutable(body.entity);
       transform.position = Vector32.create(x, y, z);
       const isVisible = y > body.basePosition.y;
-      transform.scale = isVisible ? Vector32.create(body.type === "sun" ? 3 : 2, body.type === "sun" ? 3 : 2, body.type === "sun" ? 3 : 2) : Vector32.create(0, 0, 0);
+      transform.scale = isVisible
+        ? Vector32.create(
+            body.type === 'sun' ? 3 : 2,
+            body.type === 'sun' ? 3 : 2,
+            body.type === 'sun' ? 3 : 2
+          )
+        : Vector32.create(0, 0, 0);
     });
   }
   // Update sky color based on time and weather
   updateSkyColor() {
     const material = Material3.getMutable(this.skyDome);
-    if (!material || material.$case !== "pbr")
-      return;
+    if (!material || material.$case !== 'pbr') return;
     let skyColor;
     const hour = this.currentTime.hour;
     if (hour >= 6 && hour < 12) {
@@ -29789,37 +30569,45 @@ var WeatherSystem = class {
   // Apply weather effects to sky color
   applyWeatherToSkyColor(baseColor) {
     switch (this.currentState.type) {
-      case "cloudy":
-        return Color42.lerp(baseColor, Color42.create(0.6, 0.6, 0.6, 1), this.currentState.intensity * 0.7);
-      case "rainy":
-      case "stormy":
-        return Color42.lerp(baseColor, Color42.create(0.3, 0.3, 0.4, 1), this.currentState.intensity * 0.8);
-      case "foggy":
-        return Color42.lerp(baseColor, Color42.create(0.7, 0.7, 0.75, 1), this.currentState.intensity * 0.6);
+      case 'cloudy':
+        return Color42.lerp(
+          baseColor,
+          Color42.create(0.6, 0.6, 0.6, 1),
+          this.currentState.intensity * 0.7
+        );
+      case 'rainy':
+      case 'stormy':
+        return Color42.lerp(
+          baseColor,
+          Color42.create(0.3, 0.3, 0.4, 1),
+          this.currentState.intensity * 0.8
+        );
+      case 'foggy':
+        return Color42.lerp(
+          baseColor,
+          Color42.create(0.7, 0.7, 0.75, 1),
+          this.currentState.intensity * 0.6
+        );
       default:
         return baseColor;
     }
   }
   // Update weather effects
   updateWeatherEffects() {
-    this.weatherEffects.forEach((effect) => {
+    this.weatherEffects.forEach(effect => {
       const transform = Transform2.getMutable(effect.entity);
       transform.position = Vector32.add(transform.position, Vector32.scale(effect.velocity, 0.016));
-      if (effect.type === "rain" || effect.type === "snow") {
+      if (effect.type === 'rain' || effect.type === 'snow') {
         if (transform.position.y < 0) {
           transform.position.y = 30;
           transform.position.x = Math.random() * 16;
           transform.position.z = Math.random() * 16;
         }
-      } else if (effect.type === "cloud") {
-        if (transform.position.x > 20)
-          transform.position.x = -4;
-        if (transform.position.x < -4)
-          transform.position.x = 20;
-        if (transform.position.z > 20)
-          transform.position.z = -4;
-        if (transform.position.z < -4)
-          transform.position.z = 20;
+      } else if (effect.type === 'cloud') {
+        if (transform.position.x > 20) transform.position.x = -4;
+        if (transform.position.x < -4) transform.position.x = 20;
+        if (transform.position.z > 20) transform.position.z = -4;
+        if (transform.position.z < -4) transform.position.z = 20;
       }
       const shouldBeVisible = this.isEffectVisible(effect.type);
       transform.scale = shouldBeVisible ? Vector32.create(1, 1, 1) : Vector32.create(0, 0, 0);
@@ -29828,14 +30616,18 @@ var WeatherSystem = class {
   // Check if effect should be visible
   isEffectVisible(effectType) {
     switch (effectType) {
-      case "rain":
-        return this.currentState.type === "rainy" || this.currentState.type === "stormy";
-      case "cloud":
-        return this.currentState.type === "cloudy" || this.currentState.type === "rainy" || this.currentState.type === "stormy";
-      case "fog":
-        return this.currentState.type === "foggy";
-      case "snow":
-        return this.currentState.type === "snowy";
+      case 'rain':
+        return this.currentState.type === 'rainy' || this.currentState.type === 'stormy';
+      case 'cloud':
+        return (
+          this.currentState.type === 'cloudy' ||
+          this.currentState.type === 'rainy' ||
+          this.currentState.type === 'stormy'
+        );
+      case 'fog':
+        return this.currentState.type === 'foggy';
+      case 'snow':
+        return this.currentState.type === 'snowy';
       default:
         return false;
     }
@@ -29851,14 +30643,16 @@ var WeatherSystem = class {
     if (newWeather) {
       this.currentState = { ...this.currentState, ...newWeather };
     } else {
-      const weatherTypes = ["clear", "cloudy", "rainy", "stormy", "foggy"];
+      const weatherTypes = ['clear', 'cloudy', 'rainy', 'stormy', 'foggy'];
       this.currentState.type = weatherTypes[Math.floor(Math.random() * weatherTypes.length)];
       this.currentState.intensity = Math.random() * 0.8 + 0.2;
       this.currentState.temperature = 15 + Math.random() * 20;
       this.currentState.humidity = 30 + Math.random() * 60;
       this.currentState.windSpeed = Math.random() * 15;
     }
-    console.log(`\u{1F324}\uFE0F Weather changed to: ${this.currentState.type} (intensity: ${this.currentState.intensity.toFixed(2)})`);
+    console.log(
+      `\u{1F324}\uFE0F Weather changed to: ${this.currentState.type} (intensity: ${this.currentState.intensity.toFixed(2)})`
+    );
   }
   // Get current weather state
   getCurrentWeather() {
@@ -29886,28 +30680,28 @@ var WeatherSystem = class {
       const hour = (this.currentTime.hour + i) % 24;
       let weatherType;
       if (hour >= 6 && hour < 12) {
-        weatherType = Math.random() > 0.7 ? "cloudy" : "clear";
+        weatherType = Math.random() > 0.7 ? 'cloudy' : 'clear';
       } else if (hour >= 12 && hour < 18) {
-        weatherType = Math.random() > 0.8 ? "rainy" : "clear";
+        weatherType = Math.random() > 0.8 ? 'rainy' : 'clear';
       } else {
-        weatherType = Math.random() > 0.6 ? "clear" : "cloudy";
+        weatherType = Math.random() > 0.6 ? 'clear' : 'cloudy';
       }
       forecast.push({
         ...baseWeather,
         type: weatherType,
         intensity: Math.random() * 0.8 + 0.2,
-        temperature: baseWeather.temperature + (Math.random() - 0.5) * 10
+        temperature: baseWeather.temperature + (Math.random() - 0.5) * 10,
       });
     }
     return forecast;
   }
   // Cleanup system
   cleanup() {
-    this.celestialBodies.forEach((body) => {
+    this.celestialBodies.forEach(body => {
       engine.removeEntity(body.entity);
     });
     this.celestialBodies.clear();
-    this.weatherEffects.forEach((effect) => {
+    this.weatherEffects.forEach(effect => {
       engine.removeEntity(effect.entity);
     });
     this.weatherEffects = [];
@@ -29921,13 +30715,13 @@ var weatherSystem = new WeatherSystem();
 
 // src/enhanced-index.ts
 function enhancedMain() {
-  console.log(" Initializing AIGestion Enhanced Virtual Office...");
+  console.log(' Initializing AIGestion Enhanced Virtual Office...');
   soundSystem.initialize();
   lightingSystem.initialize();
   uiSystem.initialize();
   createEnhancedArchitecture();
   createEnhancedInteractables();
-  console.log(" Core systems initialized - Starting advanced systems...");
+  console.log(' Core systems initialized - Starting advanced systems...');
   setTimeout2(() => {
     weatherSystem.initialize();
     multiplayerSystem.initialize();
@@ -29957,47 +30751,44 @@ function enhancedMain() {
     initializeDataVisualization();
     startRealTimeUpdates();
     createParticleEffects();
-    console.log(" Enhanced Virtual Office Initialized Successfully!");
+    console.log(' Enhanced Virtual Office Initialized Successfully!');
   }, 500);
 }
 var systemUpdateInterval;
 var diagnosticsInterval;
 var alertsInterval;
 function startRealTimeUpdates() {
-  if (systemUpdateInterval)
-    clearInterval(systemUpdateInterval);
-  if (diagnosticsInterval)
-    clearInterval(diagnosticsInterval);
-  if (alertsInterval)
-    clearInterval(alertsInterval);
+  if (systemUpdateInterval) clearInterval(systemUpdateInterval);
+  if (diagnosticsInterval) clearInterval(diagnosticsInterval);
+  if (alertsInterval) clearInterval(alertsInterval);
   systemUpdateInterval = setInterval2(async () => {
     try {
       const stats = await fetchEnhancedSystemStats();
-      updateSystemStatus("AUTO_UPDATE", true);
-      if (stats.systemHealth === "CRITICAL") {
-        updateAlert(" CRITICAL: System overload detected!", "CRITICAL");
-        soundSystem.playInteractionSound("alert");
-      } else if (stats.systemHealth === "WARNING") {
-        updateAlert(" WARNING: High system load detected", "WARNING");
-        soundSystem.playInteractionSound("alert");
+      updateSystemStatus('AUTO_UPDATE', true);
+      if (stats.systemHealth === 'CRITICAL') {
+        updateAlert(' CRITICAL: System overload detected!', 'CRITICAL');
+        soundSystem.playInteractionSound('alert');
+      } else if (stats.systemHealth === 'WARNING') {
+        updateAlert(' WARNING: High system load detected', 'WARNING');
+        soundSystem.playInteractionSound('alert');
       } else {
-        updateAlert(" All systems operating normally", "INFO");
+        updateAlert(' All systems operating normally', 'INFO');
       }
-      console.log(" System Stats Updated:", stats);
+      console.log(' System Stats Updated:', stats);
     } catch (error) {
-      console.error(" Error updating system stats:", error);
+      console.error(' Error updating system stats:', error);
     }
   }, 5e3);
   diagnosticsInterval = setInterval2(async () => {
     try {
       const diagnostics = await runSystemDiagnostics();
-      console.log(" System Diagnostics:", diagnostics);
-      if (diagnostics.overall === "CRITICAL") {
-        updateAlert(" CRITICAL SYSTEM FAILURE DETECTED!", "CRITICAL");
-        soundSystem.playInteractionSound("error");
+      console.log(' System Diagnostics:', diagnostics);
+      if (diagnostics.overall === 'CRITICAL') {
+        updateAlert(' CRITICAL SYSTEM FAILURE DETECTED!', 'CRITICAL');
+        soundSystem.playInteractionSound('error');
       }
     } catch (error) {
-      console.error(" Error running diagnostics:", error);
+      console.error(' Error running diagnostics:', error);
     }
   }, 2e4);
   alertsInterval = setInterval2(async () => {
@@ -30008,48 +30799,36 @@ function startRealTimeUpdates() {
         updateAlert(latestAlert.message, latestAlert.type);
       }
     } catch (error) {
-      console.error(" Error fetching alerts:", error);
+      console.error(' Error fetching alerts:', error);
     }
   }, 1e4);
 }
 function initializeNPCs() {
-  npcManager.createNPC(
-    "NEXUS",
-    "System Administrator",
-    Vector32.create(4, 1, 4)
-  );
-  npcManager.createNPC(
-    "DATA",
-    "Data Analyst",
-    Vector32.create(12, 1, 4)
-  );
-  npcManager.createNPC(
-    "GUARD",
-    "Security Expert",
-    Vector32.create(8, 1, 12)
-  );
-  console.log("\u{1F916} AI Assistants Initialized");
+  npcManager.createNPC('NEXUS', 'System Administrator', Vector32.create(4, 1, 4));
+  npcManager.createNPC('DATA', 'Data Analyst', Vector32.create(12, 1, 4));
+  npcManager.createNPC('GUARD', 'Security Expert', Vector32.create(8, 1, 12));
+  console.log('\u{1F916} AI Assistants Initialized');
 }
 function initializeDataVisualization() {
   const mainWall = dataVizManager.createWall(
-    "main",
+    'main',
     Vector32.create(8, 4, 0.5),
     Vector32.create(16, 8, 0.2)
   );
-  mainWall.addChart("systemStatus", {
-    type: "bar",
-    title: "System Status",
+  mainWall.addChart('systemStatus', {
+    type: 'bar',
+    title: 'System Status',
     data: DataVisualizationManager.createSystemStatusData(),
     maxDataPoints: 10,
-    updateInterval: 3e3
+    updateInterval: 3e3,
   });
-  mainWall.startDataStream("realtime", DataVisualizationManager.createRealtimeDataSource());
-  console.log("\u{1F4CA} Data Visualization Initialized");
+  mainWall.startDataStream('realtime', DataVisualizationManager.createRealtimeDataSource());
+  console.log('\u{1F4CA} Data Visualization Initialized');
 }
 var particlePool = [];
 var maxParticles = 50;
 function createParticleEffects() {
-  console.log("\u{1F3A8} Creating particle effects...");
+  console.log('\u{1F3A8} Creating particle effects...');
   const particleCount = Math.min(10, maxParticles);
   for (let i = 0; i < particleCount; i++) {
     const particle = createParticle();
@@ -30067,12 +30846,8 @@ function createParticleEffects() {
 function createParticle() {
   const particle = engine.addEntity();
   Transform2.create(particle, {
-    position: Vector32.create(
-      Math.random() * 16,
-      Math.random() * 4 + 1,
-      Math.random() * 16
-    ),
-    scale: Vector32.create(0.1, 0.1, 0.1)
+    position: Vector32.create(Math.random() * 16, Math.random() * 4 + 1, Math.random() * 16),
+    scale: Vector32.create(0.1, 0.1, 0.1),
   });
   MeshRenderer3.setBox(particle);
   Material3.setPbrMaterial(particle, {
@@ -30080,7 +30855,7 @@ function createParticle() {
     roughness: 0,
     metallic: 0.5,
     emissiveColor: Color42.create(0, 1, 0.8, 1),
-    emissiveIntensity: 3
+    emissiveIntensity: 3,
   });
   return particle;
 }
@@ -30092,7 +30867,7 @@ function createEnergyParticle() {
       2 + Math.random() * 2,
       8 + (Math.random() - 0.5) * 4
     ),
-    scale: Vector32.create(0.15, 0.15, 0.15)
+    scale: Vector32.create(0.15, 0.15, 0.15),
   });
   MeshRenderer3.setBox(energyParticle);
   Material3.setPbrMaterial(energyParticle, {
@@ -30100,38 +30875,37 @@ function createEnergyParticle() {
     roughness: 0.1,
     metallic: 0.8,
     emissiveColor: Color42.create(1, 0.8, 0.2, 1),
-    emissiveIntensity: 5
+    emissiveIntensity: 5,
   });
   return energyParticle;
 }
 function animateParticle(particle) {
-  console.log("\u26A0\uFE0F Particle animation disabled for performance");
+  console.log('\u26A0\uFE0F Particle animation disabled for performance');
   return;
 }
 function animateEnergyParticle(particle) {
-  console.log("\u26A0\uFE0F Energy particle animation disabled for performance");
+  console.log('\u26A0\uFE0F Energy particle animation disabled for performance');
   return;
 }
 enhancedMain();
 
 // src/index.ts
 function main() {
-  console.log("\u{1F680} Starting AIGestion Virtual Office...");
+  console.log('\u{1F680} Starting AIGestion Virtual Office...');
   enhancedMain();
 }
 
 // sdk-scripts:all-scripts
-function initializeScripts(engine2) {
-}
+function initializeScripts(engine2) {}
 
 // ../../node_modules/.pnpm/@dcl+sdk@7.17.0_@well-known-components+interfaces@1.5.2/node_modules/@dcl/sdk/index.js
-var import_EngineApi2 = require("~system/EngineApi");
+var import_EngineApi2 = require('~system/EngineApi');
 
 // ../../node_modules/.pnpm/@dcl+sdk@7.17.0_@well-known-components+interfaces@1.5.2/node_modules/@dcl/sdk/internal/transports/rendererTransport.js
 function createRendererTransport(engineApi) {
   async function sendToRenderer(message) {
     const response = await engineApi.crdtSendToRenderer({
-      data: new Uint8Array(message)
+      data: new Uint8Array(message),
     });
     if (response && response.data && response.data.length) {
       if (rendererTransport2.onmessage) {
@@ -30159,7 +30933,7 @@ function createRendererTransport(engineApi) {
       }
       return !!message;
     },
-    type: "renderer"
+    type: 'renderer',
   };
   return rendererTransport2;
 }
@@ -30277,7 +31051,10 @@ var Observable = class _Observable {
    */
   removeCallback(callback, scope) {
     for (let index = 0; index < this._observers.length; index++) {
-      if (this._observers[index].callback === callback && (!scope || scope === this._observers[index].scope)) {
+      if (
+        this._observers[index].callback === callback &&
+        (!scope || scope === this._observers[index].scope)
+      ) {
         this._deferUnregister(this._observers[index]);
         return true;
       }
@@ -30346,7 +31123,7 @@ var Observable = class _Observable {
     state.target = target;
     state.currentTarget = currentTarget;
     state.skipNextObservers = false;
-    this._observers.forEach((obs) => {
+    this._observers.forEach(obs => {
       if (state.skipNextObservers) {
         return;
       }
@@ -30355,12 +31132,12 @@ var Observable = class _Observable {
       }
       if (obs.mask & mask) {
         if (obs.scope) {
-          p = p.then((lastReturnedValue) => {
+          p = p.then(lastReturnedValue => {
             state.lastReturnValue = lastReturnedValue;
             return obs.callback.apply(obs.scope, [eventData, state]);
           });
         } else {
-          p = p.then((lastReturnedValue) => {
+          p = p.then(lastReturnedValue => {
             state.lastReturnValue = lastReturnedValue;
             return obs.callback(eventData, state);
           });
@@ -30425,7 +31202,9 @@ var Observable = class _Observable {
   _deferUnregister(observer) {
     observer.unregisterOnNextCall = false;
     observer._willBeUnregistered = true;
-    Promise.resolve().then.bind(Promise.resolve())(async () => this._remove(observer)).catch(console.error);
+    Promise.resolve()
+      .then.bind(Promise.resolve())(async () => this._remove(observer))
+      .catch(console.error);
   }
   // This should only be called when not iterating over _observers to avoid callback skipping.
   // Removes an observer from the _observer Array.
@@ -30443,7 +31222,7 @@ var Observable = class _Observable {
 };
 
 // ../../node_modules/.pnpm/@dcl+sdk@7.17.0_@well-known-components+interfaces@1.5.2/node_modules/@dcl/sdk/observables.js
-var import_EngineApi = require("~system/EngineApi");
+var import_EngineApi = require('~system/EngineApi');
 
 // ../../node_modules/.pnpm/@dcl+sdk@7.17.0_@well-known-components+interfaces@1.5.2/node_modules/@dcl/sdk/players/index.js
 function definePlayerHelper(engine2) {
@@ -30456,17 +31235,16 @@ function definePlayerHelper(engine2) {
   const onLeaveSceneCb = [];
   engine2.addSystem(() => {
     const players2 = Array.from(engine2.getEntitiesWith(PlayerIdentityData3, AvatarBase3));
-    if (players2.length === playerEntities.size)
-      return;
+    if (players2.length === playerEntities.size) return;
     for (const [entity, identity] of players2) {
       if (!playerEntities.has(entity)) {
         playerEntities.set(entity, identity.address);
         if (onEnterSceneCb.length) {
-          onEnterSceneCb.forEach((cb) => cb(getPlayer({ userId: identity.address })));
+          onEnterSceneCb.forEach(cb => cb(getPlayer({ userId: identity.address })));
         }
-        AvatarBase3.onChange(entity, (value) => {
+        AvatarBase3.onChange(entity, value => {
           if (!value && playerEntities.get(entity)) {
-            onLeaveSceneCb.forEach((cb) => cb(playerEntities.get(entity)));
+            onLeaveSceneCb.forEach(cb => cb(playerEntities.get(entity)));
             playerEntities.delete(entity);
           }
         });
@@ -30485,8 +31263,7 @@ function definePlayerHelper(engine2) {
      */
     getPlayer(user) {
       function getEntity() {
-        if (!user?.userId)
-          return engine2.PlayerEntity;
+        if (!user?.userId) return engine2.PlayerEntity;
         for (const [entity, data] of engine2.getEntitiesWith(PlayerIdentityData3)) {
           if (data.address === user.userId) {
             return entity;
@@ -30495,24 +31272,22 @@ function definePlayerHelper(engine2) {
         return void 0;
       }
       const userEntity = getEntity();
-      if (!userEntity)
-        return null;
+      if (!userEntity) return null;
       const playerData = PlayerIdentityData3.getOrNull(userEntity);
       const avatarData = AvatarBase3.getOrNull(userEntity);
       const wearablesData = AvatarEquippedData3.getOrNull(userEntity);
-      if (!playerData && !avatarData && !wearablesData)
-        return null;
+      if (!playerData && !avatarData && !wearablesData) return null;
       return {
         entity: userEntity,
-        name: avatarData?.name ?? "",
+        name: avatarData?.name ?? '',
         isGuest: !!playerData?.isGuest,
-        userId: playerData?.address ?? "",
+        userId: playerData?.address ?? '',
         avatar: avatarData ?? void 0,
         wearables: wearablesData?.wearableUrns ?? [],
         emotes: wearablesData?.emoteUrns ?? [],
-        position: Transform3.getOrNull(userEntity)?.position
+        position: Transform3.getOrNull(userEntity)?.position,
       };
-    }
+    },
   };
 }
 var players = definePlayerHelper(engine);
@@ -30522,31 +31297,31 @@ var players_default = players;
 // ../../node_modules/.pnpm/@dcl+sdk@7.17.0_@well-known-components+interfaces@1.5.2/node_modules/@dcl/sdk/observables.js
 function createSubscriber(eventName) {
   return () => {
-    if (eventName === "comms") {
+    if (eventName === 'comms') {
       (0, import_EngineApi.subscribe)({ eventId: eventName }).catch(console.error);
     } else {
       SDK7ComponentsObservable?.subscribe(eventName);
     }
   };
 }
-var onEnterSceneObservable = new Observable(createSubscriber("onEnterScene"));
-var onLeaveSceneObservable = new Observable(createSubscriber("onLeaveScene"));
-var onSceneReadyObservable = new Observable(createSubscriber("sceneStart"));
-var onPlayerExpressionObservable = new Observable(createSubscriber("playerExpression"));
-var onVideoEvent = new Observable(createSubscriber("videoEvent"));
-var onProfileChanged = new Observable(createSubscriber("profileChanged"));
-var onPlayerConnectedObservable = new Observable(createSubscriber("playerConnected"));
-var onPlayerDisconnectedObservable = new Observable(createSubscriber("playerDisconnected"));
-var onRealmChangedObservable = new Observable(createSubscriber("onRealmChanged"));
-var onPlayerClickedObservable = new Observable(createSubscriber("playerClicked"));
-var onCommsMessage = new Observable(createSubscriber("comms"));
+var onEnterSceneObservable = new Observable(createSubscriber('onEnterScene'));
+var onLeaveSceneObservable = new Observable(createSubscriber('onLeaveScene'));
+var onSceneReadyObservable = new Observable(createSubscriber('sceneStart'));
+var onPlayerExpressionObservable = new Observable(createSubscriber('playerExpression'));
+var onVideoEvent = new Observable(createSubscriber('videoEvent'));
+var onProfileChanged = new Observable(createSubscriber('profileChanged'));
+var onPlayerConnectedObservable = new Observable(createSubscriber('playerConnected'));
+var onPlayerDisconnectedObservable = new Observable(createSubscriber('playerDisconnected'));
+var onRealmChangedObservable = new Observable(createSubscriber('onRealmChanged'));
+var onPlayerClickedObservable = new Observable(createSubscriber('playerClicked'));
+var onCommsMessage = new Observable(createSubscriber('comms'));
 async function pollEvents(sendBatch2) {
   const { events } = await sendBatch2({ actions: [] });
   for (const e of events) {
     if (e.generic) {
       const data = JSON.parse(e.generic.eventData);
       switch (e.generic.eventId) {
-        case "comms": {
+        case 'comms': {
           onCommsMessage.notifyObservers(data);
           break;
         }
@@ -30558,60 +31333,59 @@ var SDK7ComponentsObservable = processObservables();
 function processObservables() {
   const subscriptions = /* @__PURE__ */ new Set();
   function subscribe2(eventName) {
-    if (subscriptions.has(eventName))
-      return;
+    if (subscriptions.has(eventName)) return;
     switch (eventName) {
-      case "playerClicked": {
+      case 'playerClicked': {
         subscribePlayerClick();
       }
-      case "onEnterScene":
-      case "playerConnected": {
+      case 'onEnterScene':
+      case 'playerConnected': {
         subscribeEnterScene();
       }
-      case "onLeaveScene":
-      case "playerDisconnected": {
+      case 'onLeaveScene':
+      case 'playerDisconnected': {
         subscribeLeaveScene();
       }
-      case "onRealmChanged": {
+      case 'onRealmChanged': {
         subscribeRealmChange();
       }
-      case "playerExpression": {
+      case 'playerExpression': {
         subscribePlayerExpression();
       }
-      case "profileChanged": {
+      case 'profileChanged': {
         subscribeProfileChange();
       }
     }
     subscriptions.add(eventName);
   }
   function subscribeEnterScene() {
-    players_default.onEnterScene((player) => {
-      if (subscriptions.has("onEnterScene")) {
+    players_default.onEnterScene(player => {
+      if (subscriptions.has('onEnterScene')) {
         onEnterSceneObservable.notifyObservers({ userId: player.userId });
       }
-      if (subscriptions.has("playerConnected")) {
+      if (subscriptions.has('playerConnected')) {
         onPlayerConnectedObservable.notifyObservers({ userId: player.userId });
       }
     });
   }
   function subscribeLeaveScene() {
-    players_default.onLeaveScene((userId) => {
-      if (subscriptions.has("onLeaveScene")) {
+    players_default.onLeaveScene(userId => {
+      if (subscriptions.has('onLeaveScene')) {
         onLeaveSceneObservable.notifyObservers({ userId });
       }
-      if (subscriptions.has("playerDisconnected")) {
+      if (subscriptions.has('playerDisconnected')) {
         onPlayerDisconnectedObservable.notifyObservers({ userId });
       }
     });
   }
   function subscribeRealmChange() {
-    RealmInfo2.onChange(engine.RootEntity, (value) => {
+    RealmInfo2.onChange(engine.RootEntity, value => {
       if (value) {
         onRealmChangedObservable.notifyObservers({
           domain: value.baseUrl,
           displayName: value.realmName,
-          room: value.room ?? "",
-          serverName: value.realmName
+          room: value.room ?? '',
+          serverName: value.realmName,
         });
       }
     });
@@ -30620,18 +31394,17 @@ function processObservables() {
     const playerEntities = /* @__PURE__ */ new Set();
     engine.addSystem(() => {
       for (const [entity] of engine.getEntitiesWith(PlayerIdentityData2)) {
-        if (playerEntities.has(entity))
-          return;
+        if (playerEntities.has(entity)) return;
         playerEntities.add(entity);
-        PointerEventsResult2.onChange(entity, (data) => {
+        PointerEventsResult2.onChange(entity, data => {
           if (data?.hit) {
             onPlayerClickedObservable.notifyObservers({
-              userId: PlayerIdentityData2.getOrNull(entity)?.address ?? "",
+              userId: PlayerIdentityData2.getOrNull(entity)?.address ?? '',
               ray: {
                 direction: data.hit.direction,
                 distance: data.hit.length,
-                origin: data.hit.globalOrigin
-              }
+                origin: data.hit.globalOrigin,
+              },
             });
           }
         });
@@ -30639,19 +31412,17 @@ function processObservables() {
     });
   }
   function subscribePlayerExpression() {
-    AvatarEmoteCommand2.onChange(engine.PlayerEntity, (value) => {
-      onPlayerExpressionObservable.notifyObservers({ expressionId: value?.emoteUrn ?? "" });
+    AvatarEmoteCommand2.onChange(engine.PlayerEntity, value => {
+      onPlayerExpressionObservable.notifyObservers({ expressionId: value?.emoteUrn ?? '' });
     });
   }
   function subscribeProfileChange() {
     AvatarBase2.onChange(engine.PlayerEntity, () => {
-      if (!profileAddress)
-        return;
+      if (!profileAddress) return;
       onProfileChanged.notifyObservers({ ethAddress: profileAddress, version: 0 });
     });
     AvatarEquippedData2.onChange(engine.PlayerEntity, () => {
-      if (!profileAddress)
-        return;
+      if (!profileAddress) return;
       onProfileChanged.notifyObservers({ ethAddress: profileAddress, version: 0 });
     });
   }
@@ -30665,8 +31436,7 @@ function processObservables() {
       sceneReady = true;
       onSceneReadyObservable.notifyObservers({});
     }
-    if (profileAddress)
-      return;
+    if (profileAddress) return;
     profileAddress = PlayerIdentityData2.getOrNull(engine.PlayerEntity)?.address;
   }
   engine.addSystem(observableSystem);
@@ -30686,10 +31456,10 @@ var compositeProvider = {
         if (fromLoader instanceof Uint8Array) {
           const composite = Composite.fromBinary(fromLoader);
           composites.push({ src, composite });
-        } else if (typeof fromLoader === "string") {
+        } else if (typeof fromLoader === 'string') {
           const composite = Composite.fromJson(JSON.parse(fromLoader));
           composites.push({ src, composite });
-        } else if (typeof fromLoader === "object") {
+        } else if (typeof fromLoader === 'object') {
           const composite = Composite.fromJson(fromLoader);
           composites.push({ src, composite });
         }
@@ -30698,12 +31468,14 @@ var compositeProvider = {
       }
       delete compositeFromLoader[src];
     }
-    return composites.find((item) => item.src === src) || null;
-  }
+    return composites.find(item => item.src === src) || null;
+  },
 };
 
 // ../../node_modules/.pnpm/@dcl+sdk@7.17.0_@well-known-components+interfaces@1.5.2/node_modules/@dcl/sdk/index.js
-var rendererTransport = createRendererTransport({ crdtSendToRenderer: import_EngineApi2.crdtSendToRenderer });
+var rendererTransport = createRendererTransport({
+  crdtSendToRenderer: import_EngineApi2.crdtSendToRenderer,
+});
 engine.addTransport(rendererTransport);
 async function onUpdate(deltaTime) {
   engine.seal();
@@ -30713,7 +31485,7 @@ async function onUpdate(deltaTime) {
 async function onStart() {
   const response = await (0, import_EngineApi2.crdtGetState)({ data: new Uint8Array() });
   if (!response.hasEntities) {
-    const mainComposite = compositeProvider.getCompositeOrNull("main.composite");
+    const mainComposite = compositeProvider.getCompositeOrNull('main.composite');
     if (mainComposite) {
       try {
         Composite.instance(engine, mainComposite, compositeProvider);
@@ -30723,7 +31495,7 @@ async function onStart() {
       }
     }
   }
-  if (!!rendererTransport.onmessage) {
+  if (rendererTransport.onmessage) {
     if (response && response.data && response.data.length) {
       for (const byteArray of response.data) {
         rendererTransport.onmessage(byteArray);
@@ -30734,10 +31506,14 @@ async function onStart() {
 
 // src/index.ts.entry-point.ts
 if (main !== void 0) {
-  let _INTERNAL_startup_system = function() {
+  let _INTERNAL_startup_system = function () {
     try {
       const maybePromise = main();
-      if (maybePromise && typeof maybePromise === "object" && typeof maybePromise.then === "function") {
+      if (
+        maybePromise &&
+        typeof maybePromise === 'object' &&
+        typeof maybePromise.then === 'function'
+      ) {
         maybePromise.catch(console.error);
       }
       initializeScripts(engine);

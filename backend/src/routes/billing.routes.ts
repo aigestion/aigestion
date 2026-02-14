@@ -6,70 +6,43 @@ import { requireAuth } from '../middleware/auth.middleware';
 import { User } from '../models/User';
 import { StripeService } from '../services/stripe.service';
 import { logger } from '../utils/logger';
+import { TYPES } from '../types';
+import { BillingController } from '../controllers/billing.controller';
 
 const router = Router();
-const stripeService = container.get(StripeService);
+const stripeService = container.get<StripeService>(TYPES.StripeService);
+const billingController = container.get<BillingController>(TYPES.BillingController);
 
-router.post('/checkout', requireAuth, async (req: any, res: any) => {
-  try {
-    const { priceId } = req.body;
-    const user = await User.findById(req.user!.id);
+// Core Billing & Snapshot
+router.get('/snapshot', requireAuth, (req, res, next) =>
+  billingController.getBillingSnapshot(req, res, next),
+);
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+// Marketplace & Hiring
+router.post('/hire', requireAuth, (req, res, next) =>
+  billingController.hirePersona(req, res, next),
+);
 
-    let customerId = user.stripeCustomerId;
+// Subscription & Checkout
+router.post('/checkout', requireAuth, (req, res, next) =>
+  billingController.createCheckoutSession(req, res, next),
+);
 
-    if (!customerId) {
-      const customer = await stripeService.createCustomer(user.email, user.name);
-      customerId = customer.id;
-      user.stripeCustomerId = customerId;
-      await user.save();
-    }
+router.post('/portal', requireAuth, (req, res, next) =>
+  billingController.createPortalSession(req, res, next),
+);
 
-    const session = await stripeService.createSubscriptionCheckoutSession(
-      customerId,
-      priceId,
-      `${env.FRONTEND_URL}/billing?success=true`,
-      `${env.FRONTEND_URL}/billing?canceled=true`
-    );
+// PayPal Integration
+router.post('/paypal/create-order', requireAuth, (req, res, next) =>
+  billingController.createPayPalOrder(req, res, next),
+);
+router.post('/paypal/capture-order', requireAuth, (req, res, next) =>
+  billingController.capturePayPalOrder(req, res, next),
+);
 
-    res.json({ sessionId: session.id, url: session.url });
-  } catch (error) {
-    logger.error(error, 'Checkout error');
-    res.status(500).json({ error: 'Failed to create checkout session' });
-  }
-});
-
-router.post('/portal', requireAuth, async (req: any, res: any) => {
-  try {
-    const user = await User.findById(req.user!.id);
-    if (!user?.stripeCustomerId) {
-      return res.status(400).json({ error: 'No billing account found' });
-    }
-
-    const session = await stripeService.createPortalSession(
-      user.stripeCustomerId,
-      `${env.FRONTEND_URL}/billing`
-    );
-
-    res.json({ url: session.url });
-  } catch (error) {
-    logger.error(error, 'Portal error');
-    res.status(500).json({ error: 'Failed to create portal session' });
-  }
-});
-
-router.post('/paypal/create-order', requireAuth, async (req: any, res: any) => {
-  // Dynamically import controller to avoid circular deps if any, or just call directly
-  const { createPayPalOrder } = await import('../controllers/billing.controller');
-  await createPayPalOrder(req, res);
-});
-
-router.post('/paypal/capture-order', requireAuth, async (req: any, res: any) => {
-  const { capturePayPalOrder } = await import('../controllers/billing.controller');
-  await capturePayPalOrder(req, res);
-});
+// Partner Transparency API
+router.get('/metrics/partner', requireAuth, (req, res, next) =>
+  billingController.getPartnerMetrics(req, res, next),
+);
 
 export default router;

@@ -7,18 +7,24 @@
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
-const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} = require('@modelcontextprotocol/sdk/types.js');
 
 class PrometheusMCPServer {
   constructor() {
-    this.server = new Server({
-      name: 'prometheus',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    this.server = new Server(
+      {
+        name: 'prometheus',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.setupTools();
     this.setupErrorHandling();
@@ -35,10 +41,10 @@ class PrometheusMCPServer {
             properties: {
               query: { type: 'string', description: 'PromQL query string' },
               time: { type: 'string', description: 'Query timestamp (optional)' },
-              timeout: { type: 'number', description: 'Query timeout in seconds' }
+              timeout: { type: 'number', description: 'Query timeout in seconds' },
             },
-            required: ['query']
-          }
+            required: ['query'],
+          },
         },
         {
           name: 'prometheus_metrics_list',
@@ -46,9 +52,9 @@ class PrometheusMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              pattern: { type: 'string', description: 'Metric name pattern' }
-            }
-          }
+              pattern: { type: 'string', description: 'Metric name pattern' },
+            },
+          },
         },
         {
           name: 'prometheus_series_info',
@@ -58,10 +64,10 @@ class PrometheusMCPServer {
             properties: {
               match: { type: 'string', description: 'Series selector' },
               start: { type: 'string', description: 'Start time' },
-              end: { type: 'string', description: 'End time' }
+              end: { type: 'string', description: 'End time' },
             },
-            required: ['match']
-          }
+            required: ['match'],
+          },
         },
         {
           name: 'prometheus_targets',
@@ -69,9 +75,13 @@ class PrometheusMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              state: { type: 'string', enum: ['active', 'down', 'any'], description: 'Target state filter' }
-            }
-          }
+              state: {
+                type: 'string',
+                enum: ['active', 'down', 'any'],
+                description: 'Target state filter',
+              },
+            },
+          },
         },
         {
           name: 'prometheus_alerts',
@@ -80,9 +90,9 @@ class PrometheusMCPServer {
             type: 'object',
             properties: {
               silenced: { type: 'boolean', description: 'Include silenced alerts' },
-              inhibited: { type: 'boolean', description: 'Include inhibited alerts' }
-            }
-          }
+              inhibited: { type: 'boolean', description: 'Include inhibited alerts' },
+            },
+          },
         },
         {
           name: 'prometheus_rules',
@@ -90,30 +100,34 @@ class PrometheusMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              type: { type: 'string', enum: ['recording', 'alerting', 'all'], description: 'Rule type filter' }
-            }
-          }
+              type: {
+                type: 'string',
+                enum: ['recording', 'alerting', 'all'],
+                description: 'Rule type filter',
+              },
+            },
+          },
         },
         {
           name: 'prometheus_config',
           description: 'Get Prometheus configuration',
           inputSchema: {
             type: 'object',
-            properties: {}
-          }
+            properties: {},
+          },
         },
         {
           name: 'prometheus_status',
           description: 'Get Prometheus status information',
           inputSchema: {
             type: 'object',
-            properties: {}
-          }
-        }
-      ]
+            properties: {},
+          },
+        },
+      ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -139,10 +153,12 @@ class PrometheusMCPServer {
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: `Error: ${error.message}`
-          }]
+          content: [
+            {
+              type: 'text',
+              text: `Error: ${error.message}`,
+            },
+          ],
         };
       }
     });
@@ -150,90 +166,106 @@ class PrometheusMCPServer {
 
   async executeQuery(args) {
     const { query, time, timeout } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Prometheus Query:\n\nQuery: ${query}\nTime: ${time || 'Current time'}\nTimeout: ${timeout || 30}s\n\nNote: Actual Prometheus queries require Prometheus client library.\n\nThis prepares the PromQL query for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Prometheus Query:\n\nQuery: ${query}\nTime: ${time || 'Current time'}\nTimeout: ${timeout || 30}s\n\nNote: Actual Prometheus queries require Prometheus client library.\n\nThis prepares the PromQL query for execution.`,
+        },
+      ],
     };
   }
 
   async listMetrics(args) {
     const { pattern } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Prometheus Metrics List:\n\nPattern: ${pattern || 'All metrics'}\n\nCommon metrics:\n- up\n- http_requests_total\n- cpu_usage_percent\n- memory_usage_bytes\n- disk_usage_percent\n- network_bytes_sent\n- network_bytes_received\n\nNote: Actual metrics listing requires Prometheus client library.\n\nThis prepares metrics listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Prometheus Metrics List:\n\nPattern: ${pattern || 'All metrics'}\n\nCommon metrics:\n- up\n- http_requests_total\n- cpu_usage_percent\n- memory_usage_bytes\n- disk_usage_percent\n- network_bytes_sent\n- network_bytes_received\n\nNote: Actual metrics listing requires Prometheus client library.\n\nThis prepares metrics listing.`,
+        },
+      ],
     };
   }
 
   async getSeriesInfo(args) {
     const { match, start, end } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Prometheus Series Info:\n\nMatch: ${match}\nStart: ${start || '1 hour ago'}\nEnd: ${end || 'Now'}\n\nNote: Actual series information requires Prometheus client library.\n\nThis prepares series information retrieval.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Prometheus Series Info:\n\nMatch: ${match}\nStart: ${start || '1 hour ago'}\nEnd: ${end || 'Now'}\n\nNote: Actual series information requires Prometheus client library.\n\nThis prepares series information retrieval.`,
+        },
+      ],
     };
   }
 
   async getTargets(args) {
     const { state } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Prometheus Targets:\n\nState: ${state || 'All'}\n\nTarget categories:\n- Active targets\n- Down targets\n- Discovered targets\n\nNote: Actual target information requires Prometheus client library.\n\nThis prepares target listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Prometheus Targets:\n\nState: ${state || 'All'}\n\nTarget categories:\n- Active targets\n- Down targets\n- Discovered targets\n\nNote: Actual target information requires Prometheus client library.\n\nThis prepares target listing.`,
+        },
+      ],
     };
   }
 
   async getAlerts(args) {
     const { silenced, inhibited } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Prometheus Alerts:\n\nSilenced: ${silenced || false}\nInhibited: ${inhibited || false}\n\nAlert types:\n- Firing alerts\n- Pending alerts\n- Resolved alerts\n\nNote: Actual alert information requires Prometheus client library.\n\nThis prepares alert listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Prometheus Alerts:\n\nSilenced: ${silenced || false}\nInhibited: ${inhibited || false}\n\nAlert types:\n- Firing alerts\n- Pending alerts\n- Resolved alerts\n\nNote: Actual alert information requires Prometheus client library.\n\nThis prepares alert listing.`,
+        },
+      ],
     };
   }
 
   async getRules(args) {
     const { type } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Prometheus Rules:\n\nType: ${type || 'All'}\n\nRule categories:\n- Recording rules\n- Alerting rules\n- Rule groups\n\nNote: Actual rule information requires Prometheus client library.\n\nThis prepares rule listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Prometheus Rules:\n\nType: ${type || 'All'}\n\nRule categories:\n- Recording rules\n- Alerting rules\n- Rule groups\n\nNote: Actual rule information requires Prometheus client library.\n\nThis prepares rule listing.`,
+        },
+      ],
     };
   }
 
   async getConfig(args) {
     return {
-      content: [{
-        type: 'text',
-        text: `Prometheus Configuration:\n\nConfiguration sections:\n- Global settings\n- Scrape configs\n- Alerting rules\n- Remote write\n- Storage\n\nNote: Actual configuration requires Prometheus client library.\n\nThis prepares configuration retrieval.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Prometheus Configuration:\n\nConfiguration sections:\n- Global settings\n- Scrape configs\n- Alerting rules\n- Remote write\n- Storage\n\nNote: Actual configuration requires Prometheus client library.\n\nThis prepares configuration retrieval.`,
+        },
+      ],
     };
   }
 
   async getStatus(args) {
     return {
-      content: [{
-        type: 'text',
-        text: `Prometheus Status:\n\nStatus information:\n- Build information\n- Runtime information\n- Flags\n- Configuration\n- TSDB status\n\nNote: Actual status requires Prometheus client library.\n\nThis prepares status retrieval.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Prometheus Status:\n\nStatus information:\n- Build information\n- Runtime information\n- Flags\n- Configuration\n- TSDB status\n\nNote: Actual status requires Prometheus client library.\n\nThis prepares status retrieval.`,
+        },
+      ],
     };
   }
 
   setupErrorHandling() {
-    this.server.onerror = (error) => console.error('[Prometheus MCP Error]', error);
+    this.server.onerror = error => console.error('[Prometheus MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);

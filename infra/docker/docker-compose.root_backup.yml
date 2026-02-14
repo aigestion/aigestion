@@ -13,7 +13,7 @@ services:
       - NODE_ENV=production
       - PORT=5000
     ports:
-      - "5001:5000"
+      - '5001:5000'
     networks:
       - aigestion-network
 
@@ -28,7 +28,7 @@ services:
     container_name: aigestion-frontend-prod
     restart: always
     ports:
-      - "8080:80"
+      - '8080:80'
     depends_on:
       - backend
     networks:

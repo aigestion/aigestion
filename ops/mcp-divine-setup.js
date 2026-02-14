@@ -26,9 +26,9 @@ class MCPDivineSetup {
       WARNING: '\x1b[33m',
       ERROR: '\x1b[31m',
       DIVINE: '\x1b[35m',
-      RESET: '\x1b[0m'
+      RESET: '\x1b[0m',
     };
-    
+
     console.log(`${colors[type]}[${timestamp}] ${message}${colors.RESET}`);
   }
 
@@ -46,7 +46,7 @@ class MCPDivineSetup {
 
   async installDependencies() {
     this.log('📦 Instalando dependencias MCP a nivel divino...', 'DIVINE');
-    
+
     const dependencies = [
       '@modelcontextprotocol/sdk',
       '@anthropic-ai/sdk',
@@ -64,14 +64,11 @@ class MCPDivineSetup {
       'compression',
       'express-rate-limit',
       'winston',
-      'joi'
+      'joi',
     ];
 
     for (const dep of dependencies) {
-      this.executeCommand(
-        `npm install ${dep}`,
-        `Instalando ${dep}`
-      );
+      this.executeCommand(`npm install ${dep}`, `Instalando ${dep}`);
     }
   }
 
@@ -84,23 +81,23 @@ class MCPDivineSetup {
 
     // Crear settings.json con configuración MCP
     const vscodeSettings = {
-      "mcp.serverTimeout": 30000,
-      "mcp.autoRestart": true,
-      "mcp.logLevel": "info",
-      "mcp.enableTelemetry": true,
-      "mcp.servers": {},
-      "editor.formatOnSave": true,
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-      "typescript.tsserver.maxTsServerMemory": 8192,
-      "github.copilot.enable": {
-        "*": true,
-        "yaml": true,
-        "plaintext": true,
-        "markdown": true
+      'mcp.serverTimeout': 30000,
+      'mcp.autoRestart': true,
+      'mcp.logLevel': 'info',
+      'mcp.enableTelemetry': true,
+      'mcp.servers': {},
+      'editor.formatOnSave': true,
+      'editor.defaultFormatter': 'esbenp.prettier-vscode',
+      'typescript.tsserver.maxTsServerMemory': 8192,
+      'github.copilot.enable': {
+        '*': true,
+        yaml: true,
+        plaintext: true,
+        markdown: true,
       },
-      "github.copilot.chat.enable": true,
-      "google.geminicodeassist.enable": true,
-      "ms-azuretools.vscode-azure-mcp-server.enable": true
+      'github.copilot.chat.enable': true,
+      'google.geminicodeassist.enable': true,
+      'ms-azuretools.vscode-azure-mcp-server.enable': true,
     };
 
     // Configurar servers MCP para VSCode
@@ -112,7 +109,7 @@ class MCPDivineSetup {
         env: server.env,
         cwd: this.projectRoot,
         timeout: 30000,
-        restart: true
+        restart: true,
       };
     }
 
@@ -129,14 +126,11 @@ class MCPDivineSetup {
       'ms-vscode.remote-remote-containers',
       'ms-vscode.vscode-json',
       'redhat.vscode-yaml',
-      'ms-vscode.powershell'
+      'ms-vscode.powershell',
     ];
 
     for (const ext of extensions) {
-      this.executeCommand(
-        `code --install-extension ${ext}`,
-        `Instalando extensión ${ext}`
-      );
+      this.executeCommand(`code --install-extension ${ext}`, `Instalando extensión ${ext}`);
     }
   }
 
@@ -154,8 +148,8 @@ class MCPDivineSetup {
         enableCaching: true,
         cacheTimeout: 300000,
         enableMetrics: true,
-        servers: {}
-      }
+        servers: {},
+      },
     };
 
     // Configurar servers MCP para Windsurf
@@ -167,7 +161,7 @@ class MCPDivineSetup {
         env: server.env,
         cwd: this.projectRoot,
         capabilities: server.capabilities,
-        priority: serverName === 'aigestion_core' ? 'high' : 'normal'
+        priority: serverName === 'aigestion_core' ? 'high' : 'normal',
       };
     }
 
@@ -177,18 +171,14 @@ class MCPDivineSetup {
     this.log('✅ Windsurf MCP config creado', 'SUCCESS');
 
     // Optimizar servers existentes
-    const servers = [
-      'aigestion-mcp-server.js',
-      'workflow-server.js',
-      'custom-rules-server.js'
-    ];
+    const servers = ['aigestion-mcp-server.js', 'workflow-server.js', 'custom-rules-server.js'];
 
     for (const server of servers) {
       const serverPath = path.join(this.windsurfPath, server);
       if (fs.existsSync(serverPath)) {
         // Optimizar server para nivel divino
         let content = fs.readFileSync(serverPath, 'utf8');
-        
+
         // Añadir optimizaciones
         if (!content.includes('DIVINE_MODE')) {
           content = content.replace(
@@ -222,15 +212,15 @@ const { performance } = require('perf_hooks');`
         enableRealTime: true,
         locationOptimization: true,
         professionalMode: true,
-        servers: {}
+        servers: {},
       },
       antigravity: {
         account: 'admin@aigestion.net',
         location: 'europe-west1',
         optimization: 'maximum',
         monitoring: '24/7',
-        backup: 'automatic'
-      }
+        backup: 'automatic',
+      },
     };
 
     // Configurar servers MCP para Antigravity
@@ -243,12 +233,12 @@ const { performance } = require('perf_hooks');`
           ...server.env,
           ANTIGRAVITY_MODE: 'true',
           PROFESSIONAL_ACCOUNT: 'true',
-          LOCATION_OPTIMIZATION: 'europe-west1'
+          LOCATION_OPTIMIZATION: 'europe-west1',
         },
         cwd: this.projectRoot,
         capabilities: server.capabilities,
         priority: 'critical',
-        realTime: true
+        realTime: true,
       };
     }
 
@@ -261,7 +251,7 @@ const { performance } = require('perf_hooks');`
   async run() {
     try {
       this.log('🌟 INICIANDO CONFIGURACIÓN MCP DIVINA - NIVEL DIOS', 'DIVINE');
-      
+
       await this.installDependencies();
       await this.setupVSCode();
       await this.setupWindsurf();
@@ -269,7 +259,6 @@ const { performance } = require('perf_hooks');`
 
       this.log('🎉 CONFIGURACIÓN MCP DIVINA COMPLETADA - NIVEL DIOS', 'SUCCESS');
       this.log('🚀 Todos los MCP servers están operando a nivel divino', 'SUCCESS');
-      
     } catch (error) {
       this.log(`❌ Error en configuración divina: ${error.message}`, 'ERROR');
       process.exit(1);

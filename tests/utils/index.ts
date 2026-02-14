@@ -1,17 +1,17 @@
-import Debug from "debug";
-import fs from "fs";
-import * as os from "os";
-import path from "path";
-import semver from "semver";
-import { TestTarget } from "tests/driver";
-import { CheckType, LandingState, LinterVersion, TaskFailure, TestingArguments } from "tests/types";
+import Debug from 'debug';
+import fs from 'fs';
+import * as os from 'os';
+import path from 'path';
+import semver from 'semver';
+import { TestTarget } from 'tests/driver';
+import { CheckType, LandingState, LinterVersion, TaskFailure, TestingArguments } from 'tests/types';
 
-export const REPO_ROOT = path.resolve(__dirname, "../..");
-export const TEST_DATA = "test_data";
-export const TEMP_PREFIX = "plugins_";
+export const REPO_ROOT = path.resolve(__dirname, '../..');
+export const TEST_DATA = 'test_data';
+export const TEMP_PREFIX = 'plugins_';
 export const DOWNLOAD_CACHE = path.resolve(
   fs.realpathSync(os.tmpdir()),
-  `${TEMP_PREFIX}testing_download_cache`,
+  `${TEMP_PREFIX}testing_download_cache`
 );
 
 // As this file and folder increase in complexity, extract out functionality into other categories.
@@ -32,7 +32,7 @@ const parseLinterVersion = (value: string): LinterVersion | undefined => {
 };
 
 const coalesceString = (value?: string): string | undefined => {
-  if (value && value !== "") {
+  if (value && value !== '') {
     return value;
   }
   return undefined;
@@ -59,7 +59,7 @@ const normalizePath = (value?: string): string | undefined => {
 export const ARGS: TestingArguments = {
   cliVersion: coalesceString(process.env.PLUGINS_TEST_CLI_VERSION),
   cliPath: normalizePath(process.env.PLUGINS_TEST_CLI_PATH),
-  linterVersion: parseLinterVersion(process.env.PLUGINS_TEST_LINTER_VERSION ?? ""),
+  linterVersion: parseLinterVersion(process.env.PLUGINS_TEST_LINTER_VERSION ?? ''),
   dumpNewSnapshot: Boolean(process.env.PLUGINS_TEST_UPDATE_SNAPSHOTS),
   sandboxDebug: Boolean(process.env.SANDBOX_DEBUG),
 };
@@ -72,7 +72,7 @@ if (
   ARGS.dumpNewSnapshot ||
   ARGS.sandboxDebug
 ) {
-  Debug("Tests").extend("Global")("%o", ARGS);
+  Debug('Tests').extend('Global')('%o', ARGS);
 }
 
 /**
@@ -95,9 +95,9 @@ export const getSnapshotName = (
   linterName: string,
   prefix: string,
   checkType: CheckType,
-  linterVersion?: string,
+  linterVersion?: string
 ) => {
-  const normalizedName = linterName.replace(/-/g, "_");
+  const normalizedName = linterName.replace(/-/g, '_');
   if (!linterVersion) {
     return `${normalizedName}_${prefix}.${checkType}.shot`;
   }
@@ -111,7 +111,7 @@ export const getSnapshotName = (
  * @param checkType "check" or "fmt"
  */
 export const getSnapshotRegex = (linterName: string, prefix: string, checkType: CheckType) =>
-  `${linterName.replace(/-/g, "_")}_(v(?<version>[^_]+)_)?${prefix}.${checkType}.shot`;
+  `${linterName.replace(/-/g, '_')}_(v(?<version>[^_]+)_)?${prefix}.${checkType}.shot`;
 
 /**
  * Identifies snapshot file to use, based on linter, version, and ARGS.dumpNewSnapshot.
@@ -130,11 +130,11 @@ export const getSnapshotPathForAssert = (
   prefix: string,
   checkType: CheckType,
   linterVersion?: string,
-  versionGreaterThanOrEqual?: (_a: string, _b: string) => boolean,
+  versionGreaterThanOrEqual?: (_a: string, _b: string) => boolean
 ): string => {
   const specificVersionSnapshotName = path.resolve(
     snapshotDirPath,
-    getSnapshotName(linterName, prefix, checkType, linterVersion),
+    getSnapshotName(linterName, prefix, checkType, linterVersion)
   );
 
   // If this is a versionless linter, don't specify a version.
@@ -152,7 +152,7 @@ export const getSnapshotPathForAssert = (
   const snapshotFileRegex = getSnapshotRegex(linterName, prefix, checkType);
   const availableSnapshots = fs
     .readdirSync(snapshotDirPath)
-    .filter((name) => name.match(snapshotFileRegex))
+    .filter(name => name.match(snapshotFileRegex))
     .reverse();
 
   // No snapshots exist.
@@ -188,14 +188,14 @@ export const getVersionsForTest = (
   dirname: string,
   linterName: string,
   prefix: string,
-  checkType: CheckType,
+  checkType: CheckType
 ) => {
   // TODO(Tyler): Add ARGS.linterVersion Query case for full matrix coverage
   let matchExists = false;
 
   const versionsList = fs
     .readdirSync(path.resolve(dirname, TEST_DATA))
-    .map((file) => {
+    .map(file => {
       const fileMatch = file.match(getSnapshotRegex(linterName, prefix, checkType));
       if (fileMatch) {
         matchExists = true;
@@ -208,13 +208,13 @@ export const getVersionsForTest = (
   // Check if no snapshots exist yet. If this is the case, run with KnownGoodVersion and Latest, and print advisory text.
   if (!matchExists && !ARGS.linterVersion) {
     console.log(
-      `No snapshots detected for ${linterName} ${prefix} ${checkType} test. Running test against KnownGoodVersion. See tests/README.md for more information.`,
+      `No snapshots detected for ${linterName} ${prefix} ${checkType} test. Running test against KnownGoodVersion. See tests/README.md for more information.`
     );
-    return ["KnownGoodVersion"];
+    return ['KnownGoodVersion'];
   }
 
   // Versionless linters must return a non-empty array, so check the list's length here.
-  if (ARGS.linterVersion === "Snapshots" && uniqueVersionsList.length > 0) {
+  if (ARGS.linterVersion === 'Snapshots' && uniqueVersionsList.length > 0) {
     return uniqueVersionsList;
   }
 
@@ -275,11 +275,11 @@ export const skipCPUOS = (pairs: CpuOsPair[]) => (_version?: string) =>
  * GitHub MacOS runners can run much slower, so allow for a larger timeout.
  */
 export const osTimeoutMultiplier =
-  process.platform === "darwin"
+  process.platform === 'darwin'
     ? 3
-    : process.platform === "win32"
+    : process.platform === 'win32'
       ? 3
-      : process.platform === "linux" && process.arch === "arm64"
+      : process.platform === 'linux' && process.arch === 'arm64'
         ? 3
         : 1;
 
@@ -303,7 +303,7 @@ export const landingStateWrapper = (actual: LandingState | undefined, snapshotPa
   if (!fs.existsSync(snapshotPath) || ARGS.dumpNewSnapshot) {
     // A new snapshot is being dumped
     return {
-      taskFailures: (actual?.taskFailures ?? []).map((failure) => ({
+      taskFailures: (actual?.taskFailures ?? []).map(failure => ({
         name: failure.name,
         message: failure.message,
         // trunk-ignore(eslint/@typescript-eslint/no-unsafe-assignment)
@@ -331,7 +331,7 @@ export const landingStateWrapper = (actual: LandingState | undefined, snapshotPa
   };
 
   return {
-    taskFailures: (actual?.taskFailures ?? []).map((failure) => ({
+    taskFailures: (actual?.taskFailures ?? []).map(failure => ({
       name: failure.name,
       message: failure.message,
       // trunk-ignore(eslint/@typescript-eslint/no-unsafe-assignment)
@@ -343,8 +343,8 @@ export const landingStateWrapper = (actual: LandingState | undefined, snapshotPa
 export const conditionalTest = (
   skipTest: boolean,
   name: string,
-  fn?: jest.ProvidesCallback  ,
-  timeout?: number  ,
+  fn?: jest.ProvidesCallback,
+  timeout?: number
 ) => (skipTest ? it.skip(name, fn, timeout) : it(name, fn, timeout));
 
 /**

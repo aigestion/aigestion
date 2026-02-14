@@ -1,6 +1,6 @@
-import { toolInstallTest } from "tests";
+import { toolInstallTest } from 'tests';
 
 toolInstallTest({
-  toolName: "grpcui",
-  toolVersion: "1.4.1",
+  toolName: 'grpcui',
+  toolVersion: '1.4.1',
 });

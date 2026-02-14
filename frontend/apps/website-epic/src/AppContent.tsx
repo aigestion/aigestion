@@ -2,6 +2,7 @@ import { AnimatePresence } from 'framer-motion';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
+import { Footer } from './components/Footer';
 import { ScrollProgress } from './components/ScrollProgress';
 import { MeshGradientBG } from './components/MeshGradientBG';
 import { useNotification } from './contexts/NotificationContext';
@@ -104,6 +105,9 @@ const DanielaDemo = lazy(() =>
   import('./pages/DanielaDemo').then(m => ({ default: m.DanielaDemo }))
 );
 const VirtualOfficePreview = lazy(() => import('./pages/VirtualOfficePreview'));
+const ClientDashboard = lazy(() =>
+  import('./components/ClientDashboard').then(m => ({ default: m.ClientDashboard }))
+);
 
 // ============================================
 // UI Components
@@ -119,44 +123,7 @@ export const LoadingFallback = () => (
   </div>
 );
 
-export const Footer = () => (
-  <footer className="py-24 bg-black border-t border-white/5 relative z-10">
-    <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-12 text-nexus-silver/40 text-[9px] font-orbitron tracking-widest uppercase">
-      <div className="col-span-2">
-        <img src="/images/brand/logo.png" alt="Sovereign Nexus" className="h-8 mb-6 opacity-80" />
-        <p className="max-w-sm mb-8 leading-relaxed">
-          Sistemas avanzados de orquestación neural y soberanía cognitiva.
-        </p>
-        <div className="text-[8px] opacity-30">
-          © 2026 Sovereign Nexus | Enterprise Infrastructure v2.1
-        </div>
-      </div>
-      <div>
-        <h4 className="text-white mb-6 tracking-[0.4em] font-bold">Soluciones</h4>
-        <ul className="space-y-4">
-          <li className="hover:text-nexus-cyan-glow cursor-pointer transition-colors">
-            Infraestructura
-          </li>
-          <li className="hover:text-nexus-cyan-glow cursor-pointer transition-colors">
-            Automatización
-          </li>
-          <li className="hover:text-nexus-cyan-glow cursor-pointer transition-colors">Seguridad</li>
-        </ul>
-      </div>
-      <div>
-        <h4 className="text-white mb-6 tracking-[0.4em] font-bold">Soporte</h4>
-        <ul className="space-y-4">
-          <li className="hover:text-nexus-cyan-glow cursor-pointer transition-colors">
-            Documentación
-          </li>
-          <li className="hover:text-nexus-cyan-glow cursor-pointer transition-colors">
-            Terminal SSH
-          </li>
-        </ul>
-      </div>
-    </div>
-  </footer>
-);
+// Footer removed - using imported version from ./components/Footer
 
 export const AppContent = ({
   loading,
@@ -258,6 +225,10 @@ export const AppContent = ({
               }
             />
 
+            <Route
+              path="/client"
+              element={isAuthenticated ? <ClientDashboard /> : <Navigate to="/login" />}
+            />
             <Route path="/weapon" element={<WeaponDashboard />} />
             <Route path="/daniela/*" element={<DanielaDemo />} />
             <Route path="/virtual-office/*" element={<VirtualOfficePreview />} />

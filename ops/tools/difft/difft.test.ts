@@ -1,6 +1,6 @@
-import { toolInstallTest } from "tests";
+import { toolInstallTest } from 'tests';
 
 toolInstallTest({
-  toolName: "difft",
-  toolVersion: "0.56.1",
+  toolName: 'difft',
+  toolVersion: '0.56.1',
 });

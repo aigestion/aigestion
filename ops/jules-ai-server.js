@@ -7,19 +7,25 @@
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
-const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} = require('@modelcontextprotocol/sdk/types.js');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 class JulesAIServer {
   constructor() {
-    this.server = new Server({
-      name: 'jules-ai-assistant',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    this.server = new Server(
+      {
+        name: 'jules-ai-assistant',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY);
     this.setupTools();
@@ -36,11 +42,15 @@ class JulesAIServer {
             type: 'object',
             properties: {
               prompt: { type: 'string', description: 'Code generation prompt' },
-              language: { type: 'string', enum: ['python', 'javascript', 'typescript', 'java', 'go', 'rust'], description: 'Programming language' },
-              context: { type: 'string', description: 'Additional context for code generation' }
+              language: {
+                type: 'string',
+                enum: ['python', 'javascript', 'typescript', 'java', 'go', 'rust'],
+                description: 'Programming language',
+              },
+              context: { type: 'string', description: 'Additional context for code generation' },
             },
-            required: ['prompt', 'language']
-          }
+            required: ['prompt', 'language'],
+          },
         },
         {
           name: 'jules_code_review',
@@ -49,10 +59,14 @@ class JulesAIServer {
             type: 'object',
             properties: {
               code: { type: 'string', description: 'Code to review' },
-              focus: { type: 'string', enum: ['performance', 'security', 'readability', 'best-practices'], description: 'Review focus area' }
+              focus: {
+                type: 'string',
+                enum: ['performance', 'security', 'readability', 'best-practices'],
+                description: 'Review focus area',
+              },
             },
-            required: ['code']
-          }
+            required: ['code'],
+          },
         },
         {
           name: 'jules_debug_assistance',
@@ -62,10 +76,10 @@ class JulesAIServer {
             properties: {
               code: { type: 'string', description: 'Code with issues' },
               error_message: { type: 'string', description: 'Error message' },
-              stack_trace: { type: 'string', description: 'Stack trace' }
+              stack_trace: { type: 'string', description: 'Stack trace' },
             },
-            required: ['code']
-          }
+            required: ['code'],
+          },
         },
         {
           name: 'jules_optimization',
@@ -74,10 +88,14 @@ class JulesAIServer {
             type: 'object',
             properties: {
               code: { type: 'string', description: 'Code to optimize' },
-              optimization_type: { type: 'string', enum: ['speed', 'memory', 'algorithm', 'parallel'], description: 'Type of optimization' }
+              optimization_type: {
+                type: 'string',
+                enum: ['speed', 'memory', 'algorithm', 'parallel'],
+                description: 'Type of optimization',
+              },
             },
-            required: ['code']
-          }
+            required: ['code'],
+          },
         },
         {
           name: 'jules_architecture_review',
@@ -86,15 +104,19 @@ class JulesAIServer {
             type: 'object',
             properties: {
               description: { type: 'string', description: 'Architecture description' },
-              code_snippets: { type: 'array', items: { type: 'string' }, description: 'Relevant code snippets' }
+              code_snippets: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Relevant code snippets',
+              },
             },
-            required: ['description']
-          }
-        }
-      ]
+            required: ['description'],
+          },
+        },
+      ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -114,10 +136,12 @@ class JulesAIServer {
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: `Error: ${error.message}`
-          }]
+          content: [
+            {
+              type: 'text',
+              text: `Error: ${error.message}`,
+            },
+          ],
         };
       }
     });
@@ -125,7 +149,7 @@ class JulesAIServer {
 
   async generateCode(args) {
     const { prompt, language, context } = args;
-    
+
     const julesPrompt = `As Google Jules AI assistant, generate ${language} code for: ${prompt}
 
 ${context ? `Context: ${context}` : ''}
@@ -141,18 +165,20 @@ Code:`;
 
     const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
     const result = await model.generateContent(julesPrompt);
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: result.response.text()
-      }]
+      content: [
+        {
+          type: 'text',
+          text: result.response.text(),
+        },
+      ],
     };
   }
 
   async reviewCode(args) {
     const { code, focus } = args;
-    
+
     const reviewPrompt = `As Google Jules AI assistant, review this code focusing on ${focus}:
 
 Code:
@@ -169,18 +195,20 @@ Provide:
 
     const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
     const result = await model.generateContent(reviewPrompt);
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: result.response.text()
-      }]
+      content: [
+        {
+          type: 'text',
+          text: result.response.text(),
+        },
+      ],
     };
   }
 
   async debugCode(args) {
     const { code, error_message, stack_trace } = args;
-    
+
     const debugPrompt = `As Google Jules AI assistant, help debug this code:
 
 Code:
@@ -199,18 +227,20 @@ Provide:
 
     const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
     const result = await model.generateContent(debugPrompt);
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: result.response.text()
-      }]
+      content: [
+        {
+          type: 'text',
+          text: result.response.text(),
+        },
+      ],
     };
   }
 
   async optimizeCode(args) {
     const { code, optimization_type } = args;
-    
+
     const optimizePrompt = `As Google Jules AI assistant, optimize this code for ${optimization_type}:
 
 Code:
@@ -227,18 +257,20 @@ Provide:
 
     const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
     const result = await model.generateContent(optimizePrompt);
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: result.response.text()
-      }]
+      content: [
+        {
+          type: 'text',
+          text: result.response.text(),
+        },
+      ],
     };
   }
 
   async reviewArchitecture(args) {
     const { description, code_snippets } = args;
-    
+
     const archPrompt = `As Google Jules AI assistant, review this software architecture:
 
 Description:
@@ -256,17 +288,19 @@ Provide:
 
     const model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
     const result = await model.generateContent(archPrompt);
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: result.response.text()
-      }]
+      content: [
+        {
+          type: 'text',
+          text: result.response.text(),
+        },
+      ],
     };
   }
 
   setupErrorHandling() {
-    this.server.onerror = (error) => console.error('[Jules AI MCP Error]', error);
+    this.server.onerror = error => console.error('[Jules AI MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);

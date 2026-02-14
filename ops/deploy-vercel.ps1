@@ -1,42 +1,47 @@
-# Deploy AIGestion to Vercel
-# Deploy all dashboards and main website
+# Deploy AIGestion to Vercel (Sovereign Edition)
 
-Write-Host "🚀 Deploying AIGestion to Vercel" -ForegroundColor Cyan
-Write-Host "=============================" -ForegroundColor Gray
+Write-Host "Deploying AIGestion to Vercel [Sovereign Edition]" -ForegroundColor Cyan
+Write-Host "==================================================" -ForegroundColor Gray
 
-# Check if Vercel CLI is installed
-try {
-    $vercelVersion = vercel --version
-    Write-Host "✅ Vercel CLI found: $vercelVersion" -ForegroundColor Green
-} catch {
-    Write-Host "❌ Vercel CLI not found. Installing..." -ForegroundColor Red
-    npm install -g vercel
-    Write-Host "✅ Vercel CLI installed" -ForegroundColor Green
-}
-
-# Build main website
-Write-Host "🏗️ Building main website..." -ForegroundColor Yellow
-Set-Location "c:\Users\Alejandro\AIGestion\frontend\website-epic"
-try {
-    npm install
-    npm run build
-    Write-Host "✅ Main website built successfully" -ForegroundColor Green
-} catch {
-    Write-Host "❌ Failed to build main website" -ForegroundColor Red
-}
-
-# Deploy to Vercel
-Write-Host "🚀 Deploying to Vercel..." -ForegroundColor Yellow
+# 1. Build Main Website
+Write-Host "Building website-epic..." -ForegroundColor Yellow
 Set-Location "c:\Users\Alejandro\AIGestion"
 try {
-    vercel --prod
-    Write-Host "✅ Deployment successful!" -ForegroundColor Green
-} catch {
-    Write-Host "❌ Deployment failed" -ForegroundColor Red
+    pnpm install --filter aigestion-website-epic
+    pnpm --filter aigestion-website-epic build
+    Write-Host "Website built successfully" -ForegroundColor Green
+}
+catch {
+    Write-Host "Build failed" -ForegroundColor Red
+    exit 1
 }
 
-Write-Host "🎉 Deployment complete!" -ForegroundColor Green
-Write-Host "========================" -ForegroundColor Gray
-Write-Host "✅ AIGestion deployed to Vercel" -ForegroundColor Green
-Write-Host "✅ All dashboards accessible" -ForegroundColor Green
-Write-Host "✅ Main website deployed" -ForegroundColor Green
+# 2. Prepare Deployment Artifact
+Write-Host "Preparing deployment artifact in aigestion-deploy..." -ForegroundColor Yellow
+$deployDir = "c:\Users\Alejandro\AIGestion\aigestion-deploy"
+$distDir = "c:\Users\Alejandro\AIGestion\frontend\apps\website-epic\dist"
+
+if (-not (Test-Path $deployDir)) {
+    New-Item -ItemType Directory -Path $deployDir | Out-Null
+}
+
+Write-Host "Triggering Vercel Deployment..." -ForegroundColor Yellow
+Set-Location "c:\Users\Alejandro\AIGestion\aigestion-deploy"
+
+Copy-Item -Path "$distDir\*" -Destination "$deployDir\public" -Recurse -Force
+if (-not (Test-Path "$deployDir\public")) { New-Item -ItemType Directory -Path "$deployDir\public" }
+
+$vercelJsonPath = "$deployDir\vercel.json"
+$jsonContent = Get-Content $vercelJsonPath | ConvertFrom-Json
+$jsonContent.outputDirectory = "public"
+$jsonContent | ConvertTo-Json -Depth 10 | Set-Content $vercelJsonPath
+
+try {
+    vercel --prod
+    Write-Host "Deployment successful!" -ForegroundColor Green
+}
+catch {
+    Write-Host "Deployment failed" -ForegroundColor Red
+}
+
+Write-Host "Sovereign Deployment Complete!" -ForegroundColor Green

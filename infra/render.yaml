@@ -6,16 +6,16 @@ services:
     name: aigestion-frontend
     env: static
     branch: main
-    buildCommand: "cd frontend/website-epic && npm ci && npm run build"
-    staticPublishPath: "frontend/website-epic/dist"
+    buildCommand: 'cd frontend/website-epic && npm ci && npm run build'
+    staticPublishPath: 'frontend/website-epic/dist'
     plan: free
 
   - type: web
     name: aigestion-backend
     env: node
     branch: main
-    buildCommand: "cd backend && npm ci && npm run build"
-    startCommand: "node backend/dist/server.js"
+    buildCommand: 'cd backend && npm ci && npm run build'
+    startCommand: 'node backend/dist/server.js'
     plan: free
 
 # Notes:

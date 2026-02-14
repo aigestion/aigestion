@@ -249,6 +249,12 @@ linters/
 # Local Netlify folder
 .netlify
 n8n_data/
+
+# Caches
+.turbo/
+**/.jest-cache/
+infra/.vercel_python_packages/
+
 # Moving Artifacts
 infra/.vercel
 infra/.env*.local

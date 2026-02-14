@@ -1,1 +1,0 @@
-{"file":"C:\\Users\\Alejandro\\AIGestion\\backend\\src\\config\\index.ts","mappings":";;;;;;;;;;;;;;;;AAAA,2CAAyB","names":[],"sources":["C:\\Users\\Alejandro\\AIGestion\\backend\\src\\config\\index.ts"],"sourcesContent":["export * from './config';\n"],"version":3}

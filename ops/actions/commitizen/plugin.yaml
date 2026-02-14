@@ -16,9 +16,9 @@ tools:
       runtime: node
       package: commitizen
       extra_packages:
-        - "@commitlint/cli"
-        - "@commitlint/config-conventional"
-        - "@commitlint/cz-commitlint"
+        - '@commitlint/cli'
+        - '@commitlint/config-conventional'
+        - '@commitlint/cz-commitlint'
         - inquirer
       shims: [commitizen, cz]
       known_good_version: 4.3.0

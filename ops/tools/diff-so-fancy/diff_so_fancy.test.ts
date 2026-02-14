@@ -1,4 +1,4 @@
-import { makeToolTestConfig, toolTest } from "tests";
+import { makeToolTestConfig, toolTest } from 'tests';
 
 const sampleDiff = `diff --git a/.trunk/trunk.yaml b/.trunk/trunk.yaml
 index dc4f1f8..fb8fe54 100644
@@ -13,21 +13,21 @@ index dc4f1f8..fb8fe54 100644
 +    - diff-so-fancy@1.4.3`;
 
 let exitCode = 25;
-if (process.platform === "darwin") {
+if (process.platform === 'darwin') {
   exitCode = 102;
-} else if (process.platform === "win32") {
+} else if (process.platform === 'win32') {
   exitCode = 0;
 }
 // diff-so-fancy returns a nonzero exit code for its version command, so we have to
 // use the custom test constructor.
 toolTest({
-  toolName: "diff-so-fancy",
-  toolVersion: "1.4.3",
+  toolName: 'diff-so-fancy',
+  toolVersion: '1.4.3',
   testConfigs: [
     makeToolTestConfig({
-      command: ["diff-so-fancy"],
+      command: ['diff-so-fancy'],
       expectedExitCode: exitCode,
-      expectedOut: "modified:",
+      expectedOut: 'modified:',
       stdin: sampleDiff,
     }),
   ],

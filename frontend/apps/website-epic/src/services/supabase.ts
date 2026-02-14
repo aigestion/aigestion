@@ -1,38 +1,94 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY;
-const supabaseServiceKey =
-  import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY || import.meta.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-/**
- * 🌌 [DIVINE MODE] Supabase Client (Frontend)
- * High-performance client with configuration safety.
- */
+// ═══════════════════════════════════════════════════════════════════
+// 🌌 [GOD MODE] Supabase Client — Frontend
+// ═══════════════════════════════════════════════════════════════════
+// Security: Uses ANON key only (RLS-protected, safe for client).
+// Admin operations MUST go through the backend API.
+// ═══════════════════════════════════════════════════════════════════
+
 if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('[Supabase] ⚠️  Configuration missing. Auth features will be disabled.');
 }
 
-export const supabase =
-  supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
-
 /**
- * 🚀 [DIVINE MODE] Supabase Admin Client (Service Role)
- * For server-side operations and admin functions.
+ * God Mode Supabase client with optimized configuration.
+ *
+ * - Auth: Persists session in localStorage, auto-refreshes tokens
+ * - Realtime: Configured with heartbeat for connection stability
+ * - Global: Retry-capable fetch wrapper with exponential backoff
  */
-export const supabaseAdmin =
-  supabaseUrl && supabaseServiceKey
-    ? createClient(supabaseUrl, supabaseServiceKey, {
+export const supabase =
+  supabaseUrl && supabaseAnonKey
+    ? createClient(supabaseUrl, supabaseAnonKey, {
         auth: {
-          autoRefreshToken: false,
-          persistSession: false,
+          autoRefreshToken: true,
+          persistSession: true,
+          detectSessionInUrl: true, // Required for OAuth redirect flows (Google, GitHub)
+          storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+          storageKey: 'aigestion-auth-token',
+          flowType: 'pkce', // Most secure OAuth flow
+        },
+        realtime: {
+          params: {
+            eventsPerSecond: 10,
+          },
+          heartbeatIntervalMs: 15000, // Keep connection alive every 15s
+        },
+        global: {
+          headers: {
+            'x-application-name': 'aigestion-frontend',
+            'x-app-version': import.meta.env.VITE_APP_VERSION || '2.0.0',
+          },
+          fetch: retryFetch,
+        },
+        db: {
+          schema: 'public',
         },
       })
     : null;
 
-/**
- * Optimized Authentication layer
- */
+// ═══════════════════════════════════════════════════════════════════
+// Retry Fetch Wrapper — Exponential Backoff (3 attempts max)
+// ═══════════════════════════════════════════════════════════════════
+
+async function retryFetch(
+  input: RequestInfo | URL,
+  init?: RequestInit
+): Promise<Response> {
+  const maxRetries = 3;
+  const baseDelay = 300; // ms
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(input, init);
+
+      // Don't retry client errors (4xx), only server errors (5xx) and network issues
+      if (response.ok || (response.status >= 400 && response.status < 500)) {
+        return response;
+      }
+
+      if (attempt === maxRetries) return response;
+
+      // Exponential backoff: 300ms, 600ms, 1200ms
+      await new Promise(resolve => setTimeout(resolve, baseDelay * Math.pow(2, attempt)));
+    } catch (error) {
+      if (attempt === maxRetries) throw error;
+      await new Promise(resolve => setTimeout(resolve, baseDelay * Math.pow(2, attempt)));
+    }
+  }
+
+  // Fallback — should never reach here
+  return fetch(input, init);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Authentication Helpers
+// ═══════════════════════════════════════════════════════════════════
+
 export const signInWithGoogle = async () => {
   if (!supabase) {
     throw new Error('Supabase not configured');
@@ -41,54 +97,47 @@ export const signInWithGoogle = async () => {
   return await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: window.location.origin,
+      redirectTo: `${window.location.origin}/auth/callback`,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
     },
   });
 };
 
 export const signOut = async () => {
   if (!supabase) return;
-  return await supabase.auth.signOut();
+  return await supabase.auth.signOut({ scope: 'global' }); // Sign out from all devices
 };
 
-/**
- * Health check utility
- */
-export const checkSupabaseHealth = async (): Promise<boolean> => {
-  if (!supabase) return false;
+export const getSession = async () => {
+  if (!supabase) return null;
+  const { data } = await supabase.auth.getSession();
+  return data.session;
+};
+
+export const onAuthStateChange = (callback: (event: string, session: any) => void) => {
+  if (!supabase) return { data: { subscription: { unsubscribe: () => {} } } };
+  return supabase.auth.onAuthStateChange(callback);
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// Health Check
+// ═══════════════════════════════════════════════════════════════════
+
+export const checkSupabaseHealth = async (): Promise<{
+  connected: boolean;
+  latencyMs: number;
+}> => {
+  if (!supabase) return { connected: false, latencyMs: -1 };
+
+  const start = performance.now();
   try {
-    const { error } = await supabase.from('users').select('id').limit(1).maybeSingle();
-    return !error;
+    const { error } = await supabase.from('profiles').select('id').limit(1).maybeSingle();
+    const latencyMs = Math.round(performance.now() - start);
+    return { connected: !error, latencyMs };
   } catch {
-    return false;
+    return { connected: false, latencyMs: Math.round(performance.now() - start) };
   }
-};
-
-/**
- * 🌌 [DIVINE MODE] Advanced Database Operations
- */
-export const createAdminUser = async (email: string, password: string) => {
-  if (!supabaseAdmin) {
-    throw new Error('Supabase admin client not configured');
-  }
-
-  return await supabaseAdmin.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: {
-      role: 'admin',
-      created_by: 'divine_mode',
-    },
-  });
-};
-
-export const createDatabaseTable = async (tableName: string, schema: any) => {
-  if (!supabaseAdmin) {
-    throw new Error('Supabase admin client not configured');
-  }
-
-  // This would require SQL execution - placeholder for divine mode
-  console.log(`[DIVINE MODE] Creating table: ${tableName}`, schema);
-  return { success: true, message: 'Table creation initiated' };
 };

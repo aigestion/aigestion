@@ -1,15 +1,15 @@
-import * as fs from "fs";
-import * as path from "path";
-import { actionRunTest, toolInstallTest } from "tests";
-import { TrunkActionDriver } from "tests/driver";
+import * as fs from 'fs';
+import * as path from 'path';
+import { actionRunTest, toolInstallTest } from 'tests';
+import { TrunkActionDriver } from 'tests/driver';
 
 toolInstallTest({
-  toolName: "uv",
-  toolVersion: "0.3",
+  toolName: 'uv',
+  toolVersion: '0.3',
 });
 
 const preCheck = (driver: TrunkActionDriver) => {
-  const trunkYamlPath = ".trunk/trunk.yaml";
+  const trunkYamlPath = '.trunk/trunk.yaml';
   const currentContents = driver.readFile(trunkYamlPath);
   const newContents = currentContents.concat(`
   definitions:
@@ -22,7 +22,7 @@ const preCheck = (driver: TrunkActionDriver) => {
   driver.writeFile(trunkYamlPath, newContents);
 
   driver.writeFile(
-    "pyproject.toml",
+    'pyproject.toml',
     `[project]
 name = "uv-test"
 version = "0.1.0"
@@ -31,21 +31,21 @@ description = ""
 [project.dependencies]
 python = "^3.12"
 pendulum = "^3.0.0"
-  `,
+  `
   );
 };
 
 const checkTestCallback = async (driver: TrunkActionDriver) => {
   try {
     await driver.gitDriver?.commit(
-      "Test commit",
+      'Test commit',
       [],
-      { "--allow-empty": null },
+      { '--allow-empty': null },
       (error, result) => {
         // uv check should pass for a valid pyproject.toml
         expect(error).toBeFalsy();
         expect(result).toBeTruthy();
-      },
+      }
     );
   } catch {
     // Intentionally empty
@@ -55,13 +55,13 @@ const checkTestCallback = async (driver: TrunkActionDriver) => {
 const fileExistsCallback = (filename: string) => async (driver: TrunkActionDriver) => {
   try {
     await driver.gitDriver?.commit(
-      "Test commit",
+      'Test commit',
       [],
-      { "--allow-empty": null },
+      { '--allow-empty': null },
       (_error, result) => {
         expect(_error).toBeFalsy();
         expect(result).toBeTruthy();
-      },
+      }
     );
 
     expect(fs.existsSync(path.resolve(driver.getSandbox(), filename))).toBeTruthy();
@@ -71,22 +71,22 @@ const fileExistsCallback = (filename: string) => async (driver: TrunkActionDrive
 };
 
 actionRunTest({
-  actionName: "uv-check",
+  actionName: 'uv-check',
   syncGitHooks: true,
   testCallback: checkTestCallback,
   preCheck: preCheck,
 });
 
 actionRunTest({
-  actionName: "uv-lock",
+  actionName: 'uv-lock',
   syncGitHooks: true,
-  testCallback: fileExistsCallback("uv.lock"),
+  testCallback: fileExistsCallback('uv.lock'),
   preCheck: preCheck,
 });
 
 actionRunTest({
-  actionName: "uv-sync",
+  actionName: 'uv-sync',
   syncGitHooks: true,
-  testCallback: fileExistsCallback(".venv"), // Assuming uv creates a .venv by default
+  testCallback: fileExistsCallback('.venv'), // Assuming uv creates a .venv by default
   preCheck: preCheck,
 });

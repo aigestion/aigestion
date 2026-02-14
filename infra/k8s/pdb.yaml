@@ -52,4 +52,3 @@ spec:
   selector:
     matchLabels:
       app: redis
-

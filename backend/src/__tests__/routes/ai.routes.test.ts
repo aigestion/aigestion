@@ -11,6 +11,34 @@
 const SKIP_INTEGRATION = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGRATION_TESTS;
 
 (SKIP_INTEGRATION ? describe.skip : describe)('POST /api/v1/ai/chat (SSE streaming)', () => {
+  let originalAIService: any;
+  const { container, TYPES } = require('../../config/inversify.config');
+  const { Readable } = require('stream');
+
+  beforeAll(() => {
+    // Mock AIService
+    originalAIService = container.get(TYPES.AIService);
+    const mockAIService = {
+      streamChat: jest.fn().mockImplementation(() => {
+        const stream = new Readable({ read() {} });
+        setTimeout(() => {
+          stream.push(`data: ${JSON.stringify({ type: 'text', content: 'Hello' })}\n\n`);
+          setTimeout(() => {
+            stream.push('data: [DONE]\n\n');
+            stream.push(null);
+          }, 100);
+        }, 100);
+        return Promise.resolve(stream);
+      }),
+      generateContent: jest.fn().mockResolvedValue('Hello from mock'),
+    };
+    container.rebind(TYPES.AIService).toConstantValue(mockAIService);
+  });
+
+  afterAll(() => {
+    container.rebind(TYPES.AIService).toConstantValue(originalAIService);
+  });
+
   it('should stream tokens and finish with DONE', async () => {
     const request = require('supertest');
     const { app } = require('../../app');

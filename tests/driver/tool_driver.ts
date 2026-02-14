@@ -1,11 +1,11 @@
-import Debug from "debug";
-import * as fs from "fs";
-import path from "path";
-import { GenericTrunkDriver, SetupSettings } from "tests/driver/driver";
-import { ARGS, REPO_ROOT } from "tests/utils";
-import { getTrunkVersion } from "tests/utils/trunk_config";
+import Debug from 'debug';
+import * as fs from 'fs';
+import path from 'path';
+import { GenericTrunkDriver, SetupSettings } from 'tests/driver/driver';
+import { ARGS, REPO_ROOT } from 'tests/utils';
+import { getTrunkVersion } from 'tests/utils/trunk_config';
 
-const baseDebug = Debug("Driver");
+const baseDebug = Debug('Driver');
 
 let testNum = 1;
 const toolTests = new Map<string, number>();
@@ -86,30 +86,30 @@ lint:
     try {
       // trunk-ignore(eslint/@typescript-eslint/no-unnecessary-template-expression): Cast to string to handle decimal case
       const version = this.extractToolVersion();
-      const versionString = version.length > 0 ? `@${version}` : "";
+      const versionString = version.length > 0 ? `@${version}` : '';
       const toolVersionString = `${this.tool}${versionString}`;
       // Prefer calling `tools enable` over editing trunk.yaml directly because it also handles version, etc.
-      this.debug("Enabling %s", toolVersionString);
-      await this.runTrunk(["tools", "enable", toolVersionString]);
+      this.debug('Enabling %s', toolVersionString);
+      await this.runTrunk(['tools', 'enable', toolVersionString]);
 
       // Retrieve the enabled version
       const newTrunkContents = fs.readFileSync(
-        path.resolve(this.sandboxPath, ".trunk/trunk.yaml"),
-        "utf8",
+        path.resolve(this.sandboxPath, '.trunk/trunk.yaml'),
+        'utf8'
       );
       const enabledVersionRegex = `(?<tool>${this.tool})@(?<version>.+)\n`;
       const foundIn = newTrunkContents.match(enabledVersionRegex);
       if (foundIn?.groups?.version && foundIn.groups.version.length > 0) {
         this.enabledVersion = foundIn.groups.version;
-        this.debug("Enabled %s", this.enabledVersion);
+        this.debug('Enabled %s', this.enabledVersion);
       }
     } catch (error) {
       console.warn(`Failed to enable ${this.tool}`, error);
-      if ("stdout" in (error as any)) {
+      if ('stdout' in (error as any)) {
         // trunk-ignore(eslint/@typescript-eslint/no-unsafe-member-access)
-        console.log("Error output:", ((error as any).stdout as Buffer).toString());
+        console.log('Error output:', ((error as any).stdout as Buffer).toString());
       } else {
-        console.log("Error keys:  ", Object.keys(error as object));
+        console.log('Error keys:  ', Object.keys(error as object));
       }
     }
   }
@@ -117,43 +117,43 @@ lint:
   async installTool() {
     // Enable tested tool if specified
     if (!this.tool || !this.sandboxPath) {
-      console.error("Tool or sandbox path not specified - we should not be here!");
+      console.error('Tool or sandbox path not specified - we should not be here!');
       return;
     }
     try {
       // Sync the tool to ensure it's available
-      await this.runTrunk(["tools", "install", this.tool, "--ci"]);
-      const tools_subdir = fs.existsSync(path.resolve(this.sandboxPath ?? "", ".trunk/dev-tools"))
-        ? "dev-tools"
-        : "tools";
+      await this.runTrunk(['tools', 'install', this.tool, '--ci']);
+      const tools_subdir = fs.existsSync(path.resolve(this.sandboxPath ?? '', '.trunk/dev-tools'))
+        ? 'dev-tools'
+        : 'tools';
       for (const shim of this.getShims()) {
         if (
           !fs.existsSync(
             path.resolve(
               this.sandboxPath,
-              ".trunk",
+              '.trunk',
               tools_subdir,
-              `${shim}${process.platform == "win32" ? ".bat" : ""}`,
-            ),
+              `${shim}${process.platform == 'win32' ? '.bat' : ''}`
+            )
           )
         ) {
           throw new Error(`Could not install or find installed ${shim}`);
         }
       }
-      this.debug("Installed %s", this.tool);
+      this.debug('Installed %s', this.tool);
     } catch (error) {
       console.warn(`Failed to enable ${this.tool}`, error);
-      if ("stdout" in (error as any)) {
+      if ('stdout' in (error as any)) {
         // trunk-ignore(eslint/@typescript-eslint/no-unsafe-member-access)
-        console.log("Error output:", ((error as any).stdout as Buffer).toString());
+        console.log('Error output:', ((error as any).stdout as Buffer).toString());
       } else {
-        console.log("Error keys:  ", Object.keys(error as object));
+        console.log('Error keys:  ', Object.keys(error as object));
       }
     }
   }
 
   runInstall = async (
-    toolName: string,
+    toolName: string
   ): Promise<{
     stdout: string;
     stderr: string;
@@ -161,7 +161,7 @@ lint:
     details?: string;
   }> => {
     try {
-      const { stdout, stderr } = await this.runTrunk(["tools", "install", toolName, "--ci"]);
+      const { stdout, stderr } = await this.runTrunk(['tools', 'install', toolName, '--ci']);
       return { exitCode: 0, stdout, stderr, details: undefined };
     } catch (e: any) {
       let details = undefined;
@@ -174,8 +174,8 @@ lint:
       if (detailsPath) {
         details = await fs.promises.readFile(
           /* eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access */
-          path.resolve(this.sandboxPath ?? "", detailsPath[0]),
-          "utf8",
+          path.resolve(this.sandboxPath ?? '', detailsPath[0]),
+          'utf8'
         );
       }
 
@@ -197,36 +197,36 @@ lint:
     const toEnableVersion = this.toEnableVersion ?? ARGS.linterVersion;
 
     // TODO(Tyler): We should leverage latest here and use the ReleaseVersionService
-    if (!toEnableVersion || toEnableVersion === "Latest") {
-      return "";
-    } else if (toEnableVersion === "KnownGoodVersion") {
+    if (!toEnableVersion || toEnableVersion === 'Latest') {
+      return '';
+    } else if (toEnableVersion === 'KnownGoodVersion') {
       // trunk-ignore-begin(eslint/@typescript-eslint/no-unsafe-member-access,eslint/@typescript-eslint/no-unsafe-call)
       return (
         (this.getFullTrunkConfig().tool.definitions.find(
-          ({ name }: { name: string }) => name === this.tool,
-        )?.known_good_version as string) ?? ""
+          ({ name }: { name: string }) => name === this.tool
+        )?.known_good_version as string) ?? ''
       );
       // trunk-ignore-end(eslint/@typescript-eslint/no-unsafe-member-access,eslint/@typescript-eslint/no-unsafe-call)
-    } else if (toEnableVersion !== "Snapshots") {
+    } else if (toEnableVersion !== 'Snapshots') {
       // toEnableVersion is a version string
       return toEnableVersion;
     } else {
-      return "";
+      return '';
     }
   };
 
   /**** Execution methods ****/
 
   async runTool(command: string[], stdin?: string): Promise<TrunkToolRunResult> {
-    const tools_subdir = fs.existsSync(path.resolve(this.sandboxPath ?? "", ".trunk/dev-tools"))
-      ? "dev-tools"
-      : "tools";
+    const tools_subdir = fs.existsSync(path.resolve(this.sandboxPath ?? '', '.trunk/dev-tools'))
+      ? 'dev-tools'
+      : 'tools';
     try {
-      if (process.platform == "win32") {
+      if (process.platform == 'win32') {
         const { stdout, stderr } = await this.run(
-          "powershell",
+          'powershell',
           [`.trunk/${tools_subdir}/${command[0]}.bat`, ...command.slice(1)],
-          { stdin },
+          { stdin }
         );
         return {
           exitCode: 0,
@@ -238,7 +238,7 @@ lint:
       const { stdout, stderr } = await this.run(
         `.trunk/${tools_subdir}/${command[0]}`,
         command.slice(1),
-        { stdin },
+        { stdin }
       );
       return {
         exitCode: 0,
@@ -264,7 +264,7 @@ lint:
     const fullTrunkConfig = this.getFullTrunkConfig();
     // get the tool definition
     const toolDefinition = fullTrunkConfig.tools.definitions.find(
-      ({ name }: { name: string }) => name === this.tool,
+      ({ name }: { name: string }) => name === this.tool
     );
     // get the shims
     const shims = toolDefinition?.shims ?? [];

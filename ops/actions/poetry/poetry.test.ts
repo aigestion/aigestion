@@ -1,15 +1,15 @@
-import * as fs from "fs";
-import * as path from "path";
-import { actionRunTest, toolInstallTest } from "tests";
-import { TrunkActionDriver } from "tests/driver";
+import * as fs from 'fs';
+import * as path from 'path';
+import { actionRunTest, toolInstallTest } from 'tests';
+import { TrunkActionDriver } from 'tests/driver';
 
 toolInstallTest({
-  toolName: "poetry",
-  toolVersion: "1.8.2",
+  toolName: 'poetry',
+  toolVersion: '1.8.2',
 });
 
 const preCheck = (authors: boolean) => (driver: TrunkActionDriver) => {
-  const trunkYamlPath = ".trunk/trunk.yaml";
+  const trunkYamlPath = '.trunk/trunk.yaml';
   const currentContents = driver.readFile(trunkYamlPath);
   const newContents = currentContents.concat(`
   definitions:
@@ -24,9 +24,9 @@ const preCheck = (authors: boolean) => (driver: TrunkActionDriver) => {
       packages_file: \${cwd}/requirements.txt`);
   driver.writeFile(trunkYamlPath, newContents);
 
-  const authorsSection = authors ? "authors = []" : "";
+  const authorsSection = authors ? 'authors = []' : '';
   driver.writeFile(
-    "pyproject.toml",
+    'pyproject.toml',
     `[tool.poetry]
 name = "poetry-test"
 version = "0.1.0"
@@ -40,20 +40,20 @@ pendulum = "^3.0.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-  `,
+  `
   );
 };
 
 const checkTestCallback = async (driver: TrunkActionDriver) => {
   try {
     await driver.gitDriver?.commit(
-      "Test commit",
+      'Test commit',
       [],
-      { "--allow-empty": null },
+      { '--allow-empty': null },
       (error, result) => {
         expect(error?.message).toContain("The fields ['authors'] are required in package mode.");
         expect(result).toBeUndefined();
-      },
+      }
     );
 
     // Commit step should throw
@@ -66,13 +66,13 @@ const checkTestCallback = async (driver: TrunkActionDriver) => {
 const fileExistsCallback = (filename: string) => async (driver: TrunkActionDriver) => {
   try {
     await driver.gitDriver?.commit(
-      "Test commit",
+      'Test commit',
       [],
-      { "--allow-empty": null },
+      { '--allow-empty': null },
       (_error, result) => {
         expect(_error).toBeFalsy();
         expect(result).toBeTruthy();
-      },
+      }
     );
 
     expect(fs.existsSync(path.resolve(driver.getSandbox(), filename))).toBeTruthy();
@@ -82,22 +82,22 @@ const fileExistsCallback = (filename: string) => async (driver: TrunkActionDrive
 };
 
 actionRunTest({
-  actionName: "poetry-check",
+  actionName: 'poetry-check',
   syncGitHooks: true,
   testCallback: checkTestCallback,
   preCheck: preCheck(/*authors=*/ false),
 });
 
 actionRunTest({
-  actionName: "poetry-lock",
+  actionName: 'poetry-lock',
   syncGitHooks: true,
-  testCallback: fileExistsCallback("poetry.lock"),
+  testCallback: fileExistsCallback('poetry.lock'),
   preCheck: preCheck(/*authors=*/ true),
 });
 
 actionRunTest({
-  actionName: "poetry-export",
+  actionName: 'poetry-export',
   syncGitHooks: true,
-  testCallback: fileExistsCallback("requirements.txt"),
+  testCallback: fileExistsCallback('requirements.txt'),
   preCheck: preCheck(/*authors=*/ true),
 });

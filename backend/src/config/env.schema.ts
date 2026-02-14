@@ -330,7 +330,7 @@ const envSchema = z.object({
       val
         .split(',')
         .map(s => s.trim())
-        .filter(s => s.length > 0)
+        .filter(s => s.length > 0),
     )
     .describe('Comma‑separated list of additional company Gmail addresses for OAuth2'),
 
@@ -355,6 +355,11 @@ const envSchema = z.object({
     .email()
     .optional()
     .describe('Email to impersonate with service account (domain-wide delegation)'),
+
+  // Twilio Configuration
+  TWILIO_ACCOUNT_SID: z.string().optional().describe('Twilio Account SID'),
+  TWILIO_AUTH_TOKEN: z.string().optional().describe('Twilio Auth Token'),
+  TWILIO_PHONE_NUMBER: z.string().optional().describe('Twilio Phone Number'),
 
   // WhatsApp Configuration
   WHATSAPP_PHONE_NUMBER: z.string().default('34618779308'),
@@ -434,6 +439,8 @@ const envSchema = z.object({
   STRIPE_SECRET_KEY: z.string().optional().describe('Stripe Secret Key'),
   STRIPE_PUBLISHABLE_KEY: z.string().optional().describe('Stripe Publishable Key'),
   STRIPE_WEBHOOK_SECRET: z.string().optional().describe('Stripe Webhook Signing Secret'),
+  STRIPE_PRICE_ID_ESSENTIAL: z.string().optional().describe('Stripe Price ID for Essential Plan'),
+  STRIPE_PRICE_ID_EVOLUTION: z.string().optional().describe('Stripe Price ID for Evolution Plan'),
   STRIPE_CURRENCY: z.string().default('usd').describe('Default currency for payments'),
   TAVILY_API_KEY: z.string().optional().describe('Tavily API key for web search'),
 
@@ -449,6 +456,13 @@ const envSchema = z.object({
     .url()
     .default('http://localhost:3000')
     .describe('WebAuthn expected origin'),
+
+  // n8n Contact Webhook
+  N8N_CONTACT_WEBHOOK_URL: z
+    .string()
+    .url()
+    .optional()
+    .describe('n8n Webhook URL for contact form submissions'),
 });
 
 /**

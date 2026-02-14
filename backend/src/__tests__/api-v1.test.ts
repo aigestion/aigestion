@@ -8,12 +8,17 @@ import request from 'supertest';
 import { app } from '../app';
 import { User } from '../models/User';
 
+import { connectToDatabase } from '../config/database';
+
+jest.setTimeout(60000);
+
 const SKIP_DB_TESTS = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGRATION_TESTS;
 
 (SKIP_DB_TESTS ? describe.skip : describe)('API v1 - REST Refactoring', () => {
   let testUserId: string;
 
   beforeAll(async () => {
+    await connectToDatabase();
     // Cleanup test users to prevent 409 Conflict
     await User.deleteMany({
       email: { $in: ['api-v1-test@example.com'] },

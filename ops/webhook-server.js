@@ -7,18 +7,24 @@
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
-const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} = require('@modelcontextprotocol/sdk/types.js');
 
 class WebhookMCPServer {
   constructor() {
-    this.server = new Server({
-      name: 'webhook',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    this.server = new Server(
+      {
+        name: 'webhook',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.setupTools();
     this.setupErrorHandling();
@@ -35,12 +41,16 @@ class WebhookMCPServer {
             properties: {
               name: { type: 'string', description: 'Webhook name' },
               url: { type: 'string', description: 'Webhook URL' },
-              events: { type: 'array', items: { type: 'string' }, description: 'Events to listen for' },
+              events: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Events to listen for',
+              },
               secret: { type: 'string', description: 'Webhook secret for validation' },
-              headers: { type: 'object', description: 'Custom headers' }
+              headers: { type: 'object', description: 'Custom headers' },
             },
-            required: ['name', 'url', 'events']
-          }
+            required: ['name', 'url', 'events'],
+          },
         },
         {
           name: 'webhook_list',
@@ -48,9 +58,13 @@ class WebhookMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              status: { type: 'string', enum: ['active', 'inactive', 'all'], description: 'Filter by status' }
-            }
-          }
+              status: {
+                type: 'string',
+                enum: ['active', 'inactive', 'all'],
+                description: 'Filter by status',
+              },
+            },
+          },
         },
         {
           name: 'webhook_delete',
@@ -58,10 +72,10 @@ class WebhookMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              webhook_id: { type: 'string', description: 'Webhook ID' }
+              webhook_id: { type: 'string', description: 'Webhook ID' },
             },
-            required: ['webhook_id']
-          }
+            required: ['webhook_id'],
+          },
         },
         {
           name: 'webhook_test',
@@ -70,10 +84,10 @@ class WebhookMCPServer {
             type: 'object',
             properties: {
               webhook_id: { type: 'string', description: 'Webhook ID' },
-              payload: { type: 'object', description: 'Test payload' }
+              payload: { type: 'object', description: 'Test payload' },
             },
-            required: ['webhook_id']
-          }
+            required: ['webhook_id'],
+          },
         },
         {
           name: 'webhook_logs',
@@ -82,9 +96,9 @@ class WebhookMCPServer {
             type: 'object',
             properties: {
               webhook_id: { type: 'string', description: 'Webhook ID' },
-              limit: { type: 'number', description: 'Number of logs to retrieve' }
-            }
-          }
+              limit: { type: 'number', description: 'Number of logs to retrieve' },
+            },
+          },
         },
         {
           name: 'webhook_retry',
@@ -92,10 +106,10 @@ class WebhookMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              delivery_id: { type: 'string', description: 'Delivery ID to retry' }
+              delivery_id: { type: 'string', description: 'Delivery ID to retry' },
             },
-            required: ['delivery_id']
-          }
+            required: ['delivery_id'],
+          },
         },
         {
           name: 'webhook_validate_signature',
@@ -105,10 +119,10 @@ class WebhookMCPServer {
             properties: {
               payload: { type: 'string', description: 'Request payload' },
               signature: { type: 'string', description: 'Webhook signature' },
-              secret: { type: 'string', description: 'Webhook secret' }
+              secret: { type: 'string', description: 'Webhook secret' },
             },
-            required: ['payload', 'signature', 'secret']
-          }
+            required: ['payload', 'signature', 'secret'],
+          },
         },
         {
           name: 'webhook_stats',
@@ -117,14 +131,18 @@ class WebhookMCPServer {
             type: 'object',
             properties: {
               webhook_id: { type: 'string', description: 'Webhook ID' },
-              time_range: { type: 'string', enum: ['1h', '24h', '7d', '30d'], description: 'Time range' }
-            }
-          }
-        }
-      ]
+              time_range: {
+                type: 'string',
+                enum: ['1h', '24h', '7d', '30d'],
+                description: 'Time range',
+              },
+            },
+          },
+        },
+      ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -150,10 +168,12 @@ class WebhookMCPServer {
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: `Error: ${error.message}`
-          }]
+          content: [
+            {
+              type: 'text',
+              text: `Error: ${error.message}`,
+            },
+          ],
         };
       }
     });
@@ -161,94 +181,110 @@ class WebhookMCPServer {
 
   async createWebhook(args) {
     const { name, url, events, secret, headers } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Webhook Creation:\n\nName: ${name}\nURL: ${url}\nEvents: ${events.join(', ')}\nSecret: ${secret ? 'Set' : 'Auto-generated'}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\n\nWebhook ID: webhook_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual webhook creation requires webhook management service.\n\nThis prepares webhook creation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Webhook Creation:\n\nName: ${name}\nURL: ${url}\nEvents: ${events.join(', ')}\nSecret: ${secret ? 'Set' : 'Auto-generated'}\nHeaders: ${JSON.stringify(headers || {}, null, 2)}\n\nWebhook ID: webhook_${Date.now()}_${Math.random().toString(36).substr(2, 9)}\n\nNote: Actual webhook creation requires webhook management service.\n\nThis prepares webhook creation.`,
+        },
+      ],
     };
   }
 
   async listWebhooks(args) {
     const { status } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Webhook List:\n\nStatus: ${status || 'All'}\n\nSample webhooks:\n- webhook_1: GitHub push events\n- webhook_2: Stripe payment events\n- webhook_3: User registration events\n- webhook_4: Email notifications\n\nNote: Actual webhook listing requires webhook management service.\n\nThis prepares webhook listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Webhook List:\n\nStatus: ${status || 'All'}\n\nSample webhooks:\n- webhook_1: GitHub push events\n- webhook_2: Stripe payment events\n- webhook_3: User registration events\n- webhook_4: Email notifications\n\nNote: Actual webhook listing requires webhook management service.\n\nThis prepares webhook listing.`,
+        },
+      ],
     };
   }
 
   async deleteWebhook(args) {
     const { webhook_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Webhook Deletion:\n\nWebhook ID: ${webhook_id}\n\nNote: Actual webhook deletion requires webhook management service.\n\nThis prepares webhook deletion.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Webhook Deletion:\n\nWebhook ID: ${webhook_id}\n\nNote: Actual webhook deletion requires webhook management service.\n\nThis prepares webhook deletion.`,
+        },
+      ],
     };
   }
 
   async testWebhook(args) {
     const { webhook_id, payload } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Webhook Test:\n\nWebhook ID: ${webhook_id}\nPayload: ${JSON.stringify(payload || {}, null, 2)}\n\nTest event: test_event_${Date.now()}\nTimestamp: ${new Date().toISOString()}\n\nNote: Actual webhook testing requires webhook management service.\n\nThis prepares webhook testing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Webhook Test:\n\nWebhook ID: ${webhook_id}\nPayload: ${JSON.stringify(payload || {}, null, 2)}\n\nTest event: test_event_${Date.now()}\nTimestamp: ${new Date().toISOString()}\n\nNote: Actual webhook testing requires webhook management service.\n\nThis prepares webhook testing.`,
+        },
+      ],
     };
   }
 
   async getWebhookLogs(args) {
     const { webhook_id, limit } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Webhook Logs:\n\nWebhook ID: ${webhook_id}\nLimit: ${limit || 50}\n\nSample logs:\n- Delivery ID: delivery_1 - Status: success - Timestamp: ${new Date().toISOString()}\n- Delivery ID: delivery_2 - Status: failed - Timestamp: ${new Date().toISOString()}\n\nNote: Actual webhook logs require webhook management service.\n\nThis prepares log retrieval.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Webhook Logs:\n\nWebhook ID: ${webhook_id}\nLimit: ${limit || 50}\n\nSample logs:\n- Delivery ID: delivery_1 - Status: success - Timestamp: ${new Date().toISOString()}\n- Delivery ID: delivery_2 - Status: failed - Timestamp: ${new Date().toISOString()}\n\nNote: Actual webhook logs require webhook management service.\n\nThis prepares log retrieval.`,
+        },
+      ],
     };
   }
 
   async retryWebhook(args) {
     const { delivery_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Webhook Retry:\n\nDelivery ID: ${delivery_id}\n\nNote: Actual webhook retry requires webhook management service.\n\nThis prepares webhook retry.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Webhook Retry:\n\nDelivery ID: ${delivery_id}\n\nNote: Actual webhook retry requires webhook management service.\n\nThis prepares webhook retry.`,
+        },
+      ],
     };
   }
 
   async validateSignature(args) {
     const { payload, signature, secret } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Webhook Signature Validation:\n\nPayload: ${payload}\nSignature: ${signature}\nSecret: ${secret}\n\nValidation method: HMAC-SHA256\n\nNote: Actual signature validation requires crypto library.\n\nThis prepares signature validation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Webhook Signature Validation:\n\nPayload: ${payload}\nSignature: ${signature}\nSecret: ${secret}\n\nValidation method: HMAC-SHA256\n\nNote: Actual signature validation requires crypto library.\n\nThis prepares signature validation.`,
+        },
+      ],
     };
   }
 
   async getWebhookStats(args) {
     const { webhook_id, time_range } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Webhook Statistics:\n\nWebhook ID: ${webhook_id}\nTime Range: ${time_range || '24h'}\n\nStatistics:\n- Total deliveries: 150\n- Successful deliveries: 142\n- Failed deliveries: 8\n- Average response time: 245ms\n- Success rate: 94.7%\n\nNote: Actual webhook stats require webhook management service.\n\nThis prepares statistics retrieval.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Webhook Statistics:\n\nWebhook ID: ${webhook_id}\nTime Range: ${time_range || '24h'}\n\nStatistics:\n- Total deliveries: 150\n- Successful deliveries: 142\n- Failed deliveries: 8\n- Average response time: 245ms\n- Success rate: 94.7%\n\nNote: Actual webhook stats require webhook management service.\n\nThis prepares statistics retrieval.`,
+        },
+      ],
     };
   }
 
   setupErrorHandling() {
-    this.server.onerror = (error) => console.error('[Webhook MCP Error]', error);
+    this.server.onerror = error => console.error('[Webhook MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);

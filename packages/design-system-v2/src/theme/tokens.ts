@@ -24,7 +24,7 @@ export const tokens = {
       warning: '#f59e0b',
       error: '#ef4444',
       info: '#3b82f6',
-    }
+    },
   },
   spacing: {
     xs: '0.25rem',
@@ -47,10 +47,10 @@ export const tokens = {
       xl: '1.25rem',
       '2xl': '1.5rem',
       '3xl': '1.875rem',
-    }
+    },
   },
   shadows: {
     glass: '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
     glow: '0 0 15px rgba(138, 43, 226, 0.5)',
-  }
+  },
 } as const;

@@ -1,5 +1,5 @@
-import { toolInstallTest } from "tests";
+import { toolInstallTest } from 'tests';
 toolInstallTest({
-  toolName: "clangd-indexing-tools",
-  toolVersion: "16.0.2",
+  toolName: 'clangd-indexing-tools',
+  toolVersion: '16.0.2',
 });

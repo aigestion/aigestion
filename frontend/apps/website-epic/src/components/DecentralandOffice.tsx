@@ -168,13 +168,14 @@ export const DecentralandOffice: React.FC = () => {
           </motion.h1>
 
           <motion.p
-            className="text-xl text-nexus-silver/60 leading-relaxed max-w-3xl mx-auto mb-8 font-light italic"
+            className="text-xl text-nexus-silver/60 leading-relaxed max-w-3xl mx-auto mb-8 font-light"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            "Arquitectura inmersiva de alta disponibilidad diseñada para la orquestación
-            estratégica, la gobernanza digital soberana y la supervisión de activos en tiempo real."
+            "Más que una oficina, es tu embajada en la frontera digital. Un espacio dinámico donde
+            celebramos eventos, reuniones estratégicas y demostraciones de IA en vivo. Ven a conocernos
+            en el corazón de Decentraland."
           </motion.p>
         </div>
 
@@ -374,25 +375,51 @@ export const DecentralandOffice: React.FC = () => {
               </ul>
             </div>
 
+            <div className="p-8 bg-linear-to-br from-nexus-violet/20 to-nexus-blue-600/20 rounded-3xl border border-nexus-violet/30 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 p-4">
+                <Sparkles className="text-nexus-violet-glow animate-pulse" size={20} />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-4 uppercase tracking-[0.2em] font-orbitron">
+                ¡Únete al Vecindario! 🚀
+              </h3>
+              <p className="text-sm text-nexus-silver/80 mb-6 leading-relaxed">
+                ¿Buscas tu propio espacio? Alquilamos parcelas en <strong>The Sandbox</strong> para
+                que lances tu proyecto de forma fácil y económica. Te ayudamos con todo el montaje.
+              </p>
+              <div className="flex items-center gap-4 text-xs font-bold text-nexus-cyan mb-8">
+                <span>DESDE €99/MES</span>
+                <span className="w-1 h-1 rounded-full bg-white/20" />
+                <span>SOPORTE TÉCNICO INCLUIDO</span>
+              </div>
+              <motion.button
+                onClick={() => (window.location.href = '#contact')}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full py-4 bg-white text-black rounded-xl font-bold font-orbitron text-[10px] tracking-[0.4em] uppercase hover:bg-nexus-violet hover:text-white transition-all shadow-xl"
+              >
+                Reservar mi Sandbox
+              </motion.button>
+            </div>
+
             <div className="space-y-6">
               <motion.button
                 onClick={handleEnterDecentraland}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
                 disabled={isExploring}
-                className={`w-full px-8 py-6 bg-white text-black rounded-2xl flex items-center justify-center gap-4 font-orbitron font-black text-[10px] tracking-[0.4em] uppercase transition-all shadow-2xl hover:bg-nexus-cyan hover:text-white ${
+                className={`w-full px-8 py-6 bg-white/5 border border-white/10 text-white rounded-2xl flex items-center justify-center gap-4 font-orbitron font-black text-[10px] tracking-[0.4em] uppercase transition-all shadow-2xl hover:bg-nexus-cyan hover:text-white ${
                   isExploring ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
                 {isExploring ? (
                   <>
                     <div className="w-3 h-3 border border-black border-t-transparent rounded-full animate-spin" />
-                    <span>Inicializando...</span>
+                    <span>Teletransportando...</span>
                   </>
                 ) : (
                   <>
                     <Rocket size={14} className="opacity-40" />
-                    <span>Entrar al Núcleo Soberano</span>
+                    <span>Visitar Sede en Decentraland</span>
                   </>
                 )}
               </motion.button>
@@ -402,7 +429,7 @@ export const DecentralandOffice: React.FC = () => {
                   SISTEMA DE NAVEGACIÓN DIMENSIONAL v5.1
                 </p>
                 <p className="text-[8px] text-nexus-cyan/40 uppercase tracking-[0.2em] font-mono">
-                  ESTADO: SOBERANO // NIVEL 5 ACTIVADO
+                  ESTADO: ONLINE // VISITANTES BIENVENIDOS
                 </p>
               </div>
             </div>

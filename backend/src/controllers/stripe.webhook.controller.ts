@@ -5,11 +5,16 @@ import Stripe from 'stripe';
 
 import { User } from '../models/User';
 import { StripeService } from '../services/stripe.service';
+import { EmailService } from '../services/email.service';
 import { logger } from '../utils/logger';
+import { TYPES } from '../types';
 
 @controller('/api/v1/stripe/webhook')
 export class StripeWebhookController {
-  constructor(@inject(StripeService) private stripeService: StripeService) {}
+  constructor(
+    @inject(TYPES.StripeService) private stripeService: StripeService,
+    @inject(TYPES.EmailService) private emailService: EmailService,
+  ) {}
 
   @httpPost('/')
   async handleWebhook(@request() req: Request, @response() res: Response) {
@@ -25,7 +30,7 @@ export class StripeWebhookController {
       const rawBody = (req as any).rawBody;
       if (!rawBody) {
         logger.error(
-          'Webhook Error: Missing rawBody. parsing middleware configuration might be incorrect.'
+          'Webhook Error: Missing rawBody. parsing middleware configuration might be incorrect.',
         );
         return (res as any).status(400).send('Webhook Error: Missing rawBody');
       }
@@ -71,10 +76,35 @@ export class StripeWebhookController {
       user.stripeCustomerId = session.customer as string;
       const status = session.subscription ? (session.subscription as any).status : 'active';
       user.subscriptionStatus = status;
-      // Map price ID to plan name if needed, or store price ID
-      // user.subscriptionPlan = ...
+      user.subscriptionId = (session.subscription as any).id;
+
+      // Map Price ID to Role
+      // Note: In real production, use session.line_items or retrieve subscription details
+      // For now, we infer based on recent intent or default to 'professional' upgrade
+      if (user.role === 'user') {
+        user.role = 'professional'; // Default upgrade
+      }
+
       await user.save();
-      logger.info(`User ${user.email} subscription activated via checkout`);
+      logger.info(`User ${user.email} subscription activated via checkout. New Role: ${user.role}`);
+
+      // Send Welcome Email
+      try {
+        await this.emailService.sendEmail({
+          to: user.email,
+          subject: 'Bienvenido a NEXUS: Acceso Confirmado 🚀',
+          html: `
+            <h1>Bienvenido al Nivel ${user.role.toUpperCase()}</h1>
+            <p>Tu suscripción ha sido activada correctamente.</p>
+            <p>Accede a tu panel de control ahora: https://aigestion.net/dashboard</p>
+            <br>
+            <p><em>Sovereign Intelligence System</em></p>
+          `,
+        });
+        logger.info(`Welcome email sent to ${user.email}`);
+      } catch (emailError) {
+        logger.error(emailError, `Failed to send welcome email to ${user.email}`);
+      }
     }
   }
 

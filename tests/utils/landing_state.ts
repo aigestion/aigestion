@@ -1,7 +1,7 @@
-import { sort } from "fast-sort";
-import * as fs from "fs";
-import * as os from "os";
-import path from "path";
+import { sort } from 'fast-sort';
+import * as fs from 'fs';
+import * as os from 'os';
+import path from 'path';
 import {
   Autofix,
   FileIssue,
@@ -9,14 +9,14 @@ import {
   LintAction,
   Replacement,
   TaskFailure,
-} from "tests/types";
+} from 'tests/types';
 
 const normalizePlatformPath = (originalPath: string | undefined) => {
   if (!originalPath) {
     return undefined;
   }
-  if (process.platform == "win32") {
-    return originalPath.replaceAll("\\", "/");
+  if (process.platform == 'win32') {
+    return originalPath.replaceAll('\\', '/');
   }
   return originalPath;
 };
@@ -30,19 +30,19 @@ const extractLintActionFields = ({
   ...rest
 }: LintAction): LintAction => ({
   // trunk-ignore(eslint/@typescript-eslint/no-non-null-assertion)
-  paths: _paths.map((originalPath) => normalizePlatformPath(originalPath)!),
+  paths: _paths.map(originalPath => normalizePlatformPath(originalPath)!),
   ...rest,
 });
 
 const extractTaskFailureFields = (
   sandboxPath: string,
-  { detailPath, message, ...rest }: TaskFailure,
+  { detailPath, message, ...rest }: TaskFailure
 ): TaskFailure => ({
   ...rest,
   // trunk-ignore(eslint/@typescript-eslint/no-non-null-assertion)
   message: normalizePlatformPath(message)!,
   details: detailPath
-    ? fs.readFileSync(path.resolve(sandboxPath, detailPath), { encoding: "utf-8" })
+    ? fs.readFileSync(path.resolve(sandboxPath, detailPath), { encoding: 'utf-8' })
     : undefined,
 });
 
@@ -57,7 +57,7 @@ const normalizeReplacement = ({
   };
   // TODO(lauri): Add this unconditionally once ruff is fixed.
   if (_replacementText) {
-    ret.replacementText = Buffer.from(_replacementText, "base64").toString();
+    ret.replacementText = Buffer.from(_replacementText, 'base64').toString();
   }
   return ret;
 };
@@ -70,16 +70,16 @@ const normalizeAutofix = ({ replacements: _replacements = [], ...rest }: Autofix
 // Replace any occurrences of the nondeterministic sandbox path in the output message
 const normalizeMessage = (message?: string) =>
   message
-    ?.replace(fs.realpathSync(os.tmpdir()), "/tmp")
-    .replace(`${process.env.LOCALAPPDATA ?? ""}\\Temp`, "/tmp")
-    .replaceAll("\\", "/")
-    .replace(/\/plugins_.{6}/gm, "/plugins_")
-    .replace(".dup.", ".")
-    .replace(/NBQA-CELL-SEP.{6}/gm, "NBQA-CELL-SEP")
+    ?.replace(fs.realpathSync(os.tmpdir()), '/tmp')
+    .replace(`${process.env.LOCALAPPDATA ?? ''}\\Temp`, '/tmp')
+    .replaceAll('\\', '/')
+    .replace(/\/plugins_.{6}/gm, '/plugins_')
+    .replace('.dup.', '.')
+    .replace(/NBQA-CELL-SEP.{6}/gm, 'NBQA-CELL-SEP')
     .trim();
 
 // trunk-ignore(eslint/@typescript-eslint/no-non-null-assertion)
-const normalizeFile = (file: string) => normalizePlatformPath(file.replace(".dup.", "."))!;
+const normalizeFile = (file: string) => normalizePlatformPath(file.replace('.dup.', '.'))!;
 
 const normalizeRange = ({ filePath: _filePath, ...rest }) => ({
   filePath: normalizePlatformPath(_filePath),
@@ -87,7 +87,7 @@ const normalizeRange = ({ filePath: _filePath, ...rest }) => ({
 });
 
 const normalizeIssueUrl = (issueUrl: string) =>
-  issueUrl.replace(/markdownlint\/blob\/v[0-9.]+\//gm, "markdownlint/blob/vx.x.x/").trim();
+  issueUrl.replace(/markdownlint\/blob\/v[0-9.]+\//gm, 'markdownlint/blob/vx.x.x/').trim();
 
 const normalizeIssues = ({
   message: _message,
@@ -105,7 +105,7 @@ const normalizeIssues = ({
   };
   if (_ranges) {
     // trunk-ignore(eslint/@typescript-eslint/no-unsafe-argument)
-    ret.ranges = _ranges.map((range) => normalizeRange(range));
+    ret.ranges = _ranges.map(range => normalizeRange(range));
   }
   if (_autofixOptions.length > 0) {
     ret.autofixOptions = _autofixOptions.map(normalizeAutofix);
@@ -122,10 +122,10 @@ const normalizeIssues = ({
  */
 const extractLandingStateFields = (
   sandboxPath: string,
-  { issues = [], unformattedFiles = [], lintActions = [], taskFailures = [] }: LandingState,
+  { issues = [], unformattedFiles = [], lintActions = [], taskFailures = [] }: LandingState
 ) =>
   ({
-    issues: sort(issues.map(normalizeIssues)).asc((issue) => [
+    issues: sort(issues.map(normalizeIssues)).asc(issue => [
       issue.file,
       issue.line,
       issue.column,
@@ -133,14 +133,14 @@ const extractLandingStateFields = (
       issue.message,
       issue.belowThreshold,
     ]),
-    unformattedFiles: sort(unformattedFiles.map(normalizeIssues)).asc((issue) => [
+    unformattedFiles: sort(unformattedFiles.map(normalizeIssues)).asc(issue => [
       issue.file,
       issue.line,
       issue.column,
       issue.code,
       issue.message,
     ]),
-    lintActions: sort(lintActions.map(extractLintActionFields)).asc((action) => [
+    lintActions: sort(lintActions.map(extractLintActionFields)).asc(action => [
       action.linter,
       action.command,
       action.verb,
@@ -148,8 +148,8 @@ const extractLandingStateFields = (
       action.paths,
     ]),
     taskFailures: sort(
-      taskFailures.map((failure) => extractTaskFailureFields(sandboxPath, failure)),
-    ).asc((failure) => [failure.name, failure.message]),
+      taskFailures.map(failure => extractTaskFailureFields(sandboxPath, failure))
+    ).asc(failure => [failure.name, failure.message]),
   }) as LandingState;
 
 /**
@@ -167,7 +167,7 @@ export const extractLandingState = (sandboxPath: string, json: unknown): Landing
  */
 export const tryParseLandingState = (
   sandboxPath: string,
-  outputJson: unknown,
+  outputJson: unknown
 ): LandingState | undefined => {
   if (!outputJson) {
     return undefined;

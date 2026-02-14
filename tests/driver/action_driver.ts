@@ -1,11 +1,11 @@
-import Debug from "debug";
-import * as fs from "fs";
-import path from "path";
-import { GenericTrunkDriver, SetupSettings } from "tests/driver/driver";
-import { REPO_ROOT } from "tests/utils";
-import { getTrunkVersion } from "tests/utils/trunk_config";
+import Debug from 'debug';
+import * as fs from 'fs';
+import path from 'path';
+import { GenericTrunkDriver, SetupSettings } from 'tests/driver/driver';
+import { REPO_ROOT } from 'tests/utils';
+import { getTrunkVersion } from 'tests/utils/trunk_config';
 
-const baseDebug = Debug("Driver");
+const baseDebug = Debug('Driver');
 
 let testNum = 1;
 const actionTests = new Map<string, number>();
@@ -26,7 +26,7 @@ export class TrunkActionDriver extends GenericTrunkDriver {
     testDir: string,
     setupSettings: SetupSettings,
     private action: string,
-    private syncGitHooks: boolean,
+    private syncGitHooks: boolean
   ) {
     super(testDir, setupSettings, getDebugger(action));
     this.action = action;
@@ -60,12 +60,12 @@ actions:
       return;
     }
     try {
-      this.debug("Syncing git hooks");
-      await this.runTrunk(["git-hooks", "sync"]);
+      this.debug('Syncing git hooks');
+      await this.runTrunk(['git-hooks', 'sync']);
 
-      this.debug("Attaching stdout and stderr pipes");
-      const stdoutPath = path.resolve(this.sandboxPath, "stdout");
-      const stderrPath = path.resolve(this.sandboxPath, "stderr");
+      this.debug('Attaching stdout and stderr pipes');
+      const stdoutPath = path.resolve(this.sandboxPath, 'stdout');
+      const stderrPath = path.resolve(this.sandboxPath, 'stderr');
       const stdoutStream = fs.createWriteStream(stdoutPath);
       const stderrStream = fs.createWriteStream(stderrPath);
       this.gitDriver?.outputHandler((_command, stdout, stderr) => {
@@ -75,24 +75,24 @@ actions:
       });
     } catch (error) {
       console.warn(`Failed to sync git hooks for ${this.action}`, error);
-      if ("stdout" in (error as any)) {
+      if ('stdout' in (error as any)) {
         // trunk-ignore(eslint/@typescript-eslint/no-unsafe-member-access)
-        console.log("Error output:", ((error as any).stdout as Buffer).toString());
+        console.log('Error output:', ((error as any).stdout as Buffer).toString());
       } else {
-        console.log("Error keys:  ", Object.keys(error as object));
+        console.log('Error keys:  ', Object.keys(error as object));
       }
     }
   }
 
   runAction = async (
-    args?: string,
+    args?: string
   ): Promise<{
     stdout: string;
     stderr: string;
     exitCode: number;
   }> => {
     try {
-      const { stdout, stderr } = await this.runTrunk(["run", this.action, args ?? ""]);
+      const { stdout, stderr } = await this.runTrunk(['run', this.action, args ?? '']);
       return { exitCode: 0, stdout, stderr };
     } catch (e: any) {
       // trunk-ignore(eslint/@typescript-eslint/no-unsafe-member-access)
@@ -101,18 +101,18 @@ actions:
   };
 
   readGitStdout = (): string => {
-    return this.readFile("stdout");
+    return this.readFile('stdout');
   };
 
   readGitStderr = (): string => {
-    return this.readFile("stderr");
+    return this.readFile('stderr');
   };
 
   flushGitStdout = () => {
-    this.deleteFile("stdout");
+    this.deleteFile('stdout');
   };
 
   flushGitStderr = () => {
-    this.deleteFile("stderr");
+    this.deleteFile('stderr');
   };
 }

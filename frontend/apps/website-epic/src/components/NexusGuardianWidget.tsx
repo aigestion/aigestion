@@ -8,18 +8,33 @@ export const NexusGuardianWidget: React.FC = () => {
   const [memoryLoad, setMemoryLoad] = useState(42);
   const [status, setStatus] = useState<'HEALTHY' | 'DEGRADED' | 'CRITICAL'>('HEALTHY');
 
-  // Simulate real-time monitoring
+  // Fetch real-time monitoring
   useEffect(() => {
-    const interval = setInterval(() => {
-      const newCpu = Math.floor(Math.random() * (30 - 20) + 20);
-      const newMem = Math.floor(Math.random() * (45 - 38) + 38);
-      setCpuLoad(newCpu);
-      setMemoryLoad(newMem);
+    const fetchMetrics = async () => {
+      try {
+        const response = await fetch('/api/v1/system/metrics', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCpuLoad(Math.round(data.cpu));
+          setMemoryLoad(Math.round(data.memory));
+          
+          // Dynamic sanity score based on real load
+          const sanity = 100 - (data.cpu / 4) - (data.memory / 8);
+          setSanityScore(Math.floor(sanity));
+          setStatus('HEALTHY');
+        }
+      } catch (error) {
+        console.error('Error fetching system metrics:', error);
+        setStatus('DEGRADED');
+      }
+    };
 
-      // Dynamic sanity score based on load
-      const sanity = 100 - newCpu / 4 - newMem / 8;
-      setSanityScore(Math.floor(sanity));
-    }, 3000);
+    fetchMetrics(); // Initial fetch
+    const interval = setInterval(fetchMetrics, 5000); // Poll every 5 seconds
     return () => clearInterval(interval);
   }, []);
 

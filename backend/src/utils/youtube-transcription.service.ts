@@ -137,3 +137,5 @@ export class YoutubeTranscriptionService {
     };
   }
 }
+
+export const youtubeTranscriptionService = new YoutubeTranscriptionService();

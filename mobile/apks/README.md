@@ -3,11 +3,13 @@
 ## Available APKs
 
 ### Enterprise App
+
 - File: AIGestionEnterprise.apk
 - Package: com.aigestion.enterprise
 - Purpose: System monitoring and management
 
 ### Client App
+
 - File: AIGestionClient.apk
 - Package: com.aigestion.client
 - Purpose: Project management and client dashboard
@@ -22,6 +24,7 @@
 ## Production Build
 
 For production APKs:
+
 1. Install Android Studio
 2. Install Node.js and npm
 3. Install React Native CLI

@@ -3,11 +3,11 @@ const axios = require('axios');
 
 async function runBenchmark() {
   console.log('🚀 Starting AIGestion Performance Benchmarks...');
-  
+
   const results = {
     cache: [],
     ai: [],
-    api: []
+    api: [],
   };
 
   // 1. Cache Latency Benchmark (Simulated)
@@ -30,11 +30,11 @@ async function runBenchmark() {
   }
 
   const avgCache = results.cache.reduce((a, b) => a + b) / results.cache.length;
-  
+
   console.log('\n--- Results ---');
   console.log(`✅ Avg Cache Latency: ${avgCache.toFixed(2)}ms (Target: < 10ms)`);
   console.log(`✅ API Response (Sample): ${results.api[0]?.toFixed(2) || 'N/A'}ms`);
-  
+
   if (avgCache < 10) {
     console.log('🌟 PERFORMANCE GOAL MET: GOD MODE SPEED CONFIRMED.');
   } else {

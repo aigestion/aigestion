@@ -15,7 +15,7 @@ export interface ResourceForecast {
 
 @injectable()
 export class SovereignSentinelService {
-  constructor(@inject(TYPES.MonitoringService) private monitoringService: MonitoringService) {}
+  constructor(@inject(TYPES.MonitoringService) private readonly monitoringService: MonitoringService) {}
 
   public async getResourceForecasts(): Promise<ResourceForecast[]> {
     const metricsToTrack = ['cpu_usage', 'memory_usage'];
@@ -64,7 +64,7 @@ export class SovereignSentinelService {
     const intercept = (sumY - slope * sumX) / n;
 
     const currentX = (now - baseTime) / 1000;
-    const currentValue = rawMetrics[rawMetrics.length - 1].value;
+    const currentValue = rawMetrics.at(-1)?.value ?? 0;
 
     // Predictions
     const x1h = currentX + 3600;
@@ -78,7 +78,7 @@ export class SovereignSentinelService {
         ? config.monitoring.cpuThreshold
         : config.monitoring.memoryThreshold;
 
-    let timeToThresholdMs = null;
+    let timeToThresholdMs: number | null = null;
     if (slope > 0) {
       const xThreshold = (threshold - intercept) / slope;
       if (xThreshold > currentX) {

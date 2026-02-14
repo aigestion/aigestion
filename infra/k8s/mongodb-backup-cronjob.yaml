@@ -7,14 +7,14 @@ metadata:
     app: mongodb-backup
     component: backup
 spec:
-  schedule: "0 2 * * *"  # Diario a las 2 AM UTC
-  successfulJobsHistoryLimit: 7  # Mantener últimos 7 backups exitosos
-  failedJobsHistoryLimit: 3      # Mantener últimos 3 fallos para debugging
-  concurrencyPolicy: Forbid      # No permitir backups simultáneos
+  schedule: '0 2 * * *' # Diario a las 2 AM UTC
+  successfulJobsHistoryLimit: 7 # Mantener últimos 7 backups exitosos
+  failedJobsHistoryLimit: 3 # Mantener últimos 3 fallos para debugging
+  concurrencyPolicy: Forbid # No permitir backups simultáneos
   jobTemplate:
     spec:
-      backoffLimit: 3  # Reintentar hasta 3 veces en caso de fallo
-      activeDeadlineSeconds: 3600  # Timeout de 1 hora
+      backoffLimit: 3 # Reintentar hasta 3 veces en caso de fallo
+      activeDeadlineSeconds: 3600 # Timeout de 1 hora
       template:
         metadata:
           labels:
@@ -103,7 +103,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Gi  # Ajustar según necesidades (30 días × ~3GB/día)
+      storage: 100Gi # Ajustar según necesidades (30 días × ~3GB/día)
   # storageClassName: standard  # Descomentar y ajustar según tu cluster
 ---
 apiVersion: v1
@@ -161,4 +161,3 @@ data:
       "$BACKUP_DIR"
 
     echo "✅ Restore completado exitosamente"
-

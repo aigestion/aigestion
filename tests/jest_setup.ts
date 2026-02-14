@@ -1,6 +1,6 @@
-import { FileIssue } from "tests/types";
-import { osTimeoutMultiplier } from "tests/utils";
-import { isDeepStrictEqual } from "util";
+import { FileIssue } from 'tests/types';
+import { osTimeoutMultiplier } from 'tests/utils';
+import { isDeepStrictEqual } from 'util';
 
 jest.setTimeout(300000 * osTimeoutMultiplier);
 
@@ -15,11 +15,11 @@ const fileIssueEquals = (expectedIssue: FileIssue) => (actualIssue: FileIssue) =
  */
 expect.extend({
   toHaveIssueOverlap: (actual: any, expected: FileIssue[], minimumOverlap: number) => {
-    if (typeof actual !== "object") {
-      throw new Error("Actual value must be an array of file issues");
+    if (typeof actual !== 'object') {
+      throw new Error('Actual value must be an array of file issues');
     }
-    const overlap = (actual as FileIssue[]).filter((actualIssue) =>
-      expected.some(fileIssueEquals(actualIssue)),
+    const overlap = (actual as FileIssue[]).filter(actualIssue =>
+      expected.some(fileIssueEquals(actualIssue))
     );
     const pass = overlap.length >= minimumOverlap;
     return {

@@ -63,7 +63,7 @@ export const streamChat = [
 
         res.write('data: [DONE]\n\n');
         res.end();
-      } catch (streamError) {
+      } catch (streamError: any) {
         console.error('Streaming error:', streamError);
         res.write(`data: ${JSON.stringify({ type: 'error', content: 'Streaming failed' })}\n\n`);
         res.end();

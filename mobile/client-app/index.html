@@ -1,8 +1,8 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AIGestion Client Mobile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -10,296 +10,317 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        body { 
-            background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
-            min-height: 100vh;
+      body {
+        background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+        min-height: 100vh;
+      }
+      .mobile-frame {
+        max-width: 375px;
+        margin: 0 auto;
+        min-height: 100vh;
+      }
+      .glass-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .daniela-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      .message-bubble {
+        max-width: 80%;
+        padding: 12px 16px;
+        border-radius: 18px;
+        margin-bottom: 8px;
+        word-wrap: break-word;
+      }
+      .message-user {
+        background: #3b82f6;
+        color: white;
+        margin-left: auto;
+        border-bottom-right-radius: 4px;
+      }
+      .message-daniela {
+        background: rgba(139, 92, 246, 0.2);
+        color: white;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        border-bottom-left-radius: 4px;
+      }
+      .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 8px 0;
+      }
+      .typing-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #8b5cf6;
+        animation: typing 1.4s infinite;
+      }
+      .typing-dot:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .typing-dot:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      @keyframes typing {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
         }
-        .mobile-frame { 
-            max-width: 375px; 
-            margin: 0 auto; 
-            min-height: 100vh;
+        30% {
+          transform: translateY(-10px);
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .voice-button {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+        border: none;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        transition: all 0.3s;
+      }
+      .voice-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+      }
+      .voice-button.active {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
         }
-        .daniela-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 8px;
+        70% {
+          box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
         }
-        .message-bubble {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            margin-bottom: 8px;
-            word-wrap: break-word;
+        100% {
+          box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
         }
-        .message-user {
-            background: #3b82f6;
-            color: white;
-            margin-left: auto;
-            border-bottom-right-radius: 4px;
-        }
-        .message-daniela {
-            background: rgba(139, 92, 246, 0.2);
-            color: white;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-bottom-left-radius: 4px;
-        }
-        .typing-indicator {
-            display: flex;
-            gap: 4px;
-            padding: 8px 0;
-        }
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #8b5cf6;
-            animation: typing 1.4s infinite;
-        }
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
-        }
-        .voice-button {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-            border: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            transition: all 0.3s;
-        }
-        .voice-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
-        }
-        .voice-button.active {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
+      }
     </style>
-</head>
-<body class="text-white">
+  </head>
+  <body class="text-white">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+      const { useState, useEffect, useRef } = React;
 
-        function DanielaMobile() {
-            const [messages, setMessages] = useState([
-                {
-                    id: 1,
-                    text: "¡Hola! Soy Daniela, tu asistente de IA móvil. Estoy aquí para ayudarte con tus proyectos y responder cualquier pregunta.",
-                    sender: "daniela",
-                    timestamp: new Date()
-                }
-            ]);
-            const [inputText, setInputText] = useState("");
-            const [isTyping, setIsTyping] = useState(false);
-            const [isVoiceActive, setIsVoiceActive] = useState(false);
-            const messagesEndRef = useRef(null);
+      function DanielaMobile() {
+        const [messages, setMessages] = useState([
+          {
+            id: 1,
+            text: '¡Hola! Soy Daniela, tu asistente de IA móvil. Estoy aquí para ayudarte con tus proyectos y responder cualquier pregunta.',
+            sender: 'daniela',
+            timestamp: new Date(),
+          },
+        ]);
+        const [inputText, setInputText] = useState('');
+        const [isTyping, setIsTyping] = useState(false);
+        const [isVoiceActive, setIsVoiceActive] = useState(false);
+        const messagesEndRef = useRef(null);
 
-            const scrollToBottom = () => {
-                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        const scrollToBottom = () => {
+          messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        useEffect(() => {
+          scrollToBottom();
+        }, [messages]);
+
+        const sendMessage = async () => {
+          if (!inputText.trim()) return;
+
+          const userMessage = {
+            id: Date.now(),
+            text: inputText,
+            sender: 'user',
+            timestamp: new Date(),
+          };
+
+          setMessages(prev => [...prev, userMessage]);
+          setInputText('');
+          setIsTyping(true);
+
+          // Simulate API response
+          setTimeout(() => {
+            const danielaResponse = {
+              id: Date.now() + 1,
+              text: `Entendido tu mensaje: "${userMessage.text}". Como tu asistente de IA móvil, puedo ayudarte a gestionar tus proyectos, analizar datos y optimizar tu flujo de trabajo. ¿En qué específico te gustaría que te asista hoy?`,
+              sender: 'daniela',
+              timestamp: new Date(),
             };
 
-            useEffect(() => {
-                scrollToBottom();
-            }, [messages]);
+            setMessages(prev => [...prev, danielaResponse]);
+            setIsTyping(false);
+          }, 1500);
+        };
 
-            const sendMessage = async () => {
-                if (!inputText.trim()) return;
+        const toggleVoice = () => {
+          setIsVoiceActive(!isVoiceActive);
+          if (!isVoiceActive) {
+            // Start voice recognition
+            if ('webkitSpeechRecognition' in window) {
+              const recognition = new webkitSpeechRecognition();
+              recognition.lang = 'es-ES';
+              recognition.continuous = false;
+              recognition.interimResults = true;
 
-                const userMessage = {
-                    id: Date.now(),
-                    text: inputText,
-                    sender: "user",
-                    timestamp: new Date()
-                };
+              recognition.onresult = event => {
+                const transcript = event.results[0][0].transcript;
+                setInputText(transcript);
+              };
 
-                setMessages(prev => [...prev, userMessage]);
-                setInputText("");
-                setIsTyping(true);
+              recognition.onend = () => {
+                setIsVoiceActive(false);
+              };
 
-                // Simulate API response
-                setTimeout(() => {
-                    const danielaResponse = {
-                        id: Date.now() + 1,
-                        text: `Entendido tu mensaje: "${userMessage.text}". Como tu asistente de IA móvil, puedo ayudarte a gestionar tus proyectos, analizar datos y optimizar tu flujo de trabajo. ¿En qué específico te gustaría que te asista hoy?`,
-                        sender: "daniela",
-                        timestamp: new Date()
-                    };
+              recognition.start();
+            }
+          }
+        };
 
-                    setMessages(prev => [...prev, danielaResponse]);
-                    setIsTyping(false);
-                }, 1500);
-            };
+        return (
+          <div className="mobile-frame">
+            {/* Header */}
+            <div className="bg-blue-900 p-4 flex items-center justify-between">
+              <div>
+                <h1 className="text-xl font-bold">💼 Client Portal</h1>
+                <p className="text-sm opacity-75">Project Management</p>
+              </div>
+              <div className="daniela-avatar">🧠</div>
+            </div>
 
-            const toggleVoice = () => {
-                setIsVoiceActive(!isVoiceActive);
-                if (!isVoiceActive) {
-                    // Start voice recognition
-                    if ("webkitSpeechRecognition" in window) {
-                        const recognition = new webkitSpeechRecognition();
-                        recognition.lang = "es-ES";
-                        recognition.continuous = false;
-                        recognition.interimResults = true;
-
-                        recognition.onresult = (event) => {
-                            const transcript = event.results[0][0].transcript;
-                            setInputText(transcript);
-                        };
-
-                        recognition.onend = () => {
-                            setIsVoiceActive(false);
-                        };
-
-                        recognition.start();
-                    }
-                }
-            };
-
-            return (
-                <div className="mobile-frame">
-                    {/* Header */}
-                    <div className="bg-blue-900 p-4 flex items-center justify-between">
-                        <div>
-                            <h1 className="text-xl font-bold">💼 Client Portal</h1>
-                            <p className="text-sm opacity-75">Project Management</p>
-                        </div>
-                        <div className="daniela-avatar">🧠</div>
-                    </div>
-
-                    {/* Stats */}
-                    <div className="p-4">
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="glass-card p-3 text-center">
-                                <div className="text-2xl font-bold">3</div>
-                                <div className="text-xs">Proyectos Activos</div>
-                            </div>
-                            <div className="glass-card p-3 text-center">
-                                <div className="text-2xl font-bold">12</div>
-                                <div className="text-xs">Tareas Pendientes</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Daniela Chat */}
-                    <div className="flex-1 px-4 pb-4">
-                        <div className="glass-card p-4 rounded-t-2xl">
-                            <div className="flex items-center gap-2 mb-4">
-                                <div className="daniela-avatar" style={{ width: "40px", height: "40px", fontSize: "18px", margin: 0 }}>🧠</div>
-                                <div>
-                                    <h3 className="font-bold">Daniela IA</h3>
-                                    <p className="text-xs opacity-75">Asistente inteligente</p>
-                                </div>
-                            </div>
-
-                            {/* Messages */}
-                            <div className="h-64 overflow-y-auto mb-4 space-y-2">
-                                {messages.map((message) => (
-                                    <div
-                                        key={message.id}
-                                        className={`message-bubble ${message.sender === "user" ? "message-user" : "message-daniela"}`}
-                                    >
-                                        {message.text}
-                                    </div>
-                                ))}
-
-                                {isTyping && (
-                                    <div className="message-bubble message-daniela">
-                                        <div className="typing-indicator">
-                                            <div className="typing-dot"></div>
-                                            <div className="typing-dot"></div>
-                                            <div className="typing-dot"></div>
-                                        </div>
-                                    </div>
-                                )}
-                                <div ref={messagesEndRef} />
-                            </div>
-
-                            {/* Input */}
-                            <div className="flex gap-2">
-                                <input
-                                    type="text"
-                                    value={inputText}
-                                    onChange={(e) => setInputText(e.target.value)}
-                                    onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-                                    placeholder="Escribe tu mensaje..."
-                                    className="flex-1 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-blue-400"
-                                />
-                                <button
-                                    onClick={sendMessage}
-                                    disabled={!inputText.trim() || isTyping}
-                                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-full px-4 py-2 text-sm"
-                                >
-                                    Enviar
-                                </button>
-                            </div>
-
-                            {/* Voice Button */}
-                            <div className="flex justify-center mt-4">
-                                <button
-                                    onClick={toggleVoice}
-                                    className={`voice-button ${isVoiceActive ? "active" : ""}`}
-                                >
-                                    {isVoiceActive ? "🔴" : "🎤"}
-                                </button>
-                            </div>
-
-                            <div className="text-center mt-2 text-xs opacity-75">
-                                {isVoiceActive ? "Escuchando..." : "Toca para hablar con Daniela"}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Quick Actions */}
-                    <div className="p-4">
-                        <div className="grid grid-cols-2 gap-3">
-                            <button className="glass-card p-3 text-center hover:bg-white/20 transition-colors">
-                                <div className="text-lg mb-1">📝</div>
-                                <div className="text-xs">Nuevo Proyecto</div>
-                            </button>
-                            <button className="glass-card p-3 text-center hover:bg-white/20 transition-colors">
-                                <div className="text-lg mb-1">📊</div>
-                                <div className="text-xs">Ver Reportes</div>
-                            </button>
-                            <button className="glass-card p-3 text-center hover:bg-white/20 transition-colors">
-                                <div className="text-lg mb-1">💬</div>
-                                <div className="text-xs">Chat con Daniela</div>
-                            </button>
-                            <button className="glass-card p-3 text-center hover:bg-white/20 transition-colors">
-                                <div className="text-lg mb-1">📈</div>
-                                <div className="text-xs">Analizar ROI</div>
-                            </button>
-                        </div>
-                    </div>
+            {/* Stats */}
+            <div className="p-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="glass-card p-3 text-center">
+                  <div className="text-2xl font-bold">3</div>
+                  <div className="text-xs">Proyectos Activos</div>
                 </div>
-            );
-        }
+                <div className="glass-card p-3 text-center">
+                  <div className="text-2xl font-bold">12</div>
+                  <div className="text-xs">Tareas Pendientes</div>
+                </div>
+              </div>
+            </div>
 
-        ReactDOM.render(<DanielaMobile />, document.getElementById("root"));
+            {/* Daniela Chat */}
+            <div className="flex-1 px-4 pb-4">
+              <div className="glass-card p-4 rounded-t-2xl">
+                <div className="flex items-center gap-2 mb-4">
+                  <div
+                    className="daniela-avatar"
+                    style={{ width: '40px', height: '40px', fontSize: '18px', margin: 0 }}
+                  >
+                    🧠
+                  </div>
+                  <div>
+                    <h3 className="font-bold">Daniela IA</h3>
+                    <p className="text-xs opacity-75">Asistente inteligente</p>
+                  </div>
+                </div>
+
+                {/* Messages */}
+                <div className="h-64 overflow-y-auto mb-4 space-y-2">
+                  {messages.map(message => (
+                    <div
+                      key={message.id}
+                      className={`message-bubble ${message.sender === 'user' ? 'message-user' : 'message-daniela'}`}
+                    >
+                      {message.text}
+                    </div>
+                  ))}
+
+                  {isTyping && (
+                    <div className="message-bubble message-daniela">
+                      <div className="typing-indicator">
+                        <div className="typing-dot"></div>
+                        <div className="typing-dot"></div>
+                        <div className="typing-dot"></div>
+                      </div>
+                    </div>
+                  )}
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Input */}
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={inputText}
+                    onChange={e => setInputText(e.target.value)}
+                    onKeyPress={e => e.key === 'Enter' && sendMessage()}
+                    placeholder="Escribe tu mensaje..."
+                    className="flex-1 bg-white/10 border border-white/20 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-blue-400"
+                  />
+                  <button
+                    onClick={sendMessage}
+                    disabled={!inputText.trim() || isTyping}
+                    className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-full px-4 py-2 text-sm"
+                  >
+                    Enviar
+                  </button>
+                </div>
+
+                {/* Voice Button */}
+                <div className="flex justify-center mt-4">
+                  <button
+                    onClick={toggleVoice}
+                    className={`voice-button ${isVoiceActive ? 'active' : ''}`}
+                  >
+                    {isVoiceActive ? '🔴' : '🎤'}
+                  </button>
+                </div>
+
+                <div className="text-center mt-2 text-xs opacity-75">
+                  {isVoiceActive ? 'Escuchando...' : 'Toca para hablar con Daniela'}
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="p-4">
+              <div className="grid grid-cols-2 gap-3">
+                <button className="glass-card p-3 text-center hover:bg-white/20 transition-colors">
+                  <div className="text-lg mb-1">📝</div>
+                  <div className="text-xs">Nuevo Proyecto</div>
+                </button>
+                <button className="glass-card p-3 text-center hover:bg-white/20 transition-colors">
+                  <div className="text-lg mb-1">📊</div>
+                  <div className="text-xs">Ver Reportes</div>
+                </button>
+                <button className="glass-card p-3 text-center hover:bg-white/20 transition-colors">
+                  <div className="text-lg mb-1">💬</div>
+                  <div className="text-xs">Chat con Daniela</div>
+                </button>
+                <button className="glass-card p-3 text-center hover:bg-white/20 transition-colors">
+                  <div className="text-lg mb-1">📈</div>
+                  <div className="text-xs">Analizar ROI</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.render(<DanielaMobile />, document.getElementById('root'));
     </script>
-</body>
+  </body>
 </html>

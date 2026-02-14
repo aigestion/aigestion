@@ -24,12 +24,25 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
   // 0. Bypass for God Mode Authority or existing service-to-service user
   const authorityKey = req.headers['x-nexus-authority'];
   if (authorityKey === 'NEXUS_GOD_2026_SOVEREIGN') {
+    // SECURITY PATCH: Verify IP source (Localhost or Docker Internal)
+    const clientIP = req.ip || req.connection.remoteAddress || '';
+    const isLocal =
+      clientIP === '127.0.0.1' ||
+      clientIP === '::1' ||
+      clientIP.startsWith('172.') || // Docker Bridge (Standard)
+      clientIP.startsWith('10.'); // Docker Network
+
+    if (!isLocal && process.env.NODE_ENV === 'production') {
+      logger.warn(`[Auth] BLOCKED Unauthorized God Mode attempt from IP: ${clientIP}`);
+      return next(new Error('Unauthorized Access Pattern'));
+    }
+
     (req as any).user = {
       id: 'god-mode-sovereign',
       email: 'god@nexus.sovereign',
       role: 'god',
     };
-    logger.debug('[Auth] God Mode access granted via X-Nexus-Authority');
+    logger.warn(`[Auth] God Mode access granted via X-Nexus-Authority from IP: ${clientIP}`);
     return next();
   }
 

@@ -8,9 +8,7 @@
             {
               "field": "weeks",
               "triggerAtHour": 9,
-              "triggerAtDayOfWeek": [
-                1
-              ]
+              "triggerAtDayOfWeek": [1]
             }
           ]
         }

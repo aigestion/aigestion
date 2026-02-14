@@ -156,8 +156,8 @@ runtimes:
           optional: true
         - name: PATH
           list:
-            - "${runtime}/bin"
-            - "${runtime}" # Windows places binaries here instead of bin/
+            - '${runtime}/bin'
+            - '${runtime}' # Windows places binaries here instead of bin/
         - name: http_proxy
           value: ${env.http_proxy}
           optional: true
@@ -175,8 +175,8 @@ runtimes:
       linter_environment:
         - name: PATH
           list:
-            - "${linter}/bin"
-            - "${linter}/Scripts" # Windows places binaries here instead of bin/
+            - '${linter}/bin'
+            - '${linter}/Scripts' # Windows places binaries here instead of bin/
         - name: VIRTUAL_ENV
           value: ${linter}
         - name: http_proxy

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 // Speech Recognition Type Definition
 
@@ -6,6 +6,7 @@ export const useDanielaVoice = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const recognitionRef = useRef<any>(null);
 
   const toggleListening = useCallback(() => {
     if (isListening) {
@@ -16,15 +17,23 @@ export const useDanielaVoice = () => {
   }, [isListening]);
 
   const startListening = () => {
-    setIsListening(true);
     const { webkitSpeechRecognition }: any = window;
     if (!webkitSpeechRecognition) return;
 
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+
     const recognition = new webkitSpeechRecognition();
+    recognitionRef.current = recognition;
 
     recognition.lang = 'es-ES';
     recognition.continuous = false;
     recognition.interimResults = true;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
 
     recognition.onresult = (event: any) => {
       const results = event.results;
@@ -34,12 +43,16 @@ export const useDanielaVoice = () => {
 
     recognition.onend = () => {
       setIsListening(false);
+      recognitionRef.current = null;
     };
 
     recognition.start();
   };
 
   const stopListening = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
     setIsListening(false);
   };
 
@@ -52,7 +65,7 @@ export const useDanielaVoice = () => {
 
     const voices = window.speechSynthesis.getVoices();
     const femaleVoice = voices.find(
-      v => v.name.includes('Female') || v.name.includes('Google Español')
+      v => v.name.includes('Female') || v.name.includes('Google Español') || v.lang === 'es-ES'
     );
     if (femaleVoice) utterance.voice = femaleVoice;
 

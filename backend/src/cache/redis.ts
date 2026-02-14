@@ -61,10 +61,12 @@ export const getRedisClient = (): RedisClientType => {
       }) as unknown as RedisClientType; // Cast compatibility
     } else {
       // Standalone Connection
+      const redisUrl = process.env.REDIS_URL;
       const host = process.env.REDIS_HOST || 'localhost';
       const port = process.env.REDIS_PORT || '6379';
       const password = process.env.REDIS_PASSWORD;
-      const url = password ? `redis://:${password}@${host}:${port}` : `redis://${host}:${port}`;
+      const url =
+        redisUrl || (password ? `redis://:${password}@${host}:${port}` : `redis://${host}:${port}`);
 
       redisClient = redis.createClient({
         url,

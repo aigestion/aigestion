@@ -1,6 +1,6 @@
-import { toolInstallTest } from "tests";
+import { toolInstallTest } from 'tests';
 
 toolInstallTest({
-  toolName: "clangd",
-  toolVersion: "16.0.2",
+  toolName: 'clangd',
+  toolVersion: '16.0.2',
 });

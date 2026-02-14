@@ -7,18 +7,24 @@
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
-const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} = require('@modelcontextprotocol/sdk/types.js');
 
 class DockerMCPServer {
   constructor() {
-    this.server = new Server({
-      name: 'docker',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    this.server = new Server(
+      {
+        name: 'docker',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.setupTools();
     this.setupErrorHandling();
@@ -34,9 +40,9 @@ class DockerMCPServer {
             type: 'object',
             properties: {
               all: { type: 'boolean', description: 'Include stopped containers' },
-              filters: { type: 'object', description: 'Container filters' }
-            }
-          }
+              filters: { type: 'object', description: 'Container filters' },
+            },
+          },
         },
         {
           name: 'docker_run_container',
@@ -49,10 +55,10 @@ class DockerMCPServer {
               ports: { type: 'array', items: { type: 'string' }, description: 'Port mappings' },
               environment: { type: 'object', description: 'Environment variables' },
               volumes: { type: 'array', items: { type: 'string' }, description: 'Volume mappings' },
-              detach: { type: 'boolean', description: 'Run in detached mode' }
+              detach: { type: 'boolean', description: 'Run in detached mode' },
             },
-            required: ['image']
-          }
+            required: ['image'],
+          },
         },
         {
           name: 'docker_stop_container',
@@ -60,10 +66,10 @@ class DockerMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              container_id: { type: 'string', description: 'Container ID or name' }
+              container_id: { type: 'string', description: 'Container ID or name' },
             },
-            required: ['container_id']
-          }
+            required: ['container_id'],
+          },
         },
         {
           name: 'docker_start_container',
@@ -71,10 +77,10 @@ class DockerMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              container_id: { type: 'string', description: 'Container ID or name' }
+              container_id: { type: 'string', description: 'Container ID or name' },
             },
-            required: ['container_id']
-          }
+            required: ['container_id'],
+          },
         },
         {
           name: 'docker_remove_container',
@@ -83,10 +89,10 @@ class DockerMCPServer {
             type: 'object',
             properties: {
               container_id: { type: 'string', description: 'Container ID or name' },
-              force: { type: 'boolean', description: 'Force removal' }
+              force: { type: 'boolean', description: 'Force removal' },
             },
-            required: ['container_id']
-          }
+            required: ['container_id'],
+          },
         },
         {
           name: 'docker_container_logs',
@@ -96,10 +102,10 @@ class DockerMCPServer {
             properties: {
               container_id: { type: 'string', description: 'Container ID or name' },
               follow: { type: 'boolean', description: 'Follow log output' },
-              tail: { type: 'number', description: 'Number of lines to show from end' }
+              tail: { type: 'number', description: 'Number of lines to show from end' },
             },
-            required: ['container_id']
-          }
+            required: ['container_id'],
+          },
         },
         {
           name: 'docker_build_image',
@@ -110,10 +116,10 @@ class DockerMCPServer {
               context_path: { type: 'string', description: 'Build context path' },
               dockerfile: { type: 'string', description: 'Dockerfile path' },
               tag: { type: 'string', description: 'Image tag' },
-              build_args: { type: 'object', description: 'Build arguments' }
+              build_args: { type: 'object', description: 'Build arguments' },
             },
-            required: ['context_path', 'tag']
-          }
+            required: ['context_path', 'tag'],
+          },
         },
         {
           name: 'docker_list_images',
@@ -122,9 +128,9 @@ class DockerMCPServer {
             type: 'object',
             properties: {
               all: { type: 'boolean', description: 'Include intermediate images' },
-              filters: { type: 'object', description: 'Image filters' }
-            }
-          }
+              filters: { type: 'object', description: 'Image filters' },
+            },
+          },
         },
         {
           name: 'docker_prune',
@@ -132,10 +138,14 @@ class DockerMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              type: { type: 'string', enum: ['containers', 'images', 'volumes', 'networks', 'all'], description: 'Resource type to prune' },
-              force: { type: 'boolean', description: 'Force pruning' }
-            }
-          }
+              type: {
+                type: 'string',
+                enum: ['containers', 'images', 'volumes', 'networks', 'all'],
+                description: 'Resource type to prune',
+              },
+              force: { type: 'boolean', description: 'Force pruning' },
+            },
+          },
         },
         {
           name: 'docker_compose_up',
@@ -144,11 +154,15 @@ class DockerMCPServer {
             type: 'object',
             properties: {
               compose_file: { type: 'string', description: 'Docker Compose file path' },
-              services: { type: 'array', items: { type: 'string' }, description: 'Specific services to start' },
-              detach: { type: 'boolean', description: 'Run in detached mode' }
+              services: {
+                type: 'array',
+                items: { type: 'string' },
+                description: 'Specific services to start',
+              },
+              detach: { type: 'boolean', description: 'Run in detached mode' },
             },
-            required: ['compose_file']
-          }
+            required: ['compose_file'],
+          },
         },
         {
           name: 'docker_compose_down',
@@ -157,15 +171,15 @@ class DockerMCPServer {
             type: 'object',
             properties: {
               compose_file: { type: 'string', description: 'Docker Compose file path' },
-              remove_volumes: { type: 'boolean', description: 'Remove volumes' }
+              remove_volumes: { type: 'boolean', description: 'Remove volumes' },
             },
-            required: ['compose_file']
-          }
-        }
-      ]
+            required: ['compose_file'],
+          },
+        },
+      ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -197,10 +211,12 @@ class DockerMCPServer {
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: `Error: ${error.message}`
-          }]
+          content: [
+            {
+              type: 'text',
+              text: `Error: ${error.message}`,
+            },
+          ],
         };
       }
     });
@@ -208,127 +224,149 @@ class DockerMCPServer {
 
   async listContainers(args) {
     const { all, filters } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Container List:\n\nAll containers: ${all ? 'Yes' : 'No'}\nFilters: ${JSON.stringify(filters || {}, null, 2)}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Container List:\n\nAll containers: ${all ? 'Yes' : 'No'}\nFilters: ${JSON.stringify(filters || {}, null, 2)}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container listing.`,
+        },
+      ],
     };
   }
 
   async runContainer(args) {
     const { image, name, ports, environment, volumes, detach } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Run Container:\n\nImage: ${image}\nName: ${name || 'Auto-generated'}\nPorts: ${ports ? ports.join(', ') : 'None'}\nEnvironment: ${JSON.stringify(environment || {}, null, 2)}\nVolumes: ${volumes ? volumes.join(', ') : 'None'}\nDetached: ${detach || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Run Container:\n\nImage: ${image}\nName: ${name || 'Auto-generated'}\nPorts: ${ports ? ports.join(', ') : 'None'}\nEnvironment: ${JSON.stringify(environment || {}, null, 2)}\nVolumes: ${volumes ? volumes.join(', ') : 'None'}\nDetached: ${detach || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container execution.`,
+        },
+      ],
     };
   }
 
   async stopContainer(args) {
     const { container_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Stop Container:\n\nContainer: ${container_id}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container stop operation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Stop Container:\n\nContainer: ${container_id}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container stop operation.`,
+        },
+      ],
     };
   }
 
   async startContainer(args) {
     const { container_id } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Start Container:\n\nContainer: ${container_id}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container start operation.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Start Container:\n\nContainer: ${container_id}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container start operation.`,
+        },
+      ],
     };
   }
 
   async removeContainer(args) {
     const { container_id, force } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Remove Container:\n\nContainer: ${container_id}\nForce: ${force || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container removal.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Remove Container:\n\nContainer: ${container_id}\nForce: ${force || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares container removal.`,
+        },
+      ],
     };
   }
 
   async getContainerLogs(args) {
     const { container_id, follow, tail } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Container Logs:\n\nContainer: ${container_id}\nFollow: ${follow || false}\nTail: ${tail || 'All'}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares log retrieval.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Container Logs:\n\nContainer: ${container_id}\nFollow: ${follow || false}\nTail: ${tail || 'All'}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares log retrieval.`,
+        },
+      ],
     };
   }
 
   async buildImage(args) {
     const { context_path, dockerfile, tag, build_args } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Build Image:\n\nContext: ${context_path}\nDockerfile: ${dockerfile || 'Dockerfile'}\nTag: ${tag}\nBuild Args: ${JSON.stringify(build_args || {}, null, 2)}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares image building.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Build Image:\n\nContext: ${context_path}\nDockerfile: ${dockerfile || 'Dockerfile'}\nTag: ${tag}\nBuild Args: ${JSON.stringify(build_args || {}, null, 2)}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares image building.`,
+        },
+      ],
     };
   }
 
   async listImages(args) {
     const { all, filters } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Image List:\n\nAll images: ${all ? 'Yes' : 'No'}\nFilters: ${JSON.stringify(filters || {}, null, 2)}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares image listing.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Image List:\n\nAll images: ${all ? 'Yes' : 'No'}\nFilters: ${JSON.stringify(filters || {}, null, 2)}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares image listing.`,
+        },
+      ],
     };
   }
 
   async pruneResources(args) {
     const { type, force } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Prune Resources:\n\nType: ${type || 'all'}\nForce: ${force || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares resource pruning.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Prune Resources:\n\nType: ${type || 'all'}\nForce: ${force || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares resource pruning.`,
+        },
+      ],
     };
   }
 
   async composeUp(args) {
     const { compose_file, services, detach } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Compose Up:\n\nCompose File: ${compose_file}\nServices: ${services ? services.join(', ') : 'All'}\nDetached: ${detach || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares compose up.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Compose Up:\n\nCompose File: ${compose_file}\nServices: ${services ? services.join(', ') : 'All'}\nDetached: ${detach || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares compose up.`,
+        },
+      ],
     };
   }
 
   async composeDown(args) {
     const { compose_file, remove_volumes } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `Docker Compose Down:\n\nCompose File: ${compose_file}\nRemove Volumes: ${remove_volumes || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares compose down.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `Docker Compose Down:\n\nCompose File: ${compose_file}\nRemove Volumes: ${remove_volumes || false}\n\nNote: Actual Docker operations require Docker client library.\n\nThis prepares compose down.`,
+        },
+      ],
     };
   }
 
   setupErrorHandling() {
-    this.server.onerror = (error) => console.error('[Docker MCP Error]', error);
+    this.server.onerror = error => console.error('[Docker MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);

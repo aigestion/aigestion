@@ -1,13 +1,21 @@
-import { ChildProcess, execFile, ExecFileOptions, execFileSync, ExecFileSyncOptions, execSync, ExecSyncOptions } from "child_process";
-import { Debugger } from "debug";
-import * as fs from "fs";
-import * as os from "os";
-import path from "path";
-import * as git from "simple-git";
-import { ARGS, DOWNLOAD_CACHE, REPO_ROOT, TEMP_PREFIX, TEST_DATA } from "tests/utils";
-import { getTrunkConfig } from "tests/utils/trunk_config";
-import * as util from "util";
-import YAML from "yaml";
+import {
+  ChildProcess,
+  execFile,
+  ExecFileOptions,
+  execFileSync,
+  ExecFileSyncOptions,
+  execSync,
+  ExecSyncOptions,
+} from 'child_process';
+import { Debugger } from 'debug';
+import * as fs from 'fs';
+import * as os from 'os';
+import path from 'path';
+import * as git from 'simple-git';
+import { ARGS, DOWNLOAD_CACHE, REPO_ROOT, TEMP_PREFIX, TEST_DATA } from 'tests/utils';
+import { getTrunkConfig } from 'tests/utils/trunk_config';
+import * as util from 'util';
+import YAML from 'yaml';
 
 /**
  * Configuration for when a TrunkDriver instance runs `setUp`.
@@ -25,7 +33,7 @@ export type CustomExecOptions = ExecFileOptions & { stdin?: string };
 
 const execFilePromise = util.promisify(execFile);
 
-const TEMP_SUBDIR = "tmp";
+const TEMP_SUBDIR = 'tmp';
 
 const UNINITIALIZED_ERROR = `You have attempted to modify the sandbox before it was created.
 Please call this method after setup has been called.`;
@@ -37,8 +45,8 @@ export const executionEnv = () => {
     ...strippedEnv,
     // This keeps test downloads separate from manual trunk invocations
     TRUNK_DOWNLOAD_CACHE: DOWNLOAD_CACHE,
-    TRUNK_SEGMENT: "off",
-    TRUNK_MIXPANEL: "off",
+    TRUNK_SEGMENT: 'off',
+    TRUNK_MIXPANEL: 'off',
   };
 };
 
@@ -47,7 +55,7 @@ export const executionEnv = () => {
  */
 const testCreationFilter = (topLevelDir: string) => (file: string) => {
   // Don't copy snapshot files
-  if (file.endsWith(".shot")) {
+  if (file.endsWith('.shot')) {
     return false;
   }
 
@@ -55,10 +63,10 @@ const testCreationFilter = (topLevelDir: string) => (file: string) => {
   // If top-level, only copy plugin.yaml, test file, test_data, and parsers
   if (base !== TEST_DATA && dir.endsWith(topLevelDir)) {
     return (
-      base === "plugin.yaml" ||
-      base.endsWith(".test.ts") ||
-      base.endsWith(".py") ||
-      base.endsWith(".sh")
+      base === 'plugin.yaml' ||
+      base.endsWith('.test.ts') ||
+      base.endsWith('.py') ||
+      base.endsWith('.sh')
     );
   }
 
@@ -85,7 +93,7 @@ export abstract class GenericTrunkDriver {
     this.testDir = testDir;
     this.setupSettings = setupSettings;
     this.debug = debug;
-    this.debugNamespace = this.debug.namespace.replace("Driver:", "");
+    this.debugNamespace = this.debug.namespace.replace('Driver:', '');
   }
 
   abstract getTrunkYamlContents(trunkVersion: string | undefined): string;
@@ -99,7 +107,7 @@ export abstract class GenericTrunkDriver {
   async setUp() {
     this.sandboxPath = fs.realpathSync(fs.mkdtempSync(path.resolve(os.tmpdir(), TEMP_PREFIX)));
     fs.mkdirSync(path.resolve(this.sandboxPath, TEMP_SUBDIR));
-    this.debug("Created sandbox path %s from %s", this.sandboxPath, this.testDir);
+    this.debug('Created sandbox path %s from %s', this.sandboxPath, this.testDir);
     if (!this.sandboxPath) {
       return;
     }
@@ -107,45 +115,45 @@ export abstract class GenericTrunkDriver {
       recursive: true,
       filter: testCreationFilter(this.testDir),
     });
-    this.copyFileFromRoot(".gitattributes");
+    this.copyFileFromRoot('.gitattributes');
 
     if (this.setupSettings.setupTrunk) {
       // Initialize trunk via config
-      if (!fs.existsSync(path.resolve(path.resolve(this.sandboxPath, ".trunk")))) {
-        fs.mkdirSync(path.resolve(this.sandboxPath, ".trunk"), {});
+      if (!fs.existsSync(path.resolve(path.resolve(this.sandboxPath, '.trunk')))) {
+        fs.mkdirSync(path.resolve(this.sandboxPath, '.trunk'), {});
       }
       fs.writeFileSync(
-        path.resolve(this.sandboxPath, ".trunk/trunk.yaml"),
-        this.getTrunkYamlContents(this.setupSettings.trunkVersion),
+        path.resolve(this.sandboxPath, '.trunk/trunk.yaml'),
+        this.getTrunkYamlContents(this.setupSettings.trunkVersion)
       );
     }
 
     this.gitDriver = git.simpleGit(this.sandboxPath);
     if (this.setupSettings.setupGit) {
       await this.gitDriver
-        .init({ "--initial-branch": "main" })
-        .add(".")
-        .addConfig("user.name", "Plugin Author")
-        .addConfig("user.email", "trunk-plugins@example.com")
-        .addConfig("commit.gpgsign", "false")
-        .addConfig("core.autocrlf", "input")
-        .commit("first commit");
+        .init({ '--initial-branch': 'main' })
+        .add('.')
+        .addConfig('user.name', 'Plugin Author')
+        .addConfig('user.email', 'trunk-plugins@example.com')
+        .addConfig('commit.gpgsign', 'false')
+        .addConfig('core.autocrlf', 'input')
+        .commit('first commit');
     }
 
     // Run a cli-dependent command to wait on and verify trunk is installed
     try {
       // This directory is generated during launcher log creation and is required for binary cache results
-      await this.runTrunk(["--help"]);
+      await this.runTrunk(['--help']);
     } catch (err: any) {
       // The trunk launcher is not designed to handle concurrent installs.
       // This command may fail if another test installs at the same time.
       // Don't block if this happens.
       // trunk-ignore-begin(eslint/@typescript-eslint/no-unsafe-member-access)
-      if (!(err.stderr as string).includes("Cannot remove item")) {
+      if (!(err.stderr as string).includes('Cannot remove item')) {
         console.warn(
           `Error running --help with stdout: %s\nand stderr: %s`,
           err.stdout,
-          err.stderr,
+          err.stderr
         );
       }
       // trunk-ignore-end(eslint/@typescript-eslint/no-unsafe-member-access)
@@ -157,24 +165,24 @@ export abstract class GenericTrunkDriver {
    * associated with it in order to prune the cache.
    */
   tearDown() {
-    this.debug("Cleaning up %s", this.sandboxPath);
+    this.debug('Cleaning up %s', this.sandboxPath);
 
     // Preserve test directory if `SANDBOX_DEBUG` is truthy.
     if (ARGS.sandboxDebug) {
-      this.runTrunkSync(["daemon", "shutdown"]);
+      this.runTrunkSync(['daemon', 'shutdown']);
       console.log(`Preserving test dir ${this.getSandbox()}`);
       return;
     }
 
-    if (process.platform == "win32") {
+    if (process.platform == 'win32') {
       try {
         // On Windows, deinit will often fail with permission error for cleaning up the cache dir
-        this.runTrunkSync(["deinit"]);
+        this.runTrunkSync(['deinit']);
       } catch (_err: any) {
         // this.debug("deinit failed with error stdout: %s\nand stderr: %s", _err.stdout, _err.stderr);
       }
     } else {
-      this.runTrunkSync(["deinit"]);
+      this.runTrunkSync(['deinit']);
     }
 
     try {
@@ -204,7 +212,7 @@ export abstract class GenericTrunkDriver {
   readFile(relPath: string): string {
     const sandboxPath = this.getSandbox();
     const targetPath = path.resolve(sandboxPath, relPath);
-    return fs.readFileSync(targetPath, "utf8");
+    return fs.readFileSync(targetPath, 'utf8');
   }
 
   /**
@@ -295,20 +303,23 @@ export abstract class GenericTrunkDriver {
    * Return the yaml result of parsing the output of `trunk config print` in the test sandbox.
    */
   getFullTrunkConfig = (): any => {
-    const [executable, args, options] = this.buildExecArgs(["config", "print"]);
-    const printConfig = execSync([executable, ...args].join(" "), options as ExecSyncOptions);
-    return YAML.parse(printConfig.toString().replaceAll("\r\n", "\n"));
+    const [executable, args, options] = this.buildExecArgs(['config', 'print']);
+    const printConfig = execSync([executable, ...args].join(' '), options as ExecSyncOptions);
+    return YAML.parse(printConfig.toString().replaceAll('\r\n', '\n'));
   };
 
   /**
    * Reformat trunk execution args into the expected platform-specific invocation
    */
-  buildExecArgs(args: string[], execOptions?: ExecFileOptions): [string, string[], ExecFileOptions] {
-    const trunkPath = ARGS.cliPath ?? "trunk";
-    if (process.platform == "win32" && (!ARGS.cliPath || ARGS.cliPath.endsWith(".ps1"))) {
+  buildExecArgs(
+    args: string[],
+    execOptions?: ExecFileOptions
+  ): [string, string[], ExecFileOptions] {
+    const trunkPath = ARGS.cliPath ?? 'trunk';
+    if (process.platform == 'win32' && (!ARGS.cliPath || ARGS.cliPath.endsWith('.ps1'))) {
       return [
-        "powershell",
-        ["-ExecutionPolicy", "ByPass", trunkPath].concat(args.filter((arg) => arg.length > 0)),
+        'powershell',
+        ['-ExecutionPolicy', 'ByPass', trunkPath].concat(args.filter(arg => arg.length > 0)),
         {
           cwd: this.sandboxPath,
           env: executionEnv(),
@@ -319,7 +330,7 @@ export abstract class GenericTrunkDriver {
     }
     return [
       trunkPath,
-      args.filter((arg) => arg.length > 0),
+      args.filter(arg => arg.length > 0),
       {
         cwd: this.sandboxPath,
         env: executionEnv(),
@@ -336,11 +347,11 @@ export abstract class GenericTrunkDriver {
    */
   async runTrunkCmd(
     argStr: string,
-    execOptions?: ExecFileOptions,
+    execOptions?: ExecFileOptions
   ): Promise<{ stdout: string; stderr: string }> {
     return await this.runTrunk(
-      argStr.split(" ").filter((arg) => arg.length > 0),
-      execOptions,
+      argStr.split(' ').filter(arg => arg.length > 0),
+      execOptions
     );
   }
 
@@ -351,7 +362,7 @@ export abstract class GenericTrunkDriver {
    */
   async runTrunk(
     args: string[],
-    execOptions?: ExecFileOptions,
+    execOptions?: ExecFileOptions
   ): Promise<{ stdout: string; stderr: string }> {
     return await execFilePromise(...this.buildExecArgs(args, execOptions));
   }
@@ -384,31 +395,36 @@ export abstract class GenericTrunkDriver {
    */
   async run(bin: string, args: string[], execOptions?: CustomExecOptions) {
     const { stdin, ...options } = execOptions || {};
-    const exec = execFile(bin, args, {
-      cwd: this.sandboxPath,
-      env: executionEnv(),
-      ...options,
-    }, null);
-    exec.stdin?.write(stdin ?? "");
+    const exec = execFile(
+      bin,
+      args,
+      {
+        cwd: this.sandboxPath,
+        env: executionEnv(),
+        ...options,
+      },
+      null
+    );
+    exec.stdin?.write(stdin ?? '');
     exec.stdin?.end();
 
     return await new Promise<{ stdout: string; stderr: string }>((resolve, reject) => {
-      let stdout = "";
-      let stderr = "";
+      let stdout = '';
+      let stderr = '';
 
-      exec.stdout?.on("data", (chunk: string) => {
+      exec.stdout?.on('data', (chunk: string) => {
         stdout += chunk;
       });
 
-      exec.stderr?.on("data", (chunk: string) => {
+      exec.stderr?.on('data', (chunk: string) => {
         stderr += chunk;
       });
 
-      exec.on("error", (err: any) => {
+      exec.on('error', (err: any) => {
         // trunk-ignore(eslint/@typescript-eslint/prefer-promise-reject-errors)
         reject(err);
       });
-      exec.on("exit", (code: number) => {
+      exec.on('exit', (code: number) => {
         if (code === 0) {
           resolve({ stdout, stderr });
         } else {

@@ -17,7 +17,6 @@ standard for both Commitizen and commitlint.
    ```
 
 1. If you don't already have a commitlint config, create one of the following:
-
    - JS config (`commitlint.config.js`)
 
      ```JavaScript

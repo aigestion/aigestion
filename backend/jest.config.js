@@ -1,5 +1,5 @@
 module.exports = {
-  preset: 'ts-jest',
+  preset: './node_modules/ts-jest/jest-preset.js',
   testEnvironment: 'node',
   testTimeout: 30000,
   forceExit: true,

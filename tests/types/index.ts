@@ -3,12 +3,12 @@
 /**
  * Which primary trunk command was run.
  */
-export type TrunkVerb = "Check" | "Format";
+export type TrunkVerb = 'Check' | 'Format';
 
 /**
  * Which snapshot type to generate based on trunk command.
  */
-export type CheckType = "check" | "fmt";
+export type CheckType = 'check' | 'fmt';
 
 /**** Testing setup ****/
 
@@ -20,7 +20,7 @@ export type CheckType = "check" | "fmt";
  * 4. string: a manually specified version. Note that this will apply to all tests.
  */
 // trunk-ignore(eslint/@typescript-eslint/no-redundant-type-constituents): Added for clarity.
-export type LinterVersion = "KnownGoodVersion" | "Latest" | "Snapshots" | string;
+export type LinterVersion = 'KnownGoodVersion' | 'Latest' | 'Snapshots' | string;
 
 /**
  * Global testing configuration based on environment variables.
@@ -136,15 +136,15 @@ export interface LandingState {
  * - assertion_failure: the expected diagnostics vary -> we can usually generate a snapshot proactively
  * - skipped: the test was skipped -> defer to other tests
  */
-export type FailureMode = "unknown" | "passed" | "task_failure" | "assertion_failure" | "skipped";
+export type FailureMode = 'unknown' | 'passed' | 'task_failure' | 'assertion_failure' | 'skipped';
 
 /**
  * Which OS the test was run on. Must be kept in sync with the matrix in nightly.yaml.
  */
 export enum TestOS {
-  LINUX = "ubuntu",
-  MAC_OS = "macos",
-  WINDOWS = "windows",
+  LINUX = 'ubuntu',
+  MAC_OS = 'macos',
+  WINDOWS = 'windows',
 }
 
 /**
@@ -154,7 +154,7 @@ export enum TestOS {
  * - skipped: all tests so far were skipped (overriden by a pass or failure).
  * - mismatch: "Latest" tests ran on different linter versions. Ultimately treated as a failure.
  */
-export type TestResultStatus = "passed" | "failed" | "skipped" | "mismatch";
+export type TestResultStatus = 'passed' | 'failed' | 'skipped' | 'mismatch';
 
 /**
  * A result from an individual test or multiple merged tests on a singular linter.
@@ -175,7 +175,7 @@ export interface TestResult {
  * Includes a map of linter/tool name to linter/tool test results.
  */
 export interface TestResultSummary {
-  os: TestOS | "composite";
+  os: TestOS | 'composite';
   testResults: Map<string, TestResult>;
 }
 

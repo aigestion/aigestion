@@ -5,14 +5,14 @@
  * 2️⃣ Sends a premium‑styled HTML email via SendGrid.
  * -------------------------------------------------
  */
-const {BigQuery} = require('@google-cloud/bigquery');
+const { BigQuery } = require('@google-cloud/bigquery');
 const sgMail = require('@sendgrid/mail');
 
 const bigquery = new BigQuery();
 const PROJECT_ID = process.env.GCP_PROJECT; // injected by Cloud Functions
 const DATASET_ID = 'billing_export';
-const TABLE_ID   = 'billing_data';
-const RECIPIENT   = 'noemisanalex@gmail.com'; // change if needed
+const TABLE_ID = 'billing_data';
+const RECIPIENT = 'noemisanalex@gmail.com'; // change if needed
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -21,19 +21,21 @@ function getPreviousWeekRange() {
   const now = new Date();
   // Find last Monday (UTC) relative to today
   const day = now.getUTCDay(); // 0=Sun … 6=Sat
-  const diffToMonday = (day + 6) % 7 + 7; // days back to previous Monday
+  const diffToMonday = ((day + 6) % 7) + 7; // days back to previous Monday
   const monday = new Date(now);
   monday.setUTCDate(now.getUTCDate() - diffToMonday);
-  monday.setUTCHours(0,0,0,0);
+  monday.setUTCHours(0, 0, 0, 0);
   const sunday = new Date(monday);
   sunday.setUTCDate(monday.getUTCDate() + 6);
-  sunday.setUTCHours(23,59,59,999);
-  return {start: monday.toISOString(), end: sunday.toISOString()};
+  sunday.setUTCHours(23, 59, 59, 999);
+  return { start: monday.toISOString(), end: sunday.toISOString() };
 }
 
 /** Build premium HTML email */
 function buildHtml(rows, total) {
-  const rowsHtml = rows.map(r => `<tr><td>${r.service}</td><td>$${Number(r.total_cost).toFixed(2)}</td></tr>`).join('');
+  const rowsHtml = rows
+    .map(r => `<tr><td>${r.service}</td><td>$${Number(r.total_cost).toFixed(2)}</td></tr>`)
+    .join('');
   return `
     <html>
       <head>
@@ -48,7 +50,7 @@ function buildHtml(rows, total) {
       </head>
       <body>
         <h1>📊 Weekly GCP Cost Summary (USD)</h1>
-        <p><strong>Period:</strong> ${rows[0]?.usageStartTime?.slice(0,10) || ''} → ${rows[0]?.usageEndTime?.slice(0,10) || ''}</p>
+        <p><strong>Period:</strong> ${rows[0]?.usageStartTime?.slice(0, 10) || ''} → ${rows[0]?.usageEndTime?.slice(0, 10) || ''}</p>
         <p><strong>Total Spend:</strong> $${total.toFixed(2)}</p>
         <table>
           <thead>
@@ -66,7 +68,7 @@ function buildHtml(rows, total) {
 /** Cloud Function entry point */
 exports.weeklyCostSummary = async (req, res) => {
   try {
-    const {start, end} = getPreviousWeekRange();
+    const { start, end } = getPreviousWeekRange();
     const query = `
       SELECT
         service.description AS service,
@@ -79,7 +81,7 @@ exports.weeklyCostSummary = async (req, res) => {
       ORDER BY total_cost DESC
       LIMIT 20`;
 
-    const options = {query, params: {start, end}, location: 'US'};
+    const options = { query, params: { start, end }, location: 'US' };
     const [rows] = await bigquery.query(options);
     const total = rows.reduce((sum, r) => sum + Number(r.total_cost), 0);
 

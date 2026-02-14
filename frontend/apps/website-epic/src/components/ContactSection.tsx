@@ -72,10 +72,22 @@ export const ContactSection: React.FC = () => {
               description="Establece el protocolo de conexión con el Nexus para integrar IA soberana en tu ecosistema."
               variant="glass"
               onSubmit={async data => {
-                console.log('Form submitted:', data);
-                // The organism handles loading and success states internally
-                // but we can trigger external effects here if needed
-                playSuccess();
+                console.log('Establishing connection...', data);
+                try {
+                  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/contact`, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'x-api-key': import.meta.env.VITE_API_KEY || '',
+                    },
+                    body: JSON.stringify(data),
+                  });
+                  if (!response.ok) throw new Error('Transmission failed');
+                  playSuccess();
+                } catch (error) {
+                  console.error('Matriz error:', error);
+                  throw error; // Let the form component handle the error state if it has one
+                }
               }}
             />
           </motion.div>

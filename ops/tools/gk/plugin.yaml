@@ -17,5 +17,5 @@ tools:
       known_good_version: 1.2.2
       environment:
         - name: PATH
-          list: ["${tool}/bin"]
+          list: ['${tool}/bin']
       shims: [gk]

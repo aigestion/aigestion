@@ -12,6 +12,16 @@ export interface SystemHealth {
   requestId: string;
 }
 
+export interface PartnerMetrics {
+  totalTokens: number;
+  totalCost: number;
+  totalPlatformCommission: number;
+  totalCreatorCommission: number;
+  userCount: number;
+  status: string;
+  timestamp: string;
+}
+
 export const api = {
   getSystemHealth: async (): Promise<SystemHealth> => {
     try {
@@ -34,6 +44,23 @@ export const api = {
       return await response.json();
     } catch (error) {
       console.error('Error fetching system diagnostics:', error);
+      throw error;
+    }
+  },
+  getPartnerMetrics: async (): Promise<PartnerMetrics> => {
+    try {
+      const token = localStorage.getItem('token'); // Get auth token if available
+      const response = await fetch(`${API_URL}/billing/metrics/partner`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching partner metrics:', error);
       throw error;
     }
   },

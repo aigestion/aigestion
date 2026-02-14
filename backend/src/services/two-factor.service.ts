@@ -5,6 +5,7 @@ import qrcode from 'qrcode';
 import { authenticator } from 'otplib';
 import { getRedisClient } from '../cache/redis';
 import { logger } from '../utils/logger';
+import { twilioService } from './twilio.service';
 
 interface TOTPSetup {
   secret: string;
@@ -447,25 +448,20 @@ export class TwoFactorService {
    */
   private async sendSMS(phoneNumber: string, code: string): Promise<boolean> {
     try {
-      // Integrate with your SMS service (Twilio, AWS SNS, etc.)
-      // For now, just log the code
-      logger.info('SMS code (for development):', { phoneNumber, code });
-
-      // Example with Twilio:
-      /*
-      const twilio = require('twilio');
-      const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
-      await client.messages.create({
-        body: `Your AIGestion verification code is: ${code}`,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: phoneNumber
-      });
-      */
-
-      return true;
+      const message = `Su código de verificación soberana para AIGestion es: ${code}. Válido por 5 minutos.`;
+      
+      const result = await twilioService.sendSMS(phoneNumber, message);
+      
+      if (result.sid) {
+        logger.info(
+          { phoneNumber, sid: result.sid },
+          '[TwoFactorService] MFA SMS dispatched via Twilio Hub',
+        );
+        return true;
+      }
+      return false;
     } catch (error) {
-      logger.error('Error sending SMS:', { phoneNumber, error });
+      logger.error({ phoneNumber, error }, '[TwoFactorService] Critical fault dispatching MFA SMS');
       return false;
     }
   }

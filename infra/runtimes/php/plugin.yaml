@@ -15,15 +15,15 @@ runtimes:
   definitions:
     - type: php
       system_version: required
-      version: ">=8.0.0"
+      version: '>=8.0.0'
       runtime_environment:
         - name: HOME
           value: ${env.HOME}
         - name: PATH
-          list: ["${env.PATH}"]
+          list: ['${env.PATH}']
       linter_environment:
         - name: PATH
-          list: ["${linter}/bin"]
+          list: ['${linter}/bin']
       version_commands:
         - run: php --version
           parse_regex: PHP ${short_semver}

@@ -30,7 +30,7 @@ runtimes:
         - name: HOME
           value: ${home}
         - name: PATH
-          list: ["${runtime}/bin"]
+          list: ['${runtime}/bin']
         - name: GOPRIVATE
           value: ${env.GOPRIVATE}
           optional: true
@@ -48,7 +48,7 @@ runtimes:
           optional: true
       linter_environment:
         - name: PATH
-          list: ["${linter}/bin"]
+          list: ['${linter}/bin']
         - name: GOPATH
           value: ${linter}
       known_good_version: 1.21.0

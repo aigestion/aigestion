@@ -118,7 +118,7 @@ export const Footer: React.FC = () => {
                           className="text-nexus-silver/30 hover:text-nexus-cyan transition-colors text-[10px] font-orbitron tracking-widest uppercase flex items-center gap-2 group"
                         >
                           <span className="w-0 h-px bg-nexus-cyan group-hover:w-4 transition-all duration-300" />
-                          Privacy Policy
+                          Política de Privacidad
                         </a>
                       </li>
                       <li>
@@ -127,7 +127,7 @@ export const Footer: React.FC = () => {
                           className="text-nexus-silver/30 hover:text-nexus-cyan transition-colors text-[10px] font-orbitron tracking-widest uppercase flex items-center gap-2 group"
                         >
                           <span className="w-0 h-px bg-nexus-cyan group-hover:w-4 transition-all duration-300" />
-                          Terms of Service
+                          Términos de Servicio
                         </a>
                       </li>
                     </>
@@ -142,7 +142,7 @@ export const Footer: React.FC = () => {
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
             <div className="text-[9px] font-orbitron tracking-[0.4em] text-nexus-silver/20 uppercase">
-              © {currentYear} SOVEREIGN NEXUS | ENTERPRISE INFRASTRUCTURE V2.1
+              © {currentYear} SOVEREIGN NEXUS | INFRAESTRUCTURA EMPRESARIAL V2.1
             </div>
             <div className="flex items-center gap-4 text-[8px] font-mono text-nexus-cyan/30">
               <span>

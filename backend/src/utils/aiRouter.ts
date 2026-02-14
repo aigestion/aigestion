@@ -61,8 +61,8 @@ export class AIModelRouter {
         return { provider: 'gemini', modelId: 'gemini-1.5-flash-8b' };
       case AIModelTier.STANDARD:
       default:
-        // Use Gemini 3.0 Flash for standard (Fastest/Balanced)
-        return { provider: 'gemini', modelId: 'gemini-3.0-flash' };
+        // Use Gemini 2.0 Flash for standard (Fastest/Balanced)
+        return { provider: 'gemini', modelId: 'gemini-2.0-flash' };
     }
   }
 }

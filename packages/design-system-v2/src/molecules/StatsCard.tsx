@@ -46,12 +46,15 @@ const StatsCard = ({
           <span className="text-sm font-medium text-gray-400 uppercase tracking-wider">
             {label}
           </span>
-          <h3 className="text-3xl font-bold text-white tabular-nums">
-            {value}
-          </h3>
+          <h3 className="text-3xl font-bold text-white tabular-nums">{value}</h3>
         </div>
         {icon && (
-          <div className={cn('p-3 rounded-xl transition-all duration-300 group-hover:scale-110', bgGlowMap[color])}>
+          <div
+            className={cn(
+              'p-3 rounded-xl transition-all duration-300 group-hover:scale-110',
+              bgGlowMap[color]
+            )}
+          >
             <div className={colorMap[color]}>{icon}</div>
           </div>
         )}
@@ -59,25 +62,25 @@ const StatsCard = ({
 
       <div className="flex items-center gap-2">
         {trend && (
-          <span className={cn(
-            'text-sm font-bold flex items-center',
-            trend.isUp ? 'text-[#10b981]' : 'text-red-500'
-          )}>
+          <span
+            className={cn(
+              'text-sm font-bold flex items-center',
+              trend.isUp ? 'text-[#10b981]' : 'text-red-500'
+            )}
+          >
             {trend.isUp ? '↑' : '↓'} {Math.abs(trend.value)}%
           </span>
         )}
-        {description && (
-          <span className="text-sm text-gray-500">
-            {description}
-          </span>
-        )}
+        {description && <span className="text-sm text-gray-500">{description}</span>}
       </div>
 
       {/* Decorative background glow */}
-      <div className={cn(
-        'absolute -bottom-8 -right-8 w-24 h-24 blur-[60px] opacity-20 rounded-full transition-all duration-500 group-hover:opacity-40',
-        color === 'primary' ? 'bg-[#8a2be2]' : 'bg-[#00d1ff]'
-      )} />
+      <div
+        className={cn(
+          'absolute -bottom-8 -right-8 w-24 h-24 blur-[60px] opacity-20 rounded-full transition-all duration-500 group-hover:opacity-40',
+          color === 'primary' ? 'bg-[#8a2be2]' : 'bg-[#00d1ff]'
+        )}
+      />
     </Card>
   );
 };

@@ -7,13 +7,14 @@ import {
   generateAuthenticationOptions,
   verifyAuthenticationResponse,
 } from '@simplewebauthn/server';
+import crypto from 'crypto';
 import { TYPES } from '../types';
 import { IUserRepository } from '../infrastructure/repository/UserRepository';
 import { logger } from '../utils/logger';
 import { config } from '../config';
 import { setCache, getCache } from '../cache/redis';
 
-const sovereignConfig = config as any; // Cast to bypass lint/sync issues with new properties
+const sovereignConfig = config as any; 
 
 @controller('/auth/webauthn')
 export class WebAuthnController {
@@ -22,7 +23,7 @@ export class WebAuthnController {
   @httpGet('/register-options')
   async getRegisterOptions(@request() req: Request, @response() res: Response) {
     try {
-      const user = await this.userRepository.findById(req.user?.id);
+      const user = await this.userRepository.findById((req as any).user?.id || '');
       if (!user) return res.status(404).json({ error: 'User not found' });
 
       const options = await generateRegistrationOptions({
@@ -37,9 +38,8 @@ export class WebAuthnController {
         },
       });
 
-      // Save challenge to Redis instead of session
       const challengeKey = `webauthn:challenge:${user.id}`;
-      await setCache(challengeKey, options.challenge, 300); // 5 minutes
+      await setCache(challengeKey, options.challenge, 300); 
 
       return res.json(options);
     } catch (error) {
@@ -52,7 +52,7 @@ export class WebAuthnController {
   async verifyRegistration(@request() req: Request, @response() res: Response) {
     try {
       const { body } = req;
-      const user = await this.userRepository.findById(req.user?.id);
+      const user = await this.userRepository.findById((req as any).user?.id || '');
       if (!user) return res.status(404).json({ error: 'User not found' });
 
       const challengeKey = `webauthn:challenge:${user.id}`;
@@ -70,14 +70,14 @@ export class WebAuthnController {
       });
 
       if (verification.verified && verification.registrationInfo) {
-        const { credentialPublicKey, credentialID, counter } = verification.registrationInfo;
+        const { credentialPublicKey, credentialID, counter } = (verification.registrationInfo as any);
 
-        const newAuthenticator = {
+        const newAuthenticator: any = {
           credentialID: Buffer.from(credentialID),
           credentialPublicKey: Buffer.from(credentialPublicKey),
           counter,
-          credentialDeviceType: verification.registrationInfo.credentialDeviceType,
-          credentialBackedUp: verification.registrationInfo.credentialBackedUp,
+          credentialDeviceType: (verification.registrationInfo as any).credentialDeviceType,
+          credentialBackedUp: (verification.registrationInfo as any).credentialBackedUp,
         };
 
         user!.authenticators.push(newAuthenticator);
@@ -96,13 +96,13 @@ export class WebAuthnController {
   @httpGet('/login-options')
   async getLoginOptions(@request() req: Request, @response() res: Response) {
     try {
-      const user = await this.userRepository.findById(req.user?.id);
+      const user = await this.userRepository.findById((req as any).user?.id || '');
 
       const options = await generateAuthenticationOptions({
         rpID: sovereignConfig.webauthn.rpID,
         allowCredentials: user?.authenticators.map(auth => ({
-          id: auth.credentialID,
-          type: 'public-key',
+          id: Buffer.from(auth.credentialID).toString('base64url'),
+          type: 'public-key' as const,
           transports: auth.transports as any,
         })),
         userVerification: 'preferred',
@@ -124,7 +124,7 @@ export class WebAuthnController {
   async verifyLogin(@request() req: Request, @response() res: Response) {
     try {
       const { body, user: sessionUser } = req;
-      const user = await this.userRepository.findById(sessionUser?.id || body.userId);
+      const user = await this.userRepository.findById((sessionUser as any)?.id || body.userId);
 
       if (!user || !user.authenticators || user.authenticators.length === 0) {
         return res.status(404).json({ error: 'User or authenticators not found' });
@@ -137,9 +137,8 @@ export class WebAuthnController {
         return res.status(400).json({ error: 'Challenge expired or not found' });
       }
 
-      // Find the authenticator used
       const authenticator = user.authenticators.find(
-        auth => Buffer.from(auth.credentialID).toString('base64url') === body.id
+        (auth: any) => Buffer.from(auth.credentialID).toString('base64url') === body.id
       );
 
       if (!authenticator) {
@@ -152,20 +151,17 @@ export class WebAuthnController {
         expectedOrigin: sovereignConfig.webauthn.origin,
         expectedRPID: sovereignConfig.webauthn.rpID,
         authenticator: {
-          credentialID: authenticator.credentialID,
-          credentialPublicKey: authenticator.credentialPublicKey,
+          credentialID: Buffer.from(authenticator.credentialID),
+          credentialPublicKey: Buffer.from(authenticator.credentialPublicKey),
           counter: authenticator.counter,
           transports: authenticator.transports as any,
         },
-      });
+      } as any);
 
       if (verification.verified) {
-        // Update counter
         authenticator.counter = verification.authenticationInfo.newCounter;
         await this.userRepository.update(user.id, { authenticators: user.authenticators });
 
-        // Logic for "Sovereign" session elevation
-        // In a real scenario, we might issue a special JWT or set a session flag
         return res.json({
           verified: true,
           sovereignToken: 'SOVEREIGN_' + Buffer.from(crypto.randomUUID()).toString('base64'),

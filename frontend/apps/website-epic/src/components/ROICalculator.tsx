@@ -32,7 +32,13 @@ export const ROICalculator: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-xs font-orbitron tracking-[0.2em] text-nexus-silver/40 uppercase">
                   <span>Facturación Mensual</span>
-                  <span className="text-white">${monthlyRevenue.toLocaleString()}</span>
+                  <span className="text-white">${monthlyRevenue.toLocaleString('es-ES')}</span>
+...
+                  ${totalImpact.toLocaleString('es-ES')}
+...
+                    (-${aiSavings.toLocaleString('es-ES')})
+...
+                    (+${efficiencyBoost.toLocaleString('es-ES')})
                 </div>
                 <input
                   type="range"

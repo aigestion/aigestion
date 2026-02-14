@@ -34,15 +34,15 @@ The **NEXUS V1 Task Management System** is an advanced, automated task managemen
 
 ### Key Capabilities
 
-| Capability | Description |
-|------------|------------|
-| **Task CRUD** | Create, read, update, delete, complete tasks with full metadata |
-| **Smart Filtering** | Filter by status, type, priority, assignee, tags, due date |
-| **Analytics** | Real-time metrics, velocity tracking, burndown analysis |
-| **Forecasting** | Predict completion dates, capacity planning, roadmap generation |
-| **Reporting** | Daily, weekly, monthly reports with actionable insights |
-| **Automation** | Auto-backup, GitHub sync, scheduled reports |
-| **Multi-Period Planning** | Sprint (1-2w), Quarter (3mo), Year (6-12mo) horizons |
+| Capability                | Description                                                     |
+| ------------------------- | --------------------------------------------------------------- |
+| **Task CRUD**             | Create, read, update, delete, complete tasks with full metadata |
+| **Smart Filtering**       | Filter by status, type, priority, assignee, tags, due date      |
+| **Analytics**             | Real-time metrics, velocity tracking, burndown analysis         |
+| **Forecasting**           | Predict completion dates, capacity planning, roadmap generation |
+| **Reporting**             | Daily, weekly, monthly reports with actionable insights         |
+| **Automation**            | Auto-backup, GitHub sync, scheduled reports                     |
+| **Multi-Period Planning** | Sprint (1-2w), Quarter (3mo), Year (6-12mo) horizons            |
 
 ---
 
@@ -139,16 +139,19 @@ pwsh task/scripts/task-cli.ps1
 ### 🗺️ Strategic Planning
 
 **Short-Term Sprint (1-2 weeks):**
+
 - Max 15 tasks per sprint
 - Focus on critical & high priority
 - Clear blockers and immediate issues
 
 **Medium-Term Quarter (3 months):**
+
 - Max 50 tasks per quarter
 - Execute high & medium priority
 - Major feature rollout
 
 **Long-Term Roadmap (6-12 months):**
+
 - Max 100 tasks per roadmap
 - Strategic initiatives
 - Capacity planning for 1 year horizon
@@ -191,6 +194,7 @@ task/
 ### Data Schema
 
 **Task Object:**
+
 ```json
 {
   "id": 1,
@@ -305,20 +309,24 @@ pwsh task-cli.ps1
 **Purpose:** Immediate execution and unblocking
 
 **Capacity:**
+
 - Max 15 tasks per sprint
 - Based on weekly velocity
 
 **Focus:**
+
 - Critical issues and blockers
 - High priority features
 - Dependencies for medium-term work
 
 **Planning Questions:**
+
 - What are the critical blockers?
 - Which high-priority items can we finish this sprint?
 - What needs to be done to unblock others?
 
 **Example:**
+
 ```
 Sprint 1 (Dec 7-20):
 ├─ Critical: Fix auth bug (blocks 3 features)
@@ -333,22 +341,26 @@ Sprint 1 (Dec 7-20):
 **Purpose:** Strategic execution and major milestones
 
 **Capacity:**
+
 - Max 50 tasks per quarter
 - ~4-5 sprints of work
 
 **Focus:**
+
 - All high priority items
 - Important medium priority
 - Major feature releases
 - Infrastructure improvements
 
 **Planning Questions:**
+
 - What are our major initiatives for this quarter?
 - Which high-priority items should be done?
 - What infrastructure work is needed?
 - What's the customer impact?
 
 **Example:**
+
 ```
 Q1 2026 (Jan-Mar):
 ├─ Feature: User authentication system
@@ -363,22 +375,26 @@ Q1 2026 (Jan-Mar):
 **Purpose:** Strategic direction and vision
 
 **Capacity:**
+
 - Max 100 tasks per year
 - 4 quarters of planning
 
 **Focus:**
+
 - Vision for the product
 - Major architectural changes
 - Platform expansion
 - Long-term sustainability
 
 **Planning Questions:**
+
 - What's our 1-year vision?
 - What big architectural changes are needed?
 - Which new platforms/integrations?
 - How do we scale?
 
 **Example:**
+
 ```
 2026 Roadmap:
 ├─ Q1: Authentication & User Management
@@ -393,13 +409,13 @@ Q1 2026 (Jan-Mar):
 
 ### Core Metrics
 
-| Metric | Definition | Good Range |
-|--------|-----------|-----------|
-| **Completion Rate** | % of total tasks completed | 75%+ |
-| **Velocity** | Tasks completed per week | 2-10 tasks/week |
-| **Health Score** | Overall system health (0-100) | 75+ |
-| **Cycle Time** | Days from start to completion | 3-14 days |
-| **Lead Time** | Days from creation to start | 1-7 days |
+| Metric              | Definition                    | Good Range      |
+| ------------------- | ----------------------------- | --------------- |
+| **Completion Rate** | % of total tasks completed    | 75%+            |
+| **Velocity**        | Tasks completed per week      | 2-10 tasks/week |
+| **Health Score**    | Overall system health (0-100) | 75+             |
+| **Cycle Time**      | Days from start to completion | 3-14 days       |
+| **Lead Time**       | Days from creation to start   | 1-7 days        |
 
 ### Health Score Calculation
 
@@ -415,6 +431,7 @@ Q1 2026 (Jan-Mar):
 **Formula:** Tasks/week × weeks in period = capacity
 
 **Examples:**
+
 - 5 tasks/week × 2 weeks = 10 task capacity (sprint)
 - 5 tasks/week × 13 weeks = 65 task capacity (quarter)
 - 5 tasks/week × 52 weeks = 260 task capacity (year)
@@ -478,6 +495,7 @@ Q1 2026 (Jan-Mar):
 **Issue:** Changes not persisting
 
 **Solution:**
+
 1. Check `task/data/tasks.json` exists
 2. Verify write permissions on `task/data/`
 3. Check disk space
@@ -492,6 +510,7 @@ Get-Item c:\Users\Alejandro\NEXUS V1\task\data\tasks.json
 **Issue:** Metrics seem wrong
 
 **Solution:**
+
 1. Verify task dates are in correct format (YYYY-MM-DD)
 2. Check status values are valid
 3. Run backup and restore if corrupted
@@ -502,6 +521,7 @@ Get-Item c:\Users\Alejandro\NEXUS V1\task\data\tasks.json
 **Issue:** Commands running slow
 
 **Solution:**
+
 1. Check task database size: `(Get-Item task/data/tasks.json).Length`
 2. Archive old completed tasks (v1.1 feature)
 3. Clear old backups: Keep only 5 recent
@@ -590,4 +610,3 @@ Created: December 7, 2025
 **Last Updated:** December 7, 2025
 **System Status:** ✅ Production Ready
 **Next Review:** January 7, 2026
-

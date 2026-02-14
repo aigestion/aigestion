@@ -7,18 +7,24 @@
 
 const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
 const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
-const { CallToolRequestSchema, ListToolsRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+} = require('@modelcontextprotocol/sdk/types.js');
 
 class MongoDBMCPServer {
   constructor() {
-    this.server = new Server({
-      name: 'mongodb',
-      version: '1.0.0',
-    }, {
-      capabilities: {
-        tools: {},
+    this.server = new Server(
+      {
+        name: 'mongodb',
+        version: '1.0.0',
       },
-    });
+      {
+        capabilities: {
+          tools: {},
+        },
+      }
+    );
 
     this.setupTools();
     this.setupErrorHandling();
@@ -38,10 +44,10 @@ class MongoDBMCPServer {
               query: { type: 'object', description: 'Query filter' },
               projection: { type: 'object', description: 'Fields to include/exclude' },
               limit: { type: 'number', description: 'Number of documents to return' },
-              sort: { type: 'object', description: 'Sort specification' }
+              sort: { type: 'object', description: 'Sort specification' },
             },
-            required: ['database', 'collection']
-          }
+            required: ['database', 'collection'],
+          },
         },
         {
           name: 'mongodb_insert_one',
@@ -51,10 +57,10 @@ class MongoDBMCPServer {
             properties: {
               database: { type: 'string', description: 'Database name' },
               collection: { type: 'string', description: 'Collection name' },
-              document: { type: 'object', description: 'Document to insert' }
+              document: { type: 'object', description: 'Document to insert' },
             },
-            required: ['database', 'collection', 'document']
-          }
+            required: ['database', 'collection', 'document'],
+          },
         },
         {
           name: 'mongodb_insert_many',
@@ -64,10 +70,14 @@ class MongoDBMCPServer {
             properties: {
               database: { type: 'string', description: 'Database name' },
               collection: { type: 'string', description: 'Collection name' },
-              documents: { type: 'array', items: { type: 'object' }, description: 'Documents to insert' }
+              documents: {
+                type: 'array',
+                items: { type: 'object' },
+                description: 'Documents to insert',
+              },
             },
-            required: ['database', 'collection', 'documents']
-          }
+            required: ['database', 'collection', 'documents'],
+          },
         },
         {
           name: 'mongodb_update_one',
@@ -79,10 +89,10 @@ class MongoDBMCPServer {
               collection: { type: 'string', description: 'Collection name' },
               filter: { type: 'object', description: 'Query filter' },
               update: { type: 'object', description: 'Update specification' },
-              upsert: { type: 'boolean', description: 'Insert if not found' }
+              upsert: { type: 'boolean', description: 'Insert if not found' },
             },
-            required: ['database', 'collection', 'filter', 'update']
-          }
+            required: ['database', 'collection', 'filter', 'update'],
+          },
         },
         {
           name: 'mongodb_update_many',
@@ -93,10 +103,10 @@ class MongoDBMCPServer {
               database: { type: 'string', description: 'Database name' },
               collection: { type: 'string', description: 'Collection name' },
               filter: { type: 'object', description: 'Query filter' },
-              update: { type: 'object', description: 'Update specification' }
+              update: { type: 'object', description: 'Update specification' },
             },
-            required: ['database', 'collection', 'filter', 'update']
-          }
+            required: ['database', 'collection', 'filter', 'update'],
+          },
         },
         {
           name: 'mongodb_delete_one',
@@ -106,10 +116,10 @@ class MongoDBMCPServer {
             properties: {
               database: { type: 'string', description: 'Database name' },
               collection: { type: 'string', description: 'Collection name' },
-              filter: { type: 'object', description: 'Query filter' }
+              filter: { type: 'object', description: 'Query filter' },
             },
-            required: ['database', 'collection', 'filter']
-          }
+            required: ['database', 'collection', 'filter'],
+          },
         },
         {
           name: 'mongodb_delete_many',
@@ -119,10 +129,10 @@ class MongoDBMCPServer {
             properties: {
               database: { type: 'string', description: 'Database name' },
               collection: { type: 'string', description: 'Collection name' },
-              filter: { type: 'object', description: 'Query filter' }
+              filter: { type: 'object', description: 'Query filter' },
             },
-            required: ['database', 'collection', 'filter']
-          }
+            required: ['database', 'collection', 'filter'],
+          },
         },
         {
           name: 'mongodb_aggregate',
@@ -132,10 +142,14 @@ class MongoDBMCPServer {
             properties: {
               database: { type: 'string', description: 'Database name' },
               collection: { type: 'string', description: 'Collection name' },
-              pipeline: { type: 'array', items: { type: 'object' }, description: 'Aggregation pipeline' }
+              pipeline: {
+                type: 'array',
+                items: { type: 'object' },
+                description: 'Aggregation pipeline',
+              },
             },
-            required: ['database', 'collection', 'pipeline']
-          }
+            required: ['database', 'collection', 'pipeline'],
+          },
         },
         {
           name: 'mongodb_create_index',
@@ -146,10 +160,10 @@ class MongoDBMCPServer {
               database: { type: 'string', description: 'Database name' },
               collection: { type: 'string', description: 'Collection name' },
               keys: { type: 'object', description: 'Index keys' },
-              options: { type: 'object', description: 'Index options' }
+              options: { type: 'object', description: 'Index options' },
             },
-            required: ['database', 'collection', 'keys']
-          }
+            required: ['database', 'collection', 'keys'],
+          },
         },
         {
           name: 'mongodb_list_collections',
@@ -157,10 +171,10 @@ class MongoDBMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              database: { type: 'string', description: 'Database name' }
+              database: { type: 'string', description: 'Database name' },
             },
-            required: ['database']
-          }
+            required: ['database'],
+          },
         },
         {
           name: 'mongodb_database_stats',
@@ -168,15 +182,15 @@ class MongoDBMCPServer {
           inputSchema: {
             type: 'object',
             properties: {
-              database: { type: 'string', description: 'Database name' }
+              database: { type: 'string', description: 'Database name' },
             },
-            required: ['database']
-          }
-        }
-      ]
+            required: ['database'],
+          },
+        },
+      ],
     }));
 
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    this.server.setRequestHandler(CallToolRequestSchema, async request => {
       const { name, arguments: args } = request.params;
 
       try {
@@ -208,10 +222,12 @@ class MongoDBMCPServer {
         }
       } catch (error) {
         return {
-          content: [{
-            type: 'text',
-            text: `Error: ${error.message}`
-          }]
+          content: [
+            {
+              type: 'text',
+              text: `Error: ${error.message}`,
+            },
+          ],
         };
       }
     });
@@ -219,127 +235,149 @@ class MongoDBMCPServer {
 
   async findDocuments(args) {
     const { database, collection, query, projection, limit, sort } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Find:\n\nDatabase: ${database}\nCollection: ${collection}\nQuery: ${JSON.stringify(query || {}, null, 2)}\nProjection: ${JSON.stringify(projection || {}, null, 2)}\nLimit: ${limit || 'No limit'}\nSort: ${JSON.stringify(sort || {}, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the find operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Find:\n\nDatabase: ${database}\nCollection: ${collection}\nQuery: ${JSON.stringify(query || {}, null, 2)}\nProjection: ${JSON.stringify(projection || {}, null, 2)}\nLimit: ${limit || 'No limit'}\nSort: ${JSON.stringify(sort || {}, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the find operation for execution.`,
+        },
+      ],
     };
   }
 
   async insertOne(args) {
     const { database, collection, document } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Insert One:\n\nDatabase: ${database}\nCollection: ${collection}\nDocument: ${JSON.stringify(document, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the insert operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Insert One:\n\nDatabase: ${database}\nCollection: ${collection}\nDocument: ${JSON.stringify(document, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the insert operation for execution.`,
+        },
+      ],
     };
   }
 
   async insertMany(args) {
     const { database, collection, documents } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Insert Many:\n\nDatabase: ${database}\nCollection: ${collection}\nDocuments: ${JSON.stringify(documents, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the insert many operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Insert Many:\n\nDatabase: ${database}\nCollection: ${collection}\nDocuments: ${JSON.stringify(documents, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the insert many operation for execution.`,
+        },
+      ],
     };
   }
 
   async updateOne(args) {
     const { database, collection, filter, update, upsert } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Update One:\n\nDatabase: ${database}\nCollection: ${collection}\nFilter: ${JSON.stringify(filter, null, 2)}\nUpdate: ${JSON.stringify(update, null, 2)}\nUpsert: ${upsert || false}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the update operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Update One:\n\nDatabase: ${database}\nCollection: ${collection}\nFilter: ${JSON.stringify(filter, null, 2)}\nUpdate: ${JSON.stringify(update, null, 2)}\nUpsert: ${upsert || false}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the update operation for execution.`,
+        },
+      ],
     };
   }
 
   async updateMany(args) {
     const { database, collection, filter, update } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Update Many:\n\nDatabase: ${database}\nCollection: ${collection}\nFilter: ${JSON.stringify(filter, null, 2)}\nUpdate: ${JSON.stringify(update, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the update many operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Update Many:\n\nDatabase: ${database}\nCollection: ${collection}\nFilter: ${JSON.stringify(filter, null, 2)}\nUpdate: ${JSON.stringify(update, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the update many operation for execution.`,
+        },
+      ],
     };
   }
 
   async deleteOne(args) {
     const { database, collection, filter } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Delete One:\n\nDatabase: ${database}\nCollection: ${collection}\nFilter: ${JSON.stringify(filter, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the delete operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Delete One:\n\nDatabase: ${database}\nCollection: ${collection}\nFilter: ${JSON.stringify(filter, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the delete operation for execution.`,
+        },
+      ],
     };
   }
 
   async deleteMany(args) {
     const { database, collection, filter } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Delete Many:\n\nDatabase: ${database}\nCollection: ${collection}\nFilter: ${JSON.stringify(filter, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the delete many operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Delete Many:\n\nDatabase: ${database}\nCollection: ${collection}\nFilter: ${JSON.stringify(filter, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the delete many operation for execution.`,
+        },
+      ],
     };
   }
 
   async aggregate(args) {
     const { database, collection, pipeline } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Aggregate:\n\nDatabase: ${database}\nCollection: ${collection}\nPipeline: ${JSON.stringify(pipeline, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the aggregation operation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Aggregate:\n\nDatabase: ${database}\nCollection: ${collection}\nPipeline: ${JSON.stringify(pipeline, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the aggregation operation for execution.`,
+        },
+      ],
     };
   }
 
   async createIndex(args) {
     const { database, collection, keys, options } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Create Index:\n\nDatabase: ${database}\nCollection: ${collection}\nKeys: ${JSON.stringify(keys, null, 2)}\nOptions: ${JSON.stringify(options || {}, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the index creation for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Create Index:\n\nDatabase: ${database}\nCollection: ${collection}\nKeys: ${JSON.stringify(keys, null, 2)}\nOptions: ${JSON.stringify(options || {}, null, 2)}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the index creation for execution.`,
+        },
+      ],
     };
   }
 
   async listCollections(args) {
     const { database } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB List Collections:\n\nDatabase: ${database}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the collection listing for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB List Collections:\n\nDatabase: ${database}\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the collection listing for execution.`,
+        },
+      ],
     };
   }
 
   async getDatabaseStats(args) {
     const { database } = args;
-    
+
     return {
-      content: [{
-        type: 'text',
-        text: `MongoDB Database Stats:\n\nDatabase: ${database}\n\nStats to retrieve:\n- Collections count\n- Documents count\n- Data size\n- Index size\n- Storage size\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the database stats retrieval for execution.`
-      }]
+      content: [
+        {
+          type: 'text',
+          text: `MongoDB Database Stats:\n\nDatabase: ${database}\n\nStats to retrieve:\n- Collections count\n- Documents count\n- Data size\n- Index size\n- Storage size\n\nNote: Actual MongoDB operations require MongoDB driver.\n\nThis prepares the database stats retrieval for execution.`,
+        },
+      ],
     };
   }
 
   setupErrorHandling() {
-    this.server.onerror = (error) => console.error('[MongoDB MCP Error]', error);
+    this.server.onerror = error => console.error('[MongoDB MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);

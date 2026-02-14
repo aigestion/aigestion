@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
 
 import { buildError } from '../common/response-builder';
@@ -8,7 +8,7 @@ import { InstagramService } from '../services/instagram.service';
 import { LinkedInService } from '../services/linkedin.service';
 import { TikTokService } from '../services/tiktok.service';
 import { XService } from '../services/x.service';
-import { TYPE_ID, TYPES } from '../types';
+import { TYPES } from '../types';
 
 const FB_API_URL = config.whatsapp.apiUrl;
 

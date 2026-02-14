@@ -32,6 +32,8 @@ import { SovereignHandshakeController } from '../controllers/SovereignHandshakeC
 import { SovereignBiometricsController } from '../controllers/SovereignBiometricsController';
 import { SentinelController } from '../controllers/SentinelController';
 import { SystemController } from '../controllers/system.controller';
+import { StripeWebhookController } from '../controllers/stripe.webhook.controller';
+import { ContactController } from '../controllers/contact.controller';
 
 // Services
 import { AIService } from '../services/ai.service';
@@ -115,6 +117,29 @@ import { DevicePostureService } from '../services/device-posture.service';
 import { SovereignHealingService } from '../services/SovereignHealingService';
 import { VoiceBiometricsService } from '../services/VoiceBiometricsService';
 import { SovereignSentinelService } from '../services/SovereignSentinelService';
+import { MemoryService } from '../services/memory.service';
+import { AuditService } from '../services/audit.service';
+import { NotebookInsightService } from '../services/google/notebook-insight.service';
+import { ColabService } from '../services/google/colab.service';
+import { MapsService } from '../services/google/maps.service';
+import { BigQueryService } from '../services/google/bigquery.service';
+import { CloudTasksService } from '../services/google/cloud-tasks.service';
+import { VideoIntelligenceService } from '../services/google/video-intelligence.service';
+import { NexusRadioService } from '../services/google/nexus-radio.service';
+import { QuantumSecurityService } from '../services/security/quantum-security.service';
+import { MastraService } from '../services/mastra.service';
+import { KeplerService } from '../services/google/kepler.service';
+import { SelfHealingService } from '../services/self-healing.service';
+import { DiscoveryService } from '../services/evolution/discovery.service';
+import { SandboxService } from '../services/evolution/sandbox.service';
+import { SanctuaryService } from '../services/evolution/sanctuary.service';
+import { EvolutionMetricsService } from '../services/evolution/evolution-metrics.service';
+import { ArbitrationService } from '../services/arbitration.service';
+import { GovernanceService } from '../services/GovernanceService';
+import { TreasuryService } from '../services/TreasuryService';
+import { TreasuryController } from '../controllers/treasury.controller';
+import { GovernanceController } from '../controllers/governance.controller';
+import { WisdomController } from '../controllers/wisdom.controller';
 
 // Infrastructure
 import { DockerService } from '../infrastructure/docker/DockerService';
@@ -157,6 +182,7 @@ if (!container.isBound(TelegramBotHandler))
   container.bind<TelegramBotHandler>(TelegramBotHandler).toSelf().inSingletonScope();
 if (!container.isBound(TelegramBotHandlerGodMode))
   container.bind<TelegramBotHandlerGodMode>(TelegramBotHandlerGodMode).toSelf().inSingletonScope();
+bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
 bind<DanielaAIService>(TYPES.DanielaAIService, DanielaAIService);
 if (!container.isBound(EconomyController))
   container.bind<EconomyController>(EconomyController).toSelf().inSingletonScope();
@@ -225,6 +251,8 @@ bind<UserService>(TYPES.UserService, UserService);
 bind<EmailService>(TYPES.EmailService, EmailService);
 bind<BackupService>(TYPES.BackupService, BackupService);
 bind<BackupSchedulerService>(TYPES.BackupSchedulerService, BackupSchedulerService);
+bind<MemoryService>(TYPES.MemoryService, MemoryService);
+bind<AuditService>(TYPES.AuditService, AuditService);
 
 // ========================================
 // EXTERNAL INTEGRATIONS
@@ -241,6 +269,36 @@ bind<RunwayService>(TYPES.RunwayService, RunwayService);
 bind<PayPalService>(TYPES.PaypalService, PayPalService);
 bind<FacebookService>(TYPES.FacebookService, FacebookService);
 bind<AIService>(TYPES.AIService, AIService);
+if (!container.isBound(ColabService))
+  container.bind<ColabService>(ColabService).toSelf().inSingletonScope();
+if (!container.isBound(NotebookInsightService))
+  container.bind<NotebookInsightService>(NotebookInsightService).toSelf().inSingletonScope();
+if (!container.isBound(MapsService))
+  container.bind<MapsService>(MapsService).toSelf().inSingletonScope();
+if (!container.isBound(BigQueryService))
+  container.bind<BigQueryService>(BigQueryService).toSelf().inSingletonScope();
+if (!container.isBound(CloudTasksService))
+  container.bind<CloudTasksService>(CloudTasksService).toSelf().inSingletonScope();
+if (!container.isBound(VideoIntelligenceService))
+  container.bind<VideoIntelligenceService>(VideoIntelligenceService).toSelf().inSingletonScope();
+if (!container.isBound(NexusRadioService))
+  container.bind<NexusRadioService>(NexusRadioService).toSelf().inSingletonScope();
+if (!container.isBound(QuantumSecurityService))
+  container.bind<QuantumSecurityService>(QuantumSecurityService).toSelf().inSingletonScope();
+if (!container.isBound(MastraService))
+  container.bind<MastraService>(MastraService).toSelf().inSingletonScope();
+if (!container.isBound(KeplerService))
+  container.bind<KeplerService>(KeplerService).toSelf().inSingletonScope();
+if (!container.isBound(SelfHealingService))
+  container.bind<SelfHealingService>(SelfHealingService).toSelf().inSingletonScope();
+if (!container.isBound(DiscoveryService))
+  container.bind<DiscoveryService>(DiscoveryService).toSelf().inSingletonScope();
+if (!container.isBound(SandboxService))
+  container.bind<SandboxService>(SandboxService).toSelf().inSingletonScope();
+if (!container.isBound(SanctuaryService))
+  container.bind<SanctuaryService>(SanctuaryService).toSelf().inSingletonScope();
+if (!container.isBound(EvolutionMetricsService))
+  container.bind<EvolutionMetricsService>(EvolutionMetricsService).toSelf().inSingletonScope();
 
 // ========================================
 // SPECIALIZED SERVICES
@@ -289,6 +347,10 @@ bind<VectorService>(TYPES.VectorService, VectorService);
 bind<VoiceService>(TYPES.VoiceService, VoiceService);
 bind<YoutubeTranscriptionQueue>(TYPES.YoutubeTranscriptionQueue, YoutubeTranscriptionQueue);
 bind<YoutubeTranscriptionService>(TYPES.YoutubeTranscriptionService, YoutubeTranscriptionService);
+bind<ArbitrationService>(TYPES.ArbitrationService, ArbitrationService);
+bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
+bind<TreasuryService>(TYPES.TreasuryService, TreasuryService);
+bind<NotebookInsightService>(TYPES.NotebookInsightService, NotebookInsightService);
 
 // ========================================
 // CONTROLLERS
@@ -314,5 +376,12 @@ bind<SovereignBiometricsController>(
 );
 bind<SentinelController>(TYPES.SentinelController, SentinelController);
 bind<SystemController>(TYPES.SystemController, SystemController);
+bind<StripeWebhookController>(TYPES.StripeWebhookController, StripeWebhookController);
+bind<ContactController>(TYPES.ContactController, ContactController);
+bind<WisdomController>(TYPES.WisdomController, WisdomController);
+bind<TreasuryController>(TYPES.TreasuryController, TreasuryController);
+bind<GovernanceController>(TYPES.GovernanceController, GovernanceController);
+bind<GovernanceService>(TYPES.GovernanceService, GovernanceService);
+bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
 
 export { container, TYPES };

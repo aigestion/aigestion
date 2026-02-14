@@ -20,7 +20,7 @@ export class DockerController {
   public async getContainerStats(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      const stats = await this.dockerService.getContainerStats(id);
+      const stats = await this.dockerService.getContainerStats(String(id));
       res.json(buildResponse({ data: stats }, 200, (req as any).requestId));
     } catch (error) {
       next(error);
@@ -30,7 +30,7 @@ export class DockerController {
   public async startContainer(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      await this.dockerService.startContainer(id);
+      await this.dockerService.startContainer(String(id));
       res.json(buildResponse({ message: `Container ${id} started` }, 200, (req as any).requestId));
     } catch (error) {
       next(error);
@@ -40,7 +40,7 @@ export class DockerController {
   public async stopContainer(req: Request, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
-      await this.dockerService.stopContainer(id);
+      await this.dockerService.stopContainer(String(id));
       res.json(buildResponse({ message: `Container ${id} stopped` }, 200, (req as any).requestId));
     } catch (error) {
       next(error);

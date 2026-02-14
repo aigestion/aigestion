@@ -38,5 +38,3 @@ data:
   # OpenTelemetry Configuration
   OTEL_SERVICE_NAME: 'NEXUS V1-backend'
   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://jaeger:4318/v1/traces'
-
-

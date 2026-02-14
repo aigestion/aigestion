@@ -40,7 +40,6 @@ linters/
   your input files and any special callbacks.
 - Inside of `test_data/`, provide at least one input file. **This file should be named
   `<name>.in.<extension>` to be automatically picked up by the testing framework.**
-
   - For linters, specify a sample input file (with an appropriate file extension). For reference,
     the tests will run the following command against your input file:
 

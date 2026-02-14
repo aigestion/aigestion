@@ -16,8 +16,8 @@ async function verifyIdempotency() {
     method: 'POST',
     path: '/test/route',
     headers: {
-      'idempotency-key': key
-    }
+      'idempotency-key': key,
+    },
   };
 
   let responseData: any = null;
@@ -35,7 +35,7 @@ async function verifyIdempotency() {
     json: (body: any) => {
       responseData = body;
       return res;
-    }
+    },
   };
 
   const next = () => {
@@ -58,14 +58,21 @@ async function verifyIdempotency() {
       if (name === 'X-Idempotency-Hit' && value === 'true') hitHeaderFound = true;
       console.log(`[Header] ${name}: ${value}`);
     },
-    status: (s: number) => { return res2; },
-    json: (body: any) => { responseData = body; return res2; }
+    status: (s: number) => {
+      return res2;
+    },
+    json: (body: any) => {
+      responseData = body;
+      return res2;
+    },
   };
 
   await idempotencyMiddleware(req, res2, () => console.log('ERROR: Logic should not run'));
 
   if (hitHeaderFound && responseData.timestamp === firstTimestamp) {
-    console.log(`   Result: IDEMPOTENCY HIT! Correct timestamp returned: ${responseData.timestamp}`);
+    console.log(
+      `   Result: IDEMPOTENCY HIT! Correct timestamp returned: ${responseData.timestamp}`
+    );
     console.log('   ✅ Verification SUCCESS');
   } else {
     console.log('   ❌ Verification FAILED');

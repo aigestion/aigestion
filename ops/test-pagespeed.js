@@ -24,7 +24,7 @@ async function runAudit() {
         url: TARGET_URL,
         key: API_KEY,
         category: ['performance', 'seo', 'accessibility', 'best-practices'],
-      }
+      },
     });
 
     const { categories } = response.data.lighthouseResult;
@@ -35,9 +35,11 @@ async function runAudit() {
     console.log(`♿ Accesibilidad: ${Math.round(categories.accessibility.score * 100)}`);
     console.log(`🛡️ Best Practices: ${Math.round(categories['best-practices'].score * 100)}`);
     console.log('------------------------------------\n');
-
   } catch (error) {
-    console.error('❌ Error al conectar con PageSpeed API:', error.response?.data?.error?.message || error.message);
+    console.error(
+      '❌ Error al conectar con PageSpeed API:',
+      error.response?.data?.error?.message || error.message
+    );
   }
 }
 

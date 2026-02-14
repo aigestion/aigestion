@@ -81,16 +81,29 @@ export class VertexAIService {
    * Generates embeddings for a given text using Vertex AI
    */
   async generateEmbeddings(text: string): Promise<number[]> {
-    if (!this.isInitialized || !this.vertexAI) {
-      logger.warn('Vertex AI not initialized, returning mock embedding');
-      return new Array(768).fill(0);
-    }
-
     try {
-      const location = process.env.GOOGLE_CLOUD_LOCATION || 'europe-west1';
-      const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID;
+      // Priority: Use Gemini API Key (Simplest, requires no GCP Service Account)
+      // This is the Sovereign/God Mode path for easy deployment
+      const geminiApiKey = process.env.GEMINI_API_KEY;
+      const isRedacted = geminiApiKey && (geminiApiKey.includes('REDACTED') || geminiApiKey.includes('MIGRATED'));
 
-      // Using vertexAI instance to get the embedding model
+      if (geminiApiKey && !isRedacted) {
+        const { GoogleGenerativeAI } = await import('@google/generative-ai');
+        const genAI = new GoogleGenerativeAI(geminiApiKey);
+        const model = genAI.getGenerativeModel({ model: 'text-embedding-004' });
+
+        const result = await model.embedContent(text);
+        return result.embedding.values;
+      }
+
+      // Legacy Vertex AI path (Service Account required)
+      if (!this.isInitialized || !this.vertexAI) {
+        logger.warn(
+          'Vertex AI not initialized and GEMINI_API_KEY missing. Returning empty embedding.',
+        );
+        return new Array(768).fill(0);
+      }
+
       const model = 'text-embedding-004';
       const result = await this.vertexAI.getGenerativeModel({ model }).embedContent({
         content: { role: 'user', parts: [{ text }] },
@@ -99,8 +112,56 @@ export class VertexAIService {
       const embedding = result.embedding;
       return embedding.values || [];
     } catch (error) {
-      logger.error('Error generating embeddings with Vertex AI', error);
+      logger.error('Error generating embeddings with Vertex/Gemini', error);
       return [];
+    }
+  }
+
+  /**
+   * Generates embeddings for a batch of multiple texts.
+   * Optimizes performance by using parallel processing and batch endpoints when available.
+   */
+  async generateEmbeddingsBatch(texts: string[]): Promise<number[][]> {
+    if (texts.length === 0) return [];
+
+    try {
+      const geminiApiKey = process.env.GEMINI_API_KEY;
+      const isRedacted = geminiApiKey && (geminiApiKey.includes('REDACTED') || geminiApiKey.includes('MIGRATED'));
+
+      // Path A: Gemini API Batching
+      if (geminiApiKey && !isRedacted) {
+        const { GoogleGenerativeAI } = await import('@google/generative-ai');
+        const genAI = new GoogleGenerativeAI(geminiApiKey);
+        const model = genAI.getGenerativeModel({ model: 'text-embedding-004' });
+
+        // Gemini SDK supports batch embed natively
+        const result = await model.batchEmbedContents({
+          requests: texts.map(text => ({
+            content: { role: 'user', parts: [{ text }] },
+          })),
+        });
+
+        return result.embeddings.map(e => e.values);
+      }
+
+      // Path B: Vertex AI / Legacy Fallback
+      // Process in smaller batches of 10 to avoid payload limits/timeouts
+      const results: number[][] = [];
+      const batchSize = 10;
+      
+      for (let i = 0; i < texts.length; i += batchSize) {
+        const chunk = texts.slice(i, i + batchSize);
+        const chunkResults = await Promise.all(
+          chunk.map(text => this.generateEmbeddings(text))
+        );
+        results.push(...chunkResults);
+      }
+      
+      return results;
+    } catch (error) {
+      logger.error('Error in generateEmbeddingsBatch', error);
+      // Return empty embeddings as fallback to prevent total failure
+      return texts.map(() => []);
     }
   }
 }
