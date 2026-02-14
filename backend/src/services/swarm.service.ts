@@ -1,15 +1,15 @@
 import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
-import { AIService } from './ai.service'; // Assuming these exist
+import { AIService } from './ai.service';
 import { BrowserlessService } from './browserless.service';
 import { EconomyService } from './economy.service';
-import { BigQueryService } from './bigquery.service';
+import { BigQueryService } from './google/bigquery.service';
 import { MemoryService } from './memory.service';
-import { DiscoveryService } from './discovery.service';
-import { SandboxService } from './sandbox.service';
+import { DiscoveryService } from './evolution/discovery.service';
+import { SandboxService } from './evolution/sandbox.service';
 import { ArbitrationService } from './arbitration.service';
-import { NotebookInsightService } from './notebook-insight.service';
-import { TreasuryService } from './treasury.service';
+import { NotebookInsightService } from './google/notebook-insight.service';
+import { TreasuryService } from './TreasuryService';
 import { DeFiStrategistService } from './defi-strategist.service';
 import { JulesGem } from './gems/JulesGem';
 import { logger } from '../utils/logger';

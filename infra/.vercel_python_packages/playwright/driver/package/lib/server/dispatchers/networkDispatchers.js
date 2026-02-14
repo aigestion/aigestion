@@ -1,36 +1,38 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var networkDispatchers_exports = {};
 __export(networkDispatchers_exports, {
   APIRequestContextDispatcher: () => APIRequestContextDispatcher,
   RequestDispatcher: () => RequestDispatcher,
   ResponseDispatcher: () => ResponseDispatcher,
   RouteDispatcher: () => RouteDispatcher,
-  WebSocketDispatcher: () => WebSocketDispatcher
+  WebSocketDispatcher: () => WebSocketDispatcher,
 });
 module.exports = __toCommonJS(networkDispatchers_exports);
-var import_network = require("../network");
-var import_dispatcher = require("./dispatcher");
-var import_frameDispatcher = require("./frameDispatcher");
-var import_pageDispatcher = require("./pageDispatcher");
-var import_tracingDispatcher = require("./tracingDispatcher");
-var import_network2 = require("../network");
+var import_network = require('../network');
+var import_dispatcher = require('./dispatcher');
+var import_frameDispatcher = require('./frameDispatcher');
+var import_pageDispatcher = require('./pageDispatcher');
+var import_tracingDispatcher = require('./tracingDispatcher');
+var import_network2 = require('../network');
 class RequestDispatcher extends import_dispatcher.Dispatcher {
   static from(scope, request) {
     const result = scope.connection.existingDispatcher(request);
@@ -45,9 +47,12 @@ class RequestDispatcher extends import_dispatcher.Dispatcher {
     const page = request.frame()?._page;
     const pageDispatcher = page ? scope.connection.existingDispatcher(page) : null;
     const frameDispatcher = import_frameDispatcher.FrameDispatcher.fromNullable(scope, frame);
-    super(pageDispatcher || frameDispatcher || scope, request, "Request", {
+    super(pageDispatcher || frameDispatcher || scope, request, 'Request', {
       frame: frameDispatcher,
-      serviceWorker: import_pageDispatcher.WorkerDispatcher.fromNullable(scope, request.serviceWorker()),
+      serviceWorker: import_pageDispatcher.WorkerDispatcher.fromNullable(
+        scope,
+        request.serviceWorker()
+      ),
       url: request.url(),
       resourceType: request.resourceType(),
       method: request.method(),
@@ -55,22 +60,29 @@ class RequestDispatcher extends import_dispatcher.Dispatcher {
       headers: request.headers(),
       isNavigationRequest: request.isNavigationRequest(),
       redirectedFrom: RequestDispatcher.fromNullable(scope, request.redirectedFrom()),
-      hasResponse: !!request._existingResponse()
+      hasResponse: !!request._existingResponse(),
     });
     this._type_Request = true;
     this._browserContextDispatcher = scope;
-    this.addObjectListener(import_network2.Request.Events.Response, () => this._dispatchEvent("response", {}));
+    this.addObjectListener(import_network2.Request.Events.Response, () =>
+      this._dispatchEvent('response', {})
+    );
   }
   async rawRequestHeaders(params, progress) {
     return { headers: await progress.race(this._object.rawRequestHeaders()) };
   }
   async response(params, progress) {
-    return { response: ResponseDispatcher.fromNullable(this._browserContextDispatcher, await progress.race(this._object.response())) };
+    return {
+      response: ResponseDispatcher.fromNullable(
+        this._browserContextDispatcher,
+        await progress.race(this._object.response())
+      ),
+    };
   }
 }
 class ResponseDispatcher extends import_dispatcher.Dispatcher {
   constructor(scope, response) {
-    super(scope, response, "Response", {
+    super(scope, response, 'Response', {
       // TODO: responses in popups can point to non-reported requests.
       request: scope,
       url: response.url(),
@@ -78,7 +90,7 @@ class ResponseDispatcher extends import_dispatcher.Dispatcher {
       statusText: response.statusText(),
       headers: response.headers(),
       timing: response.timing(),
-      fromServiceWorker: response.fromServiceWorker()
+      fromServiceWorker: response.fromServiceWorker(),
     });
     this._type_Response = true;
   }
@@ -94,10 +106,10 @@ class ResponseDispatcher extends import_dispatcher.Dispatcher {
     return { binary: await progress.race(this._object.body()) };
   }
   async securityDetails(params, progress) {
-    return { value: await progress.race(this._object.securityDetails()) || void 0 };
+    return { value: (await progress.race(this._object.securityDetails())) || void 0 };
   }
   async serverAddr(params, progress) {
-    return { value: await progress.race(this._object.serverAddr()) || void 0 };
+    return { value: (await progress.race(this._object.serverAddr())) || void 0 };
   }
   async rawResponseHeaders(params, progress) {
     return { headers: await progress.race(this._object.rawResponseHeaders()) };
@@ -108,16 +120,15 @@ class ResponseDispatcher extends import_dispatcher.Dispatcher {
 }
 class RouteDispatcher extends import_dispatcher.Dispatcher {
   constructor(scope, route) {
-    super(scope, route, "Route", {
+    super(scope, route, 'Route', {
       // Context route can point to a non-reported request, so we send the request in the initializer.
-      request: scope
+      request: scope,
     });
     this._type_Route = true;
     this._handled = false;
   }
   _checkNotHandled() {
-    if (this._handled)
-      throw new Error("Route is already handled!");
+    if (this._handled) throw new Error('Route is already handled!');
     this._handled = true;
   }
   async continue(params, progress) {
@@ -127,7 +138,7 @@ class RouteDispatcher extends import_dispatcher.Dispatcher {
       method: params.method,
       headers: params.headers,
       postData: params.postData,
-      isFallback: params.isFallback
+      isFallback: params.isFallback,
     });
   }
   async fulfill(params, progress) {
@@ -136,7 +147,7 @@ class RouteDispatcher extends import_dispatcher.Dispatcher {
   }
   async abort(params, progress) {
     this._checkNotHandled();
-    await this._object.abort(params.errorCode || "failed");
+    await this._object.abort(params.errorCode || 'failed');
   }
   async redirectNavigationRequest(params, progress) {
     this._checkNotHandled();
@@ -145,22 +156,30 @@ class RouteDispatcher extends import_dispatcher.Dispatcher {
 }
 class WebSocketDispatcher extends import_dispatcher.Dispatcher {
   constructor(scope, webSocket) {
-    super(scope, webSocket, "WebSocket", {
-      url: webSocket.url()
+    super(scope, webSocket, 'WebSocket', {
+      url: webSocket.url(),
     });
     this._type_EventTarget = true;
     this._type_WebSocket = true;
-    this.addObjectListener(import_network.WebSocket.Events.FrameSent, (event) => this._dispatchEvent("frameSent", event));
-    this.addObjectListener(import_network.WebSocket.Events.FrameReceived, (event) => this._dispatchEvent("frameReceived", event));
-    this.addObjectListener(import_network.WebSocket.Events.SocketError, (error) => this._dispatchEvent("socketError", { error }));
-    this.addObjectListener(import_network.WebSocket.Events.Close, () => this._dispatchEvent("close", {}));
+    this.addObjectListener(import_network.WebSocket.Events.FrameSent, event =>
+      this._dispatchEvent('frameSent', event)
+    );
+    this.addObjectListener(import_network.WebSocket.Events.FrameReceived, event =>
+      this._dispatchEvent('frameReceived', event)
+    );
+    this.addObjectListener(import_network.WebSocket.Events.SocketError, error =>
+      this._dispatchEvent('socketError', { error })
+    );
+    this.addObjectListener(import_network.WebSocket.Events.Close, () =>
+      this._dispatchEvent('close', {})
+    );
   }
 }
 class APIRequestContextDispatcher extends import_dispatcher.Dispatcher {
   constructor(parentScope, request) {
     const tracing = import_tracingDispatcher.TracingDispatcher.from(parentScope, request.tracing());
-    super(parentScope, request, "APIRequestContext", {
-      tracing
+    super(parentScope, request, 'APIRequestContext', {
+      tracing,
     });
     this._type_APIRequestContext = true;
     this.adopt(tracing);
@@ -188,8 +207,8 @@ class APIRequestContextDispatcher extends import_dispatcher.Dispatcher {
         status: fetchResponse.status,
         statusText: fetchResponse.statusText,
         headers: fetchResponse.headers,
-        fetchUid: fetchResponse.fetchUid
-      }
+        fetchUid: fetchResponse.fetchUid,
+      },
     };
   }
   async fetchResponseBody(params, progress) {
@@ -204,10 +223,11 @@ class APIRequestContextDispatcher extends import_dispatcher.Dispatcher {
   }
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  APIRequestContextDispatcher,
-  RequestDispatcher,
-  ResponseDispatcher,
-  RouteDispatcher,
-  WebSocketDispatcher
-});
+0 &&
+  (module.exports = {
+    APIRequestContextDispatcher,
+    RequestDispatcher,
+    ResponseDispatcher,
+    RouteDispatcher,
+    WebSocketDispatcher,
+  });

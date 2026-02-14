@@ -1,89 +1,97 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var bidiDeserializer_exports = {};
 __export(bidiDeserializer_exports, {
-  deserializeBidiValue: () => deserializeBidiValue
+  deserializeBidiValue: () => deserializeBidiValue,
 });
 module.exports = __toCommonJS(bidiDeserializer_exports);
-var import_javascript = require("../javascript");
+var import_javascript = require('../javascript');
 function deserializeBidiValue(result, internalIdMap = /* @__PURE__ */ new Map()) {
   switch (result.type) {
-    case "undefined":
+    case 'undefined':
       return void 0;
-    case "null":
+    case 'null':
       return null;
-    case "number":
-      return typeof result.value === "number" ? result.value : (0, import_javascript.parseUnserializableValue)(result.value);
-    case "boolean":
+    case 'number':
+      return typeof result.value === 'number'
+        ? result.value
+        : (0, import_javascript.parseUnserializableValue)(result.value);
+    case 'boolean':
       return Boolean(result.value);
-    case "string":
+    case 'string':
       return result.value;
-    case "bigint":
+    case 'bigint':
       return BigInt(result.value);
-    case "array":
+    case 'array':
       return deserializeBidiList(result, internalIdMap);
-    case "arraybuffer":
+    case 'arraybuffer':
       return getValue(result, internalIdMap, () => ({}));
-    case "date":
+    case 'date':
       return getValue(result, internalIdMap, () => new Date(result.value));
-    case "error":
+    case 'error':
       return getValue(result, internalIdMap, () => {
         const error = new Error();
-        error.stack = "";
+        error.stack = '';
         return error;
       });
-    case "function":
+    case 'function':
       return void 0;
-    case "generator":
+    case 'generator':
       return getValue(result, internalIdMap, () => ({}));
-    case "htmlcollection":
+    case 'htmlcollection':
       return { ...deserializeBidiList(result, internalIdMap) };
-    case "map":
+    case 'map':
       return getValue(result, internalIdMap, () => ({}));
-    case "node":
-      return "ref: <Node>";
-    case "nodelist":
+    case 'node':
+      return 'ref: <Node>';
+    case 'nodelist':
       return { ...deserializeBidiList(result, internalIdMap) };
-    case "object":
+    case 'object':
       return deserializeBidiMapping(result, internalIdMap);
-    case "promise":
+    case 'promise':
       return getValue(result, internalIdMap, () => ({}));
-    case "proxy":
+    case 'proxy':
       return getValue(result, internalIdMap, () => ({}));
-    case "regexp":
-      return getValue(result, internalIdMap, () => new RegExp(result.value.pattern, result.value.flags));
-    case "set":
+    case 'regexp':
+      return getValue(
+        result,
+        internalIdMap,
+        () => new RegExp(result.value.pattern, result.value.flags)
+      );
+    case 'set':
       return getValue(result, internalIdMap, () => ({}));
-    case "symbol":
+    case 'symbol':
       return void 0;
-    case "typedarray":
+    case 'typedarray':
       return void 0;
-    case "weakmap":
+    case 'weakmap':
       return getValue(result, internalIdMap, () => ({}));
-    case "weakset":
+    case 'weakset':
       return getValue(result, internalIdMap, () => ({}));
-    case "window":
-      return "ref: <Window>";
+    case 'window':
+      return 'ref: <Window>';
   }
 }
 function getValue(bidiValue, internalIdMap, defaultValue) {
-  if ("internalId" in bidiValue && bidiValue.internalId) {
+  if ('internalId' in bidiValue && bidiValue.internalId) {
     if (internalIdMap.has(bidiValue.internalId)) {
       return internalIdMap.get(bidiValue.internalId);
     } else {
@@ -97,20 +105,23 @@ function getValue(bidiValue, internalIdMap, defaultValue) {
 }
 function deserializeBidiList(bidiValue, internalIdMap) {
   const result = getValue(bidiValue, internalIdMap, () => []);
-  for (const val of bidiValue.value || [])
-    result.push(deserializeBidiValue(val, internalIdMap));
+  for (const val of bidiValue.value || []) result.push(deserializeBidiValue(val, internalIdMap));
   return result;
 }
 function deserializeBidiMapping(bidiValue, internalIdMap) {
   const result = getValue(bidiValue, internalIdMap, () => ({}));
   for (const [serializedKey, serializedValue] of bidiValue.value || []) {
-    const key = typeof serializedKey === "string" ? serializedKey : deserializeBidiValue(serializedKey, internalIdMap);
+    const key =
+      typeof serializedKey === 'string'
+        ? serializedKey
+        : deserializeBidiValue(serializedKey, internalIdMap);
     const value = deserializeBidiValue(serializedValue, internalIdMap);
     result[key] = value;
   }
   return result;
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  deserializeBidiValue
-});
+0 &&
+  (module.exports = {
+    deserializeBidiValue,
+  });

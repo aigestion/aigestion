@@ -1,35 +1,37 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var locator_exports = {};
 __export(locator_exports, {
   FrameLocator: () => FrameLocator,
   Locator: () => Locator,
   setTestIdAttribute: () => setTestIdAttribute,
-  testIdAttributeName: () => testIdAttributeName
+  testIdAttributeName: () => testIdAttributeName,
 });
 module.exports = __toCommonJS(locator_exports);
-var import_elementHandle = require("./elementHandle");
-var import_locatorGenerators = require("../utils/isomorphic/locatorGenerators");
-var import_locatorUtils = require("../utils/isomorphic/locatorUtils");
-var import_stringUtils = require("../utils/isomorphic/stringUtils");
-var import_rtti = require("../utils/isomorphic/rtti");
-var import_time = require("../utils/isomorphic/time");
+var import_elementHandle = require('./elementHandle');
+var import_locatorGenerators = require('../utils/isomorphic/locatorGenerators');
+var import_locatorUtils = require('../utils/isomorphic/locatorUtils');
+var import_stringUtils = require('../utils/isomorphic/stringUtils');
+var import_rtti = require('../utils/isomorphic/rtti');
+var import_time = require('../utils/isomorphic/time');
 class Locator {
   constructor(frame, selector, options) {
     this._frame = frame;
@@ -51,24 +53,31 @@ class Locator {
       this._selector += ` >> internal:has-not=` + JSON.stringify(locator._selector);
     }
     if (options?.visible !== void 0)
-      this._selector += ` >> visible=${options.visible ? "true" : "false"}`;
+      this._selector += ` >> visible=${options.visible ? 'true' : 'false'}`;
     if (this._frame._platform.inspectCustom)
       this[this._frame._platform.inspectCustom] = () => this._inspect();
   }
   async _withElement(task, options) {
     const timeout = this._frame._timeout({ timeout: options.timeout });
     const deadline = timeout ? (0, import_time.monotonicTime)() + timeout : 0;
-    return await this._frame._wrapApiCall(async () => {
-      const result = await this._frame._channel.waitForSelector({ selector: this._selector, strict: true, state: "attached", timeout });
-      const handle = import_elementHandle.ElementHandle.fromNullable(result.element);
-      if (!handle)
-        throw new Error(`Could not resolve ${this._selector} to DOM Element`);
-      try {
-        return await task(handle, deadline ? deadline - (0, import_time.monotonicTime)() : 0);
-      } finally {
-        await handle.dispose();
-      }
-    }, { title: options.title, internal: options.internal });
+    return await this._frame._wrapApiCall(
+      async () => {
+        const result = await this._frame._channel.waitForSelector({
+          selector: this._selector,
+          strict: true,
+          state: 'attached',
+          timeout,
+        });
+        const handle = import_elementHandle.ElementHandle.fromNullable(result.element);
+        if (!handle) throw new Error(`Could not resolve ${this._selector} to DOM Element`);
+        try {
+          return await task(handle, deadline ? deadline - (0, import_time.monotonicTime)() : 0);
+        } finally {
+          await handle.dispose();
+        }
+      },
+      { title: options.title, internal: options.internal }
+    );
   }
   _equals(locator) {
     return this._frame === locator._frame && this._selector === locator._selector;
@@ -77,7 +86,10 @@ class Locator {
     return this._frame.page();
   }
   async boundingBox(options) {
-    return await this._withElement((h) => h.boundingBox(), { title: "Bounding box", timeout: options?.timeout });
+    return await this._withElement(h => h.boundingBox(), {
+      title: 'Bounding box',
+      timeout: options?.timeout,
+    });
   }
   async check(options = {}) {
     return await this._frame.check(this._selector, { strict: true, ...options });
@@ -89,31 +101,43 @@ class Locator {
     await this._frame.dblclick(this._selector, { strict: true, ...options });
   }
   async dispatchEvent(type, eventInit = {}, options) {
-    return await this._frame.dispatchEvent(this._selector, type, eventInit, { strict: true, ...options });
+    return await this._frame.dispatchEvent(this._selector, type, eventInit, {
+      strict: true,
+      ...options,
+    });
   }
   async dragTo(target, options = {}) {
     return await this._frame.dragAndDrop(this._selector, target._selector, {
       strict: true,
-      ...options
+      ...options,
     });
   }
   async evaluate(pageFunction, arg, options) {
-    return await this._withElement((h) => h.evaluate(pageFunction, arg), { title: "Evaluate", timeout: options?.timeout });
+    return await this._withElement(h => h.evaluate(pageFunction, arg), {
+      title: 'Evaluate',
+      timeout: options?.timeout,
+    });
   }
   async _evaluateFunction(functionDeclaration, options) {
-    return await this._withElement((h) => h._evaluateFunction(functionDeclaration), { title: "Evaluate", timeout: options?.timeout });
+    return await this._withElement(h => h._evaluateFunction(functionDeclaration), {
+      title: 'Evaluate',
+      timeout: options?.timeout,
+    });
   }
   async evaluateAll(pageFunction, arg) {
     return await this._frame.$$eval(this._selector, pageFunction, arg);
   }
   async evaluateHandle(pageFunction, arg, options) {
-    return await this._withElement((h) => h.evaluateHandle(pageFunction, arg), { title: "Evaluate", timeout: options?.timeout });
+    return await this._withElement(h => h.evaluateHandle(pageFunction, arg), {
+      title: 'Evaluate',
+      timeout: options?.timeout,
+    });
   }
   async fill(value, options = {}) {
     return await this._frame.fill(this._selector, value, { strict: true, ...options });
   }
   async clear(options = {}) {
-    await this._frame._wrapApiCall(() => this.fill("", options), { title: "Clear" });
+    await this._frame._wrapApiCall(() => this.fill('', options), { title: 'Clear' });
   }
   async _highlight() {
     return await this._frame._highlight(this._selector);
@@ -123,13 +147,19 @@ class Locator {
   }
   locator(selectorOrLocator, options) {
     if ((0, import_rtti.isString)(selectorOrLocator))
-      return new Locator(this._frame, this._selector + " >> " + selectorOrLocator, options);
+      return new Locator(this._frame, this._selector + ' >> ' + selectorOrLocator, options);
     if (selectorOrLocator._frame !== this._frame)
       throw new Error(`Locators must belong to the same frame.`);
-    return new Locator(this._frame, this._selector + " >> internal:chain=" + JSON.stringify(selectorOrLocator._selector), options);
+    return new Locator(
+      this._frame,
+      this._selector + ' >> internal:chain=' + JSON.stringify(selectorOrLocator._selector),
+      options
+    );
   }
   getByTestId(testId) {
-    return this.locator((0, import_locatorUtils.getByTestIdSelector)(testIdAttributeName(), testId));
+    return this.locator(
+      (0, import_locatorUtils.getByTestIdSelector)(testIdAttributeName(), testId)
+    );
   }
   getByAltText(text, options) {
     return this.locator((0, import_locatorUtils.getByAltTextSelector)(text, options));
@@ -150,13 +180,17 @@ class Locator {
     return this.locator((0, import_locatorUtils.getByRoleSelector)(role, options));
   }
   frameLocator(selector) {
-    return new FrameLocator(this._frame, this._selector + " >> " + selector);
+    return new FrameLocator(this._frame, this._selector + ' >> ' + selector);
   }
   filter(options) {
     return new Locator(this._frame, this._selector, options);
   }
   async elementHandle(options) {
-    return await this._frame.waitForSelector(this._selector, { strict: true, state: "attached", ...options });
+    return await this._frame.waitForSelector(this._selector, {
+      strict: true,
+      state: 'attached',
+      ...options,
+    });
   }
   async elementHandles() {
     return await this._frame.$$(this._selector);
@@ -165,13 +199,16 @@ class Locator {
     return new FrameLocator(this._frame, this._selector);
   }
   describe(description) {
-    return new Locator(this._frame, this._selector + " >> internal:describe=" + JSON.stringify(description));
+    return new Locator(
+      this._frame,
+      this._selector + ' >> internal:describe=' + JSON.stringify(description)
+    );
   }
   description() {
     return (0, import_locatorGenerators.locatorCustomDescription)(this._selector) || null;
   }
   first() {
-    return new Locator(this._frame, this._selector + " >> nth=0");
+    return new Locator(this._frame, this._selector + ' >> nth=0');
   }
   last() {
     return new Locator(this._frame, this._selector + ` >> nth=-1`);
@@ -180,20 +217,29 @@ class Locator {
     return new Locator(this._frame, this._selector + ` >> nth=${index}`);
   }
   and(locator) {
-    if (locator._frame !== this._frame)
-      throw new Error(`Locators must belong to the same frame.`);
-    return new Locator(this._frame, this._selector + ` >> internal:and=` + JSON.stringify(locator._selector));
+    if (locator._frame !== this._frame) throw new Error(`Locators must belong to the same frame.`);
+    return new Locator(
+      this._frame,
+      this._selector + ` >> internal:and=` + JSON.stringify(locator._selector)
+    );
   }
   or(locator) {
-    if (locator._frame !== this._frame)
-      throw new Error(`Locators must belong to the same frame.`);
-    return new Locator(this._frame, this._selector + ` >> internal:or=` + JSON.stringify(locator._selector));
+    if (locator._frame !== this._frame) throw new Error(`Locators must belong to the same frame.`);
+    return new Locator(
+      this._frame,
+      this._selector + ` >> internal:or=` + JSON.stringify(locator._selector)
+    );
   }
   async focus(options) {
     return await this._frame.focus(this._selector, { strict: true, ...options });
   }
   async blur(options) {
-    await this._frame._channel.blur({ selector: this._selector, strict: true, ...options, timeout: this._frame._timeout(options) });
+    await this._frame._channel.blur({
+      selector: this._selector,
+      strict: true,
+      ...options,
+      timeout: this._frame._timeout(options),
+    });
   }
   // options are only here for testing
   async count(_options) {
@@ -240,26 +286,37 @@ class Locator {
   }
   async screenshot(options = {}) {
     const mask = options.mask;
-    return await this._withElement((h, timeout) => h.screenshot({ ...options, mask, timeout }), { title: "Screenshot", timeout: options.timeout });
+    return await this._withElement((h, timeout) => h.screenshot({ ...options, mask, timeout }), {
+      title: 'Screenshot',
+      timeout: options.timeout,
+    });
   }
   async ariaSnapshot(options) {
-    const result = await this._frame._channel.ariaSnapshot({ ...options, selector: this._selector, timeout: this._frame._timeout(options) });
+    const result = await this._frame._channel.ariaSnapshot({
+      ...options,
+      selector: this._selector,
+      timeout: this._frame._timeout(options),
+    });
     return result.snapshot;
   }
   async scrollIntoViewIfNeeded(options = {}) {
-    return await this._withElement((h, timeout) => h.scrollIntoViewIfNeeded({ ...options, timeout }), { title: "Scroll into view", timeout: options.timeout });
+    return await this._withElement(
+      (h, timeout) => h.scrollIntoViewIfNeeded({ ...options, timeout }),
+      { title: 'Scroll into view', timeout: options.timeout }
+    );
   }
   async selectOption(values, options = {}) {
     return await this._frame.selectOption(this._selector, values, { strict: true, ...options });
   }
   async selectText(options = {}) {
-    return await this._withElement((h, timeout) => h.selectText({ ...options, timeout }), { title: "Select text", timeout: options.timeout });
+    return await this._withElement((h, timeout) => h.selectText({ ...options, timeout }), {
+      title: 'Select text',
+      timeout: options.timeout,
+    });
   }
   async setChecked(checked, options) {
-    if (checked)
-      await this.check(options);
-    else
-      await this.uncheck(options);
+    if (checked) await this.check(options);
+    else await this.uncheck(options);
   }
   async setInputFiles(files, options = {}) {
     return await this._frame.setInputFiles(this._selector, files, { strict: true, ...options });
@@ -283,25 +340,31 @@ class Locator {
     return new Array(await this.count()).fill(0).map((e, i) => this.nth(i));
   }
   async allInnerTexts() {
-    return await this._frame.$$eval(this._selector, (ee) => ee.map((e) => e.innerText));
+    return await this._frame.$$eval(this._selector, ee => ee.map(e => e.innerText));
   }
   async allTextContents() {
-    return await this._frame.$$eval(this._selector, (ee) => ee.map((e) => e.textContent || ""));
+    return await this._frame.$$eval(this._selector, ee => ee.map(e => e.textContent || ''));
   }
   async waitFor(options) {
-    await this._frame._channel.waitForSelector({ selector: this._selector, strict: true, omitReturnValue: true, ...options, timeout: this._frame._timeout(options) });
+    await this._frame._channel.waitForSelector({
+      selector: this._selector,
+      strict: true,
+      omitReturnValue: true,
+      ...options,
+      timeout: this._frame._timeout(options),
+    });
   }
   async _expect(expression, options) {
     return this._frame._expect(expression, {
       ...options,
-      selector: this._selector
+      selector: this._selector,
     });
   }
   _inspect() {
     return this.toString();
   }
   toString() {
-    return (0, import_locatorGenerators.asLocatorDescription)("javascript", this._selector);
+    return (0, import_locatorGenerators.asLocatorDescription)('javascript', this._selector);
   }
 }
 class FrameLocator {
@@ -311,13 +374,23 @@ class FrameLocator {
   }
   locator(selectorOrLocator, options) {
     if ((0, import_rtti.isString)(selectorOrLocator))
-      return new Locator(this._frame, this._frameSelector + " >> internal:control=enter-frame >> " + selectorOrLocator, options);
+      return new Locator(
+        this._frame,
+        this._frameSelector + ' >> internal:control=enter-frame >> ' + selectorOrLocator,
+        options
+      );
     if (selectorOrLocator._frame !== this._frame)
       throw new Error(`Locators must belong to the same frame.`);
-    return new Locator(this._frame, this._frameSelector + " >> internal:control=enter-frame >> " + selectorOrLocator._selector, options);
+    return new Locator(
+      this._frame,
+      this._frameSelector + ' >> internal:control=enter-frame >> ' + selectorOrLocator._selector,
+      options
+    );
   }
   getByTestId(testId) {
-    return this.locator((0, import_locatorUtils.getByTestIdSelector)(testIdAttributeName(), testId));
+    return this.locator(
+      (0, import_locatorUtils.getByTestIdSelector)(testIdAttributeName(), testId)
+    );
   }
   getByAltText(text, options) {
     return this.locator((0, import_locatorUtils.getByAltTextSelector)(text, options));
@@ -341,10 +414,13 @@ class FrameLocator {
     return new Locator(this._frame, this._frameSelector);
   }
   frameLocator(selector) {
-    return new FrameLocator(this._frame, this._frameSelector + " >> internal:control=enter-frame >> " + selector);
+    return new FrameLocator(
+      this._frame,
+      this._frameSelector + ' >> internal:control=enter-frame >> ' + selector
+    );
   }
   first() {
-    return new FrameLocator(this._frame, this._frameSelector + " >> nth=0");
+    return new FrameLocator(this._frame, this._frameSelector + ' >> nth=0');
   }
   last() {
     return new FrameLocator(this._frame, this._frameSelector + ` >> nth=-1`);
@@ -353,7 +429,7 @@ class FrameLocator {
     return new FrameLocator(this._frame, this._frameSelector + ` >> nth=${index}`);
   }
 }
-let _testIdAttributeName = "data-testid";
+let _testIdAttributeName = 'data-testid';
 function testIdAttributeName() {
   return _testIdAttributeName;
 }
@@ -361,9 +437,10 @@ function setTestIdAttribute(attributeName) {
   _testIdAttributeName = attributeName;
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  FrameLocator,
-  Locator,
-  setTestIdAttribute,
-  testIdAttributeName
-});
+0 &&
+  (module.exports = {
+    FrameLocator,
+    Locator,
+    setTestIdAttribute,
+    testIdAttributeName,
+  });

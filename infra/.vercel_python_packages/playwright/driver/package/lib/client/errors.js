@@ -1,41 +1,43 @@
-"use strict";
+'use strict';
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name in all) __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
+  if ((from && typeof from === 'object') || typeof from === 'function') {
     for (let key of __getOwnPropNames(from))
       if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+        __defProp(to, key, {
+          get: () => from[key],
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable,
+        });
   }
   return to;
 };
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+var __toCommonJS = mod => __copyProps(__defProp({}, '__esModule', { value: true }), mod);
 var errors_exports = {};
 __export(errors_exports, {
   TargetClosedError: () => TargetClosedError,
   TimeoutError: () => TimeoutError,
   isTargetClosedError: () => isTargetClosedError,
   parseError: () => parseError,
-  serializeError: () => serializeError
+  serializeError: () => serializeError,
 });
 module.exports = __toCommonJS(errors_exports);
-var import_serializers = require("../protocol/serializers");
-var import_rtti = require("../utils/isomorphic/rtti");
+var import_serializers = require('../protocol/serializers');
+var import_rtti = require('../utils/isomorphic/rtti');
 class TimeoutError extends Error {
   constructor(message) {
     super(message);
-    this.name = "TimeoutError";
+    this.name = 'TimeoutError';
   }
 }
 class TargetClosedError extends Error {
   constructor(cause) {
-    super(cause || "Target page, context or browser has been closed");
+    super(cause || 'Target page, context or browser has been closed');
   }
 }
 function isTargetClosedError(error) {
@@ -44,34 +46,35 @@ function isTargetClosedError(error) {
 function serializeError(e) {
   if ((0, import_rtti.isError)(e))
     return { error: { message: e.message, stack: e.stack, name: e.name } };
-  return { value: (0, import_serializers.serializeValue)(e, (value) => ({ fallThrough: value })) };
+  return { value: (0, import_serializers.serializeValue)(e, value => ({ fallThrough: value })) };
 }
 function parseError(error) {
   if (!error.error) {
     if (error.value === void 0)
-      throw new Error("Serialized error must have either an error or a value");
+      throw new Error('Serialized error must have either an error or a value');
     return (0, import_serializers.parseSerializedValue)(error.value, void 0);
   }
-  if (error.error.name === "TimeoutError") {
+  if (error.error.name === 'TimeoutError') {
     const e2 = new TimeoutError(error.error.message);
-    e2.stack = error.error.stack || "";
+    e2.stack = error.error.stack || '';
     return e2;
   }
-  if (error.error.name === "TargetClosedError") {
+  if (error.error.name === 'TargetClosedError') {
     const e2 = new TargetClosedError(error.error.message);
-    e2.stack = error.error.stack || "";
+    e2.stack = error.error.stack || '';
     return e2;
   }
   const e = new Error(error.error.message);
-  e.stack = error.error.stack || "";
+  e.stack = error.error.stack || '';
   e.name = error.error.name;
   return e;
 }
 // Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  TargetClosedError,
-  TimeoutError,
-  isTargetClosedError,
-  parseError,
-  serializeError
-});
+0 &&
+  (module.exports = {
+    TargetClosedError,
+    TimeoutError,
+    isTargetClosedError,
+    parseError,
+    serializeError,
+  });
