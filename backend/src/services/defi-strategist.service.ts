@@ -18,7 +18,7 @@ export class DeFiStrategistService {
    */
   public async scanYieldOpportunities() {
     logger.info('[DeFiStrategist] Scanning high-performance liquidity pools...');
-    
+
     const marketData = {
         eth_apr: '4.2%',
         sol_apr: '7.5%',
@@ -30,7 +30,7 @@ export class DeFiStrategistService {
       Analyze these market rates: ${JSON.stringify(marketData)}.
       Recommend the safest path to grow a $10,000 reserve for a sovereign AI system.
       Focus on Liquidity Provision or Staking with low impermanent loss.
-      
+
       OUTPUT: JSON { "opportunity": "string", "expectedYield": "string", "riskLevel": "string" }
     `;
 
@@ -42,5 +42,21 @@ export class DeFiStrategistService {
       logger.error('[DeFiStrategist] Market scan failed', error);
       return { opportunity: 'USDC Vault', expectedYield: '3.5%', riskLevel: 'MINIMAL' };
     }
+  }
+
+  /**
+   * Returns yield advice formatted for EconomyService
+   */
+  public async getYieldAdvice() {
+    const opportunity = await this.scanYieldOpportunities();
+    return {
+      wallets: [
+        {
+          asset: opportunity.opportunity || 'USDC',
+          apy: parseFloat((opportunity.expectedYield || '0').replace('%', '')),
+          recommendation: opportunity.riskLevel || 'HOLD'
+        }
+      ]
+    };
   }
 }

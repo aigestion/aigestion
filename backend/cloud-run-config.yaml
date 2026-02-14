@@ -7,7 +7,7 @@ metadata:
   name: backend-aigestion
   namespace: 'PROJECT_ID'
   labels:
-    cloud.googleapis.com/location: us-central1
+    cloud.googleapis.com/location: europe-southwest1
     environment: production
     tier: god-mode
     managed-by: terraform

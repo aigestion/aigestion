@@ -48,7 +48,7 @@ export class PineconeService {
         lastError = error;
         // Don't retry on 4xx validation errors
         if (error.status >= 400 && error.status < 500) throw error;
-        
+
         const delay = baseDelay * Math.pow(2, attempt);
         logger.warn(`[PineconeService] ${context} error (attempt ${attempt + 1}). Retrying in ${delay}ms...`, error.message);
         await new Promise(res => setTimeout(res, delay));
@@ -140,12 +140,16 @@ export class PineconeService {
       const embedding = await vertexAIService.generateEmbeddings(queryText);
       const ns = this.client.index(this.indexName).namespace(namespace);
 
-      const queryResponse = await this.withRetry(() => ns.query({
-        vector: embedding,
-        topK,
-        filter,
-        includeMetadata: true,
-      }), 'SemanticSearch');
+      const queryResponse = (await this.withRetry(
+        () =>
+          ns.query({
+            vector: embedding,
+            topK,
+            filter,
+            includeMetadata: true,
+          }),
+        'SemanticSearch',
+      )) as any;
 
       return queryResponse.matches || [];
     } catch (error) {
