@@ -159,7 +159,7 @@ jobs:
           node scripts/check-bundle-size.js
 
       - name: 📦 Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-artifacts
           path: frontend/website-epic/dist/
@@ -266,7 +266,7 @@ jobs:
           npx zap-baseline.py -t https://aigestion.net -J zap-results.json
 
       - name: 📋 Upload Test Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: post-deploy-results
           path: |

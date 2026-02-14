@@ -42,7 +42,7 @@ jobs:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: Upload performance results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v6
         with:
           name: lighthouse-results
           path: '.lighthouseci'
@@ -104,7 +104,7 @@ jobs:
           mv dist/stats.html bundle-analysis.html
 
       - name: Upload bundle analysis
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v6
         with:
           name: bundle-analysis
           path: frontend/apps/website-epic/bundle-analysis.html

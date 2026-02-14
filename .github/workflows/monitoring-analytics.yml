@@ -180,7 +180,7 @@ jobs:
           cat productivity-metrics.json | jq '.'
 
       - name: Update Productivity Dashboard
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: productivity-dashboard
           path: productivity-dashboard.html
@@ -287,7 +287,7 @@ jobs:
           historical-data: quality-history.json
 
       - name: Generate Quality Report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: quality-report
           path: quality-report.html
