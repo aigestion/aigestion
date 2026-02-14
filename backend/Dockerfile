@@ -20,10 +20,15 @@ RUN npm install --legacy-peer-deps
 # .dockerignore/gcloudignore should exclude dist to ensure fresh build
 COPY . .
 
+# Install tsc-alias to resolve @/ path aliases in compiled output
+RUN npm install --save-dev tsc-alias
+
 # Compile TypeScript
 # Note: Some optional service modules (e.g., @googlemaps, llamaindex, @noble/post-quantum)
 # produce type errors but are lazy-loaded at runtime. Allow build to proceed.
+# tsc-alias rewrites @/ imports to relative paths so Node.js can resolve them.
 RUN npx tsc || true
+RUN npx tsc-alias
 
 # ---------- Runtime Stage ----------
 FROM node:22-alpine AS runtime
@@ -64,4 +69,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:8080/api/v1/health || exit 1
 
 # Start the application
-CMD ["node", "dist/server.js"]
+CMD ["node", "dist/bootstrap.js"]
