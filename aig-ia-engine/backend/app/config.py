@@ -14,6 +14,7 @@ class Settings(BaseSettings):
 
     SECRET_KEY: str = "change-this-in-production-use-strong-key"
     IA_ENGINE_API_KEY: Optional[str] = None
+    ANTYGRAVITY_MODEL_API_KEY: Optional[str] = None
     ALLOWED_HOSTS: str = "localhost,127.0.0.1"
 
     DATABASE_URL: str = "sqlite:///../../assets/data/aigestion_ia.db"

@@ -140,6 +140,13 @@ const envSchema = z.object({
   MCP_SERVER_URL: z.string().url().optional().describe('Base URL for Antigravity MCP server'),
   MCP_API_KEY: z.string().optional().describe('API key/secret for Antigravity MCP server'),
 
+  // Browserless / Puppeteer
+  BROWSERLESS_API_KEY: z.string().optional().describe('API Key for Browserless service'),
+  BROWSERLESS_HOST: z
+    .string()
+    .default('ws://localhost:3000')
+    .describe('WebSocket endpoint for Browserless'),
+
   // Supabase Configuration
   SUPABASE_URL: z.string().url().optional().describe('Supabase project URL'),
   SUPABASE_KEY: z.string().optional().describe('Supabase API key (Anon or Service Role)'),
@@ -389,80 +396,14 @@ const envSchema = z.object({
 
   // RabbitMQ Configuration
   RABBITMQ_URL: z.string().default('amqp://localhost'),
-  // Social Media - Instagram
-  INSTAGRAM_ACCESS_TOKEN: z.string().optional(),
-  INSTAGRAM_BUSINESS_ACCOUNT_ID: z.string().optional(),
 
-  // Social Media - LinkedIn
-  LINKEDIN_ACCESS_TOKEN: z.string().optional(),
-  LINKEDIN_ORGANIZATION_URN: z.string().optional(),
-
-  // Social Media - TikTok
-  TIKTOK_ACCESS_TOKEN: z.string().optional(),
-
-  // Social Media - X (Twitter)
-  X_API_KEY: z.string().optional(),
-  X_API_SECRET: z.string().optional(),
-  X_ACCESS_TOKEN: z.string().optional(),
-  X_ACCESS_SECRET: z.string().optional(),
-  X_BEARER_TOKEN: z.string().optional(),
-
-  // Voice AI - Daniela
-  DANIELA_SYSTEM_PROMPT: z
-    .string()
-    .optional()
-    .default('Eres Daniela, una asistente de voz experta en gestión empresarial.'),
-  ELEVENLABS_VOICE_ID: z.string().optional().default('eleven_monica'),
-  ELEVENLABS_API_KEY: z.string().optional().describe('ElevenLabs API Key'),
-
-  // Voice AI - Qwen
-  DASHSCOPE_API_KEY: z.string().optional().describe('Alibaba DashScope API Key'),
-  QWEN_TTS_VOICE_ID: z.string().optional().default('longxiaomiao').describe('Qwen TTS Voice ID'),
-
-  // Finance / AlphaVantage
-  ALPHAVANTAGE_KEY: z.string().optional().describe('AlphaVantage API Key'),
-
-  // Google Document AI
-  INVOICE_PROCESSOR_ID: z.string().optional(),
-  CONTRACT_PROCESSOR_ID: z.string().optional(),
-
-  // Messaging - Telegram
-  TELEGRAM_BOT_TOKEN: z.string().optional(),
-  TELEGRAM_BOT_TOKEN_DEV: z.string().optional().describe('Telegram bot token for dev/admin bot'),
-  TELEGRAM_BOT_TOKEN_PUBLIC: z.string().optional().describe('Telegram bot token for public bot'),
-  TELEGRAM_CHAT_ID: z.string().optional(),
-  TELEGRAM_CHAT_ID_DEV: z.string().optional().describe('Default chat id for dev/admin bot'),
-  TELEGRAM_CHAT_ID_PUBLIC: z.string().optional().describe('Default chat id for public bot'),
-  TELEGRAM_ADMIN_IDS: z.string().optional().describe('Comma-separated Telegram admin chat IDs'),
-
-  // Stripe Configuration
-  STRIPE_SECRET_KEY: z.string().optional().describe('Stripe Secret Key'),
-  STRIPE_PUBLISHABLE_KEY: z.string().optional().describe('Stripe Publishable Key'),
-  STRIPE_WEBHOOK_SECRET: z.string().optional().describe('Stripe Webhook Signing Secret'),
-  STRIPE_PRICE_ID_ESSENTIAL: z.string().optional().describe('Stripe Price ID for Essential Plan'),
-  STRIPE_PRICE_ID_EVOLUTION: z.string().optional().describe('Stripe Price ID for Evolution Plan'),
-  STRIPE_CURRENCY: z.string().default('usd').describe('Default currency for payments'),
-  TAVILY_API_KEY: z.string().optional().describe('Tavily API key for web search'),
-
-  // PayPal Configuration
-  PAYPAL_CLIENT_ID: z.string().optional().describe('PayPal Client ID'),
-  PAYPAL_CLIENT_SECRET: z.string().optional().describe('PayPal Client Secret'),
-  PAYPAL_MODE: z.enum(['sandbox', 'live']).default('sandbox').describe('PayPal Environment Mode'),
-
-  // WebAuthn Configuration
-  WEBAUTHN_RP_ID: z.string().default('localhost').describe('WebAuthn Relying Party ID'),
-  WEBAUTHN_ORIGIN: z
-    .string()
-    .url()
-    .default('http://localhost:3000')
-    .describe('WebAuthn expected origin'),
-
-  // n8n Contact Webhook
-  N8N_CONTACT_WEBHOOK_URL: z
-    .string()
-    .url()
-    .optional()
-    .describe('n8n Webhook URL for contact form submissions'),
+  // Redis Configuration
+  REDIS_URL: z.string().optional().describe('Redis connection URI (Standalone)'),
+  REDIS_HOST: z.string().default('localhost').describe('Redis host'),
+  REDIS_PORT: z.string().default('6379').describe('Redis port'),
+  REDIS_PASSWORD: z.string().optional().describe('Redis password'),
+  REDIS_CLUSTER_NODES: z.string().optional().describe('Comma-separated Redis cluster nodes'),
+  ENABLE_REDIS: z.string().default('true').describe('Whether to enable Redis'),
 });
 
 /**

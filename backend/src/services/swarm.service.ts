@@ -201,4 +201,71 @@ export class SwarmService {
       confidence: 0.95,
     };
   }
+  /**
+   * GENERIC MISSION ORCHESTRATOR (Bridge to Controller)
+   */
+  public async createMission(objective: string, userId: string): Promise<SwarmResponse> {
+    logger.info(`[SwarmService] Received mission request from ${userId}: ${objective}`);
+
+    const lowerObj = objective.toLowerCase();
+
+    // Simple keyword-based routing (God Mode Logic)
+    if (lowerObj.includes('code') || lowerObj.includes('refactor') || lowerObj.includes('fix')) {
+      return this.julesCodingMission(objective);
+    }
+    if (lowerObj.includes('invest') || lowerObj.includes('yield') || lowerObj.includes('price')) {
+      return this.assetMission(objective);
+    }
+    if (lowerObj.includes('research') || lowerObj.includes('find') || lowerObj.includes('search')) {
+      return this.researchMission(objective);
+    }
+    if (lowerObj.includes('evolve') || lowerObj.includes('upgrade') || lowerObj.includes('tech')) {
+      return this.evolutionMission(objective);
+    }
+    if (
+      lowerObj.includes('strategy') ||
+      lowerObj.includes('plan') ||
+      lowerObj.includes('insight')
+    ) {
+      return this.wisdomMission(objective);
+    }
+
+    // Default to General Intelligence
+    return this.generalMission(objective);
+  }
+
+  public async executeTool(toolName: string, args: any): Promise<SwarmResponse> {
+    logger.info(`[SwarmService] Execute Tool Request: ${toolName}`);
+    // Basic tool execution stub
+    return {
+      agentName: 'Tool-Executor',
+      result: `Tool ${toolName} executed with args: ${JSON.stringify(args)}`,
+      confidence: 1.0,
+    };
+  }
+
+  public async getGodState(): Promise<any> {
+    const health = await this.treasury.getSovereignHealth();
+    return {
+      status: 'GOD_MODE_ACTIVE',
+      treasury: health,
+      activeAgents: ['Jules', 'Daniela', 'Economy', 'Research', 'Sovereign-Architect'],
+      uptime: process.uptime(),
+    };
+  }
+
+  public async getMission(id: string): Promise<SwarmResponse> {
+    return {
+      agentName: 'System',
+      result: `Mission ${id} details retrieved.`,
+      confidence: 1.0,
+    };
+  }
+
+  public async orchestrate(task: any): Promise<SwarmResponse> {
+    return this.createMission(
+      task.payload || task.objective || 'General Task',
+      'system-orchestrator',
+    );
+  }
 }
