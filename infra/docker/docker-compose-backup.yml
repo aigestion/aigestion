@@ -217,8 +217,6 @@ services:
       - evaluation-results:/app/evaluation/results
     environment:
       - PYTHONUNBUFFERED=1
-      - WINDSURF_API_TOKEN=${WINDSURF_API_TOKEN}
-      - WINDSURF_API_URL=${WINDSURF_API_URL}
     networks:
       - NEXUS V1-network
     restart: unless-stopped

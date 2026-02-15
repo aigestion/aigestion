@@ -1,7 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { injectable, inject } from 'inversify';
 import { logger } from '../utils/logger';
-import { DanielaAIService } from './daniela-ai.service'; // Assuming this exists or will be mocked
 import { TYPES } from '../types';
 
 /**
@@ -14,7 +13,7 @@ export class Gemini2Service {
   private vertexClient: any;
   private aiStudioClient: GoogleGenerativeAI;
 
-  constructor(@inject(DanielaAIService) private daniela: DanielaAIService) {}
+  constructor() {}
 
   async initialize() {
     try {
@@ -27,7 +26,10 @@ export class Gemini2Service {
         });
         logger.info('✅ Vertex AI (Gemini Core) initialized');
       } catch (vertexError) {
-        logger.warn('⚠️ Vertex AI initialization failed (using fallback if available):', vertexError);
+        logger.warn(
+          '⚠️ Vertex AI initialization failed (using fallback if available):',
+          vertexError,
+        );
       }
 
       // 2. Initialize AI Studio (Labs Layer)
@@ -38,9 +40,10 @@ export class Gemini2Service {
       }
 
       if (!this.vertexClient && !this.aiStudioClient) {
-          throw new Error('Neither Vertex AI nor AI Studio could be initialized. Please check credentials.');
+        throw new Error(
+          'Neither Vertex AI nor AI Studio could be initialized. Please check credentials.',
+        );
       }
-
     } catch (error) {
       logger.error('[Gemini2Service] Initialization fault', error);
       throw error;
@@ -77,10 +80,10 @@ export class Gemini2Service {
 
       // Prefer AI Studio for faster Pro access if available
       if (this.aiStudioClient && !options.useVertex) {
-        const model = this.aiStudioClient.getGenerativeModel({ 
+        const model = this.aiStudioClient.getGenerativeModel({
           model: modelName,
           systemInstruction: options.systemInstruction,
-          safetySettings: this.safetySettings as any 
+          safetySettings: this.safetySettings as any,
         });
         const result = await model.generateContent({
           contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -90,10 +93,10 @@ export class Gemini2Service {
       }
 
       // Fallback to Vertex AI
-      const model = this.vertexClient.getGenerativeModel({ 
+      const model = this.vertexClient.getGenerativeModel({
         model: modelName,
         systemInstruction: options.systemInstruction,
-        safetySettings: this.safetySettings as any
+        safetySettings: this.safetySettings as any,
       });
       const response = await model.generateContent({
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -108,10 +111,10 @@ export class Gemini2Service {
 
   // Helper to get client (Vertex or AI Studio)
   private getClient(useVertex: boolean = false) {
-      if (this.aiStudioClient && !useVertex) {
-          return this.aiStudioClient;
-      }
-      return this.vertexClient;
+    if (this.aiStudioClient && !useVertex) {
+      return this.aiStudioClient;
+    }
+    return this.vertexClient;
   }
 
   async analyzeImage(imageUrl: string, prompt: string) {
@@ -127,11 +130,8 @@ export class Gemini2Service {
         contents: [
           {
             role: 'user',
-            parts: [
-                { inlineData: { mimeType: 'image/jpeg', data: imageData } },
-                { text: prompt }
-            ]
-          }
+            parts: [{ inlineData: { mimeType: 'image/jpeg', data: imageData } }, { text: prompt }],
+          },
         ],
         generationConfig: this.godGenerationConfig,
       });
@@ -167,8 +167,8 @@ export class Gemini2Service {
       }
 
       const response = await model.generateContent({
-          contents: [{ role: 'user', parts: content }],
-          generationConfig: this.godGenerationConfig,
+        contents: [{ role: 'user', parts: content }],
+        generationConfig: this.godGenerationConfig,
       });
       return response.response.text();
     } catch (error) {

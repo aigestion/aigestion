@@ -3,10 +3,13 @@ import { EconomyService } from '../services/economy.service';
 import { DeFiStrategistService } from '../services/defi-strategist.service';
 import { logger } from '../utils/logger';
 
+import { Gemini2Service } from '../services/gemini-2.service';
+
 async function testAdvice() {
   console.log('🚀 Iniciando prueba de consejos de inversión...');
 
-  const defiService = new DeFiStrategistService();
+  const geminiService = new Gemini2Service();
+  const defiService = new DeFiStrategistService(geminiService);
   const service = new EconomyService(defiService);
 
   // Force some mock data/behavior if needed for the test to be impressive

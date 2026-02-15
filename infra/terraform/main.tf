@@ -16,7 +16,7 @@ provider "google" {
 # Variable Definitions
 variable "project_id" {
   type    = string
-  default = "aigestion-pro-2026"
+  default = "aigestion-sovereign-2026"
 }
 
 variable "region" {

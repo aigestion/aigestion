@@ -5,10 +5,13 @@ import { DeFiStrategistService } from '../services/defi-strategist.service';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 
+import { Gemini2Service } from '../services/gemini-2.service';
+
 async function sendManualReport() {
   console.log('🚀 Generando y enviando reporte a Telegram...');
 
-  const defiService = new DeFiStrategistService();
+  const geminiService = new Gemini2Service();
+  const defiService = new DeFiStrategistService(geminiService);
   const economyService = new EconomyService(defiService);
   const chatId = env.TELEGRAM_CHAT_ID_DEV || env.TELEGRAM_CHAT_ID;
   const token = env.TELEGRAM_BOT_TOKEN_DEV || env.TELEGRAM_BOT_TOKEN;

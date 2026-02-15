@@ -29,11 +29,11 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   }
 
   override async findById(id: string): Promise<IUser | null> {
-    return await User.findById(id).exec();
+    return (await User.findById(id).lean().exec()) as IUser | null;
   }
 
   override async findAll(limit: number = 10, skip: number = 0): Promise<IUser[]> {
-    return await User.find().skip(skip).limit(limit).exec();
+    return (await User.find().skip(skip).limit(limit).lean().exec()) as IUser[];
   }
 
   async countAll(): Promise<number> {
