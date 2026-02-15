@@ -1,19 +1,15 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronRight, Lock, Menu, Rocket, X } from 'lucide-react';
+import { ChevronRight, Menu, X, User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useAppContext } from '../contexts/AppContext';
-import { MagneticWrapper } from './MagneticWrapper';
-
-import { SoundControl } from './SoundControl';
 
 export const Navigation: React.FC = () => {
   const { playHover, playClick } = useSoundEffects();
   const { setIsContactModalOpen } = useAppContext();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,12 +20,12 @@ export const Navigation: React.FC = () => {
   }, []);
 
   const navItems = [
-    { label: 'Demo', path: '#demo-dashboard', isHash: true },
-    { label: 'Servicios', path: '#services', isHash: true },
-    { label: 'Soluciones', path: '#plan', isHash: true },
-    { label: 'Tutoriales', path: '#tutoriales', isHash: true },
-    { label: 'Precios', path: '#pricing', isHash: true },
-    { label: 'Contacto', path: '#contact', isHash: true, isModal: true },
+    { label: 'Muestra', path: '#demo-dashboard', isHash: true },
+    { label: 'Qué hacemos', path: '#services', isHash: true },
+    { label: 'Cómo te ayuda', path: '#plan', isHash: true },
+    { label: 'Vídeos de ayuda', path: '#tutoriales', isHash: true },
+    { label: 'Planes y Precios', path: '#pricing', isHash: true },
+    { label: 'Hablar con nosotros', path: '#contact', isHash: true, isModal: true },
   ];
 
   const handleLinkClick = (path: string, isHash?: boolean, isModal?: boolean) => {
@@ -52,7 +48,7 @@ export const Navigation: React.FC = () => {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${
         isScrolled
-          ? 'bg-nexus-obsidian-deep/95 backdrop-blur-xl border-b border-white/10 py-3'
+          ? 'bg-nexus-obsidian-deep/95 backdrop-blur-xl border-b border-white/10 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
           : 'bg-transparent py-6'
       }`}
     >
@@ -74,134 +70,141 @@ export const Navigation: React.FC = () => {
           <div className="flex flex-col justify-center">
             <h1 className="font-orbitron font-black text-2xl tracking-tighter text-white transition-all duration-300">
               AIGESTION
-              <span className="text-nexus-cyan font-extralight opacity-80">.NET</span>
             </h1>
+            <span className="text-[10px] text-nexus-cyan tracking-[0.3em] font-orbitron opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-2 left-14">
+              NEXUS
+            </span>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden md:flex items-center space-x-8">
           {navItems.map(item => (
-            <Link
+            <a
               key={item.label}
-              to={item.path}
+              href={item.path}
               onClick={e => {
-                if (item.isHash) {
-                  e.preventDefault();
-                  handleLinkClick(item.path, true, item.isModal);
-                } else {
-                  handleLinkClick(item.path, false, item.isModal);
-                }
+                e.preventDefault();
+                handleLinkClick(item.path, item.isHash, item.isModal);
               }}
               onMouseEnter={playHover}
-              className={`relative font-orbitron text-[11px] tracking-[0.2em] uppercase transition-all duration-300 hover:text-white ${
-                location.pathname === item.path ? 'text-nexus-cyan-glow' : 'text-nexus-silver/60'
-              }`}
+              className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group py-2 font-orbitron tracking-wide"
             >
-              {item.label}
-              <span
-                className={`absolute -bottom-1 left-0 h-[1px] bg-nexus-cyan-glow transition-all duration-300 ${location.pathname === item.path ? 'w-full' : 'w-0 group-hover:w-full'}`}
-              />
-            </Link>
+              <span className="relative z-10">{item.label}</span>
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-nexus-cyan transition-all duration-300 group-hover:w-full shadow-[0_0_8px_#22d3ee]" />
+            </a>
           ))}
         </div>
 
-        {/* Action Buttons & Mobile Toggle */}
-        <div className="flex items-center gap-6">
-          <SoundControl />
-
-          <MagneticWrapper strength={10}>
-            <Link
-              to="/login"
-              onMouseEnter={() => {
-                playHover();
-              }}
-              onClick={playClick}
-              className="hidden sm:flex group relative items-center gap-3 px-6 py-2.5 overflow-hidden rounded-sm bg-white/5 border border-white/10 hover:border-nexus-cyan/50 transition-all duration-500 shadow-lg shadow-nexus-cyan/5"
-            >
-              <div className="absolute inset-0 bg-linear-to-r from-nexus-cyan/10 to-nexus-violet/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <Lock
-                size={14}
-                className="text-nexus-cyan-glow group-hover:text-white transition-colors"
-              />
-              <span className="relative font-orbitron font-medium text-[10px] tracking-[0.2em] uppercase text-white">
-                Acceso Clientes
-              </span>
-              <ChevronRight
-                size={14}
-                className="text-nexus-silver/40 group-hover:text-white group-hover:translate-x-1 transition-all"
-              />
-            </Link>
-          </MagneticWrapper>
-
-          <button
-            className="lg:hidden p-2 text-white hover:text-nexus-cyan-glow transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        {/* CTAs */}
+        <div className="hidden md:flex items-center space-x-6">
+          <Link
+            to="/login"
+            onMouseEnter={playHover}
+            onClick={playClick}
+            className="text-sm font-bold font-orbitron text-white/70 hover:text-white transition-colors hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] tracking-wider"
           >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+            ACCEDER
+          </Link>
+          <Link
+            to="/register"
+            onMouseEnter={playHover}
+            onClick={playClick}
+            className="group relative px-6 py-2.5 bg-white text-black font-bold text-sm tracking-wide overflow-hidden hover:scale-105 transition-transform duration-300"
+            style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
+          >
+            <span className="relative z-10 flex items-center gap-2 font-orbitron">
+              EMPEZAR GRATIS
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-nexus-cyan via-white to-nexus-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </Link>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => {
+            playClick();
+            setIsMobileMenuOpen(true);
+          }}
+          className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
       </div>
 
-      {/* Professional Mobile Menu Overlay */}
+      {/* Mobile Sidebar */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden absolute top-full w-full bg-nexus-obsidian-deep/98 backdrop-blur-2xl border-b border-white/10 overflow-hidden"
-          >
-            <div className="flex flex-col p-8 gap-1">
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 md:hidden"
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 20 }}
+              className="fixed right-0 top-0 bottom-0 w-80 bg-[#0a0a0a] border-l border-white/10 z-50 p-6 md:hidden shadow-2xl"
+            >
+              <div className="flex justify-between items-center mb-12">
+                <span className="text-xl font-bold font-orbitron text-white">MENÚ</span>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                 >
-                  <Link
-                    to={item.path}
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {navItems.map(item => (
+                  <a
+                    key={item.label}
+                    href={item.path}
                     onClick={e => {
-                      if (item.isHash) {
-                        e.preventDefault();
-                        handleLinkClick(item.path, true, item.isModal);
-                      } else {
-                        handleLinkClick(item.path, false, item.isModal);
-                      }
+                      e.preventDefault();
+                      handleLinkClick(item.path, item.isHash, item.isModal);
                     }}
-                    className="flex items-center justify-between py-4 border-b border-white/5 group"
+                    className="flex items-center space-x-4 text-gray-300 hover:text-white group p-2 hover:bg-white/5 rounded-xl transition-all"
                   >
-                    <span className="font-orbitron font-medium text-[11px] tracking-[0.3em] uppercase text-nexus-silver/60 group-hover:text-white transition-colors">
+                    <div className="p-2 bg-white/5 rounded-lg group-hover:bg-nexus-cyan/20 transition-colors">
+                      <ChevronRight className="w-5 h-5 group-hover:text-nexus-cyan transition-colors" />
+                    </div>
+                    <span className="text-lg font-medium font-orbitron tracking-wide">
                       {item.label}
                     </span>
-                    <ChevronRight
-                      size={14}
-                      className="text-nexus-cyan/30 group-hover:text-nexus-cyan transition-all"
-                    />
-                  </Link>
-                </motion.div>
-              ))}
+                  </a>
+                ))}
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8"
-              >
+                <div className="h-px bg-white/10 my-6" />
+
                 <Link
                   to="/login"
-                  onClick={() => handleLinkClick('/login')}
-                  className="w-full py-4 bg-white/5 border border-white/10 flex items-center justify-center gap-3 group hover:bg-white/10 transition-all"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center space-x-4 text-gray-300 hover:text-white p-2 hover:bg-white/5 rounded-xl transition-all"
                 >
-                  <span className="font-orbitron font-bold text-[10px] tracking-[0.3em] uppercase text-white">
-                    Acceso al Hub
-                  </span>
-                  <Rocket className="w-4 h-4 text-nexus-cyan-glow" />
+                  <div className="p-2 bg-white/5 rounded-lg">
+                    <User className="w-5 h-5" />
+                  </div>
+                  <span className="text-lg font-medium font-orbitron tracking-wide">Acceder</span>
                 </Link>
-              </motion.div>
-            </div>
-          </motion.div>
+
+                <Link
+                  to="/register"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full mt-4 bg-nexus-cyan text-black py-3 px-4 rounded-xl font-bold flex items-center justify-center space-x-2 hover:bg-cyan-300 transition-colors shadow-[0_0_20px_rgba(34,211,238,0.3)]"
+                >
+                  <span className="font-orbitron tracking-wide">COMENZAR AHORA</span>
+                  <ChevronRight className="w-5 h-5" />
+                </Link>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </motion.nav>

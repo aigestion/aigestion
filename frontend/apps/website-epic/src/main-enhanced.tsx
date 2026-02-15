@@ -15,19 +15,19 @@ const EnhancedApp = () => {
                 <span className="text-2xl">🚀</span>
               </div>
               <div>
-                <h1 className="text-4xl font-bold text-white">AIGestion Nexus</h1>
-                <p className="text-white/70">The Sovereign Intelligence Platform</p>
+                <h1 className="text-4xl font-bold text-white">AIGestion</h1>
+                <p className="text-white/70">Tu Asistente Inteligente de Confianza</p>
               </div>
             </div>
             <nav className="hidden md:flex space-x-6">
               <a href="#features" className="text-white/70 hover:text-white transition-colors">
-                Features
+                Qué hacemos
               </a>
               <a href="#dashboards" className="text-white/70 hover:text-white transition-colors">
-                Dashboards
+                Cómo te ayuda
               </a>
               <a href="#about" className="text-white/70 hover:text-white transition-colors">
-                About
+                Sobre nosotros
               </a>
             </nav>
           </div>
@@ -39,20 +39,20 @@ const EnhancedApp = () => {
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
             <h2 className="text-5xl font-bold mb-4 text-gradient">
-              Experience the Future of
+              Tu Negocio en
               <br />
-              <span className="text-gradient">Sovereign AI</span>
+              <span className="text-gradient">Piloto Automático</span>
             </h2>
             <p className="text-xl text-white/80 mb-6">
-              Real-time voice agents, neural memory, and decentralized intelligence orchestration.
-              Built for the God Mode era.
+              Asistentes de voz en tiempo real, memoria compartida y organización inteligente.
+              Diseñado para que recuperes tu tiempo.
             </p>
             <div className="flex justify-center space-x-4">
               <button className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg transition-colors">
-                Explore Dashboards
+                Probar los Paneles
               </button>
               <button className="border border-purple-400 hover:bg-purple-400/20 px-6 py-3 rounded-lg transition-colors">
-                Learn More
+                Saber Más
               </button>
             </div>
           </div>
@@ -65,38 +65,38 @@ const EnhancedApp = () => {
           className="text-3xl font-bold text-center mb-6 fade-in"
           style={{ animationDelay: '0.2s' }}
         >
-          ⚡ God Mode Features
+          ⚡ Funciones Útiles
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto px-4">
           <div className="glass fade-in text-center" style={{ animationDelay: '0.3s' }}>
             <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🎤</span>
             </div>
-            <h3 className="text-lg font-semibold mb-2">Voice Agents</h3>
+            <h3 className="text-lg font-semibold mb-2">Ayuda por Voz</h3>
             <p className="text-white/70 text-sm">
-              Real-time voice processing with neural understanding
+              Habla con Daniela y ella entenderá todo lo que necesitas
             </p>
           </div>
           <div className="glass fade-in text-center" style={{ animationDelay: '0.4s' }}>
             <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🧠</span>
             </div>
-            <h3 className="text-lg font-semibold mb-2">Neural Memory</h3>
-            <p className="text-white/70 text-sm">Persistent memory across all interactions</p>
+            <h3 className="text-lg font-semibold mb-2">Agenda Inteligente</h3>
+            <p className="text-white/70 text-sm">Recuerda cada detalle de tus clientes y citas</p>
           </div>
           <div className="glass fade-in text-center" style={{ animationDelay: '0.5s' }}>
             <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🔗</span>
             </div>
-            <h3 className="text-lg font-semibold mb-2">Decentralized</h3>
-            <p className="text-white/70 text-sm">Blockchain-powered intelligence orchestration</p>
+            <h3 className="text-lg font-semibold mb-2">Control Total</h3>
+            <p className="text-white/70 text-sm">Toda tu información unificada y siempre segura</p>
           </div>
           <div className="glass fade-in text-center" style={{ animationDelay: '0.6s' }}>
             <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">⚡</span>
             </div>
-            <h3 className="text-lg font-semibold mb-2">God Mode</h3>
-            <p className="text-white/70 text-sm">Ultimate performance and capabilities</p>
+            <h3 className="text-lg font-semibold mb-2">Modo Experto</h3>
+            <p className="text-white/70 text-sm">Potencia máxima para los negocios más exigentes</p>
           </div>
         </div>
       </section>
@@ -107,19 +107,17 @@ const EnhancedApp = () => {
           className="text-3xl font-bold text-center mb-6 fade-in"
           style={{ animationDelay: '0.7s' }}
         >
-          🎮 Intelligent Dashboards
+          🎮 Paneles de Control
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
           <div className="glass fade-in game-card" style={{ animationDelay: '0.8s' }}>
             <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🏆</span>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Admin Dashboard</h3>
-            <p className="text-white/70 mb-4">
-              Cuartel General con estadísticas en tiempo real y control total del sistema.
-            </p>
+            <h3 className="text-xl font-semibold mb-2">Administrador</h3>
+            <p className="text-white/70 mb-4">Control central para dueños de negocio y gestores.</p>
             <button className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors inline-block w-full text-center">
-              Access Admin
+              Entrar
             </button>
           </div>
 
@@ -127,12 +125,10 @@ const EnhancedApp = () => {
             <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">💎</span>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Client Dashboard</h3>
-            <p className="text-white/70 mb-4">
-              Panel de control personal con progreso, logros y métricas individuales.
-            </p>
+            <h3 className="text-xl font-semibold mb-2">Cliente</h3>
+            <p className="text-white/70 mb-4">Tu espacio personal para ver tu progreso y tareas.</p>
             <button className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors inline-block w-full text-center">
-              Access Client
+              Entrar
             </button>
           </div>
 
@@ -140,12 +136,10 @@ const EnhancedApp = () => {
             <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🎪</span>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Demo Dashboard</h3>
-            <p className="text-white/70 mb-4">
-              Parque de juegos interactivo con gamificación, mini juegos y leaderboard.
-            </p>
+            <h3 className="text-xl font-semibold mb-2">Muestras</h3>
+            <p className="text-white/70 mb-4">Mira cómo funciona todo de forma interactiva.</p>
             <button className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors inline-block w-full text-center">
-              Access Demo
+              Ver Muestra
             </button>
           </div>
         </div>
@@ -153,23 +147,23 @@ const EnhancedApp = () => {
 
       {/* Stats Section */}
       <section className="glass rounded-xl p-8 mb-8 fade-in" style={{ animationDelay: '1.1s' }}>
-        <h2 className="text-3xl font-bold text-center mb-6">📊 Platform Statistics</h2>
+        <h2 className="text-3xl font-bold text-center mb-6">📊 Cifras de la Plataforma</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="text-center">
             <p className="text-4xl font-bold text-purple-400">12.5K+</p>
-            <p className="text-white/70">Active Users</p>
+            <p className="text-white/70">Usuarios Activos</p>
           </div>
           <div className="text-center">
             <p className="text-4xl font-bold text-blue-400">99.9%</p>
-            <p className="text-white/70">Uptime</p>
+            <p className="text-white/70">Tiempo Online</p>
           </div>
           <div className="text-center">
             <p className="text-4xl font-bold text-green-400">1.2M</p>
-            <p className="text-white/70">API Calls</p>
+            <p className="text-white/70">Tareas Hechas</p>
           </div>
           <div className="text-center">
             <p className="text-4xl font-bold text-orange-400">24/7</p>
-            <p className="text-white/70">Support</p>
+            <p className="text-white/70">Ayuda Siempre</p>
           </div>
         </div>
       </section>
@@ -178,13 +172,13 @@ const EnhancedApp = () => {
       <footer className="glass rounded-xl p-6 fade-in" style={{ animationDelay: '1.2s' }}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           <div>
-            <h3 className="text-lg font-semibold mb-3">AIGestion Nexus</h3>
+            <h3 className="text-lg font-semibold mb-3">AIGestion</h3>
             <p className="text-white/70 text-sm">
-              The future of sovereign intelligence is here. Experience the power of God Mode AI.
+              El futuro de la ayuda inteligente para personas reales ya está aquí.
             </p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
+            <h3 className="text-lg font-semibold mb-3">Enlaces Rápidos</h3>
             <ul className="space-y-2 text-white/70 text-sm">
               <li>
                 <a href="#dashboards" className="hover:text-purple-300 transition-colors">
@@ -201,13 +195,13 @@ const EnhancedApp = () => {
                   href="https://aig-estion-final.vercel.app"
                   className="hover:text-purple-300 transition-colors"
                 >
-                  Live Demo
+                  Muestra Online
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-3">Connect</h3>
+            <h3 className="text-lg font-semibold mb-3">Conectar</h3>
             <div className="flex space-x-4">
               <a
                 href="#"
@@ -230,8 +224,8 @@ const EnhancedApp = () => {
             </div>
           </div>
         </div>
-        <div class="border-t border-white/20 mt-6 pt-6 text-center text-white/70 text-sm">
-          <p>&copy; 2024 AIGestion Nexus. Built with ❤️ for the God Mode era.</p>
+        <div className="border-t border-white/20 mt-6 pt-6 text-center text-white/70 text-sm">
+          <p>&copy; 2024 AIGestion. Hecho con ❤️ para que disfrutes de tu tiempo pronto.</p>
         </div>
       </footer>
     </div>
@@ -240,11 +234,7 @@ const EnhancedApp = () => {
 
 // Main App Entry with error handling
 const rootElement = document.getElementById('root');
-if (!rootElement) {
-  console.error('Root element not found!');
-  document.body.innerHTML =
-    '<div style="color: white; text-align: center; padding: 20px;">❌ Root element not found</div>';
-} else {
+if (rootElement) {
   try {
     ReactDOM.createRoot(rootElement).render(<EnhancedApp />);
     console.log('✅ Enhanced React app rendered successfully');
@@ -265,4 +255,8 @@ if (!rootElement) {
       </div>
     `;
   }
+} else {
+  console.error('Root element not found!');
+  document.body.innerHTML =
+    '<div style="color: white; text-align: center; padding: 20px;">❌ Root element not found</div>';
 }

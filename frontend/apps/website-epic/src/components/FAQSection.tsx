@@ -3,20 +3,20 @@ import React from 'react';
 
 const faqs = [
   {
-    q: '¿Cuánto tarda la implementación?',
-    a: 'Entre 2 y 6 semanas según complejidad. Empezamos con un piloto rápido para medir impacto.',
+    q: '¿Tengo que saber de informática?',
+    a: 'Nada de nada. Si sabes enviar un audio por WhatsApp o usar el móvil para llamar, ya sabes usar AIGestion. Daniela te guía en todo.',
   },
   {
-    q: '¿Cómo se protege la información?',
-    a: 'Usamos gobernanza, cifrado, roles y auditoría completa. También podemos operar en infraestructura privada.',
+    q: '¿Mis datos están seguros?',
+    a: 'Totalmente. Es como una caja fuerte digital. Tus datos son solo tuyos y nadie más puede ver tus cosas privadas.',
   },
   {
-    q: '¿AIGestion se integra con mis sistemas?',
-    a: 'Sí. Integración con ERP, CRM, BI, data lakes y APIs personalizadas sin fricción.',
+    q: '¿Esto es solo para empresas grandes?',
+    a: 'Al revés. Está hecho para autónomos, familias y pequeñas tiendas que no tienen tiempo de aprender programas complejos.',
   },
   {
-    q: '¿Tienen planes para gremios o asociaciones?',
-    a: 'Sí. Contamos con planes por miembro y funcionalidades específicas para gestión gremial.',
+    q: '¿Es difícil de instalar?',
+    a: 'No hay que instalar nada raro. Pulsas un botón, entras con tu correo y ya puedes empezar a organizar tu vida.',
   },
 ];
 

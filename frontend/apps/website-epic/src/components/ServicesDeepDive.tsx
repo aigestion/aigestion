@@ -1,51 +1,37 @@
 import { motion } from 'framer-motion';
-import { Brain, ShieldCheck, Workflow, LineChart, PlugZap, GraduationCap } from 'lucide-react';
+import { Brain, ShieldCheck, Workflow, LineChart, PlugZap, GraduationCap, Layout, Cpu, Database, Shield } from 'lucide-react';
 import React from 'react';
 
 const services = [
   {
-    title: 'Arquitectura IA Soberana',
-    description:
-      'Diseñamos el núcleo inteligente que gobierna procesos críticos con control total de datos y modelos.',
-    icon: Brain,
-    bullets: [
-      'Modelos privados y gobernanza',
-      'Orquestación multi-agente',
-      'Auditoría y explicabilidad',
-    ],
+    title: 'Tu Oficina en el Móvil',
+    description: 'Lleva todo el control de tu negocio en tu bolsillo. Facturas, citas y recados, todo listo para que lo consultes hablando.',
+    icon: Layout,
+    bullets: ['Facturas rápidas', 'Control de stock', 'Citas y recados'],
   },
   {
-    title: 'Automatización Operativa',
-    description:
-      'Flujos inteligentes que reducen tiempos, eliminan errores y conectan equipos en tiempo real.',
-    icon: Workflow,
-    bullets: ['RPA + IA contextual', 'Integración con ERP/CRM', 'SLA y monitoreo continuo'],
+    title: 'Atención a Clientes',
+    description: 'Daniela ayuda a tus clientes por ti, resolviendo dudas y anotando pedidos mientras tú descansas.',
+    icon: Cpu,
+    bullets: ['Ayuda 24 horas', 'Pedidos automáticos', 'Trato cariñoso'],
   },
   {
-    title: 'Seguridad y Cumplimiento',
-    description:
-      'Capas de seguridad, trazabilidad y cumplimiento regulatorio por industria y país.',
-    icon: ShieldCheck,
-    bullets: ['Zero-trust IA', 'Data lineage y retención', 'Cumplimiento sectorial'],
+    title: 'Saber cuánto ganas',
+    description: 'Informes que se entienden a la primera. Mira cuánto has ganado hoy y qué gastos tienes pendientes sin líos.',
+    icon: Database,
+    bullets: ['Cuentas claras', 'Aviso de gastos', 'Simulador de ahorro'],
   },
   {
-    title: 'Inteligencia Comercial',
-    description:
-      'Dashboards y analítica predictiva para ventas, finanzas y operaciones estratégicas.',
-    icon: LineChart,
-    bullets: ['KPIs accionables', 'Forecasting y alertas', 'Simuladores ROI'],
+    title: 'Seguridad Máxima',
+    description: 'Tus datos están más seguros que en un banco. Copias de seguridad automáticas para que nunca pierdas nada.',
+    icon: Shield,
+    bullets: ['Copia de seguridad', 'Privacidad total', 'Acceso con huella/cara'],
   },
   {
-    title: 'Integraciones Extremo a Extremo',
-    description: 'Conectamos tu ecosistema digital sin fricción con APIs y conectores listos.',
-    icon: PlugZap,
-    bullets: ['Conectores empresariales', 'APIs seguras', 'Eventos en tiempo real'],
-  },
-  {
-    title: 'Capacitación & Change Management',
-    description: 'Alineamos al equipo para adopción rápida y sostenible con formación por roles.',
+    title: 'Capacitación & Acompañamiento',
+    description: 'Te enseñamos paso a paso a sacar el máximo partido a Daniela. Nunca estarás solo.',
     icon: GraduationCap,
-    bullets: ['Academia AIGestion', 'Playbooks por gremio', 'Soporte premium'],
+    bullets: ['Academia AIGestion', 'Guías paso a paso', 'Soporte premium'],
   },
 ];
 
