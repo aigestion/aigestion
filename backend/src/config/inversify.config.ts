@@ -267,8 +267,8 @@ if (!container.isBound(GmailService))
   container.bind<GmailService>(GmailService).toSelf().inSingletonScope();
 if (!container.isBound(SheetsService))
   container.bind<SheetsService>(SheetsService).toSelf().inSingletonScope();
-if (!container.isBound(Gemini2Service))
-  container.bind<Gemini2Service>(Gemini2Service).toSelf().inSingletonScope();
+if (!container.isBound(TYPES.Gemini2Service))
+  container.bind<Gemini2Service>(TYPES.Gemini2Service).to(Gemini2Service).inSingletonScope();
 bind<RunwayService>(TYPES.RunwayService, RunwayService);
 bind<PayPalService>(TYPES.PaypalService, PayPalService);
 bind<FacebookService>(TYPES.FacebookService, FacebookService);
@@ -278,16 +278,13 @@ if (!container.isBound(ColabService))
 if (!container.isBound(NotebookInsightService))
   container.bind<NotebookInsightService>(NotebookInsightService).toSelf().inSingletonScope();
 // MapsService binding removed (@googlemaps not installed)
-if (!container.isBound(BigQueryService))
-  container.bind<BigQueryService>(BigQueryService).toSelf().inSingletonScope();
+bind<BigQueryService>(TYPES.BigQueryService, BigQueryService);
 if (!container.isBound(CloudTasksService))
   container.bind<CloudTasksService>(CloudTasksService).toSelf().inSingletonScope();
-if (!container.isBound(VideoIntelligenceService))
-  container.bind<VideoIntelligenceService>(VideoIntelligenceService).toSelf().inSingletonScope();
+bind<VideoIntelligenceService>(TYPES.VideoIntelligenceService, VideoIntelligenceService);
 if (!container.isBound(NexusRadioService))
   container.bind<NexusRadioService>(NexusRadioService).toSelf().inSingletonScope();
-if (!container.isBound(QuantumSecurityService))
-  container.bind<QuantumSecurityService>(QuantumSecurityService).toSelf().inSingletonScope();
+bind<QuantumSecurityService>(TYPES.QuantumSecurityService, QuantumSecurityService);
 // MastraService binding removed (package not installed)
 if (!container.isBound(KeplerService))
   container.bind<KeplerService>(KeplerService).toSelf().inSingletonScope();

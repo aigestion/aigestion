@@ -1,53 +1,75 @@
-import rateLimit from 'express-rate-limit';
-import { Request, Response } from 'express';
-import { config } from '../config/config';
+import { Request, Response, NextFunction } from 'express';
+import { Redis } from 'ioredis';
+import { Logger } from '../utils/logger';
+
+// Default Limits (per window)
+const LIMITS = {
+  AUTH: 5,        // Strict: Login/Register
+  AI: 50,         // Moderate: AI Generation
+  GENERAL: 1000,  // Loose: General API
+};
+
+const WINDOW_MS = 60 * 1000; // 1 Minute
+
+export class RateLimitMiddleware {
+  private redis: Redis | null = null;
+  private logger: Logger;
+
+  constructor(redisClient: Redis | null, logger: Logger) {
+    this.redis = redisClient;
+    this.logger = logger;
+  }
+
+  /**
+   * Factory method to create a middleware handler for a specific limit type
+   */
+  public attempt(type: 'AUTH' | 'AI' | 'GENERAL') {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      // 1. Fail open if Redis is down (or fallback to memory - simpler to fail open for now)
+      if (!this.redis || this.redis.status !== 'ready') {
+        // ideally we would log this once per minute to avoid spam, but for now:
+        // this.logger.warn('Rate limiter disabled: Redis unavailable');
+        return next();
+      }
+
+      const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+      const key = `ratelimit:${type}:${ip}`;
+      const limit = LIMITS[type];
+
+      try {
+        const current = await this.redis.incr(key);
+
+        // Set expiry on first request
+        if (current === 1) {
+          await this.redis.expire(key, WINDOW_MS / 1000);
+        }
+
+        // Add headers (Legacy + Standard)
+        res.setHeader('X-RateLimit-Limit', limit);
+        res.setHeader('X-RateLimit-Remaining', Math.max(0, limit - current));
+        res.setHeader('RateLimit-Limit', limit);
+        res.setHeader('RateLimit-Remaining', Math.max(0, limit - current));
+
+        if (current > limit) {
+          this.logger.warn(`Rate limit exceeded for IP ${ip} on ${type} route`);
+          res.status(429).json({
+            error: 'Too Many Requests',
+            message: 'Please try again later',
+            retryAfter: Math.ceil(WINDOW_MS / 1000)
+          });
+          return;
+        }
+
+        next();
+      } catch (err) {
+        this.logger.error('Rate limiter error', err);
+        next(); // Fail open
+      }
+    };
+  }
+}
+import { getClient } from '../utils/redis';
 import { logger } from '../utils/logger';
 
-/**
- * Dynamic Rate Limiter
- *
- * Applies different rate limits based on user plan/role.
- * Requires user to be authenticated (prop req.user populated).
- * Falls back to IP-based limiting if not authenticated (should be used on protected routes).
- * God/Admin roles bypass rate limiting entirely via the `skip` option.
- */
-export const dynamicRateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // Default 15 minutes
-  skip: (req: Request | any) => {
-    const user = req.user;
-    // God and Admin roles bypass rate limiting entirely
-    return user && (user.role === 'god' || user.role === 'admin');
-  },
-  max: (req: Request | any) => {
-    const user = req.user;
-    if (!user) {
-      return config.rateLimit.plans.default.max;
-    }
-    const plan = user.subscriptionPlan?.toLowerCase();
-    switch (plan) {
-      case 'pro':
-      case 'premium':
-        return config.rateLimit.plans.pro.max;
-      case 'free':
-      default:
-        return config.rateLimit.plans.free.max;
-    }
-  },
-  keyGenerator: (req: Request | any) => {
-    const user = req.user;
-    return user ? `user:${user.id}` : `ip:${req.ip}`;
-  },
-  handler: (req: Request | any, res: Response | any, _next: any, options: any) => {
-    const user = req.user;
-    logger.warn(
-      `Rate limit exceeded for ${user ? `user ${user.id} (${user.role})` : `IP ${req.ip}`}`
-    );
-    res.status(options.statusCode).json({
-      status: 'error',
-      message: 'Too many requests, please try again later.',
-      retryAfter: Math.ceil(options.windowMs / 1000),
-    });
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+export const rateLimitMiddleware = new RateLimitMiddleware(getClient(), logger);
+export const dynamicRateLimiter = rateLimitMiddleware.attempt('GENERAL');

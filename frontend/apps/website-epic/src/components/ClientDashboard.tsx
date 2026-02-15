@@ -1,10 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import CountUp from 'react-countup';
 import {
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -21,12 +20,9 @@ import {
   Star,
   Zap,
   CheckCircle,
-  Activity,
   AlertCircle,
-  DollarSign,
-  Settings,
-  Database,
   Shield,
+  Loader2,
 } from 'lucide-react';
 import { api, SystemHealth } from '../services/api';
 
@@ -50,11 +46,44 @@ const ClientDashboard = () => {
     const interval = setInterval(checkConnection, 30000);
     return () => clearInterval(interval);
   }, []);
+
   const stats = [
-    { title: 'Proyectos Activos', value: '8', icon: Briefcase, color: 'text-emerald-400' },
-    { title: 'Tasa de Éxito', value: '94.2%', icon: Target, color: 'text-blue-400' },
-    { title: 'Clientes Satisfechos', value: '156', icon: Users, color: 'text-purple-400' },
-    { title: 'Logros Conseguidos', value: '23', icon: Award, color: 'text-orange-400' },
+    {
+      title: 'Proyectos Activos',
+      value: 8,
+      icon: Briefcase,
+      color: 'text-emerald-400',
+      bg: 'bg-emerald-400',
+      shadow: 'shadow-[0_0_20px_rgba(52,211,153,0.3)]',
+      suffix: '',
+    },
+    {
+      title: 'Tasa de Éxito',
+      value: 94.2,
+      icon: Target,
+      color: 'text-cyan-400',
+      bg: 'bg-cyan-400',
+      shadow: 'shadow-[0_0_20px_rgba(34,211,238,0.3)]',
+      suffix: '%',
+    },
+    {
+      title: 'Clientes Satisfechos',
+      value: 156,
+      icon: Users,
+      color: 'text-purple-400',
+      bg: 'bg-purple-400',
+      shadow: 'shadow-[0_0_20px_rgba(192,132,252,0.3)]',
+      suffix: '',
+    },
+    {
+      title: 'Logros Conseguidos',
+      value: 23,
+      icon: Award,
+      color: 'text-orange-400',
+      bg: 'bg-orange-400',
+      shadow: 'shadow-[0_0_20px_rgba(251,146,60,0.3)]',
+      suffix: '',
+    },
   ];
 
   const progressData = [
@@ -74,205 +103,342 @@ const ClientDashboard = () => {
   ];
 
   return (
-    <div className="p-6 space-y-6">
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="flex items-center justify-between"
-      >
-        <h1 className="text-4xl font-bold text-white">💎 Base Personal</h1>
-        <div className="flex space-x-4">
-          <button className="p-2 bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors">
-            <Star className="w-5 h-5 text-white" />
-          </button>
-        </div>
-      </motion.div>
-
-      {/* System Status Indicator */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center space-x-2 mb-4"
-      >
-        <div
-          className={`px-3 py-1 rounded-full text-xs font-medium flex items-center space-x-1 ${
-            connectionStatus === 'connected'
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-              : connectionStatus === 'error'
-                ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-          }`}
-        >
-          {connectionStatus === 'connected' ? (
-            <>
-              <Activity className="w-3 h-3" />
-              <span>System Online</span>
-            </>
-          ) : connectionStatus === 'error' ? (
-            <>
-              <AlertCircle className="w-3 h-3" />
-              <span>System Offline</span>
-            </>
-          ) : (
-            <>
-              <Activity className="w-3 h-3 animate-pulse" />
-              <span>Connecting...</span>
-            </>
-          )}
-        </div>
-        {health?.data?.version && (
-          <span className="text-xs text-white/30">v{health.data.version}</span>
-        )}
-      </motion.div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <motion.div
-            key={index}
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: index * 0.1 }}
-            className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-white/70 text-sm">{stat.title}</p>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-              </div>
-              <stat.icon className={`w-8 h-8 ${stat.color}`} />
-            </div>
-          </motion.div>
-        ))}
+    <div className="min-h-screen bg-black/90 p-6 md:p-12 font-sans selection:bg-cyan-500/30 relative overflow-hidden">
+      {/* Ambient Background Glow */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px]" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="max-w-7xl mx-auto relative z-10 space-y-8">
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="flex flex-col md:flex-row items-center justify-between gap-6"
         >
-          <h2 className="text-xl font-semibold text-white mb-4">📈 Progreso de Proyectos</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={progressData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
-              <XAxis dataKey="name" stroke="#ffffff" />
-              <YAxis stroke="#ffffff" />
-              <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: 'none' }} />
-              <Legend />
-              <Line type="monotone" dataKey="completado" stroke="#10b981" strokeWidth={2} />
-              <Line
-                type="monotone"
-                dataKey="objetivo"
-                stroke="#3b82f6"
-                strokeWidth={2}
-                strokeDasharray="5 5"
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <div>
+            <h1 className="text-4xl md:text-5xl font-orbitron font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] animate-gradient-x">
+              BASE{' '}
+              <span className="text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]">
+                PERSONAL
+              </span>
+            </h1>
+            <p className="text-gray-400 mt-2 font-light tracking-wide">
+              Panel de Control de Inteligencia Soberana
+            </p>
+          </div>
+          <div className="flex space-x-4">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-xl hover:bg-emerald-500/20 text-emerald-400 transition-all flex items-center gap-2 shadow-[0_0_15px_rgba(16,185,129,0.1)] hover:shadow-[0_0_25px_rgba(16,185,129,0.25)]"
+            >
+              <Star className="w-4 h-4" />
+              <span className="font-orbitron text-sm tracking-wider">PRIORIDAD</span>
+            </motion.button>
+          </div>
         </motion.div>
 
+        {/* System Status Indicator */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex items-center space-x-4"
         >
-          <h2 className="text-xl font-semibold text-white mb-4">🏆 Logros y Trofeos</h2>
-          <div className="space-y-3">
-            {achievements.map((achievement, index) => (
-              <motion.div
-                key={index}
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: index * 0.1 }}
-                className={`p-3 rounded-lg border ${
-                  achievement.unlocked
-                    ? 'bg-emerald-500/20 border-emerald-500/50'
-                    : 'bg-gray-500/20 border-gray-500/50'
-                }`}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className={`text-2xl ${achievement.unlocked ? '' : 'opacity-50'}`}>
-                    {achievement.unlocked ? (
-                      <CheckCircle className="w-6 h-6 text-emerald-400" />
-                    ) : (
-                      '🔒'
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <h3
-                      className={`font-semibold ${achievement.unlocked ? 'text-white' : 'text-gray-400'}`}
-                    >
-                      {achievement.title}
-                    </h3>
-                    <p
-                      className={`text-sm ${achievement.unlocked ? 'text-white/70' : 'text-gray-500'}`}
-                    >
-                      {achievement.description}
-                    </p>
+          <div
+            className={`px-4 py-1.5 rounded-full text-xs font-bold tracking-wider flex items-center gap-2 backdrop-blur-md transition-all duration-300 ${
+              connectionStatus === 'connected'
+                ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
+                : connectionStatus === 'error'
+                  ? 'bg-red-500/10 text-red-300 border border-red-500/30'
+                  : 'bg-blue-500/10 text-blue-300 border border-blue-500/30'
+            }`}
+          >
+            {connectionStatus === 'connected' ? (
+              <>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+                <span className="font-orbitron">SYSTEM ONLINE</span>
+              </>
+            ) : connectionStatus === 'error' ? (
+              <>
+                <AlertCircle className="w-3 h-3" />
+                <span className="font-orbitron">OFFLINE</span>
+              </>
+            ) : (
+              <>
+                <Loader2 className="w-3 h-3 animate-spin" />
+                <span className="font-orbitron">CONNECTING...</span>
+              </>
+            )}
+          </div>
+          {health?.data?.version && (
+            <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-orbitron">
+              v{health.data.version}
+            </span>
+          )}
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: index * 0.1 + 0.2 }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10 group hover:border-white/20 hover:bg-black/50 transition-all duration-300 relative overflow-hidden"
+            >
+              <div
+                className={`absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl ${stat.bg}`}
+              />
+
+              <div className="flex items-center justify-between relative z-10">
+                <div>
+                  <p className="text-gray-400 text-xs uppercase tracking-wider font-orbitron mb-1">
+                    {stat.title}
+                  </p>
+                  <div className="text-3xl font-bold text-white tracking-tight flex items-baseline">
+                    <CountUp
+                      end={stat.value}
+                      duration={2.5}
+                      decimals={stat.value % 1 !== 0 ? 1 : 0}
+                      separator=","
+                    />
+                    <span className="text-sm ml-1 text-gray-500">{stat.suffix}</span>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+                <div
+                  className={`p-3 rounded-xl bg-white/5 border border-white/5 ${stat.shadow} ${stat.color}`}
+                >
+                  <stat.icon className="w-6 h-6" />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="bg-black/40 backdrop-blur-xl rounded-2xl p-8 border border-white/10 relative group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none rounded-2xl" />
+            <h2 className="text-xl font-orbitron font-bold text-white mb-6 flex items-center gap-3">
+              <TrendingUp className="w-5 h-5 text-cyan-400" />
+              VELOCIDAD DE EJECUCIÓN
+            </h2>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={progressData}>
+                  <defs>
+                    <linearGradient id="colorCompletado" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="colorObjetivo" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#a855f7" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="#a855f7" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="rgba(255,255,255,0.05)"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="name"
+                    stroke="rgba(255,255,255,0.3)"
+                    tick={{ fontSize: 12, fontFamily: 'Orbitron' }}
+                    axisLine={false}
+                    tickLine={false}
+                    dy={10}
+                  />
+                  <YAxis
+                    stroke="rgba(255,255,255,0.3)"
+                    tick={{ fontSize: 12, fontFamily: 'Orbitron' }}
+                    axisLine={false}
+                    tickLine={false}
+                    dx={-10}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: 'rgba(0,0,0,0.8)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '12px',
+                      backdropFilter: 'blur(10px)',
+                      boxShadow: '0 0 20px rgba(0,0,0,0.5)',
+                    }}
+                    itemStyle={{ color: '#fff', fontFamily: 'sans-serif' }}
+                  />
+                  <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                  <Area
+                    type="monotone"
+                    dataKey="completado"
+                    stroke="#22d3ee"
+                    fillOpacity={1}
+                    fill="url(#colorCompletado)"
+                    strokeWidth={3}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="objetivo"
+                    stroke="#a855f7"
+                    fillOpacity={1}
+                    fill="url(#colorObjetivo)"
+                    strokeWidth={2}
+                    strokeDasharray="4 4"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="bg-black/40 backdrop-blur-xl rounded-2xl p-8 border border-white/10"
+          >
+            <h2 className="text-xl font-orbitron font-bold text-white mb-6 flex items-center gap-3">
+              <Award className="w-5 h-5 text-orange-400" />
+              TROFEOS ACTIVADOS
+            </h2>
+            <div className="space-y-4">
+              {achievements.map((achievement, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.6 + index * 0.1 }}
+                  whileHover={{ x: 5 }}
+                  className={`p-4 rounded-xl border transition-all duration-300 relative overflow-hidden ${
+                    achievement.unlocked
+                      ? 'bg-gradient-to-r from-emerald-500/5 to-transparent border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.05)]'
+                      : 'bg-white/5 border-white/5 opacity-60 grayscale'
+                  }`}
+                >
+                  <div className="flex items-center space-x-4 relative z-10">
+                    <div className="shrink-0">
+                      {achievement.unlocked ? (
+                        <div className="bg-emerald-500/10 p-2 rounded-full border border-emerald-500/20">
+                          <CheckCircle className="w-5 h-5 text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+                        </div>
+                      ) : (
+                        <div className="bg-white/5 p-2 rounded-full">
+                          <Shield className="w-5 h-5 text-gray-500" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <h3
+                        className={`font-bold font-orbitron text-sm ${achievement.unlocked ? 'text-white' : 'text-gray-400'}`}
+                      >
+                        {achievement.title}
+                      </h3>
+                      <p
+                        className={`text-sm mt-0.5 ${achievement.unlocked ? 'text-gray-400' : 'text-gray-600'}`}
+                      >
+                        {achievement.description}
+                      </p>
+                    </div>
+                    {achievement.unlocked && (
+                      <div className="text-emerald-500/20">
+                        <Star className="w-12 h-12 absolute -right-2 -top-2 opacity-10 rotate-12" />
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        >
+          <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-emerald-500/30 transition-colors duration-300 group">
+            <h3 className="text-sm font-bold font-orbitron mb-4 flex items-center tracking-wider text-emerald-400">
+              <Briefcase className="w-4 h-4 mr-2" />
+              PROYECTOS RECIENTES
+            </h3>
+            <div className="space-y-3">
+              <div className="p-3 bg-white/5 rounded-xl border border-white/5 group-hover:border-emerald-500/20 transition-colors">
+                <div className="flex justify-between items-center mb-1">
+                  <p className="text-white font-medium text-sm">Dashboard Analytics</p>
+                  <span className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30">
+                    DONE
+                  </span>
+                </div>
+                <div className="w-full bg-white/10 h-1 rounded-full mt-2 overflow-hidden">
+                  <div className="bg-emerald-400 h-full w-full shadow-[0_0_10px_#34d399]" />
+                </div>
+              </div>
+              <div className="p-3 bg-white/5 rounded-xl border border-white/5">
+                <div className="flex justify-between items-center mb-1">
+                  <p className="text-white font-medium text-sm">API Integration</p>
+                  <span className="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full border border-blue-500/30">
+                    75%
+                  </span>
+                </div>
+                <div className="w-full bg-white/10 h-1 rounded-full mt-2 overflow-hidden">
+                  <div className="bg-blue-400 h-full w-3/4 shadow-[0_0_10px_#60a5fa]" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-yellow-500/30 transition-colors duration-300">
+            <h3 className="text-sm font-bold font-orbitron mb-4 flex items-center tracking-wider text-yellow-400">
+              <Zap className="w-4 h-4 mr-2" />
+              ACTIVIDAD EN VIVO
+            </h3>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                <span className="text-gray-400">Último acceso</span>
+                <span className="text-white font-mono">Hace 2h</span>
+              </div>
+              <div className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                <span className="text-gray-400">Sync Status</span>
+                <span className="text-emerald-400 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Active
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-400">Nivel de Energía</span>
+                <span className="text-yellow-400 font-bold">98%</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-purple-500/30 transition-colors duration-300">
+            <h3 className="text-sm font-bold font-orbitron mb-4 flex items-center tracking-wider text-purple-400">
+              <TrendingUp className="w-4 h-4 mr-2" />
+              MÉTRICAS DE IMPACTO
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white/5 rounded-xl p-3 text-center border border-white/5">
+                <p className="text-3xl font-bold text-white mb-1">+2</p>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider">Proyectos</p>
+              </div>
+              <div className="bg-white/5 rounded-xl p-3 text-center border border-white/5">
+                <p className="text-3xl font-bold text-white mb-1">+5%</p>
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider">Satisfacción</p>
+              </div>
+              <div className="col-span-2 bg-gradient-to-r from-purple-500/10 to-transparent rounded-xl p-3 border border-purple-500/20 flex items-center justify-between">
+                <span className="text-xs text-purple-300">Crecimiento Total</span>
+                <TrendingUp className="w-4 h-4 text-purple-400" />
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
-
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-      >
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <Briefcase className="w-5 h-5 mr-2 text-emerald-400" />
-            Proyectos Recientes
-          </h3>
-          <div className="space-y-2">
-            <div className="p-2 bg-emerald-500/20 rounded border border-emerald-500/50">
-              <p className="text-white font-medium">Dashboard Analytics</p>
-              <p className="text-white/70 text-sm">Completado • 100%</p>
-            </div>
-            <div className="p-2 bg-blue-500/20 rounded border border-blue-500/50">
-              <p className="text-white font-medium">API Integration</p>
-              <p className="text-white/70 text-sm">En progreso • 75%</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <Zap className="w-5 h-5 mr-2 text-yellow-400" />
-            Actividad Reciente
-          </h3>
-          <div className="space-y-2">
-            <div className="flex justify-between text-white/70">
-              <span>Último login</span>
-              <span className="text-emerald-400">Hace 2h</span>
-            </div>
-            <div className="flex justify-between text-white/70">
-              <span>Proyectos actualizados</span>
-              <span className="text-blue-400">3</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <TrendingUp className="w-5 h-5 mr-2 text-purple-400" />
-            Métricas de Crecimiento
-          </h3>
-          <div className="space-y-2">
-            <div className="flex justify-between text-white/70">
-              <span>Proyectos este mes</span>
-              <span className="text-emerald-400">+2</span>
-            </div>
-            <div className="flex justify-between text-white/70">
-              <span>Satisfacción cliente</span>
-              <span className="text-purple-400">+5%</span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
-import * as fs from 'fs';
-import path from 'path';
-import { ARGS, REPO_ROOT } from 'tests/utils';
+import * as fs from 'node:fs';
+import path from 'node:path';
+import { ARGS, REPO_ROOT } from './index';
 import YAML from 'yaml';
 
 /**

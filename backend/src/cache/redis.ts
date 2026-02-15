@@ -20,6 +20,8 @@ export const getRedisClient = (): RedisClientType => {
         connect: async () => {},
         quit: async () => {},
         isOpen: true,
+        isReady: true,
+        status: 'ready',
         get: async () => null,
         set: async () => 'OK',
         setEx: async () => 'OK',

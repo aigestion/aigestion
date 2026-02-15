@@ -125,7 +125,7 @@ const extractLandingStateFields = (
   { issues = [], unformattedFiles = [], lintActions = [], taskFailures = [] }: LandingState
 ) =>
   ({
-    issues: sort(issues.map(normalizeIssues)).asc(issue => [
+    issues: sort(issues.map(normalizeIssues)).asc((issue: FileIssue) => [
       issue.file,
       issue.line,
       issue.column,
@@ -133,7 +133,7 @@ const extractLandingStateFields = (
       issue.message,
       issue.belowThreshold,
     ]),
-    unformattedFiles: sort(unformattedFiles.map(normalizeIssues)).asc(issue => [
+    unformattedFiles: sort(unformattedFiles.map(normalizeIssues)).asc((issue: FileIssue) => [
       issue.file,
       issue.line,
       issue.column,
@@ -148,8 +148,8 @@ const extractLandingStateFields = (
       action.paths,
     ]),
     taskFailures: sort(
-      taskFailures.map(failure => extractTaskFailureFields(sandboxPath, failure))
-    ).asc(failure => [failure.name, failure.message]),
+      taskFailures.map((failure: TaskFailure) => extractTaskFailureFields(sandboxPath, failure))
+    ).asc((failure: TaskFailure) => [failure.name, failure.message]),
   }) as LandingState;
 
 /**

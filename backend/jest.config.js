@@ -10,6 +10,7 @@ module.exports = {
       'ts-jest',
       {
         isolatedModules: true,
+        tsconfig: '<rootDir>/tsconfig.test.json',
       },
     ],
   },
@@ -21,7 +22,7 @@ module.exports = {
   setupFiles: ['dotenv/config'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   cacheDirectory: '.jest-cache',
-  maxWorkers: '50%',
+  maxWorkers: 1, // Prevent worker crashes on Windows
   // Ignore mock utils to prevent them being run as tests
   testPathIgnorePatterns: ['/node_modules/', '/dist/', '/src/__test_utils__/'],
   transformIgnorePatterns: ['node_modules/(?!(mastra|llamaindex|googleapis)/)'],

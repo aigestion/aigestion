@@ -6,6 +6,8 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import { SoundProvider } from './contexts/SoundContext';
 import { useAuth } from './hooks/useAuth';
 import { QueryProvider } from './providers/QueryProvider';
+import { NetworkProvider } from './contexts/NetworkContext';
+import { NetworkToast } from './components/NetworkToast';
 
 function MainApp() {
   return (
@@ -15,7 +17,10 @@ function MainApp() {
           <SoundProvider>
             <NexusProvider>
               <NotificationProvider>
-                <AppContentWithAuth />
+                <NetworkProvider>
+                  <NetworkToast />
+                  <AppContentWithAuth />
+                </NetworkProvider>
               </NotificationProvider>
             </NexusProvider>
           </SoundProvider>

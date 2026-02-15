@@ -120,7 +120,7 @@ export const LoadingFallback = () => (
     <div className="flex flex-col items-center gap-6">
       <div className="w-16 h-16 border-t-2 border-nexus-cyan-glow rounded-full animate-spin" />
       <div className="text-nexus-cyan-glow font-orbitron tracking-[0.8em] text-[10px] animate-pulse">
-        ESTABLECIENDO CONEXIÓN SOBERANA...
+        ESTABLECIENDO CONEXIÓN SEGURA...
       </div>
     </div>
   </div>
@@ -153,7 +153,7 @@ export const AppContent = ({
     if (isGodMode) {
       sessionStorage.setItem('god_mode_bypass', 'true');
       setBypassMaintenance(true);
-      notify('GOD MODE ACTIVADO', 'Bypass de mantenimiento habilitado', 'success');
+      notify('MODO AVANZADO ACTIVADO', 'Bypass de mantenimiento habilitado', 'success');
     }
   }, [isGodMode, notify]);
 

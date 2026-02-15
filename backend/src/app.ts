@@ -67,33 +67,14 @@ app.use(
   })
 );
 
-// Rate limiting middleware (15 min window, 100 requests per IP)
-const isTest = process.env.NODE_ENV === 'test' || !!process.env.JEST_WORKER_ID;
+// Rate limiting middleware (Granular Redis-backed)
+import { rateLimiter } from './middleware/rate-limiter.instance';
 
-// Redis client for rate limiting store (Reusing unified client)
-let redisClient: any;
-if (!isTest) {
-  // getRedisClient handles connection internally or returns existing one
-  redisClient = getRedisClient();
-}
-
-const useRedis = !isTest && process.env.ENABLE_REDIS !== 'false';
-
-const apiLimiter = rateLimit({
-  store: !useRedis
-    ? undefined // Use default MemoryStore for tests or if Redis is disabled
-    : new RateLimitRedisStore({
-        sendCommand: (...args) => redisClient.sendCommand(args),
-      }),
-  windowMs: 15 * 60 * 1000,
-  max: config.rateLimit.max,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-// Apply rate limiter to all API routes
-if (!isTest) {
-  app.use('/api/v1', apiLimiter);
+// Apply 'GENERAL' rate limiter to all API routes
+// Use looser general limit globally (1000 req/min) 
+// Specific routes (Auth/AI) will have tighter limits applied in their routers
+if (process.env.NODE_ENV !== 'test' && !process.env.JEST_WORKER_ID) {
+  app.use('/api/v1', rateLimiter.attempt('GENERAL'));
 }
 
 // Security middlewares

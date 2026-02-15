@@ -167,9 +167,9 @@ class SovereignGodModeService {
       const tagBuffer = this.hexToBuffer(encrypted.tag);
 
       // Web Crypto requires the tag to be at the end of the ciphertext
-      const combinedData = new Uint8Array(cipherBuffer.length + tagBuffer.length);
+      const combinedData = new Uint8Array(cipherBuffer.byteLength + tagBuffer.byteLength);
       combinedData.set(new Uint8Array(cipherBuffer));
-      combinedData.set(new Uint8Array(tagBuffer), cipherBuffer.length);
+      combinedData.set(new Uint8Array(tagBuffer), cipherBuffer.byteLength);
 
       const cryptoKey = await window.crypto.subtle.importKey('raw', keyBuffer, 'AES-GCM', false, [
         'decrypt',
@@ -221,7 +221,7 @@ class SovereignGodModeService {
   }
 
   private hexToBuffer(hex: string): ArrayBuffer {
-    return this.hexToUint8Array(hex).buffer;
+    return this.hexToUint8Array(hex).buffer as ArrayBuffer;
   }
 }
 

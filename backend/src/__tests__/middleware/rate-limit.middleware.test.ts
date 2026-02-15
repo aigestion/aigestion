@@ -1,5 +1,7 @@
 import request from 'supertest';
 import express from 'express';
+import { dynamicRateLimiter } from '../../middleware/rate-limit.middleware';
+import { config } from '../../config/config';
 
 // Mock logger to avoid pino initialization issues
 jest.mock('../../utils/logger', () => ({
@@ -13,64 +15,65 @@ jest.mock('../../utils/logger', () => ({
 }));
 
 describe('Dynamic Rate Limiter Middleware', () => {
-  it('should initialize and respond when applied to routes', async () => {
-    // Fresh import per test to avoid shared rate limiter state
-    let dynamicRateLimiter: any;
-    jest.isolateModules(() => {
-      dynamicRateLimiter = require('../../middleware/rate-limit.middleware').dynamicRateLimiter;
-    });
+  let app: express.Express;
 
-    const app = express();
+  beforeEach(() => {
+    app = express();
     app.use(express.json());
-    app.use((req, _res, next) => {
-      (req as any).user = { id: 'test-user', role: 'god', subscriptionPlan: 'god' };
+
+    // Mock user middleware
+    app.use((req, res, next) => {
+      const role = req.headers['x-test-role'] as string;
+      const plan = req.headers['x-test-plan'] as string;
+
+      if (role || plan) {
+        (req as any).user = {
+          id: 'test-user',
+          role: role || 'user',
+          subscriptionPlan: plan || 'free',
+        };
+      }
       next();
     });
-    app.get('/test', dynamicRateLimiter, (_req, res) => {
+
+    app.get('/test', dynamicRateLimiter, (req, res) => {
       res.status(200).json({ status: 'ok' });
     });
+  };);
 
-    const res = await request(app).get('/test');
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should initialize and respond when applied to routes', async () => {
+    const res = await request(app).get('/test').set('x-test-role', 'god');
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('ok');
   });
 
-  it('should set rate limit headers for standard users', async () => {
-    let dynamicRateLimiter: any;
-    jest.isolateModules(() => {
-      dynamicRateLimiter = require('../../middleware/rate-limit.middleware').dynamicRateLimiter;
-    });
-
-    const app = express();
-    app.use(express.json());
-    app.use((req, _res, next) => {
-      (req as any).user = { id: 'test-user', role: 'user', subscriptionPlan: 'free' };
-      next();
-    });
-    app.get('/test', dynamicRateLimiter, (_req, res) => {
-      res.status(200).json({ status: 'ok' });
-    });
-
-    const res = await request(app).get('/test');
+  it('should set rate limit headers for standard users (free)', async () => {
+    const res = await request(app).get('/test').set('x-test-plan', 'free');
     expect(res.status).toBe(200);
-    // express-rate-limit sets ratelimit-limit header (standard headers v7)
     expect(res.headers['ratelimit-limit']).toBeDefined();
+    expect(res.headers['ratelimit-limit']).toBe(config.rateLimit.plans.free.max.toString());
   });
 
-  it('should process request without user (anonymous)', async () => {
-    let dynamicRateLimiter: any;
-    jest.isolateModules(() => {
-      dynamicRateLimiter = require('../../middleware/rate-limit.middleware').dynamicRateLimiter;
-    });
+  it('should apply PRO limit', async () => {
+    const res = await request(app).get('/test').set('x-test-plan', 'pro');
+    expect(res.status).toBe(200);
+    expect(res.headers['ratelimit-limit']).toBe(config.rateLimit.plans.pro.max.toString());
+  });
 
-    const app = express();
-    app.use(express.json());
-    // No user middleware - anonymous request
-    app.get('/test', dynamicRateLimiter, (_req, res) => {
-      res.status(200).json({ status: 'ok' });
-    });
+  it('should skip rate limiting for GOD role', async () => {
+    const res = await request(app).get('/test').set('x-test-role', 'god');
+    expect(res.status).toBe(200);
+    // God role skips the limiter, so header should be undefined (no rate limit headers sent)
+    expect(res.headers['ratelimit-limit']).toBeUndefined();
+  });
 
+  it('should process request without user (anonymous) and apply default limit', async () => {
     const res = await request(app).get('/test');
     expect(res.status).toBe(200);
+    expect(res.headers['ratelimit-limit']).toBe(config.rateLimit.plans.default.max.toString());
   });
 });
