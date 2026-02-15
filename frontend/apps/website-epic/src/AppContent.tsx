@@ -108,6 +108,9 @@ const VirtualOfficePreview = lazy(() => import('./pages/VirtualOfficePreview'));
 const ClientDashboard = lazy(() =>
   import('./components/ClientDashboard').then(m => ({ default: m.ClientDashboard }))
 );
+const BillingDashboard = lazy(() =>
+  import('./pages/BillingDashboard').then(m => ({ default: m.BillingDashboard }))
+);
 
 // ============================================
 // UI Components
@@ -228,6 +231,10 @@ export const AppContent = ({
             <Route
               path="/client"
               element={isAuthenticated ? <ClientDashboard /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/billing"
+              element={isAuthenticated ? <BillingDashboard /> : <Navigate to="/login" />}
             />
             <Route path="/weapon" element={<WeaponDashboard />} />
             <Route path="/daniela/*" element={<DanielaDemo />} />
