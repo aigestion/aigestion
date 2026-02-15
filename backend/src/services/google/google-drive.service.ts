@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
 import { injectable } from 'inversify';
+import * as fs from 'fs';
 
 import { logger } from '../../utils/logger';
 
@@ -19,7 +20,7 @@ export class GoogleDriveService {
            await this.getDriveClient();
       }
       if (!this.drive) throw new Error('Drive client not initialized');
-      
+
       const media = {
           mimeType,
           body: require('stream').Readable.from(content)

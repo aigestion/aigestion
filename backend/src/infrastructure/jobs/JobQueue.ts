@@ -1,6 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { Queue, QueueOptions } from 'bullmq';
 import { JobName, IJobPayloads } from './job-definitions';
+import { config } from '../../config/config';
 import { logger } from '../../utils/logger';
 
 @injectable()
@@ -10,15 +11,15 @@ export class JobQueue {
 
   constructor() {
     this.redisOptions = {
-      host: process.env.REDIS_HOST || 'localhost',
-      port: parseInt(process.env.REDIS_PORT || '6379'),
-      password: process.env.REDIS_PASSWORD || undefined,
+      host: config.redis.host,
+      port: parseInt(config.redis.port),
+      password: config.redis.password || undefined,
     };
     this.initializeQueues();
   }
 
   private initializeQueues() {
-    if (process.env.ENABLE_REDIS === 'false') {
+    if (process.env.ENABLE_REDIS === 'false' || !config.redis.enabled) {
       logger.info('JobQueue: Redis disabled, skipping queue initialization');
       return;
     }
@@ -38,7 +39,7 @@ export class JobQueue {
   ): Promise<void> {
     const queue = this.queues.get(name as string);
     if (!queue) {
-      if (process.env.ENABLE_REDIS === 'false') {
+      if (process.env.ENABLE_REDIS === 'false' || !config.redis.enabled) {
         logger.warn(`JobQueue: Redis disabled, skipping job ${name}`);
         return;
       }

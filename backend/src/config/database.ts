@@ -7,10 +7,13 @@ const { mongo } = config;
 
 const connectOptions: ConnectOptions = {
   serverSelectionTimeoutMS: 5000,
-  maxPoolSize: 100, // Increase pool for high concurrency
-  minPoolSize: 10, // Keep warm connections
-  connectTimeoutMS: 5000,
+  maxPoolSize: parseInt(process.env.MONGODB_MAX_POOL_SIZE || '150'), // Increased for high concurrency
+  minPoolSize: parseInt(process.env.MONGODB_MIN_POOL_SIZE || '20'), // Keep more warm connections
+  connectTimeoutMS: 10000,
   socketTimeoutMS: 45000,
+  waitQueueTimeoutMS: 10000,
+  heartbeatFrequencyMS: 10000,
+  maxIdleTimeMS: 30000,
   family: 4, // Faster IPv4 lookup
 };
 

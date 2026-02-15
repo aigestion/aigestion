@@ -1,8 +1,5 @@
 {
-  "url": "REPLACE_WITH_WINDSURF_API_URL",
-  "input_field": "input",
-  "output_field": "prediction",
-  "headers": {
-    "Authorization": "Bearer REPLACE_WITH_YOUR_TOKEN"
-  }
+  "project": "AIGestion",
+  "api_type": "standard",
+  "description": "General API configuration example"
 }

@@ -35,9 +35,6 @@ export default defineConfig({
       },
       mangle: {
         safari10: true,
-        properties: {
-          '^_': '',
-        },
       },
     },
     reportCompressedSize: false,
