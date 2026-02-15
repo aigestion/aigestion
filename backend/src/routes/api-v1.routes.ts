@@ -8,7 +8,7 @@ import { TYPES } from '../types';
 // Middleware
 import { apiKeyAuth } from '../middleware/api-key.middleware';
 import { idempotencyMiddleware } from '../middleware/idempotency.middleware';
-import { dynamicRateLimiter } from '../middleware/rate-limit.middleware';
+import { rateLimiter } from '../middleware/rate-limiter.instance';
 import { redisCache } from '../middleware/redis-cache.middleware';
 import { requireAuth } from '../middleware/auth.middleware';
 
@@ -95,7 +95,7 @@ apiV1Router.post('/billing/portal', requireAuth, (req, res, next) => {
 apiV1Router.use('/analytics', redisCache(30), lazy('./analytics.routes'));
 apiV1Router.use('/enhanced-voice', lazy('./enhanced-voice.routes'));
 apiV1Router.use('/daniela', lazy('./daniela.routes'));
-apiV1Router.use('/ai', dynamicRateLimiter, lazy('./ai.routes'));
+apiV1Router.use('/ai', rateLimiter.attempt('AI'), lazy('./ai.routes'));
 apiV1Router.use('/rag', lazy('./rag.routes'));
 
 // System Management (Lazy)

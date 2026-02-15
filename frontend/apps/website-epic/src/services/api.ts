@@ -60,4 +60,34 @@ export const api = {
       throw error;
     }
   },
+  get: async <T = any>(endpoint: string): Promise<{ data: T }> => {
+    try {
+      const response = await fetch(`${API_URL}${endpoint}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return { data: await response.json() };
+    } catch (error) {
+      console.error(`Error fetching ${endpoint}:`, error);
+      throw error;
+    }
+  },
+  post: async <T = any>(endpoint: string, body?: any): Promise<{ data: T }> => {
+    try {
+      const response = await fetch(`${API_URL}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return { data: await response.json() };
+    } catch (error) {
+      console.error(`Error posting to ${endpoint}:`, error);
+      throw error;
+    }
+  },
 };

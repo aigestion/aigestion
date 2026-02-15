@@ -4,32 +4,34 @@ description: Build and deploy the website-epic application to Cloud Run
 
 # Deploy Website Epic
 
-## 1. Build Docker Image
+This workflow builds the `website-epic` frontend and deploys it to Google Cloud Run under the `aigestion-sovereign-2026` project.
 
-// turbo
+## 1. Build Production Bundle
+
+- [ ] Build the frontend app using pnpm.
+      // turbo
 
 ```bash
 cd frontend/apps/website-epic
-docker build -f Dockerfile.production -t gcr.io/aigestion-pro-2026/website-epic:latest .
+pnpm build
 ```
 
-## 2. Push Docker Image
+## 2. Docker Cloud Build
 
-// turbo
+- [ ] Build and push Docker image using Google Cloud Build (Artifact Injection Method).
 
 ```bash
-docker push gcr.io/aigestion-pro-2026/website-epic:latest
+cd frontend/apps/website-epic
+# Use the specialized deployment Dockerfile that consumes pre-built assets
+gcloud builds submit --tag gcr.io/aigestion-sovereign-2026/website-epic:latest --dockerfile Dockerfile.deploy .
 ```
+
+*Note: Ensure `cloudbuild.yaml` or the command points to `Dockerfile.deploy`.*
 
 ## 3. Deploy to Cloud Run
 
-// turbo
+- [ ] Deploy the image to Cloud Run with public access.
 
 ```bash
-gcloud run deploy website-epic \
-  --image gcr.io/aigestion-pro-2026/website-epic:latest \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --project aigestion-pro-2026
+gcloud run deploy website-epic --image gcr.io/aigestion-sovereign-2026/website-epic:latest --platform managed --region us-central1 --allow-unauthenticated --project aigestion-sovereign-2026
 ```
