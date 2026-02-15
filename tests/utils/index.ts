@@ -3,8 +3,8 @@ import fs from 'fs';
 import * as os from 'os';
 import path from 'path';
 import semver from 'semver';
-import { TestTarget } from 'tests/driver';
-import { CheckType, LandingState, LinterVersion, TaskFailure, TestingArguments } from 'tests/types';
+import { TestTarget } from '../driver';
+import { CheckType, LandingState, LinterVersion, TaskFailure, TestingArguments } from '../types';
 
 export const REPO_ROOT = path.resolve(__dirname, '../..');
 export const TEST_DATA = 'test_data';

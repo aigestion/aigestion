@@ -8,30 +8,30 @@ export const Footer: React.FC = () => {
 
   const footerLinks = [
     {
-      title: 'SOLUCIONES',
+      title: 'LO QUE HACEMOS',
       links: [
-        { name: 'Arquitectura Neural', href: '#' },
-        { name: 'Soberanía de Datos', href: '#' },
-        { name: 'Automatización Elite', href: '#' },
-        { name: 'Seguridad Cuántica', href: '#' },
+        { name: 'Ayuda inteligente', href: '#' },
+        { name: 'Control de tus datos', href: '#' },
+        { name: 'Organización total', href: '#' },
+        { name: 'Seguridad máxima', href: '#' },
       ],
     },
     {
-      title: 'ECOSISTEMA',
+      title: 'NUESTRA TECNOLOGÍA',
       links: [
-        { name: 'Nexus V2', href: '#' },
-        { name: 'Daniela AI', href: '#' },
-        { name: 'Swarms de Ejecución', href: '#' },
-        { name: 'Bridge Soberano', href: '#' },
+        { name: 'Centro de Control', href: '#' },
+        { name: 'Asistente Daniela', href: '#' },
+        { name: 'Grupos de Trabajo', href: '#' },
+        { name: 'Conexión Segura', href: '#' },
       ],
     },
     {
-      title: 'RECURSOS',
+      title: 'AYUDA Y MÁS',
       links: [
-        { name: 'Documentación', href: '#' },
-        { name: 'Terminal SSH', href: '#' },
-        { name: 'API Reference', href: '#' },
-        { name: 'Whitepaper', href: '#' },
+        { name: 'Guías paso a paso', href: '#' },
+        { name: 'Acceso directo', href: '#' },
+        { name: 'Preguntas comunes', href: '#' },
+        { name: 'Nuestra historia', href: '#' },
       ],
     },
   ];
@@ -64,22 +64,22 @@ export const Footer: React.FC = () => {
             </motion.div>
 
             <p className="text-nexus-silver/40 text-sm leading-relaxed max-w-md font-light italic">
-              "La orquestación de la inteligencia no es solo una herramienta, es el fundamento de la
-              soberanía digital en el nuevo siglo."
+              "Organizar tu vida no debería ser un trabajo. Deja que nosotros nos ocupemos de la
+              tecnología para que tú te ocupes de lo que importa."
             </p>
 
             {/* Newsletter / CTA */}
             <div className="premium-glass p-1 rounded-full border-white/5 bg-white/2 max-w-sm flex items-center group focus-within:ring-2 ring-nexus-cyan/20 transition-all">
               <input
                 type="email"
-                placeholder="UNIRSE AL DESPLIEGUE"
+                placeholder="RECIBE CONSEJOS ÚTILES"
                 className="bg-transparent border-none focus:ring-0 text-[10px] font-orbitron tracking-widest px-6 flex-grow uppercase placeholder:text-nexus-silver/20"
               />
               <button
                 onClick={() => setIsContactModalOpen(true)}
                 className="bg-nexus-cyan text-black px-6 py-3 rounded-full text-[10px] font-orbitron font-black tracking-widest hover:bg-white transition-colors"
               >
-                ACTIVAR
+                APUNTARME
               </button>
             </div>
           </div>
@@ -142,14 +142,14 @@ export const Footer: React.FC = () => {
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex flex-col items-center md:items-start gap-2">
             <div className="text-[9px] font-orbitron tracking-[0.4em] text-nexus-silver/20 uppercase">
-              © {currentYear} SOVEREIGN NEXUS | INFRAESTRUCTURA EMPRESARIAL V2.1
+              © {currentYear} AIGESTION | CENTRO DE CONTROL PERSONAL V2.1
             </div>
             <div className="flex items-center gap-4 text-[8px] font-mono text-nexus-cyan/30">
               <span>
-                ESTADO DEL SISTEMA: <span className="text-green-500 animate-pulse">OPERATIVO</span>
+                ESTADO: <span className="text-green-500 animate-pulse">TODO FUNCIONA BIEN</span>
               </span>
               <span className="h-3 w-px bg-white/10" />
-              <span>LATENCIA: 14MS</span>
+              <span>CONEXIÓN RÁPIDA</span>
             </div>
           </div>
 

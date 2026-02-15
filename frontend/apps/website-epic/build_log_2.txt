@@ -1,0 +1,73 @@
+
+> aigestion-website-epic@2.0.0 build C:\Users\Alejandro\AIGestion\frontend\apps\website-epic
+> vite build --config vite.config.production.ts && npm run generate:critical-css
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[plugin:vite:resolve] [plugin vite:resolve] Module "crypto" has been externalized for browser compatibility, imported by "C:/Users/Alejandro/AIGestion/node_modules/.pnpm/crystals-kyber@5.1.0/node_modules/crystals-kyber/kyber768.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin:vite:resolve] [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "C:/Users/Alejandro/AIGestion/node_modules/.pnpm/crystals-kyber@5.1.0/node_modules/crystals-kyber/kyber768.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin:vite:resolve] [plugin vite:resolve] Module "crypto" has been externalized for browser compatibility, imported by "C:/Users/Alejandro/AIGestion/node_modules/.pnpm/crystals-kyber@5.1.0/node_modules/crystals-kyber/kyber1024.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin:vite:resolve] [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "C:/Users/Alejandro/AIGestion/node_modules/.pnpm/crystals-kyber@5.1.0/node_modules/crystals-kyber/kyber1024.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin:vite:resolve] [plugin vite:resolve] Module "crypto" has been externalized for browser compatibility, imported by "C:/Users/Alejandro/AIGestion/node_modules/.pnpm/crystals-kyber@5.1.0/node_modules/crystals-kyber/kyber512.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[plugin:vite:resolve] [plugin vite:resolve] Module "fs" has been externalized for browser compatibility, imported by "C:/Users/Alejandro/AIGestion/node_modules/.pnpm/crystals-kyber@5.1.0/node_modules/crystals-kyber/kyber512.js". See https://vite.dev/guide/troubleshooting.html#module-externalized-for-browser-compatibility for more details.
+[32mÔ£ô[39m 3025 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                               [39m[1m[2m  3.57 kB[22m[1m[22m[2m Ôöé gzip:   1.27 kB[22m
+[2mdist/[22m[35massets/DanielaDemo-CzGt82K4.css          [39m[1m[2m 19.11 kB[22m[1m[22m[2m Ôöé gzip:   2.70 kB[22m
+[2mdist/[22m[35massets/main-ClbObsOR.css                 [39m[1m[2m164.60 kB[22m[1m[22m[2m Ôöé gzip:  21.32 kB[22m
+[2mdist/[22m[36massets/daniela-api.service-CZGrpgZ9.js   [39m[1m[2m  0.65 kB[22m[1m[22m[2m Ôöé gzip:   0.41 kB[22m
+[2mdist/[22m[36massets/NeuralParticles-C_mKEcGP.js       [39m[1m[2m  0.66 kB[22m[1m[22m[2m Ôöé gzip:   0.44 kB[22m
+[2mdist/[22m[36massets/api-DckOuXdp.js                   [39m[1m[2m  0.76 kB[22m[1m[22m[2m Ôöé gzip:   0.25 kB[22m
+[2mdist/[22m[36massets/AnimatedMeshGradient-CSrPfq2u.js  [39m[1m[2m  0.84 kB[22m[1m[22m[2m Ôöé gzip:   0.45 kB[22m
+[2mdist/[22m[36massets/CyberpunkGrid-CLfDiqjc.js         [39m[1m[2m  0.93 kB[22m[1m[22m[2m Ôöé gzip:   0.44 kB[22m
+[2mdist/[22m[36massets/FAQSection-Di2Vka84.js            [39m[1m[2m  1.81 kB[22m[1m[22m[2m Ôöé gzip:   0.92 kB[22m
+[2mdist/[22m[36massets/WeaponDashboard-D1LyRQVG.js       [39m[1m[2m  2.29 kB[22m[1m[22m[2m Ôöé gzip:   0.92 kB[22m
+[2mdist/[22m[36massets/CaseStudies-YivU-XgS.js           [39m[1m[2m  2.29 kB[22m[1m[22m[2m Ôöé gzip:   1.11 kB[22m
+[2mdist/[22m[36massets/IngeniousPlan-DRO8g8cG.js         [39m[1m[2m  2.39 kB[22m[1m[22m[2m Ôöé gzip:   1.14 kB[22m
+[2mdist/[22m[36massets/vendor-3d-CPj3E09C.js             [39m[1m[2m  2.44 kB[22m[1m[22m[2m Ôöé gzip:   1.33 kB[22m
+[2mdist/[22m[36massets/VideoTutorials-AHvEV6Nu.js        [39m[1m[2m  3.22 kB[22m[1m[22m[2m Ôöé gzip:   1.44 kB[22m
+[2mdist/[22m[36massets/CommandTerminal-EHQmFnwP.js       [39m[1m[2m  3.30 kB[22m[1m[22m[2m Ôöé gzip:   1.64 kB[22m
+[2mdist/[22m[36massets/VerifyEmail-CToXyBQ3.js           [39m[1m[2m  3.33 kB[22m[1m[22m[2m Ôöé gzip:   1.51 kB[22m
+[2mdist/[22m[36massets/ServicesDeepDive-Ct5JSocm.js      [39m[1m[2m  3.67 kB[22m[1m[22m[2m Ôöé gzip:   1.62 kB[22m
+[2mdist/[22m[36massets/CommandPalette-5DhoVQNY.js        [39m[1m[2m  3.82 kB[22m[1m[22m[2m Ôöé gzip:   1.68 kB[22m
+[2mdist/[22m[36massets/SelectPlan-KxXSj3rZ.js            [39m[1m[2m  4.09 kB[22m[1m[22m[2m Ôöé gzip:   1.83 kB[22m
+[2mdist/[22m[36massets/NexusGuardianWidget-CFajMtYE.js   [39m[1m[2m  4.23 kB[22m[1m[22m[2m Ôöé gzip:   1.40 kB[22m
+[2mdist/[22m[36massets/SelectRole-BpY3p558.js            [39m[1m[2m  4.56 kB[22m[1m[22m[2m Ôöé gzip:   1.68 kB[22m
+[2mdist/[22m[36massets/DanielaOmniWidget-DqTQ-kMH.js     [39m[1m[2m  4.98 kB[22m[1m[22m[2m Ôöé gzip:   1.91 kB[22m
+[2mdist/[22m[36massets/Register-B9X08MuZ.js              [39m[1m[2m  5.81 kB[22m[1m[22m[2m Ôöé gzip:   1.69 kB[22m
+[2mdist/[22m[36massets/PricingSection-CD8z-SmX.js        [39m[1m[2m  6.06 kB[22m[1m[22m[2m Ôöé gzip:   2.23 kB[22m
+[2mdist/[22m[36massets/NexusAndroid-DZtzThj5.js          [39m[1m[2m  7.01 kB[22m[1m[22m[2m Ôöé gzip:   2.63 kB[22m
+[2mdist/[22m[36massets/VirtualOfficePreview-BMz63xV6.js  [39m[1m[2m  7.60 kB[22m[1m[22m[2m Ôöé gzip:   2.94 kB[22m
+[2mdist/[22m[36massets/DemoDashboard-D6-xB23B.js         [39m[1m[2m  8.21 kB[22m[1m[22m[2m Ôöé gzip:   2.77 kB[22m
+[2mdist/[22m[36massets/MetaverseSection-VaRy66kZ.js      [39m[1m[2m 10.28 kB[22m[1m[22m[2m Ôöé gzip:   3.01 kB[22m
+[2mdist/[22m[36massets/EnhancedROI-DBhm0FzP.js           [39m[1m[2m 11.65 kB[22m[1m[22m[2m Ôöé gzip:   3.75 kB[22m
+[2mdist/[22m[36massets/BillingDashboard-CIFHzrB-.js      [39m[1m[2m 12.12 kB[22m[1m[22m[2m Ôöé gzip:   4.09 kB[22m
+[2mdist/[22m[36massets/DanielaShowcase-2etMdqHS.js       [39m[1m[2m 14.00 kB[22m[1m[22m[2m Ôöé gzip:   5.71 kB[22m
+[2mdist/[22m[36massets/Dashboard-CO76uWmX.js             [39m[1m[2m 17.67 kB[22m[1m[22m[2m Ôöé gzip:   4.60 kB[22m
+[2mdist/[22m[36massets/DecentralandOffice-BTGGUdcY.js    [39m[1m[2m 20.92 kB[22m[1m[22m[2m Ôöé gzip:   5.89 kB[22m
+[2mdist/[22m[36massets/DanielaDemo-BH55HKPi.js           [39m[1m[2m 23.48 kB[22m[1m[22m[2m Ôöé gzip:   5.95 kB[22m
+[2mdist/[22m[36massets/vendor-ui-DKIMt-AJ.js             [39m[1m[2m 42.33 kB[22m[1m[22m[2m Ôöé gzip:  14.22 kB[22m
+[2mdist/[22m[36massets/main-DT8aAthS.js                  [39m[1m[2m 64.94 kB[22m[1m[22m[2m Ôöé gzip:  19.07 kB[22m
+[2mdist/[22m[36massets/vendor-motion-BFGT6a6K.js         [39m[1m[2m126.44 kB[22m[1m[22m[2m Ôöé gzip:  40.66 kB[22m
+[2mdist/[22m[36massets/WorkbenchLayout-CdkDsP_K.js       [39m[1m[2m147.76 kB[22m[1m[22m[2m Ôöé gzip:  41.41 kB[22m
+[2mdist/[22m[36massets/vendor-react-BbWIzX5y.js          [39m[1m[2m161.10 kB[22m[1m[22m[2m Ôöé gzip:  52.31 kB[22m
+[2mdist/[22m[36massets/vendor-data-Bdj57dPA.js           [39m[1m[2m193.32 kB[22m[1m[22m[2m Ôöé gzip:  49.70 kB[22m
+[2mdist/[22m[36massets/ClientDashboard-BkDGn-KN.js       [39m[1m[33m399.48 kB[39m[22m[2m Ôöé gzip: 104.85 kB[22m
+
+(!) Some chunks are larger than 200 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[32mÔ£ô built in 1m 3s[39m
+npm warn config production Use `--omit=dev` instead.
+
+> aigestion-website-epic@2.0.0 generate:critical-css
+> node scripts/generate-critical-css.js
+
+­ƒÜÇ Generating Critical CSS...
+­ƒôØ Processing index.html...
+[32mInlined 142 bytes (59% of original 239 bytes) of inline CSS.[39m
+[32mInlined 2.37 kB (1% of original 160.75 kB) of assets/main-ClbObsOR.css.[39m
+Time 256ms
+Ô£à Critical CSS injected into index.html
