@@ -21,7 +21,7 @@ export const ROICalculator: React.FC = () => {
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           <div>
             <h2 className="text-4xl md:text-6xl font-orbitron font-black mb-8 text-glow-cyan text-nexus-cyan-glow">
-              CALCULADOR DE IMPACTO ROI
+              CALCULADORA DE GANANCIAS Y AHORRO
             </h2>
             <p className="text-nexus-silver/60 text-lg mb-12 font-light max-w-xl">
               Descubre cómo la Arquitectura de Inteligencia Soberana puede optimizar tus recursos y
@@ -33,12 +33,9 @@ export const ROICalculator: React.FC = () => {
                 <div className="flex justify-between text-xs font-orbitron tracking-[0.2em] text-nexus-silver/40 uppercase">
                   <span>Facturación Mensual</span>
                   <span className="text-white">${monthlyRevenue.toLocaleString('es-ES')}</span>
-...
-                  ${totalImpact.toLocaleString('es-ES')}
-...
-                    (-${aiSavings.toLocaleString('es-ES')})
-...
-                    (+${efficiencyBoost.toLocaleString('es-ES')})
+                  ... ${totalImpact.toLocaleString('es-ES')}
+                  ... (-${aiSavings.toLocaleString('es-ES')}) ... (+$
+                  {efficiencyBoost.toLocaleString('es-ES')})
                 </div>
                 <input
                   type="range"

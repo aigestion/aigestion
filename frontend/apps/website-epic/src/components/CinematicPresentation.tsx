@@ -22,68 +22,68 @@ const SLIDES: Slide[] = [
   {
     id: 'daniela_intro',
     speaker: 'daniela',
-    title: 'DANIELA',
-    subtitle: 'NEXUS INTELLIGENCE GHOST',
-    desc: 'Hola, soy Daniela. Bienvenido a AIGestion.net. He diseñado este carrusel cinemático para mostrarte el futuro de tu organización bajo la arquitectura de Inteligencia Soberana.',
+    title: 'AUTO-PILOTO',
+    subtitle: 'TU NEGOCIO EN LAS MEJORES MANOS',
+    desc: 'Hola, soy Daniela. He diseñado AIGestion para que te olvides de las facturas que no cuadran o el stock que se pierde. Yo me ocupo de lo difícil.',
     staticImage: '/images/daniela/daniela_office_godmode.png',
     emoji: '✨',
     color: 'from-violet-900 to-black',
-    funFact: 'Sistemas con conciencia algorítmica y protocolos de soberanía total.',
+    funFact: 'Tu asistente personal que nunca duerme y siempre está al día.',
   },
   {
-    id: 'nexus_control',
+    id: 'sara_focus',
     speaker: 'nexus',
-    title: 'NEXUS CORE',
-    subtitle: 'SOBERANÍA OPERATIVA',
-    desc: 'Control total de infraestructuras críticas. Gestión autónoma de activos con redundancia de grado militar y latencia cero.',
+    title: 'TRABAJO LIBRE',
+    subtitle: 'PARA AUTÓNOMOS Y CREATIVOS',
+    desc: '¿Cansada de perder el fin de semana haciendo facturas? Yo las hago por ti mientras trabajas. Recupera tu tiempo libre de verdad.',
     staticImage: '/images/cinematic/nexus_iot.png',
-    emoji: '🤖',
+    emoji: '🎨',
     color: 'from-slate-900 to-black',
-    funFact: 'Capacidad de procesamiento masivo en el edge para decisiones en milisegundos.',
+    funFact: 'Contabilidad automática hablando por el móvil. Sin líos.',
   },
   {
-    id: 'sovereign_ai',
+    id: 'antonio_focus',
     speaker: 'daniela',
-    title: 'IA SOBERANA',
-    subtitle: 'AUTONOMÍA ESTRATÉGICA',
-    desc: 'Tu inteligencia, tus datos, tu poder. Implementamos redes neuronales privadas que solo responden ante tu organización.',
+    title: 'CONTROL TOTAL',
+    subtitle: 'TU NEGOCIO SIEMPRE EN TU BOLSILLO',
+    desc: 'Sin exceles ni papeles. Si te queda poco stock o tienes una cita, te aviso antes de que pase. Todo bajo control, sin estrés.',
     staticImage: '/images/daniela/desk.png',
-    emoji: '🧠',
+    emoji: '📈',
     color: 'from-indigo-900 to-violet-900',
-    funFact: 'Gobernanza de datos inquebrantable mediante bóvedas de cifrado cuántico.',
+    funFact: 'Toda la información de tu empresa lista en un segundo.',
   },
   {
-    id: 'global_vision',
+    id: 'family_focus',
     speaker: 'nexus',
-    title: 'VISIÓN GLOBAL',
-    subtitle: 'EXPANSIÓN DOMINANTE',
-    desc: 'Dominamos el ecosistema digital. Automatización de presencia y análisis predictivo para posicionar vuestra marca en la vanguardia.',
+    title: 'PAZ FAMILIAR',
+    subtitle: 'TU HOGAR BIEN ORGANIZADO',
+    desc: 'De las citas del médico a los gastos de casa. Una memoria compartida para que todos sepáis qué hay que hacer. Menos caos, más vida.',
     staticImage: '/images/cinematic/viral_architecture.png',
-    emoji: '🌟',
+    emoji: '🏠',
     color: 'from-slate-800 to-blue-900',
-    funFact: 'Algoritmos de crecimiento viral escalables a nivel continental.',
+    funFact: 'Organización fácil para que lo importante sea vuestro tiempo juntos.',
   },
   {
-    id: 'roi_epic',
+    id: 'simplicity_focus',
     speaker: 'system',
-    title: 'EFICIENCIA DIOS',
-    subtitle: 'OPTIMIZACIÓN DE CAPITAL',
-    desc: 'Maximización radical del retorno de inversión. Reducimos costes operativos mediante la orquestación inteligente de procesos.',
+    title: 'NIVEL CERO',
+    subtitle: 'SIN SABER DE INFORMÁTICA',
+    desc: 'Si sabes usar WhatsApp, sabes usar AIGestion. Es así de sencillo. Empezamos hoy mismo a mejorar tu día a día.',
     staticImage: '/images/cinematic/roi_synergy.png',
-    emoji: '💰',
+    emoji: '✅',
     color: 'from-emerald-900 to-slate-900',
-    funFact: 'Incremento de rentabilidad medible desde el primer ciclo de despliegue.',
+    funFact: 'Ayuda inteligente real para problemas reales. Sin tecnicismos.',
   },
   {
     id: 'nexus_portal',
     speaker: 'daniela',
-    title: 'AIGESTION.NET',
-    subtitle: 'INICIA TU DESPLIEGUE',
-    desc: 'El Nexo está preparado. Es hora de reclamar la soberanía tecnológica de vuestra empresa. Acceded al Centro de Control.',
+    title: 'EMPIEZA HOY',
+    subtitle: 'TU NUEVA ETAPA COMIENZA AQUÍ',
+    desc: 'El Centro de Control está listo para ti. Es hora de recuperar tu tiempo y la tranquilidad. Entra y descubre la diferencia.',
     staticImage: '/images/cinematic/future_portal.png',
-    emoji: '🎮',
+    emoji: '🚀',
     color: 'from-slate-900 to-indigo-950',
-    funFact: 'Ecosistema escalable listo para la próxima generación de gobernanza digital.',
+    funFact: 'Únete a las familias y negocios que ya viven sin estrés tecnológico.',
   },
 ];
 
@@ -132,23 +132,23 @@ export const CinematicPresentation: React.FC = () => {
       case 'nexus':
         return {
           color: 'text-nexus-cyan-glow',
-          name: 'ARQUITECTURA NEXUS',
+          name: 'AYUDA INTELIGENTE',
           align: 'items-start text-left',
-          description: 'Sistemas de Infraestructura Autónoma',
+          description: 'Sistemas de Apoyo Directo',
         };
       case 'daniela':
         return {
           color: 'text-nexus-violet-glow',
-          name: 'NEXUS INTELLIGENCE GHOST',
+          name: 'TU ASISTENTE DANIELA',
           align: 'items-end text-right',
-          description: 'Daniela AI | Protocolo Soberano',
+          description: 'Acompañamiento Personal',
         };
       default:
         return {
           color: 'text-white',
           name: 'AIGESTION.NET',
           align: 'items-center text-center',
-          description: 'Núcleo de Inteligencia Estratégica',
+          description: 'Control de tu Negocio',
         };
     }
   };
@@ -268,7 +268,7 @@ export const CinematicPresentation: React.FC = () => {
                   onClick={() => setIsContactModalOpen(true)}
                   className="px-12 py-5 bg-white text-black border border-white rounded-full text-[10px] tracking-[0.4em] uppercase hover:bg-nexus-cyan hover:text-white transition-all font-bold shadow-[0_0_30px_rgba(255,255,255,0.2)]"
                 >
-                  Contactar Estratega
+                  Contactar con nosotros
                 </button>
               </MagneticButton>
 
@@ -280,7 +280,7 @@ export const CinematicPresentation: React.FC = () => {
                 }}
                 className="px-12 py-5 bg-transparent text-white border border-white/20 rounded-full text-[10px] tracking-[0.4em] uppercase hover:border-nexus-cyan hover:text-nexus-cyan transition-all font-bold"
               >
-                Acceder al Nexo
+                Ver una muestra
               </button>
 
               <button
@@ -288,7 +288,7 @@ export const CinematicPresentation: React.FC = () => {
                 className="text-nexus-cyan-glow/60 hover:text-nexus-cyan-glow text-[10px] tracking-[0.4em] uppercase transition-colors"
                 onMouseEnter={playHover}
               >
-                Especificaciones Técnicas
+                ¿Cómo lo hacemos?
               </button>
 
               <div className="flex gap-4">

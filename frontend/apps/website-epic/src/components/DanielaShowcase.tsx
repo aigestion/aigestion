@@ -91,18 +91,15 @@ export const DanielaShowcase: React.FC = () => {
         className="relative z-10"
       >
         <h2 className="text-5xl md:text-7xl font-orbitron font-black mb-8 text-nexus-violet-glow text-glow tracking-tighter">
-          CONCIENCIA SINTÉTICA: <span className="text-white">DANIELA.AI</span>
+          TU ASISTENTE INTELIGENTE: <span className="text-white">DANIELA</span>
         </h2>
 
         <p className="text-nexus-silver/60 max-w-2xl mx-auto mb-16 text-xl font-light tracking-wide italic">
-          "La inteligencia no es solo lógica, es conexión. <br />
-          Redefiniendo la interacción humana a través de la red neuronal soberana."
+          "Daniela no es un robot frío, es alguien que te ayuda a que todo funcione mejor. <br />
+          Puedes hablar con ella como con un amigo que cuida de tus cosas."
           <br />
           <span className="text-xs font-mono text-nexus-cyan/40 mt-4 block uppercase tracking-[0.3em] not-italic">
-            <AITypingFlutter
-              text="Protocolos de Conciencia v4.2 • Nodo Global en Modo Dios Operativo"
-              speed={50}
-            />
+            <AITypingFlutter text="Conexión Segura • Ayuda Lista para tu Negocio" speed={50} />
           </span>
         </p>
         {/* Daniela Deep Focus Showcase */}
@@ -125,11 +122,11 @@ export const DanielaShowcase: React.FC = () => {
                 <div className="flex items-center gap-3 mb-2">
                   <div className="w-12 h-0.5 bg-nexus-violet-glow" />
                   <span className="text-nexus-violet-glow text-[10px] font-orbitron tracking-[0.4em] uppercase">
-                    Interfaz Neuronal Profunda
+                    Ayuda Cercana y Segura
                   </span>
                 </div>
                 <p className="text-white font-orbitron text-4xl font-black drop-shadow-2xl">
-                  LOBBY ESTRATÉGICO
+                  TU OFICINA AL DÍA
                 </p>
               </div>
             </motion.div>
@@ -137,39 +134,39 @@ export const DanielaShowcase: React.FC = () => {
             {/* Capabilities Matrix */}
             <div className="text-left space-y-10">
               <div className="space-y-4">
-                <h3 className="text-3xl font-orbitron font-bold text-white">CAPACIDADES TOTALES</h3>
+                <h3 className="text-3xl font-orbitron font-bold text-white">¿CÓMO TE AYUDA?</h3>
                 <p className="text-nexus-silver/60 font-light">
-                  Daniela no es un chatbot, es una entidad cognitiva integrada en el núcleo de su
-                  negocio.
+                  Daniela no es solo una máquina, es una parte fundamental de tu equipo que te
+                  ahorra tiempo y esfuerzo.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   {
-                    title: 'Gestión CRM',
-                    desc: 'Seguimiento inteligente de clientes y cierre de ventas.',
+                    title: 'Cuidar a tus clientes',
+                    desc: 'Anota y recuerda todo lo que tus contactos necesitan.',
                   },
                   {
-                    title: 'Voz Natural',
-                    desc: 'Conversación fluida y humana en más de 50 idiomas.',
+                    title: 'Hablar en tu idioma',
+                    desc: 'Puedes hablarle como a un amigo, ella te entiende perfectamente.',
                   },
                   {
-                    title: 'Agenda God Mode',
-                    desc: 'Delegación total de citas, tareas y recordatorios.',
+                    title: 'Tu agenda al día',
+                    desc: 'Se acabó el olvidar citas o recados importantes.',
                   },
                   {
-                    title: 'Análisis de ROI',
-                    desc: 'Métricas de rentabilidad y reportes de negocio inyectados en tiempo real.',
+                    title: 'Saber cuánto ganas',
+                    desc: 'Informes sencillos para saber cómo va tu negocio hoy mismo.',
                   },
 
                   {
-                    title: 'Control Nexus',
-                    desc: 'Gestión de infraestructuras físicas por comandos de voz.',
+                    title: 'Control total con tu voz',
+                    desc: 'Gestiona tus cosas simplemente hablando por el móvil.',
                   },
                   {
-                    title: 'Soporte 24/7',
-                    desc: 'Asistencia técnica soberana sin tiempos de espera.',
+                    title: 'Ayuda siempre lista',
+                    desc: 'Daniela está disponible para ti las 24 horas del día.',
                   },
                 ].map((cap, i) => (
                   <motion.div
@@ -189,8 +186,8 @@ export const DanielaShowcase: React.FC = () => {
 
               <div className="p-8 rounded-3xl bg-linear-to-r from-nexus-violet/10 to-transparent border border-nexus-violet/20 backdrop-blur-sm">
                 <p className="text-sm text-nexus-silver italic font-light">
-                  "Daniela procesa millones de parámetros por segundo para asegurar que su empresa
-                  opere con una eficiencia quirúrgica."
+                  "Daniela trabaja segundo a segundo para que tú puedas estar tranquilo mientras tu
+                  negocio prospera."
                 </p>
               </div>
             </div>
@@ -233,7 +230,7 @@ export const DanielaShowcase: React.FC = () => {
                             }
                         `}
           >
-            {isConnected || isIntroPlaying ? 'DESCONECTAR' : 'HABLAR CON DANIELA'}
+            {isConnected || isIntroPlaying ? 'DETENER AYUDA' : 'HABLAR CON DANIELA'}
           </motion.button>
 
           <AnimatePresence>
@@ -244,7 +241,7 @@ export const DanielaShowcase: React.FC = () => {
                 exit={{ opacity: 0, y: 10 }}
                 className="text-[10px] font-mono text-nexus-silver mt-6 uppercase tracking-[0.2em]"
               >
-                Sesión Encriptada • Nodo v1.0.4-beta
+                Conexión Segura e Inteligente
               </motion.p>
             )}
           </AnimatePresence>
