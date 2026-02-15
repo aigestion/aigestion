@@ -68,6 +68,8 @@ export const getRedisClient = (): RedisClientType => {
       const url =
         redisUrl || (password ? `redis://:${password}@${host}:${port}` : `redis://${host}:${port}`);
 
+      logger.info({ url, redisUrl, host, port }, 'Initializing Redis Standalone');
+
       redisClient = redis.createClient({
         url,
         socket: {
