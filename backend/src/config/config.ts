@@ -122,6 +122,15 @@ export const config = {
     rpID: env.WEBAUTHN_RP_ID,
     origin: env.WEBAUTHN_ORIGIN,
   },
+  // Redis Configuration
+  redis: {
+    url: env.REDIS_URL,
+    host: env.REDIS_HOST,
+    port: env.REDIS_PORT,
+    password: env.REDIS_PASSWORD,
+    clusterNodes: env.REDIS_CLUSTER_NODES,
+    enabled: env.ENABLE_REDIS === 'true',
+  },
 } as const;
 
 export type Config = typeof config;

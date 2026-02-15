@@ -41,7 +41,7 @@ AI_RATE_LIMIT_MAX=30
 # 4️⃣ DATABASES, QUEUES & CACHING
 # -----------------------------------------------------------------------------
 # MongoDB
-MONGODB_URI=mongodb://admin:AWReTznw7k3Sf4lWFEenRw@mongodb:27017/aigestion-platform?authSource=admin
+MONGODB_URI=mongodb://admin:AWReTznw7k3Sf4lWFEenRw@mongodb:27017/aigestion-net?authSource=admin
 MONGO_ROOT_USER=admin
 MONGO_ROOT_PASSWORD=AWReTznw7k3Sf4lWFEenRw
 

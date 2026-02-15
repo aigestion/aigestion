@@ -2,6 +2,7 @@ import { OpenAI } from 'openai';
 import { RedisClientType } from 'redis';
 import { Db, MongoClient } from 'mongodb';
 import { logger } from '../utils/logger';
+import { config } from '../config/config';
 
 export interface DanielaStatus {
   status: string;
@@ -46,16 +47,17 @@ export class DanielaEnhancedService {
       }
 
       // Initialize Redis
-      if (process.env.REDIS_URL) {
+      if (config.redis.enabled) {
         const { createClient } = await import('redis');
-        this.redisClient = createClient({ url: process.env.REDIS_URL });
+        const url = config.redis.url || `redis://${config.redis.host}:${config.redis.port}`;
+        this.redisClient = createClient({ url });
         await this.redisClient.connect();
         logger.info('✅ Redis client initialized');
       }
 
       // Initialize MongoDB
-      if (process.env.DATABASE_URL) {
-        this.mongoClient = new MongoClient(process.env.DATABASE_URL);
+      if (config.mongo.uri) {
+        this.mongoClient = new MongoClient(config.mongo.uri);
         await this.mongoClient.connect();
         this.db = this.mongoClient.db('aigestion');
         logger.info('✅ MongoDB client initialized');

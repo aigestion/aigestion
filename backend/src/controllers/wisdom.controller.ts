@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types';
-import { notebookInsightService } from '../services/google/notebook-insight.service';
-import { swarmService } from '../services/swarm.service';
 import { logger } from '../utils/logger';
 
 /**
@@ -23,7 +21,7 @@ export class WisdomController {
     logger.info('[WisdomController] Generating high-level strategic wisdom card.');
     try {
       const { topic } = req.query;
-      
+
       // Dispatch a 'wisdom' task to the swarm
       const response = await this.swarm.orchestrate({
           id: `wisdom_${Date.now()}`,

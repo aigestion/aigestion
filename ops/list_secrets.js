@@ -15,7 +15,7 @@ async function listSecrets(projectId) {
   }
 }
 
-const projects = ['aigestion-pro-2026', 'dynamic-reef-485215-v4'];
+const projects = ['aigestion-sovereign-2026'];
 
 (async () => {
   for (const p of projects) {

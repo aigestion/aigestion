@@ -35,7 +35,7 @@ steps:
       - '--image'
       - 'gcr.io/$PROJECT_ID/backend:$BUILD_ID'
       - '--region'
-      - 'europe-southwest1'
+      - 'europe-west1'
       - '--platform'
       - 'managed'
       # God Mode: Resource Configuration
@@ -64,7 +64,7 @@ steps:
       - '300'
       # Environment variables
       - '--set-env-vars'
-      - 'NODE_ENV=production,GOOGLE_CLOUD_PROJECT_ID=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=europe-west1'
+      - 'NODE_ENV=production,GOOGLE_CLOUD_PROJECT_ID=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=europe-west1,ENABLE_REDIS=false'
     waitFor: ['push-image']
 
 # Build options

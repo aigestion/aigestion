@@ -29,7 +29,7 @@ async function findTokens(projectId) {
   }
 }
 
-const projects = ['aigestion-pro-2026', 'dynamic-reef-485215-v4', 'aigestion-v2'];
+const projects = ['aigestion-sovereign-2026', 'aigestion-v2'];
 
 (async () => {
   for (const p of projects) {

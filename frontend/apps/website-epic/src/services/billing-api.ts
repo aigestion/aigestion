@@ -1,4 +1,4 @@
-import { env } from '../config/env';
+// Removed unused import from '../config/env'
 
 const API_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
