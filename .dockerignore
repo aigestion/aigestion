@@ -1,35 +1,44 @@
-**/node_modules
-**/.git
-.git
-.gitignore
-.dockerignore
-.DS_Store
-.vscode
-.idea
-dist
-build
-coverage
-.turbo
-tmp
-**/*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-.env
-.env.*
-!.env.example
-docs
-knowledge
-images
-videos
-downloads
-backups
-.gemini
+# Whitelist Approach: Ignore Everything First
+*
 
+# Unignore necessary source folders
+!backend/
+!frontend/
+!infra/
+!packages/
 
-# AI Engine Data (Large files)
-aig-ia-engine/data
-**/trained_models
-**/checkpoints
-**/vectors
+# Unignore necessary root files
+!package.json
+!package-lock.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!tsconfig.json
+!turbo.json
+!lerna.json
+
+# Re-ignore generated/large folders everywhere
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+build/
+**/build/
+.next/
+**/.next/
+coverage/
+**/coverage/
+.tsc/
+**/.tsc/
+.terraform/
+# Large/Non-Web assets
+android/
+**/android/
+mobile/
+**/mobile/
+ml-service/
+**/ml-service/
+aig-ia-engine/
+**/aig-ia-engine/
+.git/
+.github/
+.vscode/

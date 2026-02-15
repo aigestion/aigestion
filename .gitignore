@@ -261,4 +261,16 @@ infra/.env*.local
 infra/email_credentials.json
 infra/.env.gemini
 assets/email_review_data.json
-archive/email_review_report.md
+# Audit & Build Noise
+dist/
+build_log.txt
+stats.html
+*.old
+.gemini/
+.agent/
+brain/
+walkthrough.md
+audit_report.md
+implementation_plan.md
+task.md
+
