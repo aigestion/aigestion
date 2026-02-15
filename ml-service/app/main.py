@@ -66,6 +66,14 @@ def read_root():
     return {"status": "online", "service": "AIGestion NeuroCore (RAG)"}
 
 
+@app.get("/health")
+def health_check():
+    return {
+        "status": "healthy",
+        "rag_engine": "ready" if rag_engine else "initializing",
+    }
+
+
 @app.post("/archive")
 async def archive_knowledge(
     request: ArchiveRequest, api_key: str = Depends(verify_api_key)
