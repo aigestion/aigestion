@@ -3,7 +3,8 @@ name: Deploy Website to GitHub Pages - FIXED
 on:
   push:
     branches: [main]
-    paths: ['frontend/website-epic/**']
+    paths: ['frontend/apps/website-epic/**']
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -26,20 +27,20 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: './frontend/website-epic/package-lock.json'
+          cache-dependency-path: './frontend/apps/website-epic/package-lock.json'
 
       - name: Install dependencies
-        working-directory: ./frontend/website-epic
+        working-directory: ./frontend/apps/website-epic
         run: npm ci
 
       - name: Build Website
-        working-directory: ./frontend/website-epic
+        working-directory: ./frontend/apps/website-epic
         run: npm run build
 
       - name: Copy dist to root for GitHub Pages
         run: |
           mkdir -p dist
-          cp -r frontend/website-epic/dist/* dist/
+          cp -r frontend/apps/website-epic/dist/* dist/
           ls -la dist/
 
       - name: Setup Pages
