@@ -146,7 +146,7 @@ export const EnhancedROI: React.FC = () => {
             <div className="w-12 h-0.5 bg-nexus-violet-glow" />
           </div>
           <h2 className="text-5xl md:text-8xl font-orbitron font-black text-white mb-6 tracking-tighter">
-            CENTRO ESTRATÉGICO <span className="text-glow text-nexus-cyan">DE ROI</span>
+            CENTRO ESTRATÉGICO <span className="text-glow text-nexus-cyan">DE GANANCIAS</span>
           </h2>
           <p className="text-xl text-nexus-silver/60 max-w-3xl mx-auto font-light leading-relaxed italic">
             "La inversión no es un gasto cuando el retorno es exponencial. <br />
@@ -310,7 +310,7 @@ export const EnhancedROI: React.FC = () => {
                           Ratio de Eficiencia
                         </p>
                         <div className="text-2xl text-nexus-violet-glow font-orbitron font-bold">
-                          12:1 ROI
+                          12€ por cada 1€ invertido
                         </div>
                       </div>
                     </div>

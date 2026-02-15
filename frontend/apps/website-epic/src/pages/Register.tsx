@@ -62,7 +62,7 @@ export const Register: React.FC = () => {
               NUEVA CUENTA
             </motion.h1>
             <p className="text-nexus-silver/60 text-sm">
-              Accede al sistema de inteligencia soberana
+              Empieza a organizar tu vida y tu negocio hoy mismo
             </p>
           </div>
 

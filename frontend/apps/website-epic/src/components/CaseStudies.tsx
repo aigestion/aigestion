@@ -3,23 +3,31 @@ import React from 'react';
 
 const cases = [
   {
-    sector: 'Salud & Clínicas',
-    title: 'Triaje inteligente + automatización de agenda',
-    impact: ['-48% tiempos de espera', '+37% productividad del personal', '+22% satisfacción NPS'],
-  },
-  {
-    sector: 'Logística & Transporte',
-    title: 'Orquestación de rutas con IA y monitoreo predictivo',
+    sector: 'Taller Hermanos García',
+    title: 'De los papeles acumulados al control total',
     impact: [
-      '-19% costos operativos',
-      '+31% cumplimiento de entregas',
-      '-54% incidencias críticas',
+      'Facturas listas en 2 minutos hablando al móvil',
+      'Control de piezas y recambios sin errores',
+      'Antonio ahora llega a cenar con su familia',
     ],
   },
   {
-    sector: 'Educación & Gremios',
-    title: 'Plataforma de aprendizaje y asistencia para socios',
-    impact: ['+62% adopción digital', '+41% retención de miembros', '+28% ingresos por servicios'],
+    sector: 'Sara, Diseñadora Freelance',
+    title: 'Volver a disfrutar del trabajo creativo',
+    impact: [
+      'Contabilidad automática mientras trabaja',
+      'Gestión de clientes sin estrés ni olvidos',
+      'Sábados y domingos de descanso real',
+    ],
+  },
+  {
+    sector: 'Familia Martínez',
+    title: 'El fin de la confusión en casa',
+    impact: [
+      'Citas médicas y recados siempre a mano',
+      'Gastos del hogar bajo control y compartidos',
+      'Se acabaron las dudas de "¿quién tenía que comprar esto?"',
+    ],
   },
 ];
 
@@ -39,11 +47,10 @@ export const CaseStudies: React.FC = () => (
         viewport={{ once: true }}
       >
         <h2 className="text-5xl md:text-7xl font-orbitron font-black text-white mb-4">
-          CASOS DE <span className="text-nexus-violet text-glow">ÉXITO</span>
+          HISTORIAS DE <span className="text-nexus-violet text-glow">ÉXITO</span>
         </h2>
         <p className="text-lg text-nexus-silver/70 max-w-3xl mx-auto">
-          Ejemplos reales con impacto medible. Diseñamos estrategias adaptadas a tu industria y
-          gremio.
+          Resultados reales para personas reales. Mira cómo ayudamos a simplificar el día a día.
         </p>
       </motion.div>
 
