@@ -59,7 +59,7 @@ const defaultConfig: AppConfig = {
       (process.env.NODE_ENV as 'development' | 'staging' | 'production') || 'development',
   },
   auth: {
-    supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'https://jhvtjyfmgncrrbzqpbkt.supabase.co',
+    supabaseUrl: import.meta.env.VITE_SUPABASE_URL || 'https://nbymcxvlcfyhebzjurml.supabase.co',
     supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
     adminEmails: ['admin@aigestion.net', 'nemisanalex@gmail.com'],
     redirectUrls: {

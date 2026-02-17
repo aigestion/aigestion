@@ -71,7 +71,7 @@ export class VoiceCommandSystem {
       name: 'Nexus',
       personality: 'professional',
       voice: 'female',
-      language: 'en-US',
+      language: 'es-ES',
       isActive: true,
       processingState: 'idle',
     };
@@ -222,7 +222,7 @@ export class VoiceCommandSystem {
       scale: Vector3.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: '🎤 VOICE ASSISTANT',
+      text: '💜 ASISTENTE DE VOZ (NEXUS)',
       textColor: Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3,
@@ -311,7 +311,7 @@ export class VoiceCommandSystem {
       scale: Vector3.create(0.3, 0.3, 0.3),
     });
     TextShape.create(transcriptText, {
-      text: 'Say "Hello Nexus" to start...',
+      text: 'Di "Hola Nexus" para comenzar...',
       textColor: Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
       textAlign: 3,
@@ -321,9 +321,9 @@ export class VoiceCommandSystem {
   // Create voice controls
   private createVoiceControls() {
     const controls = [
-      { id: 'listen', icon: '🎤', name: 'Start Listening' },
-      { id: 'stop', icon: '⏹️', name: 'Stop Listening' },
-      { id: 'settings', icon: '⚙️', name: 'Voice Settings' },
+      { id: 'listen', icon: '🎤', name: 'Escuchar' },
+      { id: 'stop', icon: '⏹️', name: 'Detener' },
+      { id: 'settings', icon: '⚙️', name: 'Ajustes de Voz' },
     ];
 
     let xOffset = -0.8;
@@ -374,7 +374,7 @@ export class VoiceCommandSystem {
       isListening: false,
       continuous: true,
       interimResults: true,
-      lang: 'en-US',
+      lang: 'es-ES',
 
       start: () => {
         this.recognitionEngine.isListening = true;
@@ -756,13 +756,13 @@ export class VoiceCommandSystem {
         emotion: 'serious',
       },
       emergency_stop: {
-        text: 'Emergency procedures initiated immediately.',
+        text: 'Procedimientos de emergencia iniciados inmediatamente.',
         confidence: 1.0,
         actions: ['emergency_shutdown'],
         emotion: 'urgent',
       },
       unknown: {
-        text: "I'm not sure I understand. Could you please rephrase that?",
+        text: 'No estoy segura de entenderte. ¿Podrías repetirlo?',
         confidence: 0.3,
         actions: [],
         emotion: 'confused',

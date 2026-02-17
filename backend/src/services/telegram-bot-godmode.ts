@@ -41,7 +41,7 @@ export class TelegramBotHandlerGodMode {
     this.daniela = daniela;
     this.adminIds = (env.TELEGRAM_ADMIN_IDS || '5279281613')
       .split(',')
-      .map(id => id.trim())
+      .map((id: string) => id.trim())
       .filter(Boolean);
     this.initialize();
   }

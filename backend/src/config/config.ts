@@ -131,6 +131,14 @@ export const config = {
     clusterNodes: env.REDIS_CLUSTER_NODES,
     enabled: env.ENABLE_REDIS === 'true',
   },
+  // Quantum Tier 5 Configuration
+  quantum: {
+    slackWebhook: env.SLACK_WEBHOOK_URL || '',
+    discordWebhook: env.DISCORD_WEBHOOK_URL || '',
+    discordToken: env.DISCORD_BOT_TOKEN || '',
+    vercelToken: env.VERCEL_MASTER_API_TOKEN || '',
+    sentryDsn: env.APP_SENTRY_DSN || '',
+  },
 } as const;
 
 export type Config = typeof config;

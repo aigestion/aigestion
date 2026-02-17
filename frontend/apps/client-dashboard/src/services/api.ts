@@ -67,4 +67,52 @@ export const api = {
       throw error;
     }
   },
+  getPortfolio: async (): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/finance/portfolio`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching portfolio:', error);
+      throw error;
+    }
+  },
+  getMarketData: async (): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/finance/market`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching market data:', error);
+      throw error;
+    }
+  },
+  getFinanceStrategy: async (): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/finance/strategy`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching finance strategy:', error);
+      throw error;
+    }
+  },
+  getFinanceAlerts: async (): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/finance/alerts`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching finance alerts:', error);
+      throw error;
+    }
+  },
 };

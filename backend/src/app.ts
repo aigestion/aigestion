@@ -2,14 +2,10 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
-import rateLimit from 'express-rate-limit';
 import type { Request, Response } from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
-import RateLimitRedisStore from 'rate-limit-redis';
-// @ts-ignore
-// import responseTime from 'response-time';
 import xssClean from 'xss-clean';
 
 // Middleware to ensure every JSON response follows the standard API for
@@ -23,10 +19,10 @@ import mcpRouter from './routes/mcp.routes';
 import { logger } from './utils/logger';
 
 import { buildResponse } from './common/response-builder';
-import { cdnCache } from './middleware/cdn-cache.middleware';
 import getRedisClient from './utils/redis';
 
 const app = express();
+app.set('trust proxy', 1);
 
 // Request Traceability
 app.use(requestIdMiddleware);
@@ -71,7 +67,7 @@ app.use(
 import { rateLimiter } from './middleware/rate-limiter.instance';
 
 // Apply 'GENERAL' rate limiter to all API routes
-// Use looser general limit globally (1000 req/min) 
+// Use looser general limit globally (1000 req/min)
 // Specific routes (Auth/AI) will have tighter limits applied in their routers
 if (process.env.NODE_ENV !== 'test' && !process.env.JEST_WORKER_ID) {
   app.use('/api/v1', rateLimiter.attempt('GENERAL'));
@@ -127,15 +123,21 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Graceful shutdown
-process.on('SIGINT', async () => {
-  logger.info('Shutting down gracefully...');
-  await redisClient.disconnect();
+const shutdown = async (signal: string) => {
+  logger.info(`Received ${signal}. Shutting down gracefully...`);
+  const client = getRedisClient();
+  if (client && client.isOpen) {
+    logger.info('Shutting down Redis...');
+    try {
+      await client.quit();
+    } catch (err) {
+      logger.error('Error during Redis shutdown', err);
+    }
+  }
   process.exit(0);
-});
-process.on('SIGTERM', async () => {
-  logger.info('Shutting down gracefully...');
-  await redisClient.disconnect();
-  process.exit(0);
-});
+};
+
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 export { app };

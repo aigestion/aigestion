@@ -145,7 +145,7 @@ export class VertexAIService {
           })),
         });
 
-        return result.embeddings.map(e => e.values);
+        return result.embeddings.map((e: any) => e.values);
       }
 
       // Path B: Vertex AI / Legacy Fallback

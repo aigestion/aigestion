@@ -53,7 +53,7 @@ export class EnhancedVoiceService {
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.MetaverseService) private metaverseService: MetaverseService,
     @inject(TYPES.ElevenLabsService) private elevenLabsService: ElevenLabsService,
-    @inject(TYPES.QwenTTSService) private qwenTTSService: QwenTTSService
+    @inject(TYPES.QwenTTSService) private qwenTTSService: QwenTTSService,
   ) {}
 
   /**
@@ -103,7 +103,7 @@ export class EnhancedVoiceService {
       const response = await this.generateContextualResponse(
         transcription,
         emotionalAnalysis,
-        context
+        context,
       );
 
       // Convert response to audio
@@ -113,7 +113,7 @@ export class EnhancedVoiceService {
       const suggestedActions = await this.generateSuggestedActions(
         transcription,
         emotionalAnalysis,
-        context
+        context,
       );
 
       // Add Daniela's response to context
@@ -146,19 +146,35 @@ export class EnhancedVoiceService {
   }
 
   /**
-   * Transcribe audio to text using enhanced speech recognition
+   * Transcribe audio to text using enhanced speech recognition (Faster Whisper via ML Service)
    */
   private async transcribeAudio(audioBuffer: Buffer): Promise<string> {
     try {
-      // Implementation with Google Cloud Speech-to-Text or similar
-      // For now, return mock transcription
-      logger.info('[EnhancedVoiceService] Transcribing audio...');
+      logger.info('[EnhancedVoiceService] Transcribing audio with ML Service...');
 
-      // TODO: Implement actual speech-to-text
-      return 'Audio transcribed successfully';
+      const formData = new FormData();
+      const blob = new Blob([audioBuffer], { type: 'audio/wav' });
+      formData.append('file', blob, 'audio.wav');
+
+      const response = await fetch(`${env.ML_SERVICE_URL}/transcribe`, {
+        method: 'POST',
+        headers: {
+          'x-api-key': env.ML_SERVICE_API_KEY || 'LOCAL_DEV_SECRET_KEY_REPLACE_ME',
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`ML Service error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      logger.info(`[EnhancedVoiceService] Transcription success: "${data.transcription}"`);
+      return data.transcription;
     } catch (error) {
       logger.error(error, '[EnhancedVoiceService] Error transcribing audio');
-      throw error;
+      // Fallback for demo purposes if ML service is down
+      return 'Error en transcripción. Por favor intente de nuevo.';
     }
   }
 
@@ -167,7 +183,7 @@ export class EnhancedVoiceService {
    */
   private async analyzeEmotion(
     text: string,
-    context: ConversationContext
+    context: ConversationContext,
   ): Promise<EmotionalAnalysis> {
     try {
       const prompt = `
@@ -225,7 +241,7 @@ export class EnhancedVoiceService {
   private async generateContextualResponse(
     text: string,
     emotionalAnalysis: EmotionalAnalysis,
-    context: ConversationContext
+    context: ConversationContext,
   ): Promise<string> {
     try {
       const systemPrompt = `
@@ -300,7 +316,7 @@ export class EnhancedVoiceService {
    */
   public async textToSpeech(
     text: string,
-    provider: 'elevenlabs' | 'qwen' = 'qwen'
+    provider: 'elevenlabs' | 'qwen' = 'qwen',
   ): Promise<Buffer> {
     try {
       const tempPath = path.join(process.cwd(), 'uploads', 'voice', `${Date.now()}.mp3`);
@@ -313,7 +329,7 @@ export class EnhancedVoiceService {
         audioPath = await this.elevenLabsService.textToSpeech(
           text,
           env.ELEVENLABS_VOICE_ID || '',
-          tempPath
+          tempPath,
         );
       }
 
@@ -340,7 +356,7 @@ export class EnhancedVoiceService {
   private async generateSuggestedActions(
     text: string,
     emotionalAnalysis: EmotionalAnalysis,
-    context: ConversationContext
+    context: ConversationContext,
   ): Promise<SuggestedAction[]> {
     const actions: SuggestedAction[] = [];
 

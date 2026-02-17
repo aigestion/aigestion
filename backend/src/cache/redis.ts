@@ -129,6 +129,12 @@ export const closeRedis = async (): Promise<void> => {
 const l1Cache = new Map<string, { value: any; expiry: number }>();
 const MAX_L1_SIZE = 1000;
 
+import { promisify } from 'node:util';
+import { deflate, inflate } from 'node:zlib';
+
+const deflateAsync = promisify(deflate);
+const inflateAsync = promisify(inflate);
+
 /**
  * Get value from layered cache
  * L1: Memory (fastest)
@@ -148,19 +154,26 @@ export const getCache = async (key: string): Promise<any> => {
     try {
       const data = await client.get(key);
       if (data) {
-        const parsed = JSON.parse(data);
+        let value: any;
+
+        // Handle decompression if payload is compressed
+        if (data.startsWith('gz:')) {
+          const compressed = Buffer.from(data.substring(3), 'base64');
+          const decompressed = await inflateAsync(compressed);
+          value = JSON.parse(decompressed.toString());
+          logger.debug({ key }, 'L2 Cache Hit (Decompressed)');
+        } else {
+          value = JSON.parse(data);
+          logger.debug({ key }, 'L2 Cache Hit');
+        }
 
         // Populate L1 for subsequent requests
-        // We don't have the original TTL here safely from Redis 'get',
-        // so we assume a default or check 'ttl' if we had it.
-        // For simplicity, we use a 5-minute local L1 mirror of the L2 data.
         l1Cache.set(key, {
-          value: parsed,
+          value,
           expiry: Date.now() + 5 * 60 * 1000,
         });
 
-        logger.debug({ key }, 'L2 Cache Hit (Mirroring to L1)');
-        return parsed;
+        return value;
       }
     } catch (error) {
       logger.warn({ error, key }, 'Redis get error');
@@ -195,7 +208,16 @@ export const setCache = async (key: string, value: any, ttlSeconds = 3600): Prom
   const client = getRedisClient();
   if (client?.isOpen) {
     try {
-      await client.set(key, JSON.stringify(value), {
+      let data = JSON.stringify(value);
+
+      // Compress if payload is large (> 1KB)
+      if (data.length > 1024) {
+        const compressed = await deflateAsync(data);
+        data = 'gz:' + compressed.toString('base64');
+        logger.debug({ key, originalSize: data.length }, 'L2 Cache Compressed');
+      }
+
+      await client.set(key, data, {
         EX: ttlSeconds,
       });
       return true;

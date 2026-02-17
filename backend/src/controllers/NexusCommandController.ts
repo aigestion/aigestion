@@ -1,12 +1,21 @@
 import type { Request, Response } from 'express';
+import { inject, injectable } from 'inversify';
+import { NeuralHealthService } from '../services/NeuralHealthService';
+import { PredictiveHealingService } from '../services/PredictiveHealingService';
+import { TYPES } from '../types';
 import { logger } from '../utils/logger';
-import { neuralHealthService } from '../services/NeuralHealthService';
-import { predictiveHealingService } from '../services/PredictiveHealingService';
 
 /**
  * Nexus Command Controller: The unified brain for processing high-level commands.
  */
+@injectable()
 export class NexusCommandController {
+  constructor(
+    @inject(TYPES.NeuralHealthService) private neuralHealthService: NeuralHealthService,
+    @inject(TYPES.PredictiveHealingService)
+    private predictiveHealingService: PredictiveHealingService,
+  ) {}
+
   /**
    * Execute a "God Mode" system command
    */
@@ -44,7 +53,7 @@ export class NexusCommandController {
   private async handleSystemPurge(res: Response) {
     logger.warn('Iniciando PURGA DEL SISTEMA vía Nexus Command');
     // Invocamos manualmente al servicio de curación predictiva para una limpieza profunda
-    await (predictiveHealingService as any).performEmergencyHealing({
+    await (this.predictiveHealingService as any).performEmergencyHealing({
       sanityScore: 50,
       memoryUsage: 95,
       cpuUsage: 95,
@@ -62,6 +71,13 @@ export class NexusCommandController {
     res.json({ success: true, message: 'Estado VR sincronizado globalmente.' });
   }
 
+  private async handleVRSyncState(params: any, res: Response) {
+    const { sessionId, state } = params;
+    logger.info({ sessionId }, 'Sincronizando estado VR Nexus');
+    // Lógica para persistir o emitir el estado VR a otros clientes
+    res.json({ success: true, message: 'Estado VR sincronizado globalmente.' });
+  }
+
   private async handleHealthOverride(params: any, res: Response) {
     const { targetStatus } = params;
     logger.warn({ targetStatus }, 'Sobrescribiendo estado de salud del núcleo neural');
@@ -73,9 +89,13 @@ export class NexusCommandController {
    * Get real-time neural health metrics
    */
   public async getNeuralStatus(_req: Request, res: Response): Promise<void> {
-    const metrics = neuralHealthService.getMetrics();
+    const metrics = this.neuralHealthService.getMetrics();
     res.json(metrics);
   }
 }
 
-export const nexusCommandController = new NexusCommandController();
+// Export singleton instance for backward compatibility
+export const nexusCommandController = new NexusCommandController(
+  null as any, // NeuralHealthService
+  null as any, // PredictiveHealingService
+);

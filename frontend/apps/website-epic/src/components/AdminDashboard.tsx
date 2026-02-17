@@ -1,8 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  BarChart,
-  Bar,
   LineChart,
   Line,
   PieChart,
@@ -25,13 +23,15 @@ import {
   Shield,
   Zap,
 } from 'lucide-react';
+import { TiltCard } from './design-system/TiltCard';
+import { GodModeText } from './design-system/GodModeText';
 
 const AdminDashboard = () => {
   const stats = [
-    { title: 'Usuarios Totales', value: '12,543', icon: Users, color: 'text-blue-400' },
-    { title: 'Ingresos Mensuales', value: '$45,678', icon: DollarSign, color: 'text-green-400' },
-    { title: 'Tasa de Crecimiento', value: '+23.5%', icon: TrendingUp, color: 'text-purple-400' },
-    { title: 'Actividad del Sistema', value: '98.2%', icon: Activity, color: 'text-orange-400' },
+    { title: 'Usuarios Totales', value: '12,543', icon: Users, color: 'text-nexus-cyan', shadow: 'shadow-[0_0_20px_rgba(34,211,238,0.3)]' },
+    { title: 'Ingresos Mensuales', value: '$45,678', icon: DollarSign, color: 'text-emerald-400', shadow: 'shadow-[0_0_20px_rgba(52,211,153,0.3)]' },
+    { title: 'Tasa de Crecimiento', value: '+23.5%', icon: TrendingUp, color: 'text-nexus-violet', shadow: 'shadow-[0_0_20px_rgba(168,85,247,0.3)]' },
+    { title: 'Actividad del Sistema', value: '98.2%', icon: Activity, color: 'text-orange-400', shadow: 'shadow-[0_0_20px_rgba(251,146,60,0.3)]' },
   ];
 
   const chartData = [
@@ -44,150 +44,207 @@ const AdminDashboard = () => {
   ];
 
   const pieData = [
-    { name: 'Desktop', value: 400, color: '#8884d8' },
-    { name: 'Mobile', value: 300, color: '#82ca9d' },
-    { name: 'Tablet', value: 300, color: '#ffc658' },
+    { name: 'Desktop', value: 400, color: '#22d3ee' }, // nexus-cyan
+    { name: 'Mobile', value: 300, color: '#a855f7' }, // nexus-violet
+    { name: 'Tablet', value: 300, color: '#fbbf24' }, // amber
   ];
 
   return (
-    <div className="p-6 space-y-6">
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="flex items-center justify-between"
-      >
-        <h1 className="text-4xl font-bold text-white">🏆 Cuartel General Admin</h1>
-        <div className="flex space-x-4">
-          <button className="p-2 bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors">
-            <Settings className="w-5 h-5 text-white" />
-          </button>
-        </div>
-      </motion.div>
+    <div className="min-h-screen bg-nexus-obsidian p-6 md:p-12 font-sans relative overflow-hidden">
+      {/* Background Glow */}
+      <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-nexus-violet/5 rounded-full blur-[150px]" />
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-nexus-cyan/5 rounded-full blur-[150px]" />
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <motion.div
-            key={index}
-            initial={{ y: 20, opacity: 0 }}
+      <div className="max-w-7xl mx-auto relative z-10 space-y-8">
+        <motion.div
+            initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: index * 0.1 }}
-            className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-white/70 text-sm">{stat.title}</p>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
-              </div>
-              <stat.icon className={`w-8 h-8 ${stat.color}`} />
-            </div>
-          </motion.div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
+            className="flex items-center justify-between"
         >
-          <h2 className="text-xl font-semibold text-white mb-4">📊 Estadísticas de Usuarios</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
-              <XAxis dataKey="name" stroke="#ffffff" />
-              <YAxis stroke="#ffffff" />
-              <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: 'none' }} />
-              <Legend />
-              <Line type="monotone" dataKey="usuarios" stroke="#8884d8" strokeWidth={2} />
-              <Line type="monotone" dataKey="ingresos" stroke="#82ca9d" strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+            <div className="flex items-baseline gap-4">
+                <GodModeText text="GOD" effect="none" className="text-4xl md:text-5xl font-bold" />
+                <GodModeText
+                text="ADMIN"
+                effect="hologram"
+                className="text-4xl md:text-5xl font-bold text-nexus-violet"
+                />
+            </div>
+
+            <TiltCard className="rounded-xl">
+                <button className="p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-nexus-violet/50 transition-all group">
+                <Settings className="w-5 h-5 text-nexus-silver/60 group-hover:text-nexus-violet group-hover:rotate-90 transition-all duration-500" />
+                </button>
+            </TiltCard>
         </motion.div>
 
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
-        >
-          <h2 className="text-xl font-semibold text-white mb-4">🎯 Distribución de Dispositivos</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: 'none' }} />
-            </PieChart>
-          </ResponsiveContainer>
-        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {stats.map((stat, index) => (
+            <TiltCard key={index} className="h-full" tiltMaxAngleX={4} tiltMaxAngleY={4}>
+                <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-white/10 hover:border-white/20 transition-all relative overflow-hidden group h-full">
+                    <div className="flex items-center justify-between z-10 relative">
+                        <div>
+                        <p className="text-nexus-silver/50 text-xs font-orbitron tracking-widest uppercase mb-2">{stat.title}</p>
+                        <p className="text-3xl font-bold text-white tracking-tight">{stat.value}</p>
+                        </div>
+                        <div className={`p-3 rounded-xl bg-white/5 border border-white/5 ${stat.color} ${stat.shadow} group-hover:scale-110 transition-transform`}>
+                            <stat.icon className="w-6 h-6" />
+                        </div>
+                    </div>
+                </div>
+            </TiltCard>
+            ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <TiltCard className="h-full">
+                <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-8 border border-white/10 h-full">
+                <h2 className="text-xl font-orbitron font-bold text-white mb-6 flex items-center gap-3">
+                    <TrendingUp className="w-5 h-5 text-nexus-cyan" />
+                    ESTADÍSTICAS DE USUARIOS
+                </h2>
+                <div className="h-[300px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={chartData}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                        <XAxis
+                            dataKey="name"
+                            stroke="rgba(255,255,255,0.3)"
+                            tick={{fontSize: 12, fontFamily: 'Orbitron'}}
+                            axisLine={false}
+                            tickLine={false}
+                            dy={10}
+                        />
+                        <YAxis
+                            stroke="rgba(255,255,255,0.3)"
+                            tick={{fontSize: 12, fontFamily: 'Orbitron'}}
+                            axisLine={false}
+                            tickLine={false}
+                            dx={-10}
+                        />
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                borderRadius: '12px',
+                                backdropFilter: 'blur(10px)',
+                            }}
+                            itemStyle={{ color: '#fff' }}
+                        />
+                        <Legend wrapperStyle={{ paddingTop: '20px' }} />
+                        <Line type="monotone" dataKey="usuarios" stroke="#22d3ee" strokeWidth={3} dot={{r: 4, fill: '#22d3ee'}} activeDot={{r: 6, strokeWidth: 0}} />
+                        <Line type="monotone" dataKey="ingresos" stroke="#a855f7" strokeWidth={3} dot={{r: 4, fill: '#a855f7'}} activeDot={{r: 6, strokeWidth: 0}} />
+                        </LineChart>
+                    </ResponsiveContainer>
+                </div>
+                </div>
+            </TiltCard>
+
+            <TiltCard className="h-full">
+                <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-8 border border-white/10 h-full">
+                <h2 className="text-xl font-orbitron font-bold text-white mb-6 flex items-center gap-3">
+                    <Zap className="w-5 h-5 text-nexus-violet" />
+                    DISTRIBUCIÓN
+                </h2>
+                <div className="h-[300px] w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                        <Pie
+                            data={pieData}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={100}
+                            paddingAngle={5}
+                            dataKey="value"
+                            stroke="none"
+                        >
+                            {pieData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                        </Pie>
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: 'rgba(0,0,0,0.8)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                borderRadius: '12px',
+                                backdropFilter: 'blur(10px)',
+                            }}
+                            itemStyle={{ color: '#fff' }}
+                        />
+                        <Legend
+                            verticalAlign="middle"
+                            align="right"
+                            layout="vertical"
+                            iconType="circle"
+                        />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+                </div>
+            </TiltCard>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <TiltCard className="h-full">
+                <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 h-full group hover:border-blue-400/30 transition-colors">
+                <h3 className="text-sm font-bold font-orbitron text-white mb-4 flex items-center tracking-widest">
+                    <Database className="w-4 h-4 mr-2 text-blue-400" />
+                    BASE DE DATOS
+                </h3>
+                <div className="space-y-4">
+                    <div className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                    <span className="text-nexus-silver/60">Conexiones</span>
+                    <span className="text-green-400 font-mono">24 Active</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                    <span className="text-nexus-silver/60">QPS</span>
+                    <span className="text-blue-400 font-bold font-mono">1,247</span>
+                    </div>
+                </div>
+                </div>
+            </TiltCard>
+
+            <TiltCard className="h-full">
+                <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 h-full group hover:border-red-400/30 transition-colors">
+                <h3 className="text-sm font-bold font-orbitron text-white mb-4 flex items-center tracking-widest">
+                    <Shield className="w-4 h-4 mr-2 text-red-400" />
+                    SEGURIDAD
+                </h3>
+                <div className="space-y-4">
+                    <div className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                    <span className="text-nexus-silver/60">Bloqueos</span>
+                    <span className="text-red-400 font-mono">142</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                    <span className="text-nexus-silver/60">Sesiones</span>
+                    <span className="text-green-400 font-bold font-mono">89 Safe</span>
+                    </div>
+                </div>
+                </div>
+            </TiltCard>
+
+            <TiltCard className="h-full">
+                <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 h-full group hover:border-yellow-400/30 transition-colors">
+                <h3 className="text-sm font-bold font-orbitron text-white mb-4 flex items-center tracking-widest">
+                    <Zap className="w-4 h-4 mr-2 text-yellow-400" />
+                    RENDIMIENTO
+                </h3>
+                <div className="space-y-4">
+                    <div className="flex justify-between items-center text-sm border-b border-white/5 pb-2">
+                    <span className="text-nexus-silver/60">Latencia</span>
+                    <span className="text-green-400 font-mono">124ms</span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm">
+                    <span className="text-nexus-silver/60">Uptime</span>
+                    <span className="text-green-400 font-bold font-mono">99.9%</span>
+                    </div>
+                </div>
+                </div>
+            </TiltCard>
+        </div>
       </div>
-
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-      >
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <Database className="w-5 h-5 mr-2 text-blue-400" />
-            Base de Datos
-          </h3>
-          <div className="space-y-2">
-            <div className="flex justify-between text-white/70">
-              <span>Conexiones Activas</span>
-              <span className="text-green-400">24</span>
-            </div>
-            <div className="flex justify-between text-white/70">
-              <span>Queries por Segundo</span>
-              <span className="text-blue-400">1,247</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <Shield className="w-5 h-5 mr-2 text-green-400" />
-            Seguridad
-          </h3>
-          <div className="space-y-2">
-            <div className="flex justify-between text-white/70">
-              <span>Intentos Bloqueados</span>
-              <span className="text-red-400">142</span>
-            </div>
-            <div className="flex justify-between text-white/70">
-              <span>Sesiones Activas</span>
-              <span className="text-green-400">89</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <Zap className="w-5 h-5 mr-2 text-yellow-400" />
-            Rendimiento
-          </h3>
-          <div className="space-y-2">
-            <div className="flex justify-between text-white/70">
-              <span>Response Time</span>
-              <span className="text-green-400">124ms</span>
-            </div>
-            <div className="flex justify-between text-white/70">
-              <span>Uptime</span>
-              <span className="text-green-400">99.9%</span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };

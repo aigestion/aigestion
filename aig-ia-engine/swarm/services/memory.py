@@ -1,155 +1,227 @@
+
 import json
-import logging
 import os
-from typing import Any, Dict, List
+import uuid
+import time
+from datetime import datetime, timedelta
+import logging
+from typing import Any, Dict, List, Optional, Tuple, TypedDict
 
-import google.generativeai as genai
-import numpy as np
-from services.llm import LLMService, ModelTier
+# Configure logging at a module level
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-logger = logging.getLogger("MemoryService")
-
+# Type definition for a Memory entry
+class Memory(TypedDict):
+    id: str
+    timestamp: float
+    content: str
+    embedding: List[float]
+    type: str  # e.g., 'observation', 'thought', 'plan'
+    related_entities: List[str]
 
 class MemoryService:
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(MemoryService, cls).__new__(cls)
-            cls._instance._initialize()
-        return cls._instance
-
-    def _initialize(self):
-        self.memory_file = (
-            "C:\\Users\\Alejandro\\AIG\\AIG-ia-engine\\swarm\\long_term_memory.json"
-        )
-        self.documents = []
-        self._load_memory()
-        self.max_docs = 500
-
-        api_key = os.getenv("GEMINI_API_KEY")
-        if api_key:
-            genai.configure(api_key=api_key)
-            self.model = "models/embedding-001"  # Standard Gemini embedding model
-        else:
-            self.model = None
-
-    def _load_memory(self):
-        if os.path.exists(self.memory_file):
-            try:
-                with open(self.memory_file, "r") as f:
-                    self.documents = json.load(f)
-            except Exception as e:
-                logger.error(f"Failed to load memory: {e}")
-
-    def _save_memory(self):
-        try:
-            with open(self.memory_file, "w") as f:
-                json.dump(self.documents, f, indent=2)
-        except Exception as e:
-            logger.error(f"Failed to save memory: {e}")
-
-    def _get_embedding(self, text: str) -> List[float]:
-        if not self.model:
-            return []
-        try:
-            result = genai.embed_content(
-                model=self.model,
-                content=text,
-                task_type="retrieval_document",
-                title="Swarm Memory",
-            )
-            return result["embedding"]
-        except Exception as e:
-            logger.error(f"Embedding failed: {e}")
-            return []
-
-    def remember(self, text: str, metadata: Dict[str, Any] = {}):
-        """Store a thought/fact/ruling in memory."""
-        embedding = self._get_embedding(text)
-        if embedding:
-            doc = {
-                "text": text,
-                "metadata": metadata,
-                "embedding": embedding,
-                "timestamp": metadata.get("timestamp", "unknown"),
-            }
-            self.documents.append(doc)
-
-            # Pruning logic: Keep it lean
-            if len(self.documents) > self.max_docs:
-                logger.info(
-                    f"Memory limit reached ({self.max_docs}). Pruning oldest entry."
-                )
-                self.documents.pop(0)
-
-            self._save_memory()
-            logger.info(f"Stored in memory: {text[:50]}...")
-
-    def recall(self, query: str, limit: int = 3) -> List[Dict]:
-        """Retrieve relevant context for a query."""
-        if not self.documents:
-            return []
-
-        query_embedding = self._get_embedding(query)
-        if not query_embedding:
-            return []
-
-        # Calculate Cosine Similarity
-        scored_docs = []
-        q_vec = np.array(query_embedding)
-
-        for doc in self.documents:
-            d_vec = np.array(doc["embedding"])
-            similarity = np.dot(q_vec, d_vec) / (
-                np.linalg.norm(q_vec) * np.linalg.norm(d_vec)
-            )
-            scored_docs.append((similarity, doc))
-
-        # Sort by score desc
-        scored_docs.sort(key=lambda x: x[0], reverse=True)
-
-        return [d[1] for d in scored_docs[:limit]]
-
-    def ingest_docs(self, dir_path: str):
-        """Ingest markdown files from a directory."""
-        if not os.path.exists(dir_path):
-            return 0
-
-        count = 0
-        for root, _, files in os.walk(dir_path):
-            for file in files:
-                if file.endswith(".md"):
-                    path = os.path.join(root, file)
-                    with open(path, "r", encoding="utf-8", errors="ignore") as f:
-                        content = f.read()
-                        self.remember(
-                            content, {"source": path, "type": "documentation"}
-                        )
-                        count += 1
-        return count
-
-    def summarize_past_memories(self, batch_size: int = 50):
-        """Use LLM to compress a batch of old memories into a single synthesis."""
-        if len(self.documents) < batch_size:
-            return
-
-        old_docs = self.documents[:batch_size]
-        text_to_summarize = "\n".join([d["text"] for d in old_docs])
-
-        llm = LLMService()
-        prompt = f"""
-        Role: Sovereign Memory Archiver.
-        Task: Synthesize the following batch of thoughts into a single high-level summary.
-        Objective: Maintain core mission insights and technical rulings while discarding minor logs.
-        
-        Batch Content:
-        {text_to_summarize}
+    """
+    Manages the storage, retrieval, and embedding of agent memories.
+    Uses dependency injection for the embedding client to centralize
+    API key management and model configuration.
+    """
+    def __init__(self,
+                 embedding_client: Any,  # The client responsible for generating embeddings (e.g., genai)
+                 model_name: str = "models/embedding-001",
+                 memory_dir: str = "memory_data"):
         """
+        Initializes the MemoryService.
 
-        summary = llm.generate_text(prompt, tier=ModelTier.REASONING)
-        if summary:
-            # Replace old batch with a single synthesized memory
-            self.documents = self.documents[batch_size:]
-            self.remember(f"[SYNTHESIS] {summary}", {"type": "legacy_summary"})
-            logger.info("Batch summarization complete. Memory compressed.")
+        Args:
+            embedding_client: An object with an 'embed_content' method
+                              compatible with the Google Generative AI client.
+            model_name (str): The name of the embedding model to use.
+            memory_dir (str): Directory where memory files are stored.
+        """
+        self._embedding_client = embedding_client
+        self._model_name = model_name
+        self.memory_dir = memory_dir
+        os.makedirs(memory_dir, exist_ok=True)
+        logging.info(f"MemoryService initialized with model '{self._model_name}' and memory_dir '{self.memory_dir}'")
+
+    def _generate_embedding(self, text: str) -> List[float]:
+        """
+        Generates an embedding for the given text using the injected embedding client.
+
+        Args:
+            text (str): The text content to embed.
+
+        Returns:
+            List[float]: The embedding vector, or an empty list if generation fails.
+        """
+        try:
+            response = self._embedding_client.embed_content(
+                model=self._model_name,
+                content=text,
+                task_type="RETRIEVAL_DOCUMENT"
+            )
+            # Ensure the response structure is as expected, and 'embedding' key exists
+            if 'embedding' in response:
+                return response['embedding']
+            else:
+                logging.warning(f"Embedding response did not contain 'embedding' key for text '{text[:50]}...'")
+                return []
+        except Exception as e:
+            logging.error(f"Error generating embedding for text '{text[:50]}...': {e}")
+            return []
+
+    def _save_memory(self, agent_id: str, memories: List[Memory]):
+        """
+        Saves a list of memories for a specific agent to a JSON file.
+
+        Args:
+            agent_id (str): The ID of the agent whose memories are being saved.
+            memories (List[Memory]): A list of memory dictionaries.
+        """
+        file_path = os.path.join(self.memory_dir, f"{agent_id}_memories.json")
+        try:
+            with open(file_path, 'w', encoding='utf-8') as f:
+                json.dump(memories, f, indent=4)
+            logging.debug(f"Memory saved successfully for agent {agent_id} at {file_path}")
+        except IOError as e:
+            logging.error(f"Failed to save memory for agent {agent_id} to {file_path}: {e}")
+
+    def _load_memory(self, agent_id: str) -> Optional[List[Memory]]:
+        """
+        Loads memories for a specific agent from a JSON file.
+
+        Args:
+            agent_id (str): The ID of the agent whose memories are being loaded.
+
+        Returns:
+            Optional[List[Memory]]: A list of memory dictionaries, or None if the
+                                    file doesn't exist or an error occurs.
+        """
+        file_path = os.path.join(self.memory_dir, f"{agent_id}_memories.json")
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                memories = json.load(f)
+            logging.debug(f"Memory loaded successfully for agent {agent_id} from {file_path}")
+            return memories
+        except FileNotFoundError:
+            logging.info(f"Memory file not found for agent {agent_id} at {file_path}. Returning empty memory.")
+            return [] # Return empty list if no file, consistent with previous behavior for empty memory
+        except json.JSONDecodeError as e:
+            logging.error(f"Failed to parse memory file {file_path} for agent {agent_id}: {e}")
+            return None
+        except IOError as e:
+            logging.error(f"Failed to read memory file {file_path} for agent {agent_id}: {e}")
+            return None
+
+    def add_memory(self,
+                   agent_id: str,
+                   content: str,
+                   memory_type: str = "observation",
+                   related_entities: Optional[List[str]] = None) -> Optional[Memory]:
+        """
+        Adds a new memory to the agent's memory stream, including its embedding.
+
+        Args:
+            agent_id (str): The ID of the agent.
+            content (str): The content of the memory.
+            memory_type (str): The type of memory (e.g., 'observation', 'thought', 'plan').
+            related_entities (Optional[List[str]]): A list of entities related to this memory.
+
+        Returns:
+            Optional[Memory]: The newly created memory object, or None if embedding fails.
+        """
+        embedding = self._generate_embedding(content)
+        if not embedding:
+            logging.error(f"Failed to generate embedding for new memory for agent {agent_id}. Memory not added.")
+            return None
+
+        new_memory: Memory = {
+            "id": str(uuid.uuid4()),
+            "timestamp": time.time(),
+            "content": content,
+            "embedding": embedding,
+            "type": memory_type,
+            "related_entities": related_entities if related_entities is not None else []
+        }
+
+        all_memories = self._load_memory(agent_id)
+        if all_memories is None: # Handle error during load
+            all_memories = []
+        all_memories.append(new_memory)
+        self._save_memory(agent_id, all_memories)
+        logging.info(f"Added new '{memory_type}' memory for agent {agent_id}: '{content[:80]}...'")
+        return new_memory
+
+    def retrieve_memories(self,
+                          agent_id: str,
+                          query: str,
+                          k: int = 5,
+                          time_decay_factor: float = 0.99) -> List[Tuple[Memory, float]]:
+        """
+        Retrieves the top-k most relevant memories for a given query, considering recency.
+
+        Args:
+            agent_id (str): The ID of the agent.
+            query (str): The query string to search for.
+            k (int): The number of top memories to retrieve.
+            time_decay_factor (float): Factor to decay memory score based on age (0-1).
+
+        Returns:
+            List[Tuple[Memory, float]]: A list of (memory, score) tuples, sorted by score.
+        """
+        query_embedding = self._generate_embedding(query)
+        if not query_embedding:
+            logging.warning(f"Failed to generate embedding for query '{query[:50]}...'. Cannot retrieve memories.")
+            return []
+
+        all_memories = self._load_memory(agent_id)
+        if not all_memories:
+            return []
+
+        scored_memories: List[Tuple[Memory, float]] = []
+        current_time = time.time()
+
+        for memory in all_memories:
+            if not memory.get("embedding"):
+                logging.warning(f"Memory {memory.get('id')} for agent {agent_id} has no embedding. Skipping.")
+                continue
+
+            similarity = self._cosine_similarity(query_embedding, memory["embedding"])
+
+            # Apply time decay
+            age_in_seconds = current_time - memory["timestamp"]
+            # Example: decay by 1% per hour (3600 seconds)
+            time_decay = time_decay_factor ** (age_in_seconds / 3600)
+            final_score = similarity * time_decay
+            scored_memories.append((memory, final_score))
+
+        scored_memories.sort(key=lambda x: x[1], reverse=True)
+        logging.debug(f"Retrieved {len(scored_memories)} memories for agent {agent_id} with query '{query[:50]}...'")
+        return scored_memories[:k]
+
+    @staticmethod
+    def _cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
+        """Calculates the cosine similarity between two vectors."""
+        if not vec1 or not vec2:
+            return 0.0
+        dot_product = sum(a * b for a, b in zip(vec1, vec2))
+        magnitude_vec1 = (sum(a**2 for a in vec1))**0.5
+        magnitude_vec2 = (sum(b**2 for b in vec2))**0.5
+
+        if magnitude_vec1 == 0 or magnitude_vec2 == 0:
+            return 0.0
+
+        return dot_product / (magnitude_vec1 * magnitude_vec2)
+
+    def get_all_memories(self, agent_id: str) -> List[Memory]:
+        """
+        Retrieves all memories for a given agent without filtering or scoring.
+
+        Args:
+            agent_id (str): The ID of the agent.
+
+        Returns:
+            List[Memory]: A list of all memory objects for the agent.
+        """
+        memories = self._load_memory(agent_id)
+        return memories if memories is not None else []

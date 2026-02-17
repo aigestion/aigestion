@@ -1,0 +1,40 @@
+C:\Users\Alejandro\AIGestion\aig-ia-engine\swarm\services\llm.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+Testing Swarm Agent Handshake...
+2026-02-16 16:54:01 [info     ] Registered as Architect        agent=Architect type=Architect
+2026-02-16 16:54:01 [info     ] Registered as Builder          agent=Builder type=Builder
+Registered AgentTypes: [<AgentType.ARCHITECT: 'Architect'>, <AgentType.BUILDER: 'Builder'>]
+
+Sending REVIEW_CODE message to Architect...
+Target Receiver: AgentType.ARCHITECT (Type: <enum 'AgentType'>)
+2026-02-16 16:54:01 [info     ] dispatching_message            receiver=Architect sender=Overlord type=REVIEW_CODE
+2026-02-16 16:54:01 [info     ] designing_solution             agent=Architect issue='Fix a simple typo in a comment' type=Architect
+2026-02-16 16:54:01 [info     ] recalled_context               agent=Architect count=2 type=Architect
+Failure in GeminiAPI (1/3): 400 API key not valid. Please pass a valid API key. [reason: "API_KEY_INVALID"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+, locale: "en-US"
+message: "API key not valid. Please pass a valid API key."
+]
+LLM Generation failed (REASONING): 400 API key not valid. Please pass a valid API key. [reason: "API_KEY_INVALID"
+domain: "googleapis.com"
+metadata {
+  key: "service"
+  value: "generativelanguage.googleapis.com"
+}
+, locale: "en-US"
+message: "API key not valid. Please pass a valid API key."
+]
+2026-02-16 16:54:02 [info     ] design_failed                  agent=Architect error='Error communicating with AI service: 400 API key not valid. Please pass a valid API key. [reason: "API_KEY_INVALID"\ndomain: "googleapis.com"\nmetadata {\n  key: "service"\n  value: "generativelanguage.googleapis.com"\n}\n, locale: "en-US"\nmessage: "API key not valid. Please pass a valid API key."\n]' type=Architect
+
+Handshake test initiated. Check logs for activity between Architect and Builder.

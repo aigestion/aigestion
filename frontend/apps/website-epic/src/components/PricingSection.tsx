@@ -10,6 +10,8 @@ import {
 } from 'lucide-react';
 import React, { useState } from 'react';
 import { useAppContext } from '../contexts/AppContext';
+import { TiltCard } from './design-system/TiltCard';
+import { GodModeText } from './design-system/GodModeText';
 
 type PlanCategory = 'familias' | 'empresas';
 
@@ -74,6 +76,7 @@ export const PricingSection: React.FC = () => {
   return (
     <section id="pricing" className="py-32 bg-black relative overflow-hidden">
       <div className="absolute inset-0 bg-radial-at-bottom from-nexus-cyan/5 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-10" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div
@@ -82,10 +85,23 @@ export const PricingSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-6xl font-orbitron font-black text-white mb-6 uppercase tracking-tighter">
-            SELECCIONE SU <span className="kinetic-text italic">DOMINIO</span>
+          <div className="flex justify-center mb-4">
+            <span className="px-4 py-1 rounded-full border border-nexus-cyan/30 bg-nexus-cyan/5 text-nexus-cyan text-[10px] font-orbitron tracking-[0.2em] uppercase backdrop-blur-md">
+              Protocolos de Acceso
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter flex flex-col items-center gap-4">
+            <GodModeText
+              text="PLAN EMPRESA O FAMILIAR"
+              effect="holographic"
+              className="font-orbitron"
+            />
+            <div className="flex gap-4 opacity-50">
+              <Home className="w-8 h-8 text-nexus-cyan" />
+              <Building2 className="w-8 h-8 text-nexus-violet" />
+            </div>
           </h2>
-          <p className="text-nexus-silver/60 max-w-2xl mx-auto text-lg">
+          <p className="text-nexus-silver/60 max-w-2xl mx-auto text-lg font-light tracking-wide">
             Arquitecturas de inteligencia diseñadas para escalar con su ecosistema, ya sea personal
             o institucional.
           </p>
@@ -98,7 +114,7 @@ export const PricingSection: React.FC = () => {
               onClick={() => setSelectedCategory(cat)}
               className={`relative p-10 rounded-3xl border transition-all duration-500 text-left overflow-hidden group ${
                 selectedCategory === cat
-                  ? `border-white/20 bg-white/5`
+                  ? `border-white/20 bg-white/5 shadow-[0_0_30px_rgba(255,255,255,0.05)]`
                   : 'border-white/5 bg-transparent grayscale opacity-50 hover:opacity-80'
               }`}
             >
@@ -115,7 +131,7 @@ export const PricingSection: React.FC = () => {
                   <div className={`h-1 w-12 mt-2 bg-linear-to-r ${categoryData[cat].color}`} />
                 </div>
               </div>
-              <p className="text-nexus-silver/40 text-sm leading-relaxed relative z-10">
+              <p className="text-nexus-silver/40 text-sm leading-relaxed relative z-10 font-light">
                 {categoryData[cat].description}
               </p>
             </motion.button>
@@ -132,47 +148,55 @@ export const PricingSection: React.FC = () => {
             className="grid lg:grid-cols-3 gap-8"
           >
             {categoryData[selectedCategory].plans.map((plan, idx) => (
-              <div key={plan.name} className="flex flex-col group">
-                <div className="premium-glass p-8 rounded-3xl h-full border-white/5 hover:border-white/20 transition-all duration-500 flex flex-col">
-                  <div className="mb-8">
-                    <h4 className="font-orbitron text-[10px] tracking-[0.4em] text-nexus-silver/40 mb-4 uppercase">
-                      {plan.name}
-                    </h4>
-                    <div className="text-4xl font-black text-white mb-2 tracking-tight">
-                      {plan.price}
-                    </div>
-                    <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mt-4">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(idx + 1) * 33}%` }}
-                        className={`h-full bg-linear-to-r ${categoryData[selectedCategory].color}`}
-                      />
-                    </div>
-                  </div>
+              <TiltCard key={plan.name} className="h-full">
+                <div className="premium-glass p-8 rounded-3xl h-full border-white/5 hover:border-nexus-cyan/30 transition-all duration-500 flex flex-col relative overflow-hidden group">
+                  {/* Hover Gradient Overlay */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${categoryData[selectedCategory].color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
+                  />
 
-                  <ul className="space-y-4 mb-10 grow">
-                    {plan.features.map(f => (
-                      <li
-                        key={f}
-                        className="flex items-start gap-3 text-sm text-nexus-silver/60 group-hover:text-nexus-silver transition-colors"
-                      >
-                        <CheckCircle2
-                          className={`w-4 h-4 mt-0.5 shrink-0 text-white/20 group-hover:text-nexus-cyan-glow`}
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="mb-8">
+                      <h4 className="font-orbitron text-[10px] tracking-[0.4em] text-nexus-silver/40 mb-4 uppercase">
+                        {plan.name}
+                      </h4>
+                      <div className="text-4xl font-black text-white mb-2 tracking-tight">
+                        <GodModeText text={plan.price} effect="neon" className="font-orbitron" />
+                      </div>
+                      <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mt-4">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${(idx + 1) * 33}%` }}
+                          className={`h-full bg-linear-to-r ${categoryData[selectedCategory].color} shadow-[0_0_10px_rgba(255,255,255,0.5)]`}
                         />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
+                      </div>
+                    </div>
 
-                  <button
-                    onClick={() => setIsContactModalOpen(true)}
-                    className="w-full mt-8 py-4 rounded-xl border border-white/10 hover:border-white/30 text-[10px] tracking-[0.4em] uppercase font-bold transition-all hover:bg-white/5 flex items-center justify-center gap-2 group/btn"
-                  >
-                    Adquirir Protocolo
-                    <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
+                    <ul className="space-y-4 mb-10 grow">
+                      {plan.features.map(f => (
+                        <li
+                          key={f}
+                          className="flex items-start gap-3 text-sm text-nexus-silver/60 group-hover:text-nexus-silver transition-colors"
+                        >
+                          <CheckCircle2
+                            className={`w-4 h-4 mt-0.5 shrink-0 text-white/20 group-hover:text-nexus-cyan-glow`}
+                          />
+                          <span className="font-light tracking-wide">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <button
+                      onClick={() => setIsContactModalOpen(true)}
+                      className="w-full mt-8 py-4 rounded-xl border border-white/10 hover:border-nexus-cyan/50 text-[10px] tracking-[0.4em] uppercase font-bold transition-all hover:bg-nexus-cyan/10 flex items-center justify-center gap-2 group/btn relative overflow-hidden"
+                    >
+                      <span className="relative z-10">Adquirir Protocolo</span>
+                      <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform relative z-10" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/btn:animate-shimmer" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </TiltCard>
             ))}
           </motion.div>
         </AnimatePresence>
@@ -184,19 +208,19 @@ export const PricingSection: React.FC = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-nexus-cyan/50 transition-colors">
+          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-nexus-cyan/80 transition-colors">
             <ShieldCheck className="w-5 h-5" />
             <span className="text-[10px] tracking-widest uppercase font-bold">
               Infraestructura Segura
             </span>
           </div>
-          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-nexus-violet/50 transition-colors">
+          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-nexus-violet/80 transition-colors">
             <Lock className="w-5 h-5" />
             <span className="text-[10px] tracking-widest uppercase font-bold">
               Bóveda Soberana Cifrada
             </span>
           </div>
-          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-white/50 transition-colors">
+          <div className="flex items-center gap-3 text-nexus-silver/30 group hover:text-white/80 transition-colors">
             <Trophy className="w-5 h-5" />
             <span className="text-[10px] tracking-widest uppercase font-bold">
               Excelencia Garantizada

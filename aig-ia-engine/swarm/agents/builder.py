@@ -28,7 +28,8 @@ class Builder(BaseAgent):
                 output_file = project_root / "SWARM_REPORT_AI.md"
             else:
                 prompt = f"Implement the following refactoring plan. Return ONLY code for the target file.\n\nPlan: {plan}"
-                output_file = engine_root / "swarm" / "REF_TARGET.py"
+                # Save to swarm root
+                output_file = engine_root / "REF_TARGET.py"
 
             try:
                 content = self.llm.generate_text(prompt)

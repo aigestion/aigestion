@@ -3,6 +3,13 @@
   "mcp.autoRestart": true,
   "mcp.logLevel": "info",
   "mcp.enableTelemetry": true,
+  "aigestion.ml-service.url": "http://localhost:5000",
+  "gradle.debug": true,
+  "java.gradle.buildServer.enabled": "off",
+  "java.autobuild.enabled": false,
+  "java.import.gradle.offline.enabled": false,
+  "java.import.gradle.arguments": ["--no-daemon", "--parallel"],
+  "gradle.allowParallelRun": true,
   "mcp.servers": {
     "aigestion_core": {
       "command": "node",

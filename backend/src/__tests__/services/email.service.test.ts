@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 import { jest } from '@jest/globals';
 import nodemailer from 'nodemailer';
+import { env } from '../../config/env.schema';
 import { container, TYPES } from '../../config/inversify.config';
 import { EmailService } from '../../services/email.service';
 
@@ -23,7 +24,10 @@ describe('EmailService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    service = container.get<EmailService>(TYPES.EmailService);
+    // Ensure SMTP env vars are set so the service initializes its transporter
+    (env as any).EMAIL_HOST = 'smtp.test.com';
+    (env as any).EMAIL_PORT = 587;
+    service = container.get(TYPES.EmailService) as EmailService;
   });
 
   it('should create transporter on initialization', () => {

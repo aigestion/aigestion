@@ -74,7 +74,10 @@ const DemoDashboard = () => {
   ];
 
   return (
-    <section className="relative py-32 bg-nexus-obsidian overflow-hidden border-y border-white/5">
+    <section
+      id="demo-dashboard"
+      className="relative py-32 bg-nexus-obsidian overflow-hidden border-y border-white/5"
+    >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,245,255,0.05)_0%,transparent_70%)]" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">

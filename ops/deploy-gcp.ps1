@@ -2,7 +2,7 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$ProjectId,
 
-    [string]$Region = "us-central1"
+    [string]$Region = "europe-southwest1"
 )
 
 $ErrorActionPreference = "Stop"
@@ -31,30 +31,41 @@ Write-Step "Deploying Backend (aigestion-backend)..."
 # We will use 'gcloud run deploy' from source which handles building via Buildpacks or Dockerfile automatically.
 
 # Note: We point to the root context but specify the Dockerfile relative to it.
-gcloud run deploy aigestion-backend `
-    --source . `
-    --platform managed `
-    --allow-unauthenticated `
-    --port 8080 `
-    --region $Region `
-    --set-env-vars NODE_ENV=production `
-    --service-account "default"
+# gcloud run deploy aigestion-backend `
+#     --source . `
+#     --platform managed `
+#     --allow-unauthenticated `
+#     --port 8080 `
+#     --region $Region `
+#     --set-env-vars NODE_ENV=production `
+#     --service-account "default"
 
 # Set Dockerfile via flag if using builds submit, but 'run deploy --source' tries to detect it.
 # Since we have multiple Dockerfiles, it's safer to use 'gcloud builds submit' with specific config or just specify image.
 
-# Let's try the safer Build + Deploy approach for the Backend to ensure we pick the right Dockerfile.
-Write-Step "Building Backend Image..."
-$BackendImage = "gcr.io/$ProjectId/aigestion-backend"
-gcloud builds submit --tag $BackendImage --file docker/Dockerfile .
+# Let's use a cloudbuild.yaml to avoid gcloud argument quirks
+$BackendBuildYaml = @"
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', '$BackendImage', '-f', 'backend/Dockerfile', '.' ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '$BackendImage']
+images:
+- '$BackendImage'
+"@
+Set-Content -Path "cloudbuild_backend.yaml" -Value $BackendBuildYaml
+
+Write-Step "Submitting Backend Build to Cloud Build..."
+gcloud builds submit --config cloudbuild_backend.yaml .
+Remove-Item "cloudbuild_backend.yaml"
 
 Write-Step "Deploying Backend Service..."
 gcloud run deploy aigestion-backend `
-    --image $BackendImage `
-    --platform managed `
-    --allow-unauthenticated `
-    --port 8080 `
-    --region $Region
+  --image $BackendImage `
+  --platform managed `
+  --allow-unauthenticated `
+  --port 8080 `
+  --region $Region
 
 # Get Backend URL
 $BackendUrl = gcloud run services describe aigestion-backend --platform managed --region $Region --format 'value(status.url)'
@@ -69,7 +80,7 @@ $FrontendImage = "gcr.io/$ProjectId/aigestion-frontend"
 # Vite apps bake env vars at build time. So we must rebuild for the specific environment or use a runtime config trick.
 # For now, we will assume build-time baking. We need to pass --build-arg.
 
-gcloud builds submit --tag $FrontendImage --file docker/Dockerfile.frontend --substitutions=_API_URL=$BackendUrl .
+# gcloud builds submit --tag $FrontendImage --file docker/Dockerfile.frontend --substitutions=_API_URL=$BackendUrl . # Removed redundant failing line
 
 # Note: Cloud Build substitutions don't automatically map to docker build args unless specified in yaml.
 # If using 'gcloud builds submit ...', we can't easily pass build-args without a config file.
@@ -79,7 +90,7 @@ gcloud builds submit --tag $FrontendImage --file docker/Dockerfile.frontend --su
 $CloudBuildYaml = @"
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', '$FrontendImage', '-f', 'docker/Dockerfile.frontend', '--build-arg', 'VITE_API_URL=$BackendUrl', '.' ]
+  args: [ 'build', '-t', '$FrontendImage', '-f', 'infra/docker/Dockerfile.frontend', '--build-arg', 'VITE_API_URL=$BackendUrl', '.' ]
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', '$FrontendImage']
 images:
@@ -88,7 +99,7 @@ images:
 Set-Content -Path "cloudbuild_frontend.yaml" -Value $CloudBuildYaml
 
 Write-Step "Submitting Frontend Build to Cloud Build..."
-gcloud builds submit --config cloudbuild_frontend.yaml .
+gcloud builds submit --config backend/cloudbuild_frontend.yaml .
 Remove-Item "cloudbuild_frontend.yaml"
 
 Write-Step "Deploying Frontend Service..."

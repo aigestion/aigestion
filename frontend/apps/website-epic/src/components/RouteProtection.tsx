@@ -1,6 +1,17 @@
-import { Navigate } from 'react-router-dom';
+import React from 'react';
+import { Navigate, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { React } from 'react';
+
+const LoadingFallback = () => (
+  <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center">
+    <div className="relative">
+      <div className="w-16 h-16 border-2 border-nexus-cyan/20 border-t-nexus-cyan rounded-full animate-spin" />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-2 h-2 bg-nexus-cyan rounded-full animate-pulse" />
+      </div>
+    </div>
+  </div>
+);
 
 interface RouteProtectionProps {
   children: React.ReactNode;
@@ -90,34 +101,85 @@ export const RouteProtection: React.FC<RouteProtectionProps> = ({
   return <>{children}</>;
 };
 
-// Specific protection components for different routes
-export const AdminRouteProtection: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <RouteProtection requireAuth requireAdmin requireAdmin>
-    {children}
-  </RouteProtection>
-);
+// 1. Basic Auth Guard
+export const RequireAuth = () => {
+  const { isAuthenticated, loading } = useAuth();
+  const location = useLocation();
 
-export const ClientRouteProtection: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <RouteProtection requireAuth requirePhoneVerification fallbackPath="/dashboard">
-    {children}
-  </RouteProtection>
-);
+  if (loading) return <LoadingFallback />;
 
-export const DemoRouteProtection: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Demo is accessible to everyone, but we can add rate limiting or session tracking
-  return <>{children}</>;
-};
-
-// Public route that redirects authenticated users away
-export const PublicRouteProtection: React.FC<{
-  children: React.ReactNode;
-  redirectTo?: string;
-}> = ({ children, redirectTo = '/dashboard' }) => {
-  const { isAuthenticated } = useAuth();
-
-  if (isAuthenticated) {
-    return <Navigate to={redirectTo} replace />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
+};
+
+// 2. Email Verification Guard
+export const RequireEmailVerification = () => {
+  const { user, loading } = useAuth();
+  if (loading) return <LoadingFallback />;
+
+  // Skip if already verified (mock logic: assuming true if not explicitly false in strict mode)
+  // In real app: if (!user?.emailVerified)
+  if (user && !user.emailVerified) {
+    return <Navigate to="/verify-email" replace />;
+  }
+
+  return <Outlet />;
+};
+
+// 3. Phone Verification Guard
+export const RequirePhoneVerification = () => {
+  const { user, loading } = useAuth();
+  if (loading) return <LoadingFallback />;
+
+  if (user && !user.phoneVerified) {
+    return <Navigate to="/verify-phone" replace />;
+  }
+
+  return <Outlet />;
+};
+
+// 4. Subscription Guard (The Paywall)
+export const RequireSubscription = () => {
+  const { user, loading } = useAuth();
+  if (loading) return <LoadingFallback />;
+
+  // Allow admins/superadmins or users in demo mode to bypass
+  const isDemoMode = localStorage.getItem('demo_mode') === 'true';
+
+  if (user?.role === 'admin' || user?.role === 'superadmin' || isDemoMode) {
+    return <Outlet />;
+  }
+
+  if (user?.subscription === 'free' || !user?.subscription) {
+    return <Navigate to="/pricing" replace />;
+  }
+
+  return <Outlet />;
+};
+
+// 5. Admin Guard
+export const RequireAdmin = () => {
+  const { loading, isAdmin } = useAuth();
+  if (loading) return <LoadingFallback />;
+
+  if (!isAdmin) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Outlet />;
+};
+
+// 6. Public Route (Redirects if already logged in)
+export const PublicRoute = () => {
+  const { isAuthenticated, loading } = useAuth();
+  if (loading) return null;
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Outlet />;
 };

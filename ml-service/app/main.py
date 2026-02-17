@@ -14,7 +14,7 @@ load_dotenv()
 app = FastAPI(title="AIGestion NeuroCore", description="Neural Engine for RAG and Deep Learning")
 
 # Security Configuration
-API_KEY = os.getenv("ML_SERVICE_API_KEY", "LOCAL_DEV_SECRET_KEY_REPLACE_ME")
+API_KEY = os.getenv("ML_SERVICE_API_KEY", "LOCAL_DEV_SECRET_KEY_REPLACE_ME").strip()
 ALLOWED_ORIGINS = [
     os.getenv("FRONTEND_URL", "http://localhost:3000"),
     os.getenv("BACKEND_URL", "http://localhost:5000"),
@@ -37,16 +37,27 @@ async def verify_api_key(x_api_key: Optional[str] = Header(None)):
     return x_api_key
 
 
-# Initialize RAG Engine
+# Initialize RAG Engine and Whisper Model
 rag_engine = None
+whisper_model = None
 
 @app.on_event("startup")
 async def startup_event():
-    global rag_engine
+    global rag_engine, whisper_model
     # Use the shared data directory for persistence
-    # Default is the shared assets repo, but configurable via env
     persist_dir = os.getenv("CHROMA_PERSIST_DIR", "../assets/data/chromadb")
     rag_engine = RAGEngine(persist_directory=persist_dir)
+
+    # Initialize Faster Whisper (lazy loading could be better, but eager is fine for now)
+    try:
+        from faster_whisper import WhisperModel
+
+        model_size = os.getenv("WHISPER_MODEL_SIZE", "tiny")
+        # Run on CPU by default for compatibility, change to "cuda" if GPU available
+        whisper_model = WhisperModel(model_size, device="cpu", compute_type="int8")
+        print(f"Whisper Model ({model_size}) initialized on CPU.")
+    except Exception as e:
+        print(f"Failed to initialize Whisper: {e}")
 
 class ArchiveRequest(BaseModel):
     content: str
@@ -63,7 +74,7 @@ class SearchResponse(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"status": "online", "service": "AIGestion NeuroCore (RAG)"}
+    return {"status": "online", "service": "AIGestion NeuroCore (RAG + Whisper)"}
 
 
 @app.get("/health")
@@ -71,6 +82,7 @@ def health_check():
     return {
         "status": "healthy",
         "rag_engine": "ready" if rag_engine else "initializing",
+        "whisper": "ready" if whisper_model else "offline",
     }
 
 
@@ -112,6 +124,42 @@ async def forget_all(api_key: str = Depends(verify_api_key)):
     rag_engine.wipe_memory()
     return {"status": "memory_wiped"}
 
+# --- Whisper Endpoint ---
+from fastapi import UploadFile, File
+import shutil
+import tempfile
+
+
+@app.post("/transcribe")
+async def transcribe_audio(
+    file: UploadFile = File(...), api_key: str = Depends(verify_api_key)
+):
+    """
+    Transcribe audio file using Faster Whisper.
+    """
+    if not whisper_model:
+        raise HTTPException(status_code=503, detail="Whisper model not initialized")
+
+    # Save temp file
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
+        shutil.copyfileobj(file.file, tmp)
+        tmp_path = tmp.name
+
+    try:
+        segments, info = whisper_model.transcribe(tmp_path, beam_size=5)
+        text = " ".join([segment.text for segment in segments])
+
+        return {
+            "transcription": text.strip(),
+            "language": info.language,
+            "probability": info.language_probability,
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
+    finally:
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
+
 
 if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="0.0.0.0", port=5000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=5001, reload=True)

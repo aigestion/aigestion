@@ -22,7 +22,7 @@ def verify_pinecone():
     print("Initializing Pinecone God Mode...")
     pc = Pinecone(api_key=api_key)
 
-    index_name = "aigestion-docs"
+    index_name = os.getenv("PINECONE_INDEX_NAME", "kb-index")
 
     try:
         print(f"Connecting to index: {index_name}")

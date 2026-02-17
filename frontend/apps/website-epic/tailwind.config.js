@@ -8,19 +8,37 @@ export default {
           obsidian: '#000000',
           'obsidian-light': '#050505',
           'obsidian-deep': '#000000',
+          void: '#030005', // Ultra-dark purple/black for depth
+          plasma: '#1a0b2e', // Deep plasma background
           violet: '#8a2be2',
           'violet-glow': '#a855f7',
+          'violet-dim': 'rgba(138, 43, 226, 0.1)',
           cyan: '#00f5ff',
           'cyan-glow': '#22d3ee',
-          'cyan-mute': 'rgba(0, 245, 255, 0.1)',
+          'cyan-dim': 'rgba(0, 245, 255, 0.1)',
           gold: '#ffd700',
           silver: '#f5f5f7',
           'silver-mute': 'rgba(245, 245, 247, 0.4)',
+        },
+        // Phase 18: Sovereign Intelligence Aesthetic
+        sovereign: {
+          black: '#050505', // Deepest Void
+          void: '#0A0A0A', // Background
+          'neon-cyan': '#00F0FF', // AI/Logic
+          'neon-purple': '#BD00FF', // Creative/Swarm
+          'glass-surface': 'rgba(255, 255, 255, 0.03)',
         },
       },
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         orbitron: ['Orbitron', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'], // For code/data aesthetics
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'nexus-gradient': 'linear-gradient(135deg, #000000 0%, #1a0b2e 100%)',
+        holographic:
+          'linear-gradient(135deg, rgba(0, 245, 255, 0.1) 0%, rgba(138, 43, 226, 0.1) 100%)',
       },
       animation: {
         float: 'float 6s ease-in-out infinite',
@@ -28,6 +46,8 @@ export default {
         'pulse-border': 'pulse-border 4s ease-in-out infinite',
         'stack-reveal': 'stack-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards',
         'grain-dance': 'grain-dance 8s steps(10) infinite',
+        'hologram-flicker': 'hologram-flicker 3s infinite',
+        'void-spin': 'spin 20s linear infinite',
       },
       keyframes: {
         float: {
@@ -58,8 +78,25 @@ export default {
           '80%': { transform: 'translate(-15%, 0)' },
           '90%': { transform: 'translate(10%, 5%)' },
         },
+        'hologram-flicker': {
+          '0%, 100%': { opacity: 1 },
+          '33%': { opacity: 0.9 },
+          '66%': { opacity: 0.95 },
+          '70%': { opacity: 0.7 },
+          '72%': { opacity: 1 },
+        },
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // 3D Transforms Plugin
+    function ({ addUtilities }) {
+      addUtilities({
+        '.perspective-1000': { perspective: '1000px' },
+        '.transform-style-3d': { transformStyle: 'preserve-3d' },
+        '.backface-hidden': { backfaceVisibility: 'hidden' },
+        '.rotate-y-180': { transform: 'rotateY(180deg)' },
+      });
+    },
+  ],
 };

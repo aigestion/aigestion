@@ -1,0 +1,13 @@
+# 🌌 [GOD MODE] AIGestion Nexus Backend
+# Service: Core Intelligence (Node.js)
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "node dist/bootstrap.js"
+healthcheckPath = "/api/v1/health"
+healthcheckTimeout = 300
+restartPolicyType = "always"
+numReplicas = 1

@@ -11,9 +11,7 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env': {
-      NODE_ENV: JSON.stringify('production'),
-    },
+    'process.env.NODE_ENV': JSON.stringify('development'),
     global: 'window',
   },
   build: {
@@ -24,6 +22,13 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+      },
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['framer-motion', 'lucide-react', 'clsx', 'tailwind-merge'],
+          three: ['three', '@react-three/fiber', '@react-three/drei'],
+        },
       },
     },
     chunkSizeWarningLimit: 1000,
@@ -42,6 +47,13 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   preview: {
     port: 3000,

@@ -22,6 +22,9 @@ router.get('/error-rates', cacheMiddleware(60), (req, res, next) =>
 router.get('/dashboard-data', cacheMiddleware(300), (req, res, next) =>
   controller.getDashboardData(req, res, next)
 );
+router.get('/god-mode', cacheMiddleware(30), (req, res, next) =>
+  controller.getGodModeAnalytics(req, res, next),
+);
 router.get('/export', (req, res, next) => controller.exportReport(req, res, next));
 
 export default router;

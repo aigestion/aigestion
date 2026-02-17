@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 async function fetchSecrets() {
-  const saPath = 'C:/Users/Alejandro/AIGestion/backend/credentials/aigestion-ai-sa.json';
-  const projectId = 'aigestion-sovereign-2026';
+  const saPath = 'C:/Users/Alejandro/AIGestion/infra/credentials/aigestion-ai-sa.json';
+  const projectId = 'aigestion-pro-2026';
 
   process.env.GOOGLE_APPLICATION_CREDENTIALS = saPath;
 

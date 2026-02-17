@@ -14,6 +14,18 @@ jest.mock('bullmq', () => {
   };
 });
 
+// Mock config to enable Redis
+jest.mock('../../config/config', () => ({
+  config: {
+    redis: {
+      host: 'localhost',
+      port: '6379',
+      password: '',
+      enabled: true,
+    },
+  },
+}));
+
 describe('JobQueue', () => {
   let jobQueue: JobQueue;
 

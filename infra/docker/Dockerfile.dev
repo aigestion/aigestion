@@ -1,17 +1,15 @@
 # Development environment with hot reload
 FROM node:20-alpine
 
-# Install build dependencies
+# Install build dependencies and enable pnpm
 RUN apk add --no-cache \
     libc6-compat \
     python3 \
     make \
     g++ \
     git \
-    curl
-
-# Enable pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+    curl \
+    && corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
@@ -20,10 +18,14 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 
 # Copy backend specific config
 COPY backend/package.json ./backend/
-# Copy frontend specific config (if needed by root install)
+# Copy frontend specific config
 COPY frontend/package.json ./frontend/
-# Copy other packages if needed
-COPY packages/ ./packages/
+# Copy sub-packages manifests for pnpm workspace resolution
+COPY packages/decentraland-parcel/package.json ./packages/decentraland-parcel/
+COPY packages/design-system-v2/package.json ./packages/design-system-v2/
+COPY packages/eslint-config/package.json ./packages/eslint-config/
+COPY packages/nexus-core-nestjs/package.json ./packages/nexus-core-nestjs/
+COPY packages/nexus-shared/package.json ./packages/nexus-shared/
 
 # Install dependencies (frozen-lockfile for consistency, but maybe invalid if I miss some pkg files)
 # For dev, we can just copy everything first if context is small enough,

@@ -69,7 +69,16 @@ export class ArbitrationService {
       };
     }
 
-    // 3. STANDARD Tier: Dynamic selection
+    // 3. AUTARCHY Tier: Absolute priority for local resilience
+    if (tier === AIModelTier.AUTARCHY) {
+      return {
+        provider: 'ollama',
+        modelId: 'llama3:8b',
+        reason: 'Sovereign Edge Autarchy (Zero-Trust Local)',
+      };
+    }
+
+    // 4. STANDARD Tier: Dynamic selection
     return {
       provider: 'gemini',
       modelId: 'gemini-2.0-flash',

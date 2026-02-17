@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import os from 'node:os';
+
+import { TYPES } from '../types';
+import { AnalyticsService } from '../services/analytics.service';
 
 import { User } from '../models/User';
 import { getCache, setCache } from '../utils/redis';
@@ -8,38 +11,15 @@ import { stats } from '../utils/stats';
 
 @injectable()
 export class AnalyticsController {
+  constructor(@inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService) {}
+
   public async getAnalyticsOverview(
     _req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void> {
     try {
-      const cacheKey = 'analytics:overview:real';
-      const cachedData = await getCache(cacheKey);
-
-      if (cachedData) {
-        res.json(JSON.parse(cachedData));
-        return;
-      }
-
-      const totalUsers = await User.countDocuments();
-      const activeUsersInRange = await User.countDocuments({
-        lastLogin: { $gte: new Date(Date.now() - 15 * 60 * 1000) },
-      });
-
-      const overview = {
-        activeUsers: activeUsersInRange || 1,
-        totalUsers,
-        totalRequests: stats.totalRequests,
-        errorRate:
-          stats.totalRequests > 0
-            ? Number.parseFloat(((stats.errorCount / stats.totalRequests) * 100).toFixed(2))
-            : 0,
-        avgResponseTime: stats.lastRequestTime,
-        timestamp: Date.now(),
-      };
-
-      await setCache(cacheKey, JSON.stringify(overview), 10);
+      const overview = await this.analyticsService.getOverview();
       res.json(overview);
     } catch (error) {
       next(error);
@@ -70,13 +50,13 @@ export class AnalyticsController {
 
       const usage = {
         cpu: Array.from({ length: 60 }, () =>
-          Number.parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1))
+          Number.parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1)),
         ),
         memory: Array.from({ length: 60 }, () =>
-          Number.parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1))
+          Number.parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1)),
         ),
         network: Array.from({ length: 60 }, () =>
-          Number.parseFloat((Math.random() * 10).toFixed(1))
+          Number.parseFloat((Math.random() * 10).toFixed(1)),
         ),
       };
 
@@ -140,6 +120,19 @@ export class AnalyticsController {
       ];
 
       res.json({ revenue, users, conversions });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async getGodModeAnalytics(
+    _req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const data = await this.analyticsService.getGodModeData();
+      res.json(data);
     } catch (error) {
       next(error);
     }

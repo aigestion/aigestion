@@ -60,6 +60,17 @@ export const api = {
       throw error;
     }
   },
+  getSubscriptionStatus: async (): Promise<{ active: boolean; tier: string }> => {
+    // Mock API call - Simulate network delay
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve({
+          active: true, // Change to false to test demo mode
+          tier: 'premium',
+        });
+      }, 800);
+    });
+  },
   get: async <T = any>(endpoint: string): Promise<{ data: T }> => {
     try {
       const response = await fetch(`${API_URL}${endpoint}`);

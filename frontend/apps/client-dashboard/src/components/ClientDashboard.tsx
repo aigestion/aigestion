@@ -26,6 +26,9 @@ import {
 } from 'lucide-react';
 import { api, SystemHealth } from '../services/api';
 import { SovereignTreasury } from './SovereignTreasury';
+import { PortfolioWidget } from './PortfolioWidget';
+import { StrategyWidget } from './StrategyWidget';
+import { AlertsWidget } from './AlertsWidget';
 
 const ClientDashboard = () => {
   const [health, setHealth] = React.useState<SystemHealth | null>(null);
@@ -143,142 +146,43 @@ const ClientDashboard = () => {
         ))}
       </div>
 
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
-        <SovereignTreasury />
-      </motion.div>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="h-[400px]"
         >
-          <h2 className="text-xl font-semibold text-white mb-4">📈 Progreso de Proyectos</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={progressData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
-              <XAxis dataKey="name" stroke="#ffffff" />
-              <YAxis stroke="#ffffff" />
-              <Tooltip contentStyle={{ backgroundColor: '#1f2937', border: 'none' }} />
-              <Legend />
-              <Line type="monotone" dataKey="completado" stroke="#10b981" strokeWidth={2} />
-              <Line
-                type="monotone"
-                dataKey="objetivo"
-                stroke="#3b82f6"
-                strokeWidth={2}
-                strokeDasharray="5 5"
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <PortfolioWidget />
         </motion.div>
 
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="h-[400px]"
         >
-          <h2 className="text-xl font-semibold text-white mb-4">🏆 Logros y Trofeos</h2>
-          <div className="space-y-3">
-            {achievements.map((achievement, index) => (
-              <motion.div
-                key={index}
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: index * 0.1 }}
-                className={`p-3 rounded-lg border ${
-                  achievement.unlocked
-                    ? 'bg-emerald-500/20 border-emerald-500/50'
-                    : 'bg-gray-500/20 border-gray-500/50'
-                }`}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className={`text-2xl ${achievement.unlocked ? '' : 'opacity-50'}`}>
-                    {achievement.unlocked ? (
-                      <CheckCircle className="w-6 h-6 text-emerald-400" />
-                    ) : (
-                      '🔒'
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <h3
-                      className={`font-semibold ${achievement.unlocked ? 'text-white' : 'text-gray-400'}`}
-                    >
-                      {achievement.title}
-                    </h3>
-                    <p
-                      className={`text-sm ${achievement.unlocked ? 'text-white/70' : 'text-gray-500'}`}
-                    >
-                      {achievement.description}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <StrategyWidget />
+        </motion.div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.6 }}
+          className="h-[400px]"
+        >
+          <SovereignTreasury />
+        </motion.div>
+
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="h-[400px]"
+        >
+          <AlertsWidget />
         </motion.div>
       </div>
-
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-      >
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <Briefcase className="w-5 h-5 mr-2 text-emerald-400" />
-            Proyectos Recientes
-          </h3>
-          <div className="space-y-2">
-            <div className="p-2 bg-emerald-500/20 rounded border border-emerald-500/50">
-              <p className="text-white font-medium">Dashboard Analytics</p>
-              <p className="text-white/70 text-sm">Completado • 100%</p>
-            </div>
-            <div className="p-2 bg-blue-500/20 rounded border border-blue-500/50">
-              <p className="text-white font-medium">API Integration</p>
-              <p className="text-white/70 text-sm">En progreso • 75%</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <Zap className="w-5 h-5 mr-2 text-yellow-400" />
-            Actividad Reciente
-          </h3>
-          <div className="space-y-2">
-            <div className="flex justify-between text-white/70">
-              <span>Último login</span>
-              <span className="text-emerald-400">Hace 2h</span>
-            </div>
-            <div className="flex justify-between text-white/70">
-              <span>Proyectos actualizados</span>
-              <span className="text-blue-400">3</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-            <TrendingUp className="w-5 h-5 mr-2 text-purple-400" />
-            Métricas de Crecimiento
-          </h3>
-          <div className="space-y-2">
-            <div className="flex justify-between text-white/70">
-              <span>Proyectos este mes</span>
-              <span className="text-emerald-400">+2</span>
-            </div>
-            <div className="flex justify-between text-white/70">
-              <span>Satisfacción cliente</span>
-              <span className="text-purple-400">+5%</span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };

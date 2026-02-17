@@ -1,23 +1,58 @@
+import json
+import logging
+import os
+import sys
+from datetime import datetime
+
+# Add the parent directory to sys.path to allow importing from services
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from services.memory import MemoryService
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("IngestSovereign")
 
-def seed_memory():
-    print("Initializing Memory Service...")
+
+def ingest_sovereign_memory():
     memory = MemoryService()
 
-    # Ingest Brain Artifacts (Plans)
-    artifacts_dir = "C:\\Users\\Alejandro\\.gemini\\antigravity\\brain\\4134cdf0-e490-42b3-8de8-164017e3f331"
-    print(f"Ingesting artifacts from {artifacts_dir}...")
+    # Path to the 257 core credentials snapshot
+    snapshot_path = (
+        "C:\\Users\\Alejandro\\AIGestion\\infra\\vault\\sovereign_snapshot.json"
+    )
 
-    count = memory.ingest_docs(artifacts_dir)
-    print(f"Successfully ingested {count} documents into Swarm Memory.")
+    if not os.path.exists(snapshot_path):
+        logger.error(f"Snapshot not found at {snapshot_path}")
+        return
 
-    # Verify Recall
-    print("Testing recall...")
-    results = memory.recall("What is the plan for Phase 9?")
-    for doc in results:
-        print(f"- Found relevant doc (score > 0.8): {doc['metadata'].get('source')}")
+    try:
+        with open(snapshot_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        logger.info(f"Loaded snapshot with {len(data)} items.")
+
+        timestamp = datetime.now().isoformat()
+
+        count = 0
+        for key, value in data.items():
+            # Ingest each credential as a memory record
+            text = f"CREDENTIAL: {key} = {value}"
+            metadata = {
+                "type": "sovereign_credential",
+                "key": key,
+                "timestamp": timestamp,
+                "source": "sovereign_snapshot.json",
+            }
+            memory.remember(text, metadata)
+            count += 1
+            if count % 50 == 0:
+                logger.info(f"Ingested {count} credentials...")
+
+        logger.info(f"✨ SUCCESS: Ingested {count} core credentials into Swarm Memory.")
+
+    except Exception as e:
+        logger.error(f"Ingestion failed: {e}")
 
 
 if __name__ == "__main__":
-    seed_memory()
+    ingest_sovereign_memory()

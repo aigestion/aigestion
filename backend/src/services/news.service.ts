@@ -2,6 +2,7 @@ import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
 import { AIService } from './ai.service';
 import { RagService } from './rag.service';
+import { SearchService } from './search.service';
 import { logger } from '../utils/logger';
 import { NewsItem } from '../models/News';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +13,8 @@ export class NewsService {
 
   constructor(
     @inject(TYPES.AIService) private aiService: AIService,
-    @inject(TYPES.RagService) private ragService: RagService
+    @inject(TYPES.RagService) private ragService: RagService,
+    @inject(TYPES.SearchService) private searchService: SearchService,
   ) {}
 
   async ingestNews(urls: string[]): Promise<NewsItem[]> {
@@ -67,8 +69,8 @@ export class NewsService {
         logger.warn(
           `[NewsService] AI response was not valid JSON, raw text: ${responseText.substring(
             0,
-            100
-          )}...`
+            100,
+          )}...`,
         );
         this.updateNewsItem(id, {
           title: 'Processed News',
@@ -97,5 +99,28 @@ export class NewsService {
 
     this.newsItems[index] = { ...this.newsItems[index], ...updates };
     return this.newsItems[index];
+  }
+
+  /**
+   * Search for news across the web (Tavily)
+   */
+  async searchNews(query: string): Promise<NewsItem[]> {
+    logger.info(`[NewsService] Searching for news: ${query}`);
+    const results = await this.searchService.search(query);
+
+    const mapped = results.map(r => ({
+      id: uuidv4(),
+      url: r.url,
+      title: r.title,
+      summary: r.content,
+      source: new URL(r.url).hostname || 'Web',
+      publishedAt: new Date().toISOString(),
+      status: 'completed' as const,
+    }));
+
+    // Add to global list for dashboard visibility
+    this.newsItems = [...mapped, ...this.newsItems].slice(0, 50); // Keep last 50
+
+    return mapped;
   }
 }

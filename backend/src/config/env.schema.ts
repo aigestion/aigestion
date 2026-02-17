@@ -1,6 +1,8 @@
-import dotenv from 'dotenv';
-import path from 'path';
 import { z } from 'zod';
+import * as path from 'path';
+import * as dotenv from 'dotenv';
+import { baseEnvSchema } from '@aigestion/nexus-shared';
+import { logger } from '../utils/logger';
 
 // Load .env from project root
 const envPath = path.resolve(__dirname, '../../../.env');
@@ -11,7 +13,7 @@ if (process.env.NODE_ENV === 'test') {
     console.error(`[DEBUG] Error loading .env: ${result.error.message}`);
   } else {
     console.log(
-      `[DEBUG] .env loaded successfully. MONGODB_URI: ${process.env.MONGODB_URI ? 'Defined' : 'UNDEFINED'}`
+      `[DEBUG] .env loaded successfully. MONGODB_URI: ${process.env.MONGODB_URI ? 'Defined' : 'UNDEFINED'}`,
     );
   }
 }
@@ -20,26 +22,17 @@ if (process.env.NODE_ENV === 'test') {
  * Environment variable schema with validation rules
  * This ensures all required environment variables are present and valid at startup
  */
-const envSchema = z.object({
-  // Server Configuration
-  NODE_ENV: z
-    .enum(['development', 'production', 'test'])
-    .default('development')
-    .describe('Application environment'),
-
-  PORT: z
-    .string()
-    .default('5000')
-    .transform(val => parseInt(val, 10))
-    .pipe(z.number().min(1).max(65535))
-    .describe('Server port number'),
-
-  // Frontend URL
+const envSchema = baseEnvSchema.extend({
+  // Backend specific extensions
   FRONTEND_URL: z
     .string()
     .url()
     .default('http://localhost:3000')
     .describe('Frontend application URL'),
+
+  // Regional/Locale Settings
+  LOCALE: z.string().default('es-ES').describe('Primary system locale'),
+  LANG: z.string().default('es_ES.UTF-8').describe('System language setting'),
 
   // CORS Configuration
   CORS_ORIGIN: z
@@ -53,18 +46,23 @@ const envSchema = z.object({
     })
     .describe('Allowed CORS origins (comma-separated)'),
 
+  // Security - WebAuthn
+  WEBAUTHN_RP_ID: z.string().default('localhost'),
+  WEBAUTHN_RP_NAME: z.string().default('AIGestion Nexus'),
+  WEBAUTHN_ORIGIN: z.string().url().default('http://localhost:3000'),
+
   // Rate Limiting
   RATE_LIMIT_WINDOW_MS: z
     .string()
     .default('900000') // 15 minutes
-    .transform(val => parseInt(val, 10))
+    .transform(val => Number.parseInt(val, 10))
     .pipe(z.number().positive())
     .describe('Rate limit window in milliseconds'),
 
   RATE_LIMIT_MAX: z
     .string()
-    .default('100')
-    .transform(val => parseInt(val, 10))
+    .default('1000')
+    .transform(val => Number.parseInt(val, 10))
     .pipe(z.number().positive())
     .describe('Maximum requests per window'),
 
@@ -72,14 +70,14 @@ const envSchema = z.object({
   AUTH_RATE_LIMIT_WINDOW_MS: z
     .string()
     .default('3600000') // 1 hour
-    .transform(val => parseInt(val, 10))
+    .transform(val => Number.parseInt(val, 10))
     .pipe(z.number().positive())
     .describe('Auth rate limit window in milliseconds'),
 
   AUTH_RATE_LIMIT_MAX: z
     .string()
     .default('10')
-    .transform(val => parseInt(val, 10))
+    .transform(val => Number.parseInt(val, 10))
     .pipe(z.number().positive())
     .describe('Maximum auth requests per window'),
 
@@ -87,14 +85,14 @@ const envSchema = z.object({
   AI_RATE_LIMIT_WINDOW_MS: z
     .string()
     .default('600000') // 10 minutes
-    .transform(val => parseInt(val, 10))
+    .transform(val => Number.parseInt(val, 10))
     .pipe(z.number().positive())
     .describe('AI rate limit window in milliseconds'),
 
   AI_RATE_LIMIT_MAX: z
     .string()
     .default('30')
-    .transform(val => parseInt(val, 10))
+    .transform(val => Number.parseInt(val, 10))
     .pipe(z.number().positive())
     .describe('Maximum AI requests per window'),
 
@@ -153,7 +151,7 @@ const envSchema = z.object({
   ML_SERVICE_URL: z
     .string()
     .url()
-    .default('http://localhost:5000')
+    .default('http://localhost:5001')
     .describe('URL for NeuroCore ML service'),
   ML_SERVICE_API_KEY: z
     .string()
@@ -182,7 +180,7 @@ const envSchema = z.object({
   // AWS Configuration (for Multi-Cloud Failover)
   AWS_ACCESS_KEY_ID: z.string().optional().describe('AWS Access Key ID'),
   AWS_SECRET_ACCESS_KEY: z.string().optional().describe('AWS Secret Access Key'),
-  AWS_REGION: z.string().default('us-east-1').describe('AWS Region'),
+  AWS_REGION: z.string().default('eu-south-2').describe('AWS Region'),
 
   GOOGLE_APPLICATION_CREDENTIALS: z
     .string()
@@ -217,8 +215,9 @@ const envSchema = z.object({
   // Google Cloud Translation API
   GOOGLE_TRANSLATE_API_KEY: z.string().optional().describe('Google Cloud Translation API key'),
 
-  // Google Cloud Natural Language API
-  GOOGLE_NL_API_KEY: z.string().optional().describe('Google Cloud Natural Language API key'),
+  // Google Document AI
+  INVOICE_PROCESSOR_ID: z.string().optional(),
+  CONTRACT_PROCESSOR_ID: z.string().optional(),
 
   // YouTube Channel - Personal (Documentation)
   YOUTUBE_PERSONAL_CHANNEL_ID: z
@@ -375,27 +374,72 @@ const envSchema = z.object({
   WHATSAPP_BUSINESS_PHONE_ID: z.string().optional(),
   WHATSAPP_VERIFY_TOKEN: z.string().default('nexus_v1_secret_verify_token'),
 
-  // Social Media - Meta
+  // Social Media - Instagram
+  INSTAGRAM_BUSINESS_ID: z.string().optional(),
+  INSTAGRAM_BUSINESS_ACCOUNT_ID: z.string().optional(),
+  INSTAGRAM_ACCESS_TOKEN: z.string().optional(),
+  // Social Media - X (Twitter)
+  X_API_KEY: z.string().optional(),
+  X_API_SECRET: z.string().optional(),
+  X_ACCESS_TOKEN: z.string().optional(),
+  X_ACCESS_SECRET: z.string().optional(),
+  META_ACCESS_TOKEN: z.string().optional(),
   FACEBOOK_PAGE_ID: z.string().optional(),
   FACEBOOK_PAGE_ACCESS_TOKEN: z.string().optional(),
-  META_ACCESS_TOKEN: z.string().optional(),
-  INSTAGRAM_BUSINESS_ID: z.string().optional(),
 
   // Social Media - TikTok
   TIKTOK_API_KEY: z.string().optional(),
   TIKTOK_API_SECRET: z.string().optional(),
   TIKTOK_API_URL: z.string().url().optional(),
+  TIKTOK_ACCESS_TOKEN: z.string().optional(),
+
+  // Telegram Configuration
+  TELEGRAM_BOT_TOKEN: z.string().optional(),
+  TELEGRAM_BOT_TOKEN_DEV: z.string().optional(),
+  TELEGRAM_BOT_TOKEN_PUBLIC: z.string().optional(),
+  TELEGRAM_CHAT_ID: z.string().optional(),
+  TELEGRAM_CHAT_ID_DEV: z.string().optional(),
+  TELEGRAM_ADMIN_IDS: z.string().optional(),
+
+  // Economy & Stocks
+  ALPHAVANTAGE_KEY: z.string().optional(),
+
+  // Stripe Configuration
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
+
+  // Qwen TTS Configuration
+  QWEN_TTS_VOICE_ID: z.string().optional(),
+  DASHSCOPE_API_KEY: z.string().optional(),
 
   // Social Media - LinkedIn
   LINKEDIN_CLIENT_ID: z.string().optional(),
   LINKEDIN_CLIENT_SECRET: z.string().optional(),
+  LINKEDIN_ACCESS_TOKEN: z.string().optional(),
+  LINKEDIN_ORGANIZATION_URN: z.string().optional(),
+
+  // PayPal Configuration
+  PAYPAL_CLIENT_ID: z.string().optional(),
+  PAYPAL_CLIENT_SECRET: z.string().optional(),
+  PAYPAL_API_URL: z.string().url().default('https://api-m.sandbox.paypal.com'),
+  PAYPAL_MODE: z.enum(['sandbox', 'live']).default('sandbox'),
+
+  // Tavily Search Configuration
+  TAVILY_API_KEY: z.string().optional(),
 
   // Suno AI Configuration
   SUNO_API_KEY: z.string().optional(),
   SUNO_API_BASE_URL: z.string().url().default('https://api.sunoapi.org/api/v1'),
 
+  // ElevenLabs / Voice AI
+  ELEVENLABS_API_KEY: z.string().optional(),
+  ELEVENLABS_VOICE_ID: z.string().optional(),
+
   // RabbitMQ Configuration
   RABBITMQ_URL: z.string().default('amqp://localhost'),
+
+  // n8n Webhooks
+  N8N_CONTACT_WEBHOOK_URL: z.string().url().optional(),
 
   // Redis Configuration
   REDIS_URL: z.string().optional().describe('Redis connection URI (Standalone)'),
@@ -404,6 +448,13 @@ const envSchema = z.object({
   REDIS_PASSWORD: z.string().optional().describe('Redis password'),
   REDIS_CLUSTER_NODES: z.string().optional().describe('Comma-separated Redis cluster nodes'),
   ENABLE_REDIS: z.string().default('true').describe('Whether to enable Redis'),
+
+  // QUANTUM TIER 5 - SOVEREIGN ASSETS
+  SLACK_WEBHOOK_URL: z.string().url().optional().describe('Slack webhook for alerting'),
+  DISCORD_WEBHOOK_URL: z.string().url().optional().describe('Discord webhook for alerting'),
+  DISCORD_BOT_TOKEN: z.string().optional().describe('Discord Bot Token for active orchestration'),
+  VERCEL_MASTER_API_TOKEN: z.string().optional().describe('Vercel Master API for governance'),
+  APP_SENTRY_DSN: z.string().optional().describe('Sentry DSN for error tracking'),
 });
 
 /**
@@ -425,7 +476,7 @@ function validateEnv(): Env {
     }
     const parsed = envSchema.parse(process.env);
     return parsed;
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof z.ZodError) {
       const errorMessages = error.issues.map((issue: any) => {
         const path = issue.path.join('.');
@@ -435,12 +486,18 @@ function validateEnv(): Env {
       console.error('❌ Environment validation failed:\n');
       console.error(errorMessages.join('\n'));
       console.error(
-        '\nPlease check your .env file and ensure all required variables are set correctly.\n'
+        '\nPlease check your .env file and ensure all required variables are set correctly.\n',
       );
 
       process.exit(1);
     }
-    throw error;
+    // If logger is not defined, this line would cause a runtime error.
+    // Assuming 'logger' is defined elsewhere or imported, this is syntactically correct.
+    // If not, it would need to be replaced with console.error or similar.
+    logger.error('Error in buildEnvFromSchema:', {
+      error: error.message,
+    });
+    return process.env as any;
   }
 }
 

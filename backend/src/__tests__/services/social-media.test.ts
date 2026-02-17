@@ -111,6 +111,7 @@ describe('Social Media Services', () => {
     beforeEach(() => {
       service = container.get<XService>(TYPES.XService);
       (env as any).X_ACCESS_TOKEN = 'test-token';
+      (env as any).META_ACCESS_TOKEN = 'test-meta-token';
     });
 
     it('should post tweet', async () => {

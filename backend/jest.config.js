@@ -16,6 +16,7 @@ module.exports = {
   },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^@aigestion/nexus-shared$': '<rootDir>/../packages/nexus-shared/src',
     '^googleapis$': '<rootDir>/src/__test_utils__/mocks/googleapis.ts',
     '^@googlemaps/google-maps-services-js$': '<rootDir>/src/__test_utils__/mocks/google-maps.ts',
   },

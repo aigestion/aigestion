@@ -21,5 +21,5 @@ if (!(Test-Path ".venv/Lib/site-packages/fastapi")) {
 
 # Run
 Write-Host "Iniciando servidor neuronal..." -ForegroundColor Green
-& .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 0.0.0.0 --port 5000
+& .\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --host 0.0.0.0 --port 5001
 

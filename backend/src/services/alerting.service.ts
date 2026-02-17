@@ -15,7 +15,8 @@ export class AlertingService {
 
   constructor(
     @inject(TYPES.SystemMetricsService) private metricsService: SystemMetricsService,
-    @inject(TYPES.TelegramService) private telegramService: TelegramService
+    @inject(TYPES.TelegramService) private telegramService: TelegramService,
+    @inject(TYPES.Config) private config: any,
   ) {}
 
   /**
@@ -61,6 +62,34 @@ export class AlertingService {
 
   private async triggerAlert(message: string, telegramService: TelegramService) {
     logger.warn(`ALERT: ${message}`);
+
+    // 1. Telegram Dispatch
     await telegramService.sendMessage(`🚨 SYSTEM ALERT: ${message}`);
+
+    // 2. Quantum Slack Mesh
+    if (this.config.quantum.slackWebhook) {
+      try {
+        await fetch(this.config.quantum.slackWebhook, {
+          method: 'POST',
+          body: JSON.stringify({ text: message }),
+        });
+        logger.info('Alert dispatched to Slack Mesh.');
+      } catch (e) {
+        logger.error('Slack Mesh Timeout.');
+      }
+    }
+
+    // 3. Quantum Discord Mesh
+    if (this.config.quantum.discordWebhook) {
+      try {
+        await fetch(this.config.quantum.discordWebhook, {
+          method: 'POST',
+          body: JSON.stringify({ content: message }),
+        });
+        logger.info('Alert dispatched to Discord Mesh.');
+      } catch (e) {
+        logger.error('Discord Mesh Timeout.');
+      }
+    }
   }
 }

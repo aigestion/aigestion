@@ -48,7 +48,7 @@ export class CredentialManagerService {
         return this.report('Google Cloud', 'invalid', 'Missing Project ID');
       }
       return this.report('Google Cloud', 'valid');
-    } catch (e) {
+    } catch (e: any) {
       return this.report('Google Cloud', 'invalid', e.message);
     }
   }
@@ -63,7 +63,7 @@ export class CredentialManagerService {
       // Vertex AI typically uses ADC (GCP Creds), not just a key in Node.js Vertex SDK
       // But if user uses Google AI SDK or vertex with key:
       return this.report('Gemini AI', 'valid');
-    } catch (e) {
+    } catch (e: any) {
       return this.report('Gemini AI', 'invalid', e.message);
     }
   }
@@ -78,7 +78,7 @@ export class CredentialManagerService {
       const stripe = new Stripe(key, { apiVersion: '2022-11-15' });
       await stripe.balance.retrieve();
       return this.report('Stripe', 'valid');
-    } catch (e) {
+    } catch (e: any) {
       return this.report('Stripe', 'invalid', e.message);
     }
   }
@@ -93,7 +93,7 @@ export class CredentialManagerService {
       const bot = new Telegraf(token);
       await bot.telegram.getMe();
       return this.report('Telegram', 'valid');
-    } catch (e) {
+    } catch (e: any) {
       return this.report('Telegram', 'invalid', e.message);
     }
   }
@@ -107,7 +107,7 @@ export class CredentialManagerService {
     try {
       await axios.get(`https://graph.facebook.com/v19.0/me?access_token=${token}`);
       return this.report('Instagram', 'valid');
-    } catch (e) {
+    } catch (e: any) {
       return this.report('Instagram', 'invalid', e.message);
     }
   }
@@ -127,7 +127,7 @@ export class CredentialManagerService {
       }
 
       return this.report('Professional Account', 'invalid', 'Unauthorized professional email');
-    } catch (e) {
+    } catch (e: any) {
       return this.report('Professional Account', 'invalid', e.message);
     }
   }

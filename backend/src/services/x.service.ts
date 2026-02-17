@@ -12,7 +12,7 @@ export class XService {
    * Post a tweet using Twitter API v2
    */
   async postTweet(text: string): Promise<any> {
-    if (!env.X_ACCESS_TOKEN) {
+    if (!env.META_ACCESS_TOKEN) {
       // Note: For v2, typically OAuth 2.0 User Context (Access Token) is needed
       logger.warn('X_ACCESS_TOKEN not configured');
       return { success: false, error: 'Configuration missing' };
@@ -26,10 +26,10 @@ export class XService {
         },
         {
           headers: {
-            Authorization: `Bearer ${env.X_ACCESS_TOKEN}`, // Assuming OAuth2 Bearer Token for User Context
+            Authorization: `Bearer ${env.META_ACCESS_TOKEN}`, // Assuming OAuth2 Bearer Token for User Context
             'Content-Type': 'application/json',
           },
-        }
+        },
       );
 
       logger.info(`Tweet posted: ${response.data.data?.id}`);

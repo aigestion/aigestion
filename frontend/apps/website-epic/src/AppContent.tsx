@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
 import { ScrollProgress } from './components/ScrollProgress';
@@ -8,6 +8,14 @@ import { MeshGradientBG } from './components/MeshGradientBG';
 import { useNotification } from './contexts/NotificationContext';
 import { Login } from './pages/Login';
 import { Maintenance } from './pages/Maintenance';
+import { SpotlightWrapper } from './components/design-system/SpotlightWrapper';
+import {
+    RequireAuth,
+    RequireEmailVerification,
+    RequirePhoneVerification,
+    RequireSubscription,
+    PublicRoute
+} from './components/RouteProtection'; // Updated Guards
 
 // ============================================
 // CRITICAL: Static Load for Hero Section
@@ -26,6 +34,9 @@ const NexusAndroid = lazy(() =>
 );
 const ServicesDeepDive = lazy(() =>
   import('./components/ServicesDeepDive').then(m => ({ default: m.ServicesDeepDive }))
+);
+const SovereignPublicPulse = lazy(() =>
+  import('./components/SovereignPublicPulse').then(m => ({ default: m.SovereignPublicPulse }))
 );
 const CaseStudies = lazy(() =>
   import('./components/CaseStudies').then(m => ({ default: m.CaseStudies }))
@@ -84,21 +95,34 @@ const NexusGuardianWidget = lazy(() =>
 // ============================================
 // LAZY LOAD: Route-level pages
 // ============================================
-const Dashboard = lazy(() =>
-  import('./components/Dashboard').then(m => ({ default: m.Dashboard }))
+const Register = lazy(() =>
+  import('./components/auth/Register').then(m => ({ default: m.Register }))
 );
-const Register = lazy(() => import('./pages/Register').then(m => ({ default: m.Register })));
-const VerifyEmail = lazy(() =>
-  import('./pages/VerifyEmail').then(m => ({ default: m.VerifyEmail }))
-);
-const SelectRole = lazy(() =>
-  import('./pages/onboarding/SelectRole').then(m => ({ default: m.SelectRole }))
-);
-const SelectPlan = lazy(() =>
-  import('./pages/onboarding/SelectPlan').then(m => ({ default: m.SelectPlan }))
-);
+// Note: VerifyEmail was previously imported from pages/VerifyEmail, but we created components/auth/EmailVerification.tsx
+// I will point to the new one, but I need to make sure I don't break existing references if VerifyEmail page existed.
+// The previous file content showed: const VerifyEmail = lazy(() => import('./pages/VerifyEmail').then(m => ({ default: m.VerifyEmail })));
+// I should probably keep using the new component I created.
+// Wait, I created `components/auth/EmailVerification.tsx`.
+// Let's adjust the import for VerifyEmail to use the new component if that was the intention, OR keep the old one if it was different.
+// The task was "Create components/auth/EmailVerification.tsx".
+// In AppContent.tsx I see: 92: const VerifyEmail = lazy(() => import('./pages/VerifyEmail').then(m => ({ default: m.VerifyEmail })));
+// I will replace it with the new one.
+
+const EmailVerification = lazy(() => import('./components/auth/EmailVerification').then(m => ({ default: m.EmailVerification })));
+
 const WorkbenchLayout = lazy(() =>
   import('./components/workbench/WorkbenchLayout').then(m => ({ default: m.WorkbenchLayout }))
+);
+const PhoneVerification = lazy(() =>
+  import('./components/auth/PhoneVerification').then(m => ({ default: m.PhoneVerification }))
+);
+const SubscriptionSelect = lazy(() =>
+  import('./components/subscription/SubscriptionSelect').then(m => ({
+    default: m.SubscriptionSelect,
+  }))
+);
+const PaymentGateway = lazy(() =>
+  import('./components/subscription/PaymentGateway').then(m => ({ default: m.PaymentGateway }))
 );
 const WeaponDashboard = lazy(() => import('./pages/WeaponDashboard'));
 const DanielaDemo = lazy(() =>
@@ -108,6 +132,11 @@ const VirtualOfficePreview = lazy(() => import('./pages/VirtualOfficePreview'));
 const ClientDashboard = lazy(() =>
   import('./components/ClientDashboard').then(m => ({ default: m.ClientDashboard }))
 );
+const SovereignIntelligenceHub = lazy(() =>
+  import('./components/SovereignIntelligenceHub').then(m => ({
+    default: m.SovereignIntelligenceHub,
+  }))
+);
 const BillingDashboard = lazy(() =>
   import('./pages/BillingDashboard').then(m => ({ default: m.BillingDashboard }))
 );
@@ -116,7 +145,7 @@ const BillingDashboard = lazy(() =>
 // UI Components
 // ============================================
 export const LoadingFallback = () => (
-  <div className="fixed inset-0 bg-black z-10000 flex items-center justify-center">
+  <div className="fixed inset-0 bg-nexus-obsidian z-10000 flex items-center justify-center">
     <div className="flex flex-col items-center gap-6">
       <div className="w-16 h-16 border-t-2 border-nexus-cyan-glow rounded-full animate-spin" />
       <div className="text-nexus-cyan-glow font-orbitron tracking-[0.8em] text-[10px] animate-pulse">
@@ -137,8 +166,6 @@ export const AppContent = ({
 }: any) => {
   const { notify } = useNotification();
   const location = useLocation();
-  const navigate = useNavigate();
-
   // 🚧 Maintenance Mode Logic with God Mode Bypass
   // Access via: https://aigestion.net/?mode=god
   const searchParams = new URLSearchParams(location.search);
@@ -164,8 +191,10 @@ export const AppContent = ({
   }
 
   return (
-    <div className="bg-black min-h-screen text-white font-sans selection:bg-nexus-cyan/20 selection:text-white relative overflow-x-hidden">
+    <SpotlightWrapper className="bg-nexus-obsidian min-h-screen text-white font-sans relative overflow-x-hidden">
       <div className="grain-overlay" />
+      <div className="fixed inset-0 bg-[url('/images/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+
       <MeshGradientBG />
       <ScrollProgress />
 
@@ -174,22 +203,16 @@ export const AppContent = ({
       <AnimatePresence mode="wait">
         <Suspense fallback={<LoadingFallback />}>
           <Routes location={location} key={location.pathname}>
-            <Route
-              path="/login"
-              element={
-                !isAuthenticated ? (
-                  <Login onLogin={handleLogin} isAuthenticated={isAuthenticated} />
-                ) : (
-                  <Navigate to="/dashboard" />
-                )
-              }
-            />
-            <Route
-              path="/register"
-              element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />}
-            />
-            <Route path="/verify-email" element={<VerifyEmail />} />
+            {/* Public Routes restricted if logged in */}
+            <Route element={<PublicRoute />}>
+              <Route
+                path="/login"
+                element={<Login onLogin={handleLogin} isAuthenticated={isAuthenticated} />}
+              />
+              <Route path="/register" element={<Register />} />
+            </Route>
 
+            {/* Landing Page */}
             <Route
               path="/"
               element={
@@ -202,6 +225,7 @@ export const AppContent = ({
                       <DemoDashboard />
                     </section>
                     <ServicesDeepDive />
+                    <SovereignPublicPulse />
                     <CaseStudies />
                     <EnhancedROI />
                     <PricingSection />
@@ -217,28 +241,37 @@ export const AppContent = ({
               }
             />
 
-            <Route
-              path="/dashboard/*"
-              element={
-                isAuthenticated ? (
-                  <WorkbenchLayout user={currentUser} onLogout={handleLogout} />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
+            {/* PROTECTED ROUTES FLOW */}
+            <Route element={<RequireAuth />}>
+              {/* Level 1: Auth Required */}
+              <Route path="/verify-email" element={<EmailVerification />} />
 
-            <Route
-              path="/client"
-              element={isAuthenticated ? <ClientDashboard /> : <Navigate to="/login" />}
-            />
-            <Route
-              path="/billing"
-              element={isAuthenticated ? <BillingDashboard /> : <Navigate to="/login" />}
-            />
-            <Route path="/weapon" element={<WeaponDashboard />} />
-            <Route path="/daniela/*" element={<DanielaDemo />} />
-            <Route path="/virtual-office/*" element={<VirtualOfficePreview />} />
+              {/* Level 2: Email Verified Required */}
+              <Route element={<RequireEmailVerification />}>
+                <Route path="/verify-phone" element={<PhoneVerification />} />
+
+                {/* Level 3: Phone Verified Required */}
+                <Route element={<RequirePhoneVerification />}>
+                  <Route path="/pricing" element={<SubscriptionSelect />} />
+                  <Route path="/payment" element={<PaymentGateway />} />
+
+                  <Route element={<RequireSubscription />}>
+                    <Route
+                      path="/dashboard/*"
+                      element={<WorkbenchLayout user={currentUser} onLogout={handleLogout} />}
+                    />
+                    <Route path="/intelligence" element={<SovereignIntelligenceHub />} />
+                    <Route path="/billing" element={<BillingDashboard />} />
+                    <Route path="/weapon" element={<WeaponDashboard />} />
+                    <Route path="/daniela/*" element={<DanielaDemo />} />
+                    <Route path="/virtual-office/*" element={<VirtualOfficePreview />} />
+                  </Route>
+                  {/* Client Dashboard handles its own subscription check (Demo Mode) */}
+                  <Route path="/client" element={<ClientDashboard />} />
+                </Route>
+              </Route>
+            </Route>
+
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </Suspense>
@@ -258,6 +291,6 @@ export const AppContent = ({
         <CyberpunkGrid />
         <NeuralParticles />
       </Suspense>
-    </div>
+    </SpotlightWrapper>
   );
 };

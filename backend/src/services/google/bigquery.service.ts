@@ -36,7 +36,7 @@ export class BigQueryService {
       ];
 
       await this.bq.dataset(this.datasetId).table(this.tableId).insert(rows);
-    } catch (error) {
+    } catch (error: any) {
       // Non-blocking error for performance
       logger.warn(`[BigQuery] Ingestion latency/fault: ${error.message}`);
     }

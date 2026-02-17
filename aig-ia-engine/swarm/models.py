@@ -10,6 +10,7 @@ class MessageType(str, Enum):
     DESIGN_SOLUTION = "DESIGN_SOLUTION"
     BUILD_CODE = "BUILD_CODE"
     REVIEW_CODE = "REVIEW_CODE"
+    DESIGN_SPEC = "DESIGN_SPEC"
     TASK_COMPLETE = "TASK_COMPLETE"
     ERROR = "ERROR"
     INFO = "INFO"
@@ -40,7 +41,5 @@ class BuildResult(BaseModel):
     error_message: Optional[str] = None
 
 class SwarmMessageContent(BaseModel):
-    data: Any
-    metadata: Optional[dict] = Field(default_factory=dict)
     data: Any
     metadata: Optional[dict] = Field(default_factory=dict)

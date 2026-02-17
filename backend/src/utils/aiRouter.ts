@@ -4,10 +4,11 @@ export enum AIModelTier {
   ECONOMY = 'economy',
   STANDARD = 'standard',
   PREMIUM = 'premium',
+  AUTARCHY = 'autarchy', // Local/Edge fallback
 }
 
 export interface ModelConfig {
-  provider: 'gemini' | 'openai' | 'anthropic';
+  provider: 'gemini' | 'openai' | 'anthropic' | 'ollama';
   modelId: string;
 }
 
@@ -59,6 +60,9 @@ export class AIModelRouter {
       case AIModelTier.ECONOMY:
         // Use Gemini 1.5 Flash for economy (Cheapest)
         return { provider: 'gemini', modelId: 'gemini-1.5-flash-8b' };
+      case AIModelTier.AUTARCHY:
+        // Local fallback (Ollama)
+        return { provider: 'ollama', modelId: 'llama3:8b' };
       case AIModelTier.STANDARD:
       default:
         // Use Gemini 2.0 Flash for standard (Fastest/Balanced)

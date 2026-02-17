@@ -1,1 +1,83 @@
-{ "agents": {}, "last_updated": "2026-02-09T12:27:35.016324" }
+{
+  "agents": {
+    "RedSwarm": {
+      "total_calls": 1,
+      "success_rate": 1.0,
+      "avg_duration": 0.5338823795318604,
+      "total_tokens": 0
+    },
+    "Architect": {
+      "total_calls": 16,
+      "success_rate": 0.9375,
+      "avg_duration": 6.282329112291336,
+      "total_tokens": 0
+    },
+    "Builder": {
+      "total_calls": 125,
+      "success_rate": 1.0,
+      "avg_duration": 1.4815062503814695,
+      "total_tokens": 0
+    },
+    "Critic": {
+      "total_calls": 124,
+      "success_rate": 0.9919354838709677,
+      "avg_duration": 1.178686547663904,
+      "total_tokens": 0
+    },
+    "Mechanic": {
+      "total_calls": 1,
+      "success_rate": 1.0,
+      "avg_duration": 0.009311437606811523,
+      "total_tokens": 0
+    }
+  },
+  "last_updated": "2026-02-16T17:41:31.559391",
+  "missions": [
+    {
+      "tier": "FAST",
+      "latency": 1.42,
+      "tokens": 25,
+      "cost": 3e-06,
+      "timestamp": 1771259299.3773863
+    },
+    {
+      "tier": "REASONING",
+      "latency": 26.26,
+      "tokens": 2673,
+      "cost": 0.003341,
+      "timestamp": 1771259377.728079
+    },
+    {
+      "tier": "FAST",
+      "latency": 4.97,
+      "tokens": 2172,
+      "cost": 0.000217,
+      "timestamp": 1771259382.7034585
+    },
+    {
+      "tier": "REASONING",
+      "latency": 31.42,
+      "tokens": 3547,
+      "cost": 0.004434,
+      "timestamp": 1771259803.4546473
+    },
+    {
+      "tier": "FAST",
+      "latency": 20.58,
+      "tokens": 6428,
+      "cost": 0.000643,
+      "timestamp": 1771259974.5008004
+    },
+    {
+      "tier": "FAST",
+      "latency": 12.35,
+      "tokens": 2491,
+      "cost": 0.000249,
+      "timestamp": 1771259986.908334
+    }
+  ],
+  "summary": {
+    "total_tokens": 17336,
+    "total_cost": 0.008887
+  }
+}

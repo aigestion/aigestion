@@ -1,35 +1,36 @@
 import dotenv from 'dotenv';
-import { createServer } from 'node:http';
+import { createServer, Server as HttpServer } from 'node:http';
 import path from 'node:path';
 import { type Socket } from 'socket.io';
+import { Express } from 'express';
 
 // Core services
-import { container, TYPES } from './config/inversify.config';
+import { container } from './config/inversify.config';
+import { JobQueue } from './infrastructure/jobs/JobQueue';
+import { WorkerSetup } from './infrastructure/jobs/WorkerSetup';
+import { JobName } from './infrastructure/jobs/job-definitions';
+import { NeuralHealthService } from './services/NeuralHealthService';
+import { PredictiveHealingService } from './services/PredictiveHealingService';
 import { AlertingService } from './services/alerting.service';
+import { PriceAlertService } from './services/finance/price-alert.service';
 import { BackupSchedulerService } from './services/backup-scheduler.service';
 import { CredentialManagerService } from './services/credential-manager.service';
 import { HistoryService } from './services/history.service';
-import { neuralHealthService } from './services/NeuralHealthService';
 import { SocketService } from './services/socket.service';
 import { SystemMetricsService } from './services/system-metrics.service';
-import { TelegramBotHandlerGodMode } from './services/telegram-bot-godmode';
-import { TelegramBotHandler } from './services/telegram-bot.handler';
-import { TelegramService } from './services/telegram.service';
+import { TYPES } from './types';
 import { logger } from './utils/logger';
 import { stats } from './utils/stats';
-import { WorkerSetup } from './infrastructure/jobs/WorkerSetup';
-import { JobQueue } from './infrastructure/jobs/JobQueue';
-import { JobName } from './infrastructure/jobs/job-definitions';
 
 console.log('🔵 [DEBUG] server.ts starting...');
 
 // Load .env from workspace root
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-let io: any;
-let httpServer: any;
-let server: any;
-let app: any;
+let io: any = null; // SocketServer instance
+let httpServer: HttpServer | undefined = undefined;
+let server: HttpServer | undefined = undefined;
+let app: Express | undefined = undefined;
 
 // Socket.IO Types
 interface ClientToServerEvents {
@@ -39,21 +40,6 @@ interface ClientToServerEvents {
 interface ServerToClientEvents {}
 interface InterServerEvents {}
 interface SocketData {}
-
-// Resolution moved inside initializeAndStart
-
-// Neural Heartbeat: Bridge service events to WebSockets
-neuralHealthService.on('healthUpdate', metrics => {
-  if (io) (io as any).emit('nexus:neural_heartbeat', metrics);
-});
-
-neuralHealthService.on('healthWarning', metrics => {
-  if (io) (io as any).emit('nexus:neural_warning', metrics);
-});
-
-neuralHealthService.on('healthCritical', metrics => {
-  if (io) (io as any).emit('nexus:critical_alert', metrics);
-});
 
 // Reset RPS every second
 setInterval(() => {
@@ -77,8 +63,8 @@ setInterval(async () => {
       responseTime: stats.lastRequestTime,
     };
 
-    if (io) (io as any).emit('analytics:update', update);
-    if (io) (io as any).emit('analytics:traffic', { timestamp: Date.now(), value: currentRPS });
+    if (io) io.emit('analytics:update', update);
+    if (io) io.emit('analytics:traffic', { timestamp: Date.now(), value: currentRPS });
 
     const systemMetrics = {
       cpu: metrics.cpu,
@@ -147,11 +133,16 @@ export async function initializeAndStart() {
   console.log('🚀 [DEBUG] initializeAndStart() entered');
   try {
     console.log('🔵 [DEBUG] Loading configuration...');
-    const config = (await import('./config/config')).config;
+    const { config } = await import('./config/config');
 
     console.log('🔵 [DEBUG] Importing app (routes & middleware)...');
     const { app: importedApp } = await import('./app');
     app = importedApp; // Assign to global app for export
+
+    // Ensure GlobalServer is initialized
+    (globalThis as any).GlobalServer = (globalThis as any).GlobalServer || {};
+    (globalThis as any).GlobalServer.io = io;
+
     console.log('🟢 [DEBUG] app imported successfully');
 
     // Create HTTP server with loaded app
@@ -172,7 +163,7 @@ export async function initializeAndStart() {
     io.on(
       'connection',
       (
-        socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>
+        socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>,
       ) => {
         logger.info('New WebSocket connection');
 
@@ -189,16 +180,16 @@ export async function initializeAndStart() {
         socket.on('disconnect', () => {
           logger.info('Client disconnected');
         });
-      }
+      },
     );
 
     // 1. Data Source (Optional for dev)
     try {
       const { connectToDatabase } = await import('./config/database');
       await connectToDatabase();
-    } catch (dbErr) {
+    } catch (error) {
       logger.warn(
-        '⚠️ [Database] Failed to connect. Running in degraded mode: ' + (dbErr as Error).message
+        '⚠️ [Database] Failed to connect. Running in degraded mode: ' + (error as Error).message,
       );
     }
 
@@ -227,7 +218,7 @@ export async function initializeAndStart() {
             repeat: {
               pattern: '0 0 * * *', // Every day at midnight
             },
-          }
+          },
         );
       } catch (err) {
         logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
@@ -245,14 +236,24 @@ export async function initializeAndStart() {
             `⚠️ ${criticalFailures} Critical credentials issues detected. System may be unstable.`,
           );
         }
-      } catch (e) {}
+      } catch (error) {
+        // Ignore credential manager errors during startup
+      }
 
       const backupScheduler = container.get<BackupSchedulerService>(TYPES.BackupSchedulerService);
       backupScheduler.start();
 
+      // Ensure Core Intelligence is active
+      container.get<NeuralHealthService>(TYPES.NeuralHealthService);
+      container.get<PredictiveHealingService>(TYPES.PredictiveHealingService);
+
+      // Start The Sniper
+      const sniper = container.get<PriceAlertService>(TYPES.PriceAlertService);
+      sniper.startMonitoring();
+
       logger.info('✅ Background services initialization completed');
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ [DEBUG] Critical startup failure:', error);
     logger.error('Critical failure during startup:', error);
     process.exit(1);
@@ -281,6 +282,7 @@ const gracefullyShutdown = async (signal: string) => {
 process.on('SIGTERM', () => gracefullyShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefullyShutdown('SIGINT'));
 
-initializeAndStart();
+// Start server
+const startPromise = initializeAndStart();
 
-export { app, io };
+export { app, io, startPromise };

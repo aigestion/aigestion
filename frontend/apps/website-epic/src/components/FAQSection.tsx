@@ -4,7 +4,7 @@ import React from 'react';
 const faqs = [
   {
     q: '¿Tengo que saber de informática?',
-    a: 'Nada de nada. Si sabes enviar un audio por WhatsApp o usar el móvil para llamar, ya sabes usar AIGestion. Daniela te guía en todo.',
+    a: 'Nada de nada. Si sabes enviar un audio por WhatsApp o usar el móvil para llamar, ya sabes usar AIGestion.net. Daniela te guía en todo.',
   },
   {
     q: '¿Mis datos están seguros?',

@@ -48,7 +48,7 @@ export const MobileDownloadSection: React.FC = () => {
           </h2>
 
           <p className="text-nexus-silver/40 text-lg mb-12 font-light leading-relaxed max-w-xl">
-            Lleva la potencia de Daniela AI y la transparencia de AIGestion a cualquier parte.
+            Lleva la potencia de Daniela AI y la transparencia de AIGestion.net a cualquier parte.
             Sincronización instantánea con el núcleo mediante biometría avanzada.
           </p>
 

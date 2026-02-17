@@ -45,6 +45,7 @@ describe('UserRepository', () => {
     const email = 'bob@example.com';
     const mockFindOne = {
       select: jest.fn().mockReturnThis(),
+      lean: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue({ ...mockUser, email }),
     };
     (User.findOne as jest.Mock).mockReturnValue(mockFindOne);
@@ -58,6 +59,7 @@ describe('UserRepository', () => {
 
   it('should find a user by id', async () => {
     const mockFindById = {
+      lean: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue(mockUser),
     };
     (User.findById as jest.Mock).mockReturnValue(mockFindById);
@@ -71,6 +73,7 @@ describe('UserRepository', () => {
     const mockFind = {
       skip: jest.fn().mockReturnThis(),
       limit: jest.fn().mockReturnThis(),
+      lean: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue([mockUser]),
     };
     (User.find as jest.Mock).mockReturnValue(mockFind);

@@ -44,6 +44,7 @@ apiV1Router.use('/stripe', lazy('./stripe.routes'));
 apiV1Router.use('/youtube', lazy('./youtube.routes'));
 apiV1Router.use('/contact', lazy('./contact.routes'));
 apiV1Router.use('/exit-templates', lazy('./exit-templates.routes'));
+apiV1Router.use('/finance', lazy('./finance.routes'));
 
 // System Endpoints
 apiV1Router.post('/system/credentials/verify', async (req: any, res: any) => {
