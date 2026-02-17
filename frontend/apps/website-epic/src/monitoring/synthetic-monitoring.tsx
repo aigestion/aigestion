@@ -1,5 +1,9 @@
 import { useEffect, useState, useCallback } from 'react';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://aigestion.net';
+const CDN_URL = import.meta.env.VITE_CDN_URL || 'https://cdn.aigestion.net';
+
 export interface SyntheticCheck {
   readonly id: string;
   readonly name: string;
@@ -73,7 +77,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     {
       id: 'homepage-check',
       name: 'Homepage Health Check',
-      url: 'https://aigestion.net',
+      url: SITE_URL,
       method: 'GET',
       expectedStatus: 200,
       timeout: 10000,
@@ -85,7 +89,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     {
       id: 'api-health-check',
       name: 'API Health Check',
-      url: 'https://api.aigestion.net/v1/health',
+      url: `${API_BASE_URL}/v1/health`,
       method: 'GET',
       expectedStatus: 200,
       timeout: 5000,
@@ -97,7 +101,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     {
       id: 'auth-check',
       name: 'Authentication Service Check',
-      url: 'https://api.aigestion.net/v1/auth/status',
+      url: `${API_BASE_URL}/v1/auth/status`,
       method: 'GET',
       expectedStatus: 200,
       timeout: 8000,
@@ -109,7 +113,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     {
       id: 'database-check',
       name: 'Database Connection Check',
-      url: 'https://api.aigestion.net/v1/health/detailed',
+      url: `${API_BASE_URL}/v1/health/detailed`,
       method: 'GET',
       expectedStatus: 200,
       timeout: 5000,
@@ -121,7 +125,7 @@ export function useSyntheticMonitoring(config: SyntheticConfig = {}) {
     {
       id: 'cdn-check',
       name: 'CDN Performance Check',
-      url: 'https://cdn.aigestion.net/health',
+      url: `${CDN_URL}/health`,
       method: 'GET',
       expectedStatus: 200,
       timeout: 3000,

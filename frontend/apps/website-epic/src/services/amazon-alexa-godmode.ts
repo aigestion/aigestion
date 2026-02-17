@@ -1,8 +1,9 @@
 /**
  * Amazon Alexa God Mode - AIGestion.net
  * Sistema de integración Alexa y Amazon Services a nivel dios
- * Usuario: noemisanalex@hotmail.com | Pass: Danieli.8374$$$
  */
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export interface AlexaEntity {
   id: string;
@@ -300,9 +301,9 @@ export const amazonAlexaGodModeConfig = {
         'Asistente inteligente de AIGestion para gestión empresarial y análisis de datos',
       invocation_name: 'aigestion',
       endpoints: {
-        development: 'https://dev-api.aigestion.net/alexa',
-        staging: 'https://staging-api.aigestion.net/alexa',
-        production: 'https://api.aigestion.net/alexa',
+        development: `${API_BASE_URL}/alexa`,
+        staging: `${API_BASE_URL}/alexa`,
+        production: `${API_BASE_URL}/alexa`,
       },
       intents: [
         {
@@ -325,7 +326,7 @@ export const amazonAlexaGodModeConfig = {
           ],
           fulfillment: {
             type: 'api',
-            endpoint: 'https://api.aigestion.net/alexa/metrics',
+            endpoint: `${API_BASE_URL}/alexa/metrics`,
             timeout: 10000,
           },
         },
@@ -349,7 +350,7 @@ export const amazonAlexaGodModeConfig = {
           ],
           fulfillment: {
             type: 'api',
-            endpoint: 'https://api.aigestion.net/alexa/analyze',
+            endpoint: `${API_BASE_URL}/alexa/analyze`,
             timeout: 15000,
           },
         },
@@ -373,7 +374,7 @@ export const amazonAlexaGodModeConfig = {
           ],
           fulfillment: {
             type: 'api',
-            endpoint: 'https://api.aigestion.net/alexa/report',
+            endpoint: `${API_BASE_URL}/alexa/report`,
             timeout: 20000,
           },
         },
@@ -410,9 +411,9 @@ export const amazonAlexaGodModeConfig = {
       description: 'Control inteligente del hogar y automatización',
       invocation_name: 'hogar inteligente',
       endpoints: {
-        development: 'https://dev-api.aigestion.net/smart-home',
-        staging: 'https://staging-api.aigestion.net/smart-home',
-        production: 'https://api.aigestion.net/smart-home',
+        development: `${API_BASE_URL}/smart-home`,
+        staging: `${API_BASE_URL}/smart-home`,
+        production: `${API_BASE_URL}/smart-home`,
       },
       intents: [
         {
@@ -443,7 +444,7 @@ export const amazonAlexaGodModeConfig = {
           ],
           fulfillment: {
             type: 'api',
-            endpoint: 'https://api.aigestion.net/smart-home/lighting',
+            endpoint: `${API_BASE_URL}/smart-home/lighting`,
             timeout: 5000,
           },
         },
@@ -467,7 +468,7 @@ export const amazonAlexaGodModeConfig = {
           ],
           fulfillment: {
             type: 'api',
-            endpoint: 'https://api.aigestion.net/smart-home/climate',
+            endpoint: `${API_BASE_URL}/smart-home/climate`,
             timeout: 5000,
           },
         },
