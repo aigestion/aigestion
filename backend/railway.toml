@@ -8,6 +8,7 @@ dockerfilePath = "Dockerfile"
 [deploy]
 startCommand = "node dist/bootstrap.js"
 healthcheckPath = "/api/v1/health"
-healthcheckTimeout = 300
-restartPolicyType = "always"
+healthcheckTimeout = 100
+restartPolicyType = "ALWAYS"
+restartPolicyMaxRetries = 10
 numReplicas = 1

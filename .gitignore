@@ -279,3 +279,4 @@ task.md
 infra/vault/
 infra/credentials/
 **/long_term_memory.json
+backend/aigestion-backend-env.json
