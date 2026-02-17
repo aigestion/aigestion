@@ -16,11 +16,9 @@ async function testKey() {
     const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
     const result = await model.generateContent('Say Hello');
     console.log('✅ Success! Response:', result.response.text());
-  } catch (error) {
-    console.error('❌ Failed:', error.message);
-    if (error.response) {
-        console.error('Error Details:', JSON.stringify(error.response, null, 2));
-    }
+  } catch (error: any) {
+    console.error('Handshake failure:', error.message);
+    console.error(error);
   }
 }
 

@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const workflowsDir = path.join(__dirname, '../n8n/workflows');
-const envFile = path.join(__dirname, '../config/.env');
+const workflowsDir = path.join(__dirname, './n8n/workflows');
+const envFile = path.join(__dirname, './config/.env');
 const rootEnvFile = path.join(__dirname, '../.env');
 
 // Read Env Files

@@ -34,6 +34,8 @@ import { SentinelController } from '../controllers/SentinelController';
 import { SystemController } from '../controllers/system.controller';
 import { StripeWebhookController } from '../controllers/stripe.webhook.controller';
 import { ContactController } from '../controllers/contact.controller';
+import { VisionController } from '../controllers/vision.controller';
+import { NexusCommandController } from '../controllers/NexusCommandController';
 
 // Services
 import { AIService } from '../services/ai.service';
@@ -98,6 +100,8 @@ import { FacebookService } from '../services/facebook.service';
 import { AgentService } from '../services/agent.service';
 import { VectorService } from '../services/vector.service';
 import { SemanticRouterService } from '../services/ai-router.service';
+import { VisionService } from '../services/vision.service';
+import { NeuralHealthService } from '../services/NeuralHealthService';
 import { Gemini2Service } from '../services/gemini-2.service';
 import { GmailService } from '../services/gmail.service';
 import { SheetsService } from '../services/sheets.service';
@@ -139,6 +143,21 @@ import { EvolutionMetricsService } from '../services/evolution/evolution-metrics
 import { ArbitrationService } from '../services/arbitration.service';
 import { GovernanceService } from '../services/GovernanceService';
 import { TreasuryService } from '../services/TreasuryService';
+import { SovereignRegistryService } from '../services/SovereignRegistryService';
+import { InfrastructureService } from '../services/infrastructure.service';
+import { PredictiveHealingService } from '../services/PredictiveHealingService';
+import { NotionManagerService } from '../services/notion-manager.service';
+import { WhatsAppCommandService } from '../services/whatsapp-command.service';
+import { SovereignKnowledgeEngine } from '../services/sovereign-knowledge-engine';
+import { BrowserlessService } from '../services/browserless.service';
+import { NewsService } from '../services/news.service';
+import { JulesGem } from '../services/gems/JulesGem';
+import { CoinGeckoService } from '../services/coingecko.service';
+import { WalletWatchtowerService } from '../services/finance/wallet-watchtower.service';
+import { PriceAlertService } from '../services/finance/price-alert.service';
+import { FinanceController } from '../controllers/finance.controller';
+import { config } from './config';
+
 import { TreasuryController } from '../controllers/treasury.controller';
 import { GovernanceController } from '../controllers/governance.controller';
 import { WisdomController } from '../controllers/wisdom.controller';
@@ -190,6 +209,10 @@ if (!container.isBound(EconomyController))
   container.bind<EconomyController>(EconomyController).toSelf().inSingletonScope();
 bind<SystemMetricsService>(TYPES.SystemMetricsService, SystemMetricsService);
 bind<AlertingService>(TYPES.AlertingService, AlertingService);
+if (!container.isBound(TYPES.Config)) {
+  container.bind<any>(TYPES.Config).toConstantValue(config);
+}
+bind<SovereignRegistryService>(TYPES.SovereignRegistryService, SovereignRegistryService);
 bind<GoogleSecretManagerService>(TYPES.GoogleSecretManagerService, GoogleSecretManagerService);
 bind<CredentialManagerService>(TYPES.CredentialManagerService, CredentialManagerService);
 bind<SwarmInternalClient>(TYPES.SwarmInternalClient, SwarmInternalClient);
@@ -257,6 +280,13 @@ bind<BackupSchedulerService>(TYPES.BackupSchedulerService, BackupSchedulerServic
 bind<AuditService>(TYPES.AuditService, AuditService);
 bind<SupabaseService>(TYPES.SupabaseService, SupabaseService);
 bind<VertexAIService>(TYPES.VertexAIService, VertexAIService);
+bind<NotionManagerService>(TYPES.NotionManagerService, NotionManagerService);
+bind<WhatsAppCommandService>(TYPES.WhatsAppCommandService, WhatsAppCommandService);
+bind<SovereignKnowledgeEngine>(TYPES.SovereignKnowledgeEngine, SovereignKnowledgeEngine);
+bind<CoinGeckoService>(TYPES.CoinGeckoService, CoinGeckoService);
+bind<WalletWatchtowerService>(TYPES.WalletWatchtowerService, WalletWatchtowerService);
+bind<PriceAlertService>(TYPES.PriceAlertService, PriceAlertService);
+bind<FinanceController>(TYPES.FinanceController, FinanceController);
 
 // ========================================
 // EXTERNAL INTEGRATIONS
@@ -267,8 +297,7 @@ if (!container.isBound(GmailService))
   container.bind<GmailService>(GmailService).toSelf().inSingletonScope();
 if (!container.isBound(SheetsService))
   container.bind<SheetsService>(SheetsService).toSelf().inSingletonScope();
-if (!container.isBound(TYPES.Gemini2Service))
-  container.bind<Gemini2Service>(TYPES.Gemini2Service).to(Gemini2Service).inSingletonScope();
+// Original binding for Gemini2Service removed as per instruction's implied change
 bind<RunwayService>(TYPES.RunwayService, RunwayService);
 bind<PayPalService>(TYPES.PaypalService, PayPalService);
 bind<FacebookService>(TYPES.FacebookService, FacebookService);
@@ -288,16 +317,19 @@ bind<QuantumSecurityService>(TYPES.QuantumSecurityService, QuantumSecurityServic
 // MastraService binding removed (package not installed)
 if (!container.isBound(KeplerService))
   container.bind<KeplerService>(KeplerService).toSelf().inSingletonScope();
-if (!container.isBound(SelfHealingService))
-  container.bind<SelfHealingService>(SelfHealingService).toSelf().inSingletonScope();
-if (!container.isBound(DiscoveryService))
-  container.bind<DiscoveryService>(DiscoveryService).toSelf().inSingletonScope();
-if (!container.isBound(SandboxService))
-  container.bind<SandboxService>(SandboxService).toSelf().inSingletonScope();
-if (!container.isBound(SanctuaryService))
-  container.bind<SanctuaryService>(SanctuaryService).toSelf().inSingletonScope();
-if (!container.isBound(EvolutionMetricsService))
-  container.bind<EvolutionMetricsService>(EvolutionMetricsService).toSelf().inSingletonScope();
+bind<SelfHealingService>(TYPES.SelfHealingService, SelfHealingService);
+bind<DiscoveryService>(TYPES.DiscoveryService, DiscoveryService);
+bind<SandboxService>(TYPES.SandboxService, SandboxService);
+bind<SanctuaryService>(TYPES.SanctuaryService, SanctuaryService);
+bind<EvolutionMetricsService>(TYPES.EvolutionMetricsService, EvolutionMetricsService);
+
+bind<BrowserlessService>(TYPES.BrowserlessService, BrowserlessService);
+bind<NewsService>(TYPES.NewsService, NewsService);
+if (!container.isBound(JulesGem)) container.bind<JulesGem>(JulesGem).toSelf().inSingletonScope();
+if (!container.isBound(Gemini2Service))
+  container.bind<Gemini2Service>(Gemini2Service).toSelf().inSingletonScope();
+if (!container.isBound(TYPES.Gemini2Service))
+  container.bind<Gemini2Service>(TYPES.Gemini2Service).to(Gemini2Service).inSingletonScope();
 
 // ========================================
 // SPECIALIZED SERVICES
@@ -309,6 +341,7 @@ bind<HealthService>(TYPES.DetailedHealthService, HealthService);
 bind<WAFService>(TYPES.WAFService, WAFService);
 bind<ThreatIntelligenceService>(TYPES.ThreatIntelligenceService, ThreatIntelligenceService);
 bind<MonitoringService>(TYPES.MonitoringService, MonitoringService);
+bind<InfrastructureService>(TYPES.InfrastructureService, InfrastructureService);
 bind<BackupRestoreService>(TYPES.BackupRestoreService, BackupRestoreService);
 if (!container.isBound(CENTRAL_LOGGING_SERVICE_NAME))
   container
@@ -347,9 +380,12 @@ bind<VoiceService>(TYPES.VoiceService, VoiceService);
 bind<YoutubeTranscriptionQueue>(TYPES.YoutubeTranscriptionQueue, YoutubeTranscriptionQueue);
 bind<YoutubeTranscriptionService>(TYPES.YoutubeTranscriptionService, YoutubeTranscriptionService);
 bind<ArbitrationService>(TYPES.ArbitrationService, ArbitrationService);
+bind<NeuralHealthService>(TYPES.NeuralHealthService, NeuralHealthService);
+bind<PredictiveHealingService>(TYPES.PredictiveHealingService, PredictiveHealingService);
 bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
 bind<TreasuryService>(TYPES.TreasuryService, TreasuryService);
 bind<NotebookInsightService>(TYPES.NotebookInsightService, NotebookInsightService);
+bind<VisionService>(TYPES.VisionService, VisionService);
 
 // ========================================
 // CONTROLLERS
@@ -379,8 +415,9 @@ bind<StripeWebhookController>(TYPES.StripeWebhookController, StripeWebhookContro
 bind<ContactController>(TYPES.ContactController, ContactController);
 bind<WisdomController>(TYPES.WisdomController, WisdomController);
 bind<TreasuryController>(TYPES.TreasuryController, TreasuryController);
-bind<GovernanceController>(TYPES.GovernanceController, GovernanceController);
 bind<GovernanceService>(TYPES.GovernanceService, GovernanceService);
 bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
+bind<VisionController>(TYPES.VisionController, VisionController);
+bind<NexusCommandController>(TYPES.NexusCommandController, NexusCommandController);
 
 export { container, TYPES };

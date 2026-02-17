@@ -11,9 +11,7 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env': {
-      NODE_ENV: JSON.stringify('production'),
-    },
+    'process.env.NODE_ENV': JSON.stringify('production'),
     global: 'window',
   },
   build: {
@@ -25,6 +23,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        admin: resolve(__dirname, 'admin.html'),
+        client: resolve(__dirname, 'client.html'),
+        demo: resolve(__dirname, 'demo.html'),
       },
       output: {
         manualChunks: {

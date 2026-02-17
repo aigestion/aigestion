@@ -11,10 +11,55 @@ interface NavItem {
   badge?: string;
 }
 
-interface NavGroup {
-  title: string;
-  items: NavItem[];
+interface NavGroupProps {
+  children: React.ReactNode;
+  isScrolled: boolean;
 }
+
+const NavGroup: React.FC<NavGroupProps> = ({ children, isScrolled }) => (
+  <div className={`flex items-center gap-1 p-1 rounded-2xl transition-all duration-300 ${
+    isScrolled ? 'bg-white/5 border border-white/10' : 'bg-transparent'
+  }`}>
+    {children}
+  </div>
+);
+
+interface NavItemProps {
+  label: string;
+  icon?: React.ReactNode;
+  isActive: boolean;
+  onClick: () => void;
+  layoutId: string;
+  className?: string; // Added className prop
+}
+
+const NavItem: React.FC<NavItemProps> = ({ label, icon, isActive, onClick, layoutId, className }) => (
+  <button
+    onClick={onClick}
+    className={`relative px-4 py-2 rounded-xl transition-all duration-300 group flex items-center gap-2 ${className || ''} ${
+      isActive ? 'text-nexus-cyan' : 'text-nexus-silver/70 hover:text-white'
+    }`}
+  >
+    {isActive && (
+      <motion.div
+        layoutId={layoutId}
+        className="absolute inset-0 bg-white/10 rounded-xl"
+        transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+      />
+    )}
+    <span className="relative z-10 text-lg">{icon}</span>
+    <span className="relative z-10 font-orbitron font-medium text-xs tracking-wider uppercase">
+      {label}
+    </span>
+    {isActive && (
+       <motion.div
+         layoutId={layoutId + 'glow'}
+         className="absolute inset-0 bg-nexus-cyan/20 blur-md rounded-xl"
+         transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+       />
+    )}
+  </button>
+);
 
 export const EnhancedNavigation: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -105,8 +150,8 @@ export const EnhancedNavigation: React.FC = () => {
                 </div>
               </motion.div>
               <div className="hidden sm:block">
-                <span className="text-2xl font-orbitron font-black tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-nexus-violet via-white to-nexus-cyan glitch-text">
-                  AIGESTION
+                <span className="text-xl font-orbitron font-black tracking-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-nexus-violet via-white to-nexus-cyan glitch-text">
+                  AIGESTION.NET
                 </span>
                 <div className="flex items-center gap-2">
                   <div className="h-[1px] w-4 bg-nexus-cyan/50" />

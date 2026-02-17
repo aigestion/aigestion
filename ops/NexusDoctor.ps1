@@ -124,7 +124,7 @@ else {
         if ($LASTEXITCODE -eq 0) {
             Write-Diag "Docker Engine" "PASS" "Running"
 
-            $containers = docker compose -f "$RootPath\docker-compose.yml" ps --format json 2>&1
+            $containers = docker compose -f "$RootPath\infra\docker\docker-compose.yml" ps --format json 2>&1
             if ($LASTEXITCODE -eq 0 -and $containers) {
                 Write-Diag "Docker Compose" "PASS" "Services detected"
                 Add-DiagResult -Name "Docker-Compose" -Status "PASS"
@@ -140,7 +140,7 @@ else {
                 Add-DiagResult -Name "Docker-Orphans" -Status "WARN" -Details $orphans.Trim()
                 if ($Fix) {
                     Write-Diag "Auto-Heal" "HEAL" "Removing orphans..."
-                    docker compose -f "$RootPath\docker-compose.yml" up -d --remove-orphans 2>&1 | Out-Null
+                    docker compose -f "$RootPath\infra\docker\docker-compose.yml" up -d --remove-orphans 2>&1 | Out-Null
                 }
             }
             else {

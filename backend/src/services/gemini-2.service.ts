@@ -11,7 +11,7 @@ import { TYPES } from '../types';
 @injectable()
 export class Gemini2Service {
   private vertexClient: any;
-  private aiStudioClient: GoogleGenerativeAI;
+  private aiStudioClient!: GoogleGenerativeAI;
 
   constructor() {}
 
@@ -69,7 +69,7 @@ export class Gemini2Service {
    * Generates text using the best available model (Priority: AI Studio Pro).
    */
   async generateText(prompt: string, options: any = {}) {
-    const modelName = options.model || process.env.GEMINI_2_MODEL || 'gemini-2.0-flash-exp';
+    const modelName = options.model || process.env.GEMINI_2_MODEL || 'gemini-1.5-flash';
 
     try {
       const generationConfig = {

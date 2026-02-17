@@ -72,4 +72,9 @@ Write-Host "`n" + ("*" * 70) -ForegroundColor Magenta
 Write-Host "   RITUAL COMPLETE. SYSTEM STATUS: DIVINE." -ForegroundColor Magenta
 Write-Host ("*" * 70) + "`n" -ForegroundColor Magenta
 
-Write-Host "Stay Sovereign, Alejandro.`n" -ForegroundColor Cyan
+$launchConsole = Read-Host "Initiate Quantum Nexus Console? (y/n)"
+if ($launchConsole -eq 'y') {
+    & "$OpsPath\NexusConsole.ps1"
+} else {
+    Write-Host "Stay Sovereign, Alejandro.`n" -ForegroundColor Cyan
+}

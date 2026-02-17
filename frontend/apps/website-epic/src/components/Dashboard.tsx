@@ -17,6 +17,8 @@ import { api, SystemHealth } from '../services/api';
 import React, { useState } from 'react';
 import { useEnhancedVoiceAssistant } from '../hooks/useEnhancedVoiceAssistant';
 import { DanielaConversationPanel } from './DanielaConversationPanel';
+import { GodModeText } from './design-system/GodModeText';
+import { SpotlightWrapper } from './design-system/SpotlightWrapper';
 
 interface DashboardProps {
   user: {
@@ -84,14 +86,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-nexus-obsidian text-white">
+    <div className="min-h-screen bg-nexus-obsidian text-white font-sans overflow-hidden">
+        {/* Background enhancements */}
+        <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-5 pointer-events-none fixed" />
+        <div className="grain-overlay pointer-events-none fixed inset-0 z-50 opacity-20" />
+
       {/* Mobile Menu Button */}
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="p-2 rounded-lg bg-white/5 backdrop-blur-3xl border border-white/10"
+          className="p-2 rounded-lg bg-white/5 backdrop-blur-3xl border border-white/10 hover:bg-white/10 transition-colors"
         >
-          {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {sidebarOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
         </button>
       </div>
 
@@ -106,7 +112,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setSidebarOpen(false)}
-                className="lg:hidden fixed inset-0 bg-black/50 z-40"
+                className="lg:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-40"
               />
             )}
 
@@ -116,25 +122,25 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               animate={{ x: 0 }}
               exit={{ x: -300 }}
               transition={{ type: 'spring', damping: 25 }}
-              className={`fixed lg:relative z-50 w-72 h-screen bg-nexus-obsidian-deep border-r border-white/10 ${
+              className={`fixed lg:relative z-50 w-72 h-screen bg-nexus-obsidian/90 backdrop-blur-xl border-r border-white/5 ${
                 sidebarOpen ? 'block' : 'hidden lg:block'
               }`}
             >
               {/* Header */}
-              <div className="p-6 border-b border-white/10">
+              <div className="p-6 border-b border-white/5">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-linear-to-br from-nexus-cyan to-nexus-violet flex items-center justify-center">
-                    <User className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 rounded-full bg-linear-to-br from-nexus-cyan/20 to-nexus-violet/20 border border-white/10 flex items-center justify-center relative group">
+                    <User className="w-6 h-6 text-nexus-cyan group-hover:text-white transition-colors" />
+                    <div className="absolute inset-0 rounded-full bg-nexus-cyan/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white">{user.name}</h3>
-                    <p className="text-sm text-nexus-silver">{user.email}</p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <Shield className="w-3 h-3 text-nexus-cyan" />
-                      <span
-                        className={`text-xs font-medium ${subscriptionColors[user.subscription as keyof typeof subscriptionColors]}`}
+                    <h3 className="font-bold text-white font-orbitron tracking-wide">{user.name}</h3>
+                    <p className="text-xs text-nexus-silver/60">{user.email}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                       <span
+                        className={`text-[10px] px-2 py-0.5 rounded border border-white/10 font-bold uppercase tracking-wider ${subscriptionColors[user.subscription as keyof typeof subscriptionColors].replace('text-', 'bg-').replace('silver', 'gray-800').replace('violet', 'purple-900/50').replace('gold', 'yellow-900/50')} text-white`}
                       >
-                        {user.subscription.toUpperCase()}
+                        {user.subscription}
                       </span>
                     </div>
                   </div>
@@ -153,14 +159,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                           setActiveTab(item.id as any);
                           setSidebarOpen(false);
                         }}
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all border border-transparent group relative overflow-hidden ${
                           activeTab === item.id
-                            ? `bg-linear-to-r ${item.color} text-white shadow-lg`
-                            : 'text-nexus-silver hover:bg-white/5 hover:text-white'
+                            ? `bg-white/5 border-nexus-cyan/20 text-white shadow-[0_0_15px_rgba(0,245,255,0.1)]`
+                            : 'text-nexus-silver/60 hover:bg-white/5 hover:text-white'
                         }`}
                       >
-                        <Icon className="w-5 h-5" />
-                        <span className="font-medium">{item.label}</span>
+                        {activeTab === item.id && (
+                           <motion.div layoutId="activeTabGlow" className="absolute inset-0 bg-gradient-to-r from-nexus-cyan/10 to-transparent opacity-50" />
+                        )}
+                        <Icon className={`w-5 h-5 relative z-10 ${activeTab === item.id ? 'text-nexus-cyan' : 'group-hover:text-white transition-colors'}`} />
+                        <span className="font-medium relative z-10 font-orbitron tracking-wide text-sm">{item.label}</span>
                       </button>
                     );
                   })}
@@ -168,22 +177,22 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
               </nav>
 
               {/* Stats */}
-              <div className="p-4 border-t border-white/10">
+              <div className="p-4 border-t border-white/5 bg-black/20">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-nexus-silver text-sm">Conversaciones</span>
-                    <span className="text-white font-semibold">{messages.length}</span>
+                    <span className="text-nexus-silver/50 text-xs uppercase tracking-wider">Conversaciones</span>
+                    <span className="text-white font-mono font-bold">{messages.length}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-nexus-silver text-sm">Estado</span>
+                    <span className="text-nexus-silver/50 text-xs uppercase tracking-wider">Estado</span>
                     <span
-                      className={`text-sm font-medium ${
+                      className={`text-xs font-bold uppercase tracking-wider ${
                         isProcessing
-                          ? 'text-yellow-400'
+                          ? 'text-yellow-400 animate-pulse'
                           : status === 'active'
-                            ? 'text-green-400'
+                            ? 'text-emerald-400'
                             : status === 'error'
-                              ? 'text-red-400'
+                              ? 'text-rose-400'
                               : 'text-nexus-silver'
                       }`}
                     >
@@ -196,25 +205,17 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                             : 'Inactivo'}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-nexus-silver text-sm">Suscripción</span>
-                    <span
-                      className={`text-xs font-medium ${subscriptionColors[user.subscription as keyof typeof subscriptionColors]}`}
-                    >
-                      {user.subscription}
-                    </span>
-                  </div>
                 </div>
               </div>
 
               {/* Footer */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+              <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/5">
                 <button
                   onClick={onLogout}
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-nexus-silver hover:bg-white/5 hover:text-white transition-all"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-nexus-silver/50 hover:bg-rose-500/10 hover:text-rose-500 hover:border-rose-500/30 border border-transparent transition-all"
                 >
                   <LogOut className="w-5 h-5" />
-                  <span>Cerrar Sesión</span>
+                  <span className="font-orbitron text-xs font-bold uppercase tracking-widest">Cerrar Sesión</span>
                 </button>
               </div>
             </motion.aside>
@@ -223,85 +224,60 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       </AnimatePresence>
 
       {/* Main Content */}
-      <div className="lg:ml-72 min-h-screen">
+      <div className="lg:ml-72 min-h-screen relative">
+         <SpotlightWrapper>
         {/* Header */}
-        <header className="bg-nexus-obsidian-deep border-b border-white/10 px-6 py-4">
+        <header className="bg-nexus-obsidian/80 backdrop-blur-md border-b border-white/5 px-8 py-6 sticky top-0 z-30">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-orbitron font-bold text-white">
-                {menuItems.find(item => item.id === activeTab)?.label}
+              <h1 className="text-2xl font-orbitron font-bold text-white tracking-widest uppercase">
+                <GodModeText text={menuItems.find(item => item.id === activeTab)?.label || 'DASHBOARD'} effect="glitch" />
               </h1>
-              <p className="text-nexus-silver text-sm mt-1">
-                {activeTab === 'daniela' && 'Tu asistente de IA emocional'}
-                {activeTab === 'analytics' && 'Métricas y análisis de uso'}
-                {activeTab === 'settings' && 'Configuración de tu cuenta'}
+              <p className="text-nexus-silver/50 text-xs mt-1 uppercase tracking-wider font-mono">
+                {activeTab === 'daniela' && '>> Initialization Sequence: Emotional AI'}
+                {activeTab === 'analytics' && '>> Loading Metrics: Real-time Flux'}
+                {activeTab === 'settings' && '>> System Configuration: User Protocol'}
               </p>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-6">
               {/* Status Indicator */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/5">
                 <div
                   className={`w-2 h-2 rounded-full ${
                     isProcessing
-                      ? 'bg-yellow-400 animate-pulse'
+                      ? 'bg-yellow-400 animate-ping'
                       : status === 'active'
-                        ? 'bg-green-400'
+                        ? 'bg-emerald-400 shadow-[0_0_10px_#34d399]'
                         : status === 'error'
-                          ? 'bg-red-400'
+                          ? 'bg-rose-400'
                           : 'bg-nexus-silver'
                   }`}
                 />
-                <span className="text-sm text-nexus-silver hidden sm:block">
+                <span className="text-[10px] text-nexus-silver font-bold uppercase tracking-widest">
                   {isProcessing
                     ? 'Procesando...'
                     : status === 'active'
-                      ? 'Daniela Activa'
+                      ? 'AI SYSTEM ONLINE'
                       : status === 'error'
-                        ? 'Error'
-                        : 'Inactivo'}
+                        ? 'SYSTEM ERROR'
+                        : 'SYSTEM IDLE'}
                 </span>
               </div>
 
-              {/* System Connectivity Indicator */}
-              <div className="flex items-center gap-2 border-l border-white/10 pl-4">
-                <div
-                  className={`w-2 h-2 rounded-full ${
-                    connectionStatus === 'connected'
-                      ? 'bg-emerald-400'
-                      : connectionStatus === 'error'
-                        ? 'bg-red-400'
-                        : 'bg-blue-400 animate-pulse'
-                  }`}
-                />
-                <span className="text-sm text-nexus-silver hidden sm:block">
-                  {connectionStatus === 'connected'
-                    ? 'System Online'
-                    : connectionStatus === 'error'
-                      ? 'Offline'
-                      : 'Syncing...'}
-                </span>
-                {health?.data?.version && (
-                  <span className="text-[10px] text-white/20">v{health.data.version}</span>
-                )}
-              </div>
-
-              {/* User Menu */}
-              <div className="hidden sm:flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-linear-to-br from-nexus-cyan to-nexus-violet flex items-center justify-center">
-                  <User className="w-4 h-4 text-white" />
-                </div>
-                <div className="text-right">
-                  <p className="text-sm font-medium text-white">{user.name}</p>
-                  <p className="text-xs text-nexus-silver">{user.subscription}</p>
-                </div>
-              </div>
+              {/* Server Status */}
+               <div className="flex items-center gap-2">
+                  <div className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-nexus-cyan' : 'bg-rose-500'}`} />
+                  <span className="text-[10px] text-white/40 font-mono">
+                     {connectionStatus === 'connected' ? 'WSS: CONNECTED' : 'WSS: DISCONNECTED'}
+                  </span>
+               </div>
             </div>
           </div>
         </header>
 
         {/* Content */}
-        <main className="p-6">
+        <main className="p-8">
           <AnimatePresence mode="wait">
             {activeTab === 'daniela' && (
               <motion.div
@@ -325,60 +301,67 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 className="space-y-6"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl p-6">
+                  {/* Stat Card 1 */}
+                  <div className="premium-glass p-6 rounded-2xl border border-white/5 hover:border-nexus-cyan/30 transition-all group">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-white">Conversaciones</h3>
-                      <MessageSquare className="w-5 h-5 text-nexus-cyan" />
+                      <h3 className="text-xs font-bold text-nexus-silver/70 uppercase tracking-widest group-hover:text-white transition-colors">Conversaciones</h3>
+                      <MessageSquare className="w-5 h-5 text-nexus-cyan opacity-50 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <div className="text-3xl font-bold text-white">{messages.length}</div>
-                    <p className="text-nexus-silver text-sm">Total este mes</p>
+                    <div className="text-4xl font-black text-white font-orbitron">{messages.length}</div>
+                    <p className="text-nexus-silver/40 text-[10px] mt-2 uppercase">Total este mes</p>
                   </div>
 
-                  <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl p-6">
+                  {/* Stat Card 2 */}
+                  <div className="premium-glass p-6 rounded-2xl border border-white/5 hover:border-green-400/30 transition-all group">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-white">Estado Emocional</h3>
-                      <TrendingUp className="w-5 h-5 text-green-400" />
+                      <h3 className="text-xs font-bold text-nexus-silver/70 uppercase tracking-widest group-hover:text-white transition-colors">Estado Emocional</h3>
+                      <TrendingUp className="w-5 h-5 text-green-400 opacity-50 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <div className="text-3xl font-bold text-white">
+                    <div className="text-2xl font-bold text-white font-orbitron truncate">
                       {emotionalAnalysis?.emotion?.toUpperCase() || 'NEUTRAL'}
                     </div>
-                    <p className="text-nexus-silver text-sm">
-                      Confianza:{' '}
-                      {emotionalAnalysis?.confidence
-                        ? `${Math.round(emotionalAnalysis.confidence * 100)}%`
-                        : 'N/A'}
+                    <div className="w-full bg-white/10 h-1 rounded-full mt-2 overflow-hidden">
+                       <div className="h-full bg-green-400" style={{ width: `${(emotionalAnalysis?.confidence || 0) * 100}%` }} />
+                    </div>
+                    <p className="text-nexus-silver/40 text-[10px] mt-2 uppercase">
+                      Confianza de IA: {Math.round((emotionalAnalysis?.confidence || 0) * 100)}%
                     </p>
                   </div>
 
-                  <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl p-6">
+                  {/* Stat Card 3 */}
+                  <div className="premium-glass p-6 rounded-2xl border border-white/5 hover:border-nexus-violet/30 transition-all group">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-white">Sugerencias</h3>
-                      <Brain className="w-5 h-5 text-nexus-violet" />
+                      <h3 className="text-xs font-bold text-nexus-silver/70 uppercase tracking-widest group-hover:text-white transition-colors">Sugerencias</h3>
+                      <Brain className="w-5 h-5 text-nexus-violet opacity-50 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <div className="text-3xl font-bold text-white">{suggestedActions.length}</div>
-                    <p className="text-nexus-silver text-sm">Acciones disponibles</p>
+                    <div className="text-4xl font-black text-white font-orbitron">{suggestedActions.length}</div>
+                    <p className="text-nexus-silver/40 text-[10px] mt-2 uppercase">Acciones disponibles</p>
                   </div>
 
-                  <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl p-6">
+                  {/* Stat Card 4 */}
+                  <div className="premium-glass p-6 rounded-2xl border border-white/5 hover:border-nexus-gold/30 transition-all group">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-semibold text-white">Suscripción</h3>
-                      <Shield className="w-5 h-5 text-nexus-gold" />
+                      <h3 className="text-xs font-bold text-nexus-silver/70 uppercase tracking-widest group-hover:text-white transition-colors">Suscripción</h3>
+                      <Shield className="w-5 h-5 text-nexus-gold opacity-50 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <div className="text-3xl font-bold text-white uppercase">
+                    <div className="text-2xl font-bold text-white font-orbitron uppercase">
                       {user.subscription}
                     </div>
-                    <p className="text-nexus-silver text-sm">Plan actual</p>
+                    <p className="text-nexus-silver/40 text-[10px] mt-2 uppercase">Nivel de Acceso</p>
                   </div>
                 </div>
 
-                {/* Charts */}
-                <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl p-6">
-                  <h3 className="text-xl font-semibold text-white mb-6">Actividad Reciente</h3>
-                  <div className="h-64 flex items-center justify-center text-nexus-silver">
-                    <div className="text-center">
-                      <BarChart3 className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                      <p>Gráficos de actividad próximamente</p>
-                    </div>
+                {/* Charts Placeholder */}
+                <div className="premium-glass p-8 rounded-2xl border border-white/5 relative overflow-hidden">
+                   <div className="absolute top-0 right-0 p-4 opacity-5">
+                      <BarChart3 size={100} />
+                   </div>
+                  <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-widest border-b border-white/5 pb-4">
+                     Actividad Neural Reciente
+                  </h3>
+                  <div className="h-64 flex flex-col items-center justify-center text-nexus-silver/30 gap-4">
+                    <Activity className="w-12 h-12 animate-pulse" />
+                    <p className="font-orbitron text-xs tracking-widest">RECOPILANDO TELEMETRÍA...</p>
                   </div>
                 </div>
               </motion.div>
@@ -393,42 +376,47 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 transition={{ duration: 0.3 }}
                 className="space-y-6"
               >
-                <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl p-6">
-                  <h3 className="text-xl font-semibold text-white mb-6">Configuración de Cuenta</h3>
+                <div className="premium-glass p-8 rounded-2xl border border-white/5">
+                  <h3 className="text-lg font-orbitron font-bold text-white mb-8 border-b border-white/5 pb-4">
+                     CONFIGURACIÓN DE CUENTA
+                  </h3>
 
-                  <div className="space-y-6">
+                  <div className="space-y-6 max-w-2xl">
                     <div>
-                      <label className="block text-sm font-medium text-nexus-silver mb-2">
-                        Nombre
+                      <label className="block text-xs font-bold text-nexus-silver/70 mb-2 uppercase tracking-wide">
+                        Nombre de Usuario
                       </label>
                       <input
                         type="text"
                         defaultValue={user.name}
-                        className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-nexus-cyan/50"
+                        className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-nexus-cyan/50 focus:bg-white/5 transition-all font-mono text-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-nexus-silver mb-2">
-                        Email
+                      <label className="block text-xs font-bold text-nexus-silver/70 mb-2 uppercase tracking-wide">
+                        Identificador Email
                       </label>
                       <input
                         type="email"
                         defaultValue={user.email}
                         disabled
-                        className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-nexus-silver cursor-not-allowed"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/5 rounded-xl text-nexus-silver/50 cursor-not-allowed font-mono text-sm"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-nexus-silver mb-2">
-                        Suscripción Actual
+                      <label className="block text-xs font-bold text-nexus-silver/70 mb-2 uppercase tracking-wide">
+                        Nivel de Suscripción
                       </label>
-                      <div className="p-4 bg-white/5 border border-white/10 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <span className="text-white font-medium">{user.subscription}</span>
-                          <button className="px-4 py-2 bg-linear-to-r from-nexus-cyan to-nexus-violet text-white rounded-lg text-sm font-medium hover:from-nexus-cyan/80 hover:to-nexus-violet/80 transition-all">
-                            Actualizar
+                      <div className="p-6 bg-gradient-to-br from-nexus-violet/10 to-transparent border border-nexus-violet/20 rounded-xl relative overflow-hidden">
+                        <div className="flex items-center justify-between relative z-10">
+                          <div>
+                             <span className="text-2xl font-orbitron font-bold text-white">{user.subscription}</span>
+                             <p className="text-[10px] text-nexus-silver/60 uppercase tracking-widest mt-1">Plan Activo</p>
+                          </div>
+                          <button className="px-6 py-2 bg-nexus-violet hover:bg-nexus-violet-light text-white rounded-lg text-xs font-bold uppercase tracking-widest transition-all shadow-lg hover:shadow-nexus-violet/50">
+                            Actualizar Plan
                           </button>
                         </div>
                       </div>
@@ -436,42 +424,49 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                   </div>
                 </div>
 
-                <div className="bg-white/5 backdrop-blur-3xl border border-white/10 rounded-xl p-6">
-                  <h3 className="text-xl font-semibold text-white mb-6">Preferencias de Daniela</h3>
+                <div className="premium-glass p-8 rounded-2xl border border-white/5">
+                  <h3 className="text-lg font-orbitron font-bold text-white mb-8 border-b border-white/5 pb-4">
+                     PREFERENCIAS DE DANIELA
+                  </h3>
 
-                  <div className="space-y-6">
+                  <div className="space-y-6 max-w-2xl">
                     <div>
-                      <label className="block text-sm font-medium text-nexus-silver mb-2">
-                        Voz de Daniela
+                      <label className="block text-xs font-bold text-nexus-silver/70 mb-2 uppercase tracking-wide">
+                        Modelo de Voz
                       </label>
-                      <select className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-nexus-cyan/50">
-                        <option>Bella (Default)</option>
-                        <option>Adam</option>
-                        <option>Domi</option>
-                        <option>Elli</option>
-                        <option>Emily</option>
-                      </select>
+                      <div className="relative">
+                        <select className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-nexus-cyan/50 appearance-none font-mono text-sm">
+                           <option>Bella (Neural v4)</option>
+                           <option>Adam (Neural v4)</option>
+                           <option>Domi (Neural v4)</option>
+                           <option>Elli (Neural v4)</option>
+                        </select>
+                        <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 rotate-90 pointer-events-none" />
+                      </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-nexus-silver mb-2">
-                        Idioma
+                      <label className="block text-xs font-bold text-nexus-silver/70 mb-2 uppercase tracking-wide">
+                        Idioma Principal
                       </label>
-                      <select className="w-full px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-nexus-cyan/50">
-                        <option>Español</option>
-                        <option>English</option>
-                        <option>Português</option>
-                      </select>
+                       <div className="relative">
+                        <select className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-nexus-cyan/50 appearance-none font-mono text-sm">
+                           <option>Español (ES)</option>
+                           <option>English (US)</option>
+                           <option>Português (BR)</option>
+                        </select>
+                        <ChevronRight className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 rotate-90 pointer-events-none" />
+                      </div>
                     </div>
 
                     <div>
-                      <label className="flex items-center gap-2 text-sm font-medium text-nexus-silver mb-2">
+                      <label className="flex items-center gap-3 p-4 rounded-xl border border-white/10 bg-white/5 cursor-pointer hover:bg-white/10 transition-colors">
                         <input
                           type="checkbox"
                           defaultChecked
-                          className="rounded border-white/10 bg-white/5 text-nexus-cyan"
+                          className="w-4 h-4 rounded border-white/20 bg-black/40 text-nexus-cyan focus:ring-offset-0 focus:ring-0"
                         />
-                        Notificaciones por email
+                        <span className="text-sm font-medium text-white">Recibir notificaciones prioritarias por email</span>
                       </label>
                     </div>
                   </div>
@@ -480,7 +475,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             )}
           </AnimatePresence>
         </main>
+        </SpotlightWrapper>
       </div>
     </div>
   );
 };
+
+// Helper for select arrow
+const ChevronRight = ({ className }: { className?: string }) => (
+   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="9 18 15 12 9 6"></polyline></svg>
+);

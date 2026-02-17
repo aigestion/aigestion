@@ -1,8 +1,11 @@
-import { motion } from 'framer-motion';
-import { Mail, Lock, User, AlertCircle, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Lock, User, AlertCircle, ArrowRight, Shield, Fingerprint, Activity, Cpu, Database } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { SpotlightWrapper } from '../components/design-system/SpotlightWrapper';
+import { GodModeText } from '../components/design-system/GodModeText';
+import { TiltCard } from '../components/design-system/TiltCard';
 
 export const Register: React.FC = () => {
   const { register } = useAuth();
@@ -25,7 +28,7 @@ export const Register: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setError('Las contraseñas no coinciden');
+      setError('LAS CREDENCIALES NO COINCIDEN');
       return;
     }
 
@@ -34,155 +37,200 @@ export const Register: React.FC = () => {
       await register(formData.name, formData.email, formData.password);
       navigate('/verify-email');
     } catch (err: any) {
-      setError(err.message || 'Error al registrarse');
+      setError(err.message || 'FALLO EN LA INICIALIZACIÓN');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-nexus-obsidian flex items-center justify-center relative overflow-hidden px-4">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-radial-at-center from-nexus-violet/10 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-nexus-cyan to-transparent opacity-50" />
+    <SpotlightWrapper className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden px-4 py-20">
+      {/* Operative Grid & Scanlines */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(6,182,212,0.1),transparent_80%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.02)_1px,transparent_1px)] bg-size-[60px_60px]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent bg-[length:100%_4px] animate-scan" />
+      </div>
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md relative z-10"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="w-full max-w-2xl relative z-10"
       >
-        <div className="premium-glass p-8 rounded-2xl neon-border neon-glow-violet">
-          <div className="text-center mb-8">
-            <motion.h1
-              className="text-3xl font-orbitron font-black text-white mb-2 tracking-wider"
-              initial={{ y: -20 }}
-              animate={{ y: 0 }}
-            >
-              NUEVA CUENTA
-            </motion.h1>
-            <p className="text-nexus-silver/60 text-sm">
-              Empieza a organizar tu vida y tu negocio hoy mismo
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Name */}
-            <div className="space-y-1">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
-                Nombre
-              </label>
-              <div className="relative group">
-                <User className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40 group-focus-within:text-nexus-cyan transition-colors" />
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Tu Nombre"
-                  className="w-full pl-10 pr-4 py-3 bg-nexus-obsidian/60 border border-white/10 rounded-xl text-white placeholder-nexus-silver/20 focus:outline-none focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 transition-all nexus-input-focus"
-                  required
-                />
-              </div>
+        <TiltCard className="premium-glass rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+          <div className="p-8 lg:p-12 relative">
+            {/* Enrollment HUD Header */}
+            <div className="flex justify-between items-start mb-12">
+               <div className="space-y-1">
+                 <div className="flex items-center gap-2 text-nexus-cyan">
+                   <Fingerprint className="w-5 h-5 animate-pulse" />
+                   <span className="font-mono text-xs tracking-[0.4em] uppercase">Initial Enrollment</span>
+                 </div>
+                 <GodModeText text="NUEVO OPERATIVO" effect="glitch" className="text-4xl font-black" />
+               </div>
+               <div className="hidden sm:flex gap-4">
+                  <div className="text-right">
+                    <div className="text-[10px] font-mono text-nexus-silver/40 uppercase tracking-widest">Node Status</div>
+                    <div className="text-[10px] font-mono text-nexus-cyan uppercase tracking-wider">Ready for Sync</div>
+                  </div>
+                  <Cpu className="w-8 h-8 text-nexus-cyan/20" />
+               </div>
             </div>
 
-            {/* Email */}
-            <div className="space-y-1">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
-                Email
-              </label>
-              <div className="relative group">
-                <Mail className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40 group-focus-within:text-nexus-cyan transition-colors" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="tu@email.com"
-                  className="w-full pl-10 pr-4 py-3 bg-nexus-obsidian/60 border border-white/10 rounded-xl text-white placeholder-nexus-silver/20 focus:outline-none focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 transition-all nexus-input-focus"
-                  required
-                />
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Identity Section */}
+              <div className="space-y-6">
+                 <div className="space-y-4">
+                    <div className="flex items-center gap-2 px-1">
+                       <User className="w-3 h-3 text-nexus-cyan" />
+                       <label className="text-[10px] font-mono text-nexus-cyan/60 uppercase tracking-[0.2em]">Core Identity</label>
+                    </div>
+                    <div className="relative group">
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        placeholder="CODENAME / ALIAS"
+                        className="w-full px-4 py-4 bg-black/40 border border-white/5 rounded-xl text-white placeholder-nexus-silver/10 focus:outline-none focus:border-nexus-cyan/40 transition-all font-mono text-sm"
+                        required
+                      />
+                    </div>
+                 </div>
+
+                 <div className="space-y-4">
+                    <div className="flex items-center gap-2 px-1">
+                       <Mail className="w-3 h-3 text-nexus-cyan" />
+                       <label className="text-[10px] font-mono text-nexus-cyan/60 uppercase tracking-[0.2em]">Communication Channel</label>
+                    </div>
+                    <div className="relative group">
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="AGENT@NEXUS.AI"
+                        className="w-full px-4 py-4 bg-black/40 border border-white/5 rounded-xl text-white placeholder-nexus-silver/10 focus:outline-none focus:border-nexus-cyan/40 transition-all font-mono text-sm"
+                        required
+                      />
+                    </div>
+                 </div>
               </div>
-            </div>
 
-            {/* Password */}
-            <div className="space-y-1">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
-                Contraseña
-              </label>
-              <div className="relative group">
-                <Lock className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40 group-focus-within:text-nexus-cyan transition-colors" />
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-3 bg-nexus-obsidian/60 border border-white/10 rounded-xl text-white placeholder-nexus-silver/20 focus:outline-none focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 transition-all nexus-input-focus"
-                  required
-                />
+              {/* Security Section */}
+              <div className="space-y-6">
+                 <div className="space-y-4">
+                    <div className="flex items-center gap-2 px-1">
+                       <Lock className="w-3 h-3 text-nexus-violet" />
+                       <label className="text-[10px] font-mono text-nexus-violet tracking-[0.2em] uppercase">Access Key</label>
+                    </div>
+                    <div className="relative group">
+                      <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="••••••••••••"
+                        className="w-full px-4 py-4 bg-black/40 border border-white/10 rounded-xl text-white placeholder-nexus-silver/20 focus:outline-none focus:border-nexus-violet/50 transition-all font-mono text-sm"
+                        required
+                      />
+                    </div>
+                 </div>
+
+                 <div className="space-y-4">
+                    <div className="flex items-center gap-2 px-1">
+                       <Shield className="w-3 h-3 text-nexus-violet" />
+                       <label className="text-[10px] font-mono text-nexus-violet tracking-[0.2em] uppercase">Verify Handshake</label>
+                    </div>
+                    <div className="relative group">
+                      <input
+                        type="password"
+                        name="confirmPassword"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        placeholder="••••••••••••"
+                        className="w-full px-4 py-4 bg-black/40 border border-white/10 rounded-xl text-white placeholder-nexus-silver/20 focus:outline-none focus:border-nexus-violet/50 transition-all font-mono text-sm"
+                        required
+                      />
+                    </div>
+                 </div>
               </div>
-            </div>
 
-            {/* Confirm Password */}
-            <div className="space-y-1">
-              <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">
-                Confirmar
-              </label>
-              <div className="relative group">
-                <Lock className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40 group-focus-within:text-nexus-cyan transition-colors" />
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-3 bg-nexus-obsidian/60 border border-white/10 rounded-xl text-white placeholder-nexus-silver/20 focus:outline-none focus:border-nexus-cyan/50 focus:ring-1 focus:ring-nexus-cyan/50 transition-all nexus-input-focus"
-                  required
-                />
+              {/* Status Bar / Error Message */}
+              <div className="md:col-span-2">
+                 <AnimatePresence>
+                    {error && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="p-4 bg-red-500/5 border border-red-500/30 rounded-xl flex items-center gap-3 mb-6"
+                      >
+                         <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+                         <span className="font-mono text-[11px] text-red-400 uppercase tracking-widest">{error}</span>
+                      </motion.div>
+                    )}
+                 </AnimatePresence>
+
+                 <div className="flex flex-col sm:flex-row gap-6 items-center">
+                    <motion.button
+                      type="submit"
+                      disabled={loading}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="w-full sm:w-2/3 py-5 bg-black border border-nexus-cyan text-nexus-cyan font-orbitron font-black tracking-[0.4em] rounded-2xl hover:bg-nexus-cyan hover:text-black hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all relative overflow-hidden group uppercase text-xs"
+                    >
+                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                      <span className="relative z-10 flex items-center justify-center gap-3">
+                        {loading ? 'INITIALIZING...' : 'AUTORIZAR INGRESO'}
+                        {!loading && <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />}
+                      </span>
+                    </motion.button>
+
+                    <div className="flex flex-1 justify-around w-full opacity-40">
+                       <div className="flex flex-col items-center gap-1">
+                          <Activity className="w-4 h-4 text-nexus-cyan" />
+                          <div className="text-[8px] font-mono">FLOW</div>
+                       </div>
+                       <div className="flex flex-col items-center gap-1">
+                          <Database className="w-4 h-4 text-nexus-cyan" />
+                          <div className="text-[8px] font-mono">DATA</div>
+                       </div>
+                       <div className="flex flex-col items-center gap-1">
+                          <Zap className="w-4 h-4 text-nexus-cyan" />
+                          <div className="text-[8px] font-mono">SYNC</div>
+                       </div>
+                    </div>
+                 </div>
               </div>
-            </div>
+            </form>
 
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="flex items-center text-red-400 text-xs bg-red-500/10 p-2 rounded-lg border border-red-500/20"
-              >
-                <AlertCircle className="h-4 w-4 mr-2 shrink-0" />
-                {error}
-              </motion.div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-4 bg-gradient-to-r from-nexus-violet to-nexus-cyan text-white font-orbitron font-bold tracking-[0.2em] rounded-xl hover:shadow-[0_0_20px_rgba(138,43,226,0.5)] transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 group"
-            >
-              {loading ? (
-                <span className="animate-pulse">PROCESANDO...</span>
-              ) : (
-                <>
-                  REGISTRARSE{' '}
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
-            </button>
-
-            <div className="text-center mt-6">
-              <p className="text-nexus-silver/40 text-xs">
-                ¿Ya tienes cuenta?{' '}
+            {/* Login Link Terminal Footer */}
+            <div className="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6">
+              <p className="text-nexus-silver/30 text-[10px] font-mono tracking-widest uppercase">
+                EXISTING OPERATIVE? {' '}
                 <Link
                   to="/login"
                   className="text-nexus-cyan hover:text-white transition-colors underline decoration-nexus-cyan/30 underline-offset-4"
                 >
-                  Iniciar Sesión
+                  ACCESS TERMINAL
                 </Link>
               </p>
+              <div className="flex gap-4 opacity-20">
+                 <div className="w-2 h-2 bg-nexus-cyan rounded-full animate-pulse" />
+                 <div className="w-2 h-2 bg-nexus-violet rounded-full animate-pulse delay-75" />
+                 <div className="w-2 h-2 bg-nexus-cyan rounded-full animate-pulse delay-150" />
+              </div>
             </div>
-          </form>
+          </div>
+        </TiltCard>
+
+        {/* Hardware Status Markers */}
+        <div className="mt-6 flex justify-between px-6 opacity-20 select-none">
+           <div className="font-mono text-[8px] tracking-[0.5em] uppercase">Enrollment://Nexus/Core</div>
+           <div className="font-mono text-[8px] tracking-[0.5em] uppercase">Handshake ID: {Math.random().toString(36).substring(7).toUpperCase()}</div>
         </div>
       </motion.div>
-    </div>
+    </SpotlightWrapper>
   );
 };

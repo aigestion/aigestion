@@ -1,6 +1,45 @@
-import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSound } from '../hooks/useSound';
+import { cn } from '../utils/cn';
+import { ChevronRight, ExternalLink } from 'lucide-react';
+
+// 3D Tilt Wrapper
+const TiltCard = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useSpring(0, { stiffness: 150, damping: 20 });
+  const y = useSpring(0, { stiffness: 150, damping: 20 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct * 20); // Increased tilt for more dramatic effect
+    y.set(yPct * -20);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX: y, rotateY: x, transformStyle: 'preserve-3d' }}
+      className={cn("perspective-1000", className)}
+    >
+      <div style={{ transform: 'translateZ(20px)' }}>{children}</div>
+    </motion.div>
+  );
+};
 
 interface ShowcaseItem {
   id: string;
@@ -11,6 +50,7 @@ interface ShowcaseItem {
   features: string[];
   stats: { label: string; value: string }[];
   color: string;
+  borderGlow: string;
 }
 
 interface Particle {
@@ -38,7 +78,7 @@ export const InteractiveShowcase: React.FC = () => {
     {
       id: 'daniela-ai',
       title: 'DANIELA AI',
-      category: 'Asistente Virtual',
+      category: 'ASISTENTE SOBERANA',
       description:
         'Inteligencia artificial conversacional avanzada con procesamiento de lenguaje natural y aprendizaje contextual.',
       image: '/images/daniela/lab.png',
@@ -50,15 +90,16 @@ export const InteractiveShowcase: React.FC = () => {
       ],
       stats: [
         { label: 'Idiomas', value: '50+' },
-        { label: 'Precisión', value: '99.7%' },
-        { label: 'Respuesta', value: '<100ms' },
+        { label: 'Precisión', value: '99.9%' },
+        { label: 'Latencia', value: '<50ms' },
       ],
-      color: 'from-nexus-violet to-purple-600',
+      color: 'from-nexus-violet-glow to-purple-600',
+      borderGlow: 'border-nexus-violet',
     },
     {
       id: 'nexus-control',
       title: 'NEXUS CONTROL',
-      category: 'Sistema Operativo',
+      category: 'SISTEMA OPERATIVO',
       description:
         'Plataforma central de automatización y control de infraestructura con capacidades de auto-optimización.',
       image: '/images/nexus/collaboration.png',
@@ -69,16 +110,17 @@ export const InteractiveShowcase: React.FC = () => {
         'Recuperación automática',
       ],
       stats: [
-        { label: 'Tareas/hora', value: '10K+' },
-        { label: 'Uptime', value: '99.99%' },
-        { label: 'Eficiencia', value: '300%' },
+        { label: 'Ops/min', value: '1M+' },
+        { label: 'Uptime', value: '100%' },
+        { label: 'Eficiencia', value: '∞' },
       ],
-      color: 'from-nexus-cyan to-blue-600',
+      color: 'from-nexus-cyan-glow to-blue-600',
+      borderGlow: 'border-nexus-cyan',
     },
     {
       id: 'metaverse-hub',
       title: 'METAVERSE HUB',
-      category: 'Realidad Virtual',
+      category: 'REALIDAD EXTENDIDA',
       description:
         'Espacios virtuales colaborativos con interfaces holográficas y experiencias inmersivas 3D.',
       image: '/images/nexus/hero.png',
@@ -89,11 +131,12 @@ export const InteractiveShowcase: React.FC = () => {
         'Integración blockchain',
       ],
       stats: [
-        { label: 'Usuarios', value: '100K+' },
-        { label: 'Mundos', value: '500+' },
-        { label: 'Transacciones/s', value: '10K' },
+        { label: 'Usuarios', value: 'GLOBAL' },
+        { label: 'Mundos', value: '∞' },
+        { label: 'FPS', value: '120+' },
       ],
-      color: 'from-nexus-gold to-yellow-600',
+      color: 'from-amber-500 to-yellow-600',
+      borderGlow: 'border-amber-500',
     },
   ];
 
@@ -103,19 +146,21 @@ export const InteractiveShowcase: React.FC = () => {
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
-      size: Math.random() * 3 + 1,
+      vx: (Math.random() - 0.5) * 0.2, // Slower for elegance
+      vy: (Math.random() - 0.5) * 0.2,
+      size: Math.random() * 2 + 1,
       color: Math.random() > 0.5 ? '#8A2BE2' : '#00F5FF',
     }));
     setParticles(newParticles);
 
     const interval = setInterval(() => {
-      setActiveItem(prev => (prev + 1) % showcaseItems.length);
-    }, 5000);
+      if (!isInteracting) {
+        setActiveItem(prev => (prev + 1) % showcaseItems.length);
+      }
+    }, 8000); // Slower auto-rotation
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isInteracting]);
 
   useEffect(() => {
     const animateParticles = () => {
@@ -153,30 +198,30 @@ export const InteractiveShowcase: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative min-h-screen bg-nexus-obsidian overflow-hidden"
+      className="relative min-h-screen bg-nexus-obsidian overflow-hidden py-24"
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsInteracting(true)}
-      onMouseLeave={() => setIsInteracting(false)}
     >
-      {/* Animated Particles Background */}
+      {/* Background Grid & Particles */}
       <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
         {particles.map(particle => (
           <motion.div
             key={particle.id}
-            className="absolute rounded-full"
+            className="absolute rounded-full blur-[1px]"
             style={{
               left: `${particle.x}%`,
               top: `${particle.y}%`,
               width: particle.size,
               height: particle.size,
               backgroundColor: particle.color,
-              opacity: isInteracting ? 0.8 : 0.3,
+              opacity: 0.4,
             }}
             animate={{
-              scale: isInteracting ? [1, 1.5, 1] : [1, 1.2, 1],
+              scale: [1, 1.5, 1],
+              opacity: [0.2, 0.6, 0.2],
             }}
             transition={{
-              duration: 2 + Math.random(),
+              duration: 3 + Math.random(),
               repeat: Infinity,
               ease: 'easeInOut',
             }}
@@ -184,209 +229,176 @@ export const InteractiveShowcase: React.FC = () => {
         ))}
       </div>
 
-      {/* Mouse Follow Effect */}
+      {/* Mouse Follow Glow */}
       <motion.div
-        className="absolute w-64 h-64 rounded-full pointer-events-none"
+        className="absolute w-[500px] h-[500px] rounded-full pointer-events-none blur-[100px]"
         style={{
-          background: 'radial-gradient(circle, rgba(138,43,226,0.1) 0%, transparent 70%)',
+          background: `radial-gradient(circle, ${currentItem.color.includes('cyan') ? 'rgba(0,245,255,0.1)' : 'rgba(138,43,226,0.1)'} 0%, transparent 70%)`,
           x: springX,
           y: springY,
           transform: 'translate(-50%, -50%)',
         }}
       />
 
-      <div className="relative z-10 container mx-auto px-6 py-20">
+      <div className="relative z-10 container mx-auto px-6">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          viewport={{ once: true }}
+          className="text-center mb-20"
         >
+          <div className="inline-block mb-4 px-4 py-1 rounded-full border border-nexus-cyan/30 bg-nexus-cyan/5 text-nexus-cyan text-[10px] font-orbitron tracking-[0.2em] uppercase backdrop-blur-md">
+            Arquitectura del Sistema
+          </div>
           <h2 className="text-5xl md:text-7xl font-black font-orbitron mb-6">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-nexus-violet-glow via-white to-nexus-cyan-glow">
-              ECOSISTEMA DIGITAL
+            <span className="text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+              ECOSISTEMA
+            </span>{' '}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-nexus-cyan to-nexus-violet">
+              DIGITAL
             </span>
           </h2>
-          <p className="text-xl text-nexus-silver/80 max-w-3xl mx-auto">
-            Explora nuestro universo de soluciones inteligentes diseñadas para transformar tu
-            empresa
+          <p className="text-xl text-nexus-silver/60 max-w-2xl mx-auto font-light tracking-wide">
+            Explora nuestro universo de soluciones inteligentes diseñadas para la soberanía tecnológica.
           </p>
         </motion.div>
 
-        {/* Main Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-          {/* Left: Interactive Cards */}
-          <div className="space-y-6">
+        {/* Main Content Showcase */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* Left: Navigation List */}
+          <div className="lg:col-span-5 space-y-4">
             {showcaseItems.map((item, index) => (
               <motion.div
                 key={item.id}
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-                onMouseEnter={playHover}
+                onMouseEnter={() => {
+                  setIsInteracting(true);
+                  // Optional: prefetch or prepare
+                }}
+                onMouseLeave={() => setIsInteracting(false)}
                 onClick={() => {
                   setActiveItem(index);
                   playClick();
                 }}
-                className={`premium-glass p-6 rounded-2xl border cursor-pointer transition-all duration-300 ${
+                className={`group relative p-6 rounded-xl border transition-all duration-500 cursor-pointer overflow-hidden ${
                   activeItem === index
-                    ? 'border-nexus-cyan/50 shadow-[0_0_40px_rgba(0,245,255,0.3)]'
-                    : 'border-white/10 hover:border-white/20'
+                    ? `bg-white/5 ${item.borderGlow} border-l-4 shadow-[0_0_30px_rgba(0,0,0,0.5)]`
+                    : 'bg-transparent border-white/5 hover:bg-white/5 hover:border-white/10'
                 }`}
               >
-                <div className="flex items-start gap-4">
-                  <div
-                    className={`w-12 h-12 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center flex-shrink-0`}
-                  >
-                    <span className="text-white font-bold text-lg">{item.title.charAt(0)}</span>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-bold font-orbitron">{item.title}</h3>
-                      <span className="text-xs text-nexus-silver/60 font-orbitron tracking-wider">
-                        {item.category}
-                      </span>
-                    </div>
-                    <p className="text-sm text-nexus-silver/70 leading-relaxed">
-                      {item.description}
-                    </p>
-
-                    {/* Stats */}
-                    <div className="flex gap-4 mt-4">
-                      {item.stats.map((stat, statIndex) => (
-                        <div key={statIndex} className="flex items-center gap-2">
-                          <div className="w-2 h-2 bg-nexus-cyan-glow rounded-full" />
-                          <span className="text-xs text-nexus-silver/60">
-                            <span className="text-white font-bold">{stat.value}</span> {stat.label}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Right: Feature Display */}
-          <div className="relative">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentItem.id}
-                initial={{ opacity: 0, scale: 0.9, rotateY: 90 }}
-                animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                exit={{ opacity: 0, scale: 0.9, rotateY: -90 }}
-                transition={{ duration: 0.6 }}
-                className="premium-glass p-8 rounded-3xl border border-white/10"
-              >
-                {/* Image Placeholder */}
-                <div className="relative h-64 mb-6 rounded-2xl overflow-hidden bg-gradient-to-br from-nexus-obsidian to-nexus-obsidian-light">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <motion.div
-                      animate={{
-                        rotate: [0, 10, -10, 0],
-                        scale: [1, 1.1, 1],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                      className={`w-32 h-32 rounded-2xl bg-gradient-to-br ${currentItem.color} flex items-center justify-center`}
-                    >
-                      <span className="text-4xl font-bold text-white">
-                        {currentItem.title.charAt(0)}
-                      </span>
-                    </motion.div>
-                  </div>
-
-                  {/* Animated Overlay */}
+                {/* Active Indicator Background */}
+                {activeItem === index && (
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"
-                    animate={{
-                      opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
+                    layoutId="activeGlow"
+                    className={`absolute inset-0 bg-gradient-to-r ${item.color} opacity-10`}
                   />
-                </div>
+                )}
 
-                {/* Features List */}
-                <h4 className="text-lg font-bold font-orbitron mb-4 text-nexus-cyan-glow">
-                  Características Principales
-                </h4>
-                <div className="space-y-3">
-                  {currentItem.features.map((feature, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.1 * index }}
-                      className="flex items-center gap-3"
-                    >
-                      <div className="w-2 h-2 bg-nexus-violet-glow rounded-full" />
-                      <span className="text-sm text-nexus-silver/80">{feature}</span>
-                    </motion.div>
-                  ))}
+                <div className="relative z-10 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-gradient-to-br ${item.color} shadow-lg`}>
+                        <span className="font-bold text-white text-lg">{item.title.charAt(0)}</span>
+                     </div>
+                     <div>
+                        <h3 className={`text-lg font-bold font-orbitron tracking-wide transition-colors ${activeItem === index ? 'text-white' : 'text-nexus-silver/70 group-hover:text-white'}`}>
+                          {item.title}
+                        </h3>
+                        <p className="text-[10px] text-nexus-cyan/80 uppercase tracking-widest font-mono">
+                          {item.category}
+                        </p>
+                     </div>
+                  </div>
+                  <ChevronRight className={`w-5 h-5 transition-transform duration-300 ${activeItem === index ? 'text-nexus-cyan translate-x-1' : 'text-nexus-silver/30 group-hover:text-white'}`} />
                 </div>
-
-                {/* Action Button */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onMouseEnter={playHover}
-                  onClick={playClick}
-                  className={`w-full mt-6 py-3 rounded-xl font-orbitron font-bold tracking-wider text-white bg-gradient-to-r ${currentItem.color} transition-all duration-300`}
-                >
-                  EXPLORAR {currentItem.title}
-                </motion.button>
               </motion.div>
-            </AnimatePresence>
-
-            {/* Floating Elements */}
-            {particles.slice(0, 5).map((particle, index) => (
-              <motion.div
-                key={`floating-${index}`}
-                className="absolute w-4 h-4 rounded-full"
-                style={{
-                  backgroundColor: particle.color,
-                  left: `${particle.x}%`,
-                  top: `${particle.y}%`,
-                }}
-                animate={{
-                  scale: [1, 1.5, 1],
-                  opacity: [0.5, 1, 0.5],
-                }}
-                transition={{
-                  duration: 2 + index * 0.5,
-                  repeat: Infinity,
-                  ease: 'easeInOut',
-                }}
-              />
             ))}
           </div>
-        </div>
 
-        {/* Bottom Navigation */}
-        <div className="flex justify-center gap-4">
-          {showcaseItems.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                setActiveItem(index);
-                playClick();
-              }}
-              onMouseEnter={playHover}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                activeItem === index ? 'bg-nexus-cyan-glow w-12' : 'bg-white/20 hover:bg-white/40'
-              }`}
-            />
-          ))}
+          {/* Right: 3D Preview Card */}
+          <div className="lg:col-span-7 perspective-1000 h-[600px] flex items-center justify-center">
+            <AnimatePresence mode="wait">
+              <TiltCard key={currentItem.id} className="w-full max-w-2xl">
+                <motion.div
+                  initial={{ opacity: 0, rotateY: 90, scale: 0.8 }}
+                  animate={{ opacity: 1, rotateY: 0, scale: 1 }}
+                  exit={{ opacity: 0, rotateY: -90, scale: 0.8 }}
+                  transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
+                  className="relative bg-nexus-obsidian/80 backdrop-blur-xl border border-white/10 rounded-3xl p-1 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+                >
+                    {/* Inner Border Gradient */}
+                    <div className={`absolute inset-0 rounded-3xl opacity-30 bg-gradient-to-br ${currentItem.color}`} />
+                    
+                    <div className="relative bg-black/40 rounded-[22px] p-8 h-full">
+                       {/* Holographic Header */}
+                       <div className="flex justify-between items-start mb-8 border-b border-white/10 pb-6">
+                          <div>
+                             <h2 className="text-3xl font-black font-orbitron text-white mb-2 tracking-wide kinetic-text">
+                               {currentItem.title}
+                             </h2>
+                             <p className="text-nexus-silver/80 text-sm leading-relaxed max-w-md">
+                               {currentItem.description}
+                             </p>
+                          </div>
+                          <div className={`px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider border ${currentItem.borderGlow} text-white bg-white/5`}>
+                             V2.0.5 ACTIVE
+                          </div>
+                       </div>
+
+                       {/* Stats Grid */}
+                       <div className="grid grid-cols-3 gap-4 mb-8">
+                          {currentItem.stats.map((stat, i) => (
+                             <div key={i} className="bg-white/5 rounded-xl p-4 border border-white/5 hover:border-nexus-cyan/30 transition-colors">
+                                <div className="text-2xl font-bold text-white mb-1 font-orbitron">{stat.value}</div>
+                                <div className="text-[10px] uppercase text-nexus-silver/50 tracking-wider font-mono">{stat.label}</div>
+                             </div>
+                          ))}
+                       </div>
+
+                       {/* Features List */}
+                       <div className="space-y-3 mb-8">
+                          {currentItem.features.map((feature, i) => (
+                             <motion.div 
+                               key={i}
+                               initial={{ opacity: 0, x: -10 }}
+                               animate={{ opacity: 1, x: 0 }}
+                               transition={{ delay: 0.3 + (i * 0.1) }}
+                               className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg transition-colors"
+                             >
+                                <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${currentItem.color}`} />
+                                <span className="text-sm text-nexus-silver/90 font-light">{feature}</span>
+                             </motion.div>
+                          ))}
+                       </div>
+
+                       {/* Action Footer */}
+                       <div className="flex items-center justify-between pt-6 border-t border-white/10">
+                          <button 
+                            className="text-xs text-nexus-silver/50 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2"
+                            onMouseEnter={playHover}
+                          >
+                             Documentación <ExternalLink className="w-3 h-3" />
+                          </button>
+                          
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={playClick}
+                            className={`px-8 py-3 rounded-xl bg-gradient-to-r ${currentItem.color} text-white font-bold font-orbitron text-sm tracking-wider shadow-lg hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-shadow`}
+                          >
+                             INICIAR SISTEMA
+                          </motion.button>
+                       </div>
+                    </div>
+                </motion.div>
+              </TiltCard>
+            </AnimatePresence>
+          </div>
+
         </div>
       </div>
     </div>

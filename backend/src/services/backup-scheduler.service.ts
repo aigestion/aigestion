@@ -48,12 +48,21 @@ export class BackupSchedulerService {
       // Optional: don't spam success message to telegram every day unless requested
       // await this.telegramService.sendMessage(msg);
     } catch (error: any) {
-      const msg = `🚨 Backup FAILED: ${error.message}`;
-      logger.error(msg, error);
+      const cloudMsg = `🚨 Cloud Backup FAILED: ${error.message}. Initiating Local Fallback...`;
+      logger.error(cloudMsg, error);
+
       try {
-        await this.telegramService.sendMessage(msg);
-      } catch (tgError) {
-        logger.error('Failed to send backup failure alert to Telegram', tgError);
+        await this.telegramService.sendMessage(cloudMsg);
+
+        // Local Fallback
+        const localDest = await this.backupService.localBackup(this.SOURCE_DIR);
+        const localMsg = `✅ Local Fallback Successful: Saved to ${localDest}`;
+        logger.info(localMsg);
+        await this.telegramService.sendMessage(localMsg);
+      } catch (localError: any) {
+        const criticalMsg = `💀 CRITICAL: All Backup Systems FAILED. Local Error: ${localError.message}`;
+        logger.error(criticalMsg);
+        await this.telegramService.sendMessage(criticalMsg);
       }
     }
   }

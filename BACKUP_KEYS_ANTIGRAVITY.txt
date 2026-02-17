@@ -1,0 +1,31 @@
+# 🔑 BACKUP CRÍTICO - ANTIGRAVITY API KEYS
+# Fecha: 16 de Febrero de 2026
+# Project: aigestion.net
+# Guardar en lugar seguro - NO PERDER
+
+## 🚨 ANTES DE ACTUALIZAR (KEY ANTIGUA)
+ANTYGRAVITY_MODEL_API_KEY=al-6TF8l1m1TSSUrUKRY6PnktTl5FxlroC7zdk0VcWoeNT
+
+## ✅ NUEVA KEY ACTUALIZADA (CORRECTA)
+ANTIGRAVITY_MODEL_API_KEY=al-G7_fXYvaFQrT_FhuamkLKC01Ts8ORKHfjVoUA-BoUkJ
+
+## 📋 INFORMACIÓN DEL PROYECTO
+- **Name:** antigravity
+- **Project:** aigestion.net
+- **Model API Key:** al-G7_fXYvaFQrT_FhuamkLKC01Ts8ORKHfjVoUA-BoUkJ
+- **Fecha de actualización:** 16/02/2026
+- **Actualizado por:** Sistema AIGestion
+
+## 🔒 SEGURIDAD
+- Guardar en gestor de contraseñas (Bitwarden/1Password)
+- No compartir en repositorios públicos
+- Rotar cada 90 días
+- Backup en lugar seguro offline
+
+## ✅ ESTADO DE CONFIGURACIÓN
+- [x] Key antigua respaldada
+- [x] Nueva key actualizada en .env
+- [x] Documentación creada
+- [x] Backup seguro generado
+
+**IMPORTANTE:** Esta key es crítica para el funcionamiento de Antigravity MCP server.

@@ -1,0 +1,36 @@
+C:\Users\Alejandro\AIGestion\aig-ia-engine\swarm\services\llm.py:7: FutureWarning: 
+
+All support for the `google.generativeai` package has ended. It will no longer be receiving 
+updates or bug fixes. Please switch to the `google.genai` package as soon as possible.
+See README for more details:
+
+https://github.com/google-gemini/deprecated-generative-ai-python/blob/main/README.md
+
+  import google.generativeai as genai
+2026-02-16T16:41:31.506108Z [info     ] Registered as Architect        agent=Architect type=Architect
+2026-02-16T16:41:31.506108Z [info     ] Registered as Builder          agent=Builder type=Builder
+2026-02-16T16:41:31.506108Z [info     ] Registered as Critic           agent=Critic type=Critic
+2026-02-16T16:41:31.506108Z [info     ] Registered as Mechanic         agent=Mechanic type=Mechanic
+Dispatching mission to Architect...
+2026-02-16T16:41:31.506108Z [info     ] dispatching_message            receiver=Architect sender=Navigator type=DESIGN_SOLUTION
+2026-02-16T16:41:31.510237Z [info     ] designing_solution             agent=Architect issue="\n    TASK: Refactor 'swarm/services/memory.py'\n    GOALS:\n    1. Remove redundant genai.configure() " type=Architect
+2026-02-16T16:41:31.510237Z [info     ] recalled_context               agent=Architect count=2 type=Architect
+DEBUG: Architect sending BUILD_CODE to Builder. Plan length: 5655
+2026-02-16T16:41:31.521344Z [info     ] dispatching_message            receiver=Builder sender=Architect type=BUILD_CODE
+2026-02-16T16:41:31.525871Z [info     ] generating_code_via_llm        agent=Builder type=Builder
+2026-02-16T16:41:31.527893Z [info     ] dispatching_message            receiver=Critic sender=Builder type=REVIEW_CODE
+2026-02-16T16:41:31.531887Z [info     ] reviewing_code_proposal        agent=Critic type=Critic
+2026-02-16T16:41:31.538693Z [info     ] pylint_execution_failed        agent=Critic error='[WinError 2] El sistema no puede encontrar el archivo especificado' type=Critic
+2026-02-16T16:41:31.538693Z [info     ] code_quality_passed            agent=Critic score=10.0 type=Critic
+2026-02-16T16:41:31.539693Z [info     ] dispatching_message            receiver=Mechanic sender=Critic type=TASK_COMPLETE
+2026-02-16T16:41:31.545249Z [info     ] initiating_safe_deployment_protocol agent=Mechanic type=Mechanic
+2026-02-16T16:41:31.547107Z [info     ] git_branch_creation_failed_proceeding_on_current agent=Mechanic type=Mechanic
+2026-02-16T16:41:31.547988Z [info     ] file_written_successfully      agent=Mechanic path=C:\Users\Alejandro\AIGestion\aig-ia-engine\swarm\REF_TARGET.py type=Mechanic
+2026-02-16T16:41:31.547988Z [info     ] running_post_deployment_tests_ok agent=Mechanic type=Mechanic
+2026-02-16T16:41:31.547988Z [info     ] dispatching_message            receiver=Overlord sender=Mechanic type=TASK_COMPLETE
+2026-02-16T16:41:31.554561Z [warning  ] Receiver AgentType.OVERLORD not found!
+DEBUG: Architect sent BUILD_CODE successfully.
+
+Mission dispatch complete.
+The pipeline should now: Architect(Plan) -> Builder(Code) -> Critic(Review) -> Mechanic(Deploy)
+Verify output at: aig-ia-engine/swarm/REF_TARGET.py

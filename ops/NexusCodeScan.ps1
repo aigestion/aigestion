@@ -93,11 +93,15 @@ if ($Fix) {
     }
     else {
         Write-Host "   Running Prettier..." -ForegroundColor DarkGray
-        $formatOutput = & pnpm run format --prefix $RootPath 2>&1 | Out-String
+        Push-Location $RootPath
+        $formatOutput = & pnpm run format 2>&1 | Out-String
+        Pop-Location
         Write-Check "Prettier Format" "PASS" "Code formatted"
 
         Write-Host "   Running ESLint --fix..." -ForegroundColor DarkGray
-        $lintFixOutput = & pnpm run lint:fix --prefix $RootPath 2>&1 | Out-String
+        Push-Location $RootPath
+        $lintFixOutput = & pnpm run lint:fix 2>&1 | Out-String
+        Pop-Location
         Write-Check "ESLint Auto-Fix" "PASS" "Auto-fixable issues resolved"
     }
     Write-Host ""
@@ -112,7 +116,9 @@ if ($DryRun) {
 }
 else {
     try {
-        $lintOutput = & pnpm lint --prefix $RootPath 2>&1 | Out-String
+        Push-Location $RootPath
+        $lintOutput = & pnpm lint 2>&1 | Out-String
+        Pop-Location
         $errorLines = ([regex]::Matches($lintOutput, "error")).Count
         $warnLines = ([regex]::Matches($lintOutput, "warning")).Count
 
@@ -147,7 +153,9 @@ elseif ($DryRun) {
 else {
     # Backend
     try {
-        $backendTsc = & pnpm --prefix "$RootPath\backend" exec tsc --noEmit 2>&1 | Out-String
+        Push-Location "$RootPath\backend"
+        $backendTsc = & pnpm exec tsc --noEmit 2>&1 | Out-String
+        Pop-Location
         if ($LASTEXITCODE -eq 0) {
             Write-Check "TypeScript (Backend)" "PASS" "No type errors"
             Add-CheckResult -Name "TypeScript-Backend" -Status "PASS"
@@ -165,7 +173,9 @@ else {
 
     # Frontend
     try {
-        $frontendTsc = & pnpm --prefix "$RootPath\frontend" exec tsc --noEmit 2>&1 | Out-String
+        Push-Location "$RootPath\frontend"
+        $frontendTsc = & pnpm exec tsc --noEmit 2>&1 | Out-String
+        Pop-Location
         if ($LASTEXITCODE -eq 0) {
             Write-Check "TypeScript (Frontend)" "PASS" "No type errors"
             Add-CheckResult -Name "TypeScript-Frontend" -Status "PASS"
@@ -195,7 +205,7 @@ elseif ($DryRun) {
 }
 else {
     try {
-        $madgeOutput = & npx --yes madge --circular --extensions ts, tsx "$RootPath\backend\src" 2>&1 | Out-String
+        $madgeOutput = & npx --yes madge --circular --extensions ts,tsx "$RootPath\backend\src" 2>&1 | Out-String
         if ($madgeOutput -match "No circular dependency found") {
             Write-Check "Circular Deps (Backend)" "PASS" "No circular dependencies"
             Add-CheckResult -Name "CircularDeps-Backend" -Status "PASS"

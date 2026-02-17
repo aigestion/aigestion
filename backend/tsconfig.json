@@ -6,12 +6,8 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "outDir": "./dist",
-    "rootDir": "./src",
-    // Strict Mode: Gradual Migration Plan (see docs/TYPESCRIPT_STRICT_MIGRATION.md)
-    // Enabled individual strict settings instead of full "strict: true"
-    // This allows incremental adoption - Phase 1 in progress
-    "strict": false,
-    "noImplicitAny": false,
+    "strict": true,
+    "noImplicitAny": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "isolatedModules": true,
@@ -21,7 +17,6 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "noImplicitThis": true,
-    // Warning: Re-enable these gradually
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitOverride": true,
@@ -31,7 +26,8 @@
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@aigestion/nexus-shared": ["../packages/nexus-shared/src/index"]
     }
   },
   "include": ["src"],

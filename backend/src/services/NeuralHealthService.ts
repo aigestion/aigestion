@@ -1,5 +1,9 @@
 import os from 'os';
 import { EventEmitter } from 'events';
+import { injectable, inject } from 'inversify';
+import { TYPES } from '../types';
+import { SocketService } from './socket.service';
+import { logger } from '../utils/logger';
 
 export interface HealthMetrics {
   cpuUsage: number;
@@ -10,21 +14,15 @@ export interface HealthMetrics {
   timestamp: string;
 }
 
+@injectable()
 export class NeuralHealthService extends EventEmitter {
-  private static instance: NeuralHealthService;
   private metrics: HealthMetrics;
 
-  private constructor() {
+  constructor(@inject(TYPES.SocketService) private socketService: SocketService) {
     super();
     this.metrics = this.calculateInitialMetrics();
     this.startMonitoring();
-  }
-
-  public static getInstance(): NeuralHealthService {
-    if (!NeuralHealthService.instance) {
-      NeuralHealthService.instance = new NeuralHealthService();
-    }
-    return NeuralHealthService.instance;
+    logger.info('✅ NeuralHealthService (Sovereign Pulse) initialized');
   }
 
   private calculateInitialMetrics(): HealthMetrics {
@@ -42,6 +40,9 @@ export class NeuralHealthService extends EventEmitter {
     setInterval(() => {
       this.updateMetrics();
       this.emit('healthUpdate', this.metrics);
+
+      // Real-Time Pulse Broadcast
+      this.socketService.emit('pulse', this.metrics);
     }, 5000);
   }
 
@@ -50,8 +51,8 @@ export class NeuralHealthService extends EventEmitter {
     const freeMem = os.freemem();
     const memUsage = ((totalMem - freeMem) / totalMem) * 100;
 
-    // Simulación de carga de CPU (basada en el número de procesos activos en el sistema)
-    const cpuUsage = Math.random() * 20; // En un entorno real usaríamos librerías como 'node-os-utils'
+    // Simulation: using random for demo purposes, can be replaced by real os metrics later
+    const cpuUsage = Math.random() * 20;
 
     let sanityScore = 100 - cpuUsage * 0.5 - memUsage * 0.3;
     sanityScore = Math.max(0, Math.min(100, sanityScore));
@@ -71,6 +72,7 @@ export class NeuralHealthService extends EventEmitter {
 
     if (status !== 'OPTIMAL') {
       this.emit('healthWarning', this.metrics);
+      this.socketService.emit('pulse:warning', this.metrics);
     }
   }
 
@@ -78,5 +80,3 @@ export class NeuralHealthService extends EventEmitter {
     return this.metrics;
   }
 }
-
-export const neuralHealthService = NeuralHealthService.getInstance();

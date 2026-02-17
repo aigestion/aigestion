@@ -40,7 +40,7 @@ export const VideoTutorials: React.FC = () => (
           TUTORIALES <span className="text-nexus-cyan text-glow">EN VIDEO</span>
         </h2>
         <p className="text-lg text-nexus-silver/70 max-w-3xl mx-auto">
-          Aprende paso a paso con el canal oficial de AIGestion.
+          Aprende paso a paso con el canal oficial de AIGestion.net.
         </p>
       </motion.div>
 
@@ -96,7 +96,7 @@ export const VideoTutorials: React.FC = () => (
           rel="noreferrer"
           className="inline-flex items-center gap-3 px-8 py-3 rounded-full bg-nexus-cyan/10 border border-nexus-cyan/30 text-nexus-cyan-glow hover:bg-nexus-cyan/20 transition-all font-orbitron text-[10px] tracking-[0.2em] uppercase"
         >
-          Visitar canal AIGestion
+          Visitar canal AIGestion.net
         </a>
       </div>
     </div>

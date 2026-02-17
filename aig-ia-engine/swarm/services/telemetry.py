@@ -20,16 +20,23 @@ class TelemetryService:
         self.metrics = self._load_metrics()
 
     def _load_metrics(self) -> Dict[str, Any]:
+        default_metrics = {
+            "missions": [],
+            "summary": {"total_tokens": 0, "total_cost": 0.0},
+            "agents": {},
+        }
         if os.path.exists(self.metrics_file):
             try:
                 with open(self.metrics_file, "r") as f:
-                    return json.load(f)
+                    data = json.load(f)
+                    # Merge with defaults to ensure keys exist
+                    for key in default_metrics:
+                        if key not in data:
+                            data[key] = default_metrics[key]
+                    return data
             except Exception:
-                return {
-                    "missions": [],
-                    "summary": {"total_tokens": 0, "total_cost": 0.0},
-                }
-        return {"missions": [], "summary": {"total_tokens": 0, "total_cost": 0.0}}
+                return default_metrics
+        return default_metrics
 
     def _save_metrics(self):
         with open(self.metrics_file, "w") as f:

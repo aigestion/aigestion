@@ -27,7 +27,7 @@ export class WorkerSetup {
       { connection: redisOptions }
     );
 
-    emailWorker.on('failed', (job, err) => {
+    emailWorker.on('failed', (job: Job | undefined, err: Error) => {
       logger.error({ err, jobId: job?.id }, 'Job failed');
     });
 
@@ -43,7 +43,7 @@ export class WorkerSetup {
       { connection: redisOptions }
     );
 
-    swarmWorker.on('failed', (job, err) => {
+    swarmWorker.on('failed', (job: Job | undefined, err: Error) => {
       logger.error({ err, jobId: job?.id }, 'Swarm mission job failed');
     });
 
@@ -61,7 +61,7 @@ export class WorkerSetup {
       { connection: redisOptions }
     );
 
-    malwareWorker.on('failed', (job, err) => {
+    malwareWorker.on('failed', (job: Job | undefined, err: Error) => {
       logger.error({ err, jobId: job?.id }, 'Malware cleanup job failed');
     });
 
@@ -77,7 +77,7 @@ export class WorkerSetup {
       { connection: redisOptions }
     );
 
-    dataWorker.on('failed', (job, err) => {
+    dataWorker.on('failed', (job: Job | undefined, err: Error) => {
       logger.error({ err, jobId: job?.id }, 'Data processing job failed');
     });
 

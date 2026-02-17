@@ -164,4 +164,31 @@ export class BackupService {
       logger.error(`Failed to restore file ${filePath}:`, err);
     }
   }
+  /**
+   * Create a local backup copy (Fallback)
+   * @param sourceDir Source directory
+   * @param destDir Destination directory (default: ./backups/local)
+   */
+  async localBackup(sourceDir: string, destDir?: string) {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const folderName = `backup-${path.basename(sourceDir)}-${timestamp}`;
+    const finalDest = destDir
+      ? path.join(destDir, folderName)
+      : path.join(process.cwd(), 'backups', 'local', folderName);
+
+    logger.info(`Starting Local Backup to: ${finalDest}`);
+
+    try {
+      if (!fs.existsSync(finalDest)) {
+        await fsPromises.mkdir(finalDest, { recursive: true });
+      }
+      // Node 16.7+ support
+      await fsPromises.cp(sourceDir, finalDest, { recursive: true });
+      logger.info(`✅ Local Backup Successful: ${finalDest}`);
+      return finalDest;
+    } catch (error) {
+      logger.error('❌ Local Backup Failed:', error);
+      throw error;
+    }
+  }
 }

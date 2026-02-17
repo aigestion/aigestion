@@ -4,14 +4,16 @@ import { AIService } from './ai.service';
 import { BrowserlessService } from './browserless.service';
 import { EconomyService } from './economy.service';
 import { BigQueryService } from './google/bigquery.service';
-import { MemoryService } from './memory.service';
+// import { MemoryService } from './memory.service'; // Removed unused
 import { DiscoveryService } from './evolution/discovery.service';
 import { SandboxService } from './evolution/sandbox.service';
 import { ArbitrationService } from './arbitration.service';
 import { NotebookInsightService } from './google/notebook-insight.service';
 import { TreasuryService } from './TreasuryService';
 import { DeFiStrategistService } from './defi-strategist.service';
+import { NotionManagerService } from './notion-manager.service';
 import { JulesGem } from './gems/JulesGem';
+import { NewsService } from './news.service';
 import { logger } from '../utils/logger';
 
 interface SwarmResponse {
@@ -32,13 +34,15 @@ export class SwarmService {
     @inject(TYPES.BrowserlessService) private readonly researchAgent: BrowserlessService,
     @inject(TYPES.EconomyService) private readonly economyAgent: EconomyService,
     @inject(TYPES.BigQueryService) private readonly bq: BigQueryService,
-    @inject(TYPES.MemoryService) private readonly memory: MemoryService,
+    // @inject(TYPES.MemoryService) private readonly memory: MemoryService,
     @inject(TYPES.DiscoveryService) private readonly discovery: DiscoveryService,
     @inject(TYPES.SandboxService) private readonly sandbox: SandboxService,
     @inject(TYPES.ArbitrationService) private readonly arbitration: ArbitrationService,
     @inject(TYPES.NotebookInsightService) private readonly notebook: NotebookInsightService,
     @inject(TYPES.TreasuryService) private readonly treasury: TreasuryService,
     @inject(TYPES.DeFiStrategistService) private readonly defi: DeFiStrategistService,
+    @inject(TYPES.NotionManagerService) private readonly notion: NotionManagerService,
+    @inject(TYPES.NewsService) private readonly newsService: NewsService,
     @inject(JulesGem) private readonly julesGem: JulesGem, // Injected Jules
   ) {
     void this.initializeAutoEvolution();
@@ -109,9 +113,18 @@ export class SwarmService {
     const packageToTest = discoveryResult.recommendation.split(' ')[0]; // Simplified extraction
     const validation = await this.sandbox.validateModule(packageToTest || 'next-gen-module');
 
+    const resultText = `Evolution check complete. Tech found: ${discoveryResult.topRepos.length} items. Recommendation: ${discoveryResult.recommendation}. Security Validation: ${validation.status}.`;
+
+    // Sync to Notion
+    void this.notion.syncSwarmPlan(
+      `Swarm Evolution: ${discoveryResult.recommendation.split('\n')[0]}`,
+      resultText,
+      'Evolution Plan',
+    );
+
     return {
       agentName: 'Sovereign-Architect',
-      result: `Evolution check complete. Tech found: ${discoveryResult.topRepos.length} items. Recommendation: ${discoveryResult.recommendation}. Security Validation: ${validation.status}.`,
+      result: resultText,
       confidence: 0.99,
     };
   }
@@ -140,9 +153,18 @@ export class SwarmService {
       { agentName: 'Daniela-Si', recommendation: strategicGuidance },
     ]);
 
+    const resultText = `Wisdom attained. ${notebookInsights.topic}. Strategic Resolution: ${resolution.decision}. Justification: ${resolution.justification}`;
+
+    // Sync to Notion
+    void this.notion.syncSwarmPlan(
+      `Strategic Resolution: ${notebookInsights.topic}`,
+      resultText,
+      'Strategic Guidance',
+    );
+
     return {
       agentName: 'Sovereign-Wisdom',
-      result: `Wisdom attained. ${notebookInsights.topic}. Strategic Resolution: ${resolution.decision}. Justification: ${resolution.justification}`,
+      result: resultText,
       confidence: 1,
     };
   }
@@ -230,8 +252,53 @@ export class SwarmService {
       return this.wisdomMission(objective);
     }
 
-    // Default to General Intelligence
     return this.generalMission(objective);
+  }
+
+  /**
+   * RED SWARM PROTOCOL: Active Defense Trigger
+   * Called by PriceAlertService when markets crash.
+   */
+  public async activateRedSwarm(
+    asset: string,
+    changePercent: number,
+    price: number,
+  ): Promise<SwarmResponse> {
+    logger.warn(`[SwarmService] 🚨 RED SWARM ACTIVATED: ${asset} crashed ${changePercent}%`);
+
+    // 1. Fetch live contextual news (Fast search)
+    let crashNews: any[] = [];
+    try {
+      crashNews = await this.newsService.searchNews(
+        `why is ${asset} price crashing news today reasons for ${asset} drop`,
+      );
+    } catch (error: any) {
+      logger.error(`[SwarmService] Failed to fetch news for Red Swarm: ${error.message}`);
+    }
+
+    const newsContext =
+      crashNews.length > 0
+        ? crashNews.map(n => `- ${n.title} (Source: ${n.source})`).join('\n')
+        : 'No real-time headlines detected via Tavily.';
+
+    const payload = `
+      [URGENT] MARKET CRASH DETECTED: ${asset.toUpperCase()}
+      Drop: ${changePercent.toFixed(2)}%
+      Current Price: $${price}
+
+      LIVE NEWS CONTEXT:
+      ${newsContext}
+
+      IMMEDIATE ACTION REQUIRED:
+      1. Analyze the potential correlation between the news results and the price drop.
+      2. Recommend immediate defensive actions for the layout (Hold, Sell, Buy Dip).
+      3. Assess systemic risk to the Sovereign Treasury.
+
+      Provide a "Defensive Tactical Response" plan based on this evidence.
+    `;
+
+    // Dispatch high-priority wisdom mission
+    return this.wisdomMission(payload);
   }
 
   public async executeTool(toolName: string, args: any): Promise<SwarmResponse> {

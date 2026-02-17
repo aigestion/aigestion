@@ -1,0 +1,21 @@
+# Optimized GCloud Ignore for AIGestion Monorepo
+.git
+.gitignore
+**/node_modules
+**/dist
+**/build
+.env
+**/packages/*/test-results
+**/coverage
+*.log
+.pnpm-store
+.next
+.vercel
+**/.turbo
+cloudbuild*.yaml
+docker/volumes
+frontend/apps/*/dist
+packages/*/dist
+android/
+mobile/
+ios/

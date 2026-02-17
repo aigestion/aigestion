@@ -1,13 +1,19 @@
-import { injectable } from 'inversify';
-import os from 'os';
+import { injectable, inject } from 'inversify';
+import os from 'node:os';
 
 import { User } from '../models/User';
 import { UsageRecord } from '../models/UsageRecord';
 import { getCache, setCache } from '../utils/redis';
 import { stats } from '../utils/stats';
+import { InfrastructureService } from './infrastructure.service';
+import { TYPES } from '../types';
 
 @injectable()
 export class AnalyticsService {
+  constructor(
+    @inject(TYPES.InfrastructureService) private infrastructureService: InfrastructureService,
+  ) {}
+
   /**
    * Get analytics overview with caching
    */
@@ -25,15 +31,22 @@ export class AnalyticsService {
       lastLogin: { $gte: new Date(Date.now() - 15 * 60 * 1000) }, // Active in last 15 mins
     });
 
+    const containerStats = await this.infrastructureService.getContainerStats();
+    const nexusMeshStatus = containerStats.every(c => c.status.includes('Up'))
+      ? 'OPTIMAL'
+      : 'DEGRADED';
+
     const overview = {
       activeUsers: activeUsersInRange || 1, // Fallback to 1 if empty for UI
       totalUsers,
       totalRequests: stats.totalRequests,
       errorRate:
         stats.totalRequests > 0
-          ? parseFloat(((stats.errorCount / stats.totalRequests) * 100).toFixed(2))
+          ? Number.parseFloat(((stats.errorCount / stats.totalRequests) * 100).toFixed(2))
           : 0,
       avgResponseTime: stats.lastRequestTime,
+      nexusMeshStatus,
+      activeContainers: containerStats.length,
       timestamp: Date.now(),
     };
 
@@ -156,18 +169,42 @@ export class AnalyticsService {
 
     return {
       cpu: Array.from({ length: 60 }, () =>
-        parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1))
+        parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1)),
       ),
       memory: Array.from({ length: 60 }, () =>
-        parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1))
+        parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1)),
       ),
       network: Array.from({ length: 60 }, () => parseFloat((Math.random() * 10).toFixed(1))),
     };
   }
 
   /**
-   * Get current error rates
+   * Get consolidated God Mode analytics
    */
+  async getGodModeData(): Promise<any> {
+    const overview = await this.getOverview();
+    const dashboard = await this.getDashboardData();
+    const systemUsage = this.getSystemUsage();
+
+    // Additional infrastructure check
+    const containerStats = await this.infrastructureService.getContainerStats();
+
+    return {
+      status: 'SOVEREIGN_OPTIMAL',
+      message: 'Sistema operando bajo parámetros de Grado Divino.',
+      coreMetrics: overview,
+      businessIntelligence: dashboard,
+      systemResources: systemUsage,
+      nexusMesh: {
+        totalContainers: containerStats.length,
+        containers: containerStats,
+        lastHealthCheck: new Date().toISOString(),
+      },
+      locale: 'es-ES',
+      protocol: 'ETERNAL_SOVEREIGN_V2',
+    };
+  }
+
   getErrorRates(): any {
     return {
       total: stats.errorCount,

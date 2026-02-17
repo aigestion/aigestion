@@ -59,7 +59,7 @@ export const DanielaWebsite: React.FC<DanielaWebsiteProps> = ({
       pricing: [
         {
           id: 'pricing',
-          text: '💰 ¡Hola! Soy Daniela, tu asesora financiera de AIGestion. Estoy aquí para ayudarte a encontrar el plan perfecto que se ajuste a tu presupuesto y objetivos.',
+          text: '💰 ¡Hola! Soy Daniela, tu asesora financiera de AIGestion.net. Estoy aquí para ayudarte a encontrar el plan perfecto que se ajuste a tu presupuesto y objetivos.',
           sender: 'daniela' as const,
           timestamp: new Date(),
           suggestions: ['Ver planes disponibles', 'Calcular ROI', 'Obtener cotización'],

@@ -16,8 +16,11 @@ RUN playwright install chromium
 
 # Copy application code
 COPY backend/app ./app
-COPY backend/app/main_simple.py ./app/main.py
-COPY backend/app/api/routes_simple.py ./app/api/routes.py
+# Simplified entrypoint is legacy. Using full main.py for metrics/health.
+# Entrypoint is uvicorn app.main:app
+# Ensure PYTHONPATH includes current directory to resolve 'app' module
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
 COPY backend/app/services/agent_service_simple.py ./app/services/agent_service.py
 COPY backend/app/services/daniela_clowd_safe.py ./app/services/
 COPY backend/app/api/daniela_routes.py ./app/api/

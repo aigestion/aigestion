@@ -21,10 +21,10 @@ export const Navigation: React.FC = () => {
 
   const navItems = [
     { label: 'Muestra', path: '#demo-dashboard', isHash: true },
+    { label: 'Inteligencia', path: '/intelligence', isHash: false },
     { label: 'Qué hacemos', path: '#services', isHash: true },
     { label: 'Cómo te ayuda', path: '#plan', isHash: true },
     { label: 'Vídeos de ayuda', path: '#tutoriales', isHash: true },
-    { label: 'Planes y Precios', path: '#pricing', isHash: true },
     { label: 'Hablar con nosotros', path: '#contact', isHash: true, isModal: true },
   ];
 
@@ -48,11 +48,13 @@ export const Navigation: React.FC = () => {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${
         isScrolled
-          ? 'bg-nexus-obsidian-deep/95 backdrop-blur-xl border-b border-white/10 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
+          ? 'bg-nexus-obsidian/80 backdrop-blur-xl border-b border-white/5 py-4 shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
           : 'bg-transparent py-6'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative z-10">
         {/* Professional Logo Section */}
         <Link
           to="/"
@@ -61,39 +63,63 @@ export const Navigation: React.FC = () => {
           className="group flex items-center gap-0 relative"
         >
           <div className="relative z-10 w-10 h-10 mr-4 flex items-center justify-center">
-            <div className="absolute inset-0 bg-nexus-cyan/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="w-6 h-6 border-[1.5px] border-nexus-cyan/30 rounded-lg rotate-45 group-hover:rotate-[135deg] transition-transform duration-1000 ease-out flex items-center justify-center">
-              <div className="w-2 h-2 bg-nexus-cyan rounded-full animate-pulse shadow-[0_0_10px_rgba(0,245,255,0.8)]" />
+            <div className="absolute inset-0 bg-nexus-cyan/20 blur-xl rounded-full opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="w-6 h-6 border-[1.5px] border-nexus-cyan/50 rounded-lg rotate-45 group-hover:rotate-[135deg] transition-transform duration-1000 ease-out flex items-center justify-center bg-black/20 backdrop-blur-sm">
+              <div className="w-2 h-2 bg-nexus-cyan rounded-full animate-pulse shadow-[0_0_15px_rgba(0,245,255,0.8)]" />
             </div>
           </div>
 
           <div className="flex flex-col justify-center">
-            <h1 className="font-orbitron font-black text-2xl tracking-tighter text-white transition-all duration-300">
-              AIGESTION
+            <h1 className="font-orbitron font-black text-2xl tracking-tighter text-white transition-all duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+              AIGESTION.NET
             </h1>
-            <span className="text-[10px] text-nexus-cyan tracking-[0.3em] font-orbitron opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-2 left-14">
+            <span className="text-[10px] text-nexus-cyan tracking-[0.3em] font-orbitron opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-2 left-14 drop-shadow-[0_0_8px_rgba(0,245,255,0.8)]">
               NEXUS
             </span>
           </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
-          {navItems.map(item => (
-            <a
-              key={item.label}
-              href={item.path}
-              onClick={e => {
-                e.preventDefault();
-                handleLinkClick(item.path, item.isHash, item.isModal);
-              }}
-              onMouseEnter={playHover}
-              className="text-sm font-medium text-gray-300 hover:text-white transition-colors relative group py-2 font-orbitron tracking-wide"
-            >
-              <span className="relative z-10">{item.label}</span>
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-nexus-cyan transition-all duration-300 group-hover:w-full shadow-[0_0_8px_#22d3ee]" />
-            </a>
-          ))}
+        <div className="hidden md:flex items-center space-x-1">
+          {navItems.map(item => {
+            const commonProps = {
+              key: item.label,
+              onMouseEnter: playHover,
+              className: "text-sm font-medium text-gray-300 hover:text-white transition-all relative group px-4 py-2 font-orbitron tracking-wide rounded-lg hover:bg-white/5"
+            };
+
+            const content = (
+              <>
+                <span className="relative z-10 group-hover:text-nexus-cyan transition-colors duration-300">{item.label}</span>
+                <span className="absolute bottom-1 left-4 w-0 h-[1px] bg-nexus-cyan transition-all duration-300 group-hover:w-[calc(100%-2rem)] shadow-[0_0_8px_#22d3ee]" />
+              </>
+            );
+
+            if (item.isHash) {
+               return (
+                 <a
+                   {...commonProps}
+                   href={item.path}
+                   onClick={e => {
+                     e.preventDefault();
+                     handleLinkClick(item.path, item.isHash, item.isModal);
+                   }}
+                 >
+                   {content}
+                 </a>
+               );
+            }
+
+            return (
+              <Link
+                {...commonProps}
+                to={item.path}
+                onClick={() => handleLinkClick(item.path, false, false)}
+              >
+                {content}
+              </Link>
+            );
+          })}
         </div>
 
         {/* CTAs */}
@@ -102,7 +128,7 @@ export const Navigation: React.FC = () => {
             to="/login"
             onMouseEnter={playHover}
             onClick={playClick}
-            className="text-sm font-bold font-orbitron text-white/70 hover:text-white transition-colors hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] tracking-wider"
+            className="text-xs font-black font-orbitron text-nexus-silver/50 hover:text-white transition-all hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] tracking-[0.3em] uppercase"
           >
             ACCEDER
           </Link>
@@ -110,14 +136,18 @@ export const Navigation: React.FC = () => {
             to="/register"
             onMouseEnter={playHover}
             onClick={playClick}
-            className="group relative px-6 py-2.5 bg-white text-black font-bold text-sm tracking-wide overflow-hidden hover:scale-105 transition-transform duration-300"
-            style={{ clipPath: 'polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%)' }}
+            className="group relative px-8 py-3 bg-transparent overflow-hidden transition-all duration-500 rounded-xl"
           >
-            <span className="relative z-10 flex items-center gap-2 font-orbitron">
+            {/* Animated Border Gradient */}
+            <div className="absolute inset-0 p-[2px] rounded-xl bg-gradient-to-r from-nexus-cyan via-nexus-violet to-nexus-cyan bg-[length:200%_auto] animate-gradient-x opacity-30 group-hover:opacity-100 transition-opacity">
+               <div className="absolute inset-0 bg-black rounded-[10px]" />
+            </div>
+
+            <div className="absolute inset-0 bg-nexus-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative z-10 flex items-center gap-3 font-orbitron font-black text-[10px] tracking-[0.4em] text-white group-hover:text-nexus-cyan transition-colors">
               EMPEZAR GRATIS
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </span>
-            <div className="absolute inset-0 bg-gradient-to-r from-nexus-cyan via-white to-nexus-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </Link>
         </div>
 
@@ -149,37 +179,61 @@ export const Navigation: React.FC = () => {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 20 }}
-              className="fixed right-0 top-0 bottom-0 w-80 bg-[#0a0a0a] border-l border-white/10 z-50 p-6 md:hidden shadow-2xl"
+              className="fixed right-0 top-0 bottom-0 w-80 bg-nexus-obsidian border-l border-nexus-cyan/20 z-50 p-6 md:hidden shadow-[0_0_50px_rgba(0,0,0,0.8)]"
             >
               <div className="flex justify-between items-center mb-12">
-                <span className="text-xl font-bold font-orbitron text-white">MENÚ</span>
+                <span className="text-xl font-bold font-orbitron text-white glitch-text">MENÚ</span>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  className="p-2 text-gray-400 hover:text-nexus-cyan hover:bg-white/5 rounded-lg transition-colors"
                 >
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
               <div className="space-y-6">
-                {navItems.map(item => (
-                  <a
-                    key={item.label}
-                    href={item.path}
-                    onClick={e => {
-                      e.preventDefault();
-                      handleLinkClick(item.path, item.isHash, item.isModal);
-                    }}
-                    className="flex items-center space-x-4 text-gray-300 hover:text-white group p-2 hover:bg-white/5 rounded-xl transition-all"
-                  >
-                    <div className="p-2 bg-white/5 rounded-lg group-hover:bg-nexus-cyan/20 transition-colors">
-                      <ChevronRight className="w-5 h-5 group-hover:text-nexus-cyan transition-colors" />
-                    </div>
-                    <span className="text-lg font-medium font-orbitron tracking-wide">
-                      {item.label}
-                    </span>
-                  </a>
-                ))}
+                {navItems.map(item => {
+                  const content = (
+                    <>
+                      <div className="p-2 bg-white/5 rounded-lg group-hover:bg-nexus-cyan/20 transition-colors border border-transparent group-hover:border-nexus-cyan/30">
+                        <ChevronRight className="w-5 h-5 group-hover:text-nexus-cyan transition-colors" />
+                      </div>
+                      <span className="text-lg font-medium font-orbitron tracking-wide group-hover:text-nexus-cyan transition-colors">
+                        {item.label}
+                      </span>
+                    </>
+                  );
+
+                  const commonProps = {
+                    key: item.label,
+                    className: "flex items-center space-x-4 text-gray-300 hover:text-white group p-2 hover:bg-white/5 rounded-xl transition-all"
+                  };
+
+                  if (item.isHash) {
+                    return (
+                      <a
+                        {...commonProps}
+                        href={item.path}
+                        onClick={e => {
+                          e.preventDefault();
+                          handleLinkClick(item.path, item.isHash, item.isModal);
+                        }}
+                      >
+                        {content}
+                      </a>
+                    );
+                  }
+
+                  return (
+                    <Link
+                      {...commonProps}
+                      to={item.path}
+                      onClick={() => handleLinkClick(item.path, false, false)}
+                    >
+                      {content}
+                    </Link>
+                  );
+                })}
 
                 <div className="h-px bg-white/10 my-6" />
 
@@ -188,7 +242,7 @@ export const Navigation: React.FC = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center space-x-4 text-gray-300 hover:text-white p-2 hover:bg-white/5 rounded-xl transition-all"
                 >
-                  <div className="p-2 bg-white/5 rounded-lg">
+                  <div className="p-2 bg-white/5 rounded-lg border border-transparent hover:border-nexus-violet/30">
                     <User className="w-5 h-5" />
                   </div>
                   <span className="text-lg font-medium font-orbitron tracking-wide">Acceder</span>
@@ -197,7 +251,7 @@ export const Navigation: React.FC = () => {
                 <Link
                   to="/register"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full mt-4 bg-nexus-cyan text-black py-3 px-4 rounded-xl font-bold flex items-center justify-center space-x-2 hover:bg-cyan-300 transition-colors shadow-[0_0_20px_rgba(34,211,238,0.3)]"
+                  className="w-full mt-4 bg-nexus-cyan/10 border border-nexus-cyan/50 text-nexus-cyan py-3 px-4 rounded-xl font-bold flex items-center justify-center space-x-2 hover:bg-nexus-cyan hover:text-black transition-all shadow-[0_0_20px_rgba(34,211,238,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
                 >
                   <span className="font-orbitron tracking-wide">COMENZAR AHORA</span>
                   <ChevronRight className="w-5 h-5" />

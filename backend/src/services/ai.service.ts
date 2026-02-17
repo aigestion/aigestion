@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
-import { Readable } from 'stream';
+import { Readable } from 'node:stream';
+import axios from 'axios';
 
 import { env } from '../config/env.schema';
 import { CircuitBreakerFactory } from '../infrastructure/resilience/CircuitBreakerFactory';
@@ -14,8 +15,6 @@ import { SemanticCacheService } from './semantic-cache.service';
 import { UsageService } from './usage.service';
 import { ArbitrationService } from './arbitration.service';
 
-// Types for function declarations and schema types are loosely typed as any to avoid TS2709 errors
-type FunctionDeclaration = any;
 
 export interface AIStreamParams {
   prompt: string;
@@ -32,11 +31,11 @@ export class AIService {
   private chatStreamBreaker: any;
 
   constructor(
-    @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
-    @inject(TYPES.RagService) private ragService: RagService,
-    @inject(TYPES.UsageService) private usageService: UsageService,
-    @inject(TYPES.SemanticCacheService) private semanticCache: SemanticCacheService,
-    @inject(TYPES.ArbitrationService) private arbitrationService: ArbitrationService,
+    @inject(TYPES.AnalyticsService) private readonly analyticsService: AnalyticsService,
+    @inject(TYPES.RagService) private readonly ragService: RagService,
+    @inject(TYPES.UsageService) private readonly usageService: UsageService,
+    @inject(TYPES.SemanticCacheService) private readonly semanticCache: SemanticCacheService,
+    @inject(TYPES.ArbitrationService) private readonly arbitrationService: ArbitrationService,
   ) {
     // Breakers initialized with async lambdas that will call getModel() on execution
     this.generateContentBreaker = CircuitBreakerFactory.create(
@@ -70,7 +69,7 @@ export class AIService {
     return this._model;
   }
 
-  private getTools(): FunctionDeclaration[] {
+  private getTools(): any[] {
     return [
       {
         name: 'get_revenue_analytics',
@@ -157,7 +156,10 @@ export class AIService {
 
     const runner = async () => {
       try {
-        const { provider, modelId, reason } = await this.arbitrationService.getOptimalConfig(tier, params.prompt);
+        const { provider, modelId, reason } = await this.arbitrationService.getOptimalConfig(
+          tier,
+          params.prompt,
+        );
         logger.info(`[AIService] Arbitrated to: ${provider}/${modelId} | Reason: ${reason}`);
 
         // Fallback to gemini if provider is not supported in stream mode yet
@@ -168,10 +170,10 @@ export class AIService {
 
         const model = await this.getProviderModel(effectiveConfig);
 
-        const systemInstruction = `You are Nexus AI, an advanced agent.
-                When asked about revenue or users, use the provided tools.
-                Current User ID: ${params.userId}.
-                Use the 'search_web' tool for current info.`;
+        const systemInstruction = `Eres Nexus AI, un agente avanzado.
+                Cuando se te pida información sobre ingresos o usuarios, utiliza las herramientas proporcionadas.
+                ID de usuario actual: ${params.userId}.
+                Utiliza la herramienta 'search_web' para obtener información actualizada.`;
 
         const chat = model.startChat({
           history: history.map(h => ({ role: h.role, parts: h.parts })),
@@ -279,6 +281,10 @@ export class AIService {
         return text;
       }
 
+      if (provider === 'ollama') {
+        return this.generateOllamaContent(prompt, modelId);
+      }
+
       if (provider === 'anthropic' || provider === 'openai') {
         // Fallback or specialized handling for other providers (Stub for now or use ArbitrationService if it has a direct generator)
         // Since ArbitrationService is already here, we could add a generic generateText there or implement it here.
@@ -296,8 +302,30 @@ export class AIService {
 
       return 'Error: Unsupported provider in router.';
     } catch (error) {
-      logger.error(error, '[AIService] Error in generateContent');
-      return 'Error generating content.';
+      logger.error(error, '[AIService] Error in generateContent - Attempting Ollama Fallback');
+      try {
+        return await this.generateOllamaContent(prompt, 'llama3:8b');
+      } catch (fallbackError) {
+        logger.error(fallbackError, '[AIService] Ultimate Fail: Ollama also failed.');
+        return 'Error generating content (Total Outage).';
+      }
+    }
+  }
+
+  /**
+   * Internal Ollama bridge for Edge Autarchy
+   */
+  private async generateOllamaContent(prompt: string, model: string): Promise<string> {
+    try {
+      const response = await axios.post('http://localhost:11434/api/generate', {
+        model,
+        prompt,
+        stream: false,
+      });
+      return response.data.response;
+    } catch (error) {
+      logger.error(error, '[AIService] Ollama connection failed.');
+      throw error;
     }
   }
 

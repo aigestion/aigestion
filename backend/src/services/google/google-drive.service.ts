@@ -37,18 +37,35 @@ export class GoogleDriveService {
 
   private async initializeClient() {
     try {
-      if (!process.env.GOOGLE_APPLICATION_CREDENTIALS && !process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
-        logger.warn('Google Drive credentials not found. Skipping initialization.');
+      // 1. Try Service Account (Priority for write operations)
+      if (process.env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+        try {
+          const auth = new google.auth.GoogleAuth({
+            scopes: this.DRIVE_SCOPES,
+          });
+          const authClient = await auth.getClient();
+          this.drive = google.drive({ version: 'v3', auth: authClient as any });
+          logger.info('[GoogleDrive] Initialized via Service Account');
+          return;
+        } catch (authError: any) {
+          logger.warn(
+            `[GoogleDrive] Service Account auth failed, falling back: ${authError.message}`,
+          );
+        }
+      }
+
+      // 2. Fallback to API Key (Limited functionality)
+      if (process.env.GOOGLE_DRIVE_API_KEY) {
+        this.drive = google.drive({ version: 'v3', auth: process.env.GOOGLE_DRIVE_API_KEY });
+        logger.info(
+          '[GoogleDrive] Initialized via API Key (Warning: Restricted to public/read-only ops)',
+        );
         return;
       }
-      const auth = new google.auth.GoogleAuth({
-        scopes: this.DRIVE_SCOPES,
-      });
-      const authClient = await auth.getClient();
-      this.drive = google.drive({ version: 'v3', auth: authClient as any });
-      logger.info('Google Drive client initialized');
-    } catch (error) {
-      logger.error('Failed to initialize Google Drive client:', error);
+
+      logger.error('[GoogleDrive] No valid credentials found (SA or API Key)');
+    } catch (error: any) {
+      logger.error(`[GoogleDrive] Critical initialization failure: ${error.message}`);
       throw error;
     }
   }
@@ -246,7 +263,7 @@ export class GoogleDriveService {
         fields: 'files(id, name, mimeType, properties)',
         pageSize: 1000,
       });
-      return (res.data.files || []).map(f => ({
+      return (res.data.files || []).map((f: any) => ({
         id: f.id!,
         name: f.name!,
         mimeType: f.mimeType!,
@@ -267,14 +284,14 @@ export class GoogleDriveService {
     }
     return new Promise((resolve, reject) => {
       this.drive!.files.get({ fileId, alt: 'media' }, { responseType: 'stream' })
-        .then(res => {
+        .then((res: any) => {
           const dest = fs.createWriteStream(destinationPath);
           res.data
             .on('end', () => resolve())
-            .on('error', err => reject(err))
+            .on('error', (err: Error) => reject(err))
             .pipe(dest);
         })
-        .catch(err => reject(err));
+        .catch((err: Error) => reject(err));
     });
   }
 }

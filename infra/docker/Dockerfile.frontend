@@ -10,6 +10,12 @@ FROM base AS deps
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 # Frontend workspace manifest
 COPY frontend/package.json ./frontend/package.json
+# Copy shared packages manifests for pnpm workspace resolution
+COPY packages/decentraland-parcel/package.json ./packages/decentraland-parcel/
+COPY packages/design-system-v2/package.json ./packages/design-system-v2/
+COPY packages/eslint-config/package.json ./packages/eslint-config/
+COPY packages/nexus-core-nestjs/package.json ./packages/nexus-core-nestjs/
+COPY packages/nexus-shared/package.json ./packages/nexus-shared/
 
 # Install dependencies for the frontend root (and its dependencies)
 RUN pnpm install --filter nexus-v1-frontend-monorepo... --frozen-lockfile

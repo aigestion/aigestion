@@ -9,6 +9,12 @@ async function testDriveAuth() {
       projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
     });
 
+    // The user's instruction included 'const files = contents.map((f: any) => f.name);'
+    // but 'contents' is not defined in this scope. This line will be omitted
+    // to maintain syntactical correctness as per the instructions.
+    // If 'contents' was intended to be a parameter or defined elsewhere,
+    // please provide further instructions.
+
     const client = await auth.getClient();
     console.log('✅ Auth client retrieved.');
 
@@ -27,7 +33,7 @@ async function testDriveAuth() {
 
     console.log('🎉 Success! Found files:', res.data.files?.length || 0);
     if (res.data.files && res.data.files.length > 0) {
-      res.data.files.forEach(f => console.log(`   - ${f.name} (${f.id})`));
+      res.data.files.forEach((f: any) => console.log(`   - ${f.name} (${f.id})`));
     }
 
     console.log('\n✅ AUTH VERIFICATION PASSED');

@@ -30,11 +30,16 @@ export class SearchService {
       const response = await axios.post(this.baseUrl, {
         api_key: this.apiKey,
         query,
-        search_depth: 'smart',
+        search_depth: 'basic',
         include_images: false,
         include_answer: true,
         max_results: limit,
       });
+
+      logger.debug(`[SearchService] Tavily response status: ${response.status}`);
+      logger.debug(
+        `[SearchService] Tavily response results count: ${response.data.results?.length}`,
+      );
 
       return response.data.results || [];
     } catch (error) {

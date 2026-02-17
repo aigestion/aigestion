@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniela Connectivity Diagnostic</title>
+    <style>
+        body { background: #0a0a0a; color: #00f0ff; font-family: monospace; padding: 2rem; }
+        .log-entry { margin-bottom: 0.5rem; border-bottom: 1px solid #333; padding-bottom: 0.2rem; }
+        .error { color: #ff0055; }
+        .success { color: #00ff9d; }
+        button { background: #00f0ff; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>🤖 Daniela Neural Diagnostic Tool</h1>
+    <button onclick="runDiagnostics()">START DIAGNOSTICS</button>
+    <div id="logs"></div>
+
+    <script>
+        function log(msg, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `log-entry ${type}`;
+            div.textContent = `[${new Date().toISOString()}] ${msg}`;
+            document.getElementById('logs').appendChild(div);
+        }
+
+        async function runDiagnostics() {
+            document.getElementById('logs').innerHTML = '';
+            log('Initializing diagnostic sequence...', 'info');
+
+            // 1. Check Env Vars (simulated based on logic)
+            log('Checking configuration...', 'info');
+            const apiUrl = '/api'; // Hardcoded behaviour of production app
+            log(`Target API URL: ${apiUrl}/v1/daniela/chat`, 'info');
+
+            // 2. Connectivity Test
+            try {
+                log('Attempting POST request to Daniela...', 'info');
+                const start = performance.now();
+                
+                const response = await fetch(`${apiUrl}/v1/daniela/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'DIAGNOSTIC_PING',
+                        sessionId: 'diag-' + Date.now(),
+                        userId: 'diagnostic-admin'
+                    })
+                });
+
+                const end = performance.now();
+                log(`Response received in ${(end - start).toFixed(2)}ms`, 'info');
+                log(`HTTP Status: ${response.status} ${response.statusText}`, response.ok ? 'success' : 'error');
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log(`Response Payload: ${JSON.stringify(data).substring(0, 100)}...`, 'success');
+                } else {
+                    const text = await response.text();
+                    log(`Error Body: ${text}`, 'error');
+                    
+                    if (response.status === 404) {
+                        log('❌ 404 DETECTED: Routing is likely still broken.', 'error');
+                    } else if (response.status === 429) {
+                        log('⚠️ 429 RATE LIMIT: You are being blocked by the server rate limiter.', 'error');
+                    }
+                }
+
+            } catch (err) {
+                log(`FATAL NETWORK ERROR: ${err.message}`, 'error');
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+</html>

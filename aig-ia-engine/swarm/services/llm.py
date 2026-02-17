@@ -2,20 +2,21 @@ import logging
 import os
 import time
 from enum import Enum
-from typing import Optional, Union
+from typing import Optional
 
 import google.generativeai as genai
 from services.llm_cache import LLMCache
 from services.circuit_breaker import CircuitBreaker
 from services.telemetry import TelemetryService
+from google.oauth2 import service_account
 
 logger = logging.getLogger("LLMService")
 
 
 class ModelTier(str, Enum):
-    FAST = "gemini-2.0-flash"
-    BALANCED = "gemini-2.0-flash"
-    REASONING = "gemini-2.0-pro-exp-02-05"
+    FAST = "gemini-2.5-flash"
+    BALANCED = "gemini-2.5-flash"
+    REASONING = "gemini-2.5-pro"
 
 
 class LLMService:
@@ -28,46 +29,73 @@ class LLMService:
         return cls._instance
 
     def _initialize(self):
-        api_key = os.getenv("GEMINI_API_KEY")
+        # 1. Load configuration (Force override to ignore poisoned system env vars)
+        from dotenv import load_dotenv
 
-        # Initialize Cache, Circuit Breaker and Telemetry
+        # Look for .env in current and parent dirs to be robust
+        load_dotenv(override=True)
+        load_dotenv(os.path.join(os.getcwd(), ".env"), override=True)
+
+        api_key = os.getenv("GEMINI_API_KEY", "").strip()
+        sa_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+        # 2. Initialize Infrastructure
         self.cache = LLMCache()
         self.circuit_breaker = CircuitBreaker(name="GeminiAPI", failure_threshold=3)
         self.telemetry = TelemetryService()
+        self.models = {}
 
-        if not api_key:
-            logger.warning(
-                "GEMINI_API_KEY not found. LLM capabilities will be restricted."
-            )
-            self.model = None
+        # 3. Configure SDK
+        if api_key:
+            try:
+                genai.configure(api_key=api_key)
+                logger.info("LLMService: SDK configured with API Key.")
+            except Exception as e:
+                logger.error(f"LLMService: API Key config failed: {e}")
+                return
+        elif sa_path and os.path.exists(sa_path):
+            try:
+                creds = service_account.Credentials.from_service_account_file(sa_path)
+                genai.configure(credentials=creds)
+                logger.info("LLMService: SDK configured with Service Account.")
+            except Exception as e:
+                logger.error(f"LLMService: SA config failed: {e}")
+                return
+        else:
+            logger.warning("LLMService: No Gemini API Key or SA Credentials found.")
             return
 
+        # 4. Initialize Models
         try:
-            genai.configure(api_key=api_key)
-            self.default_model_name = "models/gemini-2.0-flash"
-            self.pro_model_name = "models/gemini-2.0-pro-exp-02-05"
+            # FAST tier
+            self.default_model_name = os.getenv("GEMINI_MODEL", ModelTier.FAST.value)
+            if not self.default_model_name.startswith("models/"):
+                self.default_model_name = f"models/{self.default_model_name}"
 
-            # Pre-initialize both models
+            # REASONING tier
+            self.pro_model_name = ModelTier.REASONING.value
+            if not self.pro_model_name.startswith("models/"):
+                self.pro_model_name = f"models/{self.pro_model_name}"
+
             self.models = {
                 ModelTier.FAST: genai.GenerativeModel(self.default_model_name),
+                ModelTier.BALANCED: genai.GenerativeModel(self.default_model_name),
                 ModelTier.REASONING: genai.GenerativeModel(self.pro_model_name),
             }
-            logger.info(
-                f"LLMService initialized with tiers: {[t.value for t in self.models.keys()]}"
-            )
+            logger.info(f"LLMService: Models initialized: {list(self.models.keys())}")
         except Exception as e:
-            logger.error(f"Failed to initialize Gemini: {e}")
+            logger.error(f"LLMService: Model initialization failed: {e}")
             self.models = {}
 
     def generate_text(
         self, prompt: str, use_cache: bool = True, tier: ModelTier = ModelTier.BALANCED
-    ) -> Optional[str]:
+    ) -> str:
         model = self.models.get(tier) or self.models.get(ModelTier.FAST)
         if not model:
             logger.error(f"LLM model for tier {tier} not initialized.")
             return "Error: LLM not configured."
 
-        # 1. Check Cache
+        # Check Cache
         if use_cache:
             cache_key = f"{tier.name}:{prompt}"
             cached = self.cache.get(cache_key)
@@ -75,28 +103,27 @@ class LLMService:
                 logger.info(f"LLM Cache Hit ({tier.name})")
                 return cached
 
-        # 2. Execute via Circuit Breaker
+        # Execute via Circuit Breaker
         try:
             start_t = time.time()
 
             def _call():
-                response = model.generate_content(prompt)
-                return response
+                return model.generate_content(prompt)
 
             response = self.circuit_breaker.call(_call)
             result = response.text
             latency = time.time() - start_t
 
-            # 3. Log Telemetry
+            # Telemetry
             usage = getattr(response, "usage_metadata", None)
             token_count = (
                 usage.total_token_count
                 if usage
-                else len(prompt) // 4 + len(result) // 4
-            )  # Fallback estimation
+                else (len(prompt) // 4 + len(result) // 4)
+            )
             self.telemetry.log_inference(tier.name, latency, token_count)
 
-            # 4. Store in Cache
+            # Store in Cache
             if result and use_cache:
                 self.cache.set(cache_key, result)
 
@@ -107,8 +134,8 @@ class LLMService:
 
     def review_code(self, code: str, context: str = "") -> str:
         prompt = f"""
-        Role: Senior Software Engineer & Security Auditor.
-        Task: Review the following code.
+        Role: Ingeniero de Software Senior y Auditor de Seguridad.
+        Task: Revisar el siguiente código.
         Context: {context}
 
         Code:
@@ -116,18 +143,18 @@ class LLMService:
         {code}
         ```
 
-        Output: valid markdown with findings (Security, Performance, Style) and a PASS/FAIL recommendation.
+        Output: markdown válido con hallazgos (Seguridad, Rendimiento, Estilo) y una recomendación de APROBADO/FALLIDO.
         """
         return self.generate_text(prompt, tier=ModelTier.REASONING)
 
     def generate_solution(self, issue: str) -> str:
         prompt = f"""
-        Role: Senior Software Architect.
-        Task: Design a technical solution for the following issue.
+        Role: Arquitecto de Software Senior.
+        Task: Diseñar una solución técnica para el siguiente problema.
 
         Issue:
         {issue}
 
-        Output: A concise implementation plan in markdown.
+        Output: Un plan de implementación conciso en markdown.
         """
         return self.generate_text(prompt, tier=ModelTier.REASONING)

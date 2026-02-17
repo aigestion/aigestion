@@ -1,14 +1,14 @@
 ﻿#!/usr/bin/env pwsh
 
 $ErrorActionPreference = "Continue"
-$AuditRoot = "c:\Users\Alejandro\NEXUS V1"
+$AuditRoot = "C:\Users\Alejandro\AIGestion"
 $ReportDir = "$AuditRoot\audit-reports"
 $Timestamp = Get-Date -Format "yyyy-MM-dd_HHmmss"
 $ReportFile = "$ReportDir\AUDIT_COMPLETE_$Timestamp.md"
 $startTime = Get-Date
 
 if (-not (Test-Path $ReportDir)) {
-    New-Item -ItemType Directory -Path $ReportDir -Force | Out-Null
+  New-Item -ItemType Directory -Path $ReportDir -Force | Out-Null
 }
 
 Write-Host "=====================================" -ForegroundColor Cyan -BackgroundColor Black
@@ -29,73 +29,88 @@ Write-Host ""
 # Phase 1.1: NPM Audit - NEXUS V1 Root
 Write-Host "🔐 Scanning NEXUS V1 root dependencies..." -ForegroundColor Cyan
 Set-Location $AuditRoot
-$npmAuditOutput = npm audit --json 2>&1
+$npmAuditOutput = npm audit --json 2>$null
 $auditJson = $null
 try {
-    $auditJson = $npmAuditOutput | ConvertFrom-Json
-    $vulnCount = $auditJson.metadata.vulnerabilities.total
-    $highVulns = $auditJson.metadata.vulnerabilities.high
-    $criticalVulns = $auditJson.metadata.vulnerabilities.critical
+  $auditJson = $npmAuditOutput | ConvertFrom-Json
+  $vulnCount = $auditJson.metadata.vulnerabilities.total
+  $highVulns = $auditJson.metadata.vulnerabilities.high
+  $criticalVulns = $auditJson.metadata.vulnerabilities.critical
 
-    Write-Host "✓ NPM Audit completed: $vulnCount vulnerabilities found" -ForegroundColor Green
-    Write-Host "  - Critical: $criticalVulns" -ForegroundColor $(if ($criticalVulns -gt 0) { "Red" } else { "Green" })
-    Write-Host "  - High: $highVulns" -ForegroundColor $(if ($highVulns -gt 0) { "Yellow" } else { "Green" })
+  Write-Host "✓ NPM Audit completed: $vulnCount vulnerabilities found" -ForegroundColor Green
+  Write-Host "  - Critical: $criticalVulns" -ForegroundColor $(if ($criticalVulns -gt 0) { "Red" } else { "Green" })
+  Write-Host "  - High: $highVulns" -ForegroundColor $(if ($highVulns -gt 0) { "Yellow" } else { "Green" })
 
-    $Report += "`n**Vulnerabilities Found:** $vulnCount (Critical: $criticalVulns, High: $highVulns)`n"
+  $Report += "`n**Vulnerabilities Found:** $vulnCount (Critical: $criticalVulns, High: $highVulns)`n"
 
-    if ($criticalVulns -gt 0 -or $highVulns -gt 0) {
-        $Report += "`n⚠️ **CRITICAL/HIGH VULNERABILITIES DETECTED**`n"
-        $Report += "Please run: `npm audit fix` to remediate`n"
-    }
+  if ($criticalVulns -gt 0 -or $highVulns -gt 0) {
+    $Report += "`n⚠️ **CRITICAL/HIGH VULNERABILITIES DETECTED**`n"
+    $Report += "Please run: `npm audit fix` to remediate`n"
+  }
 }
 catch {
-    Write-Host "⚠ Could not parse npm audit JSON" -ForegroundColor Yellow
-    $Report += "`nℹ️ Could not parse npm audit output (may have formatting issues)`n"
+  Write-Host "⚠ Could not parse npm audit JSON" -ForegroundColor Yellow
+  $Report += "`nℹ️ Could not parse npm audit output (may have formatting issues)`n"
 }
 
-# Phase 1.2: NPM Audit - Server
+# Phase 1.2: NPM Audit - Backend
 Write-Host ""
-Write-Host "🔐 Scanning server dependencies..." -ForegroundColor Cyan
-Set-Location "$AuditRoot\server"
-$serverAudit = npm audit --json 2>&1
-try {
+Write-Host "🔐 Scanning backend dependencies..." -ForegroundColor Cyan
+if (Test-Path "$AuditRoot\backend") {
+  Set-Location "$AuditRoot\backend"
+  $serverAudit = npm audit --json 2>$null
+  try {
     $serverAuditJson = $serverAudit | ConvertFrom-Json
     $serverVulns = $serverAuditJson.metadata.vulnerabilities.total
-    Write-Host "✓ Server vulnerabilities: $serverVulns" -ForegroundColor Green
-    $Report += "`n#### Server Vulnerabilities: $serverVulns"
+    Write-Host "✓ Backend vulnerabilities: $serverVulns" -ForegroundColor Green
+    $Report += "`n#### Backend Vulnerabilities: $serverVulns"
+  }
+  catch {
+    Write-Host "⚠ Could not scan backend (JSON parse error)" -ForegroundColor Yellow
+  }
 }
-catch {
-    Write-Host "⚠ Could not scan server" -ForegroundColor Yellow
+else {
+  Write-Host "⚠ Backend directory not found" -ForegroundColor Yellow
 }
 
-# Phase 1.3: NPM Audit - Client
+# Phase 1.3: NPM Audit - Frontend
 Write-Host ""
-Write-Host "🔐 Scanning client dependencies..." -ForegroundColor Cyan
-Set-Location "$AuditRoot\client"
-$clientAudit = npm audit --json 2>&1
-try {
+Write-Host "🔐 Scanning frontend dependencies..." -ForegroundColor Cyan
+if (Test-Path "$AuditRoot\frontend") {
+  Set-Location "$AuditRoot\frontend"
+  $clientAudit = npm audit --json 2>$null
+  try {
     $clientAuditJson = $clientAudit | ConvertFrom-Json
     $clientVulns = $clientAuditJson.metadata.vulnerabilities.total
-    Write-Host "✓ Client vulnerabilities: $clientVulns" -ForegroundColor Green
-    $Report += "`n#### Client Vulnerabilities: $clientVulns"
+    Write-Host "✓ Frontend vulnerabilities: $clientVulns" -ForegroundColor Green
+    $Report += "`n#### Frontend Vulnerabilities: $clientVulns"
+  }
+  catch {
+    Write-Host "⚠ Could not scan frontend (JSON parse error)" -ForegroundColor Yellow
+  }
 }
-catch {
-    Write-Host "⚠ Could not scan client" -ForegroundColor Yellow
+else {
+  Write-Host "⚠ Frontend directory not found" -ForegroundColor Yellow
 }
 
 # Phase 1.4: Gemini-CLI Audit
 Write-Host ""
 Write-Host "🔐 Scanning gemini-cli dependencies..." -ForegroundColor Cyan
-Set-Location "c:\Users\Alejandro\gemini-cli"
-$geminiAudit = npm audit --json 2>&1
-try {
+if (Test-Path "c:\Users\Alejandro\gemini-cli") {
+  Set-Location "c:\Users\Alejandro\gemini-cli"
+  $geminiAudit = npm audit --json 2>&1
+  try {
     $geminiAuditJson = $geminiAudit | ConvertFrom-Json
     $geminiVulns = $geminiAuditJson.metadata.vulnerabilities.total
     Write-Host "✓ Gemini-CLI vulnerabilities: $geminiVulns" -ForegroundColor Green
     $Report += "`n#### Gemini-CLI Vulnerabilities: $geminiVulns"
-}
-catch {
+  }
+  catch {
     Write-Host "⚠ Could not scan gemini-cli" -ForegroundColor Yellow
+  }
+}
+else {
+  Write-Host "⚠ Gemini-CLI directory not found - Skipping" -ForegroundColor Yellow
 }
 
 # Phase 2: Code Quality - Linting
@@ -112,12 +127,12 @@ Set-Location "$AuditRoot"
 # Check if eslint exists
 $eslintCmd = npm run lint --silent 2>&1
 if ($eslintCmd -match "error" -or $eslintCmd -match "eslint") {
-    Write-Host "✓ ESLint available" -ForegroundColor Green
-    $Report += "`n### Linting Status: ✓ ESLint configured`n"
+  Write-Host "✓ ESLint available" -ForegroundColor Green
+  $Report += "`n### Linting Status: ✓ ESLint configured`n"
 }
 else {
-    Write-Host "⚠ ESLint not available or not configured" -ForegroundColor Yellow
-    $Report += "`nℹ️ ESLint: Not configured in root`n"
+  Write-Host "⚠ ESLint not available or not configured" -ForegroundColor Yellow
+  $Report += "`nℹ️ ESLint: Not configured in root`n"
 }
 
 # Phase 3: Docker Validation
@@ -132,26 +147,26 @@ $Report += "`n---`n## Phase 3: Infrastructure Audit`n"
 Write-Host "🔧 Validating docker-compose.yml..." -ForegroundColor Cyan
 $dcCheck = docker-compose config --quiet 2>&1
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "✓ docker-compose.yml is valid" -ForegroundColor Green
-    $Report += "`n### Docker Compose: ✅ Valid`n"
+  Write-Host "✓ docker-compose.yml is valid" -ForegroundColor Green
+  $Report += "`n### Docker Compose: ✅ Valid`n"
 }
 else {
-    Write-Host "✗ docker-compose.yml has issues" -ForegroundColor Red
-    $Report += "`n### Docker Compose: ❌ Issues found`n$dcCheck`n"
+  Write-Host "✗ docker-compose.yml has issues" -ForegroundColor Red
+  $Report += "`n### Docker Compose: ❌ Issues found`n$dcCheck`n"
 }
 
 # Check Kubernetes manifests
 Write-Host "🎯 Validating Kubernetes manifests..." -ForegroundColor Cyan
 $k8sDir = "$AuditRoot\k8s"
 if (Test-Path $k8sDir) {
-    Write-Host "✓ K8s manifests directory exists" -ForegroundColor Green
-    $k8sFiles = Get-ChildItem -Path "$k8sDir\*.yaml" -Recurse -ErrorAction SilentlyContinue | Measure-Object
-    Write-Host "  Found $($k8sFiles.Count) manifest files" -ForegroundColor Yellow
-    $Report += "`n### Kubernetes Manifests: ✅ $($k8sFiles.Count) files found`n"
+  Write-Host "✓ K8s manifests directory exists" -ForegroundColor Green
+  $k8sFiles = Get-ChildItem -Path "$k8sDir\*.yaml" -Recurse -ErrorAction SilentlyContinue | Measure-Object
+  Write-Host "  Found $($k8sFiles.Count) manifest files" -ForegroundColor Yellow
+  $Report += "`n### Kubernetes Manifests: ✅ $($k8sFiles.Count) files found`n"
 }
 else {
-    Write-Host "⚠ K8s manifests directory not found" -ForegroundColor Yellow
-    $Report += "`n### Kubernetes Manifests: ⚠️ Directory not found`n"
+  Write-Host "⚠ K8s manifests directory not found" -ForegroundColor Yellow
+  $Report += "`n### Kubernetes Manifests: ⚠️ Directory not found`n"
 }
 
 # Phase 4: Build Performance
@@ -167,8 +182,8 @@ Set-Location "$AuditRoot"
 
 # Check vite config
 if (Test-Path "$AuditRoot\vite.config.ts") {
-    Write-Host "✓ Vite build configured" -ForegroundColor Green
-    $Report += "`n### Build System: ✅ Vite configured`n"
+  Write-Host "✓ Vite build configured" -ForegroundColor Green
+  $Report += "`n### Build System: ✅ Vite configured`n"
 }
 
 # Phase 5: Compliance
@@ -182,17 +197,17 @@ $Report += "`n---`n## Phase 5: Compliance Audit`n"
 # Check documentation
 Write-Host "📚 Checking documentation..." -ForegroundColor Cyan
 $docs = @(
-    "README.md",
-    "CONTRIBUTING.md",
-    "CHANGELOG.md",
-    "DEPLOYMENT.md"
+  "README.md",
+  "CONTRIBUTING.md",
+  "CHANGELOG.md",
+  "DEPLOYMENT.md"
 )
 $docsFound = 0
 foreach ($doc in $docs) {
-    if (Test-Path "$AuditRoot\$doc") {
-        Write-Host "✓ $doc found" -ForegroundColor Green
-        $docsFound++
-    }
+  if (Test-Path "$AuditRoot\$doc") {
+    Write-Host "✓ $doc found" -ForegroundColor Green
+    $docsFound++
+  }
 }
 $Report += "`n### Documentation: ✅ $docsFound/$($docs.Count) key files found`n"
 
@@ -202,22 +217,17 @@ Write-Host "🔗 Checking Git status..." -ForegroundColor Cyan
 Set-Location "$AuditRoot"
 $gitStatus = git status --short
 if ([string]::IsNullOrEmpty($gitStatus)) {
-    Write-Host "✓ Working directory clean" -ForegroundColor Green
-    $Report += "`n### Git Status: ✅ Clean`n"
+  Write-Host "✓ Working directory clean" -ForegroundColor Green
+  $Report += "`n### Git Status: ✅ Clean`n"
 }
 else {
-    Write-Host "⚠ Uncommitted changes detected" -ForegroundColor Yellow
-    $Report += "`n### Git Status: ⚠️ $($gitStatus.Split("`n").Count) changes`n"
+  Write-Host "⚠ Uncommitted changes detected" -ForegroundColor Yellow
+  $Report += "`n### Git Status: ⚠️ $($gitStatus.Split("`n").Count) changes`n"
 }
 
 # Get latest commits
 $recentCommits = git log --oneline -5
-$Report += @"
-`n### Recent Commits:
-```
-$recentCommits
-```
-"@
+$Report += "`n### Recent Commits:`n``````n$recentCommits`n``````"
 
 # Final Summary
 Write-Host ""

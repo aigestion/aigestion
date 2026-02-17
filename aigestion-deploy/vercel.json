@@ -1,58 +1,53 @@
 {
-    "version":  2,
-    "buildCommand":  null,
-    "outputDirectory":  "public",
-    "installCommand":  "echo \u0027Skipping install\u0027",
-    "framework":  null,
-    "routes":  [
-                   {
-                       "src":  "/api/system/health",
-                       "dest":  "https://backend-aigestion-1046057023064.europe-southwest1.run.app/api/v1/health",
-                       "headers":  {
-                                       "Access-Control-Allow-Origin":  "*",
-                                       "Access-Control-Allow-Methods":  "GET, OPTIONS",
-                                       "Access-Control-Allow-Headers":  "Content-Type, Authorization"
-                                   }
-                   },
-                   {
-                       "src":  "/api/system/diagnostic",
-                       "dest":  "https://backend-aigestion-1046057023064.europe-southwest1.run.app/api/v1/system/diagnostic",
-                       "headers":  {
-                                       "Access-Control-Allow-Origin":  "*",
-                                       "Access-Control-Allow-Methods":  "GET, OPTIONS",
-                                       "Access-Control-Allow-Headers":  "Content-Type, Authorization"
-                                   }
-                   },
-                   {
-                       "src":  "/api/(.*)",
-                       "dest":  "https://backend-aigestion-1046057023064.europe-southwest1.run.app/api/$1",
-                       "headers":  {
-                                       "Access-Control-Allow-Origin":  "*",
-                                       "Access-Control-Allow-Methods":  "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-                                       "Access-Control-Allow-Headers":  "X-Requested-With, Content-Type, Authorization, Cache-Control, X-Request-ID"
-                                   }
-                   },
-                   {
-                       "src":  "/admin/(.*)",
-                       "dest":  "/admin/$1"
-                   },
-                   {
-                       "src":  "/client/(.*)",
-                       "dest":  "/client/$1"
-                   },
-                   {
-                       "src":  "/demo/(.*)",
-                       "dest":  "/demo/$1"
-                   },
-                   {
-                       "src":  "/(.*)",
-                       "dest":  "/$1"
-                   }
-               ],
-    "env":  {
-                "NODE_ENV":  "production",
-                "NEXT_PUBLIC_APP_URL":  "https://aigestion.net",
-                "NEXT_PUBLIC_API_URL":  "https://aigestion.net/api",
-                "NEXT_PUBLIC_WS_URL":  "wss://aigestion.net"
-            }
+  "buildCommand": null,
+  "outputDirectory": "public",
+  "rewrites": [
+    {
+      "destination": "https://backend-aigestion-1046057023064.europe-southwest1.run.app/api/$1",
+      "source": "/api/(.*)"
+    },
+    {
+      "destination": "/index.html",
+      "source": "/(.*)"
+    }
+  ],
+  "framework": null,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,POST,PUT,DELETE,OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ],
+  "version": 2,
+  "installCommand": "echo 'Skipping install'"
 }

@@ -13,7 +13,7 @@ class Architect(BaseAgent):
         self.retriever = HybridRetriever()
 
     def process_message(self, message: Message):
-        if message.msg_type == MessageType.REVIEW_CODE:
+        if message.msg_type in [MessageType.REVIEW_CODE, MessageType.DESIGN_SOLUTION]:
             issue = message.content
             # Convert issue to string for retrieval/prompting
             if isinstance(issue, dict):
@@ -41,8 +41,15 @@ class Architect(BaseAgent):
                 self.log("llm_generation_failed", error=str(e))
                 plan = None
 
-            if not plan or "Error" in plan:
+            if not plan or "Error communicating with AI service" in plan:
+                print(
+                    f"DEBUG: Architect plan generation failed or returned error: {plan}"
+                )
                 self.log("design_failed", error=plan)
                 return
 
-            self.send_message(AgentType.BUILDER, plan, MessageType.DESIGN_SPEC)
+            print(
+                f"DEBUG: Architect sending BUILD_CODE to Builder. Plan length: {len(plan)}"
+            )
+            self.send_message(AgentType.BUILDER, plan, MessageType.BUILD_CODE)
+            print("DEBUG: Architect sent BUILD_CODE successfully.")

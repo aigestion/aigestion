@@ -29,6 +29,7 @@
     "vercel-install": "npm install --legacy-peer-deps"
   },
   "dependencies": {
+    "@aigestion/nexus-shared": "workspace:*",
     "@google-cloud/aiplatform": "^6.0.0",
     "@google-cloud/bigquery": "^8.1.1",
     "@google-cloud/dialogflow-cx": "^5.5.0",
@@ -127,6 +128,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "telegraf": "^4.16.3",
+    "tsconfig-paths": "^4.2.0",
     "tweetnacl": "^1.0.3",
     "typedi": "^0.10.0",
     "uuid": "^9.0.1",
@@ -189,6 +191,7 @@
     "ts-mockito": "^2.6.1",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

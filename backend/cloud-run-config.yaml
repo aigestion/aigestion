@@ -7,13 +7,16 @@ metadata:
   name: backend-aigestion
   namespace: 'PROJECT_ID'
   labels:
-    cloud.googleapis.com/location: europe-southwest1
+    cloud.googleapis.com/location: europe-west1 # PRIMARY
+    deployment.aigestion.net/secondary-location: us-east1 # FAILOVER
     environment: production
     tier: god-mode
     managed-by: terraform
+    sovereignty: absolute
   annotations:
     run.googleapis.com/ingress: all
     run.googleapis.com/ingress-status: all
+    run.googleapis.com/launch-stage: BETA
 spec:
   template:
     metadata:

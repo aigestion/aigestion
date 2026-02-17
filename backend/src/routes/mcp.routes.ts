@@ -3,8 +3,23 @@ import type { Request, Response } from 'express';
 import fetch from 'node-fetch';
 
 import { env } from '../config/env.schema';
+import { rateLimiter } from '../middleware/rate-limiter.instance';
 
 const mcpRouter = Router();
+
+// Sovereign Bridge Middleware
+mcpRouter.use(rateLimiter.attempt('MCP'));
+
+mcpRouter.use((req, res, next) => {
+  const token = req.headers['x-sovereign-token'];
+  if (!token || token !== env.IA_ENGINE_API_KEY) { // Using IA_ENGINE_API_KEY as the sovereign secret
+    return (res as any).status(401).json({ 
+      error: 'Token Soberano Requerido',
+      message: 'Se requiere un token válido para acceder al puente del Nexo AIGestion.' 
+    });
+  }
+  next();
+});
 
 /**
  * @openapi
@@ -34,7 +49,7 @@ mcpRouter.get('/health', async (_req: Request, res: Response) => {
     return (res as any).status(200).json({ status: 'ok', mcp: data });
   } catch (err) {
     return (res as any).status(502).json({
-      error: 'Failed to reach MCP server',
+      error: 'Error de Conexión con el Servidor MCP',
       details: err instanceof Error ? err.message : String(err),
     });
   }
