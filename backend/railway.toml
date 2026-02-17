@@ -2,7 +2,6 @@
 # Service: Core Intelligence (Node.js)
 
 [build]
-builder = "dockerfile"
 dockerfilePath = "Dockerfile"
 
 [deploy]
