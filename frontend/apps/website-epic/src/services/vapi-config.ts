@@ -1,7 +1,7 @@
 /**
- * Vapi Configuration Nivel Dios - AIGestion.net
+ * 🌌 Vapi Configuration Nivel Dios - AIGestion.net
  * Asistente de voz IA en español optimista, elegante y claro
- * Configuración gratuita optimizada
+ * Configuración gratuita optimizada con ElevenLabs integrado
  */
 
 export interface VapiAssistantConfig {
@@ -105,6 +105,7 @@ export const vapiGodModeConfig: VapiGodModeConfig = {
         'Para soporte técnico, contactar a soporte@aigestion.net',
         'Planes gratuitos y premium disponibles según necesidades del cliente',
         'Integración con múltiples plataformas como Slack, Google Workspace y más',
+        'Voz generada con ElevenLabs - Bella (EXAVITQu4vr4xnSDxMaL)',
       ],
       personality: {
         tone: 'optimista',
@@ -144,6 +145,7 @@ export const vapiGodModeConfig: VapiGodModeConfig = {
         'Actualizaciones y mantenimiento del sistema',
         'Integración con APIs de terceros',
         'Mejores prácticas de uso de AIGestion',
+        'Voz generada con ElevenLabs - Adam (pNInz6obpgDQGcFmaJgB)',
       ],
       personality: {
         tone: 'profesional',
@@ -183,6 +185,7 @@ export const vapiGodModeConfig: VapiGodModeConfig = {
           'Casos de éxito y testimonios',
           'Demostraciones y pruebas gratuitas',
           'Integraciones disponibles',
+          'Voz generada con ElevenLabs - Domi (AZnzlk1XvdvUeBnXmlld)',
         ],
         personality: {
           tone: 'optimista',
@@ -221,7 +224,7 @@ export const vapiGodModeConfig: VapiGodModeConfig = {
   },
 
   integrations: {
-    elevenlabs: true,
+    elevenlabs: true, // 🌌 Optimizado con ElevenLabs
     twilio: true,
     slack: false, // Plan gratuito limitado
     email: false, // Plan gratuito limitado
