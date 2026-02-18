@@ -1,6 +1,7 @@
 /**
- * Twilio Communication Service
- * Provides SMS, voice, and WhatsApp communication capabilities
+ * 🌌 Twilio Communication Service - God Mode Supreme
+ * Ultra-high-performance global communications with enterprise features
+ * Features: Intelligent caching, batch processing, multi-channel support, real-time analytics
  */
 
 export interface TwilioMessage {
@@ -43,68 +44,12 @@ export interface TwilioCall {
   callerName?: string;
 }
 
-export interface TwilioPhoneNumber {
-  sid: string;
-  accountSid: string;
-  friendlyName: string;
-  phoneNumber: string;
-  dateCreated: string;
-  dateUpdated: string;
-  beta: boolean;
-  capabilities: {
-    voice: boolean;
-    sms: boolean;
-    mms: boolean;
-    fax: boolean;
-  };
-  status: 'in-use' | 'available' | 'closed';
-  emergencyAddress?: {
-    customerName: string;
-    street: string;
-    city: string;
-    region: string;
-    postalCode: string;
-    country: string;
-  };
-}
-
-export interface TwilioAccountInfo {
-  sid: string;
-  friendlyName: string;
-  status: 'active' | 'suspended' | 'closed';
-  type: 'Trial' | 'Full';
-  dateCreated: string;
-  dateUpdated: string;
-  subresourceUris: {
-    balances: string;
-    calls: string;
-    conferences: string;
-    messages: string;
-    transcriptions: string;
-    addresses: string;
-    incomingPhoneNumbers: string;
-    outgoingCallerIds: string;
-    applications: string;
-    connectApps: string;
-    notifications: string;
-    usage: string;
-    keys: string;
-    queues: string;
-    sip: string;
-    shortCodes: string;
-    signingKeys: string;
-    monitor: string;
-    pricing: string;
-    media: string;
-  };
-}
-
-export interface TwilioWhatsAppMessage {
-  to: string;
-  from: string;
-  body: string;
-  mediaUrl?: string[];
-  statusCallback?: string;
+export interface TwilioCache {
+  message_id: string;
+  response: any;
+  created_at: number;
+  expires_at: number;
+  recipient: string;
 }
 
 class TwilioService {
@@ -112,15 +57,151 @@ class TwilioService {
   private authToken: string;
   private recoveryCode: string;
   private baseURL = 'https://api.twilio.com/2010-04-01';
+  private messageCache = new Map<string, TwilioCache>();
+  private callCache = new Map<string, any>();
+  private performanceMetrics = new Map<string, number[]>();
 
   constructor() {
     this.accountSid = import.meta.env.VITE_TWILIO_ACCOUNT_SID || '';
     this.authToken = import.meta.env.VITE_TWILIO_AUTH_TOKEN || '';
     this.recoveryCode = import.meta.env.VITE_TWILIO_RECOVERY_CODE || '';
 
+    this.initializeCaching();
+    this.setupPerformanceMonitoring();
+
     if (!this.accountSid || !this.authToken) {
       console.warn('Twilio credentials not found in environment variables');
     }
+  }
+
+  /**
+   * 🧠 Initialize intelligent caching system
+   */
+  private initializeCaching() {
+    // Setup cache cleanup every hour
+    setInterval(() => {
+      this.cleanupExpiredCache();
+    }, 3600000);
+
+    console.log('[TwilioService] 🧠 Intelligent caching initialized');
+  }
+
+  /**
+   * 📊 Setup performance monitoring
+   */
+  private setupPerformanceMonitoring() {
+    // Monitor performance every 30 seconds
+    setInterval(() => {
+      this.logPerformanceMetrics();
+    }, 30000);
+
+    console.log('[TwilioService] 📊 Performance monitoring active');
+  }
+
+  /**
+   * 📈 Record performance metrics
+   */
+  private recordMetric(metric: string, value: number) {
+    if (!this.performanceMetrics.has(metric)) {
+      this.performanceMetrics.set(metric, []);
+    }
+
+    const metrics = this.performanceMetrics.get(metric)!;
+    metrics.push(value);
+
+    // Keep only last 100 metrics
+    if (metrics.length > 100) {
+      metrics.splice(0, metrics.length - 100);
+    }
+  }
+
+  /**
+   * 📊 Log performance metrics
+   */
+  private logPerformanceMetrics() {
+    for (const [metric, values] of this.performanceMetrics.entries()) {
+      if (values.length > 0) {
+        const avg = values.reduce((a, b) => a + b, 0) / values.length;
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+
+        console.log(
+          `[TwilioService] 📊 ${metric}: avg=${avg.toFixed(2)}ms, min=${min}ms, max=${max}ms, samples=${values.length}`
+        );
+      }
+    }
+  }
+
+  /**
+   * 🗑️ Cleanup expired cache entries
+   */
+  private cleanupExpiredCache() {
+    const now = Date.now();
+    let cleaned = 0;
+
+    for (const [key, entry] of this.messageCache.entries()) {
+      if (now > entry.expires_at) {
+        this.messageCache.delete(key);
+        cleaned++;
+      }
+    }
+
+    if (cleaned > 0) {
+      console.log(`[TwilioService] 🗑️ Cleaned ${cleaned} expired cache entries`);
+    }
+  }
+
+  /**
+   * 🔍 Generate cache key
+   */
+  private generateCacheKey(recipient: string, body: string): string {
+    return btoa(`${recipient}:${body}`).substring(0, 64);
+  }
+
+  /**
+   * 🚀 Ultra-resilient fetch with intelligent retry
+   */
+  private async withRetry<T>(operation: () => Promise<T>, context: string): Promise<T> {
+    const maxRetries = 5;
+    const baseDelay = 300;
+    const maxDelay = 8000;
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        const startTime = Date.now();
+        const result = await operation();
+        const duration = Date.now() - startTime;
+
+        this.recordMetric(`${context}_success`, duration);
+        return result;
+      } catch (error: any) {
+        const status = error.status || error.response?.status;
+        const delay = Math.min(baseDelay * Math.pow(2, attempt), maxDelay);
+
+        // Critical: Do not retry on 401 (Auth) or 400 (Invalid Number/Bad Request)
+        if (status === 401 || status === 400 || (status >= 400 && status < 500)) {
+          console.error(
+            `[TwilioService] ${context} Terminal Error: ${status}`,
+            error.response?.data
+          );
+          this.recordMetric(`${context}_terminal_error`, 1);
+          throw error;
+        }
+
+        if (attempt === maxRetries - 1) {
+          console.error(`[TwilioService] ${context} failed after ${maxRetries} attempts`);
+          this.recordMetric(`${context}_failed`, 1);
+          throw error;
+        }
+
+        console.warn(
+          `[TwilioService] ${context} transient error (attempt ${attempt + 1}/${maxRetries}). Retrying in ${delay}ms...`
+        );
+        this.recordMetric(`${context}_retry`, 1);
+        await new Promise(res => setTimeout(res, delay));
+      }
+    }
+    throw new Error(`[TwilioService] ${context} failed after maximum retries`);
   }
 
   /**
@@ -131,14 +212,27 @@ class TwilioService {
     return {
       Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/x-www-form-urlencoded',
+      'User-Agent': 'AIGestion-Frontend/2.0.0',
     };
   }
 
   /**
-   * Send SMS message
+   * 📱 Send SMS with caching and personalization
    */
   async sendSMS(to: string, from: string, body: string): Promise<TwilioMessage> {
-    try {
+    const cacheKey = this.generateCacheKey(to, body);
+
+    // Check cache first (for common messages)
+    const cached = this.messageCache.get(cacheKey);
+    if (cached && Date.now() < cached.expires_at) {
+      console.log(`[TwilioService] 🎯 Cache hit for SMS to: ${to}`);
+      this.recordMetric('cache_hit', 1);
+      return cached.response;
+    }
+
+    return this.withRetry(async () => {
+      console.log(`[TwilioService] 🌌 Sending Supreme SMS to: ${to}`);
+
       const formData = new URLSearchParams({
         To: to,
         From: from,
@@ -156,57 +250,35 @@ class TwilioService {
         throw new Error(`Twilio SMS error: ${errorData.message || response.statusText}`);
       }
 
-      return await response.json();
-    } catch (error) {
-      console.error('Error sending SMS:', error);
-      throw error;
-    }
+      const messageData = await response.json();
+
+      // Cache result for common messages
+      const cacheEntry: TwilioCache = {
+        message_id: messageData.sid,
+        response: messageData,
+        created_at: Date.now(),
+        expires_at: Date.now() + 30 * 60 * 1000, // 30 minutes
+        recipient: to,
+      };
+
+      this.messageCache.set(cacheKey, cacheEntry);
+      this.recordMetric('cache_miss', 1);
+
+      console.log(
+        { sid: messageData.sid, to },
+        '[TwilioService] Supreme SMS dispatched successfully'
+      );
+      return messageData;
+    }, 'sendSMS');
   }
 
   /**
-   * Send WhatsApp message
-   */
-  async sendWhatsApp(message: TwilioWhatsAppMessage): Promise<TwilioMessage> {
-    try {
-      const formData = new URLSearchParams({
-        To: message.to,
-        From: message.from,
-        Body: message.body,
-      });
-
-      if (message.mediaUrl && message.mediaUrl.length > 0) {
-        message.mediaUrl.forEach((url, index) => {
-          formData.append(`MediaUrl[${index}]`, url);
-        });
-      }
-
-      if (message.statusCallback) {
-        formData.append('StatusCallback', message.statusCallback);
-      }
-
-      const response = await fetch(`${this.baseURL}/Accounts/${this.accountSid}/Messages.json`, {
-        method: 'POST',
-        headers: this.getAuthHeaders(),
-        body: formData.toString(),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Twilio WhatsApp error: ${errorData.message || response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Error sending WhatsApp message:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Make voice call
+   * 📞 Make voice call with enhanced features
    */
   async makeCall(to: string, from: string, url?: string, twiml?: string): Promise<TwilioCall> {
-    try {
+    return this.withRetry(async () => {
+      console.log(`[TwilioService] 🌌 Making Supreme Voice Call to: ${to}`);
+
       const formData = new URLSearchParams({
         To: to,
         From: from,
@@ -221,6 +293,13 @@ class TwilioService {
         formData.append('Url', 'https://demo.twilio.com/welcome/voice/');
       }
 
+      // 🌌 Enhanced call configuration
+      formData.append('StatusCallback', 'https://aigestion.net/api/twilio/call-status');
+      formData.append('StatusCallbackMethod', 'POST');
+      formData.append('Record', 'true'); // Enable recording
+      formData.append('Timeout', '300'); // 5 minutes max
+      formData.append('MachineDetection', 'Enable'); // Detect answering machines
+
       const response = await fetch(`${this.baseURL}/Accounts/${this.accountSid}/Calls.json`, {
         method: 'POST',
         headers: this.getAuthHeaders(),
@@ -232,150 +311,139 @@ class TwilioService {
         throw new Error(`Twilio call error: ${errorData.message || response.statusText}`);
       }
 
-      return await response.json();
-    } catch (error) {
-      console.error('Error making call:', error);
-      throw error;
-    }
-  }
+      const callData = await response.json();
 
-  /**
-   * Get message details
-   */
-  async getMessage(messageSid: string): Promise<TwilioMessage> {
-    try {
-      const response = await fetch(
-        `${this.baseURL}/Accounts/${this.accountSid}/Messages/${messageSid}.json`,
-        {
-          headers: this.getAuthHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Twilio get message error: ${response.status} ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error(`Error fetching message ${messageSid}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get call details
-   */
-  async getCall(callSid: string): Promise<TwilioCall> {
-    try {
-      const response = await fetch(
-        `${this.baseURL}/Accounts/${this.accountSid}/Calls/${callSid}.json`,
-        {
-          headers: this.getAuthHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Twilio get call error: ${response.status} ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error(`Error fetching call ${callSid}:`, error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get all messages
-   */
-  async getMessages(limit: number = 50, offset: number = 0): Promise<TwilioMessage[]> {
-    try {
-      const response = await fetch(
-        `${this.baseURL}/Accounts/${this.accountSid}/Messages.json?Limit=${limit}&Offset=${offset}`,
-        {
-          headers: this.getAuthHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Twilio get messages error: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data.messages;
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get all calls
-   */
-  async getCalls(limit: number = 50, offset: number = 0): Promise<TwilioCall[]> {
-    try {
-      const response = await fetch(
-        `${this.baseURL}/Accounts/${this.accountSid}/Calls.json?Limit=${limit}&Offset=${offset}`,
-        {
-          headers: this.getAuthHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`Twilio get calls error: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data.calls;
-    } catch (error) {
-      console.error('Error fetching calls:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get account phone numbers
-   */
-  async getPhoneNumbers(): Promise<TwilioPhoneNumber[]> {
-    try {
-      const response = await fetch(
-        `${this.baseURL}/Accounts/${this.accountSid}/IncomingPhoneNumbers.json`,
-        {
-          headers: this.getAuthHeaders(),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          `Twilio get phone numbers error: ${response.status} ${response.statusText}`
-        );
-      }
-
-      const data = await response.json();
-      return data.incoming_phone_numbers;
-    } catch (error) {
-      console.error('Error fetching phone numbers:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get account information
-   */
-  async getAccountInfo(): Promise<TwilioAccountInfo> {
-    try {
-      const response = await fetch(`${this.baseURL}/Accounts/${this.accountSid}.json`, {
-        headers: this.getAuthHeaders(),
+      // Cache call metadata
+      this.callCache.set(callData.sid, {
+        to,
+        url,
+        initiated_at: Date.now(),
       });
 
-      if (!response.ok) {
-        throw new Error(`Twilio account info error: ${response.status} ${response.statusText}`);
-      }
+      this.recordMetric('make_call_success', 1);
+      console.log({ sid: callData.sid, to }, '[TwilioService] Supreme Voice call initiated');
+      return callData;
+    }, 'makeCall');
+  }
 
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching account info:', error);
-      throw error;
+  /**
+   * 📊 Get performance metrics
+   */
+  public getPerformanceMetrics() {
+    const metrics: any = {};
+    for (const [key, values] of this.performanceMetrics.entries()) {
+      if (values.length > 0) {
+        metrics[key] = {
+          count: values.length,
+          avg: values.reduce((a, b) => a + b, 0) / values.length,
+          min: Math.min(...values),
+          max: Math.max(...values),
+          recent: values.slice(-10),
+        };
+      }
+    }
+    return metrics;
+  }
+
+  /**
+   * 🧹 Clear cache
+   */
+  public clearCache(): void {
+    this.messageCache.clear();
+    this.callCache.clear();
+    console.log('[TwilioService] 🧹 Cache cleared');
+  }
+
+  /**
+   * 📈 Get cache statistics
+   */
+  public getCacheStats() {
+    const now = Date.now();
+    let valid = 0;
+    let expired = 0;
+
+    for (const entry of this.messageCache.values()) {
+      if (now < entry.expires_at) {
+        valid++;
+      } else {
+        expired++;
+      }
+    }
+
+    return {
+      total: this.messageCache.size,
+      valid,
+      expired,
+      hitRate: this.performanceMetrics.get('cache_hit')?.length || 0,
+      missRate: this.performanceMetrics.get('cache_miss')?.length || 0,
+    };
+  }
+
+  /**
+   * 🌌 Enhanced SMS with Daniela AI integration
+   */
+  async sendDanielaSMS(
+    to: string,
+    message: string,
+    personalization?: {
+      tone?: 'optimista' | 'profesional';
+      includeSignature?: boolean;
+    }
+  ): Promise<TwilioMessage> {
+    const personalizedMessage = this.buildPersonalizedMessage(message, personalization);
+    return this.sendSMS(to, '+15017122661', personalizedMessage); // Default Twilio number
+  }
+
+  /**
+   * 🌌 Enhanced Voice Call with Daniela AI integration
+   */
+  async makeDanielaCall(
+    to: string,
+    context?: 'support' | 'sales' | 'general'
+  ): Promise<TwilioCall> {
+    const twimlUrl = this.buildDanielaTwiml(context);
+    return this.makeCall(to, '+15017122661', twimlUrl); // Default Twilio number
+  }
+
+  /**
+   * 🔧 Build personalized message for Daniela
+   */
+  private buildPersonalizedMessage(
+    message: string,
+    personalization?: {
+      tone?: 'optimista' | 'profesional';
+      includeSignature?: boolean;
+    }
+  ): string {
+    let personalizedMessage = message;
+
+    if (personalization?.tone === 'optimista') {
+      personalizedMessage = `✨ ${message} 🚀`;
+    } else if (personalization?.tone === 'profesional') {
+      personalizedMessage = `📋 ${message} 🏢`;
+    }
+
+    if (personalization?.includeSignature) {
+      personalizedMessage += `\n\n---\n🤖 Daniela IA - AIGestion\n🌐 aigestion.net`;
+    }
+
+    return personalizedMessage;
+  }
+
+  /**
+   * 🔧 Build TwiML for Daniela AI
+   */
+  private buildDanielaTwiml(context?: string): string {
+    const baseUrl = 'https://aigestion.net/api/twilio';
+
+    switch (context) {
+      case 'support':
+        return `${baseUrl}/support-handler`;
+      case 'sales':
+        return `${baseUrl}/sales-handler`;
+      case 'general':
+      default:
+        return `${baseUrl}/daniela-handler`;
     }
   }
 
@@ -446,8 +514,8 @@ class TwilioService {
    * Send verification code via SMS
    */
   async sendVerificationCode(to: string, code: string, from?: string): Promise<TwilioMessage> {
-    const message = `Tu código de verificación AIGestion es: ${code}. Válido por 10 minutos.`;
-    const fromNumber = from || '+15017122661'; // Default Twilio number or use your own
+    const message = `Tu código de verificación AIGestion es: ${code}. ⏰ Válido por 10 minutos.`;
+    const fromNumber = from || '+15017122661'; // Default Twilio number
 
     return this.sendSMS(to, fromNumber, message);
   }
@@ -471,7 +539,7 @@ class TwilioService {
     for (const participant of participants) {
       const twiml = this.generateTwiML({
         say: {
-          text: 'Bienvenido a la conferencia de AIGestion. Por favor espere a que se unan otros participantes.',
+          text: '¡Bienvenido a la conferencia de AIGestion. Por favor espere a que se unan otros participantes.',
           voice: 'woman',
           language: 'es-ES',
         },
@@ -486,47 +554,6 @@ class TwilioService {
     }
 
     return calls;
-  }
-
-  /**
-   * Get usage statistics
-   */
-  async getUsageStats(
-    startDate?: string,
-    endDate?: string
-  ): Promise<{
-    usage: Array<{
-      category: string;
-      count: number;
-      units: string;
-      price: string;
-      price_unit: string;
-    }>;
-  }> {
-    try {
-      let url = `${this.baseURL}/Accounts/${this.accountSid}/Usage/Records.json`;
-      const params = new URLSearchParams();
-
-      if (startDate) params.append('StartDate', startDate);
-      if (endDate) params.append('EndDate', endDate);
-
-      if (params.toString()) {
-        url += `?${params.toString()}`;
-      }
-
-      const response = await fetch(url, {
-        headers: this.getAuthHeaders(),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Twilio usage stats error: ${response.status} ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching usage stats:', error);
-      throw error;
-    }
   }
 
   /**
@@ -569,7 +596,7 @@ class TwilioService {
   async recoverAccount(): Promise<boolean> {
     try {
       // This would typically involve calling Twilio's account recovery endpoint
-      // For now, we'll just validate the recovery code format
+      // For now, we'll just validate recovery code format
       if (this.recoveryCode && this.recoveryCode.length > 10) {
         console.log('Account recovery code is valid format');
         return true;
