@@ -2,24 +2,63 @@ name: 🚀 Deploy to Railway
 on:
   push:
     branches: [main, develop]
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service to deploy'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - aigestion-backend
+          - aig-ia-engine
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: 🚀 Deploy Backend to Railway
+      - name: � Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📦 Install pnpm
+        run: npm install -g pnpm
+
+      - name: 📦 Install dependencies
+        run: |
+          cd backend
+          pnpm install --frozen-lockfile
+
+      - name: 🔨 Build Backend
+        run: |
+          cd backend
+          pnpm build
+
+      - name: �🚀 Deploy Backend to Railway
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'aigestion-backend' || github.event.inputs.service == '' }}
         uses: railway-app/railway-action@v1
         with:
           railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          service: "aigestion-backend"
-          root: "backend"
+          service: 'aigestion-backend'
+          root: 'backend'
 
       - name: 🚀 Deploy Swarm Engine to Railway
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'aig-ia-engine' }}
         uses: railway-app/railway-action@v1
         with:
           railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          service: "aig-ia-engine"
-          root: "aig-ia-engine"
+          service: 'aig-ia-engine'
+          root: 'aig-ia-engine'
+
+      - name: ✅ Health Check
+        if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'aigestion-backend' }}
+        run: |
+          sleep 30
+          curl -f https://backend-aigestion-1046057023064.europe-southwest1.run.app/api/v1/health || exit 1

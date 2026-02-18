@@ -1,6 +1,6 @@
-# 🌌 [GOD MODE] AIGestion Backend Optimized Dockerfile (Monorepo Aware)
+# [GOD MODE] AIGestion Backend Optimized Dockerfile (Monorepo Aware)
 # Optimized for: pnpm Workspaces & Cloud-Native Build
-# Building from PROJECT ROOT is required for workspace resolution.
+# Multi-stage build for minimal production image
 
 # ---------- Build Stage ----------
 FROM node:22-alpine AS builder
@@ -43,7 +43,7 @@ ENV TZ=UTC
 WORKDIR /app/backend
 
 # Install security tools & useful utilities
-RUN apk add --no-cache curl tzdata
+RUN apk add --no-cache curl tzdata dumb-init
 
 # Enable pnpm for runtime as well (to handle production-only install if needed,
 # though copying node_modules or using a standalone build is better)
@@ -55,11 +55,7 @@ COPY --from=builder /app/backend/package.json ./
 # Copy compiled artifacts
 COPY --from=builder /app/backend/dist ./dist
 
-# Copy node_modules from builder (including workspace links)
-# Note: For pnpm, we need to be careful with symlinks.
-# Alternatively, we can run pnpm install --prod here.
-COPY --from=builder /app/node_modules /app/node_modules
-COPY --from=builder /app/packages /app/packages
+# Copy only production node_modules (optimized)
 COPY --from=builder /app/backend/node_modules ./node_modules
 
 # Create non-root user for security
@@ -73,9 +69,10 @@ USER nodejs
 # Expose the Cloud Run / Railway default port
 EXPOSE 8080
 
-# Health check
+# Optimized health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
   CMD curl -f http://localhost:8080/api/v1/health || exit 1
 
-# Start the application
+# Start application with dumb-init for proper signal handling
+ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "dist/bootstrap.js"]

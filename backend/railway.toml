@@ -7,7 +7,18 @@ dockerfilePath = "Dockerfile"
 [deploy]
 startCommand = "node dist/bootstrap.js"
 healthcheckPath = "/api/v1/health"
-healthcheckTimeout = 100
+healthcheckTimeout = 30
 restartPolicyType = "ALWAYS"
 restartPolicyMaxRetries = 10
-numReplicas = 1
+numReplicas = 2
+
+# Performance Optimizations
+[deploy.environment]
+NODE_ENV = "production"
+PORT = "8080"
+TZ = "UTC"
+
+# Resource Limits (God Mode)
+[deploy.resources]
+cpu = "1000m"
+memory = "512Mi"
