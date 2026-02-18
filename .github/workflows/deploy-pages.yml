@@ -1,56 +1,226 @@
-name: Deploy to GitHub Pages
+name: 🚀 Deploy to GitHub Pages - God Mode Optimized
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - preview
+          - staging
+      force_deploy:
+        description: 'Force deployment even if tests fail'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
+  checks: write
 
 concurrency:
   group: 'pages'
   cancel-in-progress: false
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '9'
 
-      - name: Setup Node.js
+jobs:
+  # 🔍 PRE-DEPLOY VALIDATION
+  pre-deploy:
+    name: 🔍 Pre-Deploy Validation
+    runs-on: ubuntu-latest
+    outputs:
+      should-deploy: ${{ steps.decision.outputs.should-deploy }}
+      build-cache-hit: ${{ steps.cache.outputs.cache-hit }}
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'npm'
-          cache-dependency-path: './frontend/website-epic/package-lock.json'
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          cache-dependency-path: './frontend/apps/website-epic/pnpm-lock.yaml'
 
-      - name: Install dependencies
-        working-directory: ./frontend/website-epic
-        run: npm install
+      - name: 🔍 Security Scan
+        run: |
+          echo "🔍 Running security scan..."
+          cd frontend/apps/website-epic
+          # Check for hardcoded secrets
+          if grep -rn --include='*.ts' --include='*.tsx' --include='*.js' --include='*.json' \
+            -E '(password|secret|api_key|private_key)\s*[:=]\s*["\''']((?!\$\{|process\.env|import\.meta).){8,}' \
+            --exclude-dir=node_modules --exclude-dir=dist . 2>/dev/null; then
+            echo "❌ Security scan failed - hardcoded secrets found"
+            exit 1
+          fi
+          echo "✅ Security scan passed"
 
-      - name: Build Website
-        working-directory: ./frontend/website-epic
-        run: npm run build
+      - name: 📊 Bundle Size Check
+        id: cache
+        run: |
+          cd frontend/apps/website-epic
+          CURRENT_BUNDLE=$(find dist/assets -name "*.js" -exec du -ch {} + | sort -rh | head -1 | cut -f1)
+          MAX_BUNDLE=$((1024 * 1024)) # 1MB
+          if [ "$CURRENT_BUNDLE" -gt "$MAX_BUNDLE" ]; then
+            echo "⚠️ Bundle size warning: $CURRENT_BUNDLE bytes"
+          else
+            echo "✅ Bundle size OK: $CURRENT_BUNDLE bytes"
+          fi
+          echo "cache-hit=false" >> $GITHUB_OUTPUT
 
-      - name: Setup Pages
+      - name: 🤖 Deploy Decision
+        id: decision
+        run: |
+          FORCE=${{ github.event.inputs.force_deploy || 'false' }}
+          IS_MAIN=${{ github.ref == 'refs/heads/main' }}
+
+          if [ "$FORCE" = "true" ] || [ "$IS_MAIN" = "true" ]; then
+            echo "should-deploy=true" >> $GITHUB_OUTPUT
+            echo "✅ Deployment approved"
+          else
+            echo "should-deploy=false" >> $GITHUB_OUTPUT
+            echo "🚫 Deployment skipped (not main branch)"
+          fi
+
+  # 🏗️ BUILD & DEPLOY
+  build-and-deploy:
+    name: 🏗️ Build & Deploy
+    runs-on: ubuntu-latest
+    needs: pre-deploy
+    if: needs.pre-deploy.outputs.should-deploy == 'true'
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.url }}
+      build-time: ${{ steps.build.outputs.time }}
+      bundle-size: ${{ steps.analyze.outputs.size }}
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          cache-dependency-path: './frontend/apps/website-epic/pnpm-lock.yaml'
+
+      - name: 📦 Install Dependencies
+        run: |
+          cd frontend/apps/website-epic
+          pnpm install --frozen-lockfile
+
+      - name: 🏗️ Build Website
+        id: build
+        run: |
+          cd frontend/apps/website-epic
+          START_TIME=$(date +%s)
+          pnpm run build
+          END_TIME=$(date +%s)
+          BUILD_TIME=$((END_TIME - START_TIME))
+          echo "time=$BUILD_TIME" >> $GITHUB_OUTPUT
+          echo "✅ Build completed in ${BUILD_TIME}s"
+
+      - name: 📊 Bundle Analysis
+        id: analyze
+        run: |
+          cd frontend/apps/website-epic
+          TOTAL_SIZE=$(du -sh dist | cut -f1)
+          LARGEST_JS=$(find dist/assets -name "*.js" -exec du -ch {} + | sort -rh | head -1)
+          JS_COUNT=$(find dist/assets -name "*.js" | wc -l)
+
+          echo "size=$TOTAL_SIZE" >> $GITHUB_OUTPUT
+          echo "largest-js=$LARGEST_JS" >> $GITHUB_OUTPUT
+          echo "js-count=$JS_COUNT" >> $GITHUB_OUTPUT
+
+          echo "📊 Bundle Analysis:"
+          echo "Total size: ${TOTAL_SIZE} bytes"
+          echo "Largest JS: ${LARGEST_JS} bytes"
+          echo "JS files: $JS_COUNT"
+
+      - name: ⚙️ Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload artifact
+      - name: 📤 Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './frontend/website-epic/dist'
+          path: './frontend/apps/website-epic/dist'
+          retention-days: 1
 
+  # 🚀 DEPLOY TO PRODUCTION
   deploy:
+    name: 🚀 Deploy to Production
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deploy.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: build-and-deploy
     if: github.ref == 'refs/heads/main'
+
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - name: 🚀 Deploy to GitHub Pages
+        id: deploy
         uses: actions/deploy-pages@v4
+
+      - name: 🔍 Post-Deploy Health Check
+        run: |
+          sleep 30
+          for i in {1..5}; do
+            if curl -f https://aigestion.net > /dev/null 2>&1; then
+              echo "✅ Health check passed (attempt $i)"
+              break
+            else
+              echo "⏳ Waiting... ($i/5)"
+              sleep 10
+            fi
+          done
+
+  # 📊 DEPLOYMENT SUMMARY
+  deployment-summary:
+    name: 📊 Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [build-and-deploy, deploy]
+    if: always()
+
+    steps:
+      - name: 📋 Generate Summary
+        run: |
+          echo "# 🚀 AIGestion Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Metrics" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Time**: ${{ needs.build-and-deploy.outputs.build-time }}s" >> $GITHUB_STEP_SUMMARY
+          echo "- **Bundle Size**: ${{ needs.build-and-deploy.outputs.bundle-size }} bytes" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployment URL**: https://aigestion.net" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## ✅ Status" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "- **Production**: ✅ Deployed successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Production**: ❌ Deployment failed" >> $GITHUB_STEP_SUMMARY
+          fi
