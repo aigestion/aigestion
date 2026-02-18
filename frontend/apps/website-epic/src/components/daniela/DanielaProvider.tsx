@@ -1,5 +1,5 @@
-import { DanielaState, DanielaConfig, DanielaMessage, DanielaContextType } from './DanielaTypes';
 import { danielaApi } from '../../services/daniela-api.service';
+import { DanielaConfig, DanielaContextType, DanielaMessage, DanielaState } from './DanielaTypes';
 
 const initialState: DanielaState = {
   messages: [],
@@ -13,8 +13,8 @@ const initialState: DanielaState = {
     context: 'website',
     voice: {
       enabled: true,
-      provider: 'vapi',
-      voiceId: 'EXAVITQu4vr4xnSDxMaL',
+      provider: 'elevenlabs', // 🌌 Optimizado para ElevenLabs
+      voiceId: 'EXAVITQu4vr4xnSDxMaL', // Bella - español España perfecto
       autoStart: false,
     },
     personality: {
@@ -118,19 +118,58 @@ export const DanielaProvider: React.FC<DanielaProviderProps> = ({ children, conf
     try {
       const response = await danielaApi.chat(text, 'website-user', `session-${Date.now()}`);
 
+      // 🌌 TO-DO LISTO PARA DANIELA CON ELEVENLABS
+      // 1. Síntesis de voz con ElevenLabs optimizado
+      const audioResponse = await elevenLabsService.textToSpeech({
+        text: response.response,
+        voice_id: 'EXAVITQu4vr4xnSDxMaL', // Bella - voz española perfecta
+        model_id: 'eleven_multilingual_v2',
+        voice_settings: {
+          stability: 0.75,
+          similarity_boost: 0.85,
+          style: 0.65,
+          use_speaker_boost: true,
+        },
+      });
+
+      // 2. Reproducción automática del audio
+      await elevenLabsService.playAudio(audioResponse.audio);
+
+      // 3. Mensaje con metadata de audio
       const danielaMessage: DanielaMessage = {
         id: `daniela-${Date.now()}`,
         text: response.response,
         sender: 'daniela',
         timestamp: new Date(),
+        audioUrl: URL.createObjectURL(new Blob([audioResponse.audio], { type: 'audio/mpeg' })),
+        audioDuration: audioResponse.duration_ms,
         suggestions: ['Saber más sobre AIGestion', 'Ver casos de éxito', 'Contactar con experto'],
-        sentiment: response.sentiment || 'neutral',
-        confidence: response.confidence || 1,
+        sentiment: response.sentiment || 'positive',
+        confidence: response.confidence || 0.95,
+        voiceProvider: 'elevenlabs',
+        voiceId: 'EXAVITQu4vr4xnSDxMaL',
       };
 
       dispatch({ type: 'ADD_MESSAGE', payload: danielaMessage });
+
+      // 4. Estado de speaking
+      dispatch({
+        type: 'SET_SPEAKING',
+        payload: {
+          speaking: true,
+          volume: 0.8,
+        },
+      });
+
+      // 5. Limpiar estado de speaking después del audio
+      if (audioResponse.duration_ms) {
+        setTimeout(() => {
+          dispatch({ type: 'SET_SPEAKING', payload: { speaking: false, volume: 0 } });
+        }, audioResponse.duration_ms + 500);
+      }
     } catch (error) {
-      dispatch({ type: 'SET_ERROR', payload: 'Error al enviar mensaje' });
+      console.error('Error en sendMessage con ElevenLabs:', error);
+      dispatch({ type: 'SET_ERROR', payload: 'Error al generar voz con ElevenLabs' });
     } finally {
       dispatch({ type: 'SET_TYPING', payload: false });
     }
