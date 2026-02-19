@@ -61,4 +61,5 @@ jobs:
         if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'aigestion-backend' }}
         run: |
           sleep 30
-          curl -f https://backend-aigestion-1046057023064.europe-southwest1.run.app/api/v1/health || exit 1
+          # Using Railway's service-specific URL (or localhost if it were an internal check, but this is a GH runner)
+          curl -f https://aigestion-backend-production.up.railway.app/api/v1/health || exit 1

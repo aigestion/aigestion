@@ -21,24 +21,19 @@ COPY backend/package.json ./backend/
 # Copy frontend specific config
 COPY frontend/package.json ./frontend/
 # Copy sub-packages manifests for pnpm workspace resolution
+COPY packages/dashboard-core/package.json ./packages/dashboard-core/
 COPY packages/decentraland-parcel/package.json ./packages/decentraland-parcel/
 COPY packages/design-system-v2/package.json ./packages/design-system-v2/
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/nexus-core-nestjs/package.json ./packages/nexus-core-nestjs/
 COPY packages/nexus-shared/package.json ./packages/nexus-shared/
 
-# Install dependencies (frozen-lockfile for consistency, but maybe invalid if I miss some pkg files)
-# For dev, we can just copy everything first if context is small enough,
-# but better to copy manifests first for caching.
-# However, for workspace, pnpm needs all package.jsons.
-# Let's try to copy manifests.
-# SIMPLIFICATION: usage of pnpm fetch or just install after full copy for dev.
-
-# Let's allow full copy for dev since we optimized .dockerignore
-COPY . .
-
 # Install dependencies
-RUN pnpm install
+# Using --no-frozen-lockfile in dev to facilitate workspace resolution if manifests changed
+RUN pnpm install --no-frozen-lockfile
+
+# Final copy of source code
+COPY . .
 
 # Expose ports (Base ports, overridden by compose)
 EXPOSE 5173 3000
