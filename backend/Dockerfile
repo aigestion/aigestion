@@ -12,21 +12,27 @@ RUN npm install -g pnpm
 # Copy workspace configuration
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 
-# Copy shared packages needed for backend (e.g., nexus-shared)
-COPY packages/nexus-shared ./packages/nexus-shared
-COPY packages/nexus-core-nestjs ./packages/nexus-core-nestjs
+# Copy all package manifests for correct workspace resolution
+# This is crucial for pnpm to understand the dependency graph
+COPY packages/dashboard-core/package.json ./packages/dashboard-core/
+COPY packages/decentraland-parcel/package.json ./packages/decentraland-parcel/
+COPY packages/design-system-v2/package.json ./packages/design-system-v2/
+COPY packages/eslint-config/package.json ./packages/eslint-config/
+COPY packages/nexus-core-nestjs/package.json ./packages/nexus-core-nestjs/
+COPY packages/nexus-shared/package.json ./packages/nexus-shared/
 
-# Copy backend package files
+# Copy backend package manifest
 COPY backend/package.json ./backend/
 
 # Install dependencies (frozen lockfile for production parity)
 # We filter to backend and its dependencies
 RUN pnpm install --frozen-lockfile --filter nexus-v1-dashboard-backend...
 
-# Copy source code for backend and shared packages
+# Copy source code for backend and internal dependencies
 COPY backend ./backend
 COPY packages/nexus-shared ./packages/nexus-shared
 COPY packages/nexus-core-nestjs ./packages/nexus-core-nestjs
+COPY packages/dashboard-core ./packages/dashboard-core
 
 # Compile TypeScript for the backend
 WORKDIR /app/backend
