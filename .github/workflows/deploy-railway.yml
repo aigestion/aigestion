@@ -22,7 +22,7 @@ jobs:
       - name: 📥 Checkout
         uses: actions/checkout@v4
 
-      - name: � Setup Node.js
+      - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -41,19 +41,21 @@ jobs:
           cd backend
           pnpm build
 
-      - name: �🚀 Deploy Backend to Railway
+      - name: 🚀 Deploy Backend to Railway
         if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'aigestion-backend' || github.event.inputs.service == '' }}
-        uses: railway-app/railway-action@v1
+        uses: railwayapp/railway-action@v2
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
           service: 'aigestion-backend'
           root: 'backend'
 
       - name: 🚀 Deploy Swarm Engine to Railway
         if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'aig-ia-engine' }}
-        uses: railway-app/railway-action@v1
+        uses: railwayapp/railway-action@v2
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
           service: 'aig-ia-engine'
           root: 'aig-ia-engine'
 
@@ -61,5 +63,4 @@ jobs:
         if: ${{ github.event.inputs.service == 'all' || github.event.inputs.service == 'aigestion-backend' }}
         run: |
           sleep 30
-          # Using Railway's service-specific URL (or localhost if it were an internal check, but this is a GH runner)
           curl -f https://aigestion-backend-production.up.railway.app/api/v1/health || exit 1
