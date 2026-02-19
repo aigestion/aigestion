@@ -16,6 +16,7 @@ import {
     RequireSubscription,
     PublicRoute
 } from './components/RouteProtection'; // Updated Guards
+import SubscriptionGuard from './components/guards/SubscriptionGuard';
 
 // ============================================
 // CRITICAL: Static Load for Hero Section
@@ -116,9 +117,9 @@ const WorkbenchLayout = lazy(() =>
 const PhoneVerification = lazy(() =>
   import('./components/auth/PhoneVerification').then(m => ({ default: m.PhoneVerification }))
 );
-const SubscriptionSelect = lazy(() =>
-  import('./components/subscription/SubscriptionSelect').then(m => ({
-    default: m.SubscriptionSelect,
+const SubscriptionPage = lazy(() =>
+  import('./pages/SubscriptionPage').then(m => ({
+    default: m.default,
   }))
 );
 const PaymentGateway = lazy(() =>
@@ -252,15 +253,26 @@ export const AppContent = ({
 
                 {/* Level 3: Phone Verified Required */}
                 <Route element={<RequirePhoneVerification />}>
-                  <Route path="/pricing" element={<SubscriptionSelect />} />
+                  <Route path="/pricing" element={<SubscriptionPage />} />
                   <Route path="/payment" element={<PaymentGateway />} />
 
                   <Route element={<RequireSubscription />}>
                     <Route
                       path="/dashboard/*"
-                      element={<WorkbenchLayout user={currentUser} onLogout={handleLogout} />}
+                      element={
+                        <SubscriptionGuard accessType="dashboard">
+                          <WorkbenchLayout user={currentUser} onLogout={handleLogout} />
+                        </SubscriptionGuard>
+                      }
                     />
-                    <Route path="/intelligence" element={<SovereignIntelligenceHub />} />
+                    <Route
+                      path="/intelligence"
+                      element={
+                        <SubscriptionGuard accessType="api">
+                          <SovereignIntelligenceHub />
+                        </SubscriptionGuard>
+                      }
+                    />
                     <Route path="/billing" element={<BillingDashboard />} />
                     <Route path="/weapon" element={<WeaponDashboard />} />
                     <Route path="/daniela/*" element={<DanielaDemo />} />
