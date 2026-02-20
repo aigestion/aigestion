@@ -123,7 +123,7 @@ export class ElevenLabsService {
   /**
    * 🗑️ Cleanup expired cache entries
    */
-  private cleanupExpiredCache() {
+  private async cleanupExpiredCache() {
     const now = Date.now();
     let cleaned = 0;
 
@@ -133,10 +133,12 @@ export class ElevenLabsService {
 
         // Remove file from disk
         try {
-          await fs.unlink(entry.audio_path).catch(() => {});
+          await fs.unlink(entry.audio_path);
           cleaned++;
-        } catch (error) {
-          logger.warn(`[ElevenLabsService] Failed to delete cache file: ${error.message}`);
+        } catch (error: any) {
+          logger.warn(
+            `[ElevenLabsService] Failed to delete cache file: ${error?.message || String(error)}`,
+          );
         }
       }
     }
@@ -156,8 +158,10 @@ export class ElevenLabsService {
 
       // This would load existing cache files
       logger.info('[ElevenLabsService] 💾 Cache directory ready');
-    } catch (error) {
-      logger.warn(`[ElevenLabsService] Cache initialization warning: ${error.message}`);
+    } catch (error: any) {
+      logger.warn(
+        `[ElevenLabsService] Cache initialization warning: ${error?.message || String(error)}`,
+      );
     }
   }
 
@@ -279,7 +283,7 @@ export class ElevenLabsService {
         created_at: Date.now(),
         expires_at: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
         voice_id: voiceId,
-        settings: settings || {},
+        settings: settings || { stability: 0.75, similarity_boost: 0.85 },
       };
 
       this.audioCache.set(cacheKey, cacheEntry);
@@ -290,7 +294,6 @@ export class ElevenLabsService {
           size: buffer.length,
           path: outputPath,
           cached: true,
-          duration_ms: Date.now() - this.recordMetric.start || Date.now(),
         },
         '[ElevenLabsService] Supreme synthesis successful',
       );
@@ -409,8 +412,10 @@ export class ElevenLabsService {
           batch[index].reject(result.reason);
         }
       });
-    } catch (error) {
-      logger.error(`[ElevenLabsService] Batch processing error: ${error.message}`);
+    } catch (error: any) {
+      logger.error(
+        `[ElevenLabsService] Batch processing error: ${error?.message || String(error)}`,
+      );
       batch.forEach(item => item.reject(error as Error));
     } finally {
       this.batchProcessing = false;
@@ -436,7 +441,8 @@ export class ElevenLabsService {
       // Add audio files
       for (const [index, filePath] of audioFiles.entries()) {
         const audioBuffer = await fs.readFile(filePath);
-        formData.append('files', audioBuffer, `audio_${index}.mp3`);
+        const fileName = `audio_${index}.mp3`;
+        formData.append('files', new Blob([audioBuffer]), fileName);
       }
 
       const response = await axios.post(`${this.baseUrl}/voices/add`, formData, {

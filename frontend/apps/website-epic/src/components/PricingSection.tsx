@@ -76,7 +76,7 @@ export const PricingSection: React.FC = () => {
   return (
     <section id="pricing" className="py-32 bg-black relative overflow-hidden">
       <div className="absolute inset-0 bg-radial-at-bottom from-nexus-cyan/5 via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-10" />
+      <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] bg-center opacity-10" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <motion.div

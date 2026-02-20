@@ -5,6 +5,10 @@ import { logger } from '../utils/logger';
 import { getCache, setCache } from '../cache/redis';
 import { TYPES } from '../types';
 import { DeFiStrategistService } from './defi-strategist.service';
+import { UsageRecord } from '../models/UsageRecord';
+import { Persona } from '../models/Persona';
+import { AIBond } from '../models/AIBond';
+import mongoose from 'mongoose';
 
 export interface PriceAlert {
   symbol: string;
@@ -153,7 +157,7 @@ export class EconomyService {
 
     try {
       const res = await axios.get(
-        `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${this.alphaVantageKey}`
+        `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&apikey=${this.alphaVantageKey}`,
       );
       const sentiment = res.data.feed?.[0]?.overall_sentiment_label || 'NEUTRAL';
       const result = sentiment.toUpperCase();
@@ -222,7 +226,7 @@ export class EconomyService {
         yieldData.wallets.forEach((w: any) => {
           if (w.apy > 5) {
             opportunities.push(
-              `💎 *Oportunidad DeFi*: ${w.asset} está rindiendo un *${w.apy}% APY*. Estrategia sugerida: *${w.recommendation}*.`
+              `💎 *Oportunidad DeFi*: ${w.asset} está rindiendo un *${w.apy}% APY*. Estrategia sugerida: *${w.recommendation}*.`,
             );
           }
         });
@@ -236,22 +240,22 @@ export class EconomyService {
       const changeNum = parseFloat(p.changePercent.replace('%', ''));
       if (changeNum < -3) {
         opportunities.push(
-          `🔥 *${p.symbol}* ha bajado un ${p.changePercent}. Podría ser una oportunidad de compra si mantienes a largo plazo.`
+          `🔥 *${p.symbol}* ha bajado un ${p.changePercent}. Podría ser una oportunidad de compra si mantienes a largo plazo.`,
         );
       } else if (changeNum > 5) {
         opportunities.push(
-          `🚀 *${p.symbol}* está en rally (+${p.changePercent}). Considera proteger ganancias con stops dinámicos.`
+          `🚀 *${p.symbol}* está en rally (+${p.changePercent}). Considera proteger ganancias con stops dinámicos.`,
         );
       }
     });
 
     if (sentiment === 'BULLISH' || sentiment === 'SOMEWHAT_BULLISH') {
       opportunities.push(
-        '🌟 El sentimiento general es alcista. Buen momento para mantener posiciones fuertes en NVDA y GOOGL.'
+        '🌟 El sentimiento general es alcista. Buen momento para mantener posiciones fuertes en NVDA y GOOGL.',
       );
     } else if (sentiment === 'BEARISH' || sentiment === 'SOMEWHAT_BEARISH') {
       opportunities.push(
-        '⚠️ Alerta: El sentimiento de noticias es bajista. Considera aumentar liquidez o buscar activos refugio como el Oro.'
+        '⚠️ Alerta: El sentimiento de noticias es bajista. Considera aumentar liquidez o buscar activos refugio como el Oro.',
       );
     }
 
@@ -308,7 +312,7 @@ export class EconomyService {
     }
 
     const script = `${intro} ${sentimentText} ${geoText} ${opportunitiesText} ${clean(
-      data.advice.split('\n').pop() || ''
+      data.advice.split('\n').pop() || '',
     )}`;
 
     return script;
@@ -330,7 +334,7 @@ export class EconomyService {
     await setCache(cacheKey, existing, 0); // No expiry for user alerts
 
     logger.info(
-      `[EconomyService] Alert added for ${alert.userId}: ${alert.symbol} ${condition} ${alert.targetPrice}`
+      `[EconomyService] Alert added for ${alert.userId}: ${alert.symbol} ${condition} ${alert.targetPrice}`,
     );
     return fullAlert;
   }
@@ -385,7 +389,7 @@ export class EconomyService {
     userId: string,
     symbol: string,
     amount: number,
-    entryPrice: number
+    entryPrice: number,
   ): Promise<void> {
     const cacheKey = `economy:portfolio:${userId}`;
     const portfolio: any[] = (await getCache(cacheKey)) || [];
@@ -467,5 +471,88 @@ export class EconomyService {
       logger.error(`[EconomyService] History fetch failed for ${symbol}:`, error);
       return [];
     }
+  }
+
+  /**
+   * Aggregates creator earnings and persona performance
+   */
+  async getCreatorDashboard(userId: string) {
+    try {
+      const personas = await Persona.find({ ownerId: new mongoose.Types.ObjectId(userId) });
+      const personaIds = personas.map(p => p._id.toString());
+
+      const earnings = await UsageRecord.aggregate([
+        { $match: { personaId: { $in: personaIds } } },
+        {
+          $group: {
+            _id: null,
+            totalYield: { $sum: '$creatorCommission' },
+            totalExecutions: { $sum: 1 },
+          },
+        },
+      ]);
+
+      return {
+        totalEarnings: earnings[0]?.totalYield || 0,
+        totalExecutions: earnings[0]?.totalExecutions || 0,
+        personaCount: personas.length,
+        personas: personas.map(p => ({
+          id: p._id,
+          name: p.name,
+          reputation: p.reputationScore,
+          multiplier: p.commissionMultiplier,
+          successRate: p.successRate,
+        })),
+      };
+    } catch (error) {
+      logger.error(`[EconomyService] Failed to fetch creator dashboard for ${userId}`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Processes a financial transaction between entities
+   */
+  async processTransaction(tx: {
+    from: string;
+    to: any;
+    amount: number;
+    type: string;
+    metadata: any;
+  }): Promise<boolean> {
+    logger.info(
+      `💸 [EconomyService] Processing ${tx.type}: ${tx.amount} NXS from ${tx.from} to ${tx.to}`,
+    );
+
+    // In a production system, this would involve:
+    // 1. Verifying 'from' has sufficient balance.
+    // 2. Deducting balance from 'from'.
+    // 3. Calculating platform commission (e.g., 10%).
+    // 4. Crediting 'to' with the net amount.
+    // 5. Recording a transaction ledger entry.
+
+    const platformCommission = tx.amount * 0.1;
+    const creatorNet = tx.amount - platformCommission;
+
+    await UsageRecord.create({
+      userId: tx.from,
+      personaId: tx.metadata.personaId,
+      creditsUsed: tx.amount,
+      creatorCommission: creatorNet,
+      platformFee: platformCommission,
+      timestamp: new Date(),
+    });
+
+    return true;
+  }
+
+  /**
+   * Claims accumulated yield as AI Bonds
+   */
+  async claimYield(userId: string): Promise<boolean> {
+    logger.warn(`💸 [EconomyService] Yield claim initiated for user ${userId}`);
+    // In a real system, we'd deduct from a pending_payouts table.
+    // Here we simulate the conversion of tokens into a Silver-tier AI Bond.
+    return true;
   }
 }

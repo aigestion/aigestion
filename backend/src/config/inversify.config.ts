@@ -36,6 +36,12 @@ import { StripeWebhookController } from '../controllers/stripe.webhook.controlle
 import { ContactController } from '../controllers/contact.controller';
 import { VisionController } from '../controllers/vision.controller';
 import { NexusCommandController } from '../controllers/NexusCommandController';
+import { PredictiveBIController } from '../controllers/PredictiveBIController';
+import { GovernanceController } from '../controllers/GovernanceController';
+import { NeuralHealthController } from '../controllers/NeuralHealthController';
+import { MCPController } from '../controllers/MCPController';
+import { PersonaController } from '../controllers/PersonaController';
+import { FinanceController } from '../controllers/FinanceController';
 
 // Services
 import { AIService } from '../services/ai.service';
@@ -51,6 +57,7 @@ import { CredentialManagerService } from '../services/credential-manager.service
 import { DanielaAIService } from '../services/daniela-ai.service';
 import { DeFiStrategistService } from '../services/defi-strategist.service';
 import { DoraMetricsService } from '../services/dora-metrics.service';
+import { DeFiYieldHarvesterService } from '../services/DeFiYieldHarvesterService';
 import { EmailService } from '../services/email.service';
 import { GodNotificationService } from '../services/god-notification.service';
 import { EconomyService } from '../services/economy.service';
@@ -133,14 +140,16 @@ import { CloudTasksService } from '../services/google/cloud-tasks.service';
 import { VideoIntelligenceService } from '../services/google/video-intelligence.service';
 import { NexusRadioService } from '../services/google/nexus-radio.service';
 import { QuantumSecurityService } from '../services/security/quantum-security.service';
-// MastraService: removed (not installed, not bound)
+import { MastraService } from '../services/mastra.service';
 import { KeplerService } from '../services/google/kepler.service';
 import { SelfHealingService } from '../services/self-healing.service';
 import { DiscoveryService } from '../services/evolution/discovery.service';
 import { SandboxService } from '../services/evolution/sandbox.service';
 import { SanctuaryService } from '../services/evolution/sanctuary.service';
 import { EvolutionMetricsService } from '../services/evolution/evolution-metrics.service';
+import { PersonaMarketplaceService } from '../services/PersonaMarketplaceService';
 import { ArbitrationService } from '../services/arbitration.service';
+import { MCPDiscoveryService } from '../services/MCPDiscoveryService';
 import { GovernanceService } from '../services/GovernanceService';
 import { TreasuryService } from '../services/TreasuryService';
 import { SovereignRegistryService } from '../services/SovereignRegistryService';
@@ -155,11 +164,12 @@ import { JulesGem } from '../services/gems/JulesGem';
 import { CoinGeckoService } from '../services/coingecko.service';
 import { WalletWatchtowerService } from '../services/finance/wallet-watchtower.service';
 import { PriceAlertService } from '../services/finance/price-alert.service';
-import { FinanceController } from '../controllers/finance.controller';
+import { SovereignOrchestratorService } from '../services/SovereignOrchestratorService';
+import { EnterpriseAuditService } from '../services/EnterpriseAuditService';
+import { PredictiveBIService } from '../services/PredictiveBIService';
 import { config } from './config';
 
 import { TreasuryController } from '../controllers/treasury.controller';
-import { GovernanceController } from '../controllers/governance.controller';
 import { WisdomController } from '../controllers/wisdom.controller';
 
 // Infrastructure
@@ -251,6 +261,12 @@ bind<INotificationRepository>(TYPES.NotificationRepository, NotificationReposito
 // ========================================
 // BUSINESS SERVICES
 // ========================================
+import { DanielaEnhancedService } from '../services/daniela-enhanced.service';
+import { DanielaProactiveService } from '../services/DanielaProactiveService';
+
+bind<DanielaEnhancedService>(TYPES.DanielaEnhancedService, DanielaEnhancedService);
+bind<DanielaProactiveService>(TYPES.DanielaProactiveService, DanielaProactiveService);
+
 bind<MetaverseService>(TYPES.MetaverseService, MetaverseService);
 bind<RateLimitService>(TYPES.RateLimitService, RateLimitService);
 bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
@@ -286,7 +302,7 @@ bind<SovereignKnowledgeEngine>(TYPES.SovereignKnowledgeEngine, SovereignKnowledg
 bind<CoinGeckoService>(TYPES.CoinGeckoService, CoinGeckoService);
 bind<WalletWatchtowerService>(TYPES.WalletWatchtowerService, WalletWatchtowerService);
 bind<PriceAlertService>(TYPES.PriceAlertService, PriceAlertService);
-bind<FinanceController>(TYPES.FinanceController, FinanceController);
+bind<PersonaMarketplaceService>(TYPES.PersonaMarketplaceService, PersonaMarketplaceService);
 
 // ========================================
 // EXTERNAL INTEGRATIONS
@@ -314,7 +330,7 @@ bind<VideoIntelligenceService>(TYPES.VideoIntelligenceService, VideoIntelligence
 if (!container.isBound(NexusRadioService))
   container.bind<NexusRadioService>(NexusRadioService).toSelf().inSingletonScope();
 bind<QuantumSecurityService>(TYPES.QuantumSecurityService, QuantumSecurityService);
-// MastraService binding removed (package not installed)
+bind<MastraService>(TYPES.MastraService, MastraService);
 if (!container.isBound(KeplerService))
   container.bind<KeplerService>(KeplerService).toSelf().inSingletonScope();
 bind<SelfHealingService>(TYPES.SelfHealingService, SelfHealingService);
@@ -382,10 +398,17 @@ bind<YoutubeTranscriptionService>(TYPES.YoutubeTranscriptionService, YoutubeTran
 bind<ArbitrationService>(TYPES.ArbitrationService, ArbitrationService);
 bind<NeuralHealthService>(TYPES.NeuralHealthService, NeuralHealthService);
 bind<PredictiveHealingService>(TYPES.PredictiveHealingService, PredictiveHealingService);
+bind<SovereignOrchestratorService>(
+  TYPES.SovereignOrchestratorService,
+  SovereignOrchestratorService,
+);
+bind<EnterpriseAuditService>(TYPES.EnterpriseAuditService, EnterpriseAuditService);
 bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
 bind<TreasuryService>(TYPES.TreasuryService, TreasuryService);
 bind<NotebookInsightService>(TYPES.NotebookInsightService, NotebookInsightService);
 bind<VisionService>(TYPES.VisionService, VisionService);
+bind<PredictiveBIService>(TYPES.PredictiveBIService, PredictiveBIService);
+bind<MCPDiscoveryService>(TYPES.MCPDiscoveryService, MCPDiscoveryService);
 
 // ========================================
 // CONTROLLERS
@@ -415,9 +438,14 @@ bind<StripeWebhookController>(TYPES.StripeWebhookController, StripeWebhookContro
 bind<ContactController>(TYPES.ContactController, ContactController);
 bind<WisdomController>(TYPES.WisdomController, WisdomController);
 bind<TreasuryController>(TYPES.TreasuryController, TreasuryController);
-bind<GovernanceService>(TYPES.GovernanceService, GovernanceService);
-bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
 bind<VisionController>(TYPES.VisionController, VisionController);
 bind<NexusCommandController>(TYPES.NexusCommandController, NexusCommandController);
+bind<PredictiveBIController>(TYPES.PredictiveBIController, PredictiveBIController);
+bind<GovernanceController>(TYPES.GovernanceController, GovernanceController);
+bind<NeuralHealthController>(TYPES.NeuralHealthController, NeuralHealthController);
+bind<MCPController>(TYPES.MCPController, MCPController);
+bind<PersonaController>(TYPES.PersonaController, PersonaController);
+bind<FinanceController>(TYPES.FinanceController, FinanceController);
+bind<DeFiYieldHarvesterService>(TYPES.DeFiYieldHarvesterService, DeFiYieldHarvesterService);
 
 export { container, TYPES };

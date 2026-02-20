@@ -53,7 +53,7 @@ export const Register: React.FC = () => {
       {/* Background Ambience */}
       <div className="absolute inset-0">
         <div className="grain-overlay opacity-30" />
-        <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-20 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+        <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] bg-center opacity-20 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
       </div>
 
       <motion.div

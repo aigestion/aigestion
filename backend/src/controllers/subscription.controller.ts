@@ -5,7 +5,7 @@ import { buildResponse } from '../common/response-builder';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2022-11-15',
 });
 
 /**
@@ -88,22 +88,26 @@ export const validateSubscriptionAccess = async (req: Request, res: Response) =>
 
     if (!subscription) {
       return res.json(
-        buildResponse({
-          isValid: false,
-          plan: null,
-          subscription: null,
-          restrictions: {
-            canAccessDashboard: false,
-            canAccessMobile: false,
-            canAccessAPI: false,
-            maxProjectsReached: false,
-            maxUsersReached: false,
-            daysUntilExpiry: 0,
-            isTrial: false,
-            isExpired: true,
+        buildResponse(
+          {
+            isValid: false,
+            plan: null,
+            subscription: null,
+            restrictions: {
+              canAccessDashboard: false,
+              canAccessMobile: false,
+              canAccessAPI: false,
+              maxProjectsReached: false,
+              maxUsersReached: false,
+              daysUntilExpiry: 0,
+              isTrial: false,
+              isExpired: true,
+            },
+            messages: ['No active subscription found'],
           },
-          messages: ['No active subscription found'],
-        }),
+          200,
+          (req as any).requestId,
+        ),
       );
     }
 
@@ -160,7 +164,7 @@ export const validateSubscriptionAccess = async (req: Request, res: Response) =>
         isTrial,
         isExpired,
       },
-      messages: generateValidationMessages(accessType, plan, isExpired, isTrial, daysUntilExpiry),
+      messages: generateValidationMessages(accessType, plan, !!isExpired, !!isTrial, daysUntilExpiry || 0),
     };
 
     res.json(buildResponse(validation, 200, (req as any).requestId));
@@ -187,12 +191,16 @@ export const validateMobileSubscription = async (req: Request, res: Response) =>
 
     if (!subscription) {
       return res.json(
-        buildResponse({
-          userId,
-          subscriptionStatus: 'inactive',
-          planType: 'free',
-          lastValidated: new Date().toISOString(),
-        }),
+        buildResponse(
+          {
+            userId,
+            subscriptionStatus: 'inactive',
+            planType: 'free',
+            lastValidated: new Date().toISOString(),
+          },
+          200,
+          (req as any).requestId,
+        ),
       );
     }
 
@@ -245,7 +253,7 @@ export const createPaymentSession = async (req: Request, res: Response) => {
     // Get plan details
     const plan = await Plan.findOne({ id: planId }).exec();
     if (!plan) {
-      return res.status(404).json(buildResponse(null, 'Plan not found', 404));
+      return res.status(404).json(buildResponse(null, 404, (req as any).requestId));
     }
 
     // Create Stripe checkout session
@@ -309,7 +317,7 @@ export const updateSubscription = async (req: Request, res: Response) => {
 
     const subscription = await Subscription.findOne({ userId }).exec();
     if (!subscription) {
-      return res.status(404).json(buildResponse(null, 'Subscription not found', 404));
+      return res.status(404).json(buildResponse(null, 404, (req as any).requestId));
     }
 
     Object.assign(subscription, updates);
@@ -337,7 +345,7 @@ export const cancelSubscription = async (req: Request, res: Response) => {
 
     const subscription = await Subscription.findOne({ userId }).exec();
     if (!subscription) {
-      return res.status(404).json(buildResponse(null, 'Subscription not found', 404));
+      return res.status(404).json(buildResponse(null, 404, (req as any).requestId));
     }
 
     // Cancel at period end in Stripe
@@ -350,7 +358,13 @@ export const cancelSubscription = async (req: Request, res: Response) => {
     subscription.status = 'cancelled';
     await subscription.save();
 
-    res.json(buildResponse({ message: 'Subscription cancelled successfully' }));
+    res.json(
+      buildResponse(
+        { message: 'Subscription cancelled successfully' },
+        200,
+        (req as any).requestId,
+      ),
+    );
   } catch (error) {
     console.error('[Subscription] Error cancelling subscription:', error);
     res.status(500).json(buildResponse(null, 500, (req as any).requestId));

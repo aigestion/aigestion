@@ -266,8 +266,8 @@ module.exports = {
     NEXT_PUBLIC_WS_URL: 'wss://aigestion.net',
     NEXT_PUBLIC_VERCEL_URL: 'https://aigestion.net',
     VERCEL_ENV: 'production',
-    VITE_SUPABASE_URL: 'https://T8jp4wZKQU1l5WQHSHoM1g_w1mvEbx1.supabase.co',
-    VITE_SUPABASE_ANON_KEY: 'sb_publishable_CqCI6d-vk4X6vlsOL69g_Q_BYH5K4yG',
+    VITE_SUPABASE_URL: process.env.VITE_SUPABASE_URL,
+    VITE_SUPABASE_ANON_KEY: process.env.VITE_SUPABASE_ANON_KEY,
   },
 
   // 🔄 Cron Jobs

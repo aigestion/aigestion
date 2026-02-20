@@ -11,9 +11,9 @@ import { logger } from '../utils/logger';
 @injectable()
 export class SupabaseService {
   private static instance: SupabaseService;
-  private readonly client: SupabaseClient;
+  private client!: SupabaseClient;
   private readonly connectionPool: Map<string, any> = new Map();
-  private readonly queryCache = new Map<string, { data: any, timestamp: number }>();
+  private readonly queryCache = new Map<string, { data: any; timestamp: number }>();
   private readonly performanceMetrics = new Map<string, number[]>();
 
   public constructor() {
@@ -109,16 +109,17 @@ export class SupabaseService {
             data: responseData,
             timestamp: Date.now(),
           });
-          this.recordMetric('api_call', Date.now() - this.recordMetric.start || Date.now());
+          this.recordMetric('api_call', 1);
         }
 
-        this.recordMetric('fetch_success', 1);
-        return response;
-      } else {
+        if (response.ok) {
+          this.recordMetric('fetch_success', 1);
+          return response;
+        }
+
         if (attempt === maxRetries) return response;
         this.recordMetric('fetch_retry', 1);
         await new Promise(r => setTimeout(r, baseDelay * Math.pow(2, attempt)));
-      }
       } catch (error: any) {
         if (attempt === maxRetries) throw error;
         this.recordMetric('fetch_error', 1);
@@ -167,7 +168,8 @@ export class SupabaseService {
   private cleanupCache() {
     const now = Date.now();
     for (const [key, value] of this.queryCache.entries()) {
-      if (now - value.timestamp > 3600000) { // 1 hour
+      if (now - value.timestamp > 3600000) {
+        // 1 hour
         this.queryCache.delete(key);
       }
     }
@@ -182,19 +184,27 @@ export class SupabaseService {
     // Monitor document changes
     this.client
       .channel('public:documents')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'documents' })
-      .subscribe((payload) => {
-        logger.info(`[SupabaseService] Document change: ${payload.eventType}`, payload);
-        this.invalidateCacheForDocument(payload.new?.id);
-      });
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'documents' },
+        (payload: any) => {
+          logger.info(`[SupabaseService] Document change: ${payload.eventType}`, payload);
+          this.invalidateCacheForDocument(payload.new?.id);
+        },
+      )
+      .subscribe();
 
     // Monitor AI sessions
     this.client
       .channel('public:ai_sessions')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'ai_sessions' })
-      .subscribe((payload) => {
-        logger.info(`[SupabaseService] AI Session change: ${payload.eventType}`, payload);
-      });
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'ai_sessions' },
+        (payload: any) => {
+          logger.info(`[SupabaseService] AI Session change: ${payload.eventType}`, payload);
+        },
+      )
+      .subscribe();
   }
 
   /**
@@ -230,15 +240,13 @@ export class SupabaseService {
       const tables = ['profiles', 'documents', 'ai_sessions'];
       for (const table of tables) {
         try {
-          const { error } = await this.client
-            .from(table)
-            .select('id')
-            .limit(1)
-            .maybeSingle();
+          const { error } = await this.client.from(table).select('id').limit(1).maybeSingle();
 
           if (!error) tablesChecked.push(table);
-        } catch (err) {
-          logger.warn(`[SupabaseService] Health check failed for ${table}: ${err.message}`);
+        } catch (err: any) {
+          logger.warn(
+            `[SupabaseService] Health check failed for ${table}: ${err?.message || String(err)}`,
+          );
         }
       }
 
@@ -250,10 +258,12 @@ export class SupabaseService {
           `[SupabaseService] Supreme Health check: ${tablesChecked.length} tables OK, ${latency}ms`,
         );
       } else {
-        logger.warn(`[SupabaseService] Health check: ${tables.length - tablesChecked.length} tables failed`);
+        logger.warn(
+          `[SupabaseService] Health check: ${tables.length - tablesChecked.length} tables failed`,
+        );
       }
-    } catch (err) {
-      logger.error(`[SupabaseService] Health check failed: ${err.message}`);
+    } catch (err: any) {
+      logger.error(`[SupabaseService] Health check failed: ${err?.message || String(err)}`);
       this.recordMetric('health_check_error', 1);
     }
   }
@@ -287,7 +297,7 @@ export class SupabaseService {
     embedding: number[],
     threshold: number = 0.7,
     count: number = 10,
-    searchMode: 'hybrid' | 'vector' | 'fulltext' | 'semantic' = 'hybrid'
+    searchMode: 'hybrid' | 'vector' | 'fulltext' | 'semantic' = 'hybrid',
   ) {
     if (!this.client) throw new Error('Supabase client not initialized');
 
@@ -309,8 +319,8 @@ export class SupabaseService {
 
       this.recordMetric('hybrid_search_v2', 1);
       return data;
-    } catch (error) {
-      logger.error(`[SupabaseService] Hybrid search v2 error: ${error.message}`);
+    } catch (error: any) {
+      logger.error(`[SupabaseService] Hybrid search v2 error: ${error?.message || String(error)}`);
       throw error;
     }
   }
@@ -318,6 +328,31 @@ export class SupabaseService {
   /**
    * Get performance metrics
    */
+  /**
+   * Upsert a document for RAG
+   */
+  public async upsertDocument(doc: { title: string; content: string; metadata?: any }) {
+    if (!this.client) throw new Error('Supabase client not initialized');
+
+    try {
+      const { data, error } = await this.client.from('documents').upsert({
+        title: doc.title,
+        content: doc.content,
+        metadata: doc.metadata || {},
+      });
+
+      if (error) {
+        logger.error(`[SupabaseService] Upsert document failed: ${error.message}`);
+        throw error;
+      }
+
+      return data;
+    } catch (error: any) {
+      logger.error(`[SupabaseService] Upsert error: ${error.message}`);
+      throw error;
+    }
+  }
+
   public getPerformanceMetrics() {
     const metrics: any = {};
     for (const [key, values] of this.performanceMetrics.entries()) {
@@ -345,8 +380,8 @@ export class SupabaseService {
       } else {
         logger.info(`[SupabaseService] Auto-optimization: ${data}`);
       }
-    } catch (err) {
-      logger.error(`[SupabaseService] Auto-optimization failed: ${err.message}`);
+    } catch (err: any) {
+      logger.error(`[SupabaseService] Auto-optimization failed: ${err?.message || String(err)}`);
     }
   }
 
@@ -367,8 +402,8 @@ export class SupabaseService {
       }
 
       return data;
-    } catch (err) {
-      logger.error(`[SupabaseService] Session analysis error: ${err.message}`);
+    } catch (err: any) {
+      logger.error(`[SupabaseService] Session analysis error: ${err?.message || String(err)}`);
       throw err;
     }
   }

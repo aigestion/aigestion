@@ -5,6 +5,8 @@ import { SupabaseService } from '../services/supabase.service';
 import { GodNotificationService } from '../services/god-notification.service';
 // MastraService: removed (not installed, routed through SwarmService)
 import { SwarmService } from '../services/swarm.service';
+import { SovereignOrchestratorService } from '../services/SovereignOrchestratorService';
+import { EnterpriseAuditService } from '../services/EnterpriseAuditService';
 import { logger } from '../utils/logger';
 
 /**
@@ -16,6 +18,8 @@ export class GodModeController {
   constructor(
     @inject(TYPES.GodNotificationService) private notificationService: GodNotificationService,
     @inject(TYPES.SwarmService) private swarm: SwarmService,
+    @inject(TYPES.SovereignOrchestratorService) private orchestrator: SovereignOrchestratorService,
+    @inject(TYPES.EnterpriseAuditService) private enterpriseAudit: EnterpriseAuditService,
   ) {}
 
   /**
@@ -47,6 +51,7 @@ export class GodModeController {
    */
   public async godPulse(req: Request, res: Response, next: NextFunction) {
     try {
+      const scaling = this.orchestrator.getCurrentScalingState();
       res.json({
         success: true,
         pulse: {
@@ -54,6 +59,10 @@ export class GodModeController {
           status: 'SOVEREIGN_ACTIVE',
           entropy: Math.random(),
           cognitiveLoad: 0.12, // Example metric
+          scaling: {
+            replicas: scaling.replicas,
+            trend: scaling.loadTrend,
+          },
         },
       });
     } catch (error: any) {
@@ -104,7 +113,7 @@ export class GodModeController {
         return res.status(400).json({ error: 'Query and embedding are required' });
       }
 
-      const results = await SupabaseService.getInstance().hybridSearch(
+      const results = await SupabaseService.getInstance().hybridSearchV2(
         projectId,
         query,
         embedding,
@@ -122,9 +131,14 @@ export class GodModeController {
   public async getPrompt(req: Request, res: Response, next: NextFunction) {
     try {
       const name = req.params.name as string;
-      const template = await SupabaseService.getInstance().getPromptTemplate(name);
+      const client = SupabaseService.getInstance().getClient();
+      const { data: template, error } = await client
+        .from('prompt_templates')
+        .select('*')
+        .eq('name', name)
+        .single();
 
-      if (!template) {
+      if (error || !template) {
         return res.status(404).json({ error: `Prompt template [${name}] not found` });
       }
 
@@ -178,6 +192,20 @@ export class GodModeController {
       );
 
       res.json({ success: true, message: 'Broadcast successful' });
+    } catch (error: any) {
+      next(error);
+    }
+  }
+
+  /**
+   * 📜 COMPLIANCE EXPORT
+   * Trigger a high-priority audit export for enterprise auditing.
+   */
+  public async requestComplianceExport(req: Request, res: Response, next: NextFunction) {
+    try {
+      const filters = req.body.filters || {};
+      const result = await this.enterpriseAudit.generateComplianceExport(filters);
+      res.json({ success: true, data: result });
     } catch (error: any) {
       next(error);
     }

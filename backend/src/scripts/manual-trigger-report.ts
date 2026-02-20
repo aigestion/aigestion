@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import axios from 'axios';
 import { EconomyService } from '../services/economy.service';
 import { DeFiStrategistService } from '../services/defi-strategist.service';
+import { CoinGeckoService } from '../services/coingecko.service';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 
@@ -11,7 +12,8 @@ async function sendManualReport() {
   console.log('🚀 Generando y enviando reporte a Telegram...');
 
   const geminiService = new Gemini2Service();
-  const defiService = new DeFiStrategistService(geminiService);
+  const coingeckoService = new CoinGeckoService();
+  const defiService = new DeFiStrategistService(geminiService, coingeckoService);
   const economyService = new EconomyService(defiService);
   const chatId = env.TELEGRAM_CHAT_ID_DEV || env.TELEGRAM_CHAT_ID;
   const token = env.TELEGRAM_BOT_TOKEN_DEV || env.TELEGRAM_BOT_TOKEN;

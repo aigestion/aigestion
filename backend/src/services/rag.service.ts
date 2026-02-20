@@ -454,12 +454,12 @@ export class RagService {
       // Mock embedding (768d) - In production you would use gemini or openai here
       const mockEmbedding = new Array(768).fill(0).map(() => Math.random());
 
-      const results = await supabaseService.hybridSearch(
+      const results = await supabaseService.hybridSearchV2(
         undefined, // All projects
         query,
         mockEmbedding,
         0.3,
-        3
+        3,
       );
 
       if (results && results.length > 0) {

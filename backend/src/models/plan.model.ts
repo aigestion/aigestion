@@ -110,10 +110,11 @@ const PlanSchema: Schema = new Schema({
   timestamps: true,
   toJSON: {
     transform: function(doc, ret) {
-      ret.id = ret._id;
-      delete ret._id;
-      delete ret.__v;
-      return ret;
+      const data = ret as any;
+      data.id = data._id;
+      delete data._id;
+      delete data.__v;
+      return data;
     },
   },
 });
@@ -262,7 +263,7 @@ PlanSchema.methods.getFeaturesWithIcons = function(): Array<{name: string, icon:
     'SLA': 'shield',
   };
 
-  return this.features.map(feature => ({
+  return this.features.map((feature: string) => ({
     name: feature,
     icon: iconMap[feature] || 'check',
   }));
@@ -270,4 +271,4 @@ PlanSchema.methods.getFeaturesWithIcons = function(): Array<{name: string, icon:
 
 const Plan = mongoose.model<IPlan>('Plan', PlanSchema);
 
-export { Plan, IPlan };
+export { Plan };

@@ -59,43 +59,26 @@ jspm_packages/
 google-credentials.json
 *-credentials.json
 *-token.json
-*/tokens/*
 **/secrets/**
-migration-backup/
-backups/
-!.env.example
-!.env.docker.example
+**/*.env
+**/*.env.*
+! .env.example
 
-# Sensitive scripts
-**/generate-tokens.js
-**/verify_github_token.js
-**/check-fb-token.js
+# INFRA: Vaults & Environment Snapshots
+infra/vault/
+infra/envs/
+aig-ia-engine/swarm/long_term_memory.json
+aig-ia-engine/swarm/*.log
 
-# Backup files
-*.bak
-*.backup
-*.tmp
-*.swp
+# DEPLOY: Build Artifacts & Snapshots
+aigestion-deploy/public/
+**/dist/
+**/build/
+**/out/
+ .vercel/
+ .output/
+ .next/
 
-# Security - NEVER COMMIT SECRETS
-*.env
-*.env.*
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-**/.env
-**/.env.*
-ops/scripts/credentials.json
-ops/scripts/verify_github_token.js
-ops/scripts/create_notion_os_fallback.js
-ops/scripts/get_database_schema.js
-backend/.env*
-migration-backup/**/tk.txt
-migration-backup/**/token.txt
-**/credentials.json
-**/api_keys.txt
-**/secrets.txt
 
 # Database files
 *.db

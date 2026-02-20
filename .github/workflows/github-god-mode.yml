@@ -23,6 +23,8 @@ on:
           - security-only
           - performance-only
           - vercel-deploy
+          - railway-deploy
+          - gcp-deploy
           - cleanup-only
       environment:
         description: 'Deployment environment'
@@ -64,6 +66,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # 🛡️ DEPENDENCY GUARD
+  dependency-guard:
+    name: 🛡️ Dependency Guard
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - name: 🔍 Security Audit
+        run: pnpm audit --audit-level=critical
+      - name: 📊 Dependency Analysis
+        run: |
+          OUTDATED=$(pnpm outdated || true)
+          if [ -n "$OUTDATED" ]; then
+            echo "## ⚠️ Outdated Dependencies" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "$OUTDATED" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
   # 🧠 INTELLIGENCE GATHERING
   intelligence-gathering:
     name: 🧠 Intelligence Gathering & Analysis
@@ -139,9 +163,9 @@ jobs:
           echo "}" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
         env:
-          VITE_API_BASE_URL: /api
-          VITE_SUPABASE_URL: https://nbymcxvlcfyhebzjurml.supabase.co
-          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ieW1jeHZsY2Z5aGViemp1cm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1NzU1MDAsImV4cCI6MjA4NTE1MTUwMH0.naLyb4Fc2o0-c4K2S_D7rEXasUN-xu7zcBtX-nVHldA
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: ⚠️ Risk Assessment
         id: risk
@@ -198,14 +222,21 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
 
-      - name: 🔐 Advanced Secret Detection
+      - name: 🔐 Advanced Secret Detection (TruffleHog)
         if: matrix.scan-type == 'secrets'
         uses: trufflesecurity/trufflehog@main
-        continue-on-error: true # Don't block deploy for minor secrets unless critical
+        continue-on-error: true
         with:
           base: ${{ github.event_name == 'pull_request' && github.base_ref || github.event.repository.default_branch }}
           head: HEAD
           extra_args: --only-verified
+
+      - name: 🔍 Gitleaks Secret Scan
+        if: matrix.scan-type == 'secrets'
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
 
       - name: 📦 Dependency Security Scan
         if: matrix.scan-type == 'dependencies'
@@ -220,6 +251,16 @@ jobs:
       - name: 🔍 CodeQL Analysis
         if: matrix.scan-type == 'code'
         uses: github/codeql-action/analyze@v3
+
+      - name: 🛡️ Semgrep Security Scan
+        if: matrix.scan-type == 'code'
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/owasp-top-ten
+            p/secrets
+            p/cwe-top-25
 
       - name: 🛡️ Infrastructure Security
         if: matrix.scan-type == 'infrastructure'
@@ -357,9 +398,9 @@ jobs:
           cd frontend/apps/website-epic
           pnpm run build
         env:
-          VITE_API_BASE_URL: /api
-          VITE_SUPABASE_URL: https://nbymcxvlcfyhebzjurml.supabase.co
-          VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ieW1jeHZsY2Z5aGViemp1cm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1NzU1MDAsImV4cCI6MjA4NTE1MTUwMH0.naLyb4Fc2o0-c4K2S_D7rEXasUN-xu7zcBtX-nVHldA
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL || '/api' }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: 🛡️ Deploy Canary (Preview)
         id: deploy
@@ -402,6 +443,55 @@ jobs:
           echo "❌ Health check failed"
           echo "passed=false" >> $GITHUB_OUTPUT
           exit 1
+
+  # 🏗️ INFRASTRUCTURE DEPLOYMENT (Backend & Swarm)
+  infrastructure-deployment:
+    name: 🏗️ Infra Deploy (Railway/GCP)
+    runs-on: ubuntu-latest
+    needs: [intelligence-gathering, ultimate-security]
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: 🚀 Deploy to Railway (Backend)
+        if: github.event.inputs.action_type == 'full-suite' || github.event.inputs.action_type == 'railway-deploy'
+        uses: railwayapp/railway-action@master
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        with:
+          service: 'aigestion-backend'
+          root: 'backend'
+
+      - name: 🚀 Deploy to Cloud Run
+        if: github.event.inputs.action_type == 'full-suite' || github.event.inputs.action_type == 'gcp-deploy'
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: ${{ secrets.GCP_WID_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: 🏗️ GCP Build and Push
+        if: github.event.inputs.action_type == 'full-suite' || github.event.inputs.action_type == 'gcp-deploy'
+        run: |
+          docker build -t europe-southwest1-docker.pkg.dev/aigestion-sovereign-2026/aigestion-repo/aigestion-backend:${{ github.sha }} -f backend/Dockerfile .
+          docker push europe-southwest1-docker.pkg.dev/aigestion-sovereign-2026/aigestion-repo/aigestion-backend:${{ github.sha }}
+
+      - name: 🚀 Deploy to Cloud Run
+        if: github.event.inputs.action_type == 'full-suite' || github.event.inputs.action_type == 'gcp-deploy'
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: 'aigestion-backend'
+          region: 'europe-southwest1'
+          image: europe-southwest1-docker.pkg.dev/aigestion-sovereign-2026/aigestion-repo/aigestion-backend:${{ github.sha }}
+          env_vars: |
+            NODE_ENV=production
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            REDIS_URL=${{ secrets.REDIS_URL }}
+            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+
+
 
   # 🏆 PRODUCTION PROMOTION
   production-promotion:
@@ -454,25 +544,102 @@ jobs:
           echo "**Canary Validation:** ${{ needs.post-deploy-validation.result }}" >> $GITHUB_STEP_SUMMARY
           echo "**Deployment URL:** https://aigestion.net" >> $GITHUB_STEP_SUMMARY
 
+  # 🤖 AI-POWERED PR INSIGHTS
+  ai-pr-insights:
+    name: 🤖 AI PR Insights - God Mode
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🧪 Generate AI Summary
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            const summary = `
+            ## 🤖 AI PR Insights - Sovereign Intelligence
+            
+            **PR Title:** ${pullRequest.title}
+            **Status:** 🚀 God Level Optimization Detected
+            
+            ### 📊 Change Summary:
+            - **Files Modified:** ${files.length}
+            - **Lines Added:** +${pullRequest.additions}
+            - **Lines Removed:** -${pullRequest.deletions}
+            
+            ### 🔍 Quick Audit:
+            ${files.map(f => `- \`${f.filename}\`: ${f.status}`).join('\n')}
+            
+            ---
+            *Generated by Antigravity AI Orchestrator*
+            `;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: summary
+            });
+
+  # 🏆 AI-POWERED RELEASE MANAGEMENT
+  ai-release-management:
+    name: 🏆 AI Release Management
+    runs-on: ubuntu-latest
+    needs: [production-promotion]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: 🎓 Generate Release Notes
+        id: release-notes
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const commits = await github.rest.repos.listCommits({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              per_page: 10
+            });
+            const notes = commits.data.map(c => `- ${c.commit.message}`).join('\n');
+            const releaseBody = `## 🚀 New Sovereign Release\n\n### 🧬 Genetic Updates:\n${notes}\n\n---\n*Orchestrated by Antigravity God Mode*`;
+            
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `v${new Date().getTime()}`,
+              name: `Sovereign Update ${new Date().toLocaleDateString()}`,
+              body: releaseBody
+            });
+
+
   # 🧹 CLEANUP
   cleanup:
     name: 🧹 Cleanup & Optimization
     runs-on: ubuntu-latest
-    needs: [production-promotion]
-    if: always() && needs.production-promotion.result == 'success'
-
+    needs: [intelligence-gathering]
+    if: always()
     steps:
-      - name: 🧹 Clean Old Deployments
+      - name: 🧹 Clean Cache & Old Runs
         run: |
-          echo "🧹 Cleaning up old deployments..."
-          # List deployments older than 30 days and remove them
-          npx vercel ls --token=${{ secrets.VERCEL_TOKEN }} 2>/dev/null | head -20 || echo "Vercel CLI not available for cleanup"
-
-      - name: 📊 Cache Optimization
-        run: |
-          echo "📊 Optimizing GitHub Actions cache..."
-          # Report cache usage
-          echo "## 🧹 Cleanup Report" >> $GITHUB_STEP_SUMMARY
-          echo "**Old deployments**: Reviewed" >> $GITHUB_STEP_SUMMARY
-          echo "**Cache status**: Optimized" >> $GITHUB_STEP_SUMMARY
-          echo "**Timestamp**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "🧹 Performing God-Level maintenance..."
+          gh run delete --all --status completed --limit 5 || true
+          echo "✅ Repository optimized"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

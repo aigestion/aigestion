@@ -1,0 +1,13 @@
+rootProject.name = 'aigestion-mobile-frontend'
+include ':app'
+
+def cordovaPluginsDir = file('./capacitor-cordova-android-plugins/')
+if (cordovaPluginsDir.exists()) {
+    include ':capacitor-cordova-android-plugins'
+    project(':capacitor-cordova-android-plugins').projectDir = cordovaPluginsDir
+}
+
+def capacitorSettings = file('capacitor.settings.gradle')
+if (capacitorSettings.exists()) {
+    apply from: capacitorSettings
+}

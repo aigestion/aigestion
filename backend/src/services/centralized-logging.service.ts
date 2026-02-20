@@ -5,6 +5,9 @@ import type { RedisClientType } from 'redis';
 import path from 'path';
 import { getRedisClient } from '../cache/redis';
 import { logger } from '../utils/logger';
+import { SelfHealingService } from './self-healing.service';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 export const CENTRAL_LOGGING_SERVICE_NAME = 'CentralizedLoggingService';
 
 interface LogEntry {
@@ -523,8 +526,16 @@ export class CentralizedLoggingService {
           ...log,
           alertLevel: 'critical',
           sentAt: new Date(),
-        })
+        }),
       );
+
+      // Automated Self-Healing Trigger
+      try {
+        const selfHealing = container.get<SelfHealingService>(TYPES.SelfHealingService);
+        await selfHealing.diagnoseAndRepair(JSON.stringify(log));
+      } catch (e) {
+        logger.error('[CentralizedLogging] Failed to trigger self-healing diagnostic:', e);
+      }
     } catch (error) {
       logger.error('Failed to send alert:', error);
     }

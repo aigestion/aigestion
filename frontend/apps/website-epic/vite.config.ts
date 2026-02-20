@@ -11,38 +11,42 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env.NODE_ENV': JSON.stringify('development'),
     global: 'window',
   },
   build: {
     outDir: 'dist',
     sourcemap: false,
     minify: 'terser',
-    target: 'es2020',
+    target: 'esnext',
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
       },
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-          ui: ['framer-motion', 'lucide-react', 'clsx', 'tailwind-merge'],
-          three: ['three', '@react-three/fiber', '@react-three/drei'],
+          'vendor-core': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['framer-motion', 'lucide-react', 'clsx', 'tailwind-merge'],
+          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
+          'vendor-utils': ['axios', 'zod', 'zustand', 'howler'],
         },
       },
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 800,
     terserOptions: {
       compress: {
-        drop_console: false,
+        drop_console: true,
         drop_debugger: true,
-        // pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn'],
+        pure_getters: true,
+        passes: 2,
       },
       mangle: {
         safari10: true,
       },
+      format: {
+        comments: false,
+      },
     },
-    reportCompressedSize: false,
+    reportCompressedSize: true,
   },
   server: {
     port: 3000,

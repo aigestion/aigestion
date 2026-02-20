@@ -66,7 +66,7 @@ export const PhoneVerification: React.FC = () => {
         <SpotlightWrapper className="min-h-screen bg-nexus-obsidian flex items-center justify-center px-4 relative overflow-hidden">
              <div className="absolute inset-0">
                 <div className="grain-overlay opacity-30" />
-                <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-20" />
+                <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] bg-center opacity-20" />
             </div>
 
             <motion.div

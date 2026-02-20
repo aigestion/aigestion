@@ -55,16 +55,34 @@ export class SovereignVaultService {
     limit: number
   ): Promise<VaultResult[]> {
     try {
-      // Direct call to ChromaDB Port 8000
-      const response = await axios.get(`${this.chromaUrl}/api/v1/heartbeat`);
-      if (response.status === 200) {
-        // Placeholder: ChromaDB implementation would use the embedding vector here
-        // For now, we return empty but log the health status
-        return [];
+      // 🌌 HIGH-PERFORMANCE CHROMADB INTEGRATION
+      // ChromaDB expects a collection query. We target the 'sovereign_knowledge' collection.
+      const collectionName = 'sovereign_knowledge';
+      const response = await axios.post(
+        `${this.chromaUrl}/api/v1/collections/${collectionName}/query`,
+        {
+          query_embeddings: [embedding],
+          n_results: limit,
+          include: ['documents', 'metadatas', 'distances'],
+        },
+        { timeout: 2000 },
+      ); // Strict timeout for local resilience
+
+      if (response.status === 200 && response.data.documents[0]) {
+        return response.data.documents[0].map((doc: string, i: number) => ({
+          content: doc,
+          source: 'local',
+          score: 1 - (response.data.distances[0][i] || 0), // Convert distance to score
+          metadata: response.data.metadatas[0][i] || {},
+        }));
       }
       return [];
-    } catch (err) {
-      logger.warn('[SovereignVault] Local ChromaDB unreachable');
+    } catch (err: any) {
+      if (err.code === 'ECONNREFUSED') {
+        logger.warn('[SovereignVault] Local ChromaDB offline, skipping local bank.');
+      } else {
+        logger.warn({ error: err.message }, '[SovereignVault] ChromaDB query error');
+      }
       return [];
     }
   }
@@ -98,7 +116,7 @@ export class SovereignVaultService {
   ): Promise<VaultResult[]> {
     try {
       // Supabase Hybrid Search using real embeddings
-      const results = await supabaseService.hybridSearch(undefined, text, embedding, 0.3, limit);
+      const results = await supabaseService.hybridSearchV2(undefined, text, embedding, 0.3, limit);
 
       return results.map((res: any) => ({
         content: res.content || '',

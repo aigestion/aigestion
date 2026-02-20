@@ -203,7 +203,7 @@ export const InteractiveShowcase: React.FC = () => {
     >
       {/* Background Grid & Particles */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+        <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
         {particles.map(particle => (
           <motion.div
             key={particle.id}

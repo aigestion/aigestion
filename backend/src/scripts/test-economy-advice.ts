@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { EconomyService } from '../services/economy.service';
 import { DeFiStrategistService } from '../services/defi-strategist.service';
+import { CoinGeckoService } from '../services/coingecko.service';
 import { logger } from '../utils/logger';
 
 import { Gemini2Service } from '../services/gemini-2.service';
@@ -9,7 +10,8 @@ async function testAdvice() {
   console.log('🚀 Iniciando prueba de consejos de inversión...');
 
   const geminiService = new Gemini2Service();
-  const defiService = new DeFiStrategistService(geminiService);
+  const coingeckoService = new CoinGeckoService();
+  const defiService = new DeFiStrategistService(geminiService, coingeckoService);
   const service = new EconomyService(defiService);
 
   // Force some mock data/behavior if needed for the test to be impressive

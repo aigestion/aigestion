@@ -88,7 +88,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
   return (
     <div className="min-h-screen bg-nexus-obsidian text-white font-sans overflow-hidden">
         {/* Background enhancements */}
-        <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-5 pointer-events-none fixed" />
+        <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] bg-center opacity-5 pointer-events-none fixed" />
         <div className="grain-overlay pointer-events-none fixed inset-0 z-50 opacity-20" />
 
       {/* Mobile Menu Button */}

@@ -153,13 +153,13 @@ export class EnhancedVoiceService {
       logger.info('[EnhancedVoiceService] Transcribing audio with ML Service...');
 
       const formData = new FormData();
-      const blob = new Blob([audioBuffer], { type: 'audio/wav' });
+      const blob = new Blob([new Uint8Array(audioBuffer)], { type: 'audio/wav' });
       formData.append('file', blob, 'audio.wav');
 
       const response = await fetch(`${env.ML_SERVICE_URL}/transcribe`, {
         method: 'POST',
         headers: {
-          'x-api-key': env.ML_SERVICE_API_KEY || 'LOCAL_DEV_SECRET_KEY_REPLACE_ME',
+          'x-api-key': env.ML_SERVICE_API_KEY,
         },
         body: formData,
       });
@@ -244,35 +244,52 @@ export class EnhancedVoiceService {
     context: ConversationContext,
   ): Promise<string> {
     try {
+      const tierTraits = {
+        free: 'Mantén un tono útil pero básico. Evita análisis técnicos profundos.',
+        basic: 'Tono profesional y eficiente. Proporciona explicaciones claras pero concisas.',
+        premium:
+          'Tono altamente inteligente, proactivo y empático. Proporciona insights técnicos detallados y sugerencias arquitectónicas.',
+        elite:
+          'Tono de máxima autoridad técnica (God Mode). Anticipa necesidades, sugiere optimizaciones de infraestructura y asiste en decisiones estratégicas.',
+      };
+
+      const userTier = (context as any).tier || 'free';
+      const personality = tierTraits[userTier as keyof typeof tierTraits] || tierTraits.free;
+
       const systemPrompt = `
-        Eres Daniela, una asistente de IA futurista y empática de AIGestion.
-
-        Directrices:
-        - Adapta tu tono según la emoción detectada: ${emotionalAnalysis.emotion}
-        - Mantén un perfil profesional pero cercano
-        - Usa el contexto de la conversación para respuestas coherentes
-        - Sé proactiva y ofrece soluciones cuando sea apropiado
-        - Mantén las respuestas concisas pero informativas
-
-        Emoción detectada: ${emotionalAnalysis.emotion} (${emotionalAnalysis.confidence}% de confianza)
-        Sentimiento: ${emotionalAnalysis.sentiment}
-      `;
+      Eres Daniela, una asistente de IA futurista de AIGestion.
+      Tu nivel de acceso actual es: ${userTier.toUpperCase()}
+      
+      Directrices de Personalidad:
+      - ${personality}
+      - Adapta tu tono según la emoción detectada: ${emotionalAnalysis.emotion}
+      - Mantén un perfil profesional pero cercano
+      - Usa el contexto de la conversación para respuestas coherentes
+      - Sé proactiva y ofrece soluciones cuando sea apropiado
+      
+      Emoción detectada: ${emotionalAnalysis.emotion} (${emotionalAnalysis.confidence}% de confianza)
+      Sentimiento: ${emotionalAnalysis.sentiment}
+    `;
 
       const conversationHistory = context.messages.map(msg => ({
         role: msg.speaker === 'daniela' ? ('assistant' as const) : ('user' as const),
         content: msg.text,
       }));
 
-      const response = await this.aiService.streamChat({
+      const streamingResponse = await this.aiService.streamChat({
         prompt: text,
         history: conversationHistory,
         userId: context.messages[0]?.id || 'unknown',
         userRole: 'premium',
       });
 
-      // For now, return a mock response
-      // TODO: Implement actual streaming response handling
-      return this.generateResponseBasedOnEmotion(text, emotionalAnalysis);
+      // Handle streaming response (accumulate for TTS if needed, or pipe to frontend)
+      let fullResponse = '';
+      for await (const chunk of streamingResponse) {
+        fullResponse += chunk;
+      }
+
+      return fullResponse || this.generateResponseBasedOnEmotion(text, emotionalAnalysis);
     } catch (error) {
       logger.error(error, '[EnhancedVoiceService] Error generating response');
       return 'Entendido. ¿En qué más puedo ayudarte?';

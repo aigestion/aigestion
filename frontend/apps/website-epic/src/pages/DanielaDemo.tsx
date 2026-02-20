@@ -3,6 +3,33 @@ import { Brain, Cpu, Globe, Shield, Sparkles, Zap } from 'lucide-react';
 import React, { useState } from 'react';
 import { DanielaWebsite } from '../components/DanielaWebsite';
 
+const Waveform: React.FC<{ isActive: boolean }> = ({ isActive }) => (
+  <div className="flex items-end gap-1 h-8 px-4">
+    {[...Array(12)].map((_, i) => (
+      <motion.div
+        key={i}
+        animate={
+          isActive
+            ? {
+                height: [8, Math.random() * 24 + 8, 8],
+              }
+            : { height: 4 }
+        }
+        transition={
+          isActive
+            ? {
+                duration: 0.5 + Math.random() * 0.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }
+            : { duration: 0.2 }
+        }
+        className="w-1 bg-nexus-cyan-glow/50 rounded-full"
+      />
+    ))}
+  </div>
+);
+
 export const DanielaDemo: React.FC = () => {
   const [demoMode, setDemoMode] = useState<'conversation' | 'features' | 'analytics'>(
     'conversation'
@@ -25,8 +52,8 @@ export const DanielaDemo: React.FC = () => {
     },
     {
       icon: <Zap className="w-6 h-6" />,
-      title: 'Acciones Proactivas',
-      description: 'Sugerencias inteligentes basadas en la conversación',
+      title: 'Streaming de Alta Fidelidad',
+      description: 'Respuestas por voz en tiempo real con latencia <200ms',
       color: 'from-nexus-gold to-yellow-500',
     },
     {
@@ -176,6 +203,22 @@ export const DanielaDemo: React.FC = () => {
                     </motion.button>
                   ))}
                 </div>
+              </div>
+            </div>
+
+            {/* Status & Waveform Indicator */}
+            <div className="flex justify-center items-center gap-4 mb-8">
+              <div className="flex items-center gap-2 px-3 py-1 bg-nexus-cyan/10 border border-nexus-cyan/20 rounded-full">
+                <div className="w-2 h-2 bg-nexus-cyan rounded-full animate-pulse" />
+                <span className="text-xs font-orbitron text-nexus-cyan-glow uppercase tracking-wider">
+                  High Fidelity Voice Active
+                </span>
+              </div>
+              <Waveform isActive={true} />
+              <div className="px-3 py-1 bg-nexus-violet/10 border border-nexus-violet/20 rounded-full">
+                <span className="text-xs font-orbitron text-nexus-violet-glow uppercase tracking-wider">
+                  Premium Tier Enabled
+                </span>
               </div>
             </div>
 

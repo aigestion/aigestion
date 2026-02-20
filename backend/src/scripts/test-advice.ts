@@ -1,13 +1,15 @@
 import 'reflect-metadata';
 import { EconomyService } from '../services/economy.service';
 import { DeFiStrategistService } from '../services/defi-strategist.service';
+import { CoinGeckoService } from '../services/coingecko.service';
 
 import { Gemini2Service } from '../services/gemini-2.service';
 
 async function run() {
   console.log('--- TEST START ---');
   const geminiService = new Gemini2Service();
-  const defiService = new DeFiStrategistService(geminiService);
+  const coingeckoService = new CoinGeckoService();
+  const defiService = new DeFiStrategistService(geminiService, coingeckoService);
   const service = new EconomyService(defiService);
 
   console.log('Fetching Advice...');

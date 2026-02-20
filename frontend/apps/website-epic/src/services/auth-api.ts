@@ -70,4 +70,42 @@ export const authApi = {
   logout: async () => {
     return request<any>('/auth/logout', { method: 'POST' });
   },
+
+  // Subscription endpoints
+  getSubscription: async (userId: string, token: string) => {
+    return request<any>(`/subscription/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  validateSubscription: async (userId: string, accessType: string, token: string) => {
+    return request<any>('/subscription/validate', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ userId, accessType }),
+    });
+  },
+
+  createPaymentSession: async (userId: string, planId: string, token: string) => {
+    return request<any>('/subscription/create-payment-session', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ userId, planId }),
+    });
+  },
+
+  cancelSubscription: async (userId: string, token: string) => {
+    return request<any>(`/subscription/${userId}/cancel`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+  },
+
+  updateSubscription: async (userId: string, updates: any, token: string) => {
+    return request<any>(`/subscription/${userId}`, {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(updates),
+    });
+  },
 };

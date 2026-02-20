@@ -64,10 +64,14 @@ export class UsageService {
         const persona = await Persona.findById(params.personaId);
         if (persona) {
           creatorId = persona.ownerId.toString();
-          // Logic: 30% platform, 70% creator of the cost estimate
-          // This can be adjusted if we have a specific 'markup' for personas
+          // Logic: 30% platform BASE, adjusted by persona's multiplier
+          // Base cost is estimated tokens. Multiplier increases the creator's cut.
+          const multiplier = persona.commissionMultiplier || 1.0;
           platformCommission = costEstimate * this.PLATFORM_COMMISSION_RATE;
-          creatorCommission = costEstimate * (1 - this.PLATFORM_COMMISSION_RATE);
+          creatorCommission = costEstimate * (1 - this.PLATFORM_COMMISSION_RATE) * multiplier;
+          
+          // Increment execution count synchronously for reputation tracking
+          await Persona.findByIdAndUpdate(params.personaId, { $inc: { totalExecutions: 1 } });
         }
       }
 
@@ -120,5 +124,32 @@ export class UsageService {
 
     const rate = rates[modelId] || rates['gemini-3.0-flash'];
     return promptTokens * rate.prompt + completionTokens * rate.completion;
+  }
+
+  /**
+   * Updates persona reputation based on success metrics
+   */
+  public async updatePersonaReputation(personaId: string, success: boolean): Promise<void> {
+    try {
+      const persona = await Persona.findById(personaId);
+      if (!persona) return;
+
+      const total = persona.totalExecutions || 1;
+      const currentSuccesses = (persona.successRate || 1.0) * total;
+      const newSuccesses = success ? currentSuccesses + 1 : currentSuccesses;
+      const newRate = newSuccesses / (total + (success ? 0 : 0)); // total already incremented in trackUsage
+
+      // Linear interpolation for reputation: weight success rate and execution volume
+      const reputationScore = (newRate * 0.7) + (Math.min(total / 1000, 1.0) * 0.3);
+
+      await Persona.findByIdAndUpdate(personaId, {
+        successRate: newRate,
+        reputationScore
+      });
+
+      logger.info(`[UsageService] Updated reputation for Persona ${personaId}: ${reputationScore.toFixed(4)}`);
+    } catch (error) {
+      logger.error(`[UsageService] Failed to update persona reputation ${personaId}`, error);
+    }
   }
 }

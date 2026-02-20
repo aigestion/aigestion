@@ -10,14 +10,15 @@ interface CinematicHeroProps {
   onHeroComplete?: () => void;
 }
 
-export const CinematicHero: React.FC<CinematicHeroProps> = () => {
+export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) => {
   const { setIsContactModalOpen } = useAppContext();
   const [currentScene, setCurrentScene] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [videoError, setVideoError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [showDemo, setShowDemo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { playHover, playClick } = useSound();
+  const { playHover, playClick, playWuaw } = useSound();
 
   const scenes = [
     {
@@ -60,26 +61,46 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       if (isPlaying && !isLoading) {
-        setCurrentScene(prev => (prev + 1) % scenes.length);
+        if (currentScene === scenes.length - 1) {
+          onHeroComplete?.();
+        } else {
+          setCurrentScene(prev => (prev + 1) % scenes.length);
+        }
       }
     }, scenes[currentScene].duration);
 
     return () => clearInterval(timer);
-  }, [currentScene, isPlaying, isLoading, scenes]);
+  }, [currentScene, isPlaying, isLoading, scenes, onHeroComplete]);
 
   useEffect(() => {
+    setVideoError(false);
     if (videoRef.current) {
-      videoRef.current.play().catch(() => setIsLoading(false));
+      videoRef.current.load();
+      videoRef.current.play().catch(() => {
+        setIsLoading(false);
+        setVideoError(true);
+      });
     }
   }, [currentScene]);
 
   const handleVideoLoaded = () => {
     setIsLoading(false);
+    setVideoError(false);
+  };
+
+  const handleVideoError = () => {
+    setIsLoading(false);
+    setVideoError(true);
   };
 
   const handleSceneClick = (sceneIndex: number) => {
     playClick();
     setCurrentScene(sceneIndex);
+  };
+
+  const handleSkip = () => {
+    playWuaw();
+    onHeroComplete?.();
   };
 
   const handlePlayPause = () => {
@@ -95,7 +116,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black" data-build="website-epic-v3">
+    <div
+      className="relative w-full h-screen overflow-hidden bg-black font-orbitron"
+      data-build="website-epic-v4"
+    >
       {/* Background Layer with Multi-layered effects */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="wait">
@@ -107,24 +131,31 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
             transition={{ duration: 1.5 }}
             className="relative w-full h-full"
           >
-            {/* Base Layer: wide hero or video */}
-            <div className="absolute inset-0 smooth-mesh-bg opacity-40 scale-110 blur-[2px]" />
+            {/* Base Layer: smooth mesh or fallback */}
+            <div
+              className={`absolute inset-0 smooth-mesh-bg scale-110 blur-[2px] transition-opacity duration-1000 ${videoError ? 'opacity-80' : 'opacity-40'}`}
+            />
 
-            <motion.video
-              ref={videoRef}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-40"
-              onLoadedData={handleVideoLoaded}
+            {!videoError && (
+              <motion.video
+                ref={videoRef}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-40"
+                onLoadedData={handleVideoLoaded}
+                onError={handleVideoError}
+              >
+                <source src={scenes[currentScene].video} type="video/mp4" />
+              </motion.video>
+            )}
+
+            {/* 3D Neural Core - Interactive Layer (Fallback & Enhancement) */}
+            <div
+              className={`absolute inset-0 z-10 flex items-center justify-center pointer-events-none transition-opacity duration-1000 ${videoError ? 'opacity-100' : 'opacity-80'}`}
             >
-              <source src={scenes[currentScene].video} type="video/mp4" />
-            </motion.video>
-
-            {/* 3D Neural Core - Interactive Layer */}
-            <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-              <div className="w-full h-full md:w-1/2 md:h-1/2 opacity-80 mix-blend-screen pointer-events-auto">
+              <div className="w-full h-full md:w-1/2 md:h-1/2 mix-blend-screen pointer-events-auto">
                 <NeuralServer />
               </div>
             </div>
@@ -176,27 +207,23 @@ export const CinematicHero: React.FC<CinematicHeroProps> = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7 }}
-            className="flex gap-4"
+            className="flex gap-4 items-center"
           >
             <button
               onClick={handlePlayPause}
-              className="premium-glass px-6 py-3 rounded-full text-white text-xs font-orbitron font-bold tracking-widest uppercase hover:text-nexus-cyan transition-colors"
+              className="premium-glass px-6 py-3 rounded-full text-white text-xs font-bold tracking-widest uppercase hover:text-nexus-cyan transition-colors"
             >
               {isPlaying ? '⏸ PAUSA' : '▶ PLAY'}
             </button>
             <button
-              onClick={() => {
-                const el = document.getElementById('demo-dashboard');
-                el?.scrollIntoView({ behavior: 'smooth' });
-              }}
-              onMouseEnter={playHover}
-              className="premium-glass px-6 py-3 rounded-full text-nexus-cyan text-xs font-orbitron font-bold tracking-widest uppercase hover:bg-nexus-cyan/20 transition-all"
+              onClick={handleSkip}
+              className="premium-glass px-6 py-3 rounded-full text-nexus-cyan text-xs font-bold tracking-widest uppercase hover:bg-nexus-cyan/20 transition-all border border-nexus-cyan/30"
             >
-              PROBAR DEMO
+              SALTAR INTRO
             </button>
             <button
               onClick={() => setIsContactModalOpen(true)}
-              className="btn-enterprise px-8 py-3 rounded-full"
+              className="btn-enterprise px-8 py-3 rounded-full text-xs"
             >
               INGRESAR AL NEXUS
             </button>

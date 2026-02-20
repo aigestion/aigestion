@@ -3,9 +3,10 @@ import tsConfig from '../tsconfig.json';
 import path from 'path';
 import dotenv from 'dotenv';
 
-// Load .env at the very beginning
-// Target the root .env in C:\Users\Alejandro\AIGestion\.env
-dotenv.config({ path: path.join(process.cwd(), '../.env') });
+// Load environment variables via dotenv only if not already provided by host/dotenvx
+if (!process.env.PORT && !process.env.MONGODB_URI) {
+  dotenv.config({ path: path.join(process.cwd(), '../.env') });
+}
 
 // Register path aliases from tsconfig.json
 register({

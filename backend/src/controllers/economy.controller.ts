@@ -55,4 +55,28 @@ export class EconomyController {
       res.status(500).json({ success: false, message: 'Failed to fetch history' });
     }
   }
+
+  @httpGet('/creator-dashboard')
+  async getCreatorDashboard(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = (req as any).user?.id || 'god_mode';
+      const dashboard = await this.economyService.getCreatorDashboard(userId);
+      res.status(200).json({ success: true, data: dashboard });
+    } catch (error) {
+      logger.error('[EconomyController] Error fetching creator dashboard:', error);
+      res.status(500).json({ success: false, message: 'Failed to fetch creator dashboard' });
+    }
+  }
+
+  @httpPost('/claim-yield')
+  async claimYield(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = (req as any).user?.id || 'god_mode';
+      const success = await this.economyService.claimYield(userId);
+      res.status(200).json({ success: success });
+    } catch (error) {
+      logger.error('[EconomyController] Error claiming yield:', error);
+      res.status(500).json({ success: false, message: 'Failed to claim yield' });
+    }
+  }
 }

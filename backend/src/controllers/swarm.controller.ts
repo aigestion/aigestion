@@ -66,4 +66,23 @@ export class SwarmController {
       next(error);
     }
   }
+
+  public async stressTest(req: Request, res: Response, next: any) {
+    const requestId = (req as any).requestId || 'unknown';
+    try {
+      const { count = 5, objective = 'Test Mission' } = req.body;
+      const userId = (req as any).user?.id || 'stress-test';
+
+      logger.info(`[SwarmController] Launching Stress Test with ${count} missions`);
+
+      const missions = Array.from({ length: count }).map(() =>
+        this.swarmService.createMission(objective, userId),
+      );
+
+      const results = await Promise.all(missions);
+      return res.json(buildResponse({ count, results }, 200, requestId));
+    } catch (error) {
+      next(error);
+    }
+  }
 }

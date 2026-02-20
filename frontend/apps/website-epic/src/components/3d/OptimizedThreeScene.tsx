@@ -299,10 +299,13 @@ export function useThreeOptimization() {
     });
 
     // Optimize geometry
-    scene.traverse(object => {
-      if (object instanceof THREE.Mesh && object.geometry) {
-        object.geometry.computeBoundingSphere();
-        object.geometry.computeBoundingBox();
+    scene.traverse((object: any) => {
+      if (object.isMesh && object.geometry) {
+        const positions = object.geometry.attributes.position;
+        if (positions && positions.array.length > 0 && !Number.isNaN(positions.array[0])) {
+          object.geometry.computeBoundingSphere();
+          object.geometry.computeBoundingBox();
+        }
       }
     });
   }, [scene]);

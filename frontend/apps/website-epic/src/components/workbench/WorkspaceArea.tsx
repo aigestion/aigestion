@@ -3,6 +3,7 @@ import { useWorkbench } from './WorkbenchContext';
 import { Dashboard } from '../../components/Dashboard';
 import { SovereignIntelligenceHub } from '../../components/SovereignIntelligenceHub';
 import { SettingsDashboard } from '../../components/settings/SettingsDashboard';
+import { SovereignDiagnostics } from '../../components/SovereignDiagnostics';
 
 interface WorkspaceAreaProps {
   user: any;
@@ -26,6 +27,8 @@ export const WorkspaceArea: React.FC<WorkspaceAreaProps> = ({ user, onLogout }) 
             <p>Search results will appear here</p>
           </div>
         );
+      case 'diagnostics':
+        return <SovereignDiagnostics />;
       case 'settings':
         return <SettingsDashboard />;
       default:

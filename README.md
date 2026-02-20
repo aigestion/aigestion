@@ -17,13 +17,21 @@ AIGestion/
 │
 ├── 🛠️ Operations & Setup
 │   ├── ops/                # Automation, Scripts, Tools & Actions
+│   │   ├── deployment/     # Deployment plans (Railway, Cloud Run)
+│   │   ├── database/       # Database guides (MongoDB Atlas)
+│   │   └── scripts/        # Restoration scripts (test, setup, etc.)
 │   ├── infra/              # Cloud, Docker, K8s & Security Configs
 │   └── tests/              # Root-level Test Suites & Quality Guards
 │
 ├── 📦 Resources & History
 │   ├── assets/             # Static Media, AI Assets & Data Loads
 │   ├── docs/               # System & Process Documentation
-│   └── archive/            # Legacy Modules & Historical Artifacts
+│   │   ├── reports/        # Diagnostic & optimization reports (Nexus Doctor)
+│   │   └── archive/        # Historical artifacts & temporary fixes
+│   └── logs/               # Centralized build and test logs
+│
+├── 🔧 Development
+│   └── scripts/            # Python diagnostic & maintenance utilities
 ```
 
 ## 🚀 Inicio Rápido
@@ -57,10 +65,10 @@ pnpm dev:frontend  # Website Eco-system
 
 El proyecto utiliza el estándar **Sovereign de 20 bloques** para archivos `.env`. Asegúrate de completar el archivo `.env` en la raíz siguiendo la plantilla oficial.
 
-- [docs/project-documentation/](file:///C:/Users/Alejandro/AIGestion/docs/project-documentation/) - Project status and completion reports
+- [docs/reports/](file:///C:/Users/Alejandro/AIGestion/docs/reports/) - Diagnostic & Optimization reports (Nexus Doctor)
 - [docs/memory-management/](file:///C:/Users/Alejandro/AIGestion/docs/memory-management/) - Memory optimization guides
 - [mobile/documentation/](file:///C:/Users/Alejandro/AIGestion/mobile/documentation/) - Mobile app installation guides
-- [deployment/guides/](file:///C:/Users/Alejandro/AIGestion/deployment/guides/) - Deployment and production guides
+- [ops/deployment/](file:///C:/Users/Alejandro/AIGestion/ops/deployment/) - Deployment and production guides
 
 ### Core Applications
 
@@ -88,11 +96,12 @@ El proyecto utiliza el estándar **Sovereign de 20 bloques** para archivos `.env
 
 - monitoring/ - System monitoring tools
 - dashboard/ - Real-time dashboards
-- audit/ - Audit logs and reports
+- ops/reports/ - Audit logs and reports
 
 ### Archive
 
 - archive/ - Archived documentation and placeholders
+- docs/archive/ - Temporary fixes and legacy docs
 
 ## Quick Start
 
@@ -118,7 +127,7 @@ El proyecto utiliza el estándar **Sovereign de 20 bloques** para archivos `.env
 - Memory Usage: Optimized (342.77 MB, 10 processes)
 - Web Deployment: 100% operational on Vercel
 - Mobile Apps: Ready for installation
-- Documentation: Complete and organized
+- Documentation: Complete, organized, and RAG-ready
 
 ## 🌌 God Level Sovereign Ecosystem
 
@@ -145,4 +154,4 @@ The AIGestion system is now powered by **God Mode v2.0**, featuring:
 
 ---
 
-Last updated: 2026-02-13 14:40:00 (Sovereign Update)
+Last updated: 2026-02-20 08:45:00 (Sovereign Reorganization)

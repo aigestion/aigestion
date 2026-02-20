@@ -163,8 +163,8 @@ else {
 Write-Host "`n>> 3. SERVICE ENDPOINTS" -ForegroundColor Yellow
 
 $endpoints = @(
-    @{ Name = "Backend API"; Url = "http://localhost:3000/api/health" },
-    @{ Name = "ML Service"; Url = "http://localhost:4000/health" }
+    @{ Name = "Backend API"; Url = "http://localhost:5000/api/v1/health" },
+    @{ Name = "ML Service"; Url = "http://localhost:5001/health" }
 )
 
 if ($DryRun) {

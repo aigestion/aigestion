@@ -26,11 +26,20 @@ export async function loadSecrets(): Promise<void> {
   const secretNames = [
     'MONGODB_URI',
     'GEMINI_API_KEY',
+    'GOOGLE_GENAI_API_KEY',
     'MONGO_ROOT_PASSWORD',
     'JWT_SECRET',
     'STRIPE_SECRET_KEY',
     'STRIPE_WEBHOOK_SECRET',
     'ML_SERVICE_API_KEY',
+    'IA_ENGINE_API_KEY',
+    'TELEGRAM_BOT_TOKEN',
+    'TELEGRAM_PRO_CHAT_ID',
+    'ELEVENLABS_API_KEY',
+    'TAVILY_API_KEY',
+    'WHATSAPP_TOKEN',
+    'META_ACCESS_TOKEN',
+    'REDIS_PASSWORD',
   ];
 
   logger.info(`Fetching ${secretNames.length} secrets from GCP Secret Manager...`);

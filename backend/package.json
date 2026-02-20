@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/bootstrap.js",
-    "dev": "tsx watch src/bootstrap.ts",
+    "dev": "tsx watch --openssl-legacy-provider src/bootstrap.ts",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "test": "npx jest",

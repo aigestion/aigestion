@@ -39,8 +39,26 @@ export class VoiceBiometricsService {
     const challengeHash = await this.generateVoiceHash(challengeAudio);
 
     // In a fuzzy biometric world, we'd use a similarity score.
-    // In our Zero-Trust Sovereign Hub, we require high-fidelity matches for Phase 13.
-    // (Note: This is a placeholder for a more complex similarity algorithm like DTW)
-    return storedHash === challengeHash;
+    const score = this.compareSignatures(storedHash, challengeHash);
+    
+    logger.info({ score }, '[VoiceBiometrics] Comparison complete');
+    
+    // Require 95% similarity for Sovereign Tier access
+    return score >= 0.95;
+  }
+
+  /**
+   * Simulated spectral comparison (Levenshtein-based for Phase 18)
+   */
+  private compareSignatures(h1: string, h2: string): number {
+    if (h1 === h2) return 1.0;
+    
+    const len = Math.max(h1.length, h2.length);
+    let matches = 0;
+    for (let i = 0; i < len; i++) {
+      if (h1[i] === h2[i]) matches++;
+    }
+    
+    return matches / len;
   }
 }

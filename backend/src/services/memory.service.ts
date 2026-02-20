@@ -58,7 +58,7 @@ export class MemoryService {
       // 2. Parallel Execution: Pinecone (Vector) + Supabase (SQL)
       const [vectorResults, relationalResults] = await Promise.all([
         this.pinecone.search(query, { topK: limit, namespace }),
-        this.supabase.hybridSearch(undefined, query, embedding, 0.5, limit),
+        this.supabase.hybridSearchV2(undefined, query, embedding, 0.5, limit),
       ]);
 
       // 3. Normalize and Merge

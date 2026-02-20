@@ -19,39 +19,51 @@ export class AnalyticsService {
    */
   async getOverview(): Promise<any> {
     const cacheKey = 'analytics:overview:real';
-    const cachedData = await getCache(cacheKey);
-
-    if (cachedData) {
-      return JSON.parse(cachedData);
+    try {
+      const cachedData = await getCache(cacheKey);
+      if (cachedData) {
+        return JSON.parse(cachedData);
+      }
+    } catch (err) {
+      logger.error('Redis cache fetch failed in AnalyticsService:', err);
     }
 
-    // Real data from DB and stats
-    const totalUsers = await User.countDocuments();
-    const activeUsersInRange = await User.countDocuments({
-      lastLogin: { $gte: new Date(Date.now() - 15 * 60 * 1000) }, // Active in last 15 mins
-    });
+    try {
+      // Real data from DB and stats
+      const totalUsers = await User.countDocuments();
+      const activeUsersInRange = await User.countDocuments({
+        lastLogin: { $gte: new Date(Date.now() - 15 * 60 * 1000) }, // Active in last 15 mins
+      });
 
-    const containerStats = await this.infrastructureService.getContainerStats();
-    const nexusMeshStatus = containerStats.every(c => c.status.includes('Up'))
-      ? 'OPTIMAL'
-      : 'DEGRADED';
+      const containerStats = await this.infrastructureService.getContainerStats();
+      const nexusMeshStatus = containerStats.every(c => c && c.status && c.status.includes('Up'))
+        ? 'OPTIMAL'
+        : 'DEGRADED';
 
-    const overview = {
-      activeUsers: activeUsersInRange || 1, // Fallback to 1 if empty for UI
-      totalUsers,
-      totalRequests: stats.totalRequests,
-      errorRate:
-        stats.totalRequests > 0
-          ? Number.parseFloat(((stats.errorCount / stats.totalRequests) * 100).toFixed(2))
-          : 0,
-      avgResponseTime: stats.lastRequestTime,
-      nexusMeshStatus,
-      activeContainers: containerStats.length,
-      timestamp: Date.now(),
-    };
+      const overview = {
+        activeUsers: activeUsersInRange || 1, // Fallback to 1 if empty for UI
+        totalUsers,
+        totalRequests: stats.totalRequests,
+        errorRate:
+          stats.totalRequests > 0
+            ? Number.parseFloat(((stats.errorCount / stats.totalRequests) * 100).toFixed(2))
+            : 0,
+        avgResponseTime: stats.lastRequestTime,
+        nexusMeshStatus,
+        activeContainers: containerStats.length,
+        timestamp: Date.now(),
+      };
 
-    await setCache(cacheKey, JSON.stringify(overview), 10);
-    return overview;
+      try {
+        await setCache(cacheKey, JSON.stringify(overview), 10);
+      } catch (err) {
+        logger.error('Redis cache set failed in AnalyticsService:', err);
+      }
+      return overview;
+    } catch (dbError) {
+      logger.error('CRITICAL: Analytics overview database/infra failure:', dbError);
+      throw dbError;
+    }
   }
 
   /**

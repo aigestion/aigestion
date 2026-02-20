@@ -26,8 +26,11 @@ export class RateLimitMiddleware {
    */
   public attempt(type: 'AUTH' | 'AI' | 'GENERAL' | 'MCP') {
     return async (req: Request, res: Response, next: NextFunction) => {
-      // 1. Fail open if Redis is down
+      // 1. Fail open with alert if Redis is down
       if (!this.redis?.isOpen) {
+        this._logger.error(
+          `[RateLimit] CRITICAL: Redis connection lost. Rate limiting for ${type} is in PASS-THRU mode.`,
+        );
         return next();
       }
 
@@ -71,7 +74,7 @@ export class RateLimitMiddleware {
         this._logger.error('Rate limiter error', err);
         next(); // Fail open
       }
-    };
+    };;
   }
 }
 

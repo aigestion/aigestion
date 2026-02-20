@@ -23,7 +23,7 @@ export const WorkbenchShell: React.FC<WorkbenchShellProps> = ({
     <div className="flex flex-col h-screen w-screen overflow-hidden bg-nexus-obsidian text-white selection:bg-nexus-cyan/30 font-sans relative">
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(10,10,10,0))]" />
+        <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] bg-center opacity-10 [mask-image:linear-gradient(180deg,white,rgba(10,10,10,0))]" />
         <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-nexus-violet/10 blur-[150px] rounded-full mix-blend-screen opacity-30" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-nexus-cyan/10 blur-[150px] rounded-full mix-blend-screen opacity-30" />
       </div>

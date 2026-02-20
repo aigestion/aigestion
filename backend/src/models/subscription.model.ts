@@ -81,10 +81,11 @@ const SubscriptionSchema: Schema = new Schema(
     timestamps: true,
     toJSON: {
       transform: function (doc, ret) {
-        ret.id = ret._id;
-        delete ret._id;
-        delete ret.__v;
-        return ret;
+        const data = ret as any;
+        data.id = data._id;
+        delete data._id;
+        delete data.__v;
+        return data;
       },
     },
   },
@@ -96,11 +97,13 @@ SubscriptionSchema.index({ stripeSubscriptionId: 1 });
 SubscriptionSchema.index({ status: 1, endDate: 1 });
 
 // Pre-save middleware to update nextBillingDate
-SubscriptionSchema.pre('save', function (next) {
+SubscriptionSchema.pre('save', function (this: any, next) {
   if (this.isModified('status') && this.status === 'active') {
     // Calculate next billing date (30 days from start or last payment)
-    const baseDate = this.lastPaymentDate || this.startDate;
-    this.nextBillingDate = new Date(baseDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+    const baseDate = (this.lastPaymentDate || this.startDate) as Date;
+    if (baseDate) {
+      this.nextBillingDate = new Date(baseDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+    }
   }
 
   // Set end date for cancelled subscriptions
@@ -169,4 +172,4 @@ SubscriptionSchema.virtual('planDetails', {
 
 const Subscription = mongoose.model<ISubscription>('Subscription', SubscriptionSchema);
 
-export { Subscription, ISubscription };
+export { Subscription };

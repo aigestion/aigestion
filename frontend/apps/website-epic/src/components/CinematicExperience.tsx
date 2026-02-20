@@ -1,10 +1,48 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { useSound } from '../hooks/useSound';
 import { CinematicHero } from './CinematicHero';
 import { ClientShowcase } from './ClientShowcase';
-import { DanielaAI } from './DanielaAI';
-import { NexusAndroid } from './NexusAndroid';
+import { Footer } from './Footer';
+
+// Lazy loaded sections from AppContent
+const DanielaShowcase = lazy(() =>
+  import('./DanielaShowcase').then(m => ({ default: m.DanielaShowcase }))
+);
+const NexusAndroid = lazy(() => import('./NexusAndroid').then(m => ({ default: m.NexusAndroid })));
+const ServicesDeepDive = lazy(() =>
+  import('./ServicesDeepDive').then(m => ({ default: m.ServicesDeepDive }))
+);
+const SovereignPublicPulse = lazy(() =>
+  import('./SovereignPublicPulse').then(m => ({ default: m.SovereignPublicPulse }))
+);
+const CaseStudies = lazy(() => import('./CaseStudies').then(m => ({ default: m.CaseStudies })));
+const EnhancedROI = lazy(() => import('./EnhancedROI').then(m => ({ default: m.EnhancedROI })));
+const PricingSection = lazy(() =>
+  import('./PricingSection').then(m => ({ default: m.PricingSection }))
+);
+const IngeniousPlan = lazy(() =>
+  import('./IngeniousPlan').then(m => ({ default: m.IngeniousPlan }))
+);
+const VideoTutorials = lazy(() =>
+  import('./VideoTutorials').then(m => ({ default: m.VideoTutorials }))
+);
+const MetaverseSection = lazy(() =>
+  import('./MetaverseSection').then(m => ({ default: m.MetaverseSection }))
+);
+const DecentralandOffice = lazy(() =>
+  import('./DecentralandOffice').then(m => ({ default: m.DecentralandOffice }))
+);
+const FAQSection = lazy(() => import('./FAQSection').then(m => ({ default: m.FAQSection })));
+const DemoDashboard = lazy(() =>
+  import('./DemoDashboard').then(m => ({ default: m.DemoDashboard }))
+);
+
+const LoadingFallback = () => (
+  <div className="h-screen flex items-center justify-center bg-black">
+    <div className="w-8 h-8 border-2 border-nexus-cyan border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 export const CinematicExperience: React.FC = () => {
   const [showMainContent, setShowMainContent] = useState(false);
@@ -14,8 +52,19 @@ export const CinematicExperience: React.FC = () => {
   const sections = [
     { id: 'hero', component: <CinematicHero onHeroComplete={() => setShowMainContent(true)} /> },
     { id: 'clients', component: <ClientShowcase /> },
-    { id: 'daniela', component: <DanielaAI /> },
+    { id: 'daniela', component: <DanielaShowcase /> },
     { id: 'nexus', component: <NexusAndroid /> },
+    { id: 'demo', component: <DemoDashboard /> },
+    { id: 'services', component: <ServicesDeepDive /> },
+    { id: 'pulse', component: <SovereignPublicPulse /> },
+    { id: 'cases', component: <CaseStudies /> },
+    { id: 'roi', component: <EnhancedROI /> },
+    { id: 'pricing', component: <PricingSection /> },
+    { id: 'plan', component: <IngeniousPlan /> },
+    { id: 'tutorials', component: <VideoTutorials /> },
+    { id: 'metaverse', component: <MetaverseSection /> },
+    { id: 'office', component: <DecentralandOffice /> },
+    { id: 'faq', component: <FAQSection /> },
   ];
 
   useEffect(() => {
@@ -85,60 +134,14 @@ export const CinematicExperience: React.FC = () => {
 
             {/* Sections */}
             <div className="space-y-0">
-              {/* Hero Section (Simplified) */}
-              <section
-                id="hero"
-                className="relative h-screen flex items-center justify-center bg-black overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-nexus-violet/20 via-transparent to-nexus-cyan/20" />
-                <div className="relative z-10 text-center max-w-6xl mx-auto px-6">
-                  <motion.h1
-                    className="text-6xl md:text-9xl font-orbitron font-black text-white mb-6"
-                    style={{
-                      textShadow:
-                        '0 0 40px rgba(138, 43, 226, 0.8), 0 0 80px rgba(0, 245, 255, 0.6)',
-                    }}
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1 }}
-                  >
-                    AIGESTION.NET
-                  </motion.h1>
-                  <motion.p
-                    className="text-2xl md:text-4xl text-nexus-cyan mb-8 font-light"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 0.3 }}
-                  >
-                    Arquitectura de Inteligencia Soberana
-                  </motion.p>
-                  <motion.button
-                    className="btn-enterprise px-12 py-6 text-xl font-bold"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 0.6 }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    EXPERIENCIA CINEMATOGRÁFICA
-                  </motion.button>
-                </div>
-              </section>
-
-              {/* Client Showcase */}
-              <section id="clients">
-                <ClientShowcase />
-              </section>
-
-              {/* Daniela AI */}
-              <section id="daniela">
-                <DanielaAI />
-              </section>
-
-              {/* Nexus Android */}
-              <section id="nexus">
-                <NexusAndroid />
-              </section>
+              <Suspense fallback={<LoadingFallback />}>
+                {sections.map((section, index) => (
+                  <section key={section.id} id={section.id}>
+                    {section.component}
+                  </section>
+                ))}
+                <Footer />
+              </Suspense>
             </div>
 
             {/* Floating Action Button */}

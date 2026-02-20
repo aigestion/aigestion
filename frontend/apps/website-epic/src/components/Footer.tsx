@@ -44,7 +44,7 @@ export const Footer: React.FC = () => {
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-nexus-cyan/5 rounded-full blur-[120px] animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-nexus-violet/5 rounded-full blur-[120px] animate-pulse-slow" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-nexus-cyan/30 to-transparent shadow-[0_0_15px_rgba(0,245,255,0.5)]" />
-        <div className="absolute inset-0 bg-[url('/images/grid.svg')] bg-center bg-fixed opacity-5 [mask-image:linear-gradient(0deg,white,transparent)]" />
+        <div className="absolute inset-0 bg-[url('/images/nexus/grid.svg')] bg-center bg-fixed opacity-5 [mask-image:linear-gradient(0deg,white,transparent)]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">

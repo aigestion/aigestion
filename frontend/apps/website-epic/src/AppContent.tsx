@@ -22,7 +22,7 @@ import SubscriptionGuard from './components/guards/SubscriptionGuard';
 // CRITICAL: Static Load for Hero Section
 // Prevents "Black Screen" if chunk loading fails
 // ============================================
-import { CinematicPresentation } from './components/CinematicPresentation';
+import { CinematicExperience } from './components/CinematicExperience';
 
 // ============================================
 // LAZY LOAD: Below-the-fold content sections
@@ -141,6 +141,7 @@ const SovereignIntelligenceHub = lazy(() =>
 const BillingDashboard = lazy(() =>
   import('./pages/BillingDashboard').then(m => ({ default: m.BillingDashboard }))
 );
+const MissionControl = lazy(() => import('./pages/MissionControl'));
 
 // ============================================
 // UI Components
@@ -194,7 +195,7 @@ export const AppContent = ({
   return (
     <SpotlightWrapper className="bg-nexus-obsidian min-h-screen text-white font-sans relative overflow-x-hidden">
       <div className="grain-overlay" />
-      <div className="fixed inset-0 bg-[url('/images/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+      <div className="fixed inset-0 bg-[url('/images/nexus/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
 
       <MeshGradientBG />
       <ScrollProgress />
@@ -216,30 +217,7 @@ export const AppContent = ({
             {/* Landing Page */}
             <Route
               path="/"
-              element={
-                !isAuthenticated ? (
-                  <main>
-                    <CinematicPresentation />
-                    <DanielaShowcase />
-                    <NexusAndroid />
-                    <section id="demo-dashboard">
-                      <DemoDashboard />
-                    </section>
-                    <ServicesDeepDive />
-                    <SovereignPublicPulse />
-                    <CaseStudies />
-                    <EnhancedROI />
-                    <PricingSection />
-                    <IngeniousPlan />
-                    <VideoTutorials />
-                    <MetaverseSection />
-                    <DecentralandOffice />
-                    <FAQSection />
-                  </main>
-                ) : (
-                  <Navigate to="/dashboard" />
-                )
-              }
+              element={!isAuthenticated ? <CinematicExperience /> : <Navigate to="/dashboard" />}
             />
 
             {/* PROTECTED ROUTES FLOW */}
@@ -277,6 +255,14 @@ export const AppContent = ({
                     <Route path="/weapon" element={<WeaponDashboard />} />
                     <Route path="/daniela/*" element={<DanielaDemo />} />
                     <Route path="/virtual-office/*" element={<VirtualOfficePreview />} />
+                    <Route
+                      path="/missions"
+                      element={
+                        <SubscriptionGuard accessType="api">
+                          <MissionControl />
+                        </SubscriptionGuard>
+                      }
+                    />
                   </Route>
                   {/* Client Dashboard handles its own subscription check (Demo Mode) */}
                   <Route path="/client" element={<ClientDashboard />} />
