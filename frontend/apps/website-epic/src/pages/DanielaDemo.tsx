@@ -5,9 +5,9 @@ import { DanielaWebsite } from '../components/DanielaWebsite';
 
 const Waveform: React.FC<{ isActive: boolean }> = ({ isActive }) => (
   <div className="flex items-end gap-1 h-8 px-4">
-    {[...Array(12)].map((_, i) => (
+    {[...new Array(12)].map((_, i) => (
       <motion.div
-        key={i}
+        key={`wave-bar-${i}`}
         animate={
           isActive
             ? {
@@ -330,12 +330,12 @@ export const DanielaDemo: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
+              {features.map(feature => (
                 <motion.div
-                  key={index}
+                  key={`feature-${feature.title.toLowerCase().replace(/\s+/g, '-')}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: features.indexOf(feature) * 0.1 }}
                   className="group relative"
                 >
                   <div
@@ -380,12 +380,12 @@ export const DanielaDemo: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              {stats.map((stat, index) => (
+              {stats.map(stat => (
                 <motion.div
-                  key={index}
+                  key={`stat-${stat.label.toLowerCase().replace(/\s+/g, '-')}`}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: stats.indexOf(stat) * 0.1 }}
                   className="bg-white/5 border border-white/10 rounded-2xl p-6"
                 >
                   <div className="text-3xl font-orbitron font-black text-white mb-2">

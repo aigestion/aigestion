@@ -1,7 +1,5 @@
-import { injectable, inject } from 'inversify';
+import { injectable } from 'inversify';
 import axios from 'axios';
-import { TYPES } from '../types';
-import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
 import { pineconeService } from './pinecone.service';
 import { supabaseService } from './supabase.service';
@@ -42,7 +40,7 @@ export class SovereignVaultService {
       const allResults = [...local, ...cloud, ...sovereign];
 
       // Multi-source Reranking by Score
-      return allResults.sort((a, b) => b.score - a.score).slice(0, limit * 2);
+      return [...allResults].sort((a, b) => b.score - a.score).slice(0, limit * 2);
     } catch (error: any) {
       logger.error({ error: error.message }, '[SovereignVault] Query failed');
       return [];
@@ -52,7 +50,7 @@ export class SovereignVaultService {
   private async queryLocal(
     text: string,
     embedding: number[],
-    limit: number
+    limit: number,
   ): Promise<VaultResult[]> {
     try {
       // 🌌 HIGH-PERFORMANCE CHROMADB INTEGRATION
@@ -90,7 +88,7 @@ export class SovereignVaultService {
   private async queryCloud(
     text: string,
     embedding: number[],
-    limit: number
+    limit: number,
   ): Promise<VaultResult[]> {
     try {
       // Pinecone search using pre-generated embeddings could be optimized,
@@ -112,7 +110,7 @@ export class SovereignVaultService {
   private async querySovereign(
     text: string,
     embedding: number[],
-    limit: number
+    limit: number,
   ): Promise<VaultResult[]> {
     try {
       // Supabase Hybrid Search using real embeddings

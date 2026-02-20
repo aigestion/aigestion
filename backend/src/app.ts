@@ -18,7 +18,6 @@ import routes from './routes';
 import mcpRouter from './routes/mcp.routes';
 import { logger } from './utils/logger';
 
-import { buildResponse } from './common/response-builder';
 import getRedisClient from './utils/redis';
 
 const app = express();
