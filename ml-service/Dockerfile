@@ -13,7 +13,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 COPY --from=builder /root/.local /root/.local
-COPY --from=builder /root/.cache/torch /root/.cache/torch
+# Copy only what's necessary and check path existence if possible,
+# or just allow the final stage to handle its own cache if builder fails.
+COPY --from=builder /app /app
 
 # Install curl for health checks
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
