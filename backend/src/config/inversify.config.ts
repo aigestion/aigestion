@@ -98,6 +98,9 @@ import { UserService } from '../services/user.service';
 import { XService } from '../services/x.service';
 import { WhatsAppService } from '../services/whatsapp.service';
 import { ZeroTrustService } from '../services/zero-trust.service';
+import { LogMonitoringService } from '../services/LogMonitoringService';
+import { LandingController } from '../controllers/LandingController';
+import { LandingPersonalizationService } from '../services/LandingPersonalizationService';
 import { SwarmInternalClient } from '../services/swarm-internal.client';
 import { VaultService } from '../services/vault.service';
 import { PQCCommService } from '../services/pqc-comm.service';
@@ -226,6 +229,15 @@ bind<SovereignRegistryService>(TYPES.SovereignRegistryService, SovereignRegistry
 bind<GoogleSecretManagerService>(TYPES.GoogleSecretManagerService, GoogleSecretManagerService);
 bind<CredentialManagerService>(TYPES.CredentialManagerService, CredentialManagerService);
 bind<SwarmInternalClient>(TYPES.SwarmInternalClient, SwarmInternalClient);
+container
+  .bind<LogMonitoringService>(TYPES.LogMonitoringService)
+  .to(LogMonitoringService)
+  .inSingletonScope();
+container
+  .bind<LandingPersonalizationService>(TYPES.LandingPersonalizationService)
+  .to(LandingPersonalizationService)
+  .inSingletonScope();
+container.bind<LandingController>(LandingController).toSelf().inSingletonScope();
 if (!container.isBound('Container')) container.bind('Container').toConstantValue(container);
 
 // ========================================

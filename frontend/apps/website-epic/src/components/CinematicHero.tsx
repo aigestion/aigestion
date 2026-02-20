@@ -5,6 +5,7 @@ import { NeuralServer } from './3d/NeuralServer';
 import { FluidBackground } from './FluidBackground';
 import { MiniDashboard } from './MiniDashboard';
 import { useAppContext } from '../contexts/AppContext';
+import { useLocation } from 'react-router-dom';
 
 interface CinematicHeroProps {
   onHeroComplete?: () => void;
@@ -17,60 +18,49 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
   const [videoError, setVideoError] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [showDemo, setShowDemo] = useState(false);
+  const [personalizedScenes, setPersonalizedScenes] = useState<any[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const location = useLocation();
   const { playHover, playClick, playWuaw } = useSound();
 
-  const scenes = [
-    {
-      id: 'space-intro',
-      title: 'EL FUTURO HA COMENZADO',
-      subtitle: 'Transformación Neural Empresarial',
-      video: '/videos/cinematic/space-intro.mp4',
-      duration: 4000,
-    },
-    {
-      id: 'city-future',
-      title: 'CIUDADES INTELIGENTES',
-      subtitle: 'Ecosistemas Conectados por IA',
-      video: '/videos/cinematic/future-city.mp4',
-      duration: 5000,
-    },
-    {
-      id: 'daniela-ai',
-      title: 'DANIELA AI',
-      subtitle: 'Conciencia Artificial 8K Ultra-Realista',
-      video: '/videos/cinematic/daniela-ai.mp4',
-      duration: 5000,
-    },
-    {
-      id: 'nexus-android',
-      title: 'GUERRERO NEXUS ANDROID',
-      subtitle: 'Guardián Cuántico de la Innovación',
-      video: '/videos/cinematic/nexus-android.mp4',
-      duration: 4000,
-    },
-    {
-      id: 'solutions-showcase',
-      title: 'AIGESTION.NET',
-      subtitle: 'Arquitectura de Inteligencia Soberana',
-      video: '/videos/cinematic/solutions-showcase.mp4',
-      duration: 6000,
-    },
-  ];
+  const activeScenes = personalizedScenes.length > 0 ? personalizedScenes : defaultScenes;
+
+  useEffect(() => {
+    const fetchPersonalization = async () => {
+      const searchParams = new URLSearchParams(location.search);
+      const source = searchParams.get('utm_source');
+      if (source) {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_API_URL || ''}/api/v1/landing/personalization?source=${source}`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            if (data.scenes && data.scenes.length > 0) {
+              setPersonalizedScenes(data.scenes);
+            }
+          }
+        } catch (error) {
+          console.error('Failed to fetch personalization:', error);
+        }
+      }
+    };
+    fetchPersonalization();
+  }, [location.search]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       if (isPlaying && !isLoading) {
-        if (currentScene === scenes.length - 1) {
+        if (currentScene === activeScenes.length - 1) {
           onHeroComplete?.();
         } else {
-          setCurrentScene(prev => (prev + 1) % scenes.length);
+          setCurrentScene(prev => (prev + 1) % activeScenes.length);
         }
       }
-    }, scenes[currentScene].duration);
+    }, activeScenes[currentScene]?.duration || 5000);
 
     return () => clearInterval(timer);
-  }, [currentScene, isPlaying, isLoading, scenes, onHeroComplete]);
+  }, [currentScene, isPlaying, isLoading, activeScenes, onHeroComplete]);
 
   useEffect(() => {
     setVideoError(false);

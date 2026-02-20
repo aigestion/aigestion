@@ -14,6 +14,7 @@ import { BigQueryService } from './google/bigquery.service';
 import { QuantumSecurityService } from './security/quantum-security.service';
 import { VideoIntelligenceService } from './google/video-intelligence.service';
 import { SovereignSentinelService } from './SovereignSentinelService';
+import { LogMonitoringService } from './LogMonitoringService';
 
 @injectable()
 export class HealthService {
@@ -24,7 +25,13 @@ export class HealthService {
     @inject(TYPES.QuantumSecurityService) private quantumService: QuantumSecurityService,
     @inject(TYPES.VideoIntelligenceService) private visionService: VideoIntelligenceService,
     @inject(TYPES.SovereignSentinelService) private sentinelService: SovereignSentinelService,
-  ) {}
+    @inject(TYPES.LogMonitoringService) private logSentinel: LogMonitoringService,
+  ) {
+    // Proactive Sentinel Activation
+    if (process.env.NODE_ENV !== 'test') {
+      this.logSentinel.startMonitoring();
+    }
+  }
 
   public async getDetailedHealth() {
     const results: any = {
@@ -202,7 +209,20 @@ export class HealthService {
             logger.info('[HealthService] Telegram bridge severed. Re-launching bot handler...');
             // telegramService.initialize() could be called here
             break;
+          case 'neurocore':
+            logger.warn('[HealthService] NeuroCore degradation! Attempting bridge re-sync...');
+            // Logic to ping or notify ml-service
+            break;
         }
+      }
+
+      // Proactive: Clear Redis if memory is critical (Sovereign Decision)
+      const memoryCheck = results.checks.find((c: any) => c.name === 'memory-usage');
+      if (memoryCheck && parseInt(memoryCheck.heapUsed) > 1536) {
+        // > 1.5GB
+        logger.warn('[HealthService] Memory pressure detected. Purging L2 cache...');
+        const redisClient = getRedisClient();
+        await redisClient.flushDb();
       }
     }
   }

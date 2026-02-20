@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import { createPersona, getMarketplacePersonas } from '../controllers/persona.controller';
+import { TYPES } from '../types';
+import { container } from '../config/inversify.config';
+import { PersonaController } from '../controllers/PersonaController';
 import { protect } from '../middleware/auth.middleware';
 
 const router = Router();
 
-// Protected routes
-router.post('/', protect, createPersona);
+const getController = () => container.get<PersonaController>(TYPES.PersonaController);
 
-// Public routes (Marketplace is public?)
-// Requirements said "Marketplace". Usually requires auth to buy, but viewing might be public.
-// Implementation plan didn't specify strict auth for GET, but let's assume public view is allowed for now,
-// OR simpler to protect everything given the context of "Persona Management".
-// Let's make it protected for now as verified in requirements "Create/View".
-router.get('/marketplace', protect, getMarketplacePersonas);
+// CRUD routes
+router.post('/', protect, (req, res, next) => getController().create(req, res, next));
+router.get('/marketplace', (req, res, next) => getController().getMarketplace(req, res, next));
+router.post('/hire/:id', protect, (req, res, next) => getController().hire(req, res, next));
+router.post('/rate/:id', protect, (req, res, next) => getController().rate(req, res, next));
 
 export default router;

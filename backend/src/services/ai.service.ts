@@ -14,6 +14,7 @@ import { RagService } from './rag.service';
 import { SemanticCacheService } from './semantic-cache.service';
 import { UsageService } from './usage.service';
 import { ArbitrationService } from './arbitration.service';
+import { Persona } from '../models/Persona';
 
 
 export interface AIStreamParams {
@@ -21,6 +22,7 @@ export interface AIStreamParams {
   history?: { role: 'user' | 'assistant' | 'system'; content: string }[];
   userId: string;
   userRole?: string;
+  personaId?: string;
 }
 
 @injectable()
@@ -170,10 +172,18 @@ export class AIService {
 
         const model = await this.getProviderModel(effectiveConfig);
 
-        const systemInstruction = `Eres Nexus AI, un agente avanzado.
+        let systemInstruction = `Eres Nexus AI, un agente avanzado.
                 Cuando se te pida información sobre ingresos o usuarios, utiliza las herramientas proporcionadas.
                 ID de usuario actual: ${params.userId}.
                 Utiliza la herramienta 'search_web' para obtener información actualizada.`;
+
+        if (params.personaId) {
+          const persona = await Persona.findById(params.personaId);
+          if (persona) {
+            logger.info(`[AIService] Swapping to Persona: ${persona.name}`);
+            systemInstruction = persona.systemPrompt;
+          }
+        }
 
         const chat = model.startChat({
           history: history.map(h => ({ role: h.role, parts: h.parts })),

@@ -31,7 +31,11 @@ export class PersonaRepository extends BaseRepository<IPersona> implements IPers
   }
 
   override async findById(id: string): Promise<IPersona | null> {
-    return await Persona.findById(id).exec();
+    return (await Persona.findById(id).exec()) as IPersona | null;
+  }
+
+  async findAll(limit: number = 20, offset: number = 0): Promise<IPersona[]> {
+    return await Persona.find().skip(offset).limit(limit).exec();
   }
 
   override async create(

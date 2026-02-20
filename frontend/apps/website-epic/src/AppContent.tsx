@@ -141,6 +141,9 @@ const SovereignIntelligenceHub = lazy(() =>
 const BillingDashboard = lazy(() =>
   import('./pages/BillingDashboard').then(m => ({ default: m.BillingDashboard }))
 );
+const Marketplace = lazy(() =>
+  import('./pages/Marketplace').then(m => ({ default: m.Marketplace }))
+);
 const MissionControl = lazy(() => import('./pages/MissionControl'));
 
 // ============================================
@@ -260,6 +263,14 @@ export const AppContent = ({
                       element={
                         <SubscriptionGuard accessType="api">
                           <MissionControl />
+                        </SubscriptionGuard>
+                      }
+                    />
+                    <Route
+                      path="/marketplace"
+                      element={
+                        <SubscriptionGuard accessType="marketplace">
+                          <Marketplace />
                         </SubscriptionGuard>
                       }
                     />

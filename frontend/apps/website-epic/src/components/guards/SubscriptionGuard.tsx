@@ -23,7 +23,7 @@ import { TiltCard } from '../design-system/TiltCard';
 
 interface SubscriptionGuardProps {
   children: React.ReactNode;
-  accessType: 'dashboard' | 'mobile' | 'api';
+  accessType: 'dashboard' | 'mobile' | 'api' | 'billing' | 'marketplace';
   fallback?: React.ReactNode;
   onAccessDenied?: (validation: SubscriptionValidation) => void;
   showUpgradePrompt?: boolean;
@@ -51,7 +51,7 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
       try {
         const result = await subscriptionService.validateAccess(user.id, accessType);
         setValidation(result);
-        
+
         if (!result.restrictions[`canAccess${accessType.charAt(0).toUpperCase() + accessType.slice(1)}` as keyof typeof result.restrictions]) {
           onAccessDenied?.(result);
           if (showUpgradePrompt) {
@@ -134,13 +134,13 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
               >
                 <Lock className="w-10 h-10 text-white" />
               </motion.div>
-              
+
               <GodModeText
                 text="CONTENIDO PREMIUM"
                 effect="hologram"
                 className="text-3xl md:text-4xl font-bold text-white mb-2"
               />
-              
+
               <p className="text-nexus-silver/60 text-lg">
                 {validation?.messages[0] || 'Esta función requiere una suscripción activa'}
               </p>
@@ -163,13 +163,13 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                       Plan Actual: {validation.plan?.name || 'Gratis'}
                     </span>
                   </div>
-                  
+
                   {validation.restrictions.isTrial && (
                     <span className="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-sm font-medium">
                       PERIODO DE PRUEBA
                     </span>
                   )}
-                  
+
                   {validation.restrictions.isExpired && (
                     <span className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-sm font-medium">
                       EXPIRADO
@@ -191,9 +191,11 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                 .filter(plan => plan.id !== 'free')
                 .map((plan, index) => {
                   const isPopular = plan.id === 'professional';
-                  const canUpgrade = validation?.plan && 
-                    (SUBSCRIPTION_PLANS[plan.id].price > SUBSCRIPTION_PLANS[validation.plan.id].price);
-                  
+                  const canUpgrade =
+                    validation?.plan &&
+                    SUBSCRIPTION_PLANS[plan.id].price >
+                      SUBSCRIPTION_PLANS[validation.plan.id].price;
+
                   return (
                     <TiltCard key={plan.id} className="h-full" tiltMaxAngleX={3} tiltMaxAngleY={3}>
                       <motion.div
@@ -201,8 +203,8 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 + index * 0.1 }}
                         className={`relative bg-black/40 backdrop-blur-xl rounded-2xl p-6 border-2 h-full ${
-                          isPopular 
-                            ? 'border-nexus-cyan shadow-[0_0_30px_rgba(34,211,238,0.3)]' 
+                          isPopular
+                            ? 'border-nexus-cyan shadow-[0_0_30px_rgba(34,211,238,0.3)]'
                             : 'border-white/10 hover:border-white/20'
                         } transition-all duration-300`}
                       >
@@ -217,7 +219,9 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                         <div className="text-center mb-6">
                           <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
                           <div className="flex items-baseline justify-center gap-1">
-                            <span className="text-3xl font-bold text-nexus-cyan">${plan.price}</span>
+                            <span className="text-3xl font-bold text-nexus-cyan">
+                              ${plan.price}
+                            </span>
                             <span className="text-nexus-silver/60">/mes</span>
                           </div>
                         </div>
@@ -244,8 +248,11 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                                 : 'bg-white/5 text-nexus-silver/40 cursor-not-allowed'
                           }`}
                         >
-                          {validation?.plan?.id === plan.id ? 'PLAN ACTUAL' :
-                           canUpgrade || validation?.plan?.id === 'free' ? 'ACTUALIZAR' : 'NO DISPONIBLE'}
+                          {validation?.plan?.id === plan.id
+                            ? 'PLAN ACTUAL'
+                            : canUpgrade || validation?.plan?.id === 'free'
+                              ? 'ACTUALIZAR'
+                              : 'NO DISPONIBLE'}
                         </motion.button>
                       </motion.div>
                     </TiltCard>
@@ -264,7 +271,7 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                 <Shield className="w-5 h-5" />
                 Requisitos de Acceso
               </h4>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex items-center gap-3">
                   <Smartphone className={`w-5 h-5 ${
@@ -275,7 +282,7 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                     <p className="text-nexus-silver/60 text-sm">Requiere plan Básico o superior</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-3">
                   <BarChart3 className={`w-5 h-5 ${
                     accessType === 'dashboard' ? 'text-nexus-cyan' : 'text-nexus-silver/40'
@@ -285,7 +292,7 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
                     <p className="text-nexus-silver/60 text-sm">Requiere plan Básico o superior</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-3">
                   <Zap className={`w-5 h-5 ${
                     accessType === 'api' ? 'text-nexus-cyan' : 'text-nexus-silver/40'
@@ -308,7 +315,7 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
               >
                 Cancelar
               </motion.button>
-              
+
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}

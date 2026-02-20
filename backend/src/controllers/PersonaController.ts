@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
 import { PersonaMarketplaceService } from '../services/PersonaMarketplaceService';
+import { CreatePersonaUseCase } from '../application/usecases/persona/CreatePersonaUseCase';
+import { GetMarketplacePersonasUseCase } from '../application/usecases/persona/GetMarketplacePersonasUseCase';
 import { buildResponse } from '../common/response-builder';
 import { logger } from '../utils/logger';
 
@@ -9,14 +11,33 @@ import { logger } from '../utils/logger';
 export class PersonaController {
   constructor(
     @inject(TYPES.PersonaMarketplaceService) private marketplaceService: PersonaMarketplaceService,
+    @inject(TYPES.CreatePersonaUseCase) private createPersonaUseCase: CreatePersonaUseCase,
+    @inject(TYPES.GetMarketplacePersonasUseCase) private getMarketplacePersonasUseCase: GetMarketplacePersonasUseCase,
   ) {}
 
   public async getMarketplace(req: Request, res: Response, next: NextFunction) {
     try {
-      const personas = await this.marketplaceService.getPersonas();
-      res.json(buildResponse(personas, 200, (req as any).requestId));
+      const limit = parseInt(req.query.limit as string) || 20;
+      const offset = parseInt(req.query.offset as string) || 0;
+      const result = await this.getMarketplacePersonasUseCase.execute(limit, offset);
+      res.json(buildResponse(result, 200, (req as any).requestId));
     } catch (error) {
       logger.error('[PersonaController] Failed to get marketplace', error);
+      next(error);
+    }
+  }
+
+  public async create(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userId = (req as any).user?.id || 'nexus_god'; // Consistent with hire fallback
+      const persona = await this.createPersonaUseCase.execute({
+        ...req.body,
+        ownerId: userId,
+      });
+
+      res.status(201).json(buildResponse({ persona }, 201, (req as any).requestId));
+    } catch (error) {
+      logger.error('[PersonaController] Failed to create persona', error);
       next(error);
     }
   }

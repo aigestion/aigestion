@@ -39,8 +39,8 @@
    [OK] Git Lock File -- No stale locks
 
 >> 6. SYSTEM RESOURCES
-   [OK] Disk Space -- 416.81 GB free
-   [OK] Free RAM -- 2.97 GB
+   [OK] Disk Space -- 416.73 GB free
+   [OK] Free RAM -- 5.01 GB
 
 ------------------------------------------------------------
   [OK] HEALTH: HEALTHY | Errors: 0 | Warnings: 3

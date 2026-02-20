@@ -169,4 +169,6 @@ export const TYPES = {
   FinanceController: Symbol.for('FinanceController'),
   DanielaEnhancedService: Symbol.for('DanielaEnhancedService'),
   DanielaProactiveService: Symbol.for('DanielaProactiveService'),
+  LogMonitoringService: Symbol.for('LogMonitoringService'),
+  LandingPersonalizationService: Symbol.for('LandingPersonalizationService'),
 };

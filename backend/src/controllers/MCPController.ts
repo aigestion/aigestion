@@ -7,9 +7,7 @@ import { logger } from '../utils/logger';
 
 @injectable()
 export class MCPController {
-  constructor(
-    @inject(TYPES.MCPDiscoveryService) private mcpService: MCPDiscoveryService
-  ) {}
+  constructor(@inject(TYPES.MCPDiscoveryService) private mcpService: MCPDiscoveryService) {}
 
   public async getDirectory(req: Request, res: Response, next: NextFunction) {
     try {
@@ -49,6 +47,28 @@ export class MCPController {
       res.json(buildResponse(server, 201, (req as any).requestId));
     } catch (error) {
       logger.error('[MCPController] Failed to register local server', error);
+      next(error);
+    }
+  }
+
+  public async checkHealth(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const health = await this.mcpService.checkHealth(id);
+      res.json(buildResponse(health, 200, (req as any).requestId));
+    } catch (error) {
+      logger.error('[MCPController] Failed to check health', error);
+      next(error);
+    }
+  }
+
+  public async sync(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const server = await this.mcpService.syncCapabilities(id);
+      res.json(buildResponse(server, 200, (req as any).requestId));
+    } catch (error) {
+      logger.error('[MCPController] Failed to sync capabilities', error);
       next(error);
     }
   }

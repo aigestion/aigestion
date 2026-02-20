@@ -7,7 +7,7 @@ services:
     container_name: aigestion-backend
     image: docker-backend:latest
     ports:
-      - '5000:5000' # Backend API
+      - '5002:5000' # Backend API (Moved from 5000 to avoid host conflict)
     volumes:
       - ../..:/app
       - /app/node_modules
@@ -63,7 +63,7 @@ services:
     container_name: aigestion-frontend
     image: docker-frontend:latest
     ports:
-      - '3000:3000' # Vite dev server
+      - '3001:3000' # Vite dev server (Moved from 3000 to avoid host conflict)
     volumes:
       - ../..:/app
       - /app/node_modules
@@ -307,14 +307,15 @@ services:
     build:
       context: ../../ml-service
       dockerfile: Dockerfile
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
+    container_name: aig-neurocore-v1
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5001"]
     user: root
     ports:
-      - "5001:5001" # Host:5001 -> Container:5000 (Backend expects 5000 internally)
+      - "5001:5001" # ML Service on port 5001
     volumes:
       - aigestion-chroma-data:/app/chromadb # Persistence for RAG
     healthcheck:
-      test: ['CMD-SHELL', 'curl -f http://localhost:5000/health || exit 1']
+      test: ['CMD-SHELL', 'curl -f http://localhost:5001/health || exit 1']
       interval: 30s
       timeout: 10s
       start_period: 15s
@@ -333,6 +334,34 @@ services:
         limits:
           cpus: '1.0'
           memory: 2G
+
+  # ChromaDB Vector Database
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: aigestion-chromadb
+    ports:
+      - "8000:8000"
+    volumes:
+      - aigestion-chroma-data:/chroma/data
+    networks:
+      - aigestion-network
+    restart: unless-stopped
+
+  # N8N Automation
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: aigestion-n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD:-admin123}
+    volumes:
+      - ../../n8n_data:/home/node/.n8n
+    networks:
+      - aigestion-network
+    restart: unless-stopped
 
 networks:
   aigestion-network:

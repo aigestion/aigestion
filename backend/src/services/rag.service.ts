@@ -12,6 +12,7 @@ import { pineconeService } from './pinecone.service';
 import { supabaseService } from './supabase.service';
 import { TYPES } from '../types';
 import { SovereignVaultService } from './SovereignVaultService';
+import { withRetry } from '../utils/RetryHelper';
 
 interface FileContext {
   path: string;
@@ -118,7 +119,7 @@ export class RagService {
           const rustResults = await this.queryRustCore(query);
           if (rustResults && rustResults.length > 0) {
             logger.info(
-              `[RagService] Rust RagCore provided ${rustResults.length} optimized results.`
+              `[RagService] Rust RagCore provided ${rustResults.length} optimized results.`,
             );
             sortedFiles = rustResults;
           } else {
@@ -186,7 +187,7 @@ export class RagService {
     return results
       .map(
         (res, i) =>
-          `[Source: ${res.source.toUpperCase()} | Score: ${res.score.toFixed(2)}]\n${res.content}`
+          `[Source: ${res.source.toUpperCase()} | Score: ${res.score.toFixed(2)}]\n${res.content}`,
       )
       .join('\n\n');
   }
@@ -205,7 +206,7 @@ export class RagService {
   private async archiveToLocalMemory(
     content: string,
     filename: string,
-    tags: string[] = []
+    tags: string[] = [],
   ): Promise<void> {
     try {
       const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://ml-service:5000';
@@ -217,7 +218,7 @@ export class RagService {
           source: filename,
           tags,
         },
-        { headers: { 'X-API-Key': apiKey } }
+        { headers: { 'X-API-Key': apiKey } },
       );
       logger.info(`[RagService] Document archived to local NeuroCore: ${filename}`);
     } catch (error: any) {
@@ -226,28 +227,42 @@ export class RagService {
   }
 
   /**
-   * Queries the local NeuroCore ML service for neural embeddings search.
+   * Queries the local NeuroCore ML service (ChromaDB) for neural embeddings search.
+   * [Sovereign Bridge] This is the primary local memory layer.
    */
   private async queryLocalMemory(query: string): Promise<string | null> {
     try {
-      const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://ml-service:5000';
-      const apiKey = process.env.ML_SERVICE_API_KEY || 'LOCAL_DEV_SECRET_KEY_REPLACE_ME';
-      const response = await axios.post(
-        `${mlServiceUrl}/recall`,
-        { query, limit: 3 },
-        { headers: { 'X-API-Key': apiKey } }
-      );
+      const mlServiceUrl = process.env.ML_SERVICE_URL || 'http://localhost:5001';
+      const apiKey = process.env.ML_SERVICE_API_KEY || 'nexus_sovereign_dev_key_2026';
 
-      const results = response.data.results;
-      if (results && results.length > 0) {
-        return results
-          .map(
-            (res: any, i: number) =>
-              `[Local Match ${i + 1}] Source: ${res.metadata.source}\n${res.content}`
-          )
-          .join('\n\n');
-      }
-      return null;
+      return await withRetry(
+        async () => {
+          logger.debug(
+            `[RagService] Recalling from NeuroCore (ChromaDB): ${query.substring(0, 30)}...`,
+          );
+          const response = await axios.post(
+            `${mlServiceUrl}/recall`,
+            { query, limit: 5 },
+            {
+              headers: { 'X-API-Key': apiKey },
+              timeout: 5000,
+            },
+          );
+
+          const results = response.data.results;
+          if (results && results.length > 0) {
+            logger.info(`[RagService] Recalled ${results.length} results from ChromaDB`);
+            return results
+              .map(
+                (res: any, i: number) =>
+                  `[Local Neural Memory Match ${i + 1}] Source: ${res.metadata?.source || 'unknown'}\n${res.content}`,
+              )
+              .join('\n\n');
+          }
+          return null;
+        },
+        { retries: 2, minTimeout: 500 },
+      );
     } catch (error: any) {
       logger.warn(`[RagService] Failed to query local NeuroCore: ${error.message}`);
       return null;
@@ -466,7 +481,7 @@ export class RagService {
         return results
           .map(
             (res: any, i: number) =>
-              `[Sovereign Match ${i + 1}] Title: ${res.title}\n${res.content}`
+              `[Sovereign Match ${i + 1}] Title: ${res.title}\n${res.content}`,
           )
           .join('\n\n');
       }

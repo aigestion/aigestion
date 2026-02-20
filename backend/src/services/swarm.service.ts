@@ -14,7 +14,12 @@ import { DeFiStrategistService } from './defi-strategist.service';
 import { NotionManagerService } from './notion-manager.service';
 import { JulesGem } from './gems/JulesGem';
 import { NewsService } from './news.service';
+import { HealthService } from './health.service';
 import { logger } from '../utils/logger';
+import axios from 'axios';
+import { withRetry } from '../utils/RetryHelper';
+import { setCache, getCache } from '../cache/redis';
+import { env } from '../config/env.schema';
 
 interface SwarmResponse {
   agentName: string;
@@ -43,6 +48,7 @@ export class SwarmService {
     @inject(TYPES.DeFiStrategistService) private readonly defi: DeFiStrategistService,
     @inject(TYPES.NotionManagerService) private readonly notion: NotionManagerService,
     @inject(TYPES.NewsService) private readonly newsService: NewsService,
+    @inject(TYPES.HealthService) private readonly health: HealthService,
     @inject(JulesGem) private readonly julesGem: JulesGem, // Injected Jules
   ) {
     void this.initializeAutoEvolution();
@@ -72,7 +78,7 @@ export class SwarmService {
 
   private async economyMission(payload: string): Promise<SwarmResponse> {
     logger.info('[SwarmService] Dispatching Economy Agent');
-    const advice = await this.economyAgent.getInvestmentAdvice(); // Simplified implementation
+    const advice = await this.economyAgent.getInvestmentAdvice();
     return {
       agentName: 'Economy-Expert',
       result: advice.advice,
@@ -80,13 +86,65 @@ export class SwarmService {
     };
   }
 
-  private async researchMission(payload: string): Promise<SwarmResponse> {
-    logger.info('[SwarmService] Dispatching Research (Browserless) Agent');
-    // Implementation would use Browserless to fetch live data
+  /**
+   * n8n Orchestration: Delegates complex workflows to n8n as a specialized agent.
+   */
+  private async n8nOrchestrationMission(
+    payload: string,
+    missionId: string,
+  ): Promise<SwarmResponse> {
+    logger.info(`[SwarmService] Dispatching n8n Orchestration for mission: ${missionId}`);
+
+    const webhookUrl = env.N8N_CONTACT_WEBHOOK_URL;
+    if (!webhookUrl) {
+      logger.warn('[SwarmService] n8n Webhook URL not configured. Falling back to Daniela.');
+      return this.generalMission(payload);
+    }
+
+    try {
+      const result = await withRetry(
+        async () => {
+          const response = await axios.post(
+            webhookUrl,
+            {
+              missionId,
+              objective: payload,
+              timestamp: new Date().toISOString(),
+              system: 'Nexus Swarm',
+            },
+            { timeout: 10000 },
+          );
+
+          return response.data;
+        },
+        { retries: 2 },
+      );
+
+      return {
+        agentName: 'n8n-Orchestrator',
+        result: result,
+        confidence: 0.98,
+      };
+    } catch (error: any) {
+      logger.error(`[SwarmService] n8n Mission failed: ${error.message}`);
+      return {
+        agentName: 'n8n-Orchestrator',
+        result: 'Workflow execution failed or timed out.',
+        confidence: 0,
+      };
+    }
+  }
+
+  /**
+   * Health Sentinel: Audits system health and auto-healing status.
+   */
+  private async healthAuditMission(payload: string): Promise<SwarmResponse> {
+    logger.info('[SwarmService] Dispatching Health Sentinel (Audit Mission)');
+    const healthData = await this.health.getDetailedHealth();
     return {
-      agentName: 'Research-Spider',
-      result: 'Research capability active. Live data harvesting initiated.',
-      confidence: 0.9,
+      agentName: 'Health-Sentinel',
+      result: healthData,
+      confidence: 1.0,
     };
   }
 
@@ -232,6 +290,25 @@ export class SwarmService {
     const lowerObj = objective.toLowerCase();
 
     // Simple keyword-based routing (God Mode Logic)
+    if (
+      lowerObj.includes('workflow') ||
+      lowerObj.includes('automation') ||
+      lowerObj.includes('sync')
+    ) {
+      const missionId = `mission_${Date.now()}`;
+      await setCache(`swarm:mission:${missionId}`, { status: 'PENDING', objective }, 3600);
+      const res = await this.n8nOrchestrationMission(objective, missionId);
+      await setCache(
+        `swarm:mission:${missionId}`,
+        { status: 'COMPLETED', result: res.result },
+        3600,
+      );
+      return res;
+    }
+    if (lowerObj.includes('audit') || lowerObj.includes('health') || lowerObj.includes('status')) {
+      return this.healthAuditMission(objective);
+    }
+
     if (lowerObj.includes('code') || lowerObj.includes('refactor') || lowerObj.includes('fix')) {
       return this.julesCodingMission(objective);
     }
