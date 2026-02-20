@@ -310,7 +310,7 @@ services:
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5000"]
     user: root
     ports:
-      - '5001:5000' # Host:5001 -> Container:5000 (Backend expects 5000 internally)
+      - "5001:5001" # Host:5001 -> Container:5000 (Backend expects 5000 internally)
     volumes:
       - aigestion-chroma-data:/app/chromadb # Persistence for RAG
     healthcheck:

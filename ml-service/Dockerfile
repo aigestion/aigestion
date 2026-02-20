@@ -32,7 +32,7 @@ RUN addgroup --system app && adduser --system --group app \
 USER app
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/health || exit 1
+    CMD curl -f http://localhost:5001/health || exit 1
 
-EXPOSE 8000
+EXPOSE 5001
 CMD ["python", "-m", "app.main"]
