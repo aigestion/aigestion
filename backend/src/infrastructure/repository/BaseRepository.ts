@@ -4,19 +4,28 @@ export interface IEntity {
   id: string;
 }
 
-export class BaseRepository<T extends IEntity> {
-  private items = new Map<string, T>();
+export abstract class BaseRepository<T extends IEntity> {
+  /**
+   * SOVEREIGN REPOSITORY BASE
+   * Supports both in-memory Map for testing/fast-cache and
+   * external providers (Mongoose/BigQuery) via overrides.
+   */
 
-  // Supports both create(item) and create(id, item)
-  async create(idOrItem: string | T, maybeItem?: T): Promise<T> {
-    let item: T;
-    if (typeof idOrItem === 'string' && maybeItem) {
-      // Ensure the item has the correct id
-      (maybeItem as any).id = idOrItem;
-      item = maybeItem;
-    } else {
-      item = idOrItem as T;
-    }
+  abstract create(item: Partial<T>): Promise<T>;
+  abstract findAll(limit?: number, offset?: number): Promise<T[]>;
+  abstract findById(id: string): Promise<T | null>;
+  abstract update(id: string, data: Partial<T>): Promise<T | null>;
+  abstract delete(id: string): Promise<boolean>;
+}
+
+/**
+ * IN-MEMORY REPOSITORY IMPLEMENTATION
+ * Default fallback for lightweight entities or unit tests.
+ */
+export class InMemoryRepository<T extends IEntity> extends BaseRepository<T> {
+  protected items = new Map<string, T>();
+
+  async create(item: T): Promise<T> {
     this.items.set(item.id, item);
     return item;
   }
@@ -31,9 +40,7 @@ export class BaseRepository<T extends IEntity> {
 
   async update(id: string, data: Partial<T>): Promise<T | null> {
     const existing = this.items.get(id);
-    if (!existing) {
-      return null;
-    }
+    if (!existing) return null;
     const updated = { ...existing, ...data } as T;
     this.items.set(id, updated);
     return updated;

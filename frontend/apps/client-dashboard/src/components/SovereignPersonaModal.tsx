@@ -1,32 +1,38 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mic, MicOff, Send, Loader2, Sparkles } from 'lucide-react';
+import { X, Mic, MicOff, Send, Loader2, Sparkles, User } from 'lucide-react';
 
-interface DanielaVoiceModalProps {
+export interface Persona {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  voiceId?: string;
+}
+
+interface SovereignPersonaModalProps {
   isOpen: boolean;
   onClose: () => void;
+  activePersona: Persona;
 }
 
 interface Message {
   id: string;
-  role: 'user' | 'daniela';
+  role: 'user' | 'agent';
   text: string;
   timestamp: Date;
 }
 
-// ──────────────────────────────────────────────────────
-// 🌌 Daniela Voice Modal
-// Slide-up modal for mobile voice/text interaction
-// ──────────────────────────────────────────────────────
-export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
+export const SovereignPersonaModal: React.FC<SovereignPersonaModalProps> = ({
   isOpen,
   onClose,
+  activePersona,
 }) => {
   const [messages, setMessages] = React.useState<Message[]>([
     {
       id: '0',
-      role: 'daniela',
-      text: '🌌 Hola. Soy Daniela. ¿En qué puedo ayudarte?',
+      role: 'agent',
+      text: `🌌 Hola. Soy ${activePersona.name}. ¿En qué puedo ayudarte?`,
       timestamp: new Date(),
     },
   ]);
@@ -42,6 +48,18 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Reset messages when persona changes
+  React.useEffect(() => {
+    setMessages([
+      {
+        id: Date.now().toString(),
+        role: 'agent',
+        text: `🌌 Protocolo de personalidad [${activePersona.name}] activado. Esperando instrucciones.`,
+        timestamp: new Date(),
+      },
+    ]);
+  }, [activePersona.id]);
+
   // Auto-focus input when modal opens
   React.useEffect(() => {
     if (isOpen) {
@@ -49,7 +67,6 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
     }
   }, [isOpen]);
 
-  // Speech recognition
   const startListening = () => {
     const SpeechRecognition =
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -64,7 +81,6 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
       const transcript = event.results[0][0].transcript;
       setInput(transcript);
       setIsListening(false);
-      // Auto-send after recognition
       sendMessage(transcript);
     };
 
@@ -95,30 +111,37 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('/api/v1/daniela/message', {
+      // Using generic persona endpoint if available, otherwise fallback to daniela for now
+      const endpoint = activePersona.id === 'daniela' ? '/api/v1/daniela/message' : '/api/v1/swarm/recursive-reasoning';
+
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify({ message: messageText }),
+        body: JSON.stringify({
+          message: messageText,
+          objective: messageText, // for swarm
+          personaId: activePersona.id
+        }),
       });
 
       const data = await res.json();
-      const danielaMsg: Message = {
+      const agentMsg: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'daniela',
-        text: data?.data?.response || data?.response || '✦ Procesando...',
+        role: 'agent',
+        text: data?.data?.response || data?.data?.result || data?.response || '✦ Procesando...',
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, danielaMsg]);
+      setMessages(prev => [...prev, agentMsg]);
     } catch {
       setMessages(prev => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
-          role: 'daniela',
-          text: '❌ Error de conexión con Nexus. Inténtalo de nuevo.',
+          role: 'agent',
+          text: '❌ Error de comunicación con el Nexus. Inténtalo de nuevo.',
           timestamp: new Date(),
         },
       ]);
@@ -131,7 +154,6 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -140,7 +162,6 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
             className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
           />
 
-          {/* Modal — slides up from bottom */}
           <motion.div
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
@@ -149,20 +170,18 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
             className="fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-[#0d0d1a] border-t border-purple-500/30 rounded-t-3xl overflow-hidden"
             style={{ maxHeight: '80vh' }}
           >
-            {/* Handle bar */}
             <div className="flex justify-center pt-3 pb-1">
               <div className="w-12 h-1 bg-white/20 rounded-full" />
             </div>
 
-            {/* Header */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-purple-600/40 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-purple-400" />
+                <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${activePersona.color} flex items-center justify-center`}>
+                  <Sparkles className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-sm">Daniela</p>
-                  <p className="text-white/40 text-xs">NEXUS Sovereign Intelligence</p>
+                  <p className="text-white font-semibold text-sm">{activePersona.name}</p>
+                  <p className="text-white/40 text-[10px] uppercase tracking-tighter italic">Personalidad Activa</p>
                 </div>
               </div>
               <button
@@ -173,7 +192,6 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
               </button>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 min-h-0">
               {messages.map(msg => (
                 <motion.div
@@ -185,8 +203,8 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
                   <div
                     className={`max-w-[82%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                       msg.role === 'user'
-                        ? 'bg-purple-600 text-white rounded-br-sm'
-                        : 'bg-white/10 text-white/90 rounded-bl-sm border border-white/10'
+                        ? 'bg-purple-600 text-white rounded-br-sm shadow-lg shadow-purple-900/20'
+                        : `bg-white/10 text-white/90 rounded-bl-sm border border-white/10`
                     }`}
                   >
                     {msg.text}
@@ -202,16 +220,14 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
                 >
                   <div className="bg-white/10 border border-white/10 px-4 py-2.5 rounded-2xl rounded-bl-sm flex items-center gap-2">
                     <Loader2 className="w-3.5 h-3.5 text-purple-400 animate-spin" />
-                    <span className="text-white/50 text-xs">Daniela está procesando...</span>
+                    <span className="text-white/50 text-xs">Soberano procesando...</span>
                   </div>
                 </motion.div>
               )}
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input area */}
             <div className="px-4 py-3 border-t border-white/10 bg-black/30 flex items-center gap-2">
-              {/* Mic button */}
               <button
                 onClick={isListening ? stopListening : startListening}
                 className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${
@@ -225,22 +241,20 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
                 )}
               </button>
 
-              {/* Text input */}
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && sendMessage()}
-                placeholder="Escribe o habla con Daniela..."
+                placeholder={`Habla con ${activePersona.name}...`}
                 className="flex-1 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-white text-sm placeholder-white/30 outline-none focus:border-purple-500/60 focus:bg-white/15 transition-all"
               />
 
-              {/* Send button */}
               <button
                 onClick={() => sendMessage()}
                 disabled={!input.trim() || isLoading}
-                className="w-10 h-10 rounded-full bg-purple-600 disabled:opacity-30 hover:bg-purple-500 flex items-center justify-center transition-all shrink-0"
+                className="w-10 h-10 rounded-full bg-purple-600 disabled:opacity-30 hover:bg-purple-500 flex items-center justify-center transition-all shrink-0 shadow-lg shadow-purple-900/20"
               >
                 <Send className="w-4 h-4 text-white" />
               </button>

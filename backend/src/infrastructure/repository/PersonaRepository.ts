@@ -5,10 +5,6 @@ import { IPersona, Persona } from '../../models/Persona';
 export interface IPersonaRepository extends BaseRepository<IPersona> {
   findByOwner(ownerId: string): Promise<IPersona[]>;
   findPublic(limit?: number, offset?: number): Promise<{ personas: IPersona[]; total: number }>;
-  findById(id: string): Promise<IPersona | null>;
-  create(idOrItem: string | Partial<IPersona>, maybeItem?: Partial<IPersona>): Promise<IPersona>;
-  update(id: string, data: Partial<IPersona>): Promise<IPersona | null>;
-  delete(id: string): Promise<boolean>;
 }
 
 @injectable()
@@ -30,31 +26,24 @@ export class PersonaRepository extends BaseRepository<IPersona> implements IPers
     return { personas, total };
   }
 
-  override async findById(id: string): Promise<IPersona | null> {
+  async findById(id: string): Promise<IPersona | null> {
     return (await Persona.findById(id).exec()) as IPersona | null;
   }
 
-  override async findAll(limit: number = 20, offset: number = 0): Promise<IPersona[]> {
+  async findAll(limit: number = 20, offset: number = 0): Promise<IPersona[]> {
     return await Persona.find().skip(offset).limit(limit).exec();
   }
 
-  override async create(
-    idOrItem: string | Partial<IPersona>,
-    maybeItem?: Partial<IPersona>,
-  ): Promise<IPersona> {
-    const data = typeof idOrItem === 'string' ? (maybeItem ?? {}) : idOrItem;
-    if (typeof idOrItem === 'string') {
-      (data as any)._id = idOrItem;
-    }
-    const persona = new Persona(data as any);
+  async create(item: Partial<IPersona>): Promise<IPersona> {
+    const persona = new Persona(item);
     return await persona.save();
   }
 
-  override async update(id: string, data: Partial<IPersona>): Promise<IPersona | null> {
+  async update(id: string, data: Partial<IPersona>): Promise<IPersona | null> {
     return await Persona.findByIdAndUpdate(id, data, { new: true }).exec();
   }
 
-  override async delete(id: string): Promise<boolean> {
+  async delete(id: string): Promise<boolean> {
     const result = await Persona.findByIdAndDelete(id).exec();
     return !!result;
   }

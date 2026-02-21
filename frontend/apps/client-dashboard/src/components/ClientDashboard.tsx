@@ -31,7 +31,9 @@ import { StrategyWidget } from './StrategyWidget';
 import { AlertsWidget } from './AlertsWidget';
 import { SovereignMap } from './SovereignMap';
 import { SystemHealthWidget } from './SystemHealthWidget';
-import { DanielaVoiceModal } from './DanielaVoiceModal';
+import { SovereignPersonaModal, Persona } from './SovereignPersonaModal';
+import { PersonaMarketplace } from './PersonaMarketplace';
+import { ShoppingCart } from 'lucide-react';
 
 // ──────────────────────────────────────────────────────
 // Hook: detect device layout (mobile + landscape)
@@ -82,6 +84,7 @@ function useDeviceLayout() {
 const NAV_TABS = [
   { id: 'home', icon: Home, label: 'Inicio' },
   { id: 'portfolio', icon: Wallet, label: 'Cartera' },
+  { id: 'marketplace', icon: ShoppingCart, label: 'Mercado' },
   { id: 'alerts', icon: Bell, label: 'Alertas' },
   { id: 'actions', icon: Zap, label: 'Acciones' },
 ];
@@ -199,6 +202,12 @@ const ClientDashboard = () => {
   >('checking');
   const [activeTab, setActiveTab] = React.useState('home');
   const [voiceModalOpen, setVoiceModalOpen] = React.useState(false);
+  const [activePersona, setActivePersona] = React.useState<Persona>({
+    id: 'daniela',
+    name: 'Daniela Nexus',
+    description: 'Voz oficial del Nexus',
+    color: 'from-purple-500 to-indigo-600',
+  });
 
   React.useEffect(() => {
     const checkConnection = async () => {
@@ -237,9 +246,24 @@ const ClientDashboard = () => {
   const renderMobileTab = () => {
     switch (activeTab) {
       case 'portfolio':
-        return <div className="h-[360px]"><PortfolioWidget /></div>;
+        return (
+          <div className="h-[360px]">
+            <PortfolioWidget />
+          </div>
+        );
+      case 'marketplace':
+        return (
+          <PersonaMarketplace
+            activePersonaId={activePersona.id}
+            onSelectPersona={p => setActivePersona(p)}
+          />
+        );
       case 'alerts':
-        return <div className="h-[360px]"><AlertsWidget /></div>;
+        return (
+          <div className="h-[360px]">
+            <AlertsWidget />
+          </div>
+        );
       case 'actions':
         return (
           <div className="h-[360px] grid grid-cols-2 gap-3">
@@ -248,7 +272,9 @@ const ClientDashboard = () => {
               className="flex flex-col items-center justify-center gap-2 bg-purple-600/30 border border-purple-500/40 rounded-xl p-4 active:scale-95 transition-transform"
             >
               <Mic className="w-8 h-8 text-purple-400" />
-              <span className="text-xs text-white font-medium">Hablar con Daniela</span>
+              <span className="text-xs text-white font-medium">
+                Hablar con {activePersona.name.split(' ')[0]}
+              </span>
             </button>
             <button className="flex flex-col items-center justify-center gap-2 bg-emerald-600/30 border border-emerald-500/40 rounded-xl p-4 active:scale-95 transition-transform">
               <PhoneCall className="w-8 h-8 text-emerald-400" />
@@ -395,10 +421,10 @@ const ClientDashboard = () => {
           {!isMobile && (
             <button
               onClick={() => setVoiceModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 rounded-xl text-white text-sm transition-all"
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600/30 hover:bg-purple-600/50 border border-purple-500/40 rounded-xl text-white text-sm transition-all shadow-lg shadow-purple-900/20"
             >
               <Mic className="w-4 h-4" />
-              Daniela
+              {activePersona.name}
             </button>
           )}
         </motion.div>
@@ -428,6 +454,12 @@ const ClientDashboard = () => {
               </div>
               <div style={{ height: chartHeight }}>
                 <AlertsWidget />
+              </div>
+              <div className="col-span-1 md:col-span-2">
+                <PersonaMarketplace
+                  activePersonaId={activePersona.id}
+                  onSelectPersona={p => setActivePersona(p)}
+                />
               </div>
               <div style={{ height: chartHeight }}>
                 <SystemHealthWidget />
@@ -461,8 +493,12 @@ const ClientDashboard = () => {
         </motion.button>
       )}
 
-      {/* Daniela Voice Modal */}
-      <DanielaVoiceModal isOpen={voiceModalOpen} onClose={() => setVoiceModalOpen(false)} />
+      {/* Sovereign Persona Modal */}
+      <SovereignPersonaModal
+        isOpen={voiceModalOpen}
+        onClose={() => setVoiceModalOpen(false)}
+        activePersona={activePersona}
+      />
     </div>
   );
 };

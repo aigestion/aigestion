@@ -5,9 +5,7 @@ import { logger } from '../utils/logger';
 
 @injectable()
 export class PersonaMarketplaceService {
-  constructor(
-    @inject(TYPES.EconomyService) private economyService: any
-  ) {
+  constructor(@inject(TYPES.EconomyService) private economyService: any) {
     logger.info('🎭 Persona Marketplace Service active: Orchestrating voice sovereignity');
   }
 
@@ -26,7 +24,7 @@ export class PersonaMarketplaceService {
       to: persona.ownerId,
       amount: persona.price,
       type: 'PERSONA_HIRE',
-      metadata: { personaId }
+      metadata: { personaId },
     });
 
     // Update stats
@@ -36,14 +34,47 @@ export class PersonaMarketplaceService {
     return persona;
   }
 
-  public async ratePersona(personaId: string, rating: number) {
+  /**
+   * SOVEREIGN REVENUE SHARING
+   * Calculates platform commission and creator earnings based on execution tokens/usage.
+   */
+  public async calculateRevenueShare(personaId: string, tokens: number) {
     const persona = await Persona.findById(personaId);
     if (!persona) throw new Error('Persona not found');
 
-    // Simple moving average for reputation
-    persona.reputationScore = (persona.reputationScore + rating) / 2;
-    await persona.save();
+    const PLATFORM_FEE_PERCENT = 0.2; // 20% platform commission
+    const baseRatePerToken = 0.0001; // Example: $0.0001 per token
 
-    return persona;
+    const totalRevenue = tokens * baseRatePerToken * persona.commissionMultiplier;
+    const platformCommission = totalRevenue * PLATFORM_FEE_PERCENT;
+    const creatorEarnings = totalRevenue - platformCommission;
+
+    logger.info(
+      `[Marketplace] Revenue Share for ${persona.name}: Total=$${totalRevenue.toFixed(4)}, Creator=$${creatorEarnings.toFixed(4)}`,
+    );
+
+    return {
+      totalRevenue,
+      platformCommission,
+      creatorEarnings,
+      currency: 'USD',
+    };
+  }
+
+  public async getMarketplaceStats() {
+    const topPersonas = await Persona.find({ isPublic: true })
+      .sort({ totalExecutions: -1 })
+      .limit(5);
+
+    return {
+      topPerformers: topPersonas.map(p => ({
+        name: p.name,
+        executions: p.totalExecutions,
+        reputation: p.reputationScore,
+      })),
+      totalMarketplaceExecutions: await Persona.aggregate([
+        { $group: { _id: null, total: { $sum: '$totalExecutions' } } },
+      ]),
+    };
   }
 }
