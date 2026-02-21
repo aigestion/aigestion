@@ -4,4 +4,12 @@
     <string name="title_activity_main">AIGestion</string>
     <string name="package_name">com.aigestion.frontend</string>
     <string name="custom_url_scheme">com.aigestion.frontend</string>
+<!-- 🌌 App Shortcuts -->
+<string name="shortcut_daniela_short">Daniela</string>
+<string name="shortcut_daniela_long">Hablar con Daniela</string>
+<string name="shortcut_portfolio_short">Cartera</string>
+<string name="shortcut_portfolio_long">Ver mi Cartera</string>
+<string name="shortcut_call_short">Llamar</string>
+<string name="shortcut_call_long">Llamada Rápida</string>
+<string name="shortcut_disabled">No disponible</string>
 </resources>

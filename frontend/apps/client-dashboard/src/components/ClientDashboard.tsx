@@ -19,48 +19,106 @@ import { AlertsWidget } from './AlertsWidget';
 import { DanielaVoiceModal } from './DanielaVoiceModal';
 
 // ──────────────────────────────────────────────────────
-// Hook: detect mobile screen
+// Hook: detect device layout (mobile + landscape)
 // ──────────────────────────────────────────────────────
-function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState(
-    typeof window !== 'undefined' ? window.innerWidth < 768 : false,
-  );
+function useDeviceLayout() {
+  const isMobileDevice =
+    typeof window !== 'undefined'
+      ? window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768
+      : false;
+
+  const [layout, setLayout] = React.useState({
+    isMobile: isMobileDevice,
+    isLandscape:
+      typeof window !== 'undefined' ? window.matchMedia('(orientation: landscape)').matches : false,
+  });
+
   React.useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handler);
-    return () => window.removeEventListener('resize', handler);
+    const update = () => {
+      const coarse = window.matchMedia('(pointer: coarse)').matches;
+      const narrow = window.innerWidth < 768;
+      const landscape = window.matchMedia('(orientation: landscape)').matches;
+      // A touch device in landscape (e.g. Pixel 8 → 915px) stays mobile
+      const mobile = narrow || (coarse && window.innerHeight < 500);
+      setLayout({ isMobile: mobile, isLandscape: landscape });
+    };
+
+    window.addEventListener('resize', update);
+    const mql = window.matchMedia('(orientation: landscape)');
+    mql.addEventListener('change', update);
+
+    // Run once to catch initial state correctly
+    update();
+
+    return () => {
+      window.removeEventListener('resize', update);
+      mql.removeEventListener('change', update);
+    };
   }, []);
-  return isMobile;
+
+  return layout;
 }
 
 // ──────────────────────────────────────────────────────
-// Mobile Bottom Navigation
+// Mobile Navigation (Bottom bar + Landscape sidebar rail)
 // ──────────────────────────────────────────────────────
+const NAV_TABS = [
+  { id: 'home', icon: Home, label: 'Inicio' },
+  { id: 'portfolio', icon: Wallet, label: 'Cartera' },
+  { id: 'alerts', icon: Bell, label: 'Alertas' },
+  { id: 'actions', icon: Zap, label: 'Acciones' },
+];
+
 const MobileNav = ({
   activeTab,
   onTabChange,
+  landscape = false,
 }: {
   activeTab: string;
   onTabChange: (tab: string) => void;
+  landscape?: boolean;
 }) => {
-  const tabs = [
-    { id: 'home', icon: Home, label: 'Inicio' },
-    { id: 'portfolio', icon: Wallet, label: 'Cartera' },
-    { id: 'alerts', icon: Bell, label: 'Alertas' },
-    { id: 'actions', icon: Zap, label: 'Acciones' },
-  ];
+  // 🌌 Landscape → vertical sidebar rail
+  if (landscape) {
+    return (
+      <div
+        className="fixed left-0 top-0 bottom-0 z-40 w-14 bg-black/80 backdrop-blur-xl border-r border-white/10 flex flex-col items-center justify-center gap-4"
+        style={{
+          paddingTop: 'env(safe-area-inset-top)',
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        }}
+      >
+        {NAV_TABS.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => onTabChange(tab.id)}
+            className={`flex flex-col items-center justify-center p-2 rounded-xl transition-all ${
+              activeTab === tab.id
+                ? 'text-purple-400 bg-purple-500/20'
+                : 'text-white/40 hover:text-white/70'
+            }`}
+          >
+            <tab.icon className="w-5 h-5" />
+            <span className="text-[8px] font-medium mt-0.5">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+    );
+  }
 
+  // Portrait → bottom bar with safe area insets
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-xl border-t border-white/10 pb-safe">
+    <div
+      className="fixed bottom-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-xl border-t border-white/10"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
       <div className="flex items-center justify-around px-2 h-16">
-        {tabs.map(tab => (
+        {NAV_TABS.map(tab => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`flex flex-col items-center justify-center flex-1 h-full gap-1 transition-all ${
-              activeTab === tab.id
-                ? 'text-purple-400'
-                : 'text-white/40 hover:text-white/70'
+              activeTab === tab.id ? 'text-purple-400' : 'text-white/40 hover:text-white/70'
             }`}
           >
             <tab.icon className="w-5 h-5" />
@@ -76,7 +134,7 @@ const MobileNav = ({
       </div>
     </div>
   );
-};
+};;
 
 // ──────────────────────────────────────────────────────
 // Stat Card (mobile-optimized)
@@ -116,7 +174,8 @@ const StatCard = ({
 // Main Dashboard
 // ──────────────────────────────────────────────────────
 const ClientDashboard = () => {
-  const isMobile = useIsMobile();
+  const { isMobile, isLandscape } = useDeviceLayout();
+  const mobileLandscape = isMobile && isLandscape;
   const [health, setHealth] = React.useState<SystemHealth | null>(null);
   const [connectionStatus, setConnectionStatus] = React.useState<
     'checking' | 'connected' | 'error'
@@ -155,7 +214,7 @@ const ClientDashboard = () => {
     { name: 'Jun', completado: 95, objetivo: 98 },
   ];
 
-  const chartHeight = isMobile ? 240 : 400;
+  const chartHeight = mobileLandscape ? 180 : isMobile ? 240 : 400;
 
   // Mobile tab content
   const renderMobileTab = () => {
@@ -191,8 +250,16 @@ const ClientDashboard = () => {
       default: // 'home'
         return (
           <>
-            {/* Stats grid — 2 cols on mobile */}
-            <div className={`grid gap-3 ${isMobile ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-4'}`}>
+            {/* Stats grid — adaptive: 2 portrait / 4 landscape / 4 desktop */}
+            <div
+              className={`grid gap-3 ${
+                mobileLandscape
+                  ? 'grid-cols-4'
+                  : isMobile
+                    ? 'grid-cols-2'
+                    : 'grid-cols-2 md:grid-cols-4'
+              }`}
+            >
               {stats.map((stat, i) => (
                 <StatCard key={i} {...stat} index={i} />
               ))}
@@ -214,19 +281,42 @@ const ClientDashboard = () => {
                   <XAxis dataKey="name" stroke="rgba(255,255,255,0.4)" tick={{ fontSize: 11 }} />
                   <YAxis stroke="rgba(255,255,255,0.4)" tick={{ fontSize: 11 }} />
                   <Tooltip
-                    contentStyle={{ background: 'rgba(0,0,0,0.8)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8 }}
+                    contentStyle={{
+                      background: 'rgba(0,0,0,0.8)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: 8,
+                    }}
                     labelStyle={{ color: 'rgba(255,255,255,0.7)' }}
                   />
-                  <Line type="monotone" dataKey="completado" stroke="#a855f7" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="objetivo" stroke="rgba(255,255,255,0.3)" strokeWidth={1} strokeDasharray="4 4" dot={false} />
+                  <Line
+                    type="monotone"
+                    dataKey="completado"
+                    stroke="#a855f7"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="objetivo"
+                    stroke="rgba(255,255,255,0.3)"
+                    strokeWidth={1}
+                    strokeDasharray="4 4"
+                    dot={false}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </motion.div>
 
-            {/* Strategy and Treasury — stacked on mobile */}
-            <div className={`grid gap-3 ${isMobile ? 'grid-cols-1' : 'grid-cols-2'}`}>
-              <div style={{ height: chartHeight }}><StrategyWidget /></div>
-              <div style={{ height: chartHeight }}><SovereignTreasury /></div>
+            {/* Strategy and Treasury — side-by-side in landscape, stacked portrait */}
+            <div
+              className={`grid gap-3 ${mobileLandscape ? 'grid-cols-2' : isMobile ? 'grid-cols-1' : 'grid-cols-2'}`}
+            >
+              <div style={{ height: chartHeight }}>
+                <StrategyWidget />
+              </div>
+              <div style={{ height: chartHeight }}>
+                <SovereignTreasury />
+              </div>
             </div>
           </>
         );
@@ -234,7 +324,13 @@ const ClientDashboard = () => {
   };
 
   return (
-    <div className={`relative ${isMobile ? 'pb-20' : ''}`}>
+    <div
+      className={`relative ${isMobile ? (mobileLandscape ? 'pl-16 pb-2' : 'pb-20') : ''}`}
+      style={{
+        paddingTop: isMobile ? 'env(safe-area-inset-top)' : undefined,
+        paddingLeft: mobileLandscape ? 'calc(3.5rem + env(safe-area-inset-left))' : undefined,
+      }}
+    >
       <div className="p-4 md:p-6 space-y-4 md:space-y-6">
         {/* Header */}
         <motion.div
@@ -247,15 +343,25 @@ const ClientDashboard = () => {
               💎 {isMobile ? 'NEXUS' : 'Base Personal'}
             </h1>
             {/* Connection status pill */}
-            <div className={`mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
-              connectionStatus === 'connected'
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                : connectionStatus === 'error'
-                  ? 'bg-red-500/20 text-red-300 border border-red-500/30'
-                  : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
-            }`}>
-              <Activity className={`w-2.5 h-2.5 ${connectionStatus === 'checking' ? 'animate-pulse' : ''}`} />
-              <span>{connectionStatus === 'connected' ? 'En Línea' : connectionStatus === 'error' ? 'Fuera de Línea' : 'Conectando...'}</span>
+            <div
+              className={`mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                connectionStatus === 'connected'
+                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                  : connectionStatus === 'error'
+                    ? 'bg-red-500/20 text-red-300 border border-red-500/30'
+                    : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+              }`}
+            >
+              <Activity
+                className={`w-2.5 h-2.5 ${connectionStatus === 'checking' ? 'animate-pulse' : ''}`}
+              />
+              <span>
+                {connectionStatus === 'connected'
+                  ? 'En Línea'
+                  : connectionStatus === 'error'
+                    ? 'Fuera de Línea'
+                    : 'Conectando...'}
+              </span>
               {health?.data?.version && <span className="opacity-50">v{health.data.version}</span>}
             </div>
           </div>
@@ -271,23 +377,37 @@ const ClientDashboard = () => {
         </motion.div>
 
         {/* Content */}
-        {isMobile ? renderMobileTab() : (
+        {isMobile ? (
+          renderMobileTab()
+        ) : (
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {stats.map((stat, i) => <StatCard key={i} {...stat} index={i} />)}
+              {stats.map((stat, i) => (
+                <StatCard key={i} {...stat} index={i} />
+              ))}
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div style={{ height: chartHeight }}><PortfolioWidget /></div>
-              <div style={{ height: chartHeight }}><StrategyWidget /></div>
-              <div style={{ height: chartHeight }}><SovereignTreasury /></div>
-              <div style={{ height: chartHeight }}><AlertsWidget /></div>
+              <div style={{ height: chartHeight }}>
+                <PortfolioWidget />
+              </div>
+              <div style={{ height: chartHeight }}>
+                <StrategyWidget />
+              </div>
+              <div style={{ height: chartHeight }}>
+                <SovereignTreasury />
+              </div>
+              <div style={{ height: chartHeight }}>
+                <AlertsWidget />
+              </div>
             </div>
           </>
         )}
       </div>
 
       {/* Mobile Bottom Navigation */}
-      {isMobile && <MobileNav activeTab={activeTab} onTabChange={setActiveTab} />}
+      {isMobile && (
+        <MobileNav activeTab={activeTab} onTabChange={setActiveTab} landscape={mobileLandscape} />
+      )}
 
       {/* Floating Daniela Voice Button (mobile) */}
       {isMobile && (
@@ -296,18 +416,20 @@ const ClientDashboard = () => {
           animate={{ scale: 1 }}
           transition={{ delay: 0.5, type: 'spring' }}
           onClick={() => setVoiceModalOpen(true)}
-          className="fixed bottom-20 right-4 z-50 w-14 h-14 rounded-full bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-900/50 flex items-center justify-center active:scale-90 transition-transform"
-          style={{ boxShadow: '0 0 20px rgba(168, 85, 247, 0.5)' }}
+          className={`fixed z-50 rounded-full bg-purple-600 hover:bg-purple-500 shadow-lg shadow-purple-900/50 flex items-center justify-center active:scale-90 transition-transform ${
+            mobileLandscape ? 'bottom-4 right-4 w-11 h-11' : 'bottom-20 right-4 w-14 h-14'
+          }`}
+          style={{
+            boxShadow: '0 0 20px rgba(168, 85, 247, 0.5)',
+            marginBottom: mobileLandscape ? undefined : 'env(safe-area-inset-bottom)',
+          }}
         >
-          <Mic className="w-6 h-6 text-white" />
+          <Mic className={mobileLandscape ? 'w-5 h-5 text-white' : 'w-6 h-6 text-white'} />
         </motion.button>
       )}
 
       {/* Daniela Voice Modal */}
-      <DanielaVoiceModal
-        isOpen={voiceModalOpen}
-        onClose={() => setVoiceModalOpen(false)}
-      />
+      <DanielaVoiceModal isOpen={voiceModalOpen} onClose={() => setVoiceModalOpen(false)} />
     </div>
   );
 };

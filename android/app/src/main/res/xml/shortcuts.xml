@@ -1,0 +1,51 @@
+<?xml version ="1.0" encoding="utf-8"?>
+<!-- 🌌 NEXUS App Shortcuts — God Level -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 💜 Daniela Voice -->
+    <shortcut
+        android:shortcutId="daniela_voice"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_btn_speak_now"
+        android:shortcutShortLabel="@string/shortcut_daniela_short"
+        android:shortcutLongLabel="@string/shortcut_daniela_long"
+        android:shortcutDisabledMessage="@string/shortcut_disabled">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.aigestion.frontend"
+            android:targetClass="com.aigestion.frontend.MainActivity"
+            android:data="nexus://daniela" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+    <!-- 📈 Portfolio / Cartera -->
+    <shortcut
+        android:shortcutId="portfolio"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:shortcutShortLabel="@string/shortcut_portfolio_short"
+        android:shortcutLongLabel="@string/shortcut_portfolio_long"
+        android:shortcutDisabledMessage="@string/shortcut_disabled">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.aigestion.frontend"
+            android:targetClass="com.aigestion.frontend.MainActivity"
+            android:data="nexus://portfolio" />
+    </shortcut>
+
+    <!-- 📞 Quick Call -->
+    <shortcut
+        android:shortcutId="quick_call"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_call"
+        android:shortcutShortLabel="@string/shortcut_call_short"
+        android:shortcutLongLabel="@string/shortcut_call_long"
+        android:shortcutDisabledMessage="@string/shortcut_disabled">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.aigestion.frontend"
+            android:targetClass="com.aigestion.frontend.MainActivity"
+            android:data="nexus://daniela?action=call" />
+    </shortcut>
+
+</shortcuts>
