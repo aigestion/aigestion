@@ -1,5 +1,3 @@
-import { logger } from './logger';
-
 export enum AIModelTier {
   ECONOMY = 'economy',
   STANDARD = 'standard',

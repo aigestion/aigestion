@@ -156,6 +156,7 @@ import { NeuralHomeBridge } from '../services/google/neural-home.service';
 import { ContactRegistryService } from '../services/contact-registry.service';
 import { DanielaCallAgent } from '../services/daniela-call-agent.service';
 import { NexusPushService } from '../services/nexus-push.service';
+import { DeviceStateStore } from '../services/device-state.store';
 import { QuantumSecurityService } from '../services/security/quantum-security.service';
 import { PineconeService } from '../services/pinecone.service';
 import { MemoryService } from '../services/memory.service';
@@ -452,6 +453,7 @@ bind<GeminiLiveService>(TYPES.GeminiLiveService, GeminiLiveService);
 bind<VisualPerceptionService>(TYPES.VisualPerceptionService, VisualPerceptionService);
 bind<McpBridgeService>(TYPES.McpBridgeService, McpBridgeService);
 bind<NeuralHomeBridge>(TYPES.NeuralHomeBridge, NeuralHomeBridge);
+bind<DeviceStateStore>(TYPES.DeviceStateStore, DeviceStateStore);
 
 // ========================================
 // CONTROLLERS

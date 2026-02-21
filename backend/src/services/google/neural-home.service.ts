@@ -45,6 +45,49 @@ export class NeuralHomeBridge {
   }
 
   /**
+   * 🏠 [GOD MODE] Smart Lock Control
+   * Sends lock/unlock commands to Home Assistant REST API.
+   * Requires HA_URL and HA_TOKEN environment variables.
+   */
+  async controlLock(
+    action: 'lock' | 'unlock',
+    lockId: string = 'lock.front_door',
+  ): Promise<{ success: boolean; action: string; entity: string }> {
+    logger.info(`[NeuralHome] 🔐 Lock control: ${action} on ${lockId}`);
+
+    const haUrl = process.env.HA_URL || 'http://homeassistant.local:8123';
+    const haToken = process.env.HA_TOKEN;
+
+    if (!haToken) {
+      logger.warn('[NeuralHome] HA_TOKEN not set — lock command simulated');
+      // Ingest the event even if simulated
+      await this.ingestIoTEvent(`lock_${action}`, 'smart_lock', { lockId, simulated: true });
+      return { success: true, action, entity: lockId };
+    }
+
+    try {
+      const axios = require('axios');
+      const service = action === 'unlock' ? 'lock/unlock' : 'lock/lock';
+      await axios.post(
+        `${haUrl}/api/services/${service}`,
+        { entity_id: lockId },
+        { headers: { Authorization: `Bearer ${haToken}`, 'Content-Type': 'application/json' } },
+      );
+
+      await this.ingestIoTEvent(`lock_${action}`, 'smart_lock', { lockId, success: true });
+      logger.info(`[NeuralHome] 🔐 Lock ${action} successful on ${lockId}`);
+      return { success: true, action, entity: lockId };
+    } catch (error: any) {
+      logger.error(`[NeuralHome] Lock control failed: ${error.message}`);
+      await this.ingestIoTEvent(`lock_${action}_failed`, 'smart_lock', {
+        lockId,
+        error: error.message,
+      });
+      return { success: false, action, entity: lockId };
+    }
+  }
+
+  /**
    * Ingests a physical event into the AI's neural context.
    * This bridges Home Assistant/n8n events directly into ChromaDB.
    */

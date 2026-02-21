@@ -11,11 +11,11 @@ import { TreasuryService } from './TreasuryService';
 
 @injectable()
 export class UsageService {
-  private readonly PLATFORM_COMMISSION_RATE = 0.30;
+  private readonly PLATFORM_COMMISSION_RATE = 0.3;
 
   constructor(
-    @inject(TYPES.StripeService) private stripeService: StripeService,
-    @inject(TYPES.TreasuryService) private treasury: TreasuryService
+    @inject(TYPES.StripeService) private readonly stripeService: StripeService,
+    @inject(TYPES.TreasuryService) private readonly treasury: TreasuryService,
   ) {}
 
   /**
@@ -26,8 +26,8 @@ export class UsageService {
     try {
       // gpt-tokenizer is compatible with most modern LLMs (BPE)
       return encode(text).length;
-    } catch (error) {
-      logger.warn('Token counting failed, using fallback estimate');
+    } catch (error: unknown) {
+      logger.warn('Token counting failed, using fallback estimate', error);
       return Math.ceil(text.length / 4); // Very rough fallback
     }
   }
@@ -53,7 +53,7 @@ export class UsageService {
       // 0. Sovereign Bond Redemption
       // Try to pay with bonds first. If remainingCost > 0, the rest goes to billing.
       const remainingCost = await this.treasury.redeemCredit(params.userId, costEstimate);
-      const isPaidByBond = remainingCost < costEstimate;
+      const _isPaidByBond = remainingCost < costEstimate;
 
       let creatorId: string | undefined;
       let creatorCommission = 0;
@@ -66,10 +66,10 @@ export class UsageService {
           creatorId = persona.ownerId.toString();
           // Logic: 30% platform BASE, adjusted by persona's multiplier
           // Base cost is estimated tokens. Multiplier increases the creator's cut.
-          const multiplier = persona.commissionMultiplier || 1.0;
+          const multiplier = persona.commissionMultiplier || 1;
           platformCommission = costEstimate * this.PLATFORM_COMMISSION_RATE;
           creatorCommission = costEstimate * (1 - this.PLATFORM_COMMISSION_RATE) * multiplier;
-          
+
           // Increment execution count synchronously for reputation tracking
           await Persona.findByIdAndUpdate(params.personaId, { $inc: { totalExecutions: 1 } });
         }
@@ -104,7 +104,7 @@ export class UsageService {
       }
 
       logger.info(
-        `[UsageService] Tracked ${totalTokens} tokens for user ${params.userId} (Persona: ${params.personaId || 'None'})`
+        `[UsageService] Tracked ${totalTokens} tokens for user ${params.userId} (Persona: ${params.personaId || 'None'})`,
       );
     } catch (error) {
       logger.error(error, `[UsageService] Failed to track usage for user ${params.userId}`);
@@ -135,19 +135,21 @@ export class UsageService {
       if (!persona) return;
 
       const total = persona.totalExecutions || 1;
-      const currentSuccesses = (persona.successRate || 1.0) * total;
+      const currentSuccesses = (persona.successRate || 1) * total;
       const newSuccesses = success ? currentSuccesses + 1 : currentSuccesses;
-      const newRate = newSuccesses / (total + (success ? 0 : 0)); // total already incremented in trackUsage
+      const newRate = newSuccesses / total; // total already incremented in trackUsage
 
       // Linear interpolation for reputation: weight success rate and execution volume
-      const reputationScore = (newRate * 0.7) + (Math.min(total / 1000, 1.0) * 0.3);
+      const reputationScore = newRate * 0.7 + Math.min(total / 1000, 1) * 0.3;
 
       await Persona.findByIdAndUpdate(personaId, {
         successRate: newRate,
-        reputationScore
+        reputationScore,
       });
 
-      logger.info(`[UsageService] Updated reputation for Persona ${personaId}: ${reputationScore.toFixed(4)}`);
+      logger.info(
+        `[UsageService] Updated reputation for Persona ${personaId}: ${reputationScore.toFixed(4)}`,
+      );
     } catch (error) {
       logger.error(`[UsageService] Failed to update persona reputation ${personaId}`, error);
     }

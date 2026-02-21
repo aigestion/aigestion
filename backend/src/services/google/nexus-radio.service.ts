@@ -27,17 +27,16 @@ export class NexusRadioService {
     const rawContext = await this.knowledge.generateBriefing(sourceSetId);
 
     // 2. Generate conversational script with "High-tech noir" style
-    const scriptPrompt = `
-      Actúa como el locutor del Nexus Radio.
+    return await this.gemini.generateText(
+      `Actúa como el locutor del Nexus Radio.
       Genera un resumen informativo basado en estas fuentes:
       "${rawContext}"
-      
+
       ESTILO: Alta tecnología, noir, directo, inteligente.
       FORMATO: Podcast corto.
-      IDIOMA: Español.
-    `;
-
-    return await this.gemini.generateText(scriptPrompt, { model: 'gemini-2.0-flash' });
+      IDIOMA: Español.`,
+      { model: 'gemini-2.0-flash' },
+    );
   }
 
   /**

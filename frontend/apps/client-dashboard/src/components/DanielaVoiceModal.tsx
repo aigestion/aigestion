@@ -214,10 +214,8 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
               {/* Mic button */}
               <button
                 onClick={isListening ? stopListening : startListening}
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${
-                  isListening
-                    ? 'bg-red-500 animate-pulse'
-                    : 'bg-white/10 hover:bg-white/20'
+                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${
+                  isListening ? 'bg-red-500 animate-pulse' : 'bg-white/10 hover:bg-white/20'
                 }`}
               >
                 {isListening ? (
@@ -242,7 +240,7 @@ export const DanielaVoiceModal: React.FC<DanielaVoiceModalProps> = ({
               <button
                 onClick={() => sendMessage()}
                 disabled={!input.trim() || isLoading}
-                className="w-10 h-10 rounded-full bg-purple-600 disabled:opacity-30 hover:bg-purple-500 flex items-center justify-center transition-all flex-shrink-0"
+                className="w-10 h-10 rounded-full bg-purple-600 disabled:opacity-30 hover:bg-purple-500 flex items-center justify-center transition-all shrink-0"
               >
                 <Send className="w-4 h-4 text-white" />
               </button>

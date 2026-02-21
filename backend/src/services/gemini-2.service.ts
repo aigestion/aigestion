@@ -1,7 +1,6 @@
 ﻿import { GoogleGenerativeAI } from '@google/generative-ai';
-import { injectable, inject } from 'inversify';
+import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
-import { TYPES } from '../types';
 
 /**
  * GEMINI PRO & AI STUDIO SERVICE (God Level)
@@ -247,8 +246,9 @@ export class Gemini2Service {
 
       const prompt = `Resume el siguiente texto en ${lengthMap[length]}:\n\n${text}`;
 
+      const maxTokensMap = { short: 100, medium: 200, long: 500 };
       return await this.generateText(prompt, {
-        maxTokens: length === 'short' ? 100 : length === 'medium' ? 200 : 500,
+        maxTokens: maxTokensMap[length],
       });
     } catch (error) {
       console.error('Error summarizing text:', error);

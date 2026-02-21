@@ -5,11 +5,13 @@ import { AIService } from './ai.service';
 import { AnalyticsService } from './analytics.service';
 import { ContactRegistryService } from './contact-registry.service';
 import { DanielaCallAgent } from './daniela-call-agent.service';
+import { DeviceStateStore } from './device-state.store';
 import { EconomyService } from './economy.service';
 import { RagService } from './rag.service';
 import { UserBehaviorService } from './user-behavior.service';
 import { UserService } from './user.service';
 import { SwarmInternalClient } from './swarm-internal.client';
+import { NeuralHomeBridge } from './google/neural-home.service';
 import { TYPES } from '../types';
 
 interface DanielaContext {
@@ -40,6 +42,8 @@ export class DanielaAIService {
     @inject(TYPES.EconomyService) private economyService: EconomyService,
     @inject(TYPES.ContactRegistryService) private contactRegistry: ContactRegistryService,
     @inject(TYPES.DanielaCallAgent) private callAgent: DanielaCallAgent,
+    @inject(TYPES.DeviceStateStore) private deviceState: DeviceStateStore,
+    @inject(TYPES.NeuralHomeBridge) private homeBridge: NeuralHomeBridge,
   ) {
     this.initialize();
   }
@@ -145,6 +149,8 @@ export class DanielaAIService {
         return await this.handleCallRequest(context, message);
       case 'sms':
         return await this.handleSmsRequest(context, message);
+      case 'lock':
+        return await this.handleLockRequest(context, message);
       case 'analytics':
         return await this.handleAnalyticsRequest(context, message, userContext);
       case 'economy':
@@ -172,6 +178,9 @@ export class DanielaAIService {
    * Construir prompt del sistema
    */
   private buildSystemPrompt(context: DanielaContext, userContext: any): string {
+    // 🌌 [TIER 3] Inject physical context from DeviceStateStore
+    const physicalContext = this.deviceState?.buildContextBlock() || '';
+
     return `Eres Daniela, una asistente de IA profesional con personalidad cálida.
 
 Tu nombre: Daniela 💜
@@ -185,7 +194,7 @@ Información del usuario:
 - Tareas pendientes: ${userContext?.pendingTasks || 0}
 - Eficiencia: ${userContext?.efficiency || 'N/A'}
 
-Directivas:
+${physicalContext ? physicalContext + '\n\n' : ''}Directivas:
 1. Sé profesional pero cálida
 2. Proporciona insights accionables
 3. Usa emojis cuando sea apropiado
@@ -193,6 +202,8 @@ Directivas:
 5. Sé concisa pero completa
 6. Ofrece sugerencias proactivas
 7. Respeta el contexto de la conversación
+8. Si conoces la ubicación del usuario, úsala para personalizar respuestas
+9. Si el usuario está en modo coche, sé extremadamente concisa
 
 Responde en ${
       context.conversationHistory.length > 0
@@ -218,6 +229,20 @@ Responde en ${
    */
   private detectIntent(message: string): string {
     const lowerMessage = message.toLowerCase();
+
+    // 🌌 [GOD MODE] Lock intent — highest priority (before call to avoid 'abre' collision)
+    if (
+      lowerMessage.includes('abre la puerta') ||
+      lowerMessage.includes('abrir puerta') ||
+      lowerMessage.includes('cerradura') ||
+      lowerMessage.includes('cierra la puerta') ||
+      lowerMessage.includes('cerrar puerta') ||
+      lowerMessage.includes('unlock') ||
+      lowerMessage.includes('lock the door') ||
+      lowerMessage.includes('smart lock')
+    ) {
+      return 'lock';
+    }
 
     // 🌌 [GOD MODE] Call intent — highest priority
     if (
@@ -649,6 +674,39 @@ Responde en ${
     } catch (error) {
       logger.error('Error in handleSmsRequest:', error);
       return '📨 Error en el SMS Bridge. ¿Puedes intentar de nuevo?';
+    }
+  }
+
+  /**
+   * 🏠 [GOD MODE] Handle lock/unlock request via NeuralHomeBridge
+   */
+  private async handleLockRequest(context: DanielaContext, message: string): Promise<string> {
+    try {
+      const lowerMessage = message.toLowerCase();
+      const action: 'lock' | 'unlock' =
+        lowerMessage.includes('cierra') ||
+        lowerMessage.includes('lock the') ||
+        lowerMessage.includes('cerrar')
+          ? 'lock'
+          : 'unlock';
+
+      logger.info(`[DANIELA] 🏠 Lock request: ${action} by ${context.userName}`);
+
+      const result = await this.homeBridge.controlLock(action);
+
+      const emoji = action === 'unlock' ? '🔓' : '🔒';
+      const verb = action === 'unlock' ? 'desbloqueada' : 'bloqueada';
+
+      return (
+        `${emoji} *Cerradura ${verb}*\n\n` +
+        `🏠 Acción: *${action.toUpperCase()}*\n` +
+        `⚡ Estado: ${result.success ? 'Completado' : 'Pendiente'}\n` +
+        `🕐 ${new Date().toLocaleTimeString('es-ES')}\n\n` +
+        `${result.success ? '✅ La puerta ha sido ' + verb + ' exitosamente.' : '⚠️ La orden fue enviada. Verifica manualmente.'}`
+      );
+    } catch (error) {
+      logger.error('Error in handleLockRequest:', error);
+      return '🏠 No pude controlar la cerradura en este momento. Verifica la conexión con Home Assistant.';
     }
   }
 

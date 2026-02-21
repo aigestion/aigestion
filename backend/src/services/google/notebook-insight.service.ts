@@ -11,8 +11,8 @@ import { logger } from '../../utils/logger';
 @injectable()
 export class NotebookInsightService {
   constructor(
-    @inject(TYPES.Gemini2Service) private gemini: Gemini2Service,
-    @inject(TYPES.BigQueryService) private bq: BigQueryService,
+    @inject(TYPES.Gemini2Service) private readonly gemini: Gemini2Service,
+    @inject(TYPES.BigQueryService) private readonly bq: BigQueryService,
   ) {}
 
   /**

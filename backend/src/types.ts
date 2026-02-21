@@ -187,4 +187,5 @@ export const TYPES = {
   JulesGem: Symbol.for('JulesGem'),
   NexusStitchGem: Symbol.for('NexusStitchGem'),
   NexusPushService: Symbol.for('NexusPushService'),
+  DeviceStateStore: Symbol.for('DeviceStateStore'),
 };

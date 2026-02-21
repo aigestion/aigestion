@@ -1,0 +1,96 @@
+# 🔋 NEXUS Battery Intelligence — Pixel 8
+#
+# Reads battery level from HA Companion and:
+# 1. Posts telemetry to Nexus backend every 15 min
+# 2. Sends sovereign low-battery alert at 15%
+# 3. Sends critical alert at 5%
+#
+# PREREQUISITES:
+#   - HA Companion on Pixel 8
+#   - sensor.pixel_8_battery_level entity
+#   - sensor.pixel_8_battery_state (charging/discharging)
+#   - Nexus backend running with /api/v1/system/device-telemetry
+
+automation:
+  # ── Periodic Telemetry ─────────────────────────────
+  - alias: "🔋 Nexus — Battery Telemetry"
+    id: nexus_battery_telemetry
+    mode: single
+    trigger:
+      - platform: time_pattern
+        minutes: "/15"
+    action:
+      - service: rest_command.nexus_device_telemetry
+        data:
+          payload: >-
+            {
+              "device": "pixel_8",
+              "battery_level": {{ states('sensor.pixel_8_battery_level') | int }},
+              "battery_state": "{{ states('sensor.pixel_8_battery_state') }}",
+              "wifi_connected": {{ is_state('sensor.pixel_8_wifi_connection', 'connected') | lower }},
+              "timestamp": "{{ now().isoformat() }}"
+            }
+
+  # ── Low Battery Alert (15%) ────────────────────────
+  - alias: "🔋 Nexus — Low Battery Alert"
+    id: nexus_battery_low
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.pixel_8_battery_level
+        below: 15
+    condition:
+      - condition: state
+        entity_id: sensor.pixel_8_battery_state
+        state: "discharging"
+    action:
+      - service: script.nexus_sovereign_notify
+        data:
+          title: "🔋 Batería Baja — {{ states('sensor.pixel_8_battery_level') }}%"
+          message: "Conecta el cargador. Estimado: {{ states('sensor.pixel_8_battery_health') | default('N/A') }}"
+          channel: "nexus_system"
+          priority: "high"
+
+      - service: rest_command.nexus_device_telemetry
+        data:
+          payload: >-
+            {
+              "device": "pixel_8",
+              "event": "low_battery",
+              "battery_level": {{ states('sensor.pixel_8_battery_level') | int }},
+              "timestamp": "{{ now().isoformat() }}"
+            }
+
+  # ── Critical Battery Alert (5%) ────────────────────
+  - alias: "🆘 Nexus — Critical Battery"
+    id: nexus_battery_critical
+    mode: single
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.pixel_8_battery_level
+        below: 5
+    condition:
+      - condition: state
+        entity_id: sensor.pixel_8_battery_state
+        state: "discharging"
+    action:
+      - service: script.nexus_sovereign_notify
+        data:
+          title: "🆘 BATERÍA CRÍTICA — {{ states('sensor.pixel_8_battery_level') }}%"
+          message: "El dispositivo se apagará pronto. Guarda tu trabajo."
+          channel: "nexus_system"
+          priority: "high"
+          actions:
+            - action: FIND_CHARGER
+              title: "🔌 Buscar Cargador Cercano"
+              uri: "nexus://system"
+
+# ── REST command for device telemetry ────────────────
+rest_command:
+  nexus_device_telemetry:
+    url: "https://nexus.aigestion.net/api/v1/system/device-telemetry"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      Authorization: "Bearer {{ states('input_text.nexus_api_token') }}"
+    payload: "{{ payload }}"

@@ -1,0 +1,120 @@
+# yaml-language-server: $schema=https://json.schemastore.org/base.json
+# 🌌 NEXUS Sovereign Push Notification Templates
+#
+# Reusable Jinja2 notification templates for
+# `notify.mobile_app_pixel_8` with God Mode sovereign styling.
+#
+# Copy these into your HA `configuration.yaml` under `template:` or
+# reference them from automations.
+
+# ── Sovereign Notification Script ────────────────────
+script:
+  nexus_sovereign_notify:
+    alias: '🌌 NEXUS Sovereign Push'
+    description: 'Sends a God Mode styled notification to Pixel 8'
+    fields:
+      title:
+        description: 'Notification title'
+        example: '🌌 NEXUS Alert'
+      message:
+        description: 'Notification body'
+        example: 'Something happened'
+      channel:
+        description: 'Android channel ID'
+        example: 'nexus_system'
+        default: 'nexus_default'
+      deep_link:
+        description: 'NEXUS deep link URI'
+        example: 'nexus://dashboard'
+        default: ''
+      priority:
+        description: 'high / default / low'
+        default: 'high'
+      actions:
+        description: 'List of action buttons [{action, title, uri}]'
+        default: []
+    sequence:
+      - service: notify.mobile_app_pixel_8
+        data:
+          title: '{{ title }}'
+          message: '{{ message }}'
+          data:
+            # Sovereign branding
+            color: '#7c3aed'
+            icon_url: 'https://aigestion.net/icons/nexus-sovereign-icon.png'
+            image: "{{ image | default('') }}"
+
+            # Android behavior
+            channel: '{{ channel }}'
+            priority: '{{ priority }}'
+            ttl: 0
+            sticky: '{{ sticky | default(false) }}'
+
+            # Deep link on tap
+            clickAction: >-
+              {% if deep_link %}{{ deep_link }}{% else %}nexus://dashboard{% endif %}
+
+            # Action buttons
+            actions: '{{ actions }}'
+
+  # ── Pre-built Notification Templates ────────────────
+
+  # Daniela message notification
+  nexus_push_daniela:
+    alias: '💜 Push — Daniela Message'
+    sequence:
+      - service: script.nexus_sovereign_notify
+        data:
+          title: '💜 Daniela'
+          message: '{{ message }}'
+          channel: 'nexus_daniela'
+          deep_link: 'nexus://daniela'
+          priority: 'high'
+          actions:
+            - action: REPLY_DANIELA
+              title: '💬 Responder'
+              uri: 'nexus://daniela'
+
+  # Economy alert notification
+  nexus_push_economy:
+    alias: '📈 Push — Economy Alert'
+    sequence:
+      - service: script.nexus_sovereign_notify
+        data:
+          title: '📈 Alerta Económica'
+          message: '{{ message }}'
+          channel: 'nexus_economy'
+          deep_link: 'nexus://economy'
+          priority: "{{ priority | default('default') }}"
+
+  # System event notification
+  nexus_push_system:
+    alias: '⚠️ Push — System Event'
+    sequence:
+      - service: script.nexus_sovereign_notify
+        data:
+          title: '⚠️ Sistema NEXUS'
+          message: '{{ message }}'
+          channel: 'nexus_system'
+          priority: 'high'
+          actions:
+            - action: VIEW_SYSTEM
+              title: '🔍 Ver Detalles'
+              uri: 'nexus://system'
+
+  # Call notification
+  nexus_push_call:
+    alias: '📞 Push — Call'
+    sequence:
+      - service: script.nexus_sovereign_notify
+        data:
+          title: "📞 Llamada {{ contact_name | default('') }}"
+          message: "{{ message | default('Llamada entrante') }}"
+          channel: 'nexus_calls'
+          priority: 'high'
+          actions:
+            - action: CALL_NOW
+              title: '📞 Llamar'
+              uri: "tel:{{ phone_number | default('') }}"
+            - action: DISMISS
+              title: '❌ No'

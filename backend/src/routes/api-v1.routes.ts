@@ -117,5 +117,7 @@ apiV1Router.use('/nexus', lazy('./nexus.routes'));
 apiV1Router.use('/god-mode', lazy('./godmode.routes'));
 apiV1Router.use('/mcp-directory', lazy('./mcp-directory.routes'));
 apiV1Router.use('/iot', lazy('./iot.routes'));
+apiV1Router.use('/photo-ingest', lazy('./photo-ingest.routes'));
+apiV1Router.use('/system/device-telemetry', lazy('./device-telemetry.routes'));
 
 export default apiV1Router;

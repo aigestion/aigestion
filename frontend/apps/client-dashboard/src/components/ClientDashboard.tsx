@@ -1,15 +1,28 @@
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
-  BarChart, Bar, LineChart, Line,
-  XAxis, YAxis, CartesianGrid, Tooltip,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
 } from 'recharts';
 import {
-  Target, TrendingUp, Users, Award,
-  Briefcase, Star, Zap, CheckCircle,
-  Activity, AlertCircle, Mic, Home,
-  Bell, Wallet, PhoneCall,
+  Target,
+  TrendingUp,
+  Users,
+  Award,
+  Briefcase,
+  Zap,
+  CheckCircle,
+  Activity,
+  Mic,
+  Home,
+  Bell,
+  Wallet,
+  PhoneCall,
 } from 'lucide-react';
 import { api, SystemHealth } from '../services/api';
 import { SovereignTreasury } from './SovereignTreasury';
@@ -23,35 +36,37 @@ import { DanielaVoiceModal } from './DanielaVoiceModal';
 // ──────────────────────────────────────────────────────
 function useDeviceLayout() {
   const isMobileDevice =
-    typeof window !== 'undefined'
-      ? window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768
+    typeof globalThis.window !== 'undefined'
+      ? globalThis.matchMedia('(pointer: coarse)').matches || globalThis.innerWidth < 768
       : false;
 
   const [layout, setLayout] = React.useState({
     isMobile: isMobileDevice,
     isLandscape:
-      typeof window !== 'undefined' ? window.matchMedia('(orientation: landscape)').matches : false,
+      typeof globalThis.window !== 'undefined'
+        ? globalThis.matchMedia('(orientation: landscape)').matches
+        : false,
   });
 
   React.useEffect(() => {
     const update = () => {
-      const coarse = window.matchMedia('(pointer: coarse)').matches;
-      const narrow = window.innerWidth < 768;
-      const landscape = window.matchMedia('(orientation: landscape)').matches;
+      const coarse = globalThis.matchMedia('(pointer: coarse)').matches;
+      const narrow = globalThis.innerWidth < 768;
+      const landscape = globalThis.matchMedia('(orientation: landscape)').matches;
       // A touch device in landscape (e.g. Pixel 8 → 915px) stays mobile
-      const mobile = narrow || (coarse && window.innerHeight < 500);
+      const mobile = narrow || (coarse && globalThis.innerHeight < 500);
       setLayout({ isMobile: mobile, isLandscape: landscape });
     };
 
-    window.addEventListener('resize', update);
-    const mql = window.matchMedia('(orientation: landscape)');
+    globalThis.addEventListener('resize', update);
+    const mql = globalThis.matchMedia('(orientation: landscape)');
     mql.addEventListener('change', update);
 
     // Run once to catch initial state correctly
     update();
 
     return () => {
-      window.removeEventListener('resize', update);
+      globalThis.removeEventListener('resize', update);
       mql.removeEventListener('change', update);
     };
   }, []);
@@ -260,8 +275,8 @@ const ClientDashboard = () => {
                     : 'grid-cols-2 md:grid-cols-4'
               }`}
             >
-              {stats.map((stat, i) => (
-                <StatCard key={i} {...stat} index={i} />
+              {stats.map(stat => (
+                <StatCard key={stat.title} {...stat} index={stats.indexOf(stat)} />
               ))}
             </div>
 
@@ -382,8 +397,8 @@ const ClientDashboard = () => {
         ) : (
           <>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {stats.map((stat, i) => (
-                <StatCard key={i} {...stat} index={i} />
+              {stats.map(stat => (
+                <StatCard key={stat.title} {...stat} index={stats.indexOf(stat)} />
               ))}
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

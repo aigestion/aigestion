@@ -98,5 +98,11 @@
   "ms-azuretools.vscode-azure-mcp-server.enable": true,
   "[css]": {
     "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "[xml]": {
+    "editor.defaultFormatter": "DotJoshJohnson.xml"
+  },
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java"
   }
 }

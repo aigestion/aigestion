@@ -1,0 +1,104 @@
+# 🌌 NEXUS Geofence Automation — God Level
+# 
+# When Pixel 8 enters/leaves the home zone,
+# fire a webhook to n8n which activates/deactivates
+# God Mode Dashboard and adjusts Daniela's context.
+#
+# PREREQUISITES:
+#   - Home Assistant Companion App on Pixel 8
+#   - Device tracker entity: device_tracker.pixel_8
+#   - Zone "home" configured in HA
+#   - n8n webhook endpoint active
+
+automation:
+  # ── Arriving Home ──────────────────────────────────
+  - alias: "🏠 Nexus — Pixel 8 Arrived Home"
+    id: nexus_pixel8_arrive
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: device_tracker.pixel_8
+        to: "home"
+    condition:
+      - condition: state
+        entity_id: input_boolean.nexus_geofence_enabled
+        state: "on"
+    action:
+      # 1. Notify n8n
+      - service: rest_command.nexus_webhook
+        data:
+          payload: >-
+            {
+              "event": "pixel8_arrived_home",
+              "timestamp": "{{ now().isoformat() }}",
+              "zone": "home",
+              "battery": "{{ states('sensor.pixel_8_battery_level') }}"
+            }
+
+      # 2. Sovereign push to Pixel
+      - service: notify.mobile_app_pixel_8
+        data:
+          title: "🏠 NEXUS — Bienvenido"
+          message: "God Mode Dashboard activado. Batería: {{ states('sensor.pixel_8_battery_level') }}%"
+          data:
+            clickAction: "nexus://dashboard"
+            color: "#7c3aed"
+            priority: high
+            ttl: 0
+            channel: nexus_system
+            actions:
+              - action: OPEN_DASHBOARD
+                title: "💎 Abrir Dashboard"
+                uri: "nexus://dashboard"
+
+      # 3. Turn on God Mode scene (optional)
+      - service: scene.turn_on
+        target:
+          entity_id: scene.god_mode_home
+
+  # ── Leaving Home ───────────────────────────────────
+  - alias: "🚗 Nexus — Pixel 8 Left Home"
+    id: nexus_pixel8_leave
+    mode: single
+    trigger:
+      - platform: state
+        entity_id: device_tracker.pixel_8
+        from: "home"
+    condition:
+      - condition: state
+        entity_id: input_boolean.nexus_geofence_enabled
+        state: "on"
+    action:
+      - service: rest_command.nexus_webhook
+        data:
+          payload: >-
+            {
+              "event": "pixel8_left_home",
+              "timestamp": "{{ now().isoformat() }}",
+              "battery": "{{ states('sensor.pixel_8_battery_level') }}"
+            }
+
+      - service: notify.mobile_app_pixel_8
+        data:
+          title: "🚗 NEXUS — En Movimiento"
+          message: "Modo externo activado. Daniela te acompaña."
+          data:
+            color: "#7c3aed"
+            priority: default
+            channel: nexus_system
+
+# ── Helper: toggle geofence ─────────────────────────
+input_boolean:
+  nexus_geofence_enabled:
+    name: "NEXUS Geofence Enabled"
+    icon: mdi:map-marker-radius
+
+# ── REST command for n8n webhook ────────────────────
+rest_command:
+  nexus_webhook:
+    url: "http://n8n.local:5678/webhook/nexus-geofence"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+      Authorization: "Bearer {{ states('input_text.nexus_webhook_token') }}"
+    payload: "{{ payload }}"
