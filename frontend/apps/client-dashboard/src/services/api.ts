@@ -145,4 +145,43 @@ export const api = {
       throw error;
     }
   },
+  startAstraeaSession: async (
+    userId: string,
+    location?: { lat: number; lng: number }
+  ): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/astraea/session/start`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, location }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error starting Astraea session:', error);
+      throw error;
+    }
+  },
+  induceAstraeaCall: async (userId: string, phoneNumber: string): Promise<any> => {
+    try {
+      const response = await fetch(`${API_URL}/astraea/call/induce`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, phoneNumber }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error inducing Astraea call:', error);
+      throw error;
+    }
+  },
 };

@@ -189,6 +189,9 @@ import { PriceAlertService } from '../services/finance/price-alert.service';
 import { SovereignOrchestratorService } from '../services/SovereignOrchestratorService';
 import { EnterpriseAuditService } from '../services/EnterpriseAuditService';
 import { PredictiveBIService } from '../services/PredictiveBIService';
+import { AstraeaController } from '../controllers/AstraeaController';
+import { AstraeaService } from '../services/AstraeaService';
+import { VapiService } from '../services/VapiService';
 import { config } from './config';
 
 import { TreasuryController } from '../controllers/treasury.controller';
@@ -458,6 +461,8 @@ bind<NeuralHomeBridge>(TYPES.NeuralHomeBridge, NeuralHomeBridge);
 bind<DeviceStateStore>(TYPES.DeviceStateStore, DeviceStateStore);
 bind<NavigatorGem>(TYPES.NavigatorGem, NavigatorGem);
 bind<AutoHealingGem>(TYPES.AutoHealingGem, AutoHealingGem);
+bind<VapiService>(TYPES.VapiService, VapiService);
+bind<AstraeaService>(TYPES.AstraeaService, AstraeaService);
 
 // ========================================
 // CONTROLLERS
@@ -498,6 +503,7 @@ bind<FinanceController>(TYPES.FinanceController, FinanceController);
 bind<IoTController>(TYPES.IoTController, IoTController);
 bind<DeFiYieldHarvesterService>(TYPES.DeFiYieldHarvesterService, DeFiYieldHarvesterService);
 bind<ContactRegistryService>(TYPES.ContactRegistryService, ContactRegistryService);
+bind<AstraeaController>(TYPES.AstraeaController, AstraeaController);
 bind<DanielaCallAgent>(TYPES.DanielaCallAgent, DanielaCallAgent);
 bind<NexusPushService>(TYPES.NexusPushService, NexusPushService);
 

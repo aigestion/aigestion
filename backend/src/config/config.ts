@@ -139,6 +139,12 @@ export const config = {
     vercelToken: env.VERCEL_MASTER_API_TOKEN || '',
     sentryDsn: env.APP_SENTRY_DSN || '',
   },
+  // Vapi Configuration
+  vapi: {
+    apiKey: env.VAPI_API_KEY || '',
+    apiUrl: env.VAPI_API_URL,
+    phoneNumberId: env.VAPI_PHONE_NUMBER_ID,
+  },
 } as const;
 
 export type Config = typeof config;

@@ -122,12 +122,12 @@ export const PersonaMarketplace: React.FC<PersonaMarketplaceProps> = ({
               >
                 {/* Card Aura */}
                 <div
-                  className={`absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br ${persona.color} opacity-20 blur-3xl group-hover:opacity-40 transition-opacity`}
+                  className={`absolute -right-10 -top-10 w-32 h-32 bg-linear-to-br ${persona.color} opacity-20 blur-3xl group-hover:opacity-40 transition-opacity`}
                 />
 
                 <div className="flex justify-between items-start mb-4">
                   <div
-                    className={`p-3 rounded-2xl bg-gradient-to-br ${persona.color} text-white shadow-lg shadow-black/20`}
+                    className={`p-3 rounded-2xl bg-linear-to-br ${persona.color} text-white shadow-lg shadow-black/20`}
                   >
                     <Zap className="w-6 h-6" />
                   </div>

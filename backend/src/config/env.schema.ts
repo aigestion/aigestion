@@ -455,6 +455,11 @@ const envSchema = baseEnvSchema.extend({
   DISCORD_BOT_TOKEN: z.string().optional().describe('Discord Bot Token for active orchestration'),
   VERCEL_MASTER_API_TOKEN: z.string().optional().describe('Vercel Master API for governance'),
   APP_SENTRY_DSN: z.string().optional().describe('Sentry DSN for error tracking'),
+
+  // Vapi Configuration
+  VAPI_API_KEY: z.string().optional().describe('Vapi.ai API Key'),
+  VAPI_API_URL: z.string().url().default('https://api.vapi.ai').describe('Vapi.ai API Base URL'),
+  VAPI_PHONE_NUMBER_ID: z.string().optional().describe('Vapi.ai Phone Number ID'),
 });
 
 /**

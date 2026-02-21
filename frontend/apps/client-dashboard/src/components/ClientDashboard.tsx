@@ -33,6 +33,7 @@ import { SovereignMap } from './SovereignMap';
 import { SystemHealthWidget } from './SystemHealthWidget';
 import { SovereignPersonaModal, Persona } from './SovereignPersonaModal';
 import { PersonaMarketplace } from './PersonaMarketplace';
+import { SIMAOverlay } from './SIMAOverlay';
 import { ShoppingCart } from 'lucide-react';
 
 // ──────────────────────────────────────────────────────
@@ -493,8 +494,8 @@ const ClientDashboard = () => {
         </motion.button>
       )}
 
-      {/* Sovereign Persona Modal */}
-      <SovereignPersonaModal
+      {/* SIMA Sovereign Overlay */}
+      <SIMAOverlay
         isOpen={voiceModalOpen}
         onClose={() => setVoiceModalOpen(false)}
         activePersona={activePersona}

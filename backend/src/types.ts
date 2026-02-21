@@ -190,4 +190,7 @@ export const TYPES = {
   DeviceStateStore: Symbol.for('DeviceStateStore'),
   NavigatorGem: Symbol.for('NavigatorGem'),
   AutoHealingGem: Symbol.for('AutoHealingGem'),
+  VapiService: Symbol.for('VapiService'),
+  AstraeaService: Symbol.for('AstraeaService'),
+  AstraeaController: Symbol.for('AstraeaController'),
 };
