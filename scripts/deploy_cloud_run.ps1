@@ -54,20 +54,24 @@ function New-Context {
     # Copy frontend root package.json
     if (Test-Path "$src\package.json") { Copy-Item "$src\package.json" -Destination $dest -Force }
 
-    $appPath = "apps\website-epic"
-    $fullAppSrc = Join-Path $src $appPath
-    $fullAppDest = Join-Path $dest $appPath
-    New-Item -ItemType Directory -Path $fullAppDest -Force | Out-Null
-
     # Whitelist for app source
     $appWhitelist = @("src", "public", "scripts")
-    foreach ($folder in $appWhitelist) {
-      if (Test-Path "$fullAppSrc\$folder") {
-        robocopy "$fullAppSrc\$folder" "$fullAppDest\$folder" /E /XJ /NFL /NDL /NJH /NJS /R:0 /W:0 | Out-Null
+    $appsToInclude = @("website-epic", "client-dashboard")
+
+    foreach ($app in $appsToInclude) {
+      $appSrc = Join-Path $src "apps\$app"
+      $appDest = Join-Path $dest "apps\$app"
+      if (Test-Path $appSrc) {
+        New-Item -ItemType Directory -Path $appDest -Force | Out-Null
+        foreach ($folder in $appWhitelist) {
+          if (Test-Path "$appSrc\$folder") {
+            robocopy "$appSrc\$folder" "$appDest\$folder" /E /XJ /NFL /NDL /NJH /NJS /R:0 /W:0 | Out-Null
+          }
+        }
+        # Individual files in app root (package.json, nginx.conf, vite.config.ts, etc.)
+        Get-ChildItem -Path "$appSrc\*" -File | ForEach-Object { Copy-Item $_.FullName -Destination $appDest -Force }
       }
     }
-    # Individual files in app root (package.json, nginx.conf, vite.config.ts, etc.)
-    Get-ChildItem -Path "$fullAppSrc\*" -File | ForEach-Object { Copy-Item $_.FullName -Destination $fullAppDest -Force }
   }
 
   # 3. Copy Shared Packages (Whitelisted Only)
@@ -79,7 +83,7 @@ function New-Context {
       $srcDir = (Resolve-Path "packages\$pkg").Path
       $destPkg = Join-Path $pkgDest $pkg
       New-Item -ItemType Directory -Path $destPkg -Force | Out-Null
-      
+
       # Copy folders if they exist
       $foldersToCopy = @("src", "configs", "lib")
       foreach ($f in $foldersToCopy) {
@@ -87,7 +91,7 @@ function New-Context {
           robocopy "$srcDir\$f" "$destPkg\$f" /E /XJ /NFL /NDL /NJH /NJS /R:0 /W:0 | Out-Null
         }
       }
-      
+
       # IMPORTANT: Always copy manifests and configs in the root of the package
       Get-ChildItem -Path "$srcDir\*" -File | ForEach-Object { Copy-Item $_.FullName -Destination $destPkg -Force }
     }
@@ -156,6 +160,10 @@ if ($Target -eq "all" -or $Target -eq "backend") {
 }
 
 if ($Target -eq "all" -or $Target -eq "frontend") {
+    gcloud run deploy nexus-frontend --image $FRONTEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 80 --memory 512Mi
+}
+
+Write-Host "`n✨ Sovereign Deployment Complete!" -ForegroundColor Green
     gcloud run deploy nexus-frontend --image $FRONTEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 80 --memory 512Mi
 }
 
