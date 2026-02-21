@@ -18,9 +18,9 @@ export class ArbitrationService {
   // Real-time rates (can be moved to a DB or External Sync later)
   private readonly rates: Record<string, Record<string, ProviderRate>> = {
     gemini: {
-      'gemini-1.5-flash-8b': { prompt: 0.0375, completion: 0.15 },
+      'gemini-2.0-flash-lite': { prompt: 0.075, completion: 0.3 },
       'gemini-2.0-flash': { prompt: 0.1, completion: 0.4 },
-      'gemini-1.5-pro': { prompt: 1.25, completion: 5.0 },
+      'gemini-2.5-pro': { prompt: 1.25, completion: 5.0 },
     },
     openai: {
       'gpt-4o-mini': { prompt: 0.15, completion: 0.6 },
@@ -46,7 +46,7 @@ export class ArbitrationService {
     if (tier === AIModelTier.ECONOMY) {
       return {
         provider: 'gemini',
-        modelId: 'gemini-1.5-flash-8b',
+        modelId: 'gemini-2.0-flash-lite',
         reason: 'Cost Minimum (Arbitrage Strategy)',
       };
     }
@@ -104,7 +104,7 @@ export class ArbitrationService {
 
     const context = perspectives.map(p => `[${p.agentName}]: ${p.recommendation}`).join('\n\n');
     const prompt = `
-      You are the SOVEREIGN JUDGE of the AIGestion Nexus. 
+      You are the SOVEREIGN JUDGE of the AIGestion Nexus.
       Two or more specialized agents have provided conflicting perspectives on a task.
       Your goal is to arbitrate and provide the definitive strategic path forward.
 

@@ -1,16 +1,16 @@
-import { injectable } from 'inversify';
+﻿import { injectable } from 'inversify';
 // Importing as any to avoid TS2709 errors
 import { VertexAI } from '@google-cloud/vertexai';
 
 import { logger } from '../../utils/logger';
-
-type VertexAIType = any;
-type GenerativeModelType = any;
+import { getCache, setCache } from '../../cache/redis';
+import { env } from '../../config/env.schema';
+import * as crypto from 'node:crypto';
 
 @injectable()
 export class VertexAIService {
-  private vertexAI: VertexAIType | null = null;
-  private model: GenerativeModelType | null = null;
+  private vertexAI: any = null;
+  private model: any = null;
   private isInitialized = false;
 
   constructor() {
@@ -19,8 +19,8 @@ export class VertexAIService {
 
   private initialize() {
     try {
-      const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID;
-      const location = process.env.GOOGLE_CLOUD_LOCATION || 'us-central1';
+      const projectId = env.GOOGLE_CLOUD_PROJECT_ID;
+      const location = env.GOOGLE_CLOUD_LOCATION || 'us-central1';
 
       if (!projectId) {
         logger.warn('GOOGLE_CLOUD_PROJECT_ID not set. Vertex AI service will be disabled.');
@@ -28,7 +28,7 @@ export class VertexAIService {
       }
 
       this.vertexAI = new VertexAI({ project: projectId, location });
-      this.model = this.vertexAI.getGenerativeModel({ model: 'gemini-1.5-pro' }); // Or configurable model
+      this.model = this.vertexAI.getGenerativeModel({ model: 'gemini-2.0-flash' }); // Or configurable model
       this.isInitialized = true;
       logger.info('Vertex AI service initialized successfully');
     } catch (error) {
@@ -84,11 +84,23 @@ export class VertexAIService {
    */
   async generateEmbeddings(text: string): Promise<number[]> {
     try {
+      // Path A: Check Redis Cache First
+      const textHash = this.hashText(text);
+      const cacheKey = `embedding_cache:${textHash}`;
+      const cachedEmbedding = await getCache(cacheKey);
+
+      if (cachedEmbedding) {
+        logger.debug({ textHash }, '[VertexAI] L2 Cache Hit: Returning cached embedding');
+        return cachedEmbedding;
+      }
+
       // Priority: Use Gemini API Key (Simplest, requires no GCP Service Account)
       // This is the Sovereign/God Mode path for easy deployment
-      const geminiApiKey = process.env.GEMINI_API_KEY;
+      const geminiApiKey = env.GEMINI_API_KEY;
       const isRedacted =
         geminiApiKey && (geminiApiKey.includes('REDACTED') || geminiApiKey.includes('MIGRATED'));
+
+      let embeddingValues: number[] = [];
 
       if (geminiApiKey && !isRedacted) {
         const { GoogleGenerativeAI } = await import('@google/generative-ai');
@@ -96,26 +108,40 @@ export class VertexAIService {
         const model = genAI.getGenerativeModel({ model: 'text-embedding-004' });
 
         const result = await model.embedContent(text);
-        return result.embedding.values;
+        embeddingValues = result.embedding.values;
+      } else {
+        // Legacy Vertex AI path (Service Account required)
+        if (!this.isInitialized || !this.vertexAI) {
+          logger.warn(
+            'Vertex AI not initialized and GEMINI_API_KEY missing. Returning empty embedding.',
+          );
+          return new Array(768).fill(0);
+        }
+
+        const modelName = 'text-embedding-004';
+        const result = await this.vertexAI.getGenerativeModel({ model: modelName }).embedContent({
+          content: { role: 'user', parts: [{ text }] },
+        });
+
+        const embedding = result.embedding;
+        embeddingValues = embedding.values || [];
       }
 
-      // Legacy Vertex AI path (Service Account required)
-      if (!this.isInitialized || !this.vertexAI) {
-        logger.warn(
-          'Vertex AI not initialized and GEMINI_API_KEY missing. Returning empty embedding.',
-        );
-        return new Array(768).fill(0);
+      // Store in Cache (L2) for 30 days (Sovereign Retention)
+      if (embeddingValues.length > 0) {
+        await setCache(cacheKey, embeddingValues, 3600 * 24 * 30);
       }
 
-      const model = 'text-embedding-004';
-      const result = await this.vertexAI.getGenerativeModel({ model }).embedContent({
-        content: { role: 'user', parts: [{ text }] },
-      });
-
-      const embedding = result.embedding;
-      return embedding.values || [];
-    } catch (error) {
-      logger.error('Error generating embeddings with Vertex/Gemini', error);
+      return embeddingValues;
+    } catch (error: any) {
+      logger.error(
+        {
+          error: error.message,
+          stack: error.stack,
+          textSnippet: text.substring(0, 50),
+        },
+        'Error generating embeddings with Vertex/Gemini',
+      );
       return [];
     }
   }
@@ -128,9 +154,36 @@ export class VertexAIService {
     if (texts.length === 0) return [];
 
     try {
-      const geminiApiKey = process.env.GEMINI_API_KEY;
+      const geminiApiKey = env.GEMINI_API_KEY;
       const isRedacted =
         geminiApiKey && (geminiApiKey.includes('REDACTED') || geminiApiKey.includes('MIGRATED'));
+
+      // 1. Identify which texts are cached
+      const hashes = texts.map(t => this.hashText(t));
+      const cacheKeys = hashes.map(h => `embedding_cache:${h}`);
+      const cachedEmbeddings = await Promise.all(cacheKeys.map(k => getCache(k)));
+
+      const results: number[][] = new Array(texts.length).fill(null);
+      const missingIndices: number[] = [];
+
+      cachedEmbeddings.forEach((emb, idx) => {
+        if (emb) {
+          results[idx] = emb;
+        } else {
+          missingIndices.push(idx);
+        }
+      });
+
+      if (missingIndices.length === 0) {
+        logger.debug(
+          { count: texts.length },
+          '[VertexAI] Batch L2 Hit: All embeddings found in cache',
+        );
+        return results;
+      }
+
+      const remainingTexts = missingIndices.map(idx => texts[idx]);
+      let fetchedEmbeddings: number[][] = [];
 
       // Path A: Gemini API Batching
       if (geminiApiKey && !isRedacted) {
@@ -139,32 +192,53 @@ export class VertexAIService {
         const model = genAI.getGenerativeModel({ model: 'text-embedding-004' });
 
         // Gemini SDK supports batch embed natively
-        const result = await model.batchEmbedContents({
-          requests: texts.map(text => ({
+        const batchResult = await model.batchEmbedContents({
+          requests: remainingTexts.map(text => ({
             content: { role: 'user', parts: [{ text }] },
           })),
         });
 
-        return result.embeddings.map((e: any) => e.values);
+        fetchedEmbeddings = batchResult.embeddings.map((e: any) => e.values);
+      } else {
+        // Path B: Vertex AI / Legacy Fallback
+        // Process in smaller batches of 10 to avoid payload limits/timeouts
+        const batchSize = 10;
+        for (let i = 0; i < remainingTexts.length; i += batchSize) {
+          const chunk = remainingTexts.slice(i, i + batchSize);
+          const chunkResults = await Promise.all(chunk.map(text => this.generateEmbeddings(text)));
+          fetchedEmbeddings.push(...chunkResults);
+        }
       }
 
-      // Path B: Vertex AI / Legacy Fallback
-      // Process in smaller batches of 10 to avoid payload limits/timeouts
-      const results: number[][] = [];
-      const batchSize = 10;
+      // Map back and cache missing
+      for (let i = 0; i < missingIndices.length; i++) {
+        const originalIdx = missingIndices[i];
+        const embedding = fetchedEmbeddings[i];
+        results[originalIdx] = embedding;
 
-      for (let i = 0; i < texts.length; i += batchSize) {
-        const chunk = texts.slice(i, i + batchSize);
-        const chunkResults = await Promise.all(chunk.map(text => this.generateEmbeddings(text)));
-        results.push(...chunkResults);
+        // Async cache store
+        if (embedding && embedding.length > 0) {
+          setCache(`embedding_cache:${hashes[originalIdx]}`, embedding, 3600 * 24 * 30).catch(err =>
+            logger.warn(err, '[VertexAI] Cache store error'),
+          );
+        }
       }
 
       return results;
-    } catch (error) {
-      logger.error('Error in generateEmbeddingsBatch', error);
-      // Return empty embeddings as fallback to prevent total failure
-      return texts.map(() => []);
+    } catch (error: any) {
+      logger.error(
+        { error: error.message, stack: error.stack },
+        'Error in generateEmbeddingsBatch',
+      );
+      throw error;
     }
+  }
+
+  /**
+   * Generates a deterministic hash for a given text.
+   */
+  private hashText(text: string): string {
+    return crypto.createHash('sha256').update(text.trim().toLowerCase()).digest('hex');
   }
 }
 

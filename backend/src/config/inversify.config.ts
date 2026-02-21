@@ -42,6 +42,7 @@ import { NeuralHealthController } from '../controllers/NeuralHealthController';
 import { MCPController } from '../controllers/MCPController';
 import { PersonaController } from '../controllers/PersonaController';
 import { FinanceController } from '../controllers/FinanceController';
+import { IoTController } from '../controllers/iot.controller';
 
 // Services
 import { AIService } from '../services/ai.service';
@@ -142,7 +143,21 @@ import { BigQueryService } from '../services/google/bigquery.service';
 import { CloudTasksService } from '../services/google/cloud-tasks.service';
 import { VideoIntelligenceService } from '../services/google/video-intelligence.service';
 import { NexusRadioService } from '../services/google/nexus-radio.service';
+import { SovereignKnowledgeService } from '../services/google/sovereign-knowledge.service';
+import { AiStudioService } from '../services/google/ai-studio.service';
+import { FirebaseService } from '../services/google/firebase.service';
+import { SovereignStitchService } from '../services/google/stitch.service';
+import { NexusSwarmOrchestrator } from '../services/gems/swarm-orchestrator.service';
+import { AutonomousMissionService } from '../services/google/mission-control.service';
+import { GeminiLiveService } from '../services/google/gemini-live.service';
+import { VisualPerceptionService } from '../services/google/visual-perception.service';
+import { McpBridgeService } from '../services/google/mcp-bridge.service';
+import { NeuralHomeBridge } from '../services/google/neural-home.service';
+import { ContactRegistryService } from '../services/contact-registry.service';
+import { DanielaCallAgent } from '../services/daniela-call-agent.service';
 import { QuantumSecurityService } from '../services/security/quantum-security.service';
+import { PineconeService } from '../services/pinecone.service';
+import { MemoryService } from '../services/memory.service';
 import { MastraService } from '../services/mastra.service';
 import { KeplerService } from '../services/google/kepler.service';
 import { SelfHealingService } from '../services/self-healing.service';
@@ -280,6 +295,7 @@ bind<DanielaEnhancedService>(TYPES.DanielaEnhancedService, DanielaEnhancedServic
 bind<DanielaProactiveService>(TYPES.DanielaProactiveService, DanielaProactiveService);
 
 bind<MetaverseService>(TYPES.MetaverseService, MetaverseService);
+bind<PineconeService>(TYPES.PineconeService, PineconeService);
 bind<RateLimitService>(TYPES.RateLimitService, RateLimitService);
 bind<DeFiStrategistService>(TYPES.DeFiStrategistService, DeFiStrategistService);
 bind<InfraOptimizerService>(TYPES.InfraOptimizerService, InfraOptimizerService);
@@ -304,7 +320,7 @@ bind<UserService>(TYPES.UserService, UserService);
 bind<EmailService>(TYPES.EmailService, EmailService);
 bind<BackupService>(TYPES.BackupService, BackupService);
 bind<BackupSchedulerService>(TYPES.BackupSchedulerService, BackupSchedulerService);
-// MemoryService binding removed (llamaindex not installed)
+bind<MemoryService>(TYPES.MemoryService, MemoryService);
 bind<AuditService>(TYPES.AuditService, AuditService);
 bind<SupabaseService>(TYPES.SupabaseService, SupabaseService);
 bind<VertexAIService>(TYPES.VertexAIService, VertexAIService);
@@ -365,7 +381,11 @@ if (!container.isBound(TYPES.Gemini2Service))
 bind<MalwareScannerService>(TYPES.MalwareScannerService, MalwareScannerService);
 bind<DocumentProcessorService>(TYPES.DocumentProcessorService, DocumentProcessorService);
 bind<ErrorReportingService>(TYPES.ErrorReportingService, ErrorReportingService);
-bind<HealthService>(TYPES.DetailedHealthService, HealthService);
+bind<HealthService>(TYPES.HealthService, HealthService);
+// DetailedHealthService maps to the same HealthService implementation for now
+if (!container.isBound(TYPES.DetailedHealthService)) {
+  container.bind<HealthService>(TYPES.DetailedHealthService).to(HealthService).inSingletonScope();
+}
 bind<WAFService>(TYPES.WAFService, WAFService);
 bind<ThreatIntelligenceService>(TYPES.ThreatIntelligenceService, ThreatIntelligenceService);
 bind<MonitoringService>(TYPES.MonitoringService, MonitoringService);
@@ -421,6 +441,16 @@ bind<NotebookInsightService>(TYPES.NotebookInsightService, NotebookInsightServic
 bind<VisionService>(TYPES.VisionService, VisionService);
 bind<PredictiveBIService>(TYPES.PredictiveBIService, PredictiveBIService);
 bind<MCPDiscoveryService>(TYPES.MCPDiscoveryService, MCPDiscoveryService);
+bind<SovereignKnowledgeService>(TYPES.SovereignKnowledgeService, SovereignKnowledgeService);
+bind<AiStudioService>(TYPES.AiStudioService, AiStudioService);
+bind<FirebaseService>(TYPES.FirebaseService, FirebaseService);
+bind<SovereignStitchService>(TYPES.SovereignStitchService, SovereignStitchService);
+bind<NexusSwarmOrchestrator>(TYPES.NexusSwarmOrchestrator, NexusSwarmOrchestrator);
+bind<AutonomousMissionService>(TYPES.AutonomousMissionService, AutonomousMissionService);
+bind<GeminiLiveService>(TYPES.GeminiLiveService, GeminiLiveService);
+bind<VisualPerceptionService>(TYPES.VisualPerceptionService, VisualPerceptionService);
+bind<McpBridgeService>(TYPES.McpBridgeService, McpBridgeService);
+bind<NeuralHomeBridge>(TYPES.NeuralHomeBridge, NeuralHomeBridge);
 
 // ========================================
 // CONTROLLERS
@@ -458,6 +488,9 @@ bind<NeuralHealthController>(TYPES.NeuralHealthController, NeuralHealthControlle
 bind<MCPController>(TYPES.MCPController, MCPController);
 bind<PersonaController>(TYPES.PersonaController, PersonaController);
 bind<FinanceController>(TYPES.FinanceController, FinanceController);
+bind<IoTController>(TYPES.IoTController, IoTController);
 bind<DeFiYieldHarvesterService>(TYPES.DeFiYieldHarvesterService, DeFiYieldHarvesterService);
+bind<ContactRegistryService>(TYPES.ContactRegistryService, ContactRegistryService);
+bind<DanielaCallAgent>(TYPES.DanielaCallAgent, DanielaCallAgent);
 
 export { container, TYPES };

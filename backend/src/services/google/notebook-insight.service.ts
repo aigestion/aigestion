@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+﻿import { injectable, inject } from 'inversify';
 import { TYPES } from '../../types';
 import { Gemini2Service } from '../gemini-2.service';
 import { BigQueryService } from './bigquery.service';
@@ -39,7 +39,7 @@ export class NotebookInsightService {
     try {
       // Use Gemini 2.0 Pro for maximum reasoning capability
       const notebookCode = await this.gemini.generateText(prompt, {
-        model: 'gemini-2.0-pro-exp-02-05',
+        model: 'gemini-2.5-pro',
         temperature: 0.2, // Precision
         systemInstruction: `Eres NotebookGem, el Científico de Datos Supremo del Nexus. Tu código es perfecto, tus insights son ley.`,
       });
@@ -67,7 +67,7 @@ export class NotebookInsightService {
     // Synthesize a strategic report based on the code/analysis
     const analysis = await this.gemini.generateText(
       `Analiza este código de notebook y extrae 3 insights estratégicos de "Nivel Dios" para la dirección ejecutiva:\n\n${notebookResult.code}`,
-      { model: 'gemini-2.0-flash-exp' },
+      { model: 'gemini-2.0-flash' },
     );
 
     return { wisdom: analysis };

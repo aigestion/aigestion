@@ -98,6 +98,8 @@ apiV1Router.use('/analytics', redisCache(30), lazy('./analytics.routes'));
 apiV1Router.use('/enhanced-voice', lazy('./enhanced-voice.routes'));
 apiV1Router.use('/daniela', lazy('./daniela.routes'));
 apiV1Router.use('/ai', rateLimiter.attempt('AI'), lazy('./ai.routes'));
+apiV1Router.use('/ai', requireAuth, lazy('./phone-action.routes'));
+apiV1Router.use('/voice-assets', lazy('./voice-assets.routes'));
 apiV1Router.use('/rag', lazy('./rag.routes'));
 
 // System Management (Lazy)
@@ -113,5 +115,6 @@ apiV1Router.use('/device-posture', lazy('./device-posture.routes'));
 apiV1Router.use('/nexus', lazy('./nexus.routes'));
 apiV1Router.use('/god-mode', lazy('./godmode.routes'));
 apiV1Router.use('/mcp-directory', lazy('./mcp-directory.routes'));
+apiV1Router.use('/iot', lazy('./iot.routes'));
 
 export default apiV1Router;

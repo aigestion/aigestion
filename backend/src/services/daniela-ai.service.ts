@@ -3,6 +3,8 @@ import { injectable, inject } from 'inversify';
 import { logger } from '../utils/logger';
 import { AIService } from './ai.service';
 import { AnalyticsService } from './analytics.service';
+import { ContactRegistryService } from './contact-registry.service';
+import { DanielaCallAgent } from './daniela-call-agent.service';
 import { EconomyService } from './economy.service';
 import { RagService } from './rag.service';
 import { UserBehaviorService } from './user-behavior.service';
@@ -36,6 +38,8 @@ export class DanielaAIService {
     @inject(TYPES.RagService) private ragService: RagService,
     @inject(TYPES.UserService) private userService: UserService,
     @inject(TYPES.EconomyService) private economyService: EconomyService,
+    @inject(TYPES.ContactRegistryService) private contactRegistry: ContactRegistryService,
+    @inject(TYPES.DanielaCallAgent) private callAgent: DanielaCallAgent,
   ) {
     this.initialize();
   }
@@ -137,6 +141,10 @@ export class DanielaAIService {
     const intent = this.detectIntent(message);
 
     switch (intent) {
+      case 'call':
+        return await this.handleCallRequest(context, message);
+      case 'sms':
+        return await this.handleSmsRequest(context, message);
       case 'analytics':
         return await this.handleAnalyticsRequest(context, message, userContext);
       case 'economy':
@@ -210,6 +218,33 @@ Responde en ${
    */
   private detectIntent(message: string): string {
     const lowerMessage = message.toLowerCase();
+
+    // 🌌 [GOD MODE] Call intent — highest priority
+    if (
+      lowerMessage.includes('llama') ||
+      lowerMessage.includes('llamar') ||
+      lowerMessage.includes('marca') ||
+      lowerMessage.includes('telefonea') ||
+      lowerMessage.includes('ring') ||
+      lowerMessage.includes('contacta') ||
+      lowerMessage.includes('call ')
+    ) {
+      return 'call';
+    }
+
+    // 🌌 [GOD MODE] SMS intent
+    if (
+      lowerMessage.includes('manda mensaje') ||
+      lowerMessage.includes('envía sms') ||
+      lowerMessage.includes('enviar sms') ||
+      lowerMessage.includes('escribe a') ||
+      lowerMessage.includes('manda un mensaje') ||
+      lowerMessage.includes('envía un mensaje') ||
+      lowerMessage.includes('send sms') ||
+      lowerMessage.includes('text ')
+    ) {
+      return 'sms';
+    }
 
     if (
       lowerMessage.includes('analytics') ||
@@ -486,6 +521,134 @@ Responde en ${
     } catch (error) {
       logger.error('Error in handleMarketResearchRequest:', error);
       return '📊 No pude realizar la investigación de mercado en este momento.';
+    }
+  }
+
+  /**
+   * 🌌 [GOD MODE] Handle call request via Daniela Call Bridge
+   */
+  private async handleCallRequest(context: DanielaContext, message: string): Promise<string> {
+    try {
+      // Extract contact AND instructions from message
+      const { contactName, instructions } = DanielaCallAgent.extractCallInstructions(message);
+
+      if (!contactName) {
+        return (
+          `📞 *Daniela Voice Agent*\n\n` +
+          `No pude identificar a quién quieres llamar.\n` +
+          `Prueba con: "Daniela, llama a mamá y dile que estoy ocupado"\n\n` +
+          `📒 Contactos disponibles:\n` +
+          this.contactRegistry
+            .listContacts()
+            .map(c => `• ${c.name}`)
+            .join('\n')
+        );
+      }
+
+      const contact = this.contactRegistry.findByName(contactName);
+
+      if (!contact) {
+        return (
+          `📞 No encontré a "${contactName}" en tu registro soberano.\n\n` +
+          `📒 Contactos disponibles:\n` +
+          this.contactRegistry
+            .listContacts()
+            .map(c => `• ${c.name} (${c.aliases.join(', ')})`)
+            .join('\n') +
+          `\n\n¿Quieres que lo añada?`
+        );
+      }
+
+      // If no instructions, just open the dialer (simple call)
+      if (!instructions) {
+        logger.info(
+          `[DANIELA] 📞 Simple Call: ${context.userName} → ${contact.name} (${contact.phone})`,
+        );
+        return (
+          `📞 *Llamada Directa*\n\n` +
+          `👤 Contacto: *${contact.name}*\n` +
+          `📱 Número: ${contact.phone}\n\n` +
+          `⚡ Abriendo marcador en tu Pixel 8...\n` +
+          `_Sin instrucciones — tú hablarás directamente._`
+        );
+      }
+
+      // Full Voice Agent: generate script + TTS + push to Pixel
+      logger.info(
+        `[DANIELA] 📞 Voice Agent Call: ${context.userName} → ${contact.name} | Instructions: "${instructions}"`,
+      );
+
+      const callCtx = await this.callAgent.initiateVoiceCall(
+        contactName,
+        instructions,
+        context.userName,
+      );
+
+      return (
+        `📞 *Daniela Voice Agent Activado*\n\n` +
+        `🌌 He preparado mi intervención soberana...\n` +
+        `👤 Contacto: *${contact.name}* (${contact.relationship})\n` +
+        `📱 Número: ${contact.phone}\n` +
+        `💬 Mensaje: "${instructions}"\n\n` +
+        `🎙️ *Mi guion:*\n_"${callCtx.danielaScript}"_\n\n` +
+        `⚡ Enviando push al Pixel 8...\n` +
+        `📱 Tu teléfono marcará y yo hablaré por ti.\n` +
+        `🔊 Audio: ${callCtx.audioUrl}`
+      );
+    } catch (error) {
+      logger.error('Error in handleCallRequest:', error);
+      return '📞 Error en el Voice Agent. ¿Puedes intentar de nuevo?';
+    }
+  }
+
+  /**
+   * 🌌 [GOD MODE] Handle SMS request via Daniela Bridge
+   */
+  private async handleSmsRequest(context: DanielaContext, message: string): Promise<string> {
+    try {
+      const contactName = this.contactRegistry.extractContactFromMessage(message);
+
+      if (!contactName) {
+        return (
+          `📨 *Daniela SMS Bridge*\n\n` +
+          `No pude identificar el destinatario.\n` +
+          `Prueba con: "Daniela, manda mensaje a mamá" o "envía SMS a papá"\n\n` +
+          `📒 Contactos disponibles:\n` +
+          this.contactRegistry
+            .listContacts()
+            .map(c => `• ${c.name}`)
+            .join('\n')
+        );
+      }
+
+      const contact = this.contactRegistry.findByName(contactName);
+
+      if (!contact) {
+        return (
+          `📨 No encontré a "${contactName}" en tu registro soberano.\n\n` +
+          `📒 Contactos disponibles:\n` +
+          this.contactRegistry
+            .listContacts()
+            .map(c => `• ${c.name}`)
+            .join('\n') +
+          `\n\n¿Quieres añadirlo?`
+        );
+      }
+
+      logger.info(
+        `[DANIELA] 📨 SMS Bridge: ${context.userName} → ${contact.name} (${contact.phone})`,
+      );
+
+      return (
+        `📨 *Daniela SMS Bridge Activado*\n\n` +
+        `👤 Destinatario: *${contact.name}*\n` +
+        `📱 Número: ${contact.phone}\n\n` +
+        `💬 ¿Qué mensaje quieres enviar?\n` +
+        `_Responde con el contenido del mensaje._`
+      );
+    } catch (error) {
+      logger.error('Error in handleSmsRequest:', error);
+      return '📨 Error en el SMS Bridge. ¿Puedes intentar de nuevo?';
     }
   }
 

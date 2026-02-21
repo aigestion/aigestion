@@ -1,4 +1,4 @@
-import 'reflect-metadata';
+﻿import 'reflect-metadata';
 import { container } from '../config/inversify.config';
 import { TYPES } from '../types';
 import { UsageService } from '../services/usage.service';
@@ -26,7 +26,7 @@ async function verifyMeteredBilling() {
   await usageService.trackUsage({
     userId,
     provider: 'gemini',
-    modelId: 'gemini-3.0-flash',
+    modelId: 'gemini-2.0-flash',
     prompt,
     completion,
   });

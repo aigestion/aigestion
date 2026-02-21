@@ -1,0 +1,125 @@
+# 🌌 Daniela Voice Agent - Home Assistant Automation
+# HYBRID ARCHITECTURE: Pixel makes the call, Daniela speaks through it
+#
+# Flow:
+#   1. Backend generates TTS audio via ElevenLabs → hosts MP3
+#   2. HA receives webhook with phone + audioUrl
+#   3. HA pushes actionable notification to Pixel 8
+#   4. Pixel auto-dials on speaker
+#   5. Tasker detects call connected → downloads & plays MP3
+#
+# Prerequisites:
+#   1. Home Assistant Companion App on Pixel 8
+#   2. Tasker installed with "Call Connected" profile
+#   3. Device entity matches: notify.mobile_app_pixel_8
+
+# ──────────────────────────────────────────────────────
+# AUTOMATION 1: Daniela Voice Call (with TTS audio)
+# ──────────────────────────────────────────────────────
+- id: daniela_sovereign_voice_call
+  alias: '🌌 Daniela - Sovereign Voice Call Agent'
+  description: 'Receives voice call request from backend. Daniela has pre-generated audio to speak.'
+  mode: single
+  trigger:
+    - platform: webhook
+      webhook_id: daniela_call_bridge
+      allowed_methods:
+        - POST
+      local_only: false
+  condition:
+    - condition: template
+      value_template: "{{ trigger.json.action == 'voice_call' }}"
+  action:
+    # Send actionable push to Pixel — includes audio URL for Tasker
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: '📞 Daniela Voice Agent'
+        message: >-
+          Daniela va a llamar a {{ trigger.json.contact_name }}
+          y le dirá: "{{ trigger.json.instructions | truncate(80) }}"
+        data:
+          priority: high
+          channel: 'daniela_voice_agent'
+          importance: high
+          ttl: 0
+          sticky: true
+          # Tasker reads these extras
+          intent_extras: >-
+            daniela_call_id:{{ trigger.json.call_id }},
+            daniela_audio_url:{{ trigger.json.audio_url }},
+            daniela_phone:{{ trigger.json.phone_number }},
+            daniela_contact:{{ trigger.json.contact_name }}
+          actions:
+            - action: 'DANIELA_VOICE_CALL'
+              title: '📞 Daniela llamará a {{ trigger.json.contact_name }}'
+              uri: 'tel:{{ trigger.json.phone_number }}'
+            - action: 'DISMISS_CALL'
+              title: '❌ Cancelar'
+          icon_url: 'https://aigestion.net/favicon.ico'
+          group: 'daniela_voice'
+          tag: 'voice_agent_{{ trigger.json.call_id }}'
+
+# ──────────────────────────────────────────────────────
+# AUTOMATION 2: Simple Dial (no TTS, user speaks)
+# ──────────────────────────────────────────────────────
+- id: daniela_simple_dial
+  alias: '🌌 Daniela - Simple Dial'
+  description: 'Simple call — just open the dialer on Pixel'
+  mode: single
+  trigger:
+    - platform: webhook
+      webhook_id: daniela_call_bridge
+      allowed_methods:
+        - POST
+      local_only: false
+  condition:
+    - condition: template
+      value_template: "{{ trigger.json.action == 'simple_call' }}"
+  action:
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: '📞 Llamar a {{ trigger.json.contact_name }}'
+        message: 'Toca para llamar'
+        data:
+          priority: high
+          channel: 'daniela_calls'
+          actions:
+            - action: 'SIMPLE_CALL'
+              title: '📞 Llamar'
+              uri: 'tel:{{ trigger.json.phone_number }}'
+            - action: 'DISMISS_CALL'
+              title: '❌ Cancelar'
+          group: 'daniela_phone'
+
+# ──────────────────────────────────────────────────────
+# AUTOMATION 3: SMS Bridge
+# ──────────────────────────────────────────────────────
+- id: daniela_sovereign_sms_bridge
+  alias: '🌌 Daniela - Sovereign SMS Bridge'
+  description: "Sends SMS via Pixel's native messaging"
+  mode: single
+  trigger:
+    - platform: webhook
+      webhook_id: daniela_sms_bridge
+      allowed_methods:
+        - POST
+      local_only: false
+  condition:
+    - condition: template
+      value_template: "{{ trigger.json.action == 'sms' }}"
+  action:
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: '📨 SMS a {{ trigger.json.contact_name }}'
+        message: "{{ trigger.json.message_body | default('(sin mensaje)') }}"
+        data:
+          priority: high
+          channel: 'daniela_sms'
+          actions:
+            - action: 'SEND_SMS'
+              title: '📨 Enviar SMS'
+              uri: "sms:{{ trigger.json.phone_number }}?body={{ trigger.json.message_body | default('') | urlencode }}"
+            - action: 'DISMISS_SMS'
+              title: '❌ Cancelar'
+          group: 'daniela_phone'
+          tag: 'sms_bridge'

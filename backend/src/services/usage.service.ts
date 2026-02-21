@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+﻿import { injectable, inject } from 'inversify';
 import { encode } from 'gpt-tokenizer';
 import { User } from '../models/User';
 import { UsageRecord } from '../models/UsageRecord';
@@ -116,13 +116,13 @@ export class UsageService {
    */
   private estimateCost(modelId: string, promptTokens: number, completionTokens: number): number {
     const rates: Record<string, { prompt: number; completion: number }> = {
-      'gemini-3.0-flash': { prompt: 0.1 / 1_000_000, completion: 0.3 / 1_000_000 },
-      'gemini-1.5-flash-8b': { prompt: 0.03 / 1_000_000, completion: 0.09 / 1_000_000 },
+      'gemini-2.0-flash': { prompt: 0.1 / 1_000_000, completion: 0.3 / 1_000_000 },
+      'gemini-2.0-flash-lite': { prompt: 0.03 / 1_000_000, completion: 0.09 / 1_000_000 },
       'claude-3-5-sonnet-20241022': { prompt: 3 / 1_000_000, completion: 15 / 1_000_000 },
       'claude-3-5-sonnet': { prompt: 3 / 1_000_000, completion: 15 / 1_000_000 },
     };
 
-    const rate = rates[modelId] || rates['gemini-3.0-flash'];
+    const rate = rates[modelId] || rates['gemini-2.0-flash'];
     return promptTokens * rate.prompt + completionTokens * rate.completion;
   }
 

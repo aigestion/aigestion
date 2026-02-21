@@ -1,36 +1,43 @@
-import { injectable, inject } from 'inversify';
+﻿import { injectable, inject } from 'inversify';
 import { TYPES } from '../../types';
 import { Gemini2Service } from '../gemini-2.service';
-import { ElevenLabsService } from '../elevenlabs.service';
+import { VoiceService } from '../voice.service';
+import { SovereignKnowledgeService } from './sovereign-knowledge.service';
 import { logger } from '../../utils/logger';
 
 /**
- * NEXUS RADIO SERVICE (V2)
- * Advanced conversational briefing and multi-voice synthesis.
+ * NEXUS RADIO 2.0
+ * Generates conversational audio briefings based on sovereign sources.
  */
 @injectable()
 export class NexusRadioService {
   constructor(
     @inject(TYPES.Gemini2Service) private readonly gemini: Gemini2Service,
-    @inject(TYPES.ElevenLabsService) private readonly eleven: ElevenLabsService,
+    @inject(TYPES.VoiceService) private readonly voice: VoiceService,
+    @inject(TYPES.SovereignKnowledgeService) private readonly knowledge: SovereignKnowledgeService,
   ) {}
 
   /**
-   * Generates a conversational radio script for the day's briefing.
+   * Generates a conversational briefing from a specific Source Set.
    */
-  async generateRadioScript(context: string): Promise<string> {
-    logger.info('[NexusRadio] Drafting Sovereign Script (V2)...');
+  async generateSovereignBriefing(sourceSetId: string): Promise<Buffer> {
+    logger.info(`[NexusRadio] Generating source-grounded briefing for set: ${sourceSetId}`);
 
-    const prompt = `
-      Act as two high-level AI News anchors, "Nexus" (authoritative, deep) and "Aurora" (analytical, sharp).
-      Generate a conversational script summarizing:
-      ${context}
+    // 1. Get grounded context
+    const rawContext = await this.knowledge.generateBriefing(sourceSetId);
 
-      Style: "High-tech noir", fast-paced, insightful. Avoid filler.
-      Format: [NEXUS]: text, [AURORA]: text.
+    // 2. Generate conversational script with "High-tech noir" style
+    const scriptPrompt = `
+      Actúa como el locutor del Nexus Radio.
+      Genera un resumen informativo basado en estas fuentes:
+      "${rawContext}"
+      
+      ESTILO: Alta tecnología, noir, directo, inteligente.
+      FORMATO: Podcast corto.
+      IDIOMA: Español.
     `;
 
-    return await this.gemini.generateText(prompt, { model: 'gemini-1.5-pro' });
+    return await this.gemini.generateText(scriptPrompt, { model: 'gemini-2.0-flash' });
   }
 
   /**

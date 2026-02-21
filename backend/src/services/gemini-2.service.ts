@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+﻿import { GoogleGenerativeAI } from '@google/generative-ai';
 import { injectable, inject } from 'inversify';
 import { logger } from '../utils/logger';
 import { TYPES } from '../types';
@@ -120,7 +120,7 @@ export class Gemini2Service {
   async analyzeImage(imageUrl: string, prompt: string) {
     try {
       const model = this.getClient().getGenerativeModel({
-        model: 'gemini-2.0-flash-exp', // Configured to Flash for speed + multimodal
+        model: 'gemini-2.0-flash', // Configured to Flash for speed + multimodal
         safetySettings: this.safetySettings as any,
       });
 
@@ -146,7 +146,7 @@ export class Gemini2Service {
   async multimodalAnalysis(inputs: { text?: string; imageUrl?: string; audioUrl?: string }) {
     try {
       const model = this.getClient().getGenerativeModel({
-        model: 'gemini-2.0-flash-exp',
+        model: 'gemini-2.0-flash',
         safetySettings: this.safetySettings as any,
       });
 
@@ -180,7 +180,7 @@ export class Gemini2Service {
   async streamResponse(prompt: string) {
     try {
       const model = this.getClient().getGenerativeModel({
-        model: 'gemini-2.0-flash-exp',
+        model: 'gemini-2.0-flash',
         safetySettings: this.safetySettings as any,
       });
 
@@ -211,7 +211,7 @@ export class Gemini2Service {
   ) {
     try {
       const model = this.getClient().getGenerativeModel({
-        model: 'gemini-2.0-flash-exp', // Flash supports function calling
+        model: 'gemini-2.0-flash', // Flash supports function calling
         safetySettings: this.safetySettings as any,
       });
 

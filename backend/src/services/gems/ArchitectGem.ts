@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+﻿import { injectable, inject } from 'inversify';
 import { BaseGem } from './BaseGem';
 import { Gemini2Service } from '../gemini-2.service';
 
@@ -21,7 +21,7 @@ export class ArchitectGem extends BaseGem {
 
   async designSystem(requirements: string): Promise<string> {
     return this.ask(`Diseña una arquitectura de sistema robusta para: ${requirements}. Incluye diagramas de componentes (Mermaid) y elecciones tecnológicas.`, {
-        model: 'gemini-2.0-pro-exp-02-05' // Use Pro for complex reasoning
+        model: 'gemini-2.5-pro' // Use Pro for complex reasoning
     });
   }
 }
