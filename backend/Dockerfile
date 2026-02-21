@@ -23,11 +23,7 @@ RUN echo '{"name":"@aigestion/eslint-config","version":"0.0.1","private":true}' 
 COPY backend/package.json ./backend/
 
 # Install dependencies
-# Using pnpm fetch to cache dependencies based on the lockfile
-RUN pnpm fetch --filter nexus-v1-dashboard-backend...
-
-# Install only the necessary dependencies
-RUN pnpm install --offline --filter nexus-v1-dashboard-backend...
+RUN pnpm install --filter nexus-v1-dashboard-backend...
 
 # Copy source code for backend and internal dependencies
 COPY backend ./backend
