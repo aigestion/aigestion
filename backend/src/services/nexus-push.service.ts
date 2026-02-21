@@ -1,9 +1,9 @@
 import { inject, injectable } from 'inversify';
 import { Message } from 'firebase-admin/messaging';
 import * as admin from 'firebase-admin';
-import { TYPES } from '../../types';
-import { logger } from '../../utils/logger';
-import { FirebaseService } from './firebase.service';
+import { TYPES } from '../types';
+import { logger } from '../utils/logger';
+import { FirebaseService } from './google/firebase.service';
 
 export interface PushPayload {
   title: string;
