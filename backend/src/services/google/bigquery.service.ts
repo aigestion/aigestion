@@ -1,6 +1,9 @@
 import { injectable } from 'inversify';
 import { BigQuery } from '@google-cloud/bigquery';
 import { logger } from '../../utils/logger';
+import { getCache, setCache } from '../../cache/redis';
+
+const CACHE_TTL = 3600; // 1 hour for deep trends
 
 /**
  * SOVEREIGN BIGQUERY SERVICE
@@ -46,6 +49,14 @@ export class BigQueryService {
    * Performs deep trend analysis using SQL.
    */
   async runDeepTrendQuery(query: string) {
+    const salt = Buffer.from(query).toString('base64').slice(-20);
+    const cacheKey = `bq:trend:${salt}`;
+    const cached = await getCache<any[]>(cacheKey);
+    if (cached) {
+      logger.info('[BigQuery] Cache Hit: Tactical trend analysis');
+      return cached;
+    }
+
     logger.info('[BigQuery] Executing Sovereign SQL Analysis...');
     try {
       const options = {
@@ -54,6 +65,8 @@ export class BigQueryService {
       };
       const [job] = await this.bq.createQueryJob(options);
       const [rows] = await job.getQueryResults();
+
+      await setCache(cacheKey, rows, CACHE_TTL);
       return rows;
     } catch (error) {
       logger.error('[BigQuery] Analytical query fault', error);

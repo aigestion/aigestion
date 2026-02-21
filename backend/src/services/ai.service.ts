@@ -1,6 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Readable } from 'node:stream';
 import axios from 'axios';
+import { VertexAI, HarmCategory, HarmBlockThreshold } from '@google-cloud/vertexai';
 
 import { env } from '../config/env.schema';
 import { CircuitBreakerFactory } from '../infrastructure/resilience/CircuitBreakerFactory';
@@ -28,6 +29,8 @@ export interface AIStreamParams {
 @injectable()
 export class AIService {
   private _model: any;
+  private _vertexAI: VertexAI | null = null;
+  private _embeddingModel: any = null;
 
   private generateContentBreaker: any;
   private chatStreamBreaker: any;
@@ -35,6 +38,10 @@ export class AIService {
   constructor(
     @inject(TYPES.AnalyticsService) private readonly analyticsService: AnalyticsService,
     @inject(TYPES.RagService) private readonly ragService: RagService,
+    @inject(TYPES.PineconeService) private pineconeService: PineconeService,
+    @inject(TYPES.NexusSwarmOrchestrator) private readonly swarm: NexusSwarmOrchestrator,
+    @inject(TYPES.JulesGem) private readonly jules: any, // Use any or proper type if imported
+    @inject(TYPES.NexusStitchGem) private readonly stitchGem: any,
     @inject(TYPES.UsageService) private readonly usageService: UsageService,
     @inject(TYPES.SemanticCacheService) private readonly semanticCache: SemanticCacheService,
     @inject(TYPES.ArbitrationService) private readonly arbitrationService: ArbitrationService,
@@ -56,9 +63,42 @@ export class AIService {
 
   private async getProviderModel(config: ModelConfig) {
     if (config.provider === 'gemini') {
-      const { GoogleGenerativeAI } = await import('@google/generative-ai');
-      const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY || '');
-      return genAI.getGenerativeModel({ model: config.modelId });
+      if (!this._vertexAI) {
+        this._vertexAI = new VertexAI({
+          project: env.GOOGLE_PROJECT_ID || 'aigestion-sovereign-2026',
+          location: env.GOOGLE_LOCATION || 'us-central1',
+        });
+      }
+
+      const safetySettings = [
+        {
+          category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+        },
+        {
+          category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+          threshold: HarmBlockThreshold.BLOCK_VERY_LOW_AND_ABOVE,
+        },
+      ];
+
+      return this._vertexAI.getGenerativeModel({
+        model: config.modelId,
+        safetySettings,
+        generationConfig: {
+          maxOutputTokens: 2048,
+          temperature: 0.7,
+          topP: 0.8,
+          topK: 40,
+        },
+      });
     }
     throw new Error(`Unsupported provider: ${config.provider}`);
   }
@@ -271,6 +311,13 @@ export class AIService {
         `[AIService] Arbitrated to Tier: ${tier} (${provider}/${modelId}) | Reason: ${reason}`,
       );
 
+      // [GOD MODE] Swarm Collaboration for Premium/God users
+      if (userRole === 'god' && prompt.toLowerCase().includes('swarm')) {
+        logger.info('[AIService] Triggering Swarm Intelligence for God-Level query.');
+        const swarmResult = await this.swarm.collaborate(prompt, [this.jules, this.stitchGem]);
+        return swarmResult.supremeVerdict;
+      }
+
       // [GOD MODE] Dual-Provider Support
       if (provider === 'gemini') {
         const model = await this.getProviderModel({ provider, modelId });
@@ -365,14 +412,25 @@ export class AIService {
    */
   public async getEmbeddings(text: string): Promise<number[]> {
     try {
-      const { GoogleGenerativeAI } = await import('@google/generative-ai');
-      const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY || '');
-      const model = genAI.getGenerativeModel({ model: 'text-embedding-004' });
+      if (!this._vertexAI) {
+        this._vertexAI = new VertexAI({
+          project: env.GOOGLE_PROJECT_ID || 'aigestion-sovereign-2026',
+          location: env.GOOGLE_LOCATION || 'us-central1',
+        });
+      }
 
-      const result = await model.embedContent(text);
-      return result.embedding.values;
+      if (!this._embeddingModel) {
+        this._embeddingModel = this._vertexAI.getGenerativeModel({
+          model: 'text-embedding-004',
+        });
+      }
+
+      const result = await this._embeddingModel.embedContent({
+        content: { parts: [{ text }] },
+      });
+      return result.predictions[0].embeddings.values;
     } catch (error) {
-      logger.error(error, '[AIService] Failed to generate embeddings via Gemini API');
+      logger.error(error, '[AIService] Failed to generate embeddings via Vertex AI API');
       return [];
     }
   }

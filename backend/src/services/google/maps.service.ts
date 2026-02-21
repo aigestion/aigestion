@@ -1,6 +1,9 @@
 import { injectable } from 'inversify';
 import { Client } from '@googlemaps/google-maps-services-js';
 import { logger } from '../../utils/logger';
+import { getCache, setCache } from '../../cache/redis';
+
+const CACHE_TTL = 3600 * 24 * 7; // 1 week (Geospatial data is stable)
 
 /**
  * SOVEREIGN MAPS SERVICE
@@ -18,6 +21,10 @@ export class MapsService {
    * Geocodes an address to lat/lng coordinates for Tactical Radar.
    */
   async geocode(address: string) {
+    const cacheKey = `maps:geocode:${Buffer.from(address).toString('base64')}`;
+    const cached = await getCache<any>(cacheKey);
+    if (cached) return cached;
+
     logger.info(`[MapsService] Geocoding tactical objective: ${address}`);
     try {
       const resp = await this.client.geocode({
@@ -29,7 +36,9 @@ export class MapsService {
       });
 
       if (resp.data.results.length > 0) {
-        return resp.data.results[0].geometry.location;
+        const location = resp.data.results[0].geometry.location;
+        await setCache(cacheKey, location, CACHE_TTL);
+        return location;
       }
       throw new Error('No results found for tactical geocoding');
     } catch (error) {
@@ -50,6 +59,10 @@ export class MapsService {
    * Tactical Radar: Analyzes local points of interest for strategic decisions.
    */
   async getLocalIntelligence(location: { lat: number; lng: number }, query: string = 'business') {
+    const cacheKey = `maps:places:${location.lat},${location.lng}:${query}`;
+    const cached = await getCache<any[]>(cacheKey);
+    if (cached) return cached;
+
     logger.info(`[MapsService] Scanning local sector: ${location.lat},${location.lng}`);
     try {
       const resp = await this.client.placesNearby({
@@ -60,11 +73,14 @@ export class MapsService {
           key: process.env.GOOGLE_MAPS_API_KEY || '',
         },
       });
-      return resp.data.results.slice(0, 5).map(p => ({
+      const results = resp.data.results.slice(0, 5).map(p => ({
         name: p.name,
         rating: p.rating,
         vicinity: p.vicinity,
       }));
+
+      await setCache(cacheKey, results, CACHE_TTL);
+      return results;
     } catch (error) {
       logger.error('[MapsService] Nearby scan failure', error);
       return [];

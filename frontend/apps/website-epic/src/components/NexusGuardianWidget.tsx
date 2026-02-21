@@ -21,7 +21,7 @@ export const NexusGuardianWidget: React.FC = () => {
           const data = await response.json();
           setCpuLoad(Math.round(data.cpu));
           setMemoryLoad(Math.round(data.memory));
-          
+
           // Dynamic sanity score based on real load
           const sanity = 100 - (data.cpu / 4) - (data.memory / 8);
           setSanityScore(Math.floor(sanity));
@@ -65,7 +65,7 @@ export const NexusGuardianWidget: React.FC = () => {
             {sanityScore}%
           </span>
           <span className="text-[8px] text-nexus-silver/40 uppercase tracking-tighter">
-            SANITY SCORE
+            PUNTUACIÓN DE SALUD
           </span>
         </div>
       </div>
@@ -75,7 +75,7 @@ export const NexusGuardianWidget: React.FC = () => {
         <div className="space-y-1">
           <div className="flex justify-between text-[10px] font-orbitron text-nexus-silver/50 uppercase">
             <span className="flex items-center gap-2">
-              <Cpu className="w-3 h-3" /> CPU LOAD
+              <Cpu className="w-3 h-3" /> CARGA DE CPU
             </span>
             <span>{cpuLoad}%</span>
           </div>
@@ -91,7 +91,7 @@ export const NexusGuardianWidget: React.FC = () => {
         <div className="space-y-1">
           <div className="flex justify-between text-[10px] font-orbitron text-nexus-silver/50 uppercase">
             <span className="flex items-center gap-2">
-              <Activity className="w-3 h-3" /> MEMORY
+              <Activity className="w-3 h-3" /> MEMORIA
             </span>
             <span>{memoryLoad}%</span>
           </div>
@@ -131,7 +131,7 @@ export const NexusGuardianWidget: React.FC = () => {
       <div className="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]" />
-          <span className="text-[9px] font-mono text-nexus-silver/40">SENTINEL_ACTIVE_v2.0</span>
+          <span className="text-[9px] font-mono text-nexus-silver/40">CENTINELA_ACTIVO_v2.0</span>
         </div>
         <BarChart3 className="w-3 h-3 text-nexus-silver/20" />
       </div>

@@ -32,12 +32,12 @@ export const AlertsWidget: React.FC = () => {
         setAlerts(res.data);
         setError(null);
       } else {
-        setError('Log unavailable');
+        setError('Registro no disponible');
       }
     } catch (err) {
       console.error('Failed to fetch alerts:', err);
       // Don't show error on poll failure, just log it
-      if (alerts.length === 0) setError('Offline');
+      if (alerts.length === 0) setError('Fuera de línea');
     } finally {
       setLoading(false);
     }
@@ -61,16 +61,18 @@ export const AlertsWidget: React.FC = () => {
               <Crosshair size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-black text-white uppercase tracking-wider">The Sniper</h3>
+              <h3 className="text-xl font-black text-white uppercase tracking-wider">
+                El Francotirador
+              </h3>
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-2">
-                Active Targets
+                Objetivos Activos
                 <span className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
               </p>
             </div>
           </div>
           <div className="px-3 py-1 rounded-full bg-white/5 border border-white/10">
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              {alerts.length} Hits
+              {alerts.length} Impactos
             </span>
           </div>
         </div>
@@ -78,8 +80,9 @@ export const AlertsWidget: React.FC = () => {
         <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
           <AnimatePresence mode="popLayout">
             {loading && alerts.length === 0 ? (
-               <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 className="flex flex-col gap-3"
               >
                 {[1, 2, 3].map(i => (
@@ -93,7 +96,9 @@ export const AlertsWidget: React.FC = () => {
             ) : alerts.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-slate-600 gap-4">
                 <ShieldAlert size={32} className="opacity-20" />
-                <span className="text-xs font-bold uppercase tracking-widest">No Active Threats</span>
+                <span className="text-xs font-bold uppercase tracking-widest">
+                  Sin Amenazas Activas
+                </span>
               </div>
             ) : (
               <div className="flex flex-col gap-3">
@@ -107,33 +112,45 @@ export const AlertsWidget: React.FC = () => {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className={`p-2 rounded-xl ${
-                          alert.direction === 'pump'
-                            ? 'bg-emerald-500/20 text-emerald-400'
-                            : 'bg-red-500/20 text-red-500'
-                        }`}>
-                          {alert.direction === 'pump' ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+                        <div
+                          className={`p-2 rounded-xl ${
+                            alert.direction === 'pump'
+                              ? 'bg-emerald-500/20 text-emerald-400'
+                              : 'bg-red-500/20 text-red-500'
+                          }`}
+                        >
+                          {alert.direction === 'pump' ? (
+                            <TrendingUp size={16} />
+                          ) : (
+                            <TrendingDown size={16} />
+                          )}
                         </div>
                         <div>
                           <div className="flex items-baseline gap-2">
                             <span className="text-sm font-black text-white uppercase tracking-wider">
                               {alert.asset}
                             </span>
-                            <span className={`text-xs font-bold ${
-                              alert.direction === 'pump' ? 'text-emerald-400' : 'text-red-400'
-                            }`}>
-                              {alert.direction === 'pump' ? '+' : '-'}{Math.abs(alert.change).toFixed(2)}%
+                            <span
+                              className={`text-xs font-bold ${
+                                alert.direction === 'pump' ? 'text-emerald-400' : 'text-red-400'
+                              }`}
+                            >
+                              {alert.direction === 'pump' ? '+' : '-'}
+                              {Math.abs(alert.change).toFixed(2)}%
                             </span>
                           </div>
                           <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
-                            Price: ${alert.price.toLocaleString()}
+                            Precio: ${alert.price.toLocaleString()}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 text-slate-600">
                         <Clock size={12} />
                         <span className="text-[9px] font-bold uppercase">
-                          {new Date(alert.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                          {new Date(alert.timestamp).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
                         </span>
                       </div>
                     </div>

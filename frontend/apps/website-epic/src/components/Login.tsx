@@ -106,7 +106,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
                   className="text-4xl font-black mb-1"
                 />
                 <div className="font-mono text-[10px] tracking-[0.5em] text-nexus-cyan/60 uppercase">
-                   Security Protocol Active
+                   Protocolo de Seguridad Activo
                 </div>
              </div>
 
@@ -119,7 +119,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
                   transition={{ delay: 0.2 }}
                 >
                   <div className="flex justify-between items-center px-1">
-                    <label className="text-[10px] font-mono text-nexus-cyan tracking-[0.2em] uppercase">Codename Identifier</label>
+                    <label className="text-[10px] font-mono text-nexus-cyan tracking-[0.2em] uppercase">Identificador de Agente</label>
                     <Zap className="w-3 h-3 text-nexus-cyan/30" />
                   </div>
                   <div className="relative">
@@ -145,7 +145,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
                   transition={{ delay: 0.3 }}
                 >
                   <div className="flex justify-between items-center px-1">
-                    <label className="text-[10px] font-mono text-nexus-cyan tracking-[0.2em] uppercase">Auth Passkey</label>
+                    <label className="text-[10px] font-mono text-nexus-cyan tracking-[0.2em] uppercase">Clave de Autenticación</label>
                     <Lock className="w-3 h-3 text-nexus-cyan/30" />
                   </div>
                   <div className="relative">
@@ -181,7 +181,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
                     >
                       <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
                       <div className="font-mono text-[11px] text-red-400 uppercase tracking-tighter">
-                         <span className="font-bold">Protocol Error:</span> {error}
+                         <span className="font-bold">Error de Protocolo:</span> {error}
                       </div>
                     </motion.div>
                   )}
@@ -240,8 +240,8 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
 
         {/* Footer HUD labels */}
         <div className="mt-8 flex justify-between px-4 opacity-30 select-none">
-           <div className="font-mono text-[8px] tracking-[0.4em] uppercase">Terminal://Auth/Login</div>
-           <div className="font-mono text-[8px] tracking-[0.4em] uppercase">V2.0.26 Sovereign</div>
+           <div className="font-mono text-[8px] tracking-[0.4em] uppercase">Terminal://Aut/Sesión</div>
+           <div className="font-mono text-[8px] tracking-[0.4em] uppercase">V2.0.26 Soberano</div>
         </div>
       </motion.div>
     </SpotlightWrapper>

@@ -16,7 +16,10 @@ export interface IUserRepository extends BaseRepository<IUser> {
 @injectable()
 export class UserRepository extends BaseRepository<IUser> implements IUserRepository {
   async findByEmail(email: string): Promise<IUser | null> {
-    return await User.findOne({ email }).select('+password').exec();
+    return await User.findOne({ email })
+      .select('+password')
+      .cache({ ttl: 3600 }) // God Level Caching
+      .exec();
   }
 
   override async create(
@@ -29,7 +32,10 @@ export class UserRepository extends BaseRepository<IUser> implements IUserReposi
   }
 
   override async findById(id: string): Promise<IUser | null> {
-    return (await User.findById(id).lean().exec()) as any;
+    return (await User.findById(id)
+      .cache({ ttl: 3600 }) // God Level Caching
+      .lean()
+      .exec()) as any;
   }
 
   override async findAll(limit: number = 10, skip: number = 0): Promise<IUser[]> {

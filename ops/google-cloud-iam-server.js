@@ -239,7 +239,7 @@ class GoogleCloudIAMMCPServer {
       content: [
         {
           type: 'text',
-          text: `Google Cloud Service Accounts List:\n\nProject ID: ${project_id}\n\nSample service accounts:\n- aigestion-ai-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion AI Service\n- aigestion-data-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion Data Service\n- aigestion-web-service@aigestion-pro-2026.iam.gserviceaccount.com - Display: AIGestion Web Service\n\nService account information:\n- Email address\n- Display name\n- Creation time\n- Key count\n- Assigned roles\n\nNote: Actual service account listing requires Google Cloud IAM API.\n\nThis prepares Google Cloud service accounts listing.`,
+          text: `Google Cloud Service Accounts List:\n\nProject ID: ${project_id}\n\nSample service accounts:\n- aigestion-ai-service@aigestion-sovereign-2026.iam.gserviceaccount.com - Display: AIGestion AI Service\n- aigestion-data-service@aigestion-sovereign-2026.iam.gserviceaccount.com - Display: AIGestion Data Service\n- aigestion-web-service@aigestion-sovereign-2026.iam.gserviceaccount.com - Display: AIGestion Web Service\n\nService account information:\n- Email address\n- Display name\n- Creation time\n- Key count\n- Assigned roles\n\nNote: Actual service account listing requires Google Cloud IAM API.\n\nThis prepares Google Cloud service accounts listing.`,
         },
       ],
     };

@@ -1,0 +1,39 @@
+name: Sovereign Automated Deployment
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'packages/**'
+      - 'scripts/**'
+      - '.github/workflows/sovereign-deploy.yml'
+
+jobs:
+  deploy:
+    name: Nexus Rollout
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Google Cloud Auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: Set up Cloud SDK
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker --quiet
+
+      - name: Execute Sovereign Deployment
+        shell: pwsh
+        run: |
+          ./scripts/deploy_cloud_run.ps1 -Target all
+        env:
+          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          # The script uses internal variables, but env vars can be mapped here if needed

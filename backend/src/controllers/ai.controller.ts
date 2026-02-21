@@ -7,6 +7,7 @@ import { validate, schemas } from '../middleware/validation.middleware';
 import { AIService } from '../services/ai.service';
 import { TYPES } from '../types';
 import { RateLimitService } from '../services/rate-limit.service';
+import { GeminiLiveService } from '../services/google/gemini-live.service';
 
 export const runPrompt = [
   validate({ body: schemas.ai.prompt }),
@@ -73,3 +74,15 @@ export const streamChat = [
     }
   },
 ];
+
+export const getLiveSession = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = (req as any).user?.id || 'anonymous';
+    const liveService = container.get<GeminiLiveService>(TYPES.GeminiLiveService);
+    
+    const session = await liveService.establishLiveSession(userId);
+    res.json(buildResponse(session, 200, (req as any).requestId || 'unknown'));
+  } catch (err) {
+    next(err);
+  }
+};

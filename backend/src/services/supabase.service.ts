@@ -2,6 +2,8 @@ import { injectable } from 'inversify';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
+import { getCache, setCache } from '../cache/redis';
+import crypto from 'crypto';
 
 /**
  * [GOD MODE SUPREME] SupabaseService
@@ -13,8 +15,10 @@ export class SupabaseService {
   private static instance: SupabaseService;
   private client!: SupabaseClient;
   private readonly connectionPool: Map<string, any> = new Map();
-  private readonly queryCache = new Map<string, { data: any; timestamp: number }>();
+  private readonly queryCache = new Map<string, { data: any; timestamp: number }>(); // L1 Local Cache
   private readonly performanceMetrics = new Map<string, number[]>();
+  private readonly CACHE_TTL = 3600; // 1 hour by default
+  private readonly EMBEDDING_CACHE_TTL = 604800; // 7 days for stable embeddings
 
   public constructor() {
     this.validateConfig();
@@ -66,26 +70,45 @@ export class SupabaseService {
   }
 
   /**
-   * Enhanced fetch with connection pooling and intelligent retry
+   * Enhanced fetch with Redis L2 caching and refined retry logic
    */
   private async enhancedFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-    const cacheKey = typeof input === 'string' ? input : input.toString();
-    const cached = this.queryCache.get(cacheKey);
+    const url = typeof input === 'string' ? input : (input as Request).url || input.toString();
+    const cacheKey = `supabase:fetch:${this.generateHash(url + (init?.body || ''))}`;
 
-    // Return cached result if valid (5 minutes)
-    if (cached && Date.now() - cached.timestamp < 300000) {
-      this.recordMetric('cache_hit', 1);
-      return new Response(JSON.stringify(cached.data), {
+    // 1. L1 Local Cache Check (Memory)
+    const localCached = this.queryCache.get(cacheKey);
+    if (localCached && Date.now() - localCached.timestamp < 60000) {
+      // 1 minute L1
+      this.recordMetric('cache_hit_l1', 1);
+      return new Response(JSON.stringify(localCached.data), {
         status: 200,
-        headers: { 'x-cache': 'hit' },
+        headers: { 'x-cache': 'hit-l1' },
       });
     }
 
+    // 2. L2 Redis Cache Check
+    try {
+      const redisCached = await getCache(cacheKey);
+      if (redisCached) {
+        this.recordMetric('cache_hit_l2', 1);
+        // Populate L1
+        this.queryCache.set(cacheKey, { data: redisCached, timestamp: Date.now() });
+        return new Response(JSON.stringify(redisCached), {
+          status: 200,
+          headers: { 'x-cache': 'hit-l2' },
+        });
+      }
+    } catch (err) {
+      logger.debug('[SupabaseService] Redis fetch failed, falling back to network');
+    }
+
     const maxRetries = 3;
-    const baseDelay = 100;
-    const timeout = 15000;
+    const baseDelay = 150;
+    const timeout = 20000;
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      const start = Date.now();
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -102,32 +125,45 @@ export class SupabaseService {
 
         clearTimeout(timeoutId);
 
-        // Cache successful responses
-        if (response.ok && response.status < 500) {
+        const latency = Date.now() - start;
+        this.recordMetric('api_latency', latency);
+
+        // Cache successful GET responses
+        if (response.ok && (!init?.method || init.method === 'GET')) {
           const responseData = await response.clone().json();
-          this.queryCache.set(cacheKey, {
-            data: responseData,
-            timestamp: Date.now(),
-          });
-          this.recordMetric('api_call', 1);
+          // Update L1
+          this.queryCache.set(cacheKey, { data: responseData, timestamp: Date.now() });
+          // Update L2
+          await setCache(cacheKey, responseData, this.CACHE_TTL);
+          this.recordMetric('api_call_success', 1);
         }
 
-        if (response.ok) {
-          this.recordMetric('fetch_success', 1);
-          return response;
+        if (response.ok) return response;
+
+        // Specialized handling for rate limits or server errors
+        if (response.status === 429 || response.status >= 500) {
+          if (attempt === maxRetries) return response;
+          const retryAfter = response.headers.get('retry-after');
+          const delay = retryAfter
+            ? parseInt(retryAfter, 10) * 1000
+            : baseDelay * Math.pow(2, attempt);
+          await new Promise(r => setTimeout(r, delay + Math.random() * 100));
+          continue;
         }
 
-        if (attempt === maxRetries) return response;
-        this.recordMetric('fetch_retry', 1);
-        await new Promise(r => setTimeout(r, baseDelay * Math.pow(2, attempt)));
+        return response;
       } catch (error: any) {
         if (attempt === maxRetries) throw error;
         this.recordMetric('fetch_error', 1);
-        logger.warn(`[SupabaseService] Fetch attempt ${attempt + 1} failed: ${error.message}`);
-        await new Promise(r => setTimeout(r, baseDelay * Math.pow(2, attempt)));
+        const delay = baseDelay * Math.pow(2, attempt);
+        await new Promise(r => setTimeout(r, delay + Math.random() * 100));
       }
     }
     return fetch(input, init);
+  }
+
+  private generateHash(text: string): string {
+    return crypto.createHash('sha256').update(text).digest('hex');
   }
 
   /**
@@ -301,7 +337,16 @@ export class SupabaseService {
   ) {
     if (!this.client) throw new Error('Supabase client not initialized');
 
+    const cacheKey = `supabase:search:${this.generateHash(queryText + (projectId || ''))}`;
+
     try {
+      // 1. Check Cache
+      const cached = await getCache(cacheKey);
+      if (cached) {
+        this.recordMetric('search_cache_hit', 1);
+        return cached;
+      }
+
       const { data, error } = await this.client.rpc('hybrid_search_v2', {
         query_text: queryText,
         query_embedding: embedding,
@@ -316,6 +361,9 @@ export class SupabaseService {
         logger.error(`[SupabaseService] Hybrid search v2 failed: ${error.message}`);
         throw error;
       }
+
+      // 2. Set Cache (Stable for 10 minutes)
+      await setCache(cacheKey, data, 600);
 
       this.recordMetric('hybrid_search_v2', 1);
       return data;
@@ -346,11 +394,60 @@ export class SupabaseService {
         throw error;
       }
 
+      // Invalidate related caches
+      const cacheKey = `supabase:search:${this.generateHash(doc.title)}`;
+      await setCache(cacheKey, null, 0);
+
       return data;
     } catch (error: any) {
       logger.error(`[SupabaseService] Upsert error: ${error.message}`);
       throw error;
     }
+  }
+
+  /**
+   * [GOD MODE] Batch Upsert Document Engine
+   * High-throughput parallel ingestion with resilience.
+   */
+  public async upsertDocBatch(docs: { title: string; content: string; metadata?: any }[]) {
+    if (!this.client || docs.length === 0) return [];
+
+    const BATCH_SIZE = 50;
+    const batches = [];
+
+    for (let i = 0; i < docs.length; i += BATCH_SIZE) {
+      batches.push(docs.slice(i, i + BATCH_SIZE));
+    }
+
+    logger.info(
+      `[SupabaseService] Starting batch upsert of ${docs.length} documents in ${batches.length} chunks.`,
+    );
+
+    const results = await Promise.all(
+      batches.map(async (batch, idx) => {
+        try {
+          const { data, error } = await this.client.from('documents').upsert(
+            batch.map(d => ({
+              title: d.title,
+              content: d.content,
+              metadata: d.metadata || {},
+            })),
+          );
+
+          if (error) {
+            logger.error(`[SupabaseService] Batch ${idx} failed: ${error.message}`);
+            return null;
+          }
+          return data;
+        } catch (err) {
+          logger.error(`[SupabaseService] Batch ${idx} catch error:`, err);
+          return null;
+        }
+      }),
+    );
+
+    this.recordMetric('batch_upsert_doc', docs.length);
+    return results.filter(Boolean);
   }
 
   public getPerformanceMetrics() {

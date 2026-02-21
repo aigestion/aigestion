@@ -63,9 +63,9 @@ export const Register: React.FC = () => {
         className="w-full max-w-lg relative z-10"
       >
         <div className="text-center mb-8">
-            <GodModeText text="NEW OPERATIVE" effect="hologram" className="text-3xl font-bold mb-2" />
+            <GodModeText text="NUEVO OPERATIVO" effect="hologram" className="text-3xl font-bold mb-2" />
             <p className="text-nexus-silver/60 text-xs font-orbitron tracking-widest uppercase">
-                Initialize Protocol
+                Inicializar Protocolo
             </p>
         </div>
 
@@ -76,31 +76,31 @@ export const Register: React.FC = () => {
                     type="button"
                     onClick={() => setAccountType('family')}
                     className={`p-4 rounded-xl border transition-all flex flex-col items-center gap-2 ${
-                        accountType === 'family' 
-                        ? 'bg-nexus-cyan/10 border-nexus-cyan/50 text-nexus-cyan' 
+                        accountType === 'family'
+                        ? 'bg-nexus-cyan/10 border-nexus-cyan/50 text-nexus-cyan'
                         : 'bg-black/20 border-white/5 text-nexus-silver/40 hover:bg-white/5'
                     }`}
                 >
                     <UsersIcon className="w-6 h-6" />
-                    <span className="text-xs font-orbitron tracking-widest">FAMILY</span>
+                    <span className="text-xs font-orbitron tracking-widest">FAMILIAR</span>
                 </button>
                 <button
                     type="button"
                     onClick={() => setAccountType('enterprise')}
                     className={`p-4 rounded-xl border transition-all flex flex-col items-center gap-2 ${
-                        accountType === 'enterprise' 
-                        ? 'bg-nexus-violet/10 border-nexus-violet/50 text-nexus-violet' 
+                        accountType === 'enterprise'
+                        ? 'bg-nexus-violet/10 border-nexus-violet/50 text-nexus-violet'
                         : 'bg-black/20 border-white/5 text-nexus-silver/40 hover:bg-white/5'
                     }`}
                 >
                     <Briefcase className="w-6 h-6" />
-                    <span className="text-xs font-orbitron tracking-widest">ENTERPRISE</span>
+                    <span className="text-xs font-orbitron tracking-widest">EMPRESARIAL</span>
                 </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-1">
-                    <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Codename / Name</label>
+                    <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Nombre / Alias</label>
                     <div className="relative">
                         <User className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40" />
                         <input
@@ -108,7 +108,7 @@ export const Register: React.FC = () => {
                             name="name"
                             value={formData.name}
                             onChange={handleInputChange}
-                            placeholder="John Doe"
+                            placeholder="Juan Pérez"
                             className="w-full pl-10 pr-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white placeholder-nexus-silver/20 focus:outline-none focus:border-nexus-cyan/50 transition-all font-mono text-sm"
                             required
                         />
@@ -116,7 +116,7 @@ export const Register: React.FC = () => {
                 </div>
 
                 <div className="space-y-1">
-                    <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Email Channel</label>
+                    <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Canal de Email</label>
                     <div className="relative">
                         <Mail className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40" />
                         <input
@@ -124,7 +124,7 @@ export const Register: React.FC = () => {
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            placeholder="agent@nexus.ai"
+                            placeholder="agente@nexus.ai"
                             className="w-full pl-10 pr-4 py-3 bg-black/40 border border-white/10 rounded-xl text-white placeholder-nexus-silver/20 focus:outline-none focus:border-nexus-cyan/50 transition-all font-mono text-sm"
                             required
                         />
@@ -133,7 +133,7 @@ export const Register: React.FC = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Passkey</label>
+                        <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Contraseña</label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40" />
                             <input
@@ -148,7 +148,7 @@ export const Register: React.FC = () => {
                         </div>
                     </div>
                      <div className="space-y-1">
-                        <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Confirm</label>
+                        <label className="text-xs font-orbitron text-nexus-cyan tracking-widest uppercase ml-1">Confirmar</label>
                         <div className="relative">
                             <Lock className="absolute left-3 top-3 h-5 w-5 text-nexus-silver/40" />
                             <input
@@ -180,25 +180,25 @@ export const Register: React.FC = () => {
                   disabled={loading}
                   className="w-full py-4 bg-nexus-gradient text-white font-orbitron font-bold tracking-[0.2em] rounded-xl hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] disabled:opacity-50 transition-all uppercase text-sm mt-4"
                 >
-                  {loading ? 'INITIALIZING...' : 'ESTABLISH IDENTITY'}
+                  {loading ? 'INICIALIZANDO...' : 'ESTABLECER IDENTIDAD'}
                 </button>
             </form>
 
             <div className="mt-6 pt-6 border-t border-white/5 text-center">
-                <p className="text-nexus-silver/40 text-xs font-mono mb-4">OR AUTHENTICATE WITH</p>
+                <p className="text-nexus-silver/40 text-xs font-mono mb-4">O AUTENTICARSE CON</p>
                 <button
                     type="button"
                     className="w-full py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-3 group"
                 >
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 grayscale group-hover:grayscale-0 transition-all" />
-                    <span className="text-xs font-orbitron tracking-wider text-white">GOOGLE NETHUB</span>
+                    <span className="text-xs font-orbitron tracking-wider text-white">NEXUS DE GOOGLE</span>
                 </button>
             </div>
 
             <div className="mt-6 text-center">
-                <span className="text-nexus-silver/40 text-xs font-mono">ALREADY AN AGENT? </span>
+                <span className="text-nexus-silver/40 text-xs font-mono">¿YA ERES AGENTE? </span>
                 <Link to="/login" className="text-nexus-cyan hover:text-nexus-cyan-light font-bold text-xs font-orbitron tracking-wider ml-2">
-                    ACCESS TERMINAL
+                    ACCEDER A LA TERMINAL
                 </Link>
             </div>
         </div>

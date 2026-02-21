@@ -155,6 +155,7 @@ import { McpBridgeService } from '../services/google/mcp-bridge.service';
 import { NeuralHomeBridge } from '../services/google/neural-home.service';
 import { ContactRegistryService } from '../services/contact-registry.service';
 import { DanielaCallAgent } from '../services/daniela-call-agent.service';
+import { NexusPushService } from '../services/nexus-push.service';
 import { QuantumSecurityService } from '../services/security/quantum-security.service';
 import { PineconeService } from '../services/pinecone.service';
 import { MemoryService } from '../services/memory.service';
@@ -492,5 +493,6 @@ bind<IoTController>(TYPES.IoTController, IoTController);
 bind<DeFiYieldHarvesterService>(TYPES.DeFiYieldHarvesterService, DeFiYieldHarvesterService);
 bind<ContactRegistryService>(TYPES.ContactRegistryService, ContactRegistryService);
 bind<DanielaCallAgent>(TYPES.DanielaCallAgent, DanielaCallAgent);
+bind<NexusPushService>(TYPES.NexusPushService, NexusPushService);
 
 export { container, TYPES };

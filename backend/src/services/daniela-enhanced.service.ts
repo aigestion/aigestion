@@ -1,31 +1,6 @@
 import { OpenAI } from 'openai';
 import { RedisClientType } from 'redis';
 import { Db, MongoClient } from 'mongodb';
-import { logger } from '../utils/logger';
-import { config } from '../config/config';
-
-export interface DanielaStatus {
-  status: string;
-  version: string;
-  services: {
-    openai: boolean;
-    elevenlabs: boolean;
-    redis: boolean;
-    mongodb: boolean;
-  };
-  uptime: number;
-  lastActivity: Date;
-}
-
-export interface DanielaMessage {
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-}
-
-import { OpenAI } from 'openai';
-import { RedisClientType } from 'redis';
-import { Db, MongoClient } from 'mongodb';
 import { injectable, inject } from 'inversify';
 import { logger } from '../utils/logger';
 import { config } from '../config/config';
@@ -65,7 +40,7 @@ export class DanielaEnhancedService {
 
   constructor(
     @inject(TYPES.AIService) private readonly aiService: AIService,
-    @inject(TYPES.NeuralHealthService) private readonly healthService: NeuralHealthService
+    @inject(TYPES.NeuralHealthService) private readonly healthService: NeuralHealthService,
   ) {
     void this.initializeServices();
   }
@@ -146,7 +121,7 @@ export class DanielaEnhancedService {
         await this.redisClient.setEx(
           `daniela:conversation:${userId}`,
           3600,
-          JSON.stringify(this.messages)
+          JSON.stringify(this.messages),
         );
       }
 
@@ -159,10 +134,12 @@ export class DanielaEnhancedService {
 
   private getConversationContext(): string {
     const recentMessages = this.messages.slice(-6);
-    return recentMessages.map(msg => {
-      const role = msg.role === 'user' ? '👤 Usuario' : '🧠 Daniela';
-      return `${role}: ${msg.content}`;
-    }).join('\n');
+    return recentMessages
+      .map(msg => {
+        const role = msg.role === 'user' ? '👤 Usuario' : '🧠 Daniela';
+        return `${role}: ${msg.content}`;
+      })
+      .join('\n');
   }
 
   async healthCheck(): Promise<{ status: string; details: any }> {
@@ -188,16 +165,20 @@ export class DanielaEnhancedService {
   }
 }
 
-// Global instance
-export const danielaEnhancedService = new DanielaEnhancedService();
+// Global instance - Removed manual instantiation as this is an Inversify injectable
+// export const danielaEnhancedService = new DanielaEnhancedService();
 
-// Graceful shutdown
+// Graceful shutdown handlers - Since the global instance was removed for Inversify,
+// these would need to reference the container-managed instance.
+// Commenting out to avoid ReferenceError until lifecycle management is fully implemented.
+/*
 process.on('SIGTERM', async () => {
-  await danielaEnhancedService.shutdown();
+  // await danielaEnhancedService.shutdown();
   process.exit(0);
 });
 
 process.on('SIGINT', async () => {
-  await danielaEnhancedService.shutdown();
+  // await danielaEnhancedService.shutdown();
   process.exit(0);
 });
+*/

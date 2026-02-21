@@ -1,0 +1,58 @@
+ PowerShell Optimizado - Listo para acci¢n
+ Comandos de Docker cargados:
+  - Update-DockerConfig: Actualiza la configuraci¢n de Docker
+  - Clear-Docker: Limpia recursos no utilizados
+  - Test-Docker: Ejecuta diagn¢stico del sistema
+
+============================================================
+  NEXUS DOCTOR V2
+============================================================
+
+>> 1. CRITICAL SCRIPTS & TOOLS
+   [OK] DevDesktopSetup
+   [OK] NexusSecScan
+   [OK] NexusGuardian
+   [OK] GodMode
+   [OK] NexusCodeScan
+   [OK] NexusDoctor
+   [OK] node -- v25.2.1
+   [OK] pnpm -- 10.28.2
+   [OK] git -- git version 2.45.0.windows.1
+   [OK] docker -- Docker version 29.2.0, build 0b9d198
+
+>> 2. DOCKER CONTAINER HEALTH
+   [OK] Docker Engine -- Running
+   [OK] Docker Compose -- Services detected
+   [OK] Orphan Containers -- None
+
+>> 3. SERVICE ENDPOINTS
+   [WARN] Backend API -- Unreachable (service not running?)
+   [OK] ML Service -- HTTP 200
+
+>> 4. ENVIRONMENT VALIDATION
+   [OK] .env file -- Exists
+   [WARN] .env placeholders -- 7 unconfigured values
+   [OK] .env/.env.example sync -- In sync
+
+>> 5. GIT STATUS
+   [WARN] Working Tree -- 14 uncommitted changes
+   [OK] Git Lock File -- No stale locks
+
+>> 6. SYSTEM RESOURCES
+   [OK] Disk Space -- 391.91 GB free
+   [OK] Free RAM -- 12.29 GB
+
+------------------------------------------------------------
+  [OK] HEALTH: HEALTHY | Errors: 0 | Warnings: 3
+------------------------------------------------------------
+
+Name                           Value                                                                                   
+----                           -----                                                                                   
+Checks                         {System.Collections.Hashtable, System.Collections.Hashtable, System.Collections.Hasht...
+Timestamp                      2026-02-20T18:05:15                                                                     
+Errors                         0                                                                                       
+Module                         Doctor                                                                                  
+Warnings                       3                                                                                       
+Status                         HEALTHY                                                                                 
+
+

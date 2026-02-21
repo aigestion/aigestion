@@ -1,109 +1,49 @@
-import { Request, Response } from 'express';
-import { controller, httpGet, httpPost } from 'inversify-express-utils';
-import { inject } from 'inversify';
-import { HomeAssistantService } from '../services/iot/home-assistant.service';
-import { User } from '../models/User';
+import { Request, Response, NextFunction } from 'express';
+import { injectable, inject } from 'inversify';
+import { NeuralHomeBridge } from '../services/google/neural-home.service';
+import { buildResponse } from '../common/response-builder';
 import { logger } from '../utils/logger';
 
-@controller('/api/iot')
+import { TYPES } from '../types';
+
+/**
+ * 🏠 IoT Controller
+ * Receives events from the physical environment (Home Assistant, n8n)
+ * and bridges them to the Nexus Intelligence.
+ */
+@injectable()
 export class IoTController {
-  constructor(@inject(HomeAssistantService) private haService: HomeAssistantService) {}
-
-  @httpPost('/connect')
-  async connect(req: Request, res: Response) {
-    const { baseUrl, accessToken } = req.body;
-
-    // Validate inputs
-    if (!baseUrl || !accessToken) {
-      return res.status(400).json({ success: false, message: 'URL and Token are required' });
-    }
-
-    const isValid = await this.haService.validateConnection({ baseUrl, accessToken });
-
-    if (isValid) {
-      // Save to database for this user
-      const request = req as any;
-      if (request.user) {
-        const user = await User.findById(request.user.id);
-        if (user) {
-          user.haBaseUrl = baseUrl;
-          user.haAccessToken = accessToken;
-          await user.save();
-        }
-      }
-      return res.json({
-        success: true,
-        message: 'Successfully connected and saved Home Assistant credentials',
-      });
-    } else {
-      return res
-        .status(401)
-        .json({ success: false, message: 'Could not connect. Check credentials.' });
-    }
+  constructor(@inject(TYPES.NeuralHomeBridge) private homeBridge: NeuralHomeBridge) {
+    this.handleWebhook = this.handleWebhook.bind(this);
   }
 
-  @httpGet('/devices')
-  async getDevices(req: Request, res: Response) {
-    const request = req as any;
-    let haUrl = req.headers['x-ha-url'] as string;
-    let haToken = req.headers['x-ha-token'] as string;
-
-    // Fallback to DB if user is logged in
-    if (!haUrl && request.user) {
-      const user = await User.findById(request.user.id).select('+haAccessToken');
-      if (user?.haBaseUrl && user?.haAccessToken) {
-        haUrl = user.haBaseUrl;
-        haToken = user.haAccessToken;
-      }
-    }
-
-    if (!haUrl || !haToken) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Home Assistant not configured for this user' });
-    }
-
-    const config = { baseUrl: haUrl, accessToken: haToken };
-
+  /**
+   * Receives localized IoT events and ingests them into RAG context.
+   */
+  public async handleWebhook(req: Request, res: Response, next: NextFunction) {
     try {
-      const states = await this.haService.getStates(config);
-      // Filter for relevant domains (light, switch, camera, sensor, climate)
-      const relevantDomains = ['light', 'switch', 'camera', 'sensor', 'climate', 'lock', 'cover'];
-      const devices = states.filter(s => relevantDomains.includes(s.entity_id.split('.')[0]));
+      const { event, source, data } = req.body;
+      const requestId = (req as any).requestId || 'unknown';
 
-      return res.json({ success: true, count: devices.length, data: devices });
-    } catch (error: any) {
-      return res.status(500).json({ success: false, message: error.message });
-    }
-  }
+      logger.info({ event, source }, '[IoTController] Incoming event received');
 
-  @httpPost('/control')
-  async controlDevice(req: Request, res: Response) {
-    const { domain, service, serviceData } = req.body;
-    const request = req as any;
-    let haUrl = req.headers['x-ha-url'] as string;
-    let haToken = req.headers['x-ha-token'] as string;
+      const result = await this.homeBridge.ingestIoTEvent(event, source, data);
 
-    if (!haUrl && request.user) {
-      const user = await User.findById(request.user.id).select('+haAccessToken');
-      haUrl = user?.haBaseUrl || '';
-      haToken = user?.haAccessToken || '';
-    }
-
-    if (!haUrl || !haToken) {
-      return res.status(400).json({ success: false, message: 'Home Assistant not configured' });
-    }
-
-    try {
-      await this.haService.callService(
-        { baseUrl: haUrl, accessToken: haToken },
-        domain,
-        service,
-        serviceData
+      res.json(
+        buildResponse(
+          {
+            status: 'ingested',
+            neuralImpact: 'high',
+            event: event,
+            timestamp: new Date().toISOString(),
+          },
+          200,
+          requestId,
+        ),
       );
-      return res.json({ success: true, message: 'Command executed' });
-    } catch (error: any) {
-      return res.status(500).json({ success: false, message: error.message });
+    } catch (error) {
+      logger.error('Error in IoTController.handleWebhook:', error);
+      next(error);
     }
   }
 }

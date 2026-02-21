@@ -177,17 +177,17 @@ const DemoDashboard = () => {
           {connectionStatus === 'connected' ? (
             <>
               <Activity className="w-3 h-3" />
-              <span>System Online</span>
+              <span>Sistema en Línea</span>
             </>
           ) : connectionStatus === 'error' ? (
             <>
               <AlertCircle className="w-3 h-3" />
-              <span>System Offline</span>
+              <span>Sistema Fuera de Línea</span>
             </>
           ) : (
             <>
               <Activity className="w-3 h-3 animate-pulse" />
-              <span>Connecting...</span>
+              <span>Conectando...</span>
             </>
           )}
         </div>

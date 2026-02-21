@@ -34,13 +34,13 @@ export class PersonaRepository extends BaseRepository<IPersona> implements IPers
     return (await Persona.findById(id).exec()) as IPersona | null;
   }
 
-  async findAll(limit: number = 20, offset: number = 0): Promise<IPersona[]> {
+  override async findAll(limit: number = 20, offset: number = 0): Promise<IPersona[]> {
     return await Persona.find().skip(offset).limit(limit).exec();
   }
 
   override async create(
     idOrItem: string | Partial<IPersona>,
-    maybeItem?: Partial<IPersona>
+    maybeItem?: Partial<IPersona>,
   ): Promise<IPersona> {
     const data = typeof idOrItem === 'string' ? (maybeItem ?? {}) : idOrItem;
     if (typeof idOrItem === 'string') {

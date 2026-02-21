@@ -69,9 +69,9 @@ export const PortfolioWidget: React.FC = () => {
               <Wallet size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-black text-white uppercase tracking-wider">The Vault</h3>
+              <h3 className="text-xl font-black text-white uppercase tracking-wider">La Bóveda</h3>
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-2">
-                Sovereign Net Worth
+                Patrimonio Neto Soberano
                 <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" />
               </p>
             </div>
@@ -90,7 +90,9 @@ export const PortfolioWidget: React.FC = () => {
             {loading && !data ? (
               <motion.div
                 key="loading"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 className="h-24 flex items-center gap-4"
               >
                 <div className="w-full h-12 bg-white/5 rounded-2xl animate-pulse" />
@@ -98,7 +100,9 @@ export const PortfolioWidget: React.FC = () => {
             ) : error ? (
               <motion.div
                 key="error"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 className="flex items-center gap-3 p-6 bg-red-500/10 border border-red-500/20 rounded-3xl text-red-400"
               >
                 <AlertCircle size={20} />
@@ -113,11 +117,15 @@ export const PortfolioWidget: React.FC = () => {
               >
                 <div className="flex items-baseline gap-2">
                   <span className="text-5xl font-black text-white tracking-tighter">
-                    ${data?.totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    $
+                    {data?.totalValue.toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </span>
                   <span className="text-emerald-400 text-sm font-bold flex items-center gap-1">
                     <TrendingUp size={14} />
-                    Live
+                    En Vivo
                   </span>
                 </div>
                 <div className="flex items-center gap-4 mt-4">
@@ -128,7 +136,7 @@ export const PortfolioWidget: React.FC = () => {
                     </span>
                   </div>
                   <span className="text-[9px] text-slate-600 font-bold uppercase tracking-[0.2em]">
-                    Sync: {lastUpdated.toLocaleTimeString()}
+                    Sinc: {lastUpdated.toLocaleTimeString()}
                   </span>
                 </div>
               </motion.div>
@@ -160,7 +168,9 @@ export const PortfolioWidget: React.FC = () => {
               </div>
               <div className="text-right">
                 <p className="text-xs font-black text-white/80">${asset.valueUsd.toFixed(2)}</p>
-                <p className="text-[8px] text-slate-600 font-bold uppercase tracking-tighter">@ ${asset.price.toFixed(2)}</p>
+                <p className="text-[8px] text-slate-600 font-bold uppercase tracking-tighter">
+                  @ ${asset.price.toFixed(2)}
+                </p>
               </div>
             </motion.div>
           ))}
@@ -168,15 +178,23 @@ export const PortfolioWidget: React.FC = () => {
 
         <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-between">
           <div className="flex items-center gap-4">
-             <div className="flex -space-x-2">
-                <div className="w-6 h-6 rounded-full bg-orange-500 border border-slate-900 flex items-center justify-center text-[10px] font-bold">₿</div>
-                <div className="w-6 h-6 rounded-full bg-blue-500 border border-slate-900 flex items-center justify-center text-[10px] font-bold">Ξ</div>
-                <div className="w-6 h-6 rounded-full bg-yellow-500 border border-slate-900 flex items-center justify-center text-[10px] font-bold">S</div>
-             </div>
-             <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Multi-Chain Nexus</span>
+            <div className="flex -space-x-2">
+              <div className="w-6 h-6 rounded-full bg-orange-500 border border-slate-900 flex items-center justify-center text-[10px] font-bold">
+                ₿
+              </div>
+              <div className="w-6 h-6 rounded-full bg-blue-500 border border-slate-900 flex items-center justify-center text-[10px] font-bold">
+                Ξ
+              </div>
+              <div className="w-6 h-6 rounded-full bg-yellow-500 border border-slate-900 flex items-center justify-center text-[10px] font-bold">
+                S
+              </div>
+            </div>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              Nexo Multi-Cadena
+            </span>
           </div>
           <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest animate-pulse">
-            Wolf Protocol Active
+            Protocolo Wolf Activo
           </p>
         </div>
       </div>

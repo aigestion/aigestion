@@ -5,6 +5,9 @@ import { google } from 'googleapis';
 import { env } from '../../config/env.schema';
 import type { ChannelType, UploadOptions, YouTubeChannel } from '../../types/youtube.types';
 import { logger } from '../../utils/logger';
+import { getCache, setCache } from '../../cache/redis';
+
+const CACHE_TTL = 3600; // 1 hour
 
 /**
  * Servicio para gestión de múltiples canales de YouTube
@@ -174,6 +177,10 @@ export class YouTubeChannelService {
    * Lista los videos de un canal
    */
   async listVideos(channelType: ChannelType, maxResults = 50): Promise<any[]> {
+    const cacheKey = `youtube:videos:${channelType}:${maxResults}`;
+    const cached = await getCache<any[]>(cacheKey);
+    if (cached) return cached;
+
     if (!this.isChannelConfigured(channelType)) {
       throw new Error(`${channelType} channel is not properly configured`);
     }
@@ -190,7 +197,9 @@ export class YouTubeChannelService {
         order: 'date',
       });
 
-      return response.data.items || [];
+      const items = response.data.items || [];
+      await setCache(cacheKey, items, CACHE_TTL);
+      return items;
     } catch (error: any) {
       logger.error(error, `Error listing videos for ${channelType} channel:`);
       throw error;
@@ -226,6 +235,10 @@ export class YouTubeChannelService {
    * Obtiene estadísticas de un video
    */
   async getVideoStats(channelType: ChannelType, videoId: string): Promise<any> {
+    const cacheKey = `youtube:stats:${videoId}`;
+    const cached = await getCache<any>(cacheKey);
+    if (cached) return cached;
+
     if (!this.isChannelConfigured(channelType)) {
       throw new Error(`${channelType} channel is not properly configured`);
     }
@@ -239,7 +252,9 @@ export class YouTubeChannelService {
         id: [videoId],
       });
 
-      return response.data.items?.[0] || null;
+      const stats = response.data.items?.[0] || null;
+      if (stats) await setCache(cacheKey, stats, CACHE_TTL);
+      return stats;
     } catch (error: any) {
       logger.error(error, `Error getting video stats:`);
       throw error;

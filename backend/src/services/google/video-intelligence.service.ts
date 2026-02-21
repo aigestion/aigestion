@@ -1,6 +1,9 @@
 import { injectable } from 'inversify';
-const { VideoIntelligenceServiceClient } = require('@google-cloud/video-intelligence');
+import { VideoIntelligenceServiceClient } from '@google-cloud/video-intelligence';
 import { logger } from '../../utils/logger';
+import { getCache, setCache } from '../../cache/redis';
+
+const CACHE_TTL = 3600 * 24; // 24 hours
 
 /**
  * SOVEREIGN VIDEO INTELLIGENCE SERVICE
@@ -12,7 +15,7 @@ export class VideoIntelligenceService {
 
   constructor() {
     this.client = new VideoIntelligenceServiceClient({
-        keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
+      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
     });
   }
 
@@ -21,7 +24,7 @@ export class VideoIntelligenceService {
    */
   async analyzeVideo(gcsUri: string) {
     logger.info(`[VideoIntelligence] Dispatching sentinel to URI: ${gcsUri}`);
-    
+
     const request = {
       inputUri: gcsUri,
       features: ['LABEL_DETECTION', 'SHOT_CHANGE_DETECTION', 'OBJECT_TRACKING'],
@@ -30,9 +33,10 @@ export class VideoIntelligenceService {
     try {
       const [operation] = await this.client.annotateVideo(request);
       logger.info(`[VideoIntelligence] Analysis started: ${operation.name}`);
-      
-      // We don't wait for completion in the request cycle (long-running)
-      // Return the operation name as a tracking token
+
+      // Cache the operation name for the URI to avoid duplicate analysis
+      await setCache(`video_intel:op:${gcsUri}`, operation.name, 3600);
+
       return operation.name;
     } catch (error) {
       logger.error('[VideoIntelligence] Visual analysis fault', error);
@@ -44,15 +48,20 @@ export class VideoIntelligenceService {
    * Checks the status of a visual analysis operation.
    */
   async getAnalysisResults(operationName: string) {
-      try {
-          const [operation] = await this.client.checkAnnotateVideoProgress(operationName);
-          if (operation.done) {
-              return operation.result;
-          }
-          return { status: 'in_progress', metadata: operation.metadata };
-      } catch (error) {
-          logger.error('[VideoIntelligence] Result retrieval failure', error);
-          throw error;
+    const cacheKey = `video_intel:result:${operationName}`;
+    const cached = await getCache<any>(cacheKey);
+    if (cached) return cached;
+
+    try {
+      const [operation] = await this.client.checkAnnotateVideoProgress(operationName);
+      if (operation.done) {
+        await setCache(cacheKey, operation.result, CACHE_TTL);
+        return operation.result;
       }
+      return { status: 'in_progress', metadata: operation.metadata };
+    } catch (error) {
+      logger.error('[VideoIntelligence] Result retrieval failure', error);
+      throw error;
+    }
   }
 }

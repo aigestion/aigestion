@@ -7,6 +7,52 @@ import { MiniDashboard } from './MiniDashboard';
 import { useAppContext } from '../contexts/AppContext';
 import { useLocation } from 'react-router-dom';
 
+interface Scene {
+  id: string;
+  title: string;
+  subtitle: string;
+  video: string;
+  duration: number;
+}
+
+const defaultScenes: Scene[] = [
+  {
+    id: 'sovereign-nexus',
+    title: 'SOVEREIGN NEXUS',
+    subtitle: 'Infraestructura Descentralizada de Próxima Generación',
+    video: '/videos/tutorial_onboarding.mp4',
+    duration: 6000,
+  },
+  {
+    id: 'daniela-ai',
+    title: 'DANIELA AI',
+    subtitle: 'Conciencia Artificial Soberana y Agentes Autónomos',
+    video: '/videos/tutorial_features.mp4',
+    duration: 7000,
+  },
+  {
+    id: 'nexus-android',
+    title: 'NEXUS ANDROID',
+    subtitle: 'Interconexión Humano-Máquina en Tiempo Real',
+    video: '/videos/tutorial_onboarding.mp4',
+    duration: 5000,
+  },
+  {
+    id: 'quantum-protocol',
+    title: 'QUANTUM PROTOCOL',
+    subtitle: 'Seguridad Criptográfica de Grado Militar',
+    video: '/videos/tutorial_features.mp4',
+    duration: 6000,
+  },
+  {
+    id: 'global-intelligence',
+    title: 'GLOBAL INTELLIGENCE',
+    subtitle: 'Red Mundial de Nodos Inteligentes Autogestionados',
+    video: '/videos/tutorial_onboarding.mp4',
+    duration: 8000,
+  },
+];
+
 interface CinematicHeroProps {
   onHeroComplete?: () => void;
 }
@@ -114,7 +160,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
       <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
-            key={scenes[currentScene].id}
+            key={activeScenes[currentScene].id}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -137,7 +183,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
                 onLoadedData={handleVideoLoaded}
                 onError={handleVideoError}
               >
-                <source src={scenes[currentScene].video} type="video/mp4" />
+                <source src={activeScenes[currentScene].video} type="video/mp4" />
               </motion.video>
             )}
 
@@ -224,7 +270,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
         <div className="flex-1 flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
-              key={scenes[currentScene].id}
+              key={activeScenes[currentScene].id}
               className="text-center max-w-7xl mx-auto"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -239,7 +285,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
                     textShadow: '0 0 30px rgba(138, 43, 226, 0.4)',
                   }}
                 >
-                  {scenes[currentScene].title}
+                  {activeScenes[currentScene].title}
                 </motion.h2>
               </div>
 
@@ -249,11 +295,11 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                {scenes[currentScene].subtitle}
+                {activeScenes[currentScene].subtitle}
               </motion.p>
 
               {/* Scene-specific content */}
-              {scenes[currentScene].id === 'daniela-ai' && (
+              {activeScenes[currentScene].id === 'daniela-ai' && (
                 <motion.div
                   className="mt-8"
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -271,7 +317,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
                 </motion.div>
               )}
 
-              {scenes[currentScene].id === 'nexus-android' && (
+              {activeScenes[currentScene].id === 'nexus-android' && (
                 <motion.div
                   className="mt-8"
                   initial={{ opacity: 0, x: -50 }}
@@ -288,7 +334,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
 
         {/* Bottom Scene Selector */}
         <div className="flex justify-center items-center gap-4">
-          {scenes.map((scene, index) => (
+          {activeScenes.map((scene, index) => (
             <motion.button
               key={scene.id}
               onClick={() => handleSceneClick(index)}
@@ -322,7 +368,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
                   className="absolute bottom-0 left-0 right-0 h-0.5 bg-nexus-cyan shadow-[0_0_10px_rgba(0,245,255,1)]"
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
-                  transition={{ duration: scenes[index].duration / 1000, ease: 'linear' }}
+                  transition={{ duration: activeScenes[index].duration / 1000, ease: 'linear' }}
                   style={{ originX: 0 }}
                 />
               )}

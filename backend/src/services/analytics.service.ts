@@ -7,11 +7,14 @@ import { getCache, setCache } from '../utils/redis';
 import { stats } from '../utils/stats';
 import { InfrastructureService } from './infrastructure.service';
 import { TYPES } from '../types';
+import { logger } from '../utils/logger';
+
 
 @injectable()
 export class AnalyticsService {
   constructor(
-    @inject(TYPES.InfrastructureService) private infrastructureService: InfrastructureService,
+    @inject(TYPES.InfrastructureService)
+    private readonly infrastructureService: InfrastructureService,
   ) {}
 
   /**
@@ -36,7 +39,7 @@ export class AnalyticsService {
       });
 
       const containerStats = await this.infrastructureService.getContainerStats();
-      const nexusMeshStatus = containerStats.every(c => c && c.status && c.status.includes('Up'))
+      const nexusMeshStatus = containerStats.every(c => c?.status?.includes('Up'))
         ? 'OPTIMAL'
         : 'DEGRADED';
 
@@ -125,7 +128,7 @@ export class AnalyticsService {
     ];
     const revenue = revenueData.map(d => ({
       name: monthNames[d._id - 1],
-      value: parseFloat((d.total * 2).toFixed(2)), // Assume 2x margin over raw cost
+      value: Number.parseFloat((d.total * 2).toFixed(2)), // Assume 2x margin over raw cost
     }));
 
     // 2. User Growth (Last 14 days)
@@ -181,12 +184,12 @@ export class AnalyticsService {
 
     return {
       cpu: Array.from({ length: 60 }, () =>
-        parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1)),
+        Number.parseFloat((loadAvg * 10 + Math.random() * 5).toFixed(1)),
       ),
       memory: Array.from({ length: 60 }, () =>
-        parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1)),
+        Number.parseFloat((((totalMem - freeMem) / totalMem) * 100).toFixed(1)),
       ),
-      network: Array.from({ length: 60 }, () => parseFloat((Math.random() * 10).toFixed(1))),
+      network: Array.from({ length: 60 }, () => Number.parseFloat((Math.random() * 10).toFixed(1))),
     };
   }
 

@@ -8,6 +8,11 @@ export class WorkerSetup {
   private static workers: Worker[] = [];
 
   public static startWorkers() {
+    if (process.env.ENABLE_REDIS === 'false') {
+      logger.info('WorkerSetup: Redis disabled, skipping workers startup');
+      return;
+    }
+
     const redisOptions = {
       host: process.env.REDIS_HOST ?? 'localhost',
       port: parseInt(process.env.REDIS_PORT ?? '6379'),

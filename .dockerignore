@@ -39,6 +39,14 @@ ml-service/
 **/ml-service/
 aig-ia-engine/
 **/aig-ia-engine/
+backups/
+**/backups/
+quarantine/
+**/quarantine/
+uploads/
+**/uploads/
+logs/
+**/logs/
 .git/
 .github/
 .vscode/

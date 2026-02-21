@@ -24,11 +24,11 @@ export const StrategyWidget: React.FC = () => {
         setLastUpdated(new Date());
         setError(null);
       } else {
-        setError('Strategy unavailable');
+        setError('Estrategia no disponible');
       }
     } catch (err) {
       console.error('Failed to fetch strategy:', err);
-      setError('Connection failed');
+      setError('Error de conexión');
     } finally {
       setLoading(false);
     }
@@ -52,10 +52,14 @@ export const StrategyWidget: React.FC = () => {
               <Brain size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-black text-white uppercase tracking-wider">DeFi Strategist</h3>
+              <h3 className="text-xl font-black text-white uppercase tracking-wider">
+                Estratega DeFi
+              </h3>
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest flex items-center gap-2">
-                AI Reasoning Engine
-                <span className={`w-1 h-1 rounded-full ${loading ? 'bg-yellow-500' : 'bg-purple-500'} animate-pulse`} />
+                Motor de Razonamiento IA
+                <span
+                  className={`w-1 h-1 rounded-full ${loading ? 'bg-yellow-500' : 'bg-purple-500'} animate-pulse`}
+                />
               </p>
             </div>
           </div>
@@ -73,7 +77,9 @@ export const StrategyWidget: React.FC = () => {
             {loading && !strategy ? (
               <motion.div
                 key="loading"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 className="flex flex-col gap-3"
               >
                 <div className="w-3/4 h-4 bg-white/5 rounded animate-pulse" />
@@ -83,7 +89,9 @@ export const StrategyWidget: React.FC = () => {
             ) : error ? (
               <motion.div
                 key="error"
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 className="flex items-center gap-3 p-6 bg-red-500/10 border border-red-500/20 rounded-3xl text-red-400"
               >
                 <AlertTriangle size={20} />
@@ -103,10 +111,12 @@ export const StrategyWidget: React.FC = () => {
                 <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between">
                   <div className="flex items-center gap-2 text-purple-400">
                     <Zap size={14} />
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Gemini 2.0 Flash</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">
+                      Gemini 2.0 Flash
+                    </span>
                   </div>
                   <span className="text-[9px] text-slate-600 font-bold uppercase tracking-[0.2em]">
-                    Updated: {lastUpdated.toLocaleTimeString()}
+                    Actualizado: {lastUpdated.toLocaleTimeString()}
                   </span>
                 </div>
               </motion.div>

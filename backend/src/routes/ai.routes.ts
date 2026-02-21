@@ -1,7 +1,7 @@
 // src/routes/ai.routes.ts
 import { Router } from 'express';
 
-import { runPrompt, streamChat } from '../controllers/ai.controller';
+import { runPrompt, streamChat, getLiveSession } from '../controllers/ai.controller';
 
 const router = Router();
 
@@ -29,5 +29,8 @@ router.post('/prompt', runPrompt);
 
 // POST /ai/chat
 router.post('/chat', streamChat);
+
+// GET /ai/live-session
+router.get('/live-session', getLiveSession);
 
 export default router;

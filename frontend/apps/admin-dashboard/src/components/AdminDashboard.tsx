@@ -123,7 +123,7 @@ const AdminDashboard = () => {
           </div>
           <div>
             <h1 className="text-5xl font-black tracking-tighter uppercase leading-none text-white">
-              <span style={{ color: profile.primaryColor }}>{profile.branding.title}</span> COMMAND
+              <span style={{ color: profile.primaryColor }}>{profile.branding.title}</span> COMANDO
             </h1>
             <p className="text-white/40 mt-2 font-medium tracking-[0.3em] text-[10px] uppercase italic">
               {profile.branding.subtitle} — v2.5.0
@@ -139,7 +139,7 @@ const AdminDashboard = () => {
             <div className="bg-slate-950/80 px-4 py-2 rounded-[11px] flex items-center space-x-2 backdrop-blur-md">
               <Shield className="w-4 h-4" style={{ color: profile.primaryColor }} />
               <span className="text-[10px] font-bold text-white uppercase tracking-tighter">
-                God Mode Active
+                Modo Dios Activo
               </span>
             </div>
           </div>
@@ -170,7 +170,7 @@ const AdminDashboard = () => {
               connectionStatus === 'connected' ? 'text-cyan-400' : 'text-red-400'
             }`}
           >
-            {connectionStatus === 'connected' ? 'Link Synchronized' : 'Uplink Failed'}
+            {connectionStatus === 'connected' ? 'Enlace Sincronizado' : 'Uplink Fallido'}
           </span>
         </div>
 
@@ -198,10 +198,10 @@ const AdminDashboard = () => {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-black text-white tracking-tighter uppercase">
-                  Sovereign Reserve
+                  Reserva Soberana
                 </h2>
                 <p className="text-white/40 text-[10px] uppercase font-bold tracking-widest mt-1">
-                  Autonomous Capital Management
+                  Gestión de Capital Autónoma
                 </p>
               </div>
               <div className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-black text-emerald-400">
@@ -212,13 +212,13 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">
-                  Available Liquidity
+                  Liquidez Disponible
                 </span>
                 <p className="text-3xl font-black text-white">$142,500</p>
               </div>
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">
-                  30D Burn Rate
+                  Tasa de Consumo 30D
                 </span>
                 <p className="text-3xl font-black text-white">
                   ${treasury?.currentBurn?.toLocaleString() || '12,450'}
@@ -226,7 +226,7 @@ const AdminDashboard = () => {
               </div>
               <div className="space-y-2">
                 <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">
-                  TVL Growth
+                  Crecimiento de TVL
                 </span>
                 <p className="text-3xl font-black text-emerald-400">+12.4%</p>
               </div>
@@ -256,7 +256,7 @@ const AdminDashboard = () => {
           <div>
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-sm font-black text-white tracking-tighter uppercase">
-                Yield Strategist
+                Estratega de Rendimiento
               </h2>
               <Zap className="w-5 h-5 text-yellow-400" />
             </div>
@@ -268,7 +268,7 @@ const AdminDashboard = () => {
                 <div>
                   <p className="text-xs font-black text-white uppercase">USDC/ETH LP</p>
                   <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">
-                    Active Harvesting: 14.2% APR
+                    Recolección Activa: 14.2% APR
                   </p>
                 </div>
               </div>
@@ -279,14 +279,14 @@ const AdminDashboard = () => {
                 <div>
                   <p className="text-xs font-black text-white uppercase">SOL Staking</p>
                   <p className="text-[10px] text-white/40 font-bold uppercase tracking-widest">
-                    Analyzing Opportunity...
+                    Analizando Oportunidad...
                   </p>
                 </div>
               </div>
             </div>
           </div>
           <button className="w-full py-4 mt-8 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black text-white uppercase tracking-[0.2em] hover:bg-white/10 transition-all">
-            Rebalance Portfolio
+            Rebalancear Cartera
           </button>
         </div>
       </motion.div>
@@ -315,7 +315,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between mb-10">
             <h2 className="text-xl font-black text-white flex items-center tracking-tighter">
               <Shield className="w-5 h-5 mr-3" style={{ color: profile.accentColor }} />
-              ECOSYSTEM SEGMENTS
+              SEGMENTOS DEL ECOSISTEMA
             </h2>
             <span className="text-[9px] text-white/20 font-mono font-bold uppercase tracking-widest">
               SVRGN_CORE_V5
@@ -358,12 +358,12 @@ const AdminDashboard = () => {
         <div className="p-8 rounded-4xl bg-white/2 border border-white/5 hover:border-white/10 transition-all backdrop-blur-md group">
           <h3 className="text-sm font-black text-white/40 mb-8 flex items-center tracking-[0.2em] uppercase">
             <WarehouseIcon className="w-4 h-4 mr-3" style={{ color: profile.primaryColor }} />
-            Data Core
+            Núcleo de Datos
           </h3>
           <div className="space-y-4">
             <div className="flex justify-between items-end">
               <span className="text-2xl font-black text-white">2.4 TB</span>
-              <span className="text-[10px] font-bold text-white/30 uppercase">Capacity Used</span>
+              <span className="text-[10px] font-bold text-white/30 uppercase">Capacidad Usada</span>
             </div>
             <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
               <div className="h-full w-3/4" style={{ backgroundColor: profile.primaryColor }} />
@@ -374,21 +374,21 @@ const AdminDashboard = () => {
         <div className="p-8 rounded-4xl bg-white/2 border border-white/5 hover:border-white/10 transition-all backdrop-blur-md group">
           <h3 className="text-sm font-black text-white/40 mb-8 flex items-center tracking-[0.2em] uppercase">
             <Shield className="w-4 h-4 mr-3" style={{ color: profile.secondaryColor }} />
-            Security
+            Seguridad
           </h3>
           <div className="flex items-center justify-between">
-            <span className="text-2xl font-black text-white">OPTIMAL</span>
+            <span className="text-2xl font-black text-white">ÓPTIMO</span>
             <Zap className="w-6 h-6 animate-pulse" style={{ color: profile.accentColor }} />
           </div>
           <p className="mt-4 text-[10px] text-white/20 font-bold uppercase tracking-widest">
-            Neural Firewall Synchronized
+            Cortafuegos Neural Sincronizado
           </p>
         </div>
 
         <div className="p-8 rounded-4xl bg-white/2 border border-white/5 hover:border-white/10 transition-all backdrop-blur-md group">
           <h3 className="text-sm font-black text-white/40 mb-8 flex items-center tracking-[0.2em] uppercase">
             <Globe className="w-4 h-4 mr-3" style={{ color: profile.accentColor }} />
-            Network
+            Red
           </h3>
           <div className="space-y-4">
             <div className="flex justify-between">

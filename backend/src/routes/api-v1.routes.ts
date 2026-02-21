@@ -100,6 +100,7 @@ apiV1Router.use('/daniela', lazy('./daniela.routes'));
 apiV1Router.use('/ai', rateLimiter.attempt('AI'), lazy('./ai.routes'));
 apiV1Router.use('/ai', requireAuth, lazy('./phone-action.routes'));
 apiV1Router.use('/voice-assets', lazy('./voice-assets.routes'));
+apiV1Router.use('/push', lazy('./push-notifications.routes'));
 apiV1Router.use('/rag', lazy('./rag.routes'));
 
 // System Management (Lazy)

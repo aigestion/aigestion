@@ -3,6 +3,9 @@ import { injectable } from 'inversify';
 import * as fs from 'fs';
 
 import { logger } from '../../utils/logger';
+import { getCache, setCache } from '../../cache/redis';
+
+const CACHE_TTL = 3600; // 1 hour
 
 @injectable()
 export class GoogleDriveService {
@@ -104,6 +107,13 @@ export class GoogleDriveService {
   }
 
   async findFolder(name: string, parentId: string): Promise<string | null> {
+    const cacheKey = `drive:folder:${parentId}:${name}`;
+    const cachedId = await getCache<string>(cacheKey);
+    if (cachedId) {
+      logger.debug(`[GoogleDrive] Cache Hit (Folder): ${name}`);
+      return cachedId;
+    }
+
     const drive = await this.getDriveClient();
     try {
       const query = `mimeType='application/vnd.google-apps.folder' and name='${name}' and '${parentId}' in parents and trashed=false`;
@@ -114,7 +124,9 @@ export class GoogleDriveService {
       });
       const files = res.data.files;
       if (files && files.length > 0) {
-        return files[0].id || null;
+        const id = files[0].id || null;
+        if (id) await setCache(cacheKey, id, CACHE_TTL);
+        return id;
       }
       return null;
     } catch (error) {
@@ -135,8 +147,14 @@ export class GoogleDriveService {
         requestBody: fileMetadata,
         fields: 'id',
       });
-      logger.info(`Created folder ${name} (${file.data.id})`);
-      return file.data.id!;
+      const id = file.data.id!;
+      logger.info(`Created folder ${name} (${id})`);
+
+      // Invalidate/Update Cache
+      const cacheKey = `drive:folder:${parentId}:${name}`;
+      await setCache(cacheKey, id, CACHE_TTL);
+
+      return id;
     } catch (error) {
       logger.error(`Error creating folder ${name}:`, error);
       throw error;
@@ -204,6 +222,13 @@ export class GoogleDriveService {
   }
 
   async findFile(name: string, parentId: string): Promise<string | null> {
+    const cacheKey = `drive:file:${parentId}:${name}`;
+    const cachedId = await getCache<string>(cacheKey);
+    if (cachedId) {
+      logger.debug(`[GoogleDrive] Cache Hit (File): ${name}`);
+      return cachedId;
+    }
+
     if (!this.drive) {
       throw new Error('Drive client not initialized');
     }
@@ -215,7 +240,9 @@ export class GoogleDriveService {
         fields: 'files(id, name, properties)',
       });
       if (res.data.files && res.data.files.length > 0) {
-        return res.data.files[0].id || null;
+        const id = res.data.files[0].id || null;
+        if (id) await setCache(cacheKey, id, CACHE_TTL);
+        return id;
       }
       return null;
     } catch (error) {

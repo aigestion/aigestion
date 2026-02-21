@@ -38,6 +38,8 @@ export const getRedisClient = (): RedisClientType => {
         lPush: async () => 1,
         lTrim: async () => 'OK',
         lRange: async () => [],
+        ping: async () => 'PONG',
+        flushDb: async () => 'OK',
         // Add others as needed
       } as any;
       logger.info('Redis is disabled: Using God Mode Mock');

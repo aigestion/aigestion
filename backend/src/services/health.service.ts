@@ -179,7 +179,11 @@ export class HealthService {
     }
 
     // 9. Autonomous Healing Logic (Cluster Intelligence)
-    await this.triggerAutoHealing(results);
+    try {
+      await this.triggerAutoHealing(results);
+    } catch (err) {
+      logger.error('Auto-healing trigger failed:', err);
+    }
 
     return results;
   }

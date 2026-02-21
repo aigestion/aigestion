@@ -1,21 +1,74 @@
-# Optimized GCloud Ignore for AIGestion Monorepo
+# Sovereign AIGestion - Optimized Cloud Ignore
+# Exclude everything that isn't needed to build
+
+# Source control
 .git
 .gitignore
+.github
+.husky
+
+# Deps (installed in cloud)
 **/node_modules
+.pnpm-store
+
+# Compiled output
 **/dist
 **/build
-.env
-**/packages/*/test-results
-**/coverage
-*.log
-.pnpm-store
-.next
-.vercel
+**/.next
 **/.turbo
-cloudbuild*.yaml
-docker/volumes
-frontend/apps/*/dist
-packages/*/dist
+
+# Env files (injected via secrets at deploy time)
+.env
+.env.*
+!.env.example
+
+# Large monorepo subdirs NOT needed for backend or frontend builds
+aig-ia-engine/
+aigestion-deploy/
 android/
 mobile/
 ios/
+archive/
+backups/
+n8n_data/
+quarantine/
+docs/
+audit-reports/
+logs/
+ops/
+assets/
+vpn/
+ml-service/
+server/
+pub/
+data/
+uploads/
+.venv/
+.mongodb-binaries/
+
+# Test artifacts
+**/coverage
+**/test-results
+**/__mocks__
+**/tests
+
+# IDE & editor configs
+.vscode/
+.windsurf/
+.gemini/
+.agent/
+
+# Build configs not needed remotely
+# cloudbuild*.yaml
+*.code-workspace
+vscode/
+
+# Docker volumes
+docker/volumes
+
+# Misc
+*.log
+*.txt
+BACKUP_KEYS_ANTIGRAVITY.txt
+doctor_report.txt
+get_warnings.ps1

@@ -22,7 +22,7 @@ export const Navigation: React.FC = () => {
   const navItems = [
     { label: 'Muestra', path: '#demo-dashboard', isHash: true },
     { label: 'Inteligencia', path: '/intelligence', isHash: false },
-    { label: 'Marketplace', path: '/marketplace', isHash: false },
+    { label: 'Mercado', path: '/marketplace', isHash: false },
     { label: 'Qué hacemos', path: '#services', isHash: true },
     { label: 'Cómo te ayuda', path: '#plan', isHash: true },
     { label: 'Vídeos de ayuda', path: '#tutoriales', isHash: true },

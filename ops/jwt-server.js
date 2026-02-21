@@ -185,7 +185,7 @@ class JWTMCPServer {
       ...payload,
       iat: now,
       exp: expires_in ? now + expires_in : now + 3600,
-      iss: 'aigestion-pro-2026',
+      iss: 'aigestion-sovereign-2026',
       aud: 'aigestion-users',
     };
 

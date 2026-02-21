@@ -4,7 +4,6 @@ import { AIService } from './ai.service';
 import { BrowserlessService } from './browserless.service';
 import { EconomyService } from './economy.service';
 import { BigQueryService } from './google/bigquery.service';
-// import { MemoryService } from './memory.service'; // Removed unused
 import { DiscoveryService } from './evolution/discovery.service';
 import { SandboxService } from './evolution/sandbox.service';
 import { ArbitrationService } from './arbitration.service';
@@ -18,7 +17,7 @@ import { HealthService } from './health.service';
 import { logger } from '../utils/logger';
 import axios from 'axios';
 import { withRetry } from '../utils/RetryHelper';
-import { setCache, getCache } from '../cache/redis';
+import { setCache } from '../cache/redis';
 import { env } from '../config/env.schema';
 
 interface SwarmResponse {
@@ -39,7 +38,6 @@ export class SwarmService {
     @inject(TYPES.BrowserlessService) private readonly researchAgent: BrowserlessService,
     @inject(TYPES.EconomyService) private readonly economyAgent: EconomyService,
     @inject(TYPES.BigQueryService) private readonly bq: BigQueryService,
-    // @inject(TYPES.MemoryService) private readonly memory: MemoryService,
     @inject(TYPES.DiscoveryService) private readonly discovery: DiscoveryService,
     @inject(TYPES.SandboxService) private readonly sandbox: SandboxService,
     @inject(TYPES.ArbitrationService) private readonly arbitration: ArbitrationService,
@@ -76,13 +74,16 @@ export class SwarmService {
     };
   }
 
-  private async economyMission(payload: string): Promise<SwarmResponse> {
-    logger.info('[SwarmService] Dispatching Economy Agent');
-    const advice = await this.economyAgent.getInvestmentAdvice();
+  /**
+   * Research Agent: Specialized in web searching and information retrieval.
+   */
+  private async researchMission(payload: string): Promise<SwarmResponse> {
+    logger.info('[SwarmService] Dispatching Research Agent (News Search Gateway)');
+    const result = await this.newsService.searchNews(payload);
     return {
-      agentName: 'Economy-Expert',
-      result: advice.advice,
-      confidence: 0.95,
+      agentName: 'Research-Expert',
+      result,
+      confidence: 0.9,
     };
   }
 
@@ -144,7 +145,7 @@ export class SwarmService {
     return {
       agentName: 'Health-Sentinel',
       result: healthData,
-      confidence: 1.0,
+      confidence: 1,
     };
   }
 
@@ -384,7 +385,7 @@ export class SwarmService {
     return {
       agentName: 'Tool-Executor',
       result: `Tool ${toolName} executed with args: ${JSON.stringify(args)}`,
-      confidence: 1.0,
+      confidence: 1,
     };
   }
 
@@ -402,7 +403,7 @@ export class SwarmService {
     return {
       agentName: 'System',
       result: `Mission ${id} details retrieved.`,
-      confidence: 1.0,
+      confidence: 1,
     };
   }
 

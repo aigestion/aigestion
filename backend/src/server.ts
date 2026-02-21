@@ -198,60 +198,84 @@ export async function initializeAndStart() {
     // 2. Start HTTP Server
     console.log(`🔵 [DEBUG] Attempting to listen on port ${port}...`);
     server = httpServer.listen(port, async () => {
-      console.log(`🟢 [DEBUG] server.listen callback triggered!`);
-      logger.info(`
-    ################################################
-    🛡️  Server listening on port: ${port} 🛡️
-    ################################################
-      `);
-
-      // Start Background Workers
-      WorkerSetup.startWorkers();
-
-      // Schedule Recurring Jobs
       try {
-        const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
-        await jobQueue.addJob(
-          JobName.MALWARE_CLEANUP,
-          {},
-          {
-            repeat: {
-              pattern: '0 0 * * *', // Every day at midnight
+        console.log(`🟢 [DEBUG] server.listen callback triggered!`);
+        logger.info(`
+      ################################################
+      🛡️  Server listening on port: ${port} 🛡️
+      ################################################
+        `);
+
+        // Start Background Workers
+        WorkerSetup.startWorkers();
+
+        // Schedule Recurring Jobs
+        try {
+          const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
+          await jobQueue.addJob(
+            JobName.MALWARE_CLEANUP,
+            {},
+            {
+              repeat: {
+                pattern: '0 0 * * *', // Every day at midnight
+              },
             },
-          },
-        );
-      } catch (err) {
-        logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
-      }
+          );
+        } catch (err) {
+          logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
+        }
 
-      // Final initialization tasks
-      try {
-        const credManager = container.get<CredentialManagerService>(TYPES.CredentialManagerService);
-        const report = await credManager.verifyAll();
-        const criticalFailures = report.filter(
-          r => r.status === 'missing' || r.status === 'invalid',
-        ).length;
-        if (criticalFailures > 0) {
+        // Final initialization tasks
+        try {
+          const credManager = container.get<CredentialManagerService>(
+            TYPES.CredentialManagerService,
+          );
+          const report = await credManager.verifyAll();
+          const criticalFailures = report.filter(
+            r => r.status === 'missing' || r.status === 'invalid',
+          ).length;
+          if (criticalFailures > 0) {
+            logger.error(
+              `⚠️ ${criticalFailures} Critical credentials issues detected. System may be unstable.`,
+            );
+          }
+        } catch (error) {
+          logger.error('Critical: Credential verification failed during startup:', error);
+        }
+
+        try {
+          const backupScheduler = container.get<BackupSchedulerService>(
+            TYPES.BackupSchedulerService,
+          );
+          backupScheduler.start();
+        } catch (err) {
+          logger.error('BackupSchedulerService failed to start:', err);
+        }
+
+        // Ensure Core Intelligence is active
+        try {
+          container.get<NeuralHealthService>(TYPES.NeuralHealthService);
+          container.get<PredictiveHealingService>(TYPES.PredictiveHealingService);
+        } catch (err) {
           logger.error(
-            `⚠️ ${criticalFailures} Critical credentials issues detected. System may be unstable.`,
+            'Core Intelligence (NeuralHealth/PredictiveHealing) resolution failed:',
+            err,
           );
         }
-      } catch (error) {
-        // Ignore credential manager errors during startup
+
+        // Start High-Frequency Operations
+        try {
+          const sniper = container.get<PriceAlertService>(TYPES.PriceAlertService);
+          sniper.startMonitoring();
+        } catch (err) {
+          logger.error('Sniper (PriceAlertService) failed to start:', err);
+        }
+
+        logger.info('✅ Background services initialization completed');
+      } catch (fatal) {
+        logger.error('CRITICAL: Fatal error in server startup sequence:', fatal);
+        console.error('🔴 [FATAL] Startup sequence failed!', fatal);
       }
-
-      const backupScheduler = container.get<BackupSchedulerService>(TYPES.BackupSchedulerService);
-      backupScheduler.start();
-
-      // Ensure Core Intelligence is active
-      container.get<NeuralHealthService>(TYPES.NeuralHealthService);
-      container.get<PredictiveHealingService>(TYPES.PredictiveHealingService);
-
-      // Start The Sniper
-      const sniper = container.get<PriceAlertService>(TYPES.PriceAlertService);
-      sniper.startMonitoring();
-
-      logger.info('✅ Background services initialization completed');
     });
   } catch (error: any) {
     console.error('❌ [DEBUG] Critical startup failure:', error);

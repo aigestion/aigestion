@@ -80,7 +80,7 @@ export const SovereignTreasury: React.FC = () => {
     <div className="p-8 rounded-4xl bg-slate-900 border border-white/5 relative overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-yellow-500/10 blur-[100px] pointer-events-none" />
-      
+
       <div className="relative z-10">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-12">
           <div>
@@ -124,13 +124,13 @@ export const SovereignTreasury: React.FC = () => {
                   <ShieldCheck size={28} />
                 </div>
                 <div className="flex flex-col items-end">
-                   <span className="text-xs font-bold text-slate-500 uppercase tracking-tighter">Bonus Rate</span>
+                   <span className="text-xs font-bold text-slate-500 uppercase tracking-tighter">Tasa de Bono</span>
                    <span className="text-2xl font-black text-white">+{tier.discount}%</span>
                 </div>
               </div>
               <h3 className="text-xl font-bold text-white mb-2">{tier.name}</h3>
               <p className="text-slate-500 text-sm mb-6 font-medium">Inversión: <span className="text-white">${tier.price}</span> → Valor: <span className="text-yellow-500">${tier.value}</span></p>
-              
+
               <ul className="space-y-4 mb-8 grow">
                 {tier.features.map((f, i) => (
                   <li key={i} className="flex items-center gap-3 text-xs text-slate-300 font-medium tracking-tight">
@@ -140,7 +140,7 @@ export const SovereignTreasury: React.FC = () => {
                 ))}
               </ul>
 
-              <button 
+              <button
                 onClick={(e) => { e.stopPropagation(); handlePurchase(); }}
                 disabled={purchasing}
                 className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all relative overflow-hidden ${
@@ -151,7 +151,7 @@ export const SovereignTreasury: React.FC = () => {
               >
                 <AnimatePresence mode="wait">
                   {purchasing && selectedTier.id === tier.id ? (
-                    <motion.div 
+                    <motion.div
                       key="loading"
                       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                       className="flex items-center justify-center gap-2"
@@ -160,7 +160,7 @@ export const SovereignTreasury: React.FC = () => {
                       Procesando...
                     </motion.div>
                   ) : (
-                    <motion.div 
+                    <motion.div
                       key="label"
                       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                     >
@@ -190,8 +190,8 @@ export const SovereignTreasury: React.FC = () => {
                        <div className="flex items-center gap-4">
                           <div className={`w-2 h-10 rounded-full ${b.tier === 'sovereign' ? 'bg-yellow-500' : b.tier === 'gold' ? 'bg-blue-400' : 'bg-slate-500'}`} />
                           <div>
-                            <p className="text-sm font-bold text-white uppercase tracking-tight">{b.tier} Bond</p>
-                            <p className="text-xs text-slate-500 font-medium uppercase tracking-tighter">Status: <span className={b.status === 'active' ? 'text-green-400' : 'text-red-400'}>{b.status}</span></p>
+                             <p className="text-sm font-bold text-white uppercase tracking-tight">Bono {b.tier}</p>
+                            <p className="text-xs text-slate-500 font-medium uppercase tracking-tighter">Estado: <span className={b.status === 'active' ? 'text-green-400' : 'text-red-400'}>{b.status === 'active' ? 'activo' : b.status}</span></p>
                           </div>
                        </div>
                        <div className="text-right">

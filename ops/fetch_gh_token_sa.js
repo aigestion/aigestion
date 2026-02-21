@@ -19,7 +19,7 @@ async function accessSecretVersion(projectId, secretName) {
   return false;
 }
 
-const projects = ['aigestion-v1-848dd', 'aigestion-pro-2026', 'dynamic-reef-485215-v4'];
+const projects = ['aigestion-v1-848dd', 'aigestion-sovereign-2026', 'dynamic-reef-485215-v4'];
 const secrets = ['GITHUB_TOKEN', 'GITHUB_PERSONAL_ACCESS_TOKEN', 'GH_TOKEN', 'GITHUB_API_TOKEN'];
 
 (async () => {

@@ -37,6 +37,25 @@ export class RagController implements interfaces.Controller {
     }
   }
 
+  @httpPost('/ingest-json')
+  async ingestJson(@request() req: Request, @response() res: Response) {
+    try {
+      const { filename, content, tags } = req.body;
+      if (!filename || !content) {
+        return res.status(400).json({ error: 'Filename and content are required' });
+      }
+
+      logger.info(`[RagController] Received JSON ingestion for ${filename}`);
+
+      await this.ragService.ingestDocument(filename, content, tags || []);
+
+      return res.json({ status: 'success', message: `${filename} ingested successfully via JSON` });
+    } catch (error) {
+      logger.error('[RagController] JSON Ingestion failed:', error);
+      return res.status(500).json({ error: 'JSON Ingestion failed' });
+    }
+  }
+
   @httpPost('/query')
   async query(@request() req: Request, @response() res: Response) {
     try {

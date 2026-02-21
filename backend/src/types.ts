@@ -186,4 +186,5 @@ export const TYPES = {
   DanielaCallAgent: Symbol.for('DanielaCallAgent'),
   JulesGem: Symbol.for('JulesGem'),
   NexusStitchGem: Symbol.for('NexusStitchGem'),
+  NexusPushService: Symbol.for('NexusPushService'),
 };

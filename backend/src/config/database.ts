@@ -4,16 +4,20 @@ import { logger } from '../utils/logger';
 import { config } from './config';
 
 const { mongo } = config;
+import { mongooseCachePlugin } from '../infrastructure/database/mongoose-cache.plugin';
+
+// Apply God Level Supreme Global Cache Plugin
+mongoose.plugin(mongooseCachePlugin);
 
 const connectOptions: ConnectOptions = {
   serverSelectionTimeoutMS: 5000,
-  maxPoolSize: parseInt(process.env.MONGODB_MAX_POOL_SIZE || '150'), // Increased for high concurrency
-  minPoolSize: parseInt(process.env.MONGODB_MIN_POOL_SIZE || '20'), // Keep more warm connections
-  connectTimeoutMS: 10000,
-  socketTimeoutMS: 45000,
-  waitQueueTimeoutMS: 10000,
+  maxPoolSize: parseInt(process.env.MONGODB_MAX_POOL_SIZE || '200'), // Increased for Supreme concurrency
+  minPoolSize: parseInt(process.env.MONGODB_MIN_POOL_SIZE || '50'), // Increased warm pool
+  connectTimeoutMS: 15000,
+  socketTimeoutMS: 60000,
+  waitQueueTimeoutMS: 15000,
   heartbeatFrequencyMS: 10000,
-  maxIdleTimeMS: 30000,
+  maxIdleTimeMS: 60000,
   family: 4, // Faster IPv4 lookup
 };
 

@@ -18,7 +18,7 @@ export const PhoneVerification: React.FC = () => {
         e.preventDefault();
         setError(null);
         if (phoneNumber.length < 9) {
-            setError('Enter a valid frequency (phone number).');
+            setError('Introduce una frecuencia válida (número de teléfono).');
             return;
         }
         try {
@@ -57,7 +57,7 @@ export const PhoneVerification: React.FC = () => {
              if (fullCode === '123456') {
                  navigate('/pricing');
              } else {
-                 setError('Invalid encryption key. Try 123456.');
+                 setError('Clave de cifrado inválida. Prueba con 123456.');
              }
         }
     };
@@ -83,15 +83,15 @@ export const PhoneVerification: React.FC = () => {
                     </div>
 
                     <GodModeText
-                        text={step === 'phone' ? "SECURE LINE" : "VERIFY IDENTITY"}
+                        text={step === 'phone' ? "LÍNEA SEGURA" : "VERIFICAR IDENTIDAD"}
                         effect="hologram"
                         className="text-2xl font-bold mb-2"
                     />
 
                     <p className="text-nexus-silver/60 text-sm font-mono mb-8">
                         {step === 'phone'
-                            ? "Multi-factor authentication required. Establish secure voice line."
-                            : "Enter the protocol key sent to your device."}
+                            ? "Se requiere autenticación multifactor. Establece una línea de voz segura."
+                            : "Introduce la clave de protocolo enviada a tu dispositivo."}
                     </p>
 
                     {step === 'phone' ? (
@@ -109,7 +109,7 @@ export const PhoneVerification: React.FC = () => {
                                 type="submit"
                                 className="w-full py-4 bg-nexus-violet/20 border border-nexus-violet/50 text-nexus-violet font-orbitron font-bold tracking-[0.2em] rounded-xl hover:bg-nexus-violet/30 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all uppercase flex items-center justify-center gap-3"
                             >
-                                <span>TRANSMIT</span>
+                                <span>TRANSMITIR</span>
                                 <ArrowRight className="w-5 h-5" />
                             </button>
                         </form>
@@ -135,7 +135,7 @@ export const PhoneVerification: React.FC = () => {
                                 onClick={handleVerify}
                                 className="w-full py-4 bg-nexus-gradient text-white font-orbitron font-bold tracking-[0.2em] rounded-xl hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all uppercase flex items-center justify-center gap-3"
                             >
-                                <span>AUTHENTICATE</span>
+                                <span>AUTENTICAR</span>
                                 <ShieldCheck className="w-5 h-5" />
                             </button>
                         </div>

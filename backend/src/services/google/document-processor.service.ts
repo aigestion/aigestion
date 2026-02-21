@@ -1,14 +1,22 @@
 import { DocumentProcessorServiceClient } from '@google-cloud/documentai';
-import { inject, injectable } from 'inversify';
+import { injectable } from 'inversify';
 import { env } from '../../config/env.schema';
 import { logger } from '../../utils/logger';
+import { getCache, setCache } from '../../cache/redis';
+import * as crypto from 'node:crypto';
+
+const CACHE_TTL = 3600 * 24; // 24 hours (Documents are static)
 
 @injectable()
 export class DocumentProcessorService {
-  private client: DocumentProcessorServiceClient;
+  private readonly client: DocumentProcessorServiceClient;
 
   constructor() {
     this.client = new DocumentProcessorServiceClient();
+  }
+
+  private hashBuffer(buffer: Buffer): string {
+    return crypto.createHash('sha256').update(buffer).digest('hex');
   }
 
   /**
@@ -19,6 +27,15 @@ export class DocumentProcessorService {
     const location = env.GOOGLE_CLOUD_LOCATION || 'europe-west1';
 
     const name = `projects/${projectId}/locations/${location}/processors/${processorId}`;
+
+    const bufferHash = this.hashBuffer(fileBuffer);
+    const cacheKey = `doc_ai:result:${processorId}:${bufferHash}`;
+
+    const cached = await getCache<any>(cacheKey);
+    if (cached) {
+      logger.info(`[DocumentProcessor] Cache Hit for hash: ${bufferHash}`);
+      return cached;
+    }
 
     const request = {
       name,
@@ -36,7 +53,10 @@ export class DocumentProcessorService {
         throw new Error('Document AI returned empty document');
       }
 
-      return this.extractEntities(document);
+      const resultData = this.extractEntities(document);
+      await setCache(cacheKey, resultData, CACHE_TTL);
+
+      return resultData;
     } catch (error) {
       logger.error('[DocumentProcessorService] Error processing document:', error);
       throw error;
