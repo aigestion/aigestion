@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 🌌 Dark mode color overrides -->
+<resources>
+    <color name="colorSurface">#020617</color>
+    <color name="colorSurfaceVariant">#0f172a</color>
+    <color name="colorBackground">#000000</color>
+    <color name="colorOnSurface">#f8fafc</color>
+    <color name="splash_bg">#000000</color>
+</resources>

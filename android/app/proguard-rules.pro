@@ -1,21 +1,54 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# 🌌 NEXUS ProGuard Rules — God Level
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# ========================================
+# Capacitor / WebView JS Interface
+# ========================================
+-keepclassmembers class * {
+    @android.webkit.JavascriptInterface <methods>;
+}
+-keepattributes JavascriptInterface
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Keep Capacitor bridge classes
+-keep class com.getcapacitor.** { *; }
+-dontwarn com.getcapacitor.**
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# ========================================
+# Firebase
+# ========================================
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
+
+# Firebase Messaging Service
+-keep class com.aigestion.frontend.NexusFirebaseMessagingService { *; }
+
+# ========================================
+# AndroidX
+# ========================================
+-keep class androidx.** { *; }
+-dontwarn androidx.**
+
+# Biometric
+-keep class androidx.biometric.** { *; }
+
+# ========================================
+# Debugging (keep for stack traces)
+# ========================================
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
+# ========================================
+# General
+# ========================================
+-keepattributes *Annotation*
+-keepattributes Signature
+-keepattributes Exceptions
+
+# Prevent stripping of Parcelable
+-keep class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator *;
+}
+
+# Prevent stripping of Serializable
+-keepnames class * implements java.io.Serializable
