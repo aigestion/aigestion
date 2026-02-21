@@ -1,0 +1,108 @@
+# Smart Lock Integration — HA Automation
+# Nexus ↔ Home Assistant Smart Lock Bridge
+# Features:
+# - Lock/Unlock notifications to Pixel 8
+# - State change logging to n8n
+# - Voice control via Daniela ("abre la puerta")
+
+automation:
+  # ========================================
+  # LOCK STATE CHANGE NOTIFICATIONS
+  # ========================================
+  - alias: "Sovereign Lock State Notifier"
+    description: "Notifies Pixel 8 when lock state changes"
+    trigger:
+      - platform: state
+        entity_id: lock.front_door
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
+    action:
+      # Notify Pixel 8
+      - service: notify.mobile_app_pixel_8
+        data:
+          title: "🔐 NEXUS — Cerradura"
+          message: >-
+            {% if trigger.to_state.state == 'unlocked' %}
+              🔓 Puerta DESBLOQUEADA — {{ now().strftime('%H:%M') }}
+            {% else %}
+              🔒 Puerta BLOQUEADA — {{ now().strftime('%H:%M') }}
+            {% endif %}
+          data:
+            color: "#7c3aed"
+            icon_url: "https://nexus.aigestion.net/icon-lock.png"
+            channel: nexus_sovereign
+            importance: high
+            clickAction: "nexus://dashboard/security"
+            actions:
+              - action: "TOGGLE_LOCK"
+                title: >-
+                  {% if trigger.to_state.state == 'unlocked' %}
+                    🔒 Bloquear
+                  {% else %}
+                    🔓 Desbloquear
+                  {% endif %}
+
+      # Log to n8n
+      - service: rest_command.nexus_webhook
+        data:
+          webhook_path: "lock-event"
+          payload: >-
+            {
+              "event": "lock_state_change",
+              "entity": "lock.front_door",
+              "from": "{{ trigger.from_state.state }}",
+              "to": "{{ trigger.to_state.state }}",
+              "timestamp": "{{ now().isoformat() }}"
+            }
+
+  # ========================================
+  # ACTIONABLE NOTIFICATION HANDLER
+  # ========================================
+  - alias: "Lock Toggle from Notification"
+    trigger:
+      - platform: event
+        event_type: mobile_app_notification_action
+        event_data:
+          action: "TOGGLE_LOCK"
+    action:
+      - service: >-
+          {% if is_state('lock.front_door', 'locked') %}
+            lock.unlock
+          {% else %}
+            lock.lock
+          {% endif %}
+        target:
+          entity_id: lock.front_door
+
+  # ========================================
+  # AUTO-LOCK AFTER 5 MINUTES
+  # ========================================
+  - alias: "Auto Lock After 5 Minutes"
+    trigger:
+      - platform: state
+        entity_id: lock.front_door
+        to: "unlocked"
+        for: "00:05:00"
+    action:
+      - service: lock.lock
+        target:
+          entity_id: lock.front_door
+      - service: notify.mobile_app_pixel_8
+        data:
+          title: "🔒 Auto-Lock"
+          message: "Puerta bloqueada automáticamente (5 min timeout)"
+          data:
+            color: "#7c3aed"
+            channel: nexus_sovereign
+
+# ========================================
+# REST COMMANDS (add to configuration.yaml)
+# ========================================
+# rest_command:
+#   nexus_webhook:
+#     url: "https://YOUR_N8N_URL/webhook/{{ webhook_path }}"
+#     method: POST
+#     headers:
+#       Content-Type: application/json
+#     payload: "{{ payload }}"
