@@ -57,6 +57,7 @@ router.post('/', async (req: any, res: any) => {
       wifi_ssid: body.wifi_ssid,
       bluetooth_connected: body.bluetooth_connected,
       car_mode: body.car_mode,
+      sector: body.sector,
       timestamp: body.timestamp || new Date().toISOString(),
     });
 
@@ -66,7 +67,9 @@ router.post('/', async (req: any, res: any) => {
         const homeBridge = container.get<NeuralHomeBridge>(TYPES.NeuralHomeBridge);
         await homeBridge.ingestIoTEvent('location_update', 'pixel_8', {
           location: body.location,
+          sector: body.sector,
           battery: body.battery_level,
+          coords: body.coords,
         });
       } catch (e) {
         logger.warn('[DeviceTelemetry] RAG ingest failed (non-critical)');

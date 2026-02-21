@@ -15,6 +15,8 @@ import { QuantumSecurityService } from './security/quantum-security.service';
 import { VideoIntelligenceService } from './google/video-intelligence.service';
 import { SovereignSentinelService } from './SovereignSentinelService';
 import { LogMonitoringService } from './LogMonitoringService';
+import { EventBus } from '../infrastructure/eventbus/EventBus';
+import { HealthIncidentEvent } from '../domain/events/HealthIncidentEvent';
 
 @injectable()
 export class HealthService {
@@ -26,10 +28,52 @@ export class HealthService {
     @inject(TYPES.VideoIntelligenceService) private visionService: VideoIntelligenceService,
     @inject(TYPES.SovereignSentinelService) private sentinelService: SovereignSentinelService,
     @inject(TYPES.LogMonitoringService) private logSentinel: LogMonitoringService,
+    @inject(TYPES.AutoHealingGem) private autoHealing: any,
+    @inject(TYPES.EventBus) private eventBus: EventBus,
   ) {
     // Proactive Sentinel Activation
     if (process.env.NODE_ENV !== 'test') {
       this.logSentinel.startMonitoring();
+      this.startVitalMonitoring();
+    }
+  }
+
+  private startVitalMonitoring() {
+    setInterval(() => {
+      this.monitorVitals().catch(err =>
+        logger.error('[HealthService] Vital monitoring failed', err),
+      );
+    }, 300000); // Check every 5 minutes
+  }
+
+  public async monitorVitals() {
+    const memory = process.memoryUsage();
+    const heapMb = Math.round(memory.heapUsed / 1024 / 1024);
+
+    if (heapMb > 1024) {
+      // > 1GB
+      logger.warn(`[HealthService] High heap usage detected: ${heapMb}MB. Triggering diagnostic.`);
+      await this.triggerHealing(`High memory usage: ${heapMb}MB`);
+    }
+  }
+
+  public async triggerHealing(incidentData: string) {
+    try {
+      const diagnostic = await this.autoHealing.analyzeIncident(incidentData);
+      logger.warn({ diagnostic }, '[HealthService] Autonomous healing diagnosis received');
+
+      if (diagnostic.severity === 'CRITICAL' || diagnostic.severity === 'WARNING') {
+        await this.eventBus.publish(
+          new HealthIncidentEvent(
+            diagnostic.diagnosis,
+            diagnostic.severity,
+            diagnostic.payload,
+            diagnostic.justification,
+          ),
+        );
+      }
+    } catch (error) {
+      logger.error('[HealthService] Auto-healing flow failed', error);
     }
   }
 

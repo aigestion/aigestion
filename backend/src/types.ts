@@ -188,4 +188,6 @@ export const TYPES = {
   NexusStitchGem: Symbol.for('NexusStitchGem'),
   NexusPushService: Symbol.for('NexusPushService'),
   DeviceStateStore: Symbol.for('DeviceStateStore'),
+  NavigatorGem: Symbol.for('NavigatorGem'),
+  AutoHealingGem: Symbol.for('AutoHealingGem'),
 };

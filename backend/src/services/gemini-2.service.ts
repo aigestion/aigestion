@@ -236,6 +236,39 @@ export class Gemini2Service {
     }
   }
 
+  /**
+   * SOVEREIGN CHAT WITH TOOLS
+   * Maintains a chat session that supports multiple tool executions over several turns.
+   */
+  async chatWithTools(
+    history: any[],
+    tools: Array<{
+      name: string;
+      description: string;
+      parameters: any;
+    }>,
+    systemInstruction?: string,
+  ) {
+    try {
+      const model = this.getClient().getGenerativeModel({
+        model: 'gemini-2.0-flash',
+        systemInstruction: systemInstruction ? { parts: [{ text: systemInstruction }] } : undefined,
+        safetySettings: this.safetySettings as any,
+      });
+
+      const chat = model.startChat({
+        history,
+        tools: [{ functionDeclarations: tools }],
+        generationConfig: this.godGenerationConfig,
+      });
+
+      return chat;
+    } catch (error) {
+      logger.error('[Gemini2Service] Error initializing chat with tools', error);
+      throw error;
+    }
+  }
+
   async summarizeText(text: string, length: 'short' | 'medium' | 'long' = 'medium') {
     try {
       const lengthMap = {

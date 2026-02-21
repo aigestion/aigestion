@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/bootstrap.js",
     "dev": "tsx watch --openssl-legacy-provider src/bootstrap.ts",
-    "build": "tsc; tsc-alias",
+    "build": "tsc && tsc-alias",
     "typecheck": "tsc --noEmit",
     "test": "npx jest",
     "test:watch": "jest --watch",

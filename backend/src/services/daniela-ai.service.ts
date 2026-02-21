@@ -12,6 +12,7 @@ import { UserBehaviorService } from './user-behavior.service';
 import { UserService } from './user.service';
 import { SwarmInternalClient } from './swarm-internal.client';
 import { NeuralHomeBridge } from './google/neural-home.service';
+import { NavigatorGem } from './gems/NavigatorGem';
 import { TYPES } from '../types';
 
 interface DanielaContext {
@@ -44,6 +45,7 @@ export class DanielaAIService {
     @inject(TYPES.DanielaCallAgent) private callAgent: DanielaCallAgent,
     @inject(TYPES.DeviceStateStore) private deviceState: DeviceStateStore,
     @inject(TYPES.NeuralHomeBridge) private homeBridge: NeuralHomeBridge,
+    @inject(TYPES.NavigatorGem) private navigator: NavigatorGem,
   ) {
     this.initialize();
   }
@@ -167,6 +169,8 @@ export class DanielaAIService {
         return await this.handleCompetitorAnalysisRequest(context, message);
       case 'research':
         return await this.handleMarketResearchRequest(context, message);
+      case 'navigation':
+        return await this.handleNavigationRequest(context, message);
       case 'greeting':
         return this.generateGreeting(context);
       default:
@@ -202,8 +206,8 @@ ${physicalContext ? physicalContext + '\n\n' : ''}Directivas:
 5. Sé concisa pero completa
 6. Ofrece sugerencias proactivas
 7. Respeta el contexto de la conversación
-8. Si conoces la ubicación del usuario, úsala para personalizar respuestas
-9. Si el usuario está en modo coche, sé extremadamente concisa
+8. Si conoces la ubicación del usuario, úsala para personalizar respuestas. Tienes acceso al NavigatorGem para scans tácticos.
+9. Si el usuario está en modo coche, sé extremadamente concisa. Si pide navegación o ruta, usa el Navigator.
 
 Responde en ${
       context.conversationHistory.length > 0
@@ -331,6 +335,21 @@ Responde en ${
       lowerMessage.includes('sitio web')
     ) {
       return 'browse';
+    }
+
+    // 🌌 [PHASE 57] Navigation intent
+    if (
+      lowerMessage.includes('donde estoy') ||
+      lowerMessage.includes('dónde estoy') ||
+      lowerMessage.includes('donde me encuentro') ||
+      lowerMessage.includes('que hay cerca') ||
+      lowerMessage.includes('qué hay cerca') ||
+      lowerMessage.includes('radar') ||
+      lowerMessage.includes('mapa') ||
+      lowerMessage.includes('ruta') ||
+      lowerMessage.includes('llegar a')
+    ) {
+      return 'navigation';
     }
 
     if (
@@ -707,6 +726,57 @@ Responde en ${
     } catch (error) {
       logger.error('Error in handleLockRequest:', error);
       return '🏠 No pude controlar la cerradura en este momento. Verifica la conexión con Home Assistant.';
+    }
+  }
+
+  /**
+   * 🗺️ [PHASE 57] Handle navigation/spatial request via NavigatorGem
+   */
+  private async handleNavigationRequest(context: DanielaContext, message: string): Promise<string> {
+    try {
+      const state = this.deviceState?.getDeviceState();
+      const location = state?.coords;
+
+      if (!location || (location.lat === 0 && location.lng === 0)) {
+        return '🗺️ *Navigator del Nexus*\n\nActualmente no tengo coordenadas precisas de tu Pixel 8. Por favor, asegúrate de que el GPS esté activo y la telemetría enviada.';
+      }
+
+      logger.info(
+        `[DANIELA] 🗺️ Navigation request from ${context.userName} at ${location.lat}, ${location.lng}`,
+      );
+
+      let response = '';
+      const lowerMsg = message.toLowerCase();
+
+      if (
+        lowerMsg.includes('que hay cerca') ||
+        lowerMsg.includes('qué hay cerca') ||
+        lowerMsg.includes('radar')
+      ) {
+        const query = lowerMsg.includes('restaurante')
+          ? 'restaurant'
+          : lowerMsg.includes('parking') || lowerMsg.includes('aparcamiento')
+            ? 'parking'
+            : lowerMsg.includes('gasolina')
+              ? 'gas_station'
+              : 'business';
+        response = await this.navigator.scanTacticalRadar(location, query);
+      } else {
+        response = await this.navigator.ask(message);
+      }
+
+      const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&zoom=15&size=600x300&markers=color:purple%7C${location.lat},${location.lng}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
+
+      return (
+        `🗺️ *Asistente de Navegación*\n\n` +
+        `${response}\n\n` +
+        `📍 *Posición Actual:* ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}\n` +
+        `Sector: ${state.sector || 'Desconocido'}\n\n` +
+        `🖼️ [Ver Radar Táctico](${mapUrl})`
+      );
+    } catch (error) {
+      logger.error('Error in handleNavigationRequest:', error);
+      return '🗺️ Lo siento, el sistema de navegación no está disponible en este momento.';
     }
   }
 

@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../types';
 import { SwarmService } from '../services/swarm.service';
@@ -7,7 +7,24 @@ import { buildResponse, buildError } from '../common/response-builder';
 
 @injectable()
 export class SwarmController {
-  constructor(@inject(TYPES.SwarmService) private swarmService: SwarmService) {}
+  constructor(@inject(TYPES.SwarmService) private readonly swarmService: SwarmService) {}
+
+  public async runRecursiveReasoning(req: Request, res: Response, next: any) {
+    const requestId = (req as any).requestId || 'unknown';
+    try {
+      const { objective } = req.body;
+      if (!objective) {
+        return res
+          .status(400)
+          .json(buildError('objective is required', 'BAD_REQUEST', 400, requestId));
+      }
+
+      const result = await this.swarmService.runRecursiveReasoning(objective);
+      return res.json(buildResponse(result, 200, requestId));
+    } catch (error) {
+      next(error);
+    }
+  }
 
   public async createMission(req: Request, res: Response, next: any) {
     const requestId = (req as any).requestId || 'unknown';

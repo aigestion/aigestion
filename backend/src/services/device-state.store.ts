@@ -11,12 +11,13 @@ export interface DeviceState {
   device: string;
   battery_level: number;
   battery_state?: string;
-  location?: string;           // human-readable (e.g., "Casa", "Oficina", "En movimiento")
+  location?: string; // human-readable (e.g., "Casa", "Oficina", "En movimiento")
   coords?: { lat: number; lng: number };
   wifi_connected?: boolean;
   wifi_ssid?: string;
   bluetooth_connected?: string[];
   car_mode?: boolean;
+  sector?: string;
   timestamp: string;
 }
 

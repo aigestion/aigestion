@@ -12,6 +12,7 @@ import { TreasuryService } from './TreasuryService';
 import { DeFiStrategistService } from './defi-strategist.service';
 import { NotionManagerService } from './notion-manager.service';
 import { JulesGem } from './gems/JulesGem';
+import { NavigatorGem } from './gems/NavigatorGem';
 import { NewsService } from './news.service';
 import { HealthService } from './health.service';
 import { logger } from '../utils/logger';
@@ -19,6 +20,10 @@ import axios from 'axios';
 import { withRetry } from '../utils/RetryHelper';
 import { setCache } from '../cache/redis';
 import { env } from '../config/env.schema';
+import { EventBus } from '../infrastructure/eventbus/EventBus';
+import { HealthIncidentEvent } from '../domain/events/HealthIncidentEvent';
+import { Gemini2Service } from './gemini-2.service';
+import { RagService } from './rag.service';
 
 interface SwarmResponse {
   agentName: string;
@@ -47,9 +52,22 @@ export class SwarmService {
     @inject(TYPES.NotionManagerService) private readonly notion: NotionManagerService,
     @inject(TYPES.NewsService) private readonly newsService: NewsService,
     @inject(TYPES.HealthService) private readonly health: HealthService,
-    @inject(JulesGem) private readonly julesGem: JulesGem, // Injected Jules
+    @inject(JulesGem) private readonly julesGem: JulesGem,
+    @inject(TYPES.NavigatorGem) private readonly navigatorGem: NavigatorGem,
+    @inject(TYPES.EventBus) private readonly eventBus: EventBus,
+    @inject(TYPES.Gemini2Service) private readonly gemini: Gemini2Service,
+    @inject(TYPES.RagService) private readonly rag: RagService,
   ) {
     void this.initializeAutoEvolution();
+    this.subscribeToEvents();
+  }
+
+  private subscribeToEvents() {
+    this.eventBus.subscribe('HealthIncidentEvent', {
+      handle: async (event: HealthIncidentEvent) => {
+        await this.handleHealthIncident(event);
+      },
+    });
   }
 
   private async initializeAutoEvolution() {
@@ -65,7 +83,7 @@ export class SwarmService {
     logger.info('[SwarmService] Dispatching Jules (Coding Agent - God Mode)');
 
     // Use the specialized JulesGem
-    const result = await this.julesGem.generateCanonical(payload);
+    const result = await this.julesGem.auditAndRefactor(payload);
 
     return {
       agentName: 'Jules-Code-God',
@@ -157,6 +175,44 @@ export class SwarmService {
       result,
       confidence: 0.88,
     };
+  }
+
+  /**
+   * Navigator Agent: Specialized in spatial reasoning and tactical radar.
+   */
+  private async navigationMission(payload: string): Promise<SwarmResponse> {
+    logger.info('[SwarmService] Dispatching Navigator Agent (Tactical Radar)');
+
+    // Attempt to get context from DeviceStateStore if needed, but for now just use Gem logic
+    const result = await this.navigatorGem.ask(payload);
+
+    return {
+      agentName: 'Navigator-Core',
+      result,
+      confidence: 0.95,
+    };
+  }
+
+  /**
+   * Autonomous Healing Handler: Triggers missions based on health incidents.
+   */
+  private async handleHealthIncident(event: HealthIncidentEvent): Promise<void> {
+    logger.warn(`[SwarmService] 🚨 Auto-Healing Incident Received: ${event.diagnosis}`);
+
+    // Pre-validation via Sandbox
+    const validation = await this.sandbox.validatePayload(event.payload);
+
+    const missionObjective = `Autonomous Healing Mission:
+    - Diagnosis: ${event.diagnosis}
+    - Severity: ${event.severity}
+    - Recommended Action: ${event.payload}
+    - Validation: ${validation.validation} (Risk: ${validation.riskLevel})
+    - Justification: ${event.justification}
+
+    ${validation.safe ? 'Payload pre-cleared for execution.' : 'CRITICAL: Payload rejected by sandbox safety guards!'}
+    Please execute the payload if safe or propose alternative.`;
+
+    await this.createMission(missionObjective, 'SYSTEM-HEALING');
   }
 
   /**
@@ -319,6 +375,15 @@ export class SwarmService {
     if (lowerObj.includes('research') || lowerObj.includes('find') || lowerObj.includes('search')) {
       return this.researchMission(objective);
     }
+    if (
+      lowerObj.includes('map') ||
+      lowerObj.includes('location') ||
+      lowerObj.includes('cerca') ||
+      lowerObj.includes('donde estoy') ||
+      lowerObj.includes('ruta')
+    ) {
+      return this.navigationMission(objective);
+    }
     if (lowerObj.includes('evolve') || lowerObj.includes('upgrade') || lowerObj.includes('tech')) {
       return this.evolutionMission(objective);
     }
@@ -331,6 +396,165 @@ export class SwarmService {
     }
 
     return this.generalMission(objective);
+  }
+
+  /**
+   * SOVEREIGN RECURSIVE REASONING (Phase 62)
+   * A multi-turn logic loop that allows the Swarm to think, act, and resolve complex objectives.
+   */
+  public async runRecursiveReasoning(objective: string): Promise<SwarmResponse> {
+    logger.info(`[SwarmService] Starting Recursive Reasoning for: "${objective}"`);
+
+    const maxTurns = 5;
+    let currentTurn = 0;
+    const history: any[] = [];
+    const tools = this.getAvailableTools();
+
+    const systemInstruction = `Eres el Swarm Orchestrator, el núcleo de inteligencia soberana del Nexus.
+    Tu misión es resolver objetivos complejos ejecutando herramientas secuencialmente.
+
+    PROCESO:
+    1. Analiza el objetivo.
+    2. Si necesitas información o acción externa, llama a una herramienta.
+    3. Analiza el resultado de la herramienta.
+    4. Repite hasta resolver o alcanzar el límite de 5 turnos.
+    5. Entrega una respuesta final clara y accionable.`;
+
+    const chat = await this.gemini.chatWithTools(history, tools, systemInstruction);
+
+    let lastResult = '';
+    let currentPrompt = objective;
+
+    while (currentTurn < maxTurns) {
+      currentTurn++;
+      logger.info(`[SwarmService] Recursive Reasoning Turn ${currentTurn}/${maxTurns}`);
+
+      const result = await chat.sendMessage(currentPrompt);
+      const parts = result.response.candidates[0].content.parts;
+
+      // Look for function calls
+      const calls = parts.filter((p: any) => p.functionCall);
+
+      if (calls.length === 0) {
+        // No more tool calls, return final response
+        lastResult = result.response.text();
+        break;
+      }
+
+      // Execute tool calls
+      for (const call of calls) {
+        const toolName = call.functionCall.name;
+        const toolArgs = call.functionCall.args;
+
+        logger.info(`[SwarmService] 🛠️  Executing Autonomous Tool: ${toolName}`, toolArgs);
+
+        const toolExecution = await this.dispatchTool(toolName, toolArgs);
+
+        // Feed result back to chat
+        const responsePart = {
+          functionResponse: {
+            name: toolName,
+            response: { result: toolExecution },
+          },
+        };
+
+        // Update prompt for next internal loop if needed, but usually we just send the response back
+        const followUp = await chat.sendMessage([responsePart as any]);
+        lastResult = followUp.response.text();
+
+        // Check if followUp still has more calls
+        const nextParts = followUp.response.candidates[0].content.parts;
+        const nextCalls = nextParts.filter((p: any) => p.functionCall);
+        if (nextCalls.length === 0) {
+          currentTurn = maxTurns; // Exit while loop
+        } else {
+          // Continue turn within while loop logic
+        }
+      }
+    }
+
+    return {
+      agentName: 'Swarm-Orchestrator',
+      result: lastResult || 'Recursive reasoning reached limit without final answer.',
+      confidence: 0.9 + currentTurn * 0.02, // Slightly increase confidence with turns
+    };
+  }
+
+  private getAvailableTools(): any[] {
+    return [
+      {
+        name: 'search_web',
+        description: 'Searches the web for latest news or technical documentation.',
+        parameters: {
+          type: 'object',
+          properties: {
+            query: { type: 'string', description: 'The search query.' },
+          },
+          required: ['query'],
+        },
+      },
+      {
+        name: 'check_system_health',
+        description: 'Analyzes the current workstation vitals and service status.',
+        parameters: {
+          type: 'object',
+          properties: {},
+        },
+      },
+      {
+        name: 'validate_safety',
+        description: 'Verifies if a shell command or payload is safe to execute.',
+        parameters: {
+          type: 'object',
+          properties: {
+            payload: { type: 'string', description: 'The command to validate.' },
+          },
+          required: ['payload'],
+        },
+      },
+      {
+        name: 'read_codebase',
+        description: 'Reads the codebase context to answer technical questions.',
+        parameters: {
+          type: 'object',
+          properties: {
+            query: { type: 'string', description: 'Focus area (optional).' },
+          },
+        },
+      },
+      {
+        name: 'spatial_analysis',
+        description: 'Tactical radar and location analysis.',
+        parameters: {
+          type: 'object',
+          properties: {
+            query: { type: 'string', description: 'The spatial query.' },
+          },
+          required: ['query'],
+        },
+      },
+    ];
+  }
+
+  private async dispatchTool(name: string, args: any): Promise<any> {
+    try {
+      switch (name) {
+        case 'search_web':
+          return await this.newsService.searchNews(args.query);
+        case 'check_system_health':
+          return await this.health.getDetailedHealth();
+        case 'validate_safety':
+          return await this.sandbox.validatePayload(args.payload);
+        case 'read_codebase':
+          return await this.rag.getProjectContext(args.query);
+        case 'spatial_analysis':
+          return await this.navigatorGem.ask(args.query);
+        default:
+          return `Tool ${name} not found.`;
+      }
+    } catch (error: any) {
+      return `Error executing ${name}: ${error.message}`;
+    }
   }
 
   /**
@@ -381,10 +605,10 @@ export class SwarmService {
 
   public async executeTool(toolName: string, args: any): Promise<SwarmResponse> {
     logger.info(`[SwarmService] Execute Tool Request: ${toolName}`);
-    // Basic tool execution stub
+    const result = await this.dispatchTool(toolName, args);
     return {
       agentName: 'Tool-Executor',
-      result: `Tool ${toolName} executed with args: ${JSON.stringify(args)}`,
+      result,
       confidence: 1,
     };
   }

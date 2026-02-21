@@ -29,6 +29,8 @@ import { SovereignTreasury } from './SovereignTreasury';
 import { PortfolioWidget } from './PortfolioWidget';
 import { StrategyWidget } from './StrategyWidget';
 import { AlertsWidget } from './AlertsWidget';
+import { SovereignMap } from './SovereignMap';
+import { SystemHealthWidget } from './SystemHealthWidget';
 import { DanielaVoiceModal } from './DanielaVoiceModal';
 
 // ──────────────────────────────────────────────────────
@@ -280,6 +282,16 @@ const ClientDashboard = () => {
               ))}
             </div>
 
+            {/* Sovereign Map Widget (Tactical Radar) */}
+            <div className="h-[200px] w-full">
+              <SovereignMap />
+            </div>
+
+            {/* System Health Widget */}
+            <div className="h-[260px] w-full">
+              <SystemHealthWidget />
+            </div>
+
             {/* Progress Chart */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -412,7 +424,13 @@ const ClientDashboard = () => {
                 <SovereignTreasury />
               </div>
               <div style={{ height: chartHeight }}>
+                <SovereignMap />
+              </div>
+              <div style={{ height: chartHeight }}>
                 <AlertsWidget />
+              </div>
+              <div style={{ height: chartHeight }}>
+                <SystemHealthWidget />
               </div>
             </div>
           </>

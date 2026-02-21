@@ -138,7 +138,7 @@ import { SovereignSentinelService } from '../services/SovereignSentinelService';
 import { AuditService } from '../services/audit.service';
 import { NotebookInsightService } from '../services/google/notebook-insight.service';
 import { ColabService } from '../services/google/colab.service';
-// MapsService: removed (@googlemaps/google-maps-services-js not installed)
+import { MapsService } from '../services/google/maps.service';
 import { BigQueryService } from '../services/google/bigquery.service';
 import { CloudTasksService } from '../services/google/cloud-tasks.service';
 import { VideoIntelligenceService } from '../services/google/video-intelligence.service';
@@ -147,6 +147,8 @@ import { SovereignKnowledgeService } from '../services/google/sovereign-knowledg
 import { AiStudioService } from '../services/google/ai-studio.service';
 import { FirebaseService } from '../services/google/firebase.service';
 import { SovereignStitchService } from '../services/google/stitch.service';
+import { NavigatorGem } from '../services/gems/NavigatorGem';
+import { AutoHealingGem } from '../services/gems/AutoHealingGem';
 import { NexusSwarmOrchestrator } from '../services/gems/swarm-orchestrator.service';
 import { AutonomousMissionService } from '../services/google/mission-control.service';
 import { GeminiLiveService } from '../services/google/gemini-live.service';
@@ -352,7 +354,7 @@ if (!container.isBound(ColabService))
   container.bind<ColabService>(ColabService).toSelf().inSingletonScope();
 if (!container.isBound(NotebookInsightService))
   container.bind<NotebookInsightService>(NotebookInsightService).toSelf().inSingletonScope();
-// MapsService binding removed (@googlemaps not installed)
+bind<MapsService>(TYPES.MapsService, MapsService);
 bind<BigQueryService>(TYPES.BigQueryService, BigQueryService);
 if (!container.isBound(CloudTasksService))
   container.bind<CloudTasksService>(CloudTasksService).toSelf().inSingletonScope();
@@ -454,6 +456,8 @@ bind<VisualPerceptionService>(TYPES.VisualPerceptionService, VisualPerceptionSer
 bind<McpBridgeService>(TYPES.McpBridgeService, McpBridgeService);
 bind<NeuralHomeBridge>(TYPES.NeuralHomeBridge, NeuralHomeBridge);
 bind<DeviceStateStore>(TYPES.DeviceStateStore, DeviceStateStore);
+bind<NavigatorGem>(TYPES.NavigatorGem, NavigatorGem);
+bind<AutoHealingGem>(TYPES.AutoHealingGem, AutoHealingGem);
 
 // ========================================
 // CONTROLLERS
