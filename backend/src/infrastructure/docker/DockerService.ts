@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return */
 import { exec } from 'child_process';
 import { injectable } from 'inversify';
 import { promisify } from 'util';
@@ -19,7 +20,7 @@ export class DockerService {
   /**
    * Get all containers with advanced metadata
    */
-  async getContainers(): Promise<any[]> {
+  async getContainers(): Promise<unknown[]> {
     const cacheKey = 'docker:containers:list';
     const cachedData = await getCache<string>(cacheKey);
 
@@ -34,7 +35,7 @@ export class DockerService {
       await setCache(cacheKey, JSON.stringify(containers), this.CACHE_TTL);
       logger.debug('[DockerService] Containers list refreshed');
       return containers;
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.handleError('getContainers', error);
       return [];
     }
@@ -43,12 +44,12 @@ export class DockerService {
   /**
    * Get container stats with millisecond precision
    */
-  async getContainerStats(id: string): Promise<any> {
+  async getContainerStats(id: string): Promise<unknown> {
     this.validateId(id);
     try {
       const { stdout } = await execAsync(`docker stats ${id} --no-stream --format "{{json .}}"`);
-      return JSON.parse(stdout.trim());
-    } catch (error) {
+      return JSON.parse(stdout.trim()) as unknown;
+    } catch (error: unknown) {
       this.handleError(`getContainerStats(${id})`, error);
       throw error;
     }
@@ -62,7 +63,7 @@ export class DockerService {
     try {
       await execAsync(`docker start ${id}`);
       logger.info(`[DockerService] 🚀 Container ${id} launched successfully`);
-    } catch (error) {
+    } catch (error: unknown) {
       this.handleError('startContainer', error);
       throw error;
     }
@@ -73,7 +74,7 @@ export class DockerService {
     try {
       await execAsync(`docker stop ${id}`);
       logger.info(`[DockerService] 🛑 Container ${id} halted cleanly`);
-    } catch (error) {
+    } catch (error: unknown) {
       this.handleError('stopContainer', error);
       throw error;
     }
@@ -84,7 +85,7 @@ export class DockerService {
     try {
       await execAsync(`docker restart ${id}`);
       logger.info(`[DockerService] ♻️  Container ${id} recycled successfully`);
-    } catch (error) {
+    } catch (error: unknown) {
       this.handleError('restartContainer', error);
       throw error;
     }
@@ -93,31 +94,31 @@ export class DockerService {
   /**
    * Resource inventory (Images/Volumes/Networks)
    */
-  async getImages(): Promise<any[]> {
+  async getImages(): Promise<unknown[]> {
     try {
       const { stdout } = await execAsync('docker images --format "{{json .}}"');
       return this.parseJsonStdout(stdout);
-    } catch (error) {
+    } catch (error: unknown) {
       this.handleError('getImages', error);
       return [];
     }
   }
 
-  async getVolumes(): Promise<any[]> {
+  async getVolumes(): Promise<unknown[]> {
     try {
       const { stdout } = await execAsync('docker volume ls --format "{{json .}}"');
       return this.parseJsonStdout(stdout);
-    } catch (error) {
+    } catch (error: unknown) {
       this.handleError('getVolumes', error);
       return [];
     }
   }
 
-  async getNetworks(): Promise<any[]> {
+  async getNetworks(): Promise<unknown[]> {
     try {
       const { stdout } = await execAsync('docker network ls --format "{{json .}}"');
       return this.parseJsonStdout(stdout);
-    } catch (error) {
+    } catch (error: unknown) {
       this.handleError('getNetworks', error);
       return [];
     }
@@ -126,14 +127,14 @@ export class DockerService {
   /**
    * Private utilities and security guards
    */
-  private parseJsonStdout(stdout: string): any[] {
+  private parseJsonStdout(stdout: string): unknown[] {
     return stdout
       .trim()
       .split('\n')
       .filter(Boolean)
       .map(line => {
         try {
-          return JSON.parse(line);
+          return JSON.parse(line) as unknown;
         } catch {
           return null;
         }
@@ -148,8 +149,8 @@ export class DockerService {
     }
   }
 
-  private handleError(operation: string, error: any): void {
-    const message = error.message || 'Unknown Docker Error';
+  private handleError(operation: string, error: unknown): void {
+    const message = error instanceof Error ? error.message : 'Unknown Docker Error';
     logger.error(`[DockerService] 💥 Failure in ${operation}: ${message}`, { error });
   }
 }

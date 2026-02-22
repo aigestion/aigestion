@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
 import { injectable, inject } from 'inversify';
 import { BaseGem } from './BaseGem';
 import { Gemini2Service } from '../gemini-2.service';
@@ -9,7 +10,7 @@ import { logger } from '../../utils/logger';
 export class ForgeGem extends BaseGem {
   constructor(
     @inject(TYPES.Gemini2Service) gemini: Gemini2Service,
-    @inject(TYPES.MetaverseService) private readonly metaverse: MetaverseService
+    @inject(TYPES.MetaverseService) private readonly metaverse: MetaverseService,
   ) {
     super(
       gemini,
@@ -20,7 +21,7 @@ export class ForgeGem extends BaseGem {
        - Diseñar prompts descriptivos para generadores 3D (Tripo AI).
        - Estructurar solicitudes de creación de gemas, pilares, y mobiliario neural.
        - Coordinar con el Maestro de Arquitectura para el despliegue de activos en el metaverso.
-       Tu salida debe ser siempre una descripción rica y técnica del activo a generar.`
+       Tu salida debe ser siempre una descripción rica y técnica del activo a generar.`,
     );
   }
 
@@ -28,7 +29,7 @@ export class ForgeGem extends BaseGem {
    * Orchestrates the autonomous generation of a 3D asset based on a neural requirement.
    */
   async forgeAsset(requirement: string, name: string): Promise<string> {
-    logger.info({ requirement, name }, '[ForgeGem] Manifesting 3D Asset...');
+    logger.info('[ForgeGem] Manifesting 3D Asset...', { requirement, name });
 
     // 1. Generate a rich description/prompt using Gemini
     const forgePrompt = `

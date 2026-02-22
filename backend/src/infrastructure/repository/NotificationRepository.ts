@@ -17,9 +17,9 @@ export class NotificationRepository
     return await Notification.find().sort({ createdAt: -1 }).exec();
   }
 
-  override async create(idOrItem: any, maybeItem?: any): Promise<INotification> {
+  override async create(idOrItem: unknown, maybeItem?: unknown): Promise<INotification> {
     const data = typeof idOrItem === 'string' ? (maybeItem ?? {}) : idOrItem;
-    const notification = new Notification(data as any);
+    const notification = new Notification(data as Record<string, unknown>);
     return await notification.save();
   }
 

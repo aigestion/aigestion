@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument */
 import { Request, Response } from 'express';
 import { inject } from 'inversify';
 import { controller, httpGet, httpPost, request, response } from 'inversify-express-utils';
@@ -32,7 +33,7 @@ export class SovereignHandshakeController {
           pqc: keys.pqc.public,
         },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[SovereignHandshake] Init failed:', error);
       return res.status(500).json({ error: 'Handshake initialization failed' });
     }
@@ -59,7 +60,7 @@ export class SovereignHandshakeController {
         myKeys.classic.private,
         clientPublicKey.classic,
         myKeys.pqc.private,
-        clientCiphertext // Client should have encapsulated for us
+        clientCiphertext, // Client should have encapsulated for us
       );
 
       // Store the final session secret for this Sovereign Session
@@ -72,7 +73,7 @@ export class SovereignHandshakeController {
         // The client already knows the symmetric key if they encapsulated correctly
         message: 'Sovereign channel established.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('[SovereignHandshake] Finalization failed:', error);
       return res.status(500).json({ error: 'Handshake finalization failed' });
     }

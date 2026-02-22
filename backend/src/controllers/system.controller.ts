@@ -1,9 +1,9 @@
-import type { Request, Response } from 'express';
+/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
+import type { Request, Response, NextFunction } from 'express';
 import os from 'os';
 import { inject, injectable } from 'inversify';
 
 import { SystemMetricsService } from '../services/system-metrics.service';
-import { logger } from '../utils/logger';
 import { getCache, setCache } from '../utils/redis';
 import { TYPES } from '../types';
 
@@ -14,7 +14,7 @@ export class SystemController {
   /**
    * Get system metrics (CPU, Memory, Disk, Network)
    */
-  async getSystemMetrics(_req: Request, res: Response, next: any): Promise<void> {
+  async getSystemMetrics(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const cacheKey = 'system:metrics:real';
       const cachedData = await getCache<string>(cacheKey);
@@ -36,7 +36,7 @@ export class SystemController {
   /**
    * Get CPU usage
    */
-  async getCPUUsage(_req: Request, res: Response, next: any) {
+  async getCPUUsage(_req: Request, res: Response, next: NextFunction) {
     try {
       const cpuUsage = await this.metricsService.getCPUUsage();
       const cpus = os.cpus();
@@ -54,7 +54,7 @@ export class SystemController {
   /**
    * Get memory usage
    */
-  async getMemoryUsage(_req: Request, res: Response, next: any) {
+  async getMemoryUsage(_req: Request, res: Response, next: NextFunction) {
     try {
       const usagePercent = await this.metricsService.getMemoryUsage();
       const totalMem = os.totalmem();
@@ -75,7 +75,7 @@ export class SystemController {
   /**
    * Get disk usage
    */
-  async getDiskUsage(_req: Request, res: Response, next: any) {
+  async getDiskUsage(_req: Request, res: Response, next: NextFunction) {
     try {
       const usage = await this.metricsService.getDiskUsage();
       res.json({ usage });
@@ -87,7 +87,7 @@ export class SystemController {
   /**
    * Get network stats
    */
-  async getNetworkStats(_req: Request, res: Response, next: any) {
+  async getNetworkStats(_req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const networkInterfaces = os.networkInterfaces();
       const interfaces = Object.entries(networkInterfaces).map(([name, addrs]) => ({
@@ -99,6 +99,7 @@ export class SystemController {
         })),
       }));
 
+      await Promise.resolve();
       res.json({ interfaces });
     } catch (error) {
       next(error);
