@@ -1,0 +1,47 @@
+# ========================================
+# 🔗 REST Commands for Nexus Backend Integration
+# ========================================
+# These allow HA automations to push events to the Nexus backend.
+
+nexus_webhook:
+  url: "http://aigestion-backend:5000/api/v1/iot/webhook"
+  method: POST
+  content_type: "application/json"
+  payload: >
+    {
+      "event": "{{ event }}",
+      "source": "{{ source }}",
+      "data": {{ data | to_json }}
+    }
+
+nexus_pixel_sync:
+  url: "http://aigestion-backend:5000/api/v1/iot/pixel-sensors"
+  method: POST
+  content_type: "application/json"
+  payload: >
+    {
+      "deviceId": "{{ deviceId }}",
+      "timestamp": "{{ now().isoformat() }}",
+      "batteryLevel": {{ batteryLevel | int(0) }},
+      "batteryState": "{{ batteryState }}",
+      "batteryTemperature": {{ batteryTemperature | float(0) }},
+      "detectedActivity": "{{ detectedActivity }}",
+      "stepCount": {{ stepCount | int(0) }},
+      "wifiConnection": "{{ wifiConnection }}",
+      "ringerMode": "{{ ringerMode }}",
+      "screenOn": {{ screenOn | lower }},
+      "phoneState": "{{ phoneState }}",
+      "zone": "{{ zone }}"
+    }
+
+nexus_sensor_event:
+  url: "http://aigestion-backend:5000/api/v1/iot/pixel-sensors/event"
+  method: POST
+  content_type: "application/json"
+  payload: >
+    {
+      "event_type": "{{ event_type }}",
+      "entity_id": "{{ entity_id }}",
+      "new_state": "{{ new_state }}",
+      "old_state": "{{ old_state }}"
+    }

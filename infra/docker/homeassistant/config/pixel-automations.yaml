@@ -1,0 +1,399 @@
+# ========================================
+# 📱 PIXEL 8 SOVEREIGN AUTOMATIONS
+# ========================================
+# These automations leverage Pixel 8 sensor data via HA Companion App
+# to create intelligent, context-aware home/office automation.
+
+# ----------------------------------------
+# 🏠 ARRIVAL — Welcome Home
+# ----------------------------------------
+- id: pixel_arrive_home
+  alias: "📱 Pixel: Llegada a Casa"
+  description: "Activa bienvenida cuando el Pixel detecta llegada a casa"
+  trigger:
+    - platform: state
+      entity_id: device_tracker.pixel_8
+      to: "home"
+  condition:
+    - condition: state
+      entity_id: input_boolean.away_mode
+      state: "on"
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.away_mode
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.driving_mode
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_arrive_home"
+        source: "ha_automation"
+        data:
+          zone: "home"
+          timestamp: "{{ now().isoformat() }}"
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "🏠 Bienvenido a Casa"
+        message: "Nexus activado en modo hogar"
+  mode: single
+
+# ----------------------------------------
+# 🚗 DEPARTURE — Leaving Home
+# ----------------------------------------
+- id: pixel_leave_home
+  alias: "📱 Pixel: Salida de Casa"
+  description: "Activa modo away cuando el Pixel sale de la zona casa"
+  trigger:
+    - platform: state
+      entity_id: device_tracker.pixel_8
+      from: "home"
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.away_mode
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.sleep_mode
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_leave_home"
+        source: "ha_automation"
+        data:
+          direction: "departure"
+          timestamp: "{{ now().isoformat() }}"
+  mode: single
+
+# ----------------------------------------
+# 💼 OFFICE ARRIVAL
+# ----------------------------------------
+- id: pixel_arrive_office
+  alias: "📱 Pixel: Llegada a Oficina"
+  description: "Activa modo oficina al llegar al trabajo"
+  trigger:
+    - platform: zone
+      entity_id: device_tracker.pixel_8
+      zone: zone.oficina
+      event: enter
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.office_mode
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.away_mode
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_arrive_office"
+        source: "ha_automation"
+        data:
+          zone: "office"
+          timestamp: "{{ now().isoformat() }}"
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "💼 Modo Oficina Activado"
+        message: "Foco activado. Daniela lista para briefing."
+  mode: single
+
+# ----------------------------------------
+# 💼 OFFICE DEPARTURE
+# ----------------------------------------
+- id: pixel_leave_office
+  alias: "📱 Pixel: Salida de Oficina"
+  description: "Desactiva modo oficina al salir"
+  trigger:
+    - platform: zone
+      entity_id: device_tracker.pixel_8
+      zone: zone.oficina
+      event: leave
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.office_mode
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_leave_office"
+        source: "ha_automation"
+        data:
+          zone: "office"
+          direction: "departure"
+  mode: single
+
+# ----------------------------------------
+# 🔋 BATTERY CRITICAL (< 15%)
+# ----------------------------------------
+- id: pixel_battery_critical
+  alias: "📱 Pixel: Batería Crítica"
+  description: "Alerta cuando la batería del Pixel baja del 15%"
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pixel_8_battery_level
+      below: 15
+  condition:
+    - condition: template
+      value_template: "{{ states('sensor.pixel_8_battery_state') != 'charging' }}"
+  action:
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_battery_critical"
+        source: "ha_automation"
+        data:
+          level: "{{ states('sensor.pixel_8_battery_level') }}"
+          state: "{{ states('sensor.pixel_8_battery_state') }}"
+          temperature: "{{ states('sensor.pixel_8_battery_temperature') }}"
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "🔋 Batería Crítica"
+        message: "{{ states('sensor.pixel_8_battery_level') }}% — Conecta el cargador"
+        data:
+          importance: high
+          priority: high
+  mode: single
+
+# ----------------------------------------
+# 🌡️ BATTERY OVERHEAT (> 42°C)
+# ----------------------------------------
+- id: pixel_battery_overheat
+  alias: "📱 Pixel: Sobrecalentamiento"
+  description: "Alerta cuando la temperatura de batería supera 42°C"
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pixel_8_battery_temperature
+      above: 42
+  action:
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_battery_overheat"
+        source: "ha_automation"
+        data:
+          temperature: "{{ states('sensor.pixel_8_battery_temperature') }}"
+          charging: "{{ states('sensor.pixel_8_battery_state') }}"
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "🌡️ Alerta: Temperatura Alta"
+        message: "Batería a {{ states('sensor.pixel_8_battery_temperature') }}°C — Desconecta y deja enfriar"
+        data:
+          importance: high
+  mode: single
+
+# ----------------------------------------
+# 💤 SLEEP MODE (Night Detection)
+# ----------------------------------------
+- id: pixel_sleep_mode
+  alias: "📱 Pixel: Modo Sueño"
+  description: "Activa modo sueño por la noche cuando no hay actividad"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.pixel_8_interactive
+      to: "off"
+      for:
+        minutes: 30
+  condition:
+    - condition: time
+      after: "22:00:00"
+      before: "07:00:00"
+    - condition: state
+      entity_id: device_tracker.pixel_8
+      state: "home"
+    - condition: state
+      entity_id: sensor.pixel_8_detected_activity
+      state: "still"
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.sleep_mode
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_sleep_mode_activated"
+        source: "ha_automation"
+        data:
+          timestamp: "{{ now().isoformat() }}"
+  mode: single
+
+# ----------------------------------------
+# ☀️ WAKE UP Detection
+# ----------------------------------------
+- id: pixel_wake_up
+  alias: "📱 Pixel: Despertar"
+  description: "Detecta despertar y activa rutina matutina"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.pixel_8_interactive
+      to: "on"
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleep_mode
+      state: "on"
+    - condition: time
+      after: "05:00:00"
+      before: "11:00:00"
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.sleep_mode
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_wake_up"
+        source: "ha_automation"
+        data:
+          timestamp: "{{ now().isoformat() }}"
+          trigger: "morning_briefing"
+  mode: single
+
+# ----------------------------------------
+# 🚗 DRIVING MODE Detection
+# ----------------------------------------
+- id: pixel_driving_detected
+  alias: "📱 Pixel: Conducción Detectada"
+  description: "Activa modo conducción cuando el Pixel detecta movimiento en vehículo"
+  trigger:
+    - platform: state
+      entity_id: sensor.pixel_8_detected_activity
+      to: "in_vehicle"
+      for:
+        minutes: 2
+  action:
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.driving_mode
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_driving_detected"
+        source: "ha_automation"
+        data:
+          activity: "in_vehicle"
+          timestamp: "{{ now().isoformat() }}"
+  mode: single
+
+# ----------------------------------------
+# 🚶 DRIVING MODE End
+# ----------------------------------------
+- id: pixel_driving_ended
+  alias: "📱 Pixel: Fin Conducción"
+  description: "Desactiva modo conducción cuando se detecta actividad estática"
+  trigger:
+    - platform: state
+      entity_id: sensor.pixel_8_detected_activity
+      from: "in_vehicle"
+      for:
+        minutes: 3
+  condition:
+    - condition: state
+      entity_id: input_boolean.driving_mode
+      state: "on"
+  action:
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.driving_mode
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_driving_ended"
+        source: "ha_automation"
+  mode: single
+
+# ----------------------------------------
+# 📶 WIFI CHANGE (Zone Detection via Network)
+# ----------------------------------------
+- id: pixel_wifi_change
+  alias: "📱 Pixel: Cambio de WiFi"
+  description: "Detecta cambio de red WiFi para inferir zona"
+  trigger:
+    - platform: state
+      entity_id: sensor.pixel_8_wifi_connection
+  condition:
+    - condition: template
+      value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
+  action:
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_wifi_change"
+        source: "ha_automation"
+        data:
+          from_network: "{{ trigger.from_state.state }}"
+          to_network: "{{ trigger.to_state.state }}"
+          timestamp: "{{ now().isoformat() }}"
+  mode: single
+
+# ----------------------------------------
+# 📞 INCOMING CALL — Context Preparation
+# ----------------------------------------
+- id: pixel_incoming_call
+  alias: "📱 Pixel: Llamada Entrante"
+  description: "Prepara contexto cuando hay llamada entrante"
+  trigger:
+    - platform: state
+      entity_id: sensor.pixel_8_phone_state
+      to: "ringing"
+  action:
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_incoming_call"
+        source: "ha_automation"
+        data:
+          phone_state: "ringing"
+          current_activity: "{{ states('sensor.pixel_8_detected_activity') }}"
+          current_zone: "{{ states('device_tracker.pixel_8') }}"
+          timestamp: "{{ now().isoformat() }}"
+  mode: single
+
+# ----------------------------------------
+# 🏃 FITNESS — Activity Logging (Hourly)
+# ----------------------------------------
+- id: pixel_fitness_hourly
+  alias: "📱 Pixel: Fitness Tracking Horario"
+  description: "Log horario de actividad física para tracking"
+  trigger:
+    - platform: time_pattern
+      hours: "/1"
+  condition:
+    - condition: state
+      entity_id: input_boolean.sleep_mode
+      state: "off"
+  action:
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_fitness_hourly"
+        source: "ha_automation"
+        data:
+          steps: "{{ states('sensor.pixel_8_steps_sensor') }}"
+          activity: "{{ states('sensor.pixel_8_detected_activity') }}"
+          battery: "{{ states('sensor.pixel_8_battery_level') }}"
+          timestamp: "{{ now().isoformat() }}"
+  mode: single
+
+# ----------------------------------------
+# 💾 STORAGE LOW (< 10%)
+# ----------------------------------------
+- id: pixel_storage_low
+  alias: "📱 Pixel: Almacenamiento Bajo"
+  description: "Alerta cuando el almacenamiento libre es bajo"
+  trigger:
+    - platform: numeric_state
+      entity_id: sensor.pixel_8_internal_storage
+      below: 10
+  action:
+    - service: rest_command.nexus_webhook
+      data:
+        event: "pixel_storage_low"
+        source: "ha_automation"
+        data:
+          free_storage: "{{ states('sensor.pixel_8_internal_storage') }}"
+    - service: notify.mobile_app_pixel_8
+      data:
+        title: "💾 Almacenamiento Bajo"
+        message: "Queda {{ states('sensor.pixel_8_internal_storage') }}% libre"
+  mode: single
+
+# ----------------------------------------
+# 🔄 SENSOR SYNC (Every 5 min → Nexus Backend)
+# ----------------------------------------
+- id: pixel_sensor_sync
+  alias: "📱 Pixel: Sync de Sensores a Nexus"
+  description: "Envía snapshot completo de sensores al backend cada 5 minutos"
+  trigger:
+    - platform: time_pattern
+      minutes: "/5"
+  action:
+    - service: rest_command.nexus_pixel_sync
+      data:
+        deviceId: "pixel_8_sovereign"
+        batteryLevel: "{{ states('sensor.pixel_8_battery_level') | int(0) }}"
+        batteryState: "{{ states('sensor.pixel_8_battery_state') }}"
+        batteryTemperature: "{{ states('sensor.pixel_8_battery_temperature') | float(0) }}"
+        detectedActivity: "{{ states('sensor.pixel_8_detected_activity') }}"
+        stepCount: "{{ states('sensor.pixel_8_steps_sensor') | int(0) }}"
+        wifiConnection: "{{ states('sensor.pixel_8_wifi_connection') }}"
+        ringerMode: "{{ states('sensor.pixel_8_ringer_mode') }}"
+        screenOn: "{{ is_state('binary_sensor.pixel_8_interactive', 'on') }}"
+        phoneState: "{{ states('sensor.pixel_8_phone_state') }}"
+        zone: "{{ states('device_tracker.pixel_8') }}"
+  mode: single
