@@ -24,8 +24,8 @@ __export(enhanced_index_exports, {
   enhancedMain: () => enhancedMain
 });
 module.exports = __toCommonJS(enhanced_index_exports);
-var import_ecs25 = require("@dcl/sdk/ecs");
-var import_math23 = require("@dcl/sdk/math");
+var import_ecs26 = require("@dcl/sdk/ecs");
+var import_math24 = require("@dcl/sdk/math");
 
 // src/utils/timers.ts
 var import_ecs = require("@dcl/sdk/ecs");
@@ -6348,8 +6348,91 @@ var EmotionDetectionSystem = class {
 var emotionDetectionSystem = new EmotionDetectionSystem();
 
 // src/enhanced-architecture.ts
+var import_ecs14 = require("@dcl/sdk/ecs");
+var import_math12 = require("@dcl/sdk/math");
+
+// src/utils/godmode-primitives.ts
 var import_ecs13 = require("@dcl/sdk/ecs");
 var import_math11 = require("@dcl/sdk/math");
+function createNeuralPillar(position, scale) {
+  const root = import_ecs13.engine.addEntity();
+  import_ecs13.Transform.create(root, { position, scale });
+  const core = import_ecs13.engine.addEntity();
+  import_ecs13.Transform.create(core, {
+    parent: root,
+    scale: import_math11.Vector3.create(0.8, 1, 0.8)
+  });
+  import_ecs13.MeshRenderer.setBox(core);
+  import_ecs13.Material.setPbrMaterial(core, {
+    albedoColor: import_math11.Color4.create(0.1, 0.2, 0.4, 0.8),
+    roughness: 0.1,
+    metallic: 0.9,
+    emissiveColor: import_math11.Color4.create(0.1, 0.3, 0.6, 1),
+    emissiveIntensity: 2
+  });
+  for (let i = 0; i < 4; i++) {
+    const angle = i * 90 * (Math.PI / 180);
+    const panel = import_ecs13.engine.addEntity();
+    import_ecs13.Transform.create(panel, {
+      parent: root,
+      position: import_math11.Vector3.create(Math.cos(angle) * 0.6, 0, Math.sin(angle) * 0.6),
+      rotation: import_math11.Quaternion.fromEulerDegrees(0, i * 90, 0),
+      scale: import_math11.Vector3.create(0.1, 1, 0.5)
+    });
+    import_ecs13.MeshRenderer.setBox(panel);
+    import_ecs13.Material.setPbrMaterial(panel, {
+      albedoColor: import_math11.Color4.create(0.3, 0.6, 1, 0.4),
+      roughness: 0,
+      metallic: 0.5,
+      emissiveColor: import_math11.Color4.create(0, 0.8, 1, 0.5),
+      emissiveIntensity: 5
+    });
+  }
+  for (let i = 0; i < 3; i++) {
+    const ring = import_ecs13.engine.addEntity();
+    import_ecs13.Transform.create(ring, {
+      parent: root,
+      position: import_math11.Vector3.create(0, (i - 1) * 0.4, 0),
+      scale: import_math11.Vector3.create(1.1, 0.05, 1.1)
+    });
+    import_ecs13.MeshRenderer.setBox(ring);
+    import_ecs13.Material.setPbrMaterial(ring, {
+      albedoColor: import_math11.Color4.create(1, 1, 1, 1),
+      emissiveColor: import_math11.Color4.create(0.5, 0.8, 1, 1),
+      emissiveIntensity: 10
+    });
+  }
+  return root;
+}
+function createSovereignCore(position) {
+  const root = import_ecs13.engine.addEntity();
+  import_ecs13.Transform.create(root, { position });
+  const orb = import_ecs13.engine.addEntity();
+  import_ecs13.Transform.create(orb, {
+    parent: root,
+    scale: import_math11.Vector3.create(0.8, 0.8, 0.8)
+  });
+  import_ecs13.MeshRenderer.setSphere(orb);
+  import_ecs13.Material.setPbrMaterial(orb, {
+    albedoColor: import_math11.Color4.create(1, 1, 1, 1),
+    emissiveColor: import_math11.Color4.create(1, 0.8, 0.2, 1),
+    emissiveIntensity: 15
+  });
+  const shell = import_ecs13.engine.addEntity();
+  import_ecs13.Transform.create(shell, {
+    parent: root,
+    scale: import_math11.Vector3.create(1.2, 1.2, 1.2)
+  });
+  import_ecs13.MeshRenderer.setSphere(shell);
+  import_ecs13.Material.setPbrMaterial(shell, {
+    albedoColor: import_math11.Color4.create(0.6, 0.3, 1, 0.2),
+    emissiveColor: import_math11.Color4.create(0.6, 0.3, 1, 0.5),
+    emissiveIntensity: 5
+  });
+  return root;
+}
+
+// src/enhanced-architecture.ts
 var AnimationSystem = class {
   constructor() {
     this.animations = /* @__PURE__ */ new Map();
@@ -6360,12 +6443,12 @@ var AnimationSystem = class {
   update(deltaTime) {
     this.animations.forEach((data, entity) => {
       data.time += deltaTime;
-      const transform = import_ecs13.Transform.getMutable(entity);
+      const transform = import_ecs14.Transform.getMutable(entity);
       if (data.type === "pulse") {
         const scale = 1 + Math.sin(data.time * data.speed) * data.intensity;
-        transform.scale = import_math11.Vector3.create(scale, scale, scale);
+        transform.scale = import_math12.Vector3.create(scale, scale, scale);
       } else if (data.type === "rotate") {
-        transform.rotation = import_math11.Quaternion.fromEulerDegrees(0, data.time * data.speed * 10, 0);
+        transform.rotation = import_math12.Quaternion.fromEulerDegrees(0, data.time * data.speed * 10, 0);
       } else if (data.type === "float") {
         transform.position.y = data.baseY + Math.sin(data.time * data.speed) * data.intensity;
       }
@@ -6374,192 +6457,162 @@ var AnimationSystem = class {
 };
 var animationSystem = new AnimationSystem();
 function createEnhancedArchitecture() {
-  const holographicFloor = import_ecs13.engine.addEntity();
-  import_ecs13.Material.setPbrMaterial(holographicFloor, {
-    albedoColor: import_math11.Color4.create(0.1, 0.3, 0.6, 0.8),
+  const holographicFloor = import_ecs14.engine.addEntity();
+  import_ecs14.Material.setPbrMaterial(holographicFloor, {
+    albedoColor: import_math12.Color4.create(0.1, 0.3, 0.6, 0.8),
     roughness: 0.1,
     metallic: 0.9,
-    emissiveColor: import_math11.Color4.create(0, 0.2, 0.4, 0.5),
+    emissiveColor: import_math12.Color4.create(0, 0.2, 0.4, 0.5),
     emissiveIntensity: 2
   });
-  const quantumGlass = import_ecs13.engine.addEntity();
-  import_ecs13.Material.setPbrMaterial(quantumGlass, {
-    albedoColor: import_math11.Color4.create(0.3, 0.6, 1, 0.15),
+  const quantumGlass = import_ecs14.engine.addEntity();
+  import_ecs14.Material.setPbrMaterial(quantumGlass, {
+    albedoColor: import_math12.Color4.create(0.3, 0.6, 1, 0.15),
     roughness: 0,
     metallic: 0.2,
     alphaTest: 0.05,
-    emissiveColor: import_math11.Color4.create(0.2, 0.4, 0.8, 0.3),
+    emissiveColor: import_math12.Color4.create(0.2, 0.4, 0.8, 0.3),
     emissiveIntensity: 1
   });
-  const floor = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(floor, {
-    position: import_math11.Vector3.create(8, 0.01, 8),
-    scale: import_math11.Vector3.create(16, 0.1, 16)
+  const floor = import_ecs14.engine.addEntity();
+  import_ecs14.Transform.create(floor, {
+    position: import_math12.Vector3.create(8, 0.01, 8),
+    scale: import_math12.Vector3.create(16, 0.1, 16)
   });
-  import_ecs13.MeshRenderer.setBox(floor);
-  import_ecs13.Material.setPbrMaterial(floor, {
-    albedoColor: import_math11.Color4.create(0.05, 0.1, 0.2, 0.9),
+  import_ecs14.MeshRenderer.setBox(floor);
+  import_ecs14.Material.setPbrMaterial(floor, {
+    albedoColor: import_math12.Color4.create(0.05, 0.1, 0.2, 0.9),
     roughness: 0.1,
     metallic: 0.8,
-    emissiveColor: import_math11.Color4.create(0, 0.3, 0.6, 0.4),
+    emissiveColor: import_math12.Color4.create(0, 0.3, 0.6, 0.4),
     emissiveIntensity: 3
   });
-  const ceiling = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(ceiling, {
-    position: import_math11.Vector3.create(8, 6, 8),
-    scale: import_math11.Vector3.create(16, 0.1, 16)
+  const ceiling = import_ecs14.engine.addEntity();
+  import_ecs14.Transform.create(ceiling, {
+    position: import_math12.Vector3.create(8, 6, 8),
+    scale: import_math12.Vector3.create(16, 0.1, 16)
   });
-  import_ecs13.MeshRenderer.setBox(ceiling);
-  import_ecs13.Material.setPbrMaterial(ceiling, {
-    albedoColor: import_math11.Color4.create(0.1, 0.05, 0.15, 1),
+  import_ecs14.MeshRenderer.setBox(ceiling);
+  import_ecs14.Material.setPbrMaterial(ceiling, {
+    albedoColor: import_math12.Color4.create(0.1, 0.05, 0.15, 1),
     roughness: 0.2,
     metallic: 0.7,
-    emissiveColor: import_math11.Color4.create(0.4, 0.2, 0.8, 0.3),
+    emissiveColor: import_math12.Color4.create(0.4, 0.2, 0.8, 0.3),
     emissiveIntensity: 2
   });
-  const backWall = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(backWall, {
-    position: import_math11.Vector3.create(8, 3, 15.9),
-    scale: import_math11.Vector3.create(16, 6, 0.2)
+  const backWall = import_ecs14.engine.addEntity();
+  import_ecs14.Transform.create(backWall, {
+    position: import_math12.Vector3.create(8, 3, 15.9),
+    scale: import_math12.Vector3.create(16, 6, 0.2)
   });
-  import_ecs13.MeshRenderer.setBox(backWall);
-  import_ecs13.Material.setPbrMaterial(backWall, {
-    albedoColor: import_math11.Color4.create(0.15, 0.1, 0.2, 1),
+  import_ecs14.MeshRenderer.setBox(backWall);
+  import_ecs14.Material.setPbrMaterial(backWall, {
+    albedoColor: import_math12.Color4.create(0.15, 0.1, 0.2, 1),
     roughness: 0.3,
     metallic: 0.6,
-    emissiveColor: import_math11.Color4.create(0.3, 0.1, 0.5, 0.2),
+    emissiveColor: import_math12.Color4.create(0.3, 0.1, 0.5, 0.2),
     emissiveIntensity: 1
   });
-  const leftGlass = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(leftGlass, {
-    position: import_math11.Vector3.create(0.1, 3, 8),
-    scale: import_math11.Vector3.create(0.2, 6, 16)
+  const leftGlass = import_ecs14.engine.addEntity();
+  import_ecs14.Transform.create(leftGlass, {
+    position: import_math12.Vector3.create(0.1, 3, 8),
+    scale: import_math12.Vector3.create(0.2, 6, 16)
   });
-  import_ecs13.MeshRenderer.setBox(leftGlass);
-  import_ecs13.Material.setPbrMaterial(leftGlass, {
-    albedoColor: import_math11.Color4.create(0.5, 0.7, 1, 0.2),
+  import_ecs14.MeshRenderer.setBox(leftGlass);
+  import_ecs14.Material.setPbrMaterial(leftGlass, {
+    albedoColor: import_math12.Color4.create(0.5, 0.7, 1, 0.2),
     roughness: 0,
     metallic: 0.3,
-    emissiveColor: import_math11.Color4.create(0.3, 0.5, 1, 0.4),
+    emissiveColor: import_math12.Color4.create(0.3, 0.5, 1, 0.4),
     emissiveIntensity: 2
   });
-  const rightGlass = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(rightGlass, {
-    position: import_math11.Vector3.create(15.9, 3, 8),
-    scale: import_math11.Vector3.create(0.2, 6, 16)
+  const rightGlass = import_ecs14.engine.addEntity();
+  import_ecs14.Transform.create(rightGlass, {
+    position: import_math12.Vector3.create(15.9, 3, 8),
+    scale: import_math12.Vector3.create(0.2, 6, 16)
   });
-  import_ecs13.MeshRenderer.setBox(rightGlass);
-  import_ecs13.Material.setPbrMaterial(rightGlass, {
-    albedoColor: import_math11.Color4.create(0.5, 0.7, 1, 0.2),
+  import_ecs14.MeshRenderer.setBox(rightGlass);
+  import_ecs14.Material.setPbrMaterial(rightGlass, {
+    albedoColor: import_math12.Color4.create(0.5, 0.7, 1, 0.2),
     roughness: 0,
     metallic: 0.3,
-    emissiveColor: import_math11.Color4.create(0.3, 0.5, 1, 0.4),
+    emissiveColor: import_math12.Color4.create(0.3, 0.5, 1, 0.4),
     emissiveIntensity: 2
   });
-  const pillar1 = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(pillar1, {
-    position: import_math11.Vector3.create(2, 3, 0.5),
-    scale: import_math11.Vector3.create(1.2, 6, 1.2)
+  const pillar1 = createNeuralPillar(
+    import_math12.Vector3.create(2, 3, 0.5),
+    import_math12.Vector3.create(1.2, 6, 1.2)
+  );
+  const pillar2 = createNeuralPillar(
+    import_math12.Vector3.create(14, 3, 0.5),
+    import_math12.Vector3.create(1.2, 6, 1.2)
+  );
+  const neonStrip1 = import_ecs14.engine.addEntity();
+  import_ecs14.Transform.create(neonStrip1, {
+    position: import_math12.Vector3.create(8, 5.9, 8),
+    scale: import_math12.Vector3.create(14, 0.05, 14)
   });
-  import_ecs13.MeshRenderer.setBox(pillar1);
-  import_ecs13.Material.setPbrMaterial(pillar1, {
-    albedoColor: import_math11.Color4.create(0.2, 0.4, 0.8, 1),
-    roughness: 0.2,
-    metallic: 0.8,
-    emissiveColor: import_math11.Color4.create(0.2, 0.3, 0.7, 0.5),
-    emissiveIntensity: 3
-  });
-  const pillar2 = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(pillar2, {
-    position: import_math11.Vector3.create(14, 3, 0.5),
-    scale: import_math11.Vector3.create(1.2, 6, 1.2)
-  });
-  import_ecs13.MeshRenderer.setBox(pillar2);
-  import_ecs13.Material.setPbrMaterial(pillar2, {
-    albedoColor: import_math11.Color4.create(0.2, 0.4, 0.8, 1),
-    roughness: 0.2,
-    metallic: 0.8,
-    emissiveColor: import_math11.Color4.create(0.2, 0.3, 0.7, 0.5),
-    emissiveIntensity: 3
-  });
-  const neonStrip1 = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(neonStrip1, {
-    position: import_math11.Vector3.create(8, 5.9, 8),
-    scale: import_math11.Vector3.create(14, 0.05, 14)
-  });
-  import_ecs13.MeshRenderer.setBox(neonStrip1);
-  import_ecs13.Material.setPbrMaterial(neonStrip1, {
-    albedoColor: import_math11.Color4.create(0, 0, 0, 1),
-    emissiveColor: import_math11.Color4.create(0.8, 0.3, 1, 1),
+  import_ecs14.MeshRenderer.setBox(neonStrip1);
+  import_ecs14.Material.setPbrMaterial(neonStrip1, {
+    albedoColor: import_math12.Color4.create(0, 0, 0, 1),
+    emissiveColor: import_math12.Color4.create(0.8, 0.3, 1, 1),
     emissiveIntensity: 8
   });
-  const neonStrip2 = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(neonStrip2, {
-    position: import_math11.Vector3.create(8, 5.7, 8),
-    scale: import_math11.Vector3.create(13, 0.05, 13)
+  const neonStrip2 = import_ecs14.engine.addEntity();
+  import_ecs14.Transform.create(neonStrip2, {
+    position: import_math12.Vector3.create(8, 5.7, 8),
+    scale: import_math12.Vector3.create(13, 0.05, 13)
   });
-  import_ecs13.MeshRenderer.setBox(neonStrip2);
-  import_ecs13.Material.setPbrMaterial(neonStrip2, {
-    albedoColor: import_math11.Color4.create(0, 0, 0, 1),
-    emissiveColor: import_math11.Color4.create(0.3, 0.8, 1, 1),
+  import_ecs14.MeshRenderer.setBox(neonStrip2);
+  import_ecs14.Material.setPbrMaterial(neonStrip2, {
+    albedoColor: import_math12.Color4.create(0, 0, 0, 1),
+    emissiveColor: import_math12.Color4.create(0.3, 0.8, 1, 1),
     emissiveIntensity: 6
   });
   for (let i = 0; i < 5; i++) {
-    const dataStream = import_ecs13.engine.addEntity();
-    import_ecs13.Transform.create(dataStream, {
-      position: import_math11.Vector3.create(3 + i * 2.5, 3, 2),
-      scale: import_math11.Vector3.create(0.1, 4, 0.1)
+    const dataStream = import_ecs14.engine.addEntity();
+    import_ecs14.Transform.create(dataStream, {
+      position: import_math12.Vector3.create(3 + i * 2.5, 3, 2),
+      scale: import_math12.Vector3.create(0.1, 4, 0.1)
     });
-    import_ecs13.MeshRenderer.setBox(dataStream);
-    import_ecs13.Material.setPbrMaterial(dataStream, {
-      albedoColor: import_math11.Color4.create(0, 1, 0.8, 0.6),
+    import_ecs14.MeshRenderer.setBox(dataStream);
+    import_ecs14.Material.setPbrMaterial(dataStream, {
+      albedoColor: import_math12.Color4.create(0, 1, 0.8, 0.6),
       roughness: 0,
       metallic: 0.5,
-      emissiveColor: import_math11.Color4.create(0, 1, 0.8, 1),
+      emissiveColor: import_math12.Color4.create(0, 1, 0.8, 1),
       emissiveIntensity: 4
     });
   }
-  const quantumPlatform = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(quantumPlatform, {
-    position: import_math11.Vector3.create(8, 0.5, 8),
-    scale: import_math11.Vector3.create(4, 0.2, 4)
+  const quantumPlatform = import_ecs14.engine.addEntity();
+  import_ecs14.Transform.create(quantumPlatform, {
+    position: import_math12.Vector3.create(8, 0.5, 8),
+    scale: import_math12.Vector3.create(4, 0.2, 4)
   });
-  import_ecs13.MeshRenderer.setBox(quantumPlatform);
-  import_ecs13.Material.setPbrMaterial(quantumPlatform, {
-    albedoColor: import_math11.Color4.create(0.2, 0.1, 0.4, 0.8),
+  import_ecs14.MeshRenderer.setBox(quantumPlatform);
+  import_ecs14.Material.setPbrMaterial(quantumPlatform, {
+    albedoColor: import_math12.Color4.create(0.2, 0.1, 0.4, 0.8),
     roughness: 0.1,
     metallic: 0.9,
-    emissiveColor: import_math11.Color4.create(0.6, 0.3, 1, 0.6),
+    emissiveColor: import_math12.Color4.create(0.6, 0.3, 1, 0.6),
     emissiveIntensity: 5
   });
   for (let i = 0; i < 3; i++) {
-    const displayPanel = import_ecs13.engine.addEntity();
-    import_ecs13.Transform.create(displayPanel, {
-      position: import_math11.Vector3.create(4 + i * 4, 4, 12),
-      scale: import_math11.Vector3.create(2, 1.5, 0.1)
+    const displayPanel = import_ecs14.engine.addEntity();
+    import_ecs14.Transform.create(displayPanel, {
+      position: import_math12.Vector3.create(4 + i * 4, 4, 12),
+      scale: import_math12.Vector3.create(2, 1.5, 0.1)
     });
-    import_ecs13.MeshRenderer.setBox(displayPanel);
-    import_ecs13.Material.setPbrMaterial(displayPanel, {
-      albedoColor: import_math11.Color4.create(0, 0, 0, 0.9),
+    import_ecs14.MeshRenderer.setBox(displayPanel);
+    import_ecs14.Material.setPbrMaterial(displayPanel, {
+      albedoColor: import_math12.Color4.create(0, 0, 0, 0.9),
       roughness: 0.1,
       metallic: 0.8,
-      emissiveColor: import_math11.Color4.create(0.2, 0.8, 1, 0.4),
+      emissiveColor: import_math12.Color4.create(0.2, 0.8, 1, 0.4),
       emissiveIntensity: 3
     });
   }
-  const energyCore = import_ecs13.engine.addEntity();
-  import_ecs13.Transform.create(energyCore, {
-    position: import_math11.Vector3.create(8, 2, 8),
-    scale: import_math11.Vector3.create(1, 1, 1)
-  });
-  import_ecs13.MeshRenderer.setBox(energyCore);
-  import_ecs13.Material.setPbrMaterial(energyCore, {
-    albedoColor: import_math11.Color4.create(1, 1, 1, 0.8),
-    roughness: 0,
-    metallic: 1,
-    emissiveColor: import_math11.Color4.create(1, 0.8, 0.2, 1),
-    emissiveIntensity: 10
-  });
+  const energyCore = createSovereignCore(import_math12.Vector3.create(8, 2, 8));
   createArtGallery();
   animationSystem.addAnimation(energyCore, {
     type: "float",
@@ -6568,7 +6621,7 @@ function createEnhancedArchitecture() {
     time: 0,
     baseY: 2
   });
-  import_ecs13.engine.addSystem(() => {
+  import_ecs14.engine.addSystem(() => {
     animationSystem.update(0.016);
   });
 }
@@ -6577,129 +6630,129 @@ function createArtGallery() {
 }
 
 // src/enhanced-interactables.ts
-var import_ecs14 = require("@dcl/sdk/ecs");
-var import_math12 = require("@dcl/sdk/math");
+var import_ecs15 = require("@dcl/sdk/ecs");
+var import_math13 = require("@dcl/sdk/math");
 var systemStatusEntity;
 var alertSystemEntity;
 function createEnhancedInteractables() {
-  const mainDashboard = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(mainDashboard, {
-    position: import_math12.Vector3.create(8, 3, 15.5),
-    scale: import_math12.Vector3.create(8, 4, 0.2)
+  const mainDashboard = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(mainDashboard, {
+    position: import_math13.Vector3.create(8, 3, 15.5),
+    scale: import_math13.Vector3.create(8, 4, 0.2)
   });
-  import_ecs14.MeshRenderer.setBox(mainDashboard);
-  import_ecs14.Material.setPbrMaterial(mainDashboard, {
-    albedoColor: import_math12.Color4.create(0, 0, 0, 0.95),
+  import_ecs15.MeshRenderer.setBox(mainDashboard);
+  import_ecs15.Material.setPbrMaterial(mainDashboard, {
+    albedoColor: import_math13.Color4.create(0, 0, 0, 0.95),
     roughness: 0.1,
     metallic: 0.9,
-    emissiveColor: import_math12.Color4.create(0.1, 0.3, 0.6, 0.3),
+    emissiveColor: import_math13.Color4.create(0.1, 0.3, 0.6, 0.3),
     emissiveIntensity: 2
   });
-  const titleText = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(titleText, {
+  const titleText = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(titleText, {
     parent: mainDashboard,
-    position: import_math12.Vector3.create(0, 0.4, -0.8),
-    scale: import_math12.Vector3.create(0.125, 0.25, 1)
+    position: import_math13.Vector3.create(0, 0.4, -0.8),
+    scale: import_math13.Vector3.create(0.125, 0.25, 1)
   });
-  import_ecs14.TextShape.create(titleText, {
+  import_ecs15.TextShape.create(titleText, {
     text: "\u26A1 AIGESTION NEXUS HQ \u26A1",
-    textColor: import_math12.Color4.create(0.8, 0.5, 1, 1),
+    textColor: import_math13.Color4.create(0.8, 0.5, 1, 1),
     fontSize: 6,
     textAlign: 3,
     outlineWidth: 0.1,
-    outlineColor: import_math12.Color4.create(0.5, 0.2, 0.8, 1)
+    outlineColor: import_math13.Color4.create(0.5, 0.2, 0.8, 1)
   });
-  systemStatusEntity = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(systemStatusEntity, {
+  systemStatusEntity = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(systemStatusEntity, {
     parent: mainDashboard,
-    position: import_math12.Vector3.create(0, -0.1, -0.8),
-    scale: import_math12.Vector3.create(0.125, 0.25, 1)
+    position: import_math13.Vector3.create(0, -0.1, -0.8),
+    scale: import_math13.Vector3.create(0.125, 0.25, 1)
   });
-  import_ecs14.TextShape.create(systemStatusEntity, {
+  import_ecs15.TextShape.create(systemStatusEntity, {
     text: "\u{1F525} SYSTEMS ONLINE \u{1F525}\n\u26A1 Quantum Core: ACTIVE\n\u{1F310} Network: OPTIMAL\n\u{1F6E1}\uFE0F Security: ENHANCED",
-    textColor: import_math12.Color4.create(0, 1, 0.8, 1),
+    textColor: import_math13.Color4.create(0, 1, 0.8, 1),
     fontSize: 3,
     textAlign: 3
   });
-  alertSystemEntity = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(alertSystemEntity, {
+  alertSystemEntity = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(alertSystemEntity, {
     parent: mainDashboard,
-    position: import_math12.Vector3.create(0, -0.5, -0.8),
-    scale: import_math12.Vector3.create(0.125, 0.25, 1)
+    position: import_math13.Vector3.create(0, -0.5, -0.8),
+    scale: import_math13.Vector3.create(0.125, 0.25, 1)
   });
-  import_ecs14.TextShape.create(alertSystemEntity, {
+  import_ecs15.TextShape.create(alertSystemEntity, {
     text: "\u{1F4E1} Real-time Monitoring Active...",
-    textColor: import_math12.Color4.create(1, 1, 0, 1),
+    textColor: import_math13.Color4.create(1, 1, 0, 1),
     fontSize: 2.5,
     textAlign: 3
   });
-  const quantumPanel = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(quantumPanel, {
-    position: import_math12.Vector3.create(2, 1.5, 10),
-    scale: import_math12.Vector3.create(2, 2, 0.3)
+  const quantumPanel = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(quantumPanel, {
+    position: import_math13.Vector3.create(2, 1.5, 10),
+    scale: import_math13.Vector3.create(2, 2, 0.3)
   });
-  import_ecs14.MeshRenderer.setBox(quantumPanel);
-  import_ecs14.Material.setPbrMaterial(quantumPanel, {
-    albedoColor: import_math12.Color4.create(0.2, 0.1, 0.4, 0.9),
+  import_ecs15.MeshRenderer.setBox(quantumPanel);
+  import_ecs15.Material.setPbrMaterial(quantumPanel, {
+    albedoColor: import_math13.Color4.create(0.2, 0.1, 0.4, 0.9),
     roughness: 0.2,
     metallic: 0.8,
-    emissiveColor: import_math12.Color4.create(0.6, 0.3, 1, 0.5),
+    emissiveColor: import_math13.Color4.create(0.6, 0.3, 1, 0.5),
     emissiveIntensity: 3
   });
-  const quantumLabel = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(quantumLabel, {
+  const quantumLabel = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(quantumLabel, {
     parent: quantumPanel,
-    position: import_math12.Vector3.create(0, 0.3, -0.6),
-    scale: import_math12.Vector3.create(0.5, 0.5, 1)
+    position: import_math13.Vector3.create(0, 0.3, -0.6),
+    scale: import_math13.Vector3.create(0.5, 0.5, 1)
   });
-  import_ecs14.TextShape.create(quantumLabel, {
+  import_ecs15.TextShape.create(quantumLabel, {
     text: "QUANTUM\nCORE",
-    textColor: import_math12.Color4.create(0.8, 0.5, 1, 1),
+    textColor: import_math13.Color4.create(0.8, 0.5, 1, 1),
     fontSize: 4,
     textAlign: 3
   });
-  const networkPanel = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(networkPanel, {
-    position: import_math12.Vector3.create(14, 1.5, 10),
-    scale: import_math12.Vector3.create(2, 2, 0.3)
+  const networkPanel = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(networkPanel, {
+    position: import_math13.Vector3.create(14, 1.5, 10),
+    scale: import_math13.Vector3.create(2, 2, 0.3)
   });
-  import_ecs14.MeshRenderer.setBox(networkPanel);
-  import_ecs14.Material.setPbrMaterial(networkPanel, {
-    albedoColor: import_math12.Color4.create(0.1, 0.3, 0.6, 0.9),
+  import_ecs15.MeshRenderer.setBox(networkPanel);
+  import_ecs15.Material.setPbrMaterial(networkPanel, {
+    albedoColor: import_math13.Color4.create(0.1, 0.3, 0.6, 0.9),
     roughness: 0.2,
     metallic: 0.8,
-    emissiveColor: import_math12.Color4.create(0.2, 0.6, 1, 0.5),
+    emissiveColor: import_math13.Color4.create(0.2, 0.6, 1, 0.5),
     emissiveIntensity: 3
   });
-  const networkLabel = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(networkLabel, {
+  const networkLabel = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(networkLabel, {
     parent: networkPanel,
-    position: import_math12.Vector3.create(0, 0.3, -0.6),
-    scale: import_math12.Vector3.create(0.5, 0.5, 1)
+    position: import_math13.Vector3.create(0, 0.3, -0.6),
+    scale: import_math13.Vector3.create(0.5, 0.5, 1)
   });
-  import_ecs14.TextShape.create(networkLabel, {
+  import_ecs15.TextShape.create(networkLabel, {
     text: "NETWORK\nHUB",
-    textColor: import_math12.Color4.create(0.5, 0.8, 1, 1),
+    textColor: import_math13.Color4.create(0.5, 0.8, 1, 1),
     fontSize: 4,
     textAlign: 3
   });
-  const masterControl = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(masterControl, {
-    position: import_math12.Vector3.create(8, 2, 8),
-    scale: import_math12.Vector3.create(1.5, 1.5, 1.5)
+  const masterControl = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(masterControl, {
+    position: import_math13.Vector3.create(8, 2, 8),
+    scale: import_math13.Vector3.create(1.5, 1.5, 1.5)
   });
-  import_ecs14.MeshRenderer.setBox(masterControl);
-  import_ecs14.Material.setPbrMaterial(masterControl, {
-    albedoColor: import_math12.Color4.create(1, 0.8, 0.2, 0.8),
+  import_ecs15.MeshRenderer.setBox(masterControl);
+  import_ecs15.Material.setPbrMaterial(masterControl, {
+    albedoColor: import_math13.Color4.create(1, 0.8, 0.2, 0.8),
     roughness: 0.1,
     metallic: 0.9,
-    emissiveColor: import_math12.Color4.create(1, 0.8, 0.2, 1),
+    emissiveColor: import_math13.Color4.create(1, 0.8, 0.2, 1),
     emissiveIntensity: 8
   });
-  import_ecs14.pointerEventsSystem.onPointerDown(
+  import_ecs15.pointerEventsSystem.onPointerDown(
     {
       entity: masterControl,
-      opts: { button: import_ecs14.InputAction.IA_POINTER, hoverText: "\u{1F3AE} MASTER CONTROL SYSTEM" }
+      opts: { button: import_ecs15.InputAction.IA_POINTER, hoverText: "\u{1F3AE} MASTER CONTROL SYSTEM" }
     },
     () => {
       console.log("\u{1F3AE} Master Control Activated - Quantum Systems Online");
@@ -6707,10 +6760,10 @@ function createEnhancedInteractables() {
       updateSystemStatus("QUANTUM_MODE", true);
     }
   );
-  import_ecs14.pointerEventsSystem.onPointerDown(
+  import_ecs15.pointerEventsSystem.onPointerDown(
     {
       entity: quantumPanel,
-      opts: { button: import_ecs14.InputAction.IA_POINTER, hoverText: "\u26A1 Activate Quantum Core" }
+      opts: { button: import_ecs15.InputAction.IA_POINTER, hoverText: "\u26A1 Activate Quantum Core" }
     },
     () => {
       console.log("\u26A1 Quantum Core Activation Sequence");
@@ -6718,10 +6771,10 @@ function createEnhancedInteractables() {
       updateSystemStatus("QUANTUM_CORE", true);
     }
   );
-  import_ecs14.pointerEventsSystem.onPointerDown(
+  import_ecs15.pointerEventsSystem.onPointerDown(
     {
       entity: networkPanel,
-      opts: { button: import_ecs14.InputAction.IA_POINTER, hoverText: "\u{1F310} Network Diagnostics" }
+      opts: { button: import_ecs15.InputAction.IA_POINTER, hoverText: "\u{1F310} Network Diagnostics" }
     },
     () => {
       console.log("\u{1F310} Network Diagnostics Running");
@@ -6730,23 +6783,23 @@ function createEnhancedInteractables() {
     }
   );
   for (let i = 0; i < 5; i++) {
-    const dataOrb = import_ecs14.engine.addEntity();
-    import_ecs14.Transform.create(dataOrb, {
-      position: import_math12.Vector3.create(3 + i * 1.5, 3.5, 5 + i * 0.5),
-      scale: import_math12.Vector3.create(0.5, 0.5, 0.5)
+    const dataOrb = import_ecs15.engine.addEntity();
+    import_ecs15.Transform.create(dataOrb, {
+      position: import_math13.Vector3.create(3 + i * 1.5, 3.5, 5 + i * 0.5),
+      scale: import_math13.Vector3.create(0.5, 0.5, 0.5)
     });
-    import_ecs14.MeshRenderer.setBox(dataOrb);
-    import_ecs14.Material.setPbrMaterial(dataOrb, {
-      albedoColor: import_math12.Color4.create(0, 1, 0.8, 0.7),
+    import_ecs15.MeshRenderer.setBox(dataOrb);
+    import_ecs15.Material.setPbrMaterial(dataOrb, {
+      albedoColor: import_math13.Color4.create(0, 1, 0.8, 0.7),
       roughness: 0,
       metallic: 0.8,
-      emissiveColor: import_math12.Color4.create(0, 1, 0.8, 1),
+      emissiveColor: import_math13.Color4.create(0, 1, 0.8, 1),
       emissiveIntensity: 5
     });
-    import_ecs14.pointerEventsSystem.onPointerDown(
+    import_ecs15.pointerEventsSystem.onPointerDown(
       {
         entity: dataOrb,
-        opts: { button: import_ecs14.InputAction.IA_POINTER, hoverText: `\u{1F4CA} Data Node ${i + 1}` }
+        opts: { button: import_ecs15.InputAction.IA_POINTER, hoverText: `\u{1F4CA} Data Node ${i + 1}` }
       },
       () => {
         console.log(`\u{1F4CA} Accessing Data Node ${i + 1}`);
@@ -6754,35 +6807,35 @@ function createEnhancedInteractables() {
       }
     );
   }
-  const securityTerminal = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(securityTerminal, {
-    position: import_math12.Vector3.create(8, 1, 2),
-    scale: import_math12.Vector3.create(3, 2, 0.5)
+  const securityTerminal = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(securityTerminal, {
+    position: import_math13.Vector3.create(8, 1, 2),
+    scale: import_math13.Vector3.create(3, 2, 0.5)
   });
-  import_ecs14.MeshRenderer.setBox(securityTerminal);
-  import_ecs14.Material.setPbrMaterial(securityTerminal, {
-    albedoColor: import_math12.Color4.create(0.1, 0.2, 0.3, 0.9),
+  import_ecs15.MeshRenderer.setBox(securityTerminal);
+  import_ecs15.Material.setPbrMaterial(securityTerminal, {
+    albedoColor: import_math13.Color4.create(0.1, 0.2, 0.3, 0.9),
     roughness: 0.3,
     metallic: 0.7,
-    emissiveColor: import_math12.Color4.create(0.2, 0.4, 0.6, 0.4),
+    emissiveColor: import_math13.Color4.create(0.2, 0.4, 0.6, 0.4),
     emissiveIntensity: 2
   });
-  const securityLabel = import_ecs14.engine.addEntity();
-  import_ecs14.Transform.create(securityLabel, {
+  const securityLabel = import_ecs15.engine.addEntity();
+  import_ecs15.Transform.create(securityLabel, {
     parent: securityTerminal,
-    position: import_math12.Vector3.create(0, 0.2, -0.6),
-    scale: import_math12.Vector3.create(0.33, 0.5, 1)
+    position: import_math13.Vector3.create(0, 0.2, -0.6),
+    scale: import_math13.Vector3.create(0.33, 0.5, 1)
   });
-  import_ecs14.TextShape.create(securityLabel, {
+  import_ecs15.TextShape.create(securityLabel, {
     text: "\u{1F6E1}\uFE0F SECURITY\nTERMINAL",
-    textColor: import_math12.Color4.create(0.5, 0.8, 1, 1),
+    textColor: import_math13.Color4.create(0.5, 0.8, 1, 1),
     fontSize: 3,
     textAlign: 3
   });
-  import_ecs14.pointerEventsSystem.onPointerDown(
+  import_ecs15.pointerEventsSystem.onPointerDown(
     {
       entity: securityTerminal,
-      opts: { button: import_ecs14.InputAction.IA_POINTER, hoverText: "\u{1F6E1}\uFE0F Access Security Systems" }
+      opts: { button: import_ecs15.InputAction.IA_POINTER, hoverText: "\u{1F6E1}\uFE0F Access Security Systems" }
     },
     () => {
       console.log("\u{1F6E1}\uFE0F Security Systems Accessed");
@@ -6790,23 +6843,23 @@ function createEnhancedInteractables() {
     }
   );
   for (let i = 0; i < 3; i++) {
-    const energyCrystal = import_ecs14.engine.addEntity();
-    import_ecs14.Transform.create(energyCrystal, {
-      position: import_math12.Vector3.create(4 + i * 4, 1, 14),
-      scale: import_math12.Vector3.create(0.8, 1.2, 0.8)
+    const energyCrystal = import_ecs15.engine.addEntity();
+    import_ecs15.Transform.create(energyCrystal, {
+      position: import_math13.Vector3.create(4 + i * 4, 1, 14),
+      scale: import_math13.Vector3.create(0.8, 1.2, 0.8)
     });
-    import_ecs14.MeshRenderer.setBox(energyCrystal);
-    import_ecs14.Material.setPbrMaterial(energyCrystal, {
-      albedoColor: import_math12.Color4.create(0.8, 0.2, 1, 0.8),
+    import_ecs15.MeshRenderer.setBox(energyCrystal);
+    import_ecs15.Material.setPbrMaterial(energyCrystal, {
+      albedoColor: import_math13.Color4.create(0.8, 0.2, 1, 0.8),
       roughness: 0.1,
       metallic: 0.9,
-      emissiveColor: import_math12.Color4.create(0.8, 0.2, 1, 1),
+      emissiveColor: import_math13.Color4.create(0.8, 0.2, 1, 1),
       emissiveIntensity: 6
     });
-    import_ecs14.pointerEventsSystem.onPointerDown(
+    import_ecs15.pointerEventsSystem.onPointerDown(
       {
         entity: energyCrystal,
-        opts: { button: import_ecs14.InputAction.IA_POINTER, hoverText: `\u{1F48E} Energy Crystal ${i + 1}` }
+        opts: { button: import_ecs15.InputAction.IA_POINTER, hoverText: `\u{1F48E} Energy Crystal ${i + 1}` }
       },
       () => {
         console.log(`\u{1F48E} Energy Crystal ${i + 1} Activated`);
@@ -6818,28 +6871,28 @@ function createEnhancedInteractables() {
 function updateSystemStatus(system, active) {
   if (!systemStatusEntity) return;
   const status = active ? "\u2705 ACTIVE" : "\u26A0\uFE0F INACTIVE";
-  const color = active ? import_math12.Color4.create(0, 1, 0.5, 1) : import_math12.Color4.create(1, 0.5, 0, 1);
-  import_ecs14.TextShape.getMutable(systemStatusEntity).text = `\u{1F525} SYSTEMS ONLINE \u{1F525}
+  const color = active ? import_math13.Color4.create(0, 1, 0.5, 1) : import_math13.Color4.create(1, 0.5, 0, 1);
+  import_ecs15.TextShape.getMutable(systemStatusEntity).text = `\u{1F525} SYSTEMS ONLINE \u{1F525}
 \u26A1 Quantum Core: ${status}
 \u{1F310} Network: OPTIMAL
 \u{1F6E1}\uFE0F Security: ENHANCED
 \u{1F4E1} Last Action: ${system}`;
-  import_ecs14.TextShape.getMutable(systemStatusEntity).textColor = color;
+  import_ecs15.TextShape.getMutable(systemStatusEntity).textColor = color;
 }
 function updateAlert(message, alertType = "INFO") {
   if (!alertSystemEntity) return;
   const colors = {
-    INFO: import_math12.Color4.create(0, 1, 1, 1),
-    WARNING: import_math12.Color4.create(1, 1, 0, 1),
-    CRITICAL: import_math12.Color4.create(1, 0, 0, 1)
+    INFO: import_math13.Color4.create(0, 1, 1, 1),
+    WARNING: import_math13.Color4.create(1, 1, 0, 1),
+    CRITICAL: import_math13.Color4.create(1, 0, 0, 1)
   };
   const icons = {
     INFO: "\u{1F4E1}",
     WARNING: "\u26A0\uFE0F",
     CRITICAL: "\u{1F6A8}"
   };
-  import_ecs14.TextShape.getMutable(alertSystemEntity).text = `${icons[alertType]} ${message}`;
-  import_ecs14.TextShape.getMutable(alertSystemEntity).textColor = colors[alertType];
+  import_ecs15.TextShape.getMutable(alertSystemEntity).text = `${icons[alertType]} ${message}`;
+  import_ecs15.TextShape.getMutable(alertSystemEntity).textColor = colors[alertType];
 }
 
 // src/enhanced-network.ts
@@ -6914,8 +6967,8 @@ async function runSystemDiagnostics() {
 }
 
 // src/gesture-recognition.ts
-var import_ecs15 = require("@dcl/sdk/ecs");
-var import_math13 = require("@dcl/sdk/math");
+var import_ecs16 = require("@dcl/sdk/ecs");
+var import_math14 = require("@dcl/sdk/math");
 var GestureRecognitionSystem = class {
   constructor() {
     this.gestures = /* @__PURE__ */ new Map();
@@ -6971,26 +7024,26 @@ var GestureRecognitionSystem = class {
   }
   // Create gesture UI
   createGestureUI() {
-    this.gestureUI = import_ecs15.engine.addEntity();
-    import_ecs15.Transform.create(this.gestureUI, {
-      position: import_math13.Vector3.create(8, 5, 8),
-      scale: import_math13.Vector3.create(3, 1, 0.1)
+    this.gestureUI = import_ecs16.engine.addEntity();
+    import_ecs16.Transform.create(this.gestureUI, {
+      position: import_math14.Vector3.create(8, 5, 8),
+      scale: import_math14.Vector3.create(3, 1, 0.1)
     });
-    import_ecs15.MeshRenderer.setBox(this.gestureUI);
-    import_ecs15.Material.setPbrMaterial(this.gestureUI, {
-      albedoColor: import_math13.Color4.create(0.1, 0.2, 0.4, 0.9),
-      emissiveColor: import_math13.Color4.create(0.2, 0.4, 0.8, 0.5),
+    import_ecs16.MeshRenderer.setBox(this.gestureUI);
+    import_ecs16.Material.setPbrMaterial(this.gestureUI, {
+      albedoColor: import_math14.Color4.create(0.1, 0.2, 0.4, 0.9),
+      emissiveColor: import_math14.Color4.create(0.2, 0.4, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const title = import_ecs15.engine.addEntity();
-    import_ecs15.Transform.create(title, {
+    const title = import_ecs16.engine.addEntity();
+    import_ecs16.Transform.create(title, {
       parent: this.gestureUI,
-      position: import_math13.Vector3.create(0, 0.3, 0.1),
-      scale: import_math13.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math14.Vector3.create(0, 0.3, 0.1),
+      scale: import_math14.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(title, {
       text: "\u{1F44B} GESTURE CONTROL ACTIVE",
-      textColor: import_math13.Color4.create(1, 1, 1, 1),
+      textColor: import_math14.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
@@ -7006,27 +7059,27 @@ var GestureRecognitionSystem = class {
       { x: 1, y: -0.2, gesture: "\u{1F44D}" }
     ];
     indicatorPositions.forEach((pos) => {
-      const indicator = import_ecs15.engine.addEntity();
-      import_ecs15.Transform.create(indicator, {
+      const indicator = import_ecs16.engine.addEntity();
+      import_ecs16.Transform.create(indicator, {
         parent: this.gestureUI,
-        position: import_math13.Vector3.create(pos.x, pos.y, 0.1),
-        scale: import_math13.Vector3.create(0.2, 0.2, 0.1)
+        position: import_math14.Vector3.create(pos.x, pos.y, 0.1),
+        scale: import_math14.Vector3.create(0.2, 0.2, 0.1)
       });
-      import_ecs15.MeshRenderer.setBox(indicator);
-      import_ecs15.Material.setPbrMaterial(indicator, {
-        albedoColor: import_math13.Color4.create(0.2, 0.8, 0.2, 1),
-        emissiveColor: import_math13.Color4.create(0.2, 0.8, 0.2, 0.5),
+      import_ecs16.MeshRenderer.setBox(indicator);
+      import_ecs16.Material.setPbrMaterial(indicator, {
+        albedoColor: import_math14.Color4.create(0.2, 0.8, 0.2, 1),
+        emissiveColor: import_math14.Color4.create(0.2, 0.8, 0.2, 0.5),
         emissiveIntensity: 1
       });
-      const gestureText = import_ecs15.engine.addEntity();
-      import_ecs15.Transform.create(gestureText, {
+      const gestureText = import_ecs16.engine.addEntity();
+      import_ecs16.Transform.create(gestureText, {
         parent: indicator,
-        position: import_math13.Vector3.create(0, 0, 0.1),
-        scale: import_math13.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math14.Vector3.create(0, 0, 0.1),
+        scale: import_math14.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(gestureText, {
         text: pos.gesture,
-        textColor: import_math13.Color4.create(1, 1, 1, 1),
+        textColor: import_math14.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
@@ -7035,7 +7088,7 @@ var GestureRecognitionSystem = class {
   // Start hand tracking simulation
   startHandTracking() {
     this.handTracking.isActive = true;
-    import_ecs15.engine.addSystem(() => {
+    import_ecs16.engine.addSystem(() => {
       if (!this.isInitialized || !this.handTracking.isActive) return;
       this.updateHandTracking();
     });
@@ -7044,12 +7097,12 @@ var GestureRecognitionSystem = class {
   updateHandTracking() {
     const time = Date.now() / 1e3;
     this.handTracking.rightHand = {
-      position: import_math13.Vector3.create(
+      position: import_math14.Vector3.create(
         8 + Math.sin(time * 0.5) * 2,
         2 + Math.cos(time * 0.3) * 0.5,
         8 + Math.cos(time * 0.4) * 2
       ),
-      rotation: import_math13.Quaternion.fromEulerDegrees(
+      rotation: import_math14.Quaternion.fromEulerDegrees(
         Math.sin(time * 0.2) * 20,
         Math.cos(time * 0.3) * 30,
         Math.sin(time * 0.4) * 10
@@ -7058,12 +7111,12 @@ var GestureRecognitionSystem = class {
       confidence: 0.9
     };
     this.handTracking.leftHand = {
-      position: import_math13.Vector3.create(
+      position: import_math14.Vector3.create(
         8 + Math.cos(time * 0.4) * 1.5,
         2 + Math.sin(time * 0.5) * 0.3,
         8 + Math.sin(time * 0.3) * 1.5
       ),
-      rotation: import_math13.Quaternion.fromEulerDegrees(
+      rotation: import_math14.Quaternion.fromEulerDegrees(
         Math.cos(time * 0.3) * 15,
         Math.sin(time * 0.4) * 25,
         Math.cos(time * 0.2) * 8
@@ -7078,31 +7131,31 @@ var GestureRecognitionSystem = class {
     return [
       {
         id: "thumb",
-        position: import_math13.Vector3.create(0.1, 0.1, 0.05),
+        position: import_math14.Vector3.create(0.1, 0.1, 0.05),
         isExtended: Math.sin(time * 2) > 0,
         confidence: 0.9
       },
       {
         id: "index",
-        position: import_math13.Vector3.create(0.15, 0.15, 0.1),
+        position: import_math14.Vector3.create(0.15, 0.15, 0.1),
         isExtended: Math.sin(time * 3) > -0.5,
         confidence: 0.95
       },
       {
         id: "middle",
-        position: import_math13.Vector3.create(0.1, 0.2, 0.08),
+        position: import_math14.Vector3.create(0.1, 0.2, 0.08),
         isExtended: Math.sin(time * 2.5) > -0.3,
         confidence: 0.9
       },
       {
         id: "ring",
-        position: import_math13.Vector3.create(0.05, 0.18, 0.06),
+        position: import_math14.Vector3.create(0.05, 0.18, 0.06),
         isExtended: Math.sin(time * 2.2) > -0.2,
         confidence: 0.85
       },
       {
         id: "pinky",
-        position: import_math13.Vector3.create(0, 0.15, 0.04),
+        position: import_math14.Vector3.create(0, 0.15, 0.04),
         isExtended: Math.sin(time * 2.8) > -0.1,
         confidence: 0.8
       }
@@ -7110,7 +7163,7 @@ var GestureRecognitionSystem = class {
   }
   // Start gesture recognition
   startGestureRecognition() {
-    import_ecs15.engine.addSystem(() => {
+    import_ecs16.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.detectGestures();
       this.updateGestureTrails();
@@ -7149,7 +7202,7 @@ var GestureRecognitionSystem = class {
     existingGesture.path.push(hand.position);
     existingGesture.endPoint = hand.position;
     existingGesture.duration = currentTime - (existingGesture.duration || currentTime);
-    const distance = import_math13.Vector3.distance(existingGesture.startPoint, existingGesture.endPoint);
+    const distance = import_math14.Vector3.distance(existingGesture.startPoint, existingGesture.endPoint);
     if (distance > 1 && existingGesture.duration > 500) {
       existingGesture.isActive = true;
       existingGesture.confidence = Math.min(1, distance / 2);
@@ -7195,7 +7248,7 @@ var GestureRecognitionSystem = class {
       const thumb = hand.fingers.find((f) => f.id === "thumb");
       const index = hand.fingers.find((f) => f.id === "index");
       if (thumb && index) {
-        const distance = import_math13.Vector3.distance(thumb.position, index.position);
+        const distance = import_math14.Vector3.distance(thumb.position, index.position);
         if (distance < 0.05) {
           const gesture = {
             id: "pinch",
@@ -7284,11 +7337,11 @@ var GestureRecognitionSystem = class {
   // Check if path is circular
   isCircularPath(path) {
     if (path.length < 10) return false;
-    const center = import_math13.Vector3.lerp(path[0], path[path.length - 1], 0.5);
-    const radius = import_math13.Vector3.distance(path[0], center);
+    const center = import_math14.Vector3.lerp(path[0], path[path.length - 1], 0.5);
+    const radius = import_math14.Vector3.distance(path[0], center);
     let isCircular = true;
     for (let i = 1; i < path.length; i++) {
-      const distance = import_math13.Vector3.distance(path[i], center);
+      const distance = import_math14.Vector3.distance(path[i], center);
       if (Math.abs(distance - radius) > radius * 0.3) {
         isCircular = false;
         break;
@@ -7368,15 +7421,15 @@ var GestureRecognitionSystem = class {
   }
   // Create gesture feedback
   createGestureFeedback(gesture) {
-    const feedback = import_ecs15.engine.addEntity();
-    import_ecs15.Transform.create(feedback, {
+    const feedback = import_ecs16.engine.addEntity();
+    import_ecs16.Transform.create(feedback, {
       position: gesture.endPoint,
-      scale: import_math13.Vector3.create(0.2, 0.2, 0.2)
+      scale: import_math14.Vector3.create(0.2, 0.2, 0.2)
     });
-    import_ecs15.MeshRenderer.setSphere(feedback);
-    import_ecs15.Material.setPbrMaterial(feedback, {
-      albedoColor: import_math13.Color4.create(0.2, 0.8, 1, 0.8),
-      emissiveColor: import_math13.Color4.create(0.2, 0.8, 1, 1),
+    import_ecs16.MeshRenderer.setSphere(feedback);
+    import_ecs16.Material.setPbrMaterial(feedback, {
+      albedoColor: import_math14.Color4.create(0.2, 0.8, 1, 0.8),
+      emissiveColor: import_math14.Color4.create(0.2, 0.8, 1, 1),
       emissiveIntensity: 3
     });
     this.animateGestureFeedback(feedback);
@@ -7388,16 +7441,16 @@ var GestureRecognitionSystem = class {
     const animate = () => {
       scale += 0.02;
       opacity -= 0.02;
-      const transform = import_ecs15.Transform.getMutable(feedback);
-      transform.scale = import_math13.Vector3.create(scale, scale, scale);
-      const material = import_ecs15.Material.getMutable(feedback);
+      const transform = import_ecs16.Transform.getMutable(feedback);
+      transform.scale = import_math14.Vector3.create(scale, scale, scale);
+      const material = import_ecs16.Material.getMutable(feedback);
       if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = import_math13.Color4.create(0.2, 0.8, 1, opacity);
+        material.pbr.albedoColor = import_math14.Color4.create(0.2, 0.8, 1, opacity);
       }
       if (opacity > 0) {
         setTimeout(animate, 16);
       } else {
-        import_ecs15.engine.removeEntity(feedback);
+        import_ecs16.engine.removeEntity(feedback);
       }
     };
     animate();
@@ -7411,27 +7464,27 @@ var GestureRecognitionSystem = class {
       this.gestureTrails.set(trailId, []);
     }
     const trail = this.gestureTrails.get(trailId);
-    const trailPoint = import_ecs15.engine.addEntity();
-    import_ecs15.Transform.create(trailPoint, {
+    const trailPoint = import_ecs16.engine.addEntity();
+    import_ecs16.Transform.create(trailPoint, {
       position: hand.position,
-      scale: import_math13.Vector3.create(0.05, 0.05, 0.05)
+      scale: import_math14.Vector3.create(0.05, 0.05, 0.05)
     });
-    import_ecs15.MeshRenderer.setSphere(trailPoint);
-    import_ecs15.Material.setPbrMaterial(trailPoint, {
-      albedoColor: import_math13.Color4.create(0.5, 0.8, 1, 0.6),
-      emissiveColor: import_math13.Color4.create(0.5, 0.8, 1, 0.8),
+    import_ecs16.MeshRenderer.setSphere(trailPoint);
+    import_ecs16.Material.setPbrMaterial(trailPoint, {
+      albedoColor: import_math14.Color4.create(0.5, 0.8, 1, 0.6),
+      emissiveColor: import_math14.Color4.create(0.5, 0.8, 1, 0.8),
       emissiveIntensity: 2
     });
     trail.push(trailPoint);
     if (trail.length > 20) {
       const oldPoint = trail.shift();
-      import_ecs15.engine.removeEntity(oldPoint);
+      import_ecs16.engine.removeEntity(oldPoint);
     }
     trail.forEach((point, index) => {
       const opacity = index / trail.length * 0.6;
-      const material = import_ecs15.Material.getMutable(point);
+      const material = import_ecs16.Material.getMutable(point);
       if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = import_math13.Color4.create(0.5, 0.8, 1, opacity);
+        material.pbr.albedoColor = import_math14.Color4.create(0.5, 0.8, 1, opacity);
       }
     });
   }
@@ -7460,13 +7513,13 @@ var GestureRecognitionSystem = class {
   // Cleanup system
   cleanup() {
     this.gestureTrails.forEach((trail) => {
-      trail.forEach((point) => import_ecs15.engine.removeEntity(point));
+      trail.forEach((point) => import_ecs16.engine.removeEntity(point));
     });
     this.gestureTrails.clear();
     this.gestures.clear();
     this.gestureHistory = [];
     if (this.gestureUI) {
-      import_ecs15.engine.removeEntity(this.gestureUI);
+      import_ecs16.engine.removeEntity(this.gestureUI);
     }
     this.gestureActions.clear();
     this.isInitialized = false;
@@ -7475,8 +7528,8 @@ var GestureRecognitionSystem = class {
 var gestureSystem = new GestureRecognitionSystem();
 
 // src/haptic-feedback.ts
-var import_ecs16 = require("@dcl/sdk/ecs");
-var import_math14 = require("@dcl/sdk/math");
+var import_ecs17 = require("@dcl/sdk/ecs");
+var import_math15 = require("@dcl/sdk/math");
 var HapticFeedbackSystem = class {
   constructor() {
     this.devices = /* @__PURE__ */ new Map();
@@ -7752,8 +7805,8 @@ var HapticFeedbackSystem = class {
     const desktopZone = {
       id: "zone_desktop",
       name: "Desktop",
-      position: import_math14.Vector3.create(8, 1, 8),
-      size: import_math14.Vector3.create(3, 1, 3),
+      position: import_math15.Vector3.create(8, 1, 8),
+      size: import_math15.Vector3.create(3, 1, 3),
       sensitivity: 0.8,
       devices: ["device_haptic_chair"],
       isActive: true,
@@ -7769,8 +7822,8 @@ var HapticFeedbackSystem = class {
     const interactionZone = {
       id: "zone_interaction",
       name: "Interaction Area",
-      position: import_math14.Vector3.create(8, 2, 8),
-      size: import_math14.Vector3.create(2, 2, 2),
+      position: import_math15.Vector3.create(8, 2, 8),
+      size: import_math15.Vector3.create(2, 2, 2),
       sensitivity: 1,
       devices: ["device_vr_controller", "device_haptic_glove"],
       isActive: true,
@@ -7779,8 +7832,8 @@ var HapticFeedbackSystem = class {
     const floorZone = {
       id: "zone_floor",
       name: "Floor",
-      position: import_math14.Vector3.create(8, 0, 8),
-      size: import_math14.Vector3.create(10, 0.1, 10),
+      position: import_math15.Vector3.create(8, 0, 8),
+      size: import_math15.Vector3.create(10, 0.1, 10),
       sensitivity: 0.5,
       devices: ["device_haptic_vest"],
       isActive: false,
@@ -7793,26 +7846,26 @@ var HapticFeedbackSystem = class {
   }
   // Create haptic UI
   createHapticUI() {
-    this.hapticUI = import_ecs16.engine.addEntity();
-    import_ecs16.Transform.create(this.hapticUI, {
-      position: import_math14.Vector3.create(14, 3, 2),
-      scale: import_math14.Vector3.create(3, 4, 0.1)
+    this.hapticUI = import_ecs17.engine.addEntity();
+    import_ecs17.Transform.create(this.hapticUI, {
+      position: import_math15.Vector3.create(14, 3, 2),
+      scale: import_math15.Vector3.create(3, 4, 0.1)
     });
-    import_ecs16.MeshRenderer.setBox(this.hapticUI);
-    import_ecs16.Material.setPbrMaterial(this.hapticUI, {
-      albedoColor: import_math14.Color4.create(0.1, 0.2, 0.4, 0.9),
-      emissiveColor: import_math14.Color4.create(0.2, 0.4, 0.8, 0.5),
+    import_ecs17.MeshRenderer.setBox(this.hapticUI);
+    import_ecs17.Material.setPbrMaterial(this.hapticUI, {
+      albedoColor: import_math15.Color4.create(0.1, 0.2, 0.4, 0.9),
+      emissiveColor: import_math15.Color4.create(0.2, 0.4, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const title = import_ecs16.engine.addEntity();
-    import_ecs16.Transform.create(title, {
+    const title = import_ecs17.engine.addEntity();
+    import_ecs17.Transform.create(title, {
       parent: this.hapticUI,
-      position: import_math14.Vector3.create(0, 1.7, 0.1),
-      scale: import_math14.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math15.Vector3.create(0, 1.7, 0.1),
+      scale: import_math15.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(title, {
       text: "\u{1F3AF} HAPTIC FEEDBACK",
-      textColor: import_math14.Color4.create(1, 1, 1, 1),
+      textColor: import_math15.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
@@ -7826,34 +7879,34 @@ var HapticFeedbackSystem = class {
     const devices = Array.from(this.devices.values());
     let xOffset = -1.2;
     devices.forEach((device) => {
-      const indicator = import_ecs16.engine.addEntity();
-      import_ecs16.Transform.create(indicator, {
+      const indicator = import_ecs17.engine.addEntity();
+      import_ecs17.Transform.create(indicator, {
         parent: this.hapticUI,
-        position: import_math14.Vector3.create(xOffset, 1.2, 0.1),
-        scale: import_math14.Vector3.create(0.2, 0.2, 0.1)
+        position: import_math15.Vector3.create(xOffset, 1.2, 0.1),
+        scale: import_math15.Vector3.create(0.2, 0.2, 0.1)
       });
-      import_ecs16.MeshRenderer.setBox(indicator);
-      import_ecs16.Material.setPbrMaterial(indicator, {
-        albedoColor: device.isConnected ? import_math14.Color4.create(0.2, 0.8, 0.2, 1) : import_math14.Color4.create(0.8, 0.2, 0.2, 1),
-        emissiveColor: device.isConnected ? import_math14.Color4.create(0.2, 0.8, 0.2, 0.5) : import_math14.Color4.create(0.8, 0.2, 0.2, 0.5),
+      import_ecs17.MeshRenderer.setBox(indicator);
+      import_ecs17.Material.setPbrMaterial(indicator, {
+        albedoColor: device.isConnected ? import_math15.Color4.create(0.2, 0.8, 0.2, 1) : import_math15.Color4.create(0.8, 0.2, 0.2, 1),
+        emissiveColor: device.isConnected ? import_math15.Color4.create(0.2, 0.8, 0.2, 0.5) : import_math15.Color4.create(0.8, 0.2, 0.2, 0.5),
         emissiveIntensity: device.isConnected ? 2 : 0.5
       });
-      const deviceText = import_ecs16.engine.addEntity();
-      import_ecs16.Transform.create(deviceText, {
+      const deviceText = import_ecs17.engine.addEntity();
+      import_ecs17.Transform.create(deviceText, {
         parent: indicator,
-        position: import_math14.Vector3.create(0, 0, 0.1),
-        scale: import_math14.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math15.Vector3.create(0, 0, 0.1),
+        scale: import_math15.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(deviceText, {
         text: this.getDeviceIcon(device.type),
-        textColor: import_math14.Color4.create(1, 1, 1, 1),
+        textColor: import_math15.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
-      import_ecs16.pointerEventsSystem.onPointerDown(
+      import_ecs17.pointerEventsSystem.onPointerDown(
         {
           entity: indicator,
-          opts: { button: import_ecs16.InputAction.IA_POINTER, hoverText: device.name }
+          opts: { button: import_ecs17.InputAction.IA_POINTER, hoverText: device.name }
         },
         () => this.toggleDevice(device.id)
       );
@@ -7865,34 +7918,34 @@ var HapticFeedbackSystem = class {
     const patterns = ["click", "impact", "pulse", "texture", "ambient"];
     let xOffset = -1;
     patterns.forEach((pattern) => {
-      const button = import_ecs16.engine.addEntity();
-      import_ecs16.Transform.create(button, {
+      const button = import_ecs17.engine.addEntity();
+      import_ecs17.Transform.create(button, {
         parent: this.hapticUI,
-        position: import_math14.Vector3.create(xOffset, 0.6, 0.1),
-        scale: import_math14.Vector3.create(0.2, 0.2, 0.1)
+        position: import_math15.Vector3.create(xOffset, 0.6, 0.1),
+        scale: import_math15.Vector3.create(0.2, 0.2, 0.1)
       });
-      import_ecs16.MeshRenderer.setBox(button);
-      import_ecs16.Material.setPbrMaterial(button, {
-        albedoColor: import_math14.Color4.create(0.3, 0.6, 0.8, 1),
-        emissiveColor: import_math14.Color4.create(0.3, 0.6, 0.8, 0.5),
+      import_ecs17.MeshRenderer.setBox(button);
+      import_ecs17.Material.setPbrMaterial(button, {
+        albedoColor: import_math15.Color4.create(0.3, 0.6, 0.8, 1),
+        emissiveColor: import_math15.Color4.create(0.3, 0.6, 0.8, 0.5),
         emissiveIntensity: 2
       });
-      const buttonText = import_ecs16.engine.addEntity();
-      import_ecs16.Transform.create(buttonText, {
+      const buttonText = import_ecs17.engine.addEntity();
+      import_ecs17.Transform.create(buttonText, {
         parent: button,
-        position: import_math14.Vector3.create(0, 0, 0.1),
-        scale: import_math14.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math15.Vector3.create(0, 0, 0.1),
+        scale: import_math15.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(buttonText, {
         text: this.getPatternIcon(pattern),
-        textColor: import_math14.Color4.create(1, 1, 1, 1),
+        textColor: import_math15.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
-      import_ecs16.pointerEventsSystem.onPointerDown(
+      import_ecs17.pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: import_ecs16.InputAction.IA_POINTER, hoverText: `Play ${pattern}` }
+          opts: { button: import_ecs17.InputAction.IA_POINTER, hoverText: `Play ${pattern}` }
         },
         () => this.playPattern(pattern)
       );
@@ -7901,34 +7954,34 @@ var HapticFeedbackSystem = class {
   }
   // Create intensity controls
   createIntensityControls() {
-    const intensitySlider = import_ecs16.engine.addEntity();
-    import_ecs16.Transform.create(intensitySlider, {
+    const intensitySlider = import_ecs17.engine.addEntity();
+    import_ecs17.Transform.create(intensitySlider, {
       parent: this.hapticUI,
-      position: import_math14.Vector3.create(0, 0, 0.1),
-      scale: import_math14.Vector3.create(2, 0.2, 0.1)
+      position: import_math15.Vector3.create(0, 0, 0.1),
+      scale: import_math15.Vector3.create(2, 0.2, 0.1)
     });
-    import_ecs16.MeshRenderer.setBox(intensitySlider);
-    import_ecs16.Material.setPbrMaterial(intensitySlider, {
-      albedoColor: import_math14.Color4.create(0.2, 0.2, 0.2, 0.8),
-      emissiveColor: import_math14.Color4.create(0.2, 0.2, 0.2, 0.3),
+    import_ecs17.MeshRenderer.setBox(intensitySlider);
+    import_ecs17.Material.setPbrMaterial(intensitySlider, {
+      albedoColor: import_math15.Color4.create(0.2, 0.2, 0.2, 0.8),
+      emissiveColor: import_math15.Color4.create(0.2, 0.2, 0.2, 0.3),
       emissiveIntensity: 1
     });
-    const intensityText = import_ecs16.engine.addEntity();
-    import_ecs16.Transform.create(intensityText, {
+    const intensityText = import_ecs17.engine.addEntity();
+    import_ecs17.Transform.create(intensityText, {
       parent: intensitySlider,
-      position: import_math14.Vector3.create(0, 0, 0.1),
-      scale: import_math14.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math15.Vector3.create(0, 0, 0.1),
+      scale: import_math15.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(intensityText, {
       text: `\u{1F50A} Intensity: ${(this.globalIntensity * 100).toFixed(0)}%`,
-      textColor: import_math14.Color4.create(1, 1, 1, 1),
+      textColor: import_math15.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
       textAlign: 3
     });
-    import_ecs16.pointerEventsSystem.onPointerDown(
+    import_ecs17.pointerEventsSystem.onPointerDown(
       {
         entity: intensitySlider,
-        opts: { button: import_ecs16.InputAction.IA_POINTER, hoverText: "Adjust Intensity" }
+        opts: { button: import_ecs17.InputAction.IA_POINTER, hoverText: "Adjust Intensity" }
       },
       () => this.adjustIntensity()
     );
@@ -7938,34 +7991,34 @@ var HapticFeedbackSystem = class {
     const zones = Array.from(this.zones.values());
     let xOffset = -0.8;
     zones.forEach((zone) => {
-      const button = import_ecs16.engine.addEntity();
-      import_ecs16.Transform.create(button, {
+      const button = import_ecs17.engine.addEntity();
+      import_ecs17.Transform.create(button, {
         parent: this.hapticUI,
-        position: import_math14.Vector3.create(xOffset, -0.4, 0.1),
-        scale: import_math14.Vector3.create(0.2, 0.2, 0.1)
+        position: import_math15.Vector3.create(xOffset, -0.4, 0.1),
+        scale: import_math15.Vector3.create(0.2, 0.2, 0.1)
       });
-      import_ecs16.MeshRenderer.setBox(button);
-      import_ecs16.Material.setPbrMaterial(button, {
-        albedoColor: zone.isActive ? import_math14.Color4.create(0.2, 0.8, 0.2, 1) : import_math14.Color4.create(0.8, 0.2, 0.2, 1),
-        emissiveColor: zone.isActive ? import_math14.Color4.create(0.2, 0.8, 0.2, 0.5) : import_math14.Color4.create(0.8, 0.2, 0.2, 0.5),
+      import_ecs17.MeshRenderer.setBox(button);
+      import_ecs17.Material.setPbrMaterial(button, {
+        albedoColor: zone.isActive ? import_math15.Color4.create(0.2, 0.8, 0.2, 1) : import_math15.Color4.create(0.8, 0.2, 0.2, 1),
+        emissiveColor: zone.isActive ? import_math15.Color4.create(0.2, 0.8, 0.2, 0.5) : import_math15.Color4.create(0.8, 0.2, 0.2, 0.5),
         emissiveIntensity: zone.isActive ? 2 : 0.5
       });
-      const zoneText = import_ecs16.engine.addEntity();
-      import_ecs16.Transform.create(zoneText, {
+      const zoneText = import_ecs17.engine.addEntity();
+      import_ecs17.Transform.create(zoneText, {
         parent: button,
-        position: import_math14.Vector3.create(0, 0, 0.1),
-        scale: import_math14.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math15.Vector3.create(0, 0, 0.1),
+        scale: import_math15.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(zoneText, {
         text: zone.name,
-        textColor: import_math14.Color4.create(1, 1, 1, 1),
+        textColor: import_math15.Color4.create(1, 1, 1, 1),
         fontSize: 1.2,
         textAlign: 3
       });
-      import_ecs16.pointerEventsSystem.onPointerDown(
+      import_ecs17.pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: import_ecs16.InputAction.IA_POINTER, hoverText: `Toggle ${zone.name}` }
+          opts: { button: import_ecs17.InputAction.IA_POINTER, hoverText: `Toggle ${zone.name}` }
         },
         () => this.toggleZone(zone.id)
       );
@@ -8008,7 +8061,7 @@ var HapticFeedbackSystem = class {
   }
   // Start haptic engine
   startHapticEngine() {
-    import_ecs16.engine.addSystem(() => {
+    import_ecs17.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.processHapticEvents();
       this.updateDeviceStatus();
@@ -8035,7 +8088,7 @@ var HapticFeedbackSystem = class {
   // Find zone for position
   findZone(position) {
     for (const zone of this.zones.values()) {
-      const distance = import_math14.Vector3.distance(position, zone.position);
+      const distance = import_math15.Vector3.distance(position, zone.position);
       if (distance <= Math.max(zone.size.x, zone.size.y, zone.size.z) / 2) {
         return zone;
       }
@@ -8248,7 +8301,7 @@ var HapticFeedbackSystem = class {
     this.zones.clear();
     this.activeEvents.clear();
     if (this.hapticUI) {
-      import_ecs16.engine.removeEntity(this.hapticUI);
+      import_ecs17.engine.removeEntity(this.hapticUI);
     }
     this.isInitialized = false;
   }
@@ -8256,8 +8309,8 @@ var HapticFeedbackSystem = class {
 var hapticFeedbackSystem = new HapticFeedbackSystem();
 
 // src/holographic-data-walls.ts
-var import_ecs17 = require("@dcl/sdk/ecs");
-var import_math15 = require("@dcl/sdk/math");
+var import_ecs18 = require("@dcl/sdk/ecs");
+var import_math16 = require("@dcl/sdk/math");
 var HolographicDataWall = class {
   constructor(position, scale) {
     this.charts = /* @__PURE__ */ new Map();
@@ -8268,17 +8321,17 @@ var HolographicDataWall = class {
     this.startAnimation();
   }
   createWall(position, scale) {
-    this.entity = import_ecs17.engine.addEntity();
-    import_ecs17.Transform.create(this.entity, {
+    this.entity = import_ecs18.engine.addEntity();
+    import_ecs18.Transform.create(this.entity, {
       position,
       scale
     });
-    import_ecs17.MeshRenderer.setBox(this.entity);
-    import_ecs17.Material.setPbrMaterial(this.entity, {
-      albedoColor: import_math15.Color4.create(0.05, 0.05, 0.1, 0.9),
+    import_ecs18.MeshRenderer.setBox(this.entity);
+    import_ecs18.Material.setPbrMaterial(this.entity, {
+      albedoColor: import_math16.Color4.create(0.05, 0.05, 0.1, 0.9),
       roughness: 0.1,
       metallic: 0.8,
-      emissiveColor: import_math15.Color4.create(0.1, 0.1, 0.3, 0.5),
+      emissiveColor: import_math16.Color4.create(0.1, 0.1, 0.3, 0.5),
       emissiveIntensity: 2
     });
     this.createGridOverlay();
@@ -8289,16 +8342,16 @@ var HolographicDataWall = class {
     const gridSpacing = 1.6;
     for (let x = 0; x < gridSize; x++) {
       for (let y = 0; y < gridSize; y++) {
-        const gridCell = import_ecs17.engine.addEntity();
-        import_ecs17.Transform.create(gridCell, {
+        const gridCell = import_ecs18.engine.addEntity();
+        import_ecs18.Transform.create(gridCell, {
           parent: this.entity,
-          position: import_math15.Vector3.create(-7.5 + x * gridSpacing, -3.5 + y * gridSpacing, 0.1),
-          scale: import_math15.Vector3.create(1.5, 1.5, 0.05)
+          position: import_math16.Vector3.create(-7.5 + x * gridSpacing, -3.5 + y * gridSpacing, 0.1),
+          scale: import_math16.Vector3.create(1.5, 1.5, 0.05)
         });
-        import_ecs17.MeshRenderer.setBox(gridCell);
-        import_ecs17.Material.setPbrMaterial(gridCell, {
-          albedoColor: import_math15.Color4.create(0.2, 0.3, 0.5, 0.3),
-          emissiveColor: import_math15.Color4.create(0.1, 0.2, 0.4, 0.5),
+        import_ecs18.MeshRenderer.setBox(gridCell);
+        import_ecs18.Material.setPbrMaterial(gridCell, {
+          albedoColor: import_math16.Color4.create(0.2, 0.3, 0.5, 0.3),
+          emissiveColor: import_math16.Color4.create(0.1, 0.2, 0.4, 0.5),
           emissiveIntensity: 1
         });
         this.visualElements.push(gridCell);
@@ -8306,19 +8359,19 @@ var HolographicDataWall = class {
     }
   }
   createTitle() {
-    const titleEntity = import_ecs17.engine.addEntity();
-    import_ecs17.Transform.create(titleEntity, {
+    const titleEntity = import_ecs18.engine.addEntity();
+    import_ecs18.Transform.create(titleEntity, {
       parent: this.entity,
-      position: import_math15.Vector3.create(0, 4.5, 0.1),
-      scale: import_math15.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math16.Vector3.create(0, 4.5, 0.1),
+      scale: import_math16.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(titleEntity, {
       text: "\u{1F4CA} HOLOGRAPHIC DATA VISUALIZATION",
-      textColor: import_math15.Color4.create(0.5, 0.8, 1, 1),
+      textColor: import_math16.Color4.create(0.5, 0.8, 1, 1),
       fontSize: 4,
       textAlign: 3,
       outlineWidth: 0.1,
-      outlineColor: import_math15.Color4.create(0, 0, 0, 1)
+      outlineColor: import_math16.Color4.create(0, 0, 0, 1)
     });
     this.visualElements.push(titleEntity);
   }
@@ -8359,28 +8412,28 @@ var HolographicDataWall = class {
     const spacing = 1.5;
     const startX = -6;
     config.data.forEach((point, index) => {
-      const bar = import_ecs17.engine.addEntity();
+      const bar = import_ecs18.engine.addEntity();
       const height = point.value / 100 * maxHeight;
-      import_ecs17.Transform.create(bar, {
+      import_ecs18.Transform.create(bar, {
         parent: this.entity,
-        position: import_math15.Vector3.create(startX + index * spacing, -2 + height / 2, 0.2),
-        scale: import_math15.Vector3.create(barWidth, height, 0.3)
+        position: import_math16.Vector3.create(startX + index * spacing, -2 + height / 2, 0.2),
+        scale: import_math16.Vector3.create(barWidth, height, 0.3)
       });
-      import_ecs17.MeshRenderer.setBox(bar);
-      import_ecs17.Material.setPbrMaterial(bar, {
-        albedoColor: import_math15.Color4.create(point.color.r, point.color.g, point.color.b, 0.8),
-        emissiveColor: import_math15.Color4.create(point.color.r, point.color.g, point.color.b, 0.6),
+      import_ecs18.MeshRenderer.setBox(bar);
+      import_ecs18.Material.setPbrMaterial(bar, {
+        albedoColor: import_math16.Color4.create(point.color.r, point.color.g, point.color.b, 0.8),
+        emissiveColor: import_math16.Color4.create(point.color.r, point.color.g, point.color.b, 0.6),
         emissiveIntensity: 2
       });
-      const label = import_ecs17.engine.addEntity();
-      import_ecs17.Transform.create(label, {
+      const label = import_ecs18.engine.addEntity();
+      import_ecs18.Transform.create(label, {
         parent: this.entity,
-        position: import_math15.Vector3.create(startX + index * spacing, -3.5, 0.3),
-        scale: import_math15.Vector3.create(0.2, 0.2, 0.2)
+        position: import_math16.Vector3.create(startX + index * spacing, -3.5, 0.3),
+        scale: import_math16.Vector3.create(0.2, 0.2, 0.2)
       });
       TextShape.create(label, {
         text: point.label,
-        textColor: import_math15.Color4.create(1, 1, 1, 1),
+        textColor: import_math16.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
@@ -8394,36 +8447,36 @@ var HolographicDataWall = class {
     config.data.forEach((point, index) => {
       const x = startX + index * spacing;
       const y = -2 + point.value / 100 * 3;
-      points.push(import_math15.Vector3.create(x, y, 0.2));
-      const dataPoint = import_ecs17.engine.addEntity();
-      import_ecs17.Transform.create(dataPoint, {
+      points.push(import_math16.Vector3.create(x, y, 0.2));
+      const dataPoint = import_ecs18.engine.addEntity();
+      import_ecs18.Transform.create(dataPoint, {
         parent: this.entity,
-        position: import_math15.Vector3.create(x, y, 0.2),
-        scale: import_math15.Vector3.create(0.2, 0.2, 0.2)
+        position: import_math16.Vector3.create(x, y, 0.2),
+        scale: import_math16.Vector3.create(0.2, 0.2, 0.2)
       });
-      import_ecs17.MeshRenderer.setSphere(dataPoint);
-      import_ecs17.Material.setPbrMaterial(dataPoint, {
-        albedoColor: import_math15.Color4.create(point.color.r, point.color.g, point.color.b, 1),
-        emissiveColor: import_math15.Color4.create(point.color.r, point.color.g, point.color.b, 0.8),
+      import_ecs18.MeshRenderer.setSphere(dataPoint);
+      import_ecs18.Material.setPbrMaterial(dataPoint, {
+        albedoColor: import_math16.Color4.create(point.color.r, point.color.g, point.color.b, 1),
+        emissiveColor: import_math16.Color4.create(point.color.r, point.color.g, point.color.b, 0.8),
         emissiveIntensity: 3
       });
       this.visualElements.push(dataPoint);
     });
     for (let i = 0; i < points.length - 1; i++) {
-      const line = import_ecs17.engine.addEntity();
+      const line = import_ecs18.engine.addEntity();
       const start = points[i];
       const end = points[i + 1];
-      const distance = import_math15.Vector3.distance(start, end);
-      const midpoint = import_math15.Vector3.lerp(start, end, 0.5);
-      import_ecs17.Transform.create(line, {
+      const distance = import_math16.Vector3.distance(start, end);
+      const midpoint = import_math16.Vector3.lerp(start, end, 0.5);
+      import_ecs18.Transform.create(line, {
         parent: this.entity,
-        position: import_math15.Vector3.create(midpoint.x, midpoint.y, 0.15),
-        scale: import_math15.Vector3.create(0.05, distance, 0.1)
+        position: import_math16.Vector3.create(midpoint.x, midpoint.y, 0.15),
+        scale: import_math16.Vector3.create(0.05, distance, 0.1)
       });
-      import_ecs17.MeshRenderer.setBox(line);
-      import_ecs17.Material.setPbrMaterial(line, {
-        albedoColor: import_math15.Color4.create(0.5, 0.8, 1, 0.8),
-        emissiveColor: import_math15.Color4.create(0.5, 0.8, 1, 0.6),
+      import_ecs18.MeshRenderer.setBox(line);
+      import_ecs18.Material.setPbrMaterial(line, {
+        albedoColor: import_math16.Color4.create(0.5, 0.8, 1, 0.8),
+        emissiveColor: import_math16.Color4.create(0.5, 0.8, 1, 0.6),
         emissiveIntensity: 2
       });
       this.visualElements.push(line);
@@ -8435,20 +8488,20 @@ var HolographicDataWall = class {
     config.data.forEach((point, index) => {
       const percentage = point.value / total;
       const angle = percentage * 360;
-      const slice = import_ecs17.engine.addEntity();
-      import_ecs17.Transform.create(slice, {
+      const slice = import_ecs18.engine.addEntity();
+      import_ecs18.Transform.create(slice, {
         parent: this.entity,
-        position: import_math15.Vector3.create(
+        position: import_math16.Vector3.create(
           Math.cos(currentAngle * Math.PI / 180) * 2,
           Math.sin(currentAngle * Math.PI / 180) * 2,
           0.2
         ),
-        scale: import_math15.Vector3.create(1.5, 1.5, 0.3)
+        scale: import_math16.Vector3.create(1.5, 1.5, 0.3)
       });
-      import_ecs17.MeshRenderer.setBox(slice);
-      import_ecs17.Material.setPbrMaterial(slice, {
-        albedoColor: import_math15.Color4.create(point.color.r, point.color.g, point.color.b, 0.8),
-        emissiveColor: import_math15.Color4.create(point.color.r, point.color.g, point.color.b, 0.6),
+      import_ecs18.MeshRenderer.setBox(slice);
+      import_ecs18.Material.setPbrMaterial(slice, {
+        albedoColor: import_math16.Color4.create(point.color.r, point.color.g, point.color.b, 0.8),
+        emissiveColor: import_math16.Color4.create(point.color.r, point.color.g, point.color.b, 0.6),
         emissiveIntensity: 2
       });
       this.visualElements.push(slice);
@@ -8457,20 +8510,20 @@ var HolographicDataWall = class {
   }
   renderScatterChart(chartId, config) {
     config.data.forEach((point, index) => {
-      const scatterPoint = import_ecs17.engine.addEntity();
-      import_ecs17.Transform.create(scatterPoint, {
+      const scatterPoint = import_ecs18.engine.addEntity();
+      import_ecs18.Transform.create(scatterPoint, {
         parent: this.entity,
-        position: import_math15.Vector3.create(
+        position: import_math16.Vector3.create(
           -6 + index / config.data.length * 12,
           -2 + point.value / 100 * 3,
           0.2
         ),
-        scale: import_math15.Vector3.create(0.3, 0.3, 0.3)
+        scale: import_math16.Vector3.create(0.3, 0.3, 0.3)
       });
-      import_ecs17.MeshRenderer.setSphere(scatterPoint);
-      import_ecs17.Material.setPbrMaterial(scatterPoint, {
-        albedoColor: import_math15.Color4.create(point.color.r, point.color.g, point.color.b, 0.9),
-        emissiveColor: import_math15.Color4.create(point.color.r, point.color.g, point.color.b, 0.7),
+      import_ecs18.MeshRenderer.setSphere(scatterPoint);
+      import_ecs18.Material.setPbrMaterial(scatterPoint, {
+        albedoColor: import_math16.Color4.create(point.color.r, point.color.g, point.color.b, 0.9),
+        emissiveColor: import_math16.Color4.create(point.color.r, point.color.g, point.color.b, 0.7),
         emissiveIntensity: 3
       });
       this.visualElements.push(scatterPoint);
@@ -8483,22 +8536,22 @@ var HolographicDataWall = class {
       for (let y = 0; y < gridSize; y++) {
         const dataIndex = (x * gridSize + y) % config.data.length;
         const point = config.data[dataIndex];
-        const heatCell = import_ecs17.engine.addEntity();
-        import_ecs17.Transform.create(heatCell, {
+        const heatCell = import_ecs18.engine.addEntity();
+        import_ecs18.Transform.create(heatCell, {
           parent: this.entity,
-          position: import_math15.Vector3.create(-6 + x * cellSize, -2 + y * cellSize, 0.2),
-          scale: import_math15.Vector3.create(cellSize * 0.8, cellSize * 0.8, 0.2)
+          position: import_math16.Vector3.create(-6 + x * cellSize, -2 + y * cellSize, 0.2),
+          scale: import_math16.Vector3.create(cellSize * 0.8, cellSize * 0.8, 0.2)
         });
-        import_ecs17.MeshRenderer.setBox(heatCell);
+        import_ecs18.MeshRenderer.setBox(heatCell);
         const intensity = point.value / 100;
-        import_ecs17.Material.setPbrMaterial(heatCell, {
-          albedoColor: import_math15.Color4.create(
+        import_ecs18.Material.setPbrMaterial(heatCell, {
+          albedoColor: import_math16.Color4.create(
             point.color.r * intensity,
             point.color.g * intensity,
             point.color.b * intensity,
             0.8
           ),
-          emissiveColor: import_math15.Color4.create(
+          emissiveColor: import_math16.Color4.create(
             point.color.r * intensity,
             point.color.g * intensity,
             point.color.b * intensity,
@@ -8516,7 +8569,7 @@ var HolographicDataWall = class {
     const newPoint = {
       label: "T" + Date.now() % 1e3,
       value: Math.random() * 100,
-      color: import_math15.Color3.create(Math.random(), Math.random(), Math.random()),
+      color: import_math16.Color3.create(Math.random(), Math.random(), Math.random()),
       timestamp: Date.now()
     };
     chart.data.push(newPoint);
@@ -8529,16 +8582,16 @@ var HolographicDataWall = class {
   clearChart(chartId) {
     const elementsToRemove = this.visualElements.splice(20);
     elementsToRemove.forEach((element) => {
-      import_ecs17.engine.removeEntity(element);
+      import_ecs18.engine.removeEntity(element);
     });
   }
   startAnimation() {
-    import_ecs17.engine.addSystem(() => {
+    import_ecs18.engine.addSystem(() => {
       if (!this.isActive) return;
       this.animationTime += 0.016;
       this.visualElements.forEach((element, index) => {
         if (index % 3 === 0) {
-          const material = import_ecs17.Material.getMutable(element);
+          const material = import_ecs18.Material.getMutable(element);
           if (material && material.$case === "pbr") {
             const pulse = Math.sin(this.animationTime * 2 + index * 0.1) * 0.3 + 0.7;
             material.pbr.emissiveIntensity = pulse * 2;
@@ -8569,7 +8622,7 @@ var HolographicDataWall = class {
   // Cleanup
   cleanup() {
     this.visualElements.forEach((element) => {
-      import_ecs17.engine.removeEntity(element);
+      import_ecs18.engine.removeEntity(element);
     });
     this.visualElements = [];
     this.charts.clear();
@@ -8590,11 +8643,11 @@ var DataVisualizationManager = class {
   // Pre-configured data sources
   static createSystemStatusData() {
     return [
-      { label: "CPU", value: 65, color: import_math15.Color3.create(0.2, 0.8, 0.2), timestamp: Date.now() },
-      { label: "Memory", value: 78, color: import_math15.Color3.create(0.8, 0.6, 0.2), timestamp: Date.now() },
-      { label: "Network", value: 45, color: import_math15.Color3.create(0.2, 0.6, 0.8), timestamp: Date.now() },
-      { label: "Storage", value: 32, color: import_math15.Color3.create(0.8, 0.2, 0.6), timestamp: Date.now() },
-      { label: "Quantum", value: 89, color: import_math15.Color3.create(0.6, 0.2, 0.8), timestamp: Date.now() }
+      { label: "CPU", value: 65, color: import_math16.Color3.create(0.2, 0.8, 0.2), timestamp: Date.now() },
+      { label: "Memory", value: 78, color: import_math16.Color3.create(0.8, 0.6, 0.2), timestamp: Date.now() },
+      { label: "Network", value: 45, color: import_math16.Color3.create(0.2, 0.6, 0.8), timestamp: Date.now() },
+      { label: "Storage", value: 32, color: import_math16.Color3.create(0.8, 0.2, 0.6), timestamp: Date.now() },
+      { label: "Quantum", value: 89, color: import_math16.Color3.create(0.6, 0.2, 0.8), timestamp: Date.now() }
     ];
   }
   static createRealtimeDataSource() {
@@ -8602,7 +8655,7 @@ var DataVisualizationManager = class {
     return () => ({
       label: "Data" + counter++,
       value: Math.random() * 100,
-      color: import_math15.Color3.create(Math.random(), Math.random(), Math.random()),
+      color: import_math16.Color3.create(Math.random(), Math.random(), Math.random()),
       timestamp: Date.now()
     });
   }
@@ -8614,8 +8667,8 @@ var DataVisualizationManager = class {
 var dataVizManager = new DataVisualizationManager();
 
 // src/multiplayer-system.ts
-var import_ecs18 = require("@dcl/sdk/ecs");
-var import_math16 = require("@dcl/sdk/math");
+var import_ecs19 = require("@dcl/sdk/ecs");
+var import_math17 = require("@dcl/sdk/math");
 var MultiplayerSystem = class {
   constructor() {
     this.remotePlayers = /* @__PURE__ */ new Map();
@@ -8627,12 +8680,12 @@ var MultiplayerSystem = class {
     this.localPlayer = {
       id: this.generatePlayerId(),
       name: "Player",
-      position: import_math16.Vector3.create(8, 1, 8),
-      rotation: import_math16.Quaternion.fromEulerDegrees(0, 0, 0),
+      position: import_math17.Vector3.create(8, 1, 8),
+      rotation: import_math17.Quaternion.fromEulerDegrees(0, 0, 0),
       avatar: null,
       isActive: true,
       lastUpdate: Date.now(),
-      color: import_math16.Color3.create(Math.random(), Math.random(), Math.random())
+      color: import_math17.Color3.create(Math.random(), Math.random(), Math.random())
     };
   }
   // Initialize multiplayer system
@@ -8648,14 +8701,14 @@ var MultiplayerSystem = class {
   }
   // Create local player avatar
   createLocalPlayer() {
-    const avatar = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(avatar, {
+    const avatar = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(avatar, {
       position: this.localPlayer.position,
-      scale: import_math16.Vector3.create(1, 2, 1)
+      scale: import_math17.Vector3.create(1, 2, 1)
     });
-    import_ecs18.MeshRenderer.setBox(avatar);
-    import_ecs18.Material.setPbrMaterial(avatar, {
-      albedoColor: import_math16.Color4.create(
+    import_ecs19.MeshRenderer.setBox(avatar);
+    import_ecs19.Material.setPbrMaterial(avatar, {
+      albedoColor: import_math17.Color4.create(
         this.localPlayer.color.r,
         this.localPlayer.color.g,
         this.localPlayer.color.b,
@@ -8663,7 +8716,7 @@ var MultiplayerSystem = class {
       ),
       roughness: 0.2,
       metallic: 0.3,
-      emissiveColor: import_math16.Color4.create(
+      emissiveColor: import_math17.Color4.create(
         this.localPlayer.color.r * 0.3,
         this.localPlayer.color.g * 0.3,
         this.localPlayer.color.b * 0.3,
@@ -8671,15 +8724,15 @@ var MultiplayerSystem = class {
       ),
       emissiveIntensity: 1
     });
-    const nameTag = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(nameTag, {
+    const nameTag = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(nameTag, {
       parent: avatar,
-      position: import_math16.Vector3.create(0, 2.5, 0),
-      scale: import_math16.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math17.Vector3.create(0, 2.5, 0),
+      scale: import_math17.Vector3.create(0.3, 0.3, 0.3)
     });
-    import_ecs18.TextShape.create(nameTag, {
+    import_ecs19.TextShape.create(nameTag, {
       text: this.localPlayer.name,
-      textColor: import_math16.Color4.create(1, 1, 1, 1),
+      textColor: import_math17.Color4.create(1, 1, 1, 1),
       fontSize: 3,
       textAlign: 3
     });
@@ -8699,57 +8752,57 @@ var MultiplayerSystem = class {
   }
   // Create voice channel UI
   createVoiceChannelUI() {
-    const voicePanel = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(voicePanel, {
-      position: import_math16.Vector3.create(1, 3, 8),
-      scale: import_math16.Vector3.create(1.5, 2, 0.1)
+    const voicePanel = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(voicePanel, {
+      position: import_math17.Vector3.create(1, 3, 8),
+      scale: import_math17.Vector3.create(1.5, 2, 0.1)
     });
-    import_ecs18.MeshRenderer.setBox(voicePanel);
-    import_ecs18.Material.setPbrMaterial(voicePanel, {
-      albedoColor: import_math16.Color4.create(0.1, 0.2, 0.4, 0.9),
-      emissiveColor: import_math16.Color4.create(0.2, 0.4, 0.8, 0.5),
+    import_ecs19.MeshRenderer.setBox(voicePanel);
+    import_ecs19.Material.setPbrMaterial(voicePanel, {
+      albedoColor: import_math17.Color4.create(0.1, 0.2, 0.4, 0.9),
+      emissiveColor: import_math17.Color4.create(0.2, 0.4, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const voiceTitle = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(voiceTitle, {
+    const voiceTitle = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(voiceTitle, {
       parent: voicePanel,
-      position: import_math16.Vector3.create(0, 0.7, 0.1),
-      scale: import_math16.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math17.Vector3.create(0, 0.7, 0.1),
+      scale: import_math17.Vector3.create(0.3, 0.3, 0.3)
     });
-    import_ecs18.TextShape.create(voiceTitle, {
+    import_ecs19.TextShape.create(voiceTitle, {
       text: "\u{1F3A4} VOICE CHAT",
-      textColor: import_math16.Color4.create(0.8, 0.8, 1, 1),
+      textColor: import_math17.Color4.create(0.8, 0.8, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
-    const muteButton = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(muteButton, {
+    const muteButton = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(muteButton, {
       parent: voicePanel,
-      position: import_math16.Vector3.create(0, -0.2, 0.1),
-      scale: import_math16.Vector3.create(0.3, 0.3, 0.1)
+      position: import_math17.Vector3.create(0, -0.2, 0.1),
+      scale: import_math17.Vector3.create(0.3, 0.3, 0.1)
     });
-    import_ecs18.MeshRenderer.setBox(muteButton);
-    import_ecs18.Material.setPbrMaterial(muteButton, {
-      albedoColor: import_math16.Color4.create(0.2, 0.8, 0.2, 1),
-      emissiveColor: import_math16.Color4.create(0.2, 0.8, 0.2, 0.8),
+    import_ecs19.MeshRenderer.setBox(muteButton);
+    import_ecs19.Material.setPbrMaterial(muteButton, {
+      albedoColor: import_math17.Color4.create(0.2, 0.8, 0.2, 1),
+      emissiveColor: import_math17.Color4.create(0.2, 0.8, 0.2, 0.8),
       emissiveIntensity: 2
     });
-    const muteText = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(muteText, {
+    const muteText = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(muteText, {
       parent: muteButton,
-      position: import_math16.Vector3.create(0, 0, 0.1),
-      scale: import_math16.Vector3.create(0.5, 0.5, 0.5)
+      position: import_math17.Vector3.create(0, 0, 0.1),
+      scale: import_math17.Vector3.create(0.5, 0.5, 0.5)
     });
-    import_ecs18.TextShape.create(muteText, {
+    import_ecs19.TextShape.create(muteText, {
       text: "\u{1F50A}",
-      textColor: import_math16.Color4.create(1, 1, 1, 1),
+      textColor: import_math17.Color4.create(1, 1, 1, 1),
       fontSize: 3,
       textAlign: 3
     });
-    import_ecs18.pointerEventsSystem.onPointerDown(
+    import_ecs19.pointerEventsSystem.onPointerDown(
       {
         entity: muteButton,
-        opts: { button: import_ecs18.InputAction.IA_POINTER, hoverText: "Toggle Mute" }
+        opts: { button: import_ecs19.InputAction.IA_POINTER, hoverText: "Toggle Mute" }
       },
       () => this.toggleMute()
     );
@@ -8762,21 +8815,21 @@ var MultiplayerSystem = class {
   }
   // Create shared whiteboard
   createSharedWhiteboard() {
-    const whiteboard = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(whiteboard, {
-      position: import_math16.Vector3.create(8, 3, 12),
-      scale: import_math16.Vector3.create(6, 4, 0.2)
+    const whiteboard = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(whiteboard, {
+      position: import_math17.Vector3.create(8, 3, 12),
+      scale: import_math17.Vector3.create(6, 4, 0.2)
     });
-    import_ecs18.MeshRenderer.setBox(whiteboard);
-    import_ecs18.Material.setPbrMaterial(whiteboard, {
-      albedoColor: import_math16.Color4.create(1, 1, 1, 1),
+    import_ecs19.MeshRenderer.setBox(whiteboard);
+    import_ecs19.Material.setPbrMaterial(whiteboard, {
+      albedoColor: import_math17.Color4.create(1, 1, 1, 1),
       roughness: 0.1,
       metallic: 0.1
     });
     const sharedObject = {
       id: "main-whiteboard",
       type: "whiteboard",
-      position: import_math16.Vector3.create(8, 3, 12),
+      position: import_math17.Vector3.create(8, 3, 12),
       content: { drawings: [], text: [] },
       ownerId: this.localPlayer.id,
       collaborators: [],
@@ -8786,90 +8839,90 @@ var MultiplayerSystem = class {
   }
   // Create document sharing system
   createDocumentSharing() {
-    const docSharePanel = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(docSharePanel, {
-      position: import_math16.Vector3.create(14, 3, 8),
-      scale: import_math16.Vector3.create(2, 3, 0.1)
+    const docSharePanel = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(docSharePanel, {
+      position: import_math17.Vector3.create(14, 3, 8),
+      scale: import_math17.Vector3.create(2, 3, 0.1)
     });
-    import_ecs18.MeshRenderer.setBox(docSharePanel);
-    import_ecs18.Material.setPbrMaterial(docSharePanel, {
-      albedoColor: import_math16.Color4.create(0.1, 0.3, 0.6, 0.9),
-      emissiveColor: import_math16.Color4.create(0.2, 0.4, 0.8, 0.5),
+    import_ecs19.MeshRenderer.setBox(docSharePanel);
+    import_ecs19.Material.setPbrMaterial(docSharePanel, {
+      albedoColor: import_math17.Color4.create(0.1, 0.3, 0.6, 0.9),
+      emissiveColor: import_math17.Color4.create(0.2, 0.4, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const docTitle = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(docTitle, {
+    const docTitle = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(docTitle, {
       parent: docSharePanel,
-      position: import_math16.Vector3.create(0, 1.2, 0.1),
-      scale: import_math16.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math17.Vector3.create(0, 1.2, 0.1),
+      scale: import_math17.Vector3.create(0.3, 0.3, 0.3)
     });
-    import_ecs18.TextShape.create(docTitle, {
+    import_ecs19.TextShape.create(docTitle, {
       text: "\u{1F4C4} DOCUMENTS",
-      textColor: import_math16.Color4.create(1, 1, 1, 1),
+      textColor: import_math17.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
   }
   // Create collaboration panel
   createCollaborationPanel() {
-    const collabPanel = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(collabPanel, {
-      position: import_math16.Vector3.create(2, 3, 8),
-      scale: import_math16.Vector3.create(2, 3, 0.1)
+    const collabPanel = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(collabPanel, {
+      position: import_math17.Vector3.create(2, 3, 8),
+      scale: import_math17.Vector3.create(2, 3, 0.1)
     });
-    import_ecs18.MeshRenderer.setBox(collabPanel);
-    import_ecs18.Material.setPbrMaterial(collabPanel, {
-      albedoColor: import_math16.Color4.create(0.2, 0.1, 0.4, 0.9),
-      emissiveColor: import_math16.Color4.create(0.4, 0.2, 0.8, 0.5),
+    import_ecs19.MeshRenderer.setBox(collabPanel);
+    import_ecs19.Material.setPbrMaterial(collabPanel, {
+      albedoColor: import_math17.Color4.create(0.2, 0.1, 0.4, 0.9),
+      emissiveColor: import_math17.Color4.create(0.4, 0.2, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const collabTitle = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(collabTitle, {
+    const collabTitle = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(collabTitle, {
       parent: collabPanel,
-      position: import_math16.Vector3.create(0, 1.2, 0.1),
-      scale: import_math16.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math17.Vector3.create(0, 1.2, 0.1),
+      scale: import_math17.Vector3.create(0.3, 0.3, 0.3)
     });
-    import_ecs18.TextShape.create(collabTitle, {
+    import_ecs19.TextShape.create(collabTitle, {
       text: "\u{1F91D} COLLABORATE",
-      textColor: import_math16.Color4.create(1, 1, 1, 1),
+      textColor: import_math17.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
-    const startSessionBtn = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(startSessionBtn, {
+    const startSessionBtn = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(startSessionBtn, {
       parent: collabPanel,
-      position: import_math16.Vector3.create(0, 0.3, 0.1),
-      scale: import_math16.Vector3.create(0.4, 0.2, 0.1)
+      position: import_math17.Vector3.create(0, 0.3, 0.1),
+      scale: import_math17.Vector3.create(0.4, 0.2, 0.1)
     });
-    import_ecs18.MeshRenderer.setBox(startSessionBtn);
-    import_ecs18.Material.setPbrMaterial(startSessionBtn, {
-      albedoColor: import_math16.Color4.create(0.2, 0.8, 0.2, 1),
-      emissiveColor: import_math16.Color4.create(0.2, 0.8, 0.2, 0.8),
+    import_ecs19.MeshRenderer.setBox(startSessionBtn);
+    import_ecs19.Material.setPbrMaterial(startSessionBtn, {
+      albedoColor: import_math17.Color4.create(0.2, 0.8, 0.2, 1),
+      emissiveColor: import_math17.Color4.create(0.2, 0.8, 0.2, 0.8),
       emissiveIntensity: 2
     });
-    const sessionText = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(sessionText, {
+    const sessionText = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(sessionText, {
       parent: startSessionBtn,
-      position: import_math16.Vector3.create(0, 0, 0.1),
-      scale: import_math16.Vector3.create(0.5, 0.5, 0.5)
+      position: import_math17.Vector3.create(0, 0, 0.1),
+      scale: import_math17.Vector3.create(0.5, 0.5, 0.5)
     });
-    import_ecs18.TextShape.create(sessionText, {
+    import_ecs19.TextShape.create(sessionText, {
       text: "START",
-      textColor: import_math16.Color4.create(1, 1, 1, 1),
+      textColor: import_math17.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
-    import_ecs18.pointerEventsSystem.onPointerDown(
+    import_ecs19.pointerEventsSystem.onPointerDown(
       {
         entity: startSessionBtn,
-        opts: { button: import_ecs18.InputAction.IA_POINTER, hoverText: "Start Collaboration Session" }
+        opts: { button: import_ecs19.InputAction.IA_POINTER, hoverText: "Start Collaboration Session" }
       },
       () => this.startCollaborationSession()
     );
   }
   // Start network synchronization
   startNetworkSync() {
-    import_ecs18.engine.addSystem(() => {
+    import_ecs19.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.syncPlayerPositions();
       this.syncSharedObjects();
@@ -8884,10 +8937,10 @@ var MultiplayerSystem = class {
     this.connectionStatus = "connected";
     console.log("\u2705 Connected to multiplayer server");
     setTimeout(() => {
-      this.simulatePlayerJoin("Alice", import_math16.Color3.create(1, 0.5, 0.5));
+      this.simulatePlayerJoin("Alice", import_math17.Color3.create(1, 0.5, 0.5));
     }, 3e3);
     setTimeout(() => {
-      this.simulatePlayerJoin("Bob", import_math16.Color3.create(0.5, 1, 0.5));
+      this.simulatePlayerJoin("Bob", import_math17.Color3.create(0.5, 1, 0.5));
     }, 5e3);
   }
   // Simulate player joining
@@ -8895,8 +8948,8 @@ var MultiplayerSystem = class {
     const player = {
       id: this.generatePlayerId(),
       name,
-      position: import_math16.Vector3.create(Math.random() * 14 + 1, 1, Math.random() * 14 + 1),
-      rotation: import_math16.Quaternion.fromEulerDegrees(0, 0, 0),
+      position: import_math17.Vector3.create(Math.random() * 14 + 1, 1, Math.random() * 14 + 1),
+      rotation: import_math17.Quaternion.fromEulerDegrees(0, 0, 0),
       avatar: null,
       isActive: true,
       lastUpdate: Date.now(),
@@ -8909,17 +8962,17 @@ var MultiplayerSystem = class {
   }
   // Create remote player avatar
   createRemotePlayer(player) {
-    const avatar = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(avatar, {
+    const avatar = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(avatar, {
       position: player.position,
-      scale: import_math16.Vector3.create(1, 2, 1)
+      scale: import_math17.Vector3.create(1, 2, 1)
     });
-    import_ecs18.MeshRenderer.setBox(avatar);
-    import_ecs18.Material.setPbrMaterial(avatar, {
-      albedoColor: import_math16.Color4.create(player.color.r, player.color.g, player.color.b, 1),
+    import_ecs19.MeshRenderer.setBox(avatar);
+    import_ecs19.Material.setPbrMaterial(avatar, {
+      albedoColor: import_math17.Color4.create(player.color.r, player.color.g, player.color.b, 1),
       roughness: 0.2,
       metallic: 0.3,
-      emissiveColor: import_math16.Color4.create(
+      emissiveColor: import_math17.Color4.create(
         player.color.r * 0.3,
         player.color.g * 0.3,
         player.color.b * 0.3,
@@ -8927,15 +8980,15 @@ var MultiplayerSystem = class {
       ),
       emissiveIntensity: 1
     });
-    const nameTag = import_ecs18.engine.addEntity();
-    import_ecs18.Transform.create(nameTag, {
+    const nameTag = import_ecs19.engine.addEntity();
+    import_ecs19.Transform.create(nameTag, {
       parent: avatar,
-      position: import_math16.Vector3.create(0, 2.5, 0),
-      scale: import_math16.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math17.Vector3.create(0, 2.5, 0),
+      scale: import_math17.Vector3.create(0.3, 0.3, 0.3)
     });
-    import_ecs18.TextShape.create(nameTag, {
+    import_ecs19.TextShape.create(nameTag, {
       text: player.name,
-      textColor: import_math16.Color4.create(1, 1, 1, 1),
+      textColor: import_math17.Color4.create(1, 1, 1, 1),
       fontSize: 3,
       textAlign: 3
     });
@@ -8944,19 +8997,19 @@ var MultiplayerSystem = class {
   // Sync player positions
   syncPlayerPositions() {
     if (this.localPlayer.avatar) {
-      const transform = import_ecs18.Transform.getMutable(this.localPlayer.avatar);
+      const transform = import_ecs19.Transform.getMutable(this.localPlayer.avatar);
       this.localPlayer.position = transform.position;
       this.localPlayer.lastUpdate = Date.now();
     }
     this.remotePlayers.forEach((player) => {
       if (player.avatar && player.isActive) {
         if (Math.random() > 0.98) {
-          const newPos = import_math16.Vector3.create(
+          const newPos = import_math17.Vector3.create(
             player.position.x + (Math.random() - 0.5) * 0.5,
             player.position.y,
             player.position.z + (Math.random() - 0.5) * 0.5
           );
-          const transform = import_ecs18.Transform.getMutable(player.avatar);
+          const transform = import_ecs19.Transform.getMutable(player.avatar);
           transform.position = newPos;
           player.position = newPos;
           player.lastUpdate = Date.now();
@@ -9054,11 +9107,11 @@ var MultiplayerSystem = class {
   // Cleanup system
   cleanup() {
     if (this.localPlayer.avatar) {
-      import_ecs18.engine.removeEntity(this.localPlayer.avatar);
+      import_ecs19.engine.removeEntity(this.localPlayer.avatar);
     }
     this.remotePlayers.forEach((player) => {
       if (player.avatar) {
-        import_ecs18.engine.removeEntity(player.avatar);
+        import_ecs19.engine.removeEntity(player.avatar);
       }
     });
     this.remotePlayers.clear();
@@ -9074,8 +9127,8 @@ var MultiplayerSystem = class {
 var multiplayerSystem = new MultiplayerSystem();
 
 // src/physics-interaction.ts
-var import_ecs19 = require("@dcl/sdk/ecs");
-var import_math17 = require("@dcl/sdk/math");
+var import_ecs20 = require("@dcl/sdk/ecs");
+var import_math18 = require("@dcl/sdk/math");
 var PhysicsInteractionSystem = class {
   constructor() {
     this.objects = /* @__PURE__ */ new Map();
@@ -9084,7 +9137,7 @@ var PhysicsInteractionSystem = class {
     this.constraints = /* @__PURE__ */ new Map();
     this.collisions = /* @__PURE__ */ new Map();
     this.isInitialized = false;
-    this.gravity = import_math17.Vector3.create(0, -9.81, 0);
+    this.gravity = import_math18.Vector3.create(0, -9.81, 0);
     this.timeStep = 1 / 60;
     this.maxSubSteps = 4;
     this.collisionMatrix = [];
@@ -9179,26 +9232,26 @@ var PhysicsInteractionSystem = class {
   }
   // Create physics UI
   createPhysicsUI() {
-    this.physicsUI = import_ecs19.engine.addEntity();
-    import_ecs19.Transform.create(this.physicsUI, {
-      position: import_math17.Vector3.create(2, 3, 8),
-      scale: import_math17.Vector3.create(3, 4, 0.1)
+    this.physicsUI = import_ecs20.engine.addEntity();
+    import_ecs20.Transform.create(this.physicsUI, {
+      position: import_math18.Vector3.create(2, 3, 8),
+      scale: import_math18.Vector3.create(3, 4, 0.1)
     });
-    import_ecs19.MeshRenderer.setBox(this.physicsUI);
-    import_ecs19.Material.setPbrMaterial(this.physicsUI, {
-      albedoColor: import_math17.Color4.create(0.1, 0.2, 0.4, 0.9),
-      emissiveColor: import_math17.Color4.create(0.2, 0.4, 0.8, 0.5),
+    import_ecs20.MeshRenderer.setBox(this.physicsUI);
+    import_ecs20.Material.setPbrMaterial(this.physicsUI, {
+      albedoColor: import_math18.Color4.create(0.1, 0.2, 0.4, 0.9),
+      emissiveColor: import_math18.Color4.create(0.2, 0.4, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const title = import_ecs19.engine.addEntity();
-    import_ecs19.Transform.create(title, {
+    const title = import_ecs20.engine.addEntity();
+    import_ecs20.Transform.create(title, {
       parent: this.physicsUI,
-      position: import_math17.Vector3.create(0, 1.7, 0.1),
-      scale: import_math17.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math18.Vector3.create(0, 1.7, 0.1),
+      scale: import_math18.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(title, {
       text: "\u269B\uFE0F PHYSICS INTERACTION",
-      textColor: import_math17.Color4.create(1, 1, 1, 1),
+      textColor: import_math18.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
@@ -9217,34 +9270,34 @@ var PhysicsInteractionSystem = class {
     ];
     let xOffset = -0.9;
     controls.forEach((control) => {
-      const button = import_ecs19.engine.addEntity();
-      import_ecs19.Transform.create(button, {
+      const button = import_ecs20.engine.addEntity();
+      import_ecs20.Transform.create(button, {
         parent: this.physicsUI,
-        position: import_math17.Vector3.create(xOffset, 1.2, 0.1),
-        scale: import_math17.Vector3.create(0.3, 0.3, 0.1)
+        position: import_math18.Vector3.create(xOffset, 1.2, 0.1),
+        scale: import_math18.Vector3.create(0.3, 0.3, 0.1)
       });
-      import_ecs19.MeshRenderer.setBox(button);
-      import_ecs19.Material.setPbrMaterial(button, {
-        albedoColor: import_math17.Color4.create(0.3, 0.6, 0.8, 1),
-        emissiveColor: import_math17.Color4.create(0.3, 0.6, 0.8, 0.5),
+      import_ecs20.MeshRenderer.setBox(button);
+      import_ecs20.Material.setPbrMaterial(button, {
+        albedoColor: import_math18.Color4.create(0.3, 0.6, 0.8, 1),
+        emissiveColor: import_math18.Color4.create(0.3, 0.6, 0.8, 0.5),
         emissiveIntensity: 2
       });
-      const buttonText = import_ecs19.engine.addEntity();
-      import_ecs19.Transform.create(buttonText, {
+      const buttonText = import_ecs20.engine.addEntity();
+      import_ecs20.Transform.create(buttonText, {
         parent: button,
-        position: import_math17.Vector3.create(0, 0, 0.1),
-        scale: import_math17.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math18.Vector3.create(0, 0, 0.1),
+        scale: import_math18.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(buttonText, {
         text: control.icon,
-        textColor: import_math17.Color4.create(1, 1, 1, 1),
+        textColor: import_math18.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
-      import_ecs19.pointerEventsSystem.onPointerDown(
+      import_ecs20.pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: import_ecs19.InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: import_ecs20.InputAction.IA_POINTER, hoverText: control.name }
         },
         () => this.handleObjectControl(control.id)
       );
@@ -9261,34 +9314,34 @@ var PhysicsInteractionSystem = class {
     ];
     let xOffset = -0.9;
     controls.forEach((control) => {
-      const button = import_ecs19.engine.addEntity();
-      import_ecs19.Transform.create(button, {
+      const button = import_ecs20.engine.addEntity();
+      import_ecs20.Transform.create(button, {
         parent: this.physicsUI,
-        position: import_math17.Vector3.create(xOffset, 0.6, 0.1),
-        scale: import_math17.Vector3.create(0.3, 0.3, 0.1)
+        position: import_math18.Vector3.create(xOffset, 0.6, 0.1),
+        scale: import_math18.Vector3.create(0.3, 0.3, 0.1)
       });
-      import_ecs19.MeshRenderer.setBox(button);
-      import_ecs19.Material.setPbrMaterial(button, {
-        albedoColor: import_math17.Color4.create(0.8, 0.3, 0.3, 1),
-        emissiveColor: import_math17.Color4.create(0.8, 0.3, 0.3, 0.5),
+      import_ecs20.MeshRenderer.setBox(button);
+      import_ecs20.Material.setPbrMaterial(button, {
+        albedoColor: import_math18.Color4.create(0.8, 0.3, 0.3, 1),
+        emissiveColor: import_math18.Color4.create(0.8, 0.3, 0.3, 0.5),
         emissiveIntensity: 2
       });
-      const buttonText = import_ecs19.engine.addEntity();
-      import_ecs19.Transform.create(buttonText, {
+      const buttonText = import_ecs20.engine.addEntity();
+      import_ecs20.Transform.create(buttonText, {
         parent: button,
-        position: import_math17.Vector3.create(0, 0, 0.1),
-        scale: import_math17.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math18.Vector3.create(0, 0, 0.1),
+        scale: import_math18.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(buttonText, {
         text: control.icon,
-        textColor: import_math17.Color4.create(1, 1, 1, 1),
+        textColor: import_math18.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
-      import_ecs19.pointerEventsSystem.onPointerDown(
+      import_ecs20.pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: import_ecs19.InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: import_ecs20.InputAction.IA_POINTER, hoverText: control.name }
         },
         () => this.handleForceFieldControl(control.id)
       );
@@ -9304,34 +9357,34 @@ var PhysicsInteractionSystem = class {
     ];
     let xOffset = -0.6;
     controls.forEach((control) => {
-      const button = import_ecs19.engine.addEntity();
-      import_ecs19.Transform.create(button, {
+      const button = import_ecs20.engine.addEntity();
+      import_ecs20.Transform.create(button, {
         parent: this.physicsUI,
-        position: import_math17.Vector3.create(xOffset, 0, 0.1),
-        scale: import_math17.Vector3.create(0.3, 0.3, 0.1)
+        position: import_math18.Vector3.create(xOffset, 0, 0.1),
+        scale: import_math18.Vector3.create(0.3, 0.3, 0.1)
       });
-      import_ecs19.MeshRenderer.setBox(button);
-      import_ecs19.Material.setPbrMaterial(button, {
-        albedoColor: import_math17.Color4.create(0.3, 0.8, 0.3, 1),
-        emissiveColor: import_math17.Color4.create(0.3, 0.8, 0.3, 0.5),
+      import_ecs20.MeshRenderer.setBox(button);
+      import_ecs20.Material.setPbrMaterial(button, {
+        albedoColor: import_math18.Color4.create(0.3, 0.8, 0.3, 1),
+        emissiveColor: import_math18.Color4.create(0.3, 0.8, 0.3, 0.5),
         emissiveIntensity: 2
       });
-      const buttonText = import_ecs19.engine.addEntity();
-      import_ecs19.Transform.create(buttonText, {
+      const buttonText = import_ecs20.engine.addEntity();
+      import_ecs20.Transform.create(buttonText, {
         parent: button,
-        position: import_math17.Vector3.create(0, 0, 0.1),
-        scale: import_math17.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math18.Vector3.create(0, 0, 0.1),
+        scale: import_math18.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(buttonText, {
         text: control.icon,
-        textColor: import_math17.Color4.create(1, 1, 1, 1),
+        textColor: import_math18.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
-      import_ecs19.pointerEventsSystem.onPointerDown(
+      import_ecs20.pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: import_ecs19.InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: import_ecs20.InputAction.IA_POINTER, hoverText: control.name }
         },
         () => this.handleConstraintControl(control.id)
       );
@@ -9340,27 +9393,27 @@ var PhysicsInteractionSystem = class {
   }
   // Create physics stats
   createPhysicsStats() {
-    const statsDisplay = import_ecs19.engine.addEntity();
-    import_ecs19.Transform.create(statsDisplay, {
+    const statsDisplay = import_ecs20.engine.addEntity();
+    import_ecs20.Transform.create(statsDisplay, {
       parent: this.physicsUI,
-      position: import_math17.Vector3.create(0, -0.6, 0.1),
-      scale: import_math17.Vector3.create(0.8, 0.3, 0.1)
+      position: import_math18.Vector3.create(0, -0.6, 0.1),
+      scale: import_math18.Vector3.create(0.8, 0.3, 0.1)
     });
-    import_ecs19.MeshRenderer.setBox(statsDisplay);
-    import_ecs19.Material.setPbrMaterial(statsDisplay, {
-      albedoColor: import_math17.Color4.create(0.1, 0.1, 0.1, 0.8),
-      emissiveColor: import_math17.Color4.create(0.1, 0.1, 0.1, 0.3),
+    import_ecs20.MeshRenderer.setBox(statsDisplay);
+    import_ecs20.Material.setPbrMaterial(statsDisplay, {
+      albedoColor: import_math18.Color4.create(0.1, 0.1, 0.1, 0.8),
+      emissiveColor: import_math18.Color4.create(0.1, 0.1, 0.1, 0.3),
       emissiveIntensity: 1
     });
-    const statsText = import_ecs19.engine.addEntity();
-    import_ecs19.Transform.create(statsText, {
+    const statsText = import_ecs20.engine.addEntity();
+    import_ecs20.Transform.create(statsText, {
       parent: statsDisplay,
-      position: import_math17.Vector3.create(0, 0, 0.1),
-      scale: import_math17.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math18.Vector3.create(0, 0, 0.1),
+      scale: import_math18.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(statsText, {
       text: "\u{1F4CA} Objects: 0 | Collisions: 0",
-      textColor: import_math17.Color4.create(1, 1, 1, 1),
+      textColor: import_math18.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
       textAlign: 3
     });
@@ -9376,13 +9429,13 @@ var PhysicsInteractionSystem = class {
       id: "ground_plane",
       type: "static",
       mass: 0,
-      velocity: import_math17.Vector3.create(0, 0, 0),
-      acceleration: import_math17.Vector3.create(0, 0, 0),
-      angularVelocity: import_math17.Vector3.create(0, 0, 0),
-      angularAcceleration: import_math17.Vector3.create(0, 0, 0),
-      position: import_math17.Vector3.create(8, 0, 8),
-      rotation: import_math17.Quaternion.fromEulerDegrees(0, 0, 0),
-      scale: import_math17.Vector3.create(20, 0.1, 20),
+      velocity: import_math18.Vector3.create(0, 0, 0),
+      acceleration: import_math18.Vector3.create(0, 0, 0),
+      angularVelocity: import_math18.Vector3.create(0, 0, 0),
+      angularAcceleration: import_math18.Vector3.create(0, 0, 0),
+      position: import_math18.Vector3.create(8, 0, 8),
+      rotation: import_math18.Quaternion.fromEulerDegrees(0, 0, 0),
+      scale: import_math18.Vector3.create(20, 0.1, 20),
       restitution: 0.5,
       friction: 0.8,
       damping: 0.1,
@@ -9398,13 +9451,13 @@ var PhysicsInteractionSystem = class {
   // Create initial objects
   createInitialObjects() {
     for (let i = 0; i < 3; i++) {
-      this.spawnPhysicsObject("ball", import_math17.Vector3.create(6 + i * 2, 3 + i, 6 + i));
+      this.spawnPhysicsObject("ball", import_math18.Vector3.create(6 + i * 2, 3 + i, 6 + i));
     }
   }
   // Create physics entity
   createPhysicsObject(obj, materialId) {
-    const entity = import_ecs19.engine.addEntity();
-    import_ecs19.Transform.create(entity, {
+    const entity = import_ecs20.engine.addEntity();
+    import_ecs20.Transform.create(entity, {
       position: obj.position,
       scale: obj.scale,
       rotation: obj.rotation
@@ -9412,26 +9465,26 @@ var PhysicsInteractionSystem = class {
     const material = this.materials.get(materialId);
     if (!material) return;
     if (obj.id.includes("ball")) {
-      import_ecs19.MeshRenderer.setSphere(entity);
+      import_ecs20.MeshRenderer.setSphere(entity);
     } else if (obj.id.includes("box")) {
-      import_ecs19.MeshRenderer.setBox(entity);
+      import_ecs20.MeshRenderer.setBox(entity);
     } else if (obj.id.includes("cylinder")) {
-      import_ecs19.MeshRenderer.setCylinder(entity, 1, 1, 1, 1, 1);
+      import_ecs20.MeshRenderer.setCylinder(entity, 1, 1, 1, 1, 1);
     } else {
-      import_ecs19.MeshRenderer.setBox(entity);
+      import_ecs20.MeshRenderer.setBox(entity);
     }
     const color = this.getMaterialColor(materialId);
-    import_ecs19.Material.setPbrMaterial(entity, {
+    import_ecs20.Material.setPbrMaterial(entity, {
       albedoColor: color,
       roughness: 1 - material.friction,
       metallic: material.restitution,
-      emissiveColor: import_math17.Color4.create(0, 0, 0, 0),
+      emissiveColor: import_math18.Color4.create(0, 0, 0, 0),
       emissiveIntensity: 0
     });
-    import_ecs19.pointerEventsSystem.onPointerDown(
+    import_ecs20.pointerEventsSystem.onPointerDown(
       {
         entity,
-        opts: { button: import_ecs19.InputAction.IA_POINTER, hoverText: "Interact" }
+        opts: { button: import_ecs20.InputAction.IA_POINTER, hoverText: "Interact" }
       },
       () => this.interactWithObject(obj.id)
     );
@@ -9441,20 +9494,20 @@ var PhysicsInteractionSystem = class {
   getMaterialColor(materialId) {
     switch (materialId) {
       case "material_metal":
-        return import_math17.Color4.create(0.7, 0.7, 0.8, 1);
+        return import_math18.Color4.create(0.7, 0.7, 0.8, 1);
       case "material_wood":
-        return import_math17.Color4.create(0.6, 0.4, 0.2, 1);
+        return import_math18.Color4.create(0.6, 0.4, 0.2, 1);
       case "material_glass":
-        return import_math17.Color4.create(0.8, 0.9, 1, 0.7);
+        return import_math18.Color4.create(0.8, 0.9, 1, 0.7);
       case "material_rubber":
-        return import_math17.Color4.create(0.2, 0.2, 0.2, 1);
+        return import_math18.Color4.create(0.2, 0.2, 0.2, 1);
       default:
-        return import_math17.Color4.create(0.5, 0.5, 0.5, 1);
+        return import_math18.Color4.create(0.5, 0.5, 0.5, 1);
     }
   }
   // Start physics engine
   startPhysicsEngine() {
-    import_ecs19.engine.addSystem(() => {
+    import_ecs20.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.simulatePhysics();
       this.detectCollisions();
@@ -9468,19 +9521,19 @@ var PhysicsInteractionSystem = class {
     const dt = this.timeStep;
     this.objects.forEach((obj, id) => {
       if (obj.type === "static") return;
-      const gravity = import_math17.Vector3.scale(this.gravity, obj.gravityScale);
-      obj.acceleration = import_math17.Vector3.add(obj.acceleration, gravity);
-      obj.velocity = import_math17.Vector3.add(obj.velocity, import_math17.Vector3.scale(obj.acceleration, dt));
-      obj.velocity = import_math17.Vector3.scale(obj.velocity, 1 - obj.damping * dt);
-      obj.angularVelocity = import_math17.Vector3.scale(obj.angularVelocity, 1 - obj.damping * dt);
-      obj.position = import_math17.Vector3.add(obj.position, import_math17.Vector3.scale(obj.velocity, dt));
-      const angularDelta = import_math17.Vector3.scale(obj.angularVelocity, dt);
-      obj.rotation = import_math17.Quaternion.multiply(
+      const gravity = import_math18.Vector3.scale(this.gravity, obj.gravityScale);
+      obj.acceleration = import_math18.Vector3.add(obj.acceleration, gravity);
+      obj.velocity = import_math18.Vector3.add(obj.velocity, import_math18.Vector3.scale(obj.acceleration, dt));
+      obj.velocity = import_math18.Vector3.scale(obj.velocity, 1 - obj.damping * dt);
+      obj.angularVelocity = import_math18.Vector3.scale(obj.angularVelocity, 1 - obj.damping * dt);
+      obj.position = import_math18.Vector3.add(obj.position, import_math18.Vector3.scale(obj.velocity, dt));
+      const angularDelta = import_math18.Vector3.scale(obj.angularVelocity, dt);
+      obj.rotation = import_math18.Quaternion.multiply(
         obj.rotation,
-        import_math17.Quaternion.fromEulerDegrees(angularDelta.x, angularDelta.y, angularDelta.z)
+        import_math18.Quaternion.fromEulerDegrees(angularDelta.x, angularDelta.y, angularDelta.z)
       );
-      obj.acceleration = import_math17.Vector3.create(0, 0, 0);
-      obj.angularAcceleration = import_math17.Vector3.create(0, 0, 0);
+      obj.acceleration = import_math18.Vector3.create(0, 0, 0);
+      obj.angularAcceleration = import_math18.Vector3.create(0, 0, 0);
       this.checkGroundCollision(obj);
       this.updateEntityTransform(id);
     });
@@ -9529,15 +9582,15 @@ var PhysicsInteractionSystem = class {
   }
   // Check collision between two objects
   checkCollision(objA, objB) {
-    const distance = import_math17.Vector3.distance(objA.position, objB.position);
+    const distance = import_math18.Vector3.distance(objA.position, objB.position);
     const minDistance = (objA.scale.x + objB.scale.x) / 2;
     if (distance < minDistance) {
       const collision = {
         id: `collision_${Date.now()}_${Math.random()}`,
         objectA: objA.id,
         objectB: objB.id,
-        contactPoint: import_math17.Vector3.lerp(objA.position, objB.position, 0.5),
-        contactNormal: import_math17.Vector3.normalize(import_math17.Vector3.subtract(objB.position, objA.position)),
+        contactPoint: import_math18.Vector3.lerp(objA.position, objB.position, 0.5),
+        contactNormal: import_math18.Vector3.normalize(import_math18.Vector3.subtract(objB.position, objA.position)),
         impulse: minDistance - distance,
         timestamp: Date.now()
       };
@@ -9550,24 +9603,24 @@ var PhysicsInteractionSystem = class {
     const objA = this.objects.get(collision.objectA);
     const objB = this.objects.get(collision.objectB);
     if (!objA || !objB) return;
-    const separation = import_math17.Vector3.scale(collision.contactNormal, collision.impulse / 2);
+    const separation = import_math18.Vector3.scale(collision.contactNormal, collision.impulse / 2);
     if (objA.type !== "static") {
-      objA.position = import_math17.Vector3.subtract(objA.position, separation);
+      objA.position = import_math18.Vector3.subtract(objA.position, separation);
     }
     if (objB.type !== "static") {
-      objB.position = import_math17.Vector3.add(objB.position, separation);
+      objB.position = import_math18.Vector3.add(objB.position, separation);
     }
-    const relativeVelocity = import_math17.Vector3.subtract(objB.velocity, objA.velocity);
-    const velocityAlongNormal = import_math17.Vector3.dot(relativeVelocity, collision.contactNormal);
+    const relativeVelocity = import_math18.Vector3.subtract(objB.velocity, objA.velocity);
+    const velocityAlongNormal = import_math18.Vector3.dot(relativeVelocity, collision.contactNormal);
     if (velocityAlongNormal > 0) return;
     const restitution = Math.min(objA.restitution, objB.restitution);
     const impulseScalar = -(1 + restitution) * velocityAlongNormal;
-    const impulse = import_math17.Vector3.scale(collision.contactNormal, impulseScalar);
+    const impulse = import_math18.Vector3.scale(collision.contactNormal, impulseScalar);
     if (objA.type !== "static") {
-      objA.velocity = import_math17.Vector3.subtract(objA.velocity, impulse);
+      objA.velocity = import_math18.Vector3.subtract(objA.velocity, impulse);
     }
     if (objB.type !== "static") {
-      objB.velocity = import_math17.Vector3.add(objB.velocity, impulse);
+      objB.velocity = import_math18.Vector3.add(objB.velocity, impulse);
     }
     this.collisions.set(collision.id, collision);
     soundSystem.playInteractionSound("collision");
@@ -9585,12 +9638,12 @@ var PhysicsInteractionSystem = class {
   }
   // Apply force field to object
   applyForceField(obj, field) {
-    const distance = import_math17.Vector3.distance(obj.position, field.position);
+    const distance = import_math18.Vector3.distance(obj.position, field.position);
     if (distance <= field.radius) {
-      const force = import_math17.Vector3.scale(field.direction, field.strength);
+      const force = import_math18.Vector3.scale(field.direction, field.strength);
       const falloff = 1 - distance / field.radius;
-      const finalForce = import_math17.Vector3.scale(force, falloff);
-      obj.acceleration = import_math17.Vector3.add(obj.acceleration, finalForce);
+      const finalForce = import_math18.Vector3.scale(force, falloff);
+      obj.acceleration = import_math18.Vector3.add(obj.acceleration, finalForce);
     }
   }
   // Update constraints
@@ -9624,28 +9677,28 @@ var PhysicsInteractionSystem = class {
   }
   // Apply spring constraint
   applySpringConstraint(objA, objB, constraint) {
-    const distance = import_math17.Vector3.distance(objA.position, objB.position);
+    const distance = import_math18.Vector3.distance(objA.position, objB.position);
     const restLength = constraint.minDistance || 2;
     const displacement = distance - restLength;
     if (Math.abs(displacement) > 0.01) {
-      const direction = import_math17.Vector3.normalize(import_math17.Vector3.subtract(objB.position, objA.position));
-      const force = import_math17.Vector3.scale(direction, displacement * constraint.strength);
-      objA.acceleration = import_math17.Vector3.add(objA.acceleration, force);
-      objB.acceleration = import_math17.Vector3.subtract(objB.acceleration, force);
+      const direction = import_math18.Vector3.normalize(import_math18.Vector3.subtract(objB.position, objA.position));
+      const force = import_math18.Vector3.scale(direction, displacement * constraint.strength);
+      objA.acceleration = import_math18.Vector3.add(objA.acceleration, force);
+      objB.acceleration = import_math18.Vector3.subtract(objB.acceleration, force);
     }
   }
   // Apply hinge constraint
   applyHingeConstraint(objA, objB, constraint) {
-    const targetPos = import_math17.Vector3.add(objB.position, constraint.positionB);
-    const direction = import_math17.Vector3.subtract(targetPos, objA.position);
-    objA.position = import_math17.Vector3.add(targetPos, import_math17.Vector3.scale(direction, -0.5));
-    objB.position = import_math17.Vector3.add(targetPos, import_math17.Vector3.scale(direction, 0.5));
+    const targetPos = import_math18.Vector3.add(objB.position, constraint.positionB);
+    const direction = import_math18.Vector3.subtract(targetPos, objA.position);
+    objA.position = import_math18.Vector3.add(targetPos, import_math18.Vector3.scale(direction, -0.5));
+    objB.position = import_math18.Vector3.add(targetPos, import_math18.Vector3.scale(direction, 0.5));
   }
   // Apply fixed constraint
   applyFixedConstraint(objA, objB, constraint) {
-    const targetPos = import_math17.Vector3.add(objB.position, constraint.positionB);
+    const targetPos = import_math18.Vector3.add(objB.position, constraint.positionB);
     objA.position = targetPos;
-    objA.velocity = import_math17.Vector3.create(0, 0, 0);
+    objA.velocity = import_math18.Vector3.create(0, 0, 0);
   }
   // Update physics stats
   updatePhysicsStats() {
@@ -9657,13 +9710,13 @@ var PhysicsInteractionSystem = class {
   handleObjectControl(controlId) {
     switch (controlId) {
       case "spawn_ball":
-        this.spawnPhysicsObject("ball", import_math17.Vector3.create(8, 5, 8));
+        this.spawnPhysicsObject("ball", import_math18.Vector3.create(8, 5, 8));
         break;
       case "spawn_box":
-        this.spawnPhysicsObject("box", import_math17.Vector3.create(8, 5, 8));
+        this.spawnPhysicsObject("box", import_math18.Vector3.create(8, 5, 8));
         break;
       case "spawn_cylinder":
-        this.spawnPhysicsObject("cylinder", import_math17.Vector3.create(8, 5, 8));
+        this.spawnPhysicsObject("cylinder", import_math18.Vector3.create(8, 5, 8));
         break;
       case "clear_all":
         this.clearAllObjects();
@@ -9710,21 +9763,21 @@ var PhysicsInteractionSystem = class {
       id: `${type}_${Date.now()}_${Math.random()}`,
       type: "rigid_body",
       mass: 1,
-      velocity: import_math17.Vector3.create((Math.random() - 0.5) * 2, 0, (Math.random() - 0.5) * 2),
-      acceleration: import_math17.Vector3.create(0, 0, 0),
-      angularVelocity: import_math17.Vector3.create(
+      velocity: import_math18.Vector3.create((Math.random() - 0.5) * 2, 0, (Math.random() - 0.5) * 2),
+      acceleration: import_math18.Vector3.create(0, 0, 0),
+      angularVelocity: import_math18.Vector3.create(
         (Math.random() - 0.5) * 2,
         (Math.random() - 0.5) * 2,
         (Math.random() - 0.5) * 2
       ),
-      angularAcceleration: import_math17.Vector3.create(0, 0, 0),
+      angularAcceleration: import_math18.Vector3.create(0, 0, 0),
       position,
-      rotation: import_math17.Quaternion.fromEulerDegrees(
+      rotation: import_math18.Quaternion.fromEulerDegrees(
         Math.random() * 360,
         Math.random() * 360,
         Math.random() * 360
       ),
-      scale: import_math17.Vector3.create(0.5, 0.5, 0.5),
+      scale: import_math18.Vector3.create(0.5, 0.5, 0.5),
       restitution: 0.6,
       friction: 0.5,
       damping: 0.1,
@@ -9743,10 +9796,10 @@ var PhysicsInteractionSystem = class {
     const field = {
       id: `field_${type}_${Date.now()}`,
       type,
-      position: import_math17.Vector3.create(8, 2, 8),
+      position: import_math18.Vector3.create(8, 2, 8),
       radius: 5,
       strength: 10,
-      direction: import_math17.Vector3.create(0, 1, 0),
+      direction: import_math18.Vector3.create(0, 1, 0),
       isActive: true,
       affectedObjects: Array.from(this.objects.keys()).filter((id) => id !== "ground_plane")
     };
@@ -9755,16 +9808,16 @@ var PhysicsInteractionSystem = class {
   }
   // Create explosion
   createExplosion() {
-    const explosionPos = import_math17.Vector3.create(8, 2, 8);
+    const explosionPos = import_math18.Vector3.create(8, 2, 8);
     const explosionForce = 20;
     const explosionRadius = 8;
     this.objects.forEach((obj, id) => {
       if (obj.type === "static") return;
-      const distance = import_math17.Vector3.distance(obj.position, explosionPos);
+      const distance = import_math18.Vector3.distance(obj.position, explosionPos);
       if (distance <= explosionRadius) {
-        const direction = import_math17.Vector3.normalize(import_math17.Vector3.subtract(obj.position, explosionPos));
-        const force = import_math17.Vector3.scale(direction, explosionForce * (1 - distance / explosionRadius));
-        obj.velocity = import_math17.Vector3.add(obj.velocity, force);
+        const direction = import_math18.Vector3.normalize(import_math18.Vector3.subtract(obj.position, explosionPos));
+        const force = import_math18.Vector3.scale(direction, explosionForce * (1 - distance / explosionRadius));
+        obj.velocity = import_math18.Vector3.add(obj.velocity, force);
       }
     });
     soundSystem.playInteractionSound("explosion");
@@ -9779,8 +9832,8 @@ var PhysicsInteractionSystem = class {
       type: "spring",
       objectA: objectIds[0],
       objectB: objectIds[1],
-      positionA: import_math17.Vector3.create(0, 0, 0),
-      positionB: import_math17.Vector3.create(0, 0, 0),
+      positionA: import_math18.Vector3.create(0, 0, 0),
+      positionB: import_math18.Vector3.create(0, 0, 0),
       minDistance: 2,
       strength: 5,
       damping: 0.5
@@ -9797,11 +9850,11 @@ var PhysicsInteractionSystem = class {
       type: "hinge",
       objectA: objectIds[0],
       objectB: objectIds[1],
-      positionA: import_math17.Vector3.create(0, 0, 0),
-      positionB: import_math17.Vector3.create(1, 0, 0),
+      positionA: import_math18.Vector3.create(0, 0, 0),
+      positionB: import_math18.Vector3.create(1, 0, 0),
       limits: {
-        minRotation: import_math17.Vector3.create(-45, 0, 0),
-        maxRotation: import_math17.Vector3.create(45, 0, 0)
+        minRotation: import_math18.Vector3.create(-45, 0, 0),
+        maxRotation: import_math18.Vector3.create(45, 0, 0)
       },
       strength: 10,
       damping: 0.5
@@ -9818,8 +9871,8 @@ var PhysicsInteractionSystem = class {
       type: "fixed",
       objectA: objectIds[0],
       objectB: objectIds[1],
-      positionA: import_math17.Vector3.create(0, 0, 0),
-      positionB: import_math17.Vector3.create(0, 0, 0),
+      positionA: import_math18.Vector3.create(0, 0, 0),
+      positionB: import_math18.Vector3.create(0, 0, 0),
       strength: 100,
       damping: 1
     };
@@ -9830,12 +9883,12 @@ var PhysicsInteractionSystem = class {
   interactWithObject(objectId) {
     const obj = this.objects.get(objectId);
     if (!obj || obj.type === "static") return;
-    const impulse = import_math17.Vector3.create(
+    const impulse = import_math18.Vector3.create(
       (Math.random() - 0.5) * 10,
       Math.random() * 10,
       (Math.random() - 0.5) * 10
     );
-    obj.velocity = import_math17.Vector3.add(obj.velocity, impulse);
+    obj.velocity = import_math18.Vector3.add(obj.velocity, impulse);
     soundSystem.playInteractionSound("impact");
     console.log(`\u{1F44A} Applied impulse to ${objectId}`);
   }
@@ -9877,7 +9930,7 @@ var PhysicsInteractionSystem = class {
     this.constraints.clear();
     this.collisions.clear();
     if (this.physicsUI) {
-      import_ecs19.engine.removeEntity(this.physicsUI);
+      import_ecs20.engine.removeEntity(this.physicsUI);
     }
     this.isInitialized = false;
   }
@@ -9885,8 +9938,8 @@ var PhysicsInteractionSystem = class {
 var physicsSystem = new PhysicsInteractionSystem();
 
 // src/procedural-generation.ts
-var import_ecs20 = require("@dcl/sdk/ecs");
-var import_math18 = require("@dcl/sdk/math");
+var import_ecs21 = require("@dcl/sdk/ecs");
+var import_math19 = require("@dcl/sdk/math");
 var ProceduralGenerationSystem = class {
   constructor() {
     this.chunks = /* @__PURE__ */ new Map();
@@ -9903,26 +9956,26 @@ var ProceduralGenerationSystem = class {
     console.log("\u{1F30D} Procedural Generation System Ready!");
   }
   createGenerationUI() {
-    this.generationUI = import_ecs20.engine.addEntity();
-    import_ecs20.Transform.create(this.generationUI, {
-      position: import_math18.Vector3.create(14, 3, 8),
-      scale: import_math18.Vector3.create(3, 2, 0.1)
+    this.generationUI = import_ecs21.engine.addEntity();
+    import_ecs21.Transform.create(this.generationUI, {
+      position: import_math19.Vector3.create(14, 3, 8),
+      scale: import_math19.Vector3.create(3, 2, 0.1)
     });
-    import_ecs20.MeshRenderer.setBox(this.generationUI);
-    import_ecs20.Material.setPbrMaterial(this.generationUI, {
-      albedoColor: import_math18.Color4.create(0.1, 0.2, 0.4, 0.9),
-      emissiveColor: import_math18.Color4.create(0.2, 0.4, 0.8, 0.5),
+    import_ecs21.MeshRenderer.setBox(this.generationUI);
+    import_ecs21.Material.setPbrMaterial(this.generationUI, {
+      albedoColor: import_math19.Color4.create(0.1, 0.2, 0.4, 0.9),
+      emissiveColor: import_math19.Color4.create(0.2, 0.4, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const title = import_ecs20.engine.addEntity();
-    import_ecs20.Transform.create(title, {
+    const title = import_ecs21.engine.addEntity();
+    import_ecs21.Transform.create(title, {
       parent: this.generationUI,
-      position: import_math18.Vector3.create(0, 0.7, 0.1),
-      scale: import_math18.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math19.Vector3.create(0, 0.7, 0.1),
+      scale: import_math19.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(title, {
       text: "\u{1F30D} INFINITE WORLD",
-      textColor: import_math18.Color4.create(1, 1, 1, 1),
+      textColor: import_math19.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
@@ -9933,32 +9986,32 @@ var ProceduralGenerationSystem = class {
     ];
     let xOffset = -0.6;
     controls.forEach((control) => {
-      const button = import_ecs20.engine.addEntity();
-      import_ecs20.Transform.create(button, {
+      const button = import_ecs21.engine.addEntity();
+      import_ecs21.Transform.create(button, {
         parent: this.generationUI,
-        position: import_math18.Vector3.create(xOffset, 0, 0.1),
-        scale: import_math18.Vector3.create(0.3, 0.3, 0.1)
+        position: import_math19.Vector3.create(xOffset, 0, 0.1),
+        scale: import_math19.Vector3.create(0.3, 0.3, 0.1)
       });
-      import_ecs20.MeshRenderer.setBox(button);
-      import_ecs20.Material.setPbrMaterial(button, {
-        albedoColor: import_math18.Color4.create(0.3, 0.6, 0.8, 1),
-        emissiveColor: import_math18.Color4.create(0.3, 0.6, 0.8, 0.5),
+      import_ecs21.MeshRenderer.setBox(button);
+      import_ecs21.Material.setPbrMaterial(button, {
+        albedoColor: import_math19.Color4.create(0.3, 0.6, 0.8, 1),
+        emissiveColor: import_math19.Color4.create(0.3, 0.6, 0.8, 0.5),
         emissiveIntensity: 2
       });
-      const buttonText = import_ecs20.engine.addEntity();
-      import_ecs20.Transform.create(buttonText, {
+      const buttonText = import_ecs21.engine.addEntity();
+      import_ecs21.Transform.create(buttonText, {
         parent: button,
-        position: import_math18.Vector3.create(0, 0, 0.1),
-        scale: import_math18.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math19.Vector3.create(0, 0, 0.1),
+        scale: import_math19.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(buttonText, {
         text: control.icon,
-        textColor: import_math18.Color4.create(1, 1, 1, 1),
+        textColor: import_math19.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
-      import_ecs20.pointerEventsSystem.onPointerDown(
-        { entity: button, opts: { button: import_ecs20.InputAction.IA_POINTER, hoverText: control.name } },
+      import_ecs21.pointerEventsSystem.onPointerDown(
+        { entity: button, opts: { button: import_ecs21.InputAction.IA_POINTER, hoverText: control.name } },
         () => this.handleControl(control.id)
       );
       xOffset += 0.6;
@@ -9979,7 +10032,7 @@ var ProceduralGenerationSystem = class {
     soundSystem.playInteractionSound("click");
   }
   startGenerationEngine() {
-    import_ecs20.engine.addSystem(() => {
+    import_ecs21.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.updateChunks();
     });
@@ -9997,7 +10050,7 @@ var ProceduralGenerationSystem = class {
     const biome = biomes[Math.floor(Math.random() * biomes.length)];
     const chunk = {
       id: chunkId,
-      position: import_math18.Vector3.create(x * this.chunkSize, 0, z * this.chunkSize),
+      position: import_math19.Vector3.create(x * this.chunkSize, 0, z * this.chunkSize),
       biome,
       structures: [],
       entities: [],
@@ -10014,7 +10067,7 @@ var ProceduralGenerationSystem = class {
       const structure = {
         id: `struct_${chunk.id}_${i}`,
         type: chunk.biome === "office" ? "building" : "decoration",
-        position: import_math18.Vector3.create(
+        position: import_math19.Vector3.create(
           chunk.position.x + Math.random() * this.chunkSize,
           2,
           chunk.position.z + Math.random() * this.chunkSize
@@ -10027,7 +10080,7 @@ var ProceduralGenerationSystem = class {
       const entity = {
         id: `entity_${chunk.id}_${i}`,
         type: chunk.biome === "nature" ? "plant" : "object",
-        position: import_math18.Vector3.create(
+        position: import_math19.Vector3.create(
           chunk.position.x + Math.random() * this.chunkSize,
           1,
           chunk.position.z + Math.random() * this.chunkSize
@@ -10044,40 +10097,40 @@ var ProceduralGenerationSystem = class {
     });
   }
   loadChunk(chunk) {
-    const terrain = import_ecs20.engine.addEntity();
-    import_ecs20.Transform.create(terrain, {
+    const terrain = import_ecs21.engine.addEntity();
+    import_ecs21.Transform.create(terrain, {
       position: chunk.position,
-      scale: import_math18.Vector3.create(this.chunkSize, 0.1, this.chunkSize)
+      scale: import_math19.Vector3.create(this.chunkSize, 0.1, this.chunkSize)
     });
-    import_ecs20.MeshRenderer.setBox(terrain);
+    import_ecs21.MeshRenderer.setBox(terrain);
     const biomeColor = this.getBiomeColor(chunk.biome);
-    import_ecs20.Material.setPbrMaterial(terrain, {
+    import_ecs21.Material.setPbrMaterial(terrain, {
       albedoColor: biomeColor,
       roughness: 0.8,
       metallic: 0.1
     });
     chunk.structures.forEach((structure) => {
-      const structEntity = import_ecs20.engine.addEntity();
-      import_ecs20.Transform.create(structEntity, {
+      const structEntity = import_ecs21.engine.addEntity();
+      import_ecs21.Transform.create(structEntity, {
         position: structure.position,
-        scale: import_math18.Vector3.create(2, 4, 2)
+        scale: import_math19.Vector3.create(2, 4, 2)
       });
-      import_ecs20.MeshRenderer.setBox(structEntity);
-      import_ecs20.Material.setPbrMaterial(structEntity, {
-        albedoColor: import_math18.Color4.create(0.7, 0.7, 0.7, 1),
+      import_ecs21.MeshRenderer.setBox(structEntity);
+      import_ecs21.Material.setPbrMaterial(structEntity, {
+        albedoColor: import_math19.Color4.create(0.7, 0.7, 0.7, 1),
         roughness: 0.3,
         metallic: 0.5
       });
     });
     chunk.entities.forEach((entity) => {
-      const entityEntity = import_ecs20.engine.addEntity();
-      import_ecs20.Transform.create(entityEntity, {
+      const entityEntity = import_ecs21.engine.addEntity();
+      import_ecs21.Transform.create(entityEntity, {
         position: entity.position,
-        scale: import_math18.Vector3.create(0.5, 1, 0.5)
+        scale: import_math19.Vector3.create(0.5, 1, 0.5)
       });
-      import_ecs20.MeshRenderer.setSphere(entityEntity);
-      import_ecs20.Material.setPbrMaterial(entityEntity, {
-        albedoColor: import_math18.Color4.create(0.2, 0.8, 0.2, 1),
+      import_ecs21.MeshRenderer.setSphere(entityEntity);
+      import_ecs21.Material.setPbrMaterial(entityEntity, {
+        albedoColor: import_math19.Color4.create(0.2, 0.8, 0.2, 1),
         roughness: 0.5,
         metallic: 0.1
       });
@@ -10087,15 +10140,15 @@ var ProceduralGenerationSystem = class {
   getBiomeColor(biome) {
     switch (biome) {
       case "office":
-        return import_math18.Color4.create(0.6, 0.6, 0.7, 1);
+        return import_math19.Color4.create(0.6, 0.6, 0.7, 1);
       case "tech":
-        return import_math18.Color4.create(0.2, 0.4, 0.8, 1);
+        return import_math19.Color4.create(0.2, 0.4, 0.8, 1);
       case "nature":
-        return import_math18.Color4.create(0.2, 0.8, 0.2, 1);
+        return import_math19.Color4.create(0.2, 0.8, 0.2, 1);
       case "abstract":
-        return import_math18.Color4.create(0.8, 0.2, 0.8, 1);
+        return import_math19.Color4.create(0.8, 0.2, 0.8, 1);
       default:
-        return import_math18.Color4.create(0.5, 0.5, 0.5, 1);
+        return import_math19.Color4.create(0.5, 0.5, 0.5, 1);
     }
   }
   generateNewChunk() {
@@ -10126,7 +10179,7 @@ var ProceduralGenerationSystem = class {
   cleanup() {
     this.chunks.clear();
     if (this.generationUI) {
-      import_ecs20.engine.removeEntity(this.generationUI);
+      import_ecs21.engine.removeEntity(this.generationUI);
     }
     this.isInitialized = false;
   }
@@ -10134,8 +10187,8 @@ var ProceduralGenerationSystem = class {
 var proceduralSystem = new ProceduralGenerationSystem();
 
 // src/responsive-ui-system.ts
-var import_ecs21 = require("@dcl/sdk/ecs");
-var import_math19 = require("@dcl/sdk/math");
+var import_ecs22 = require("@dcl/sdk/ecs");
+var import_math20 = require("@dcl/sdk/math");
 var ResponsiveUISystem = class {
   constructor() {
     this.components = /* @__PURE__ */ new Map();
@@ -10168,28 +10221,28 @@ var ResponsiveUISystem = class {
   }
   // Create floating control panel
   createFloatingPanel() {
-    const panel = import_ecs21.engine.addEntity();
-    import_ecs21.Transform.create(panel, {
-      position: import_math19.Vector3.create(8, 3, 2),
-      scale: import_math19.Vector3.create(4, 2, 0.1)
+    const panel = import_ecs22.engine.addEntity();
+    import_ecs22.Transform.create(panel, {
+      position: import_math20.Vector3.create(8, 3, 2),
+      scale: import_math20.Vector3.create(4, 2, 0.1)
     });
-    import_ecs21.MeshRenderer.setBox(panel);
-    import_ecs21.Material.setPbrMaterial(panel, {
-      albedoColor: import_math19.Color4.create(0.1, 0.1, 0.2, 0.9),
+    import_ecs22.MeshRenderer.setBox(panel);
+    import_ecs22.Material.setPbrMaterial(panel, {
+      albedoColor: import_math20.Color4.create(0.1, 0.1, 0.2, 0.9),
       roughness: 0.2,
       metallic: 0.8,
-      emissiveColor: import_math19.Color4.create(0.2, 0.3, 0.6, 0.5),
+      emissiveColor: import_math20.Color4.create(0.2, 0.3, 0.6, 0.5),
       emissiveIntensity: 2
     });
-    const title = import_ecs21.engine.addEntity();
-    import_ecs21.Transform.create(title, {
+    const title = import_ecs22.engine.addEntity();
+    import_ecs22.Transform.create(title, {
       parent: panel,
-      position: import_math19.Vector3.create(0, 0.7, 0.1),
-      scale: import_math19.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math20.Vector3.create(0, 0.7, 0.1),
+      scale: import_math20.Vector3.create(0.3, 0.3, 0.3)
     });
-    import_ecs21.TextShape.create(title, {
+    import_ecs22.TextShape.create(title, {
       text: "\u{1F3AE} CONTROL PANEL",
-      textColor: import_math19.Color4.create(0.8, 0.8, 1, 1),
+      textColor: import_math20.Color4.create(0.8, 0.8, 1, 1),
       fontSize: 3,
       textAlign: 3
     });
@@ -10197,8 +10250,8 @@ var ResponsiveUISystem = class {
       id: "mainPanel",
       entity: panel,
       type: "panel",
-      position: import_math19.Vector3.create(8, 3, 2),
-      size: import_math19.Vector3.create(4, 2, 0.1),
+      position: import_math20.Vector3.create(8, 3, 2),
+      size: import_math20.Vector3.create(4, 2, 0.1),
       visible: true,
       interactive: true,
       gestureHandlers: /* @__PURE__ */ new Map([
@@ -10210,26 +10263,26 @@ var ResponsiveUISystem = class {
   }
   // Create gesture tutorial
   createGestureTutorial() {
-    const tutorial = import_ecs21.engine.addEntity();
-    import_ecs21.Transform.create(tutorial, {
-      position: import_math19.Vector3.create(14, 4, 2),
-      scale: import_math19.Vector3.create(2, 3, 0.1)
+    const tutorial = import_ecs22.engine.addEntity();
+    import_ecs22.Transform.create(tutorial, {
+      position: import_math20.Vector3.create(14, 4, 2),
+      scale: import_math20.Vector3.create(2, 3, 0.1)
     });
-    import_ecs21.MeshRenderer.setBox(tutorial);
-    import_ecs21.Material.setPbrMaterial(tutorial, {
-      albedoColor: import_math19.Color4.create(0.2, 0.1, 0.3, 0.8),
-      emissiveColor: import_math19.Color4.create(0.4, 0.2, 0.6, 0.4),
+    import_ecs22.MeshRenderer.setBox(tutorial);
+    import_ecs22.Material.setPbrMaterial(tutorial, {
+      albedoColor: import_math20.Color4.create(0.2, 0.1, 0.3, 0.8),
+      emissiveColor: import_math20.Color4.create(0.4, 0.2, 0.6, 0.4),
       emissiveIntensity: 1
     });
-    const tutorialText = import_ecs21.engine.addEntity();
-    import_ecs21.Transform.create(tutorialText, {
+    const tutorialText = import_ecs22.engine.addEntity();
+    import_ecs22.Transform.create(tutorialText, {
       parent: tutorial,
-      position: import_math19.Vector3.create(0, 0, 0.1),
-      scale: import_math19.Vector3.create(0.2, 0.2, 0.2)
+      position: import_math20.Vector3.create(0, 0, 0.1),
+      scale: import_math20.Vector3.create(0.2, 0.2, 0.2)
     });
-    import_ecs21.TextShape.create(tutorialText, {
+    import_ecs22.TextShape.create(tutorialText, {
       text: "\u{1F446} TAP\n\u{1F91A} SWIPE\n\u{1F90F} PINCH\n\u{1F504} ROTATE\n\u23F0 LONG PRESS",
-      textColor: import_math19.Color4.create(1, 1, 0.8, 1),
+      textColor: import_math20.Color4.create(1, 1, 0.8, 1),
       fontSize: 2,
       textAlign: 3
     });
@@ -10237,8 +10290,8 @@ var ResponsiveUISystem = class {
       id: "gestureTutorial",
       entity: tutorial,
       type: "panel",
-      position: import_math19.Vector3.create(14, 4, 2),
-      size: import_math19.Vector3.create(2, 3, 0.1),
+      position: import_math20.Vector3.create(14, 4, 2),
+      size: import_math20.Vector3.create(2, 3, 0.1),
       visible: true,
       interactive: true,
       gestureHandlers: /* @__PURE__ */ new Map([["tap", this.handleTutorialTap.bind(this)]])
@@ -10250,51 +10303,51 @@ var ResponsiveUISystem = class {
       {
         id: "btnLights",
         label: "\u{1F4A1}",
-        pos: import_math19.Vector3.create(2, 1.5, 2),
-        color: import_math19.Color4.create(1, 0.8, 0.2, 1)
+        pos: import_math20.Vector3.create(2, 1.5, 2),
+        color: import_math20.Color4.create(1, 0.8, 0.2, 1)
       },
       {
         id: "btnSound",
         label: "\u{1F50A}",
-        pos: import_math19.Vector3.create(3, 1.5, 2),
-        color: import_math19.Color4.create(0.2, 0.8, 1, 1)
+        pos: import_math20.Vector3.create(3, 1.5, 2),
+        color: import_math20.Color4.create(0.2, 0.8, 1, 1)
       },
       {
         id: "btnData",
         label: "\u{1F4CA}",
-        pos: import_math19.Vector3.create(4, 1.5, 2),
-        color: import_math19.Color4.create(0.8, 0.2, 1, 1)
+        pos: import_math20.Vector3.create(4, 1.5, 2),
+        color: import_math20.Color4.create(0.8, 0.2, 1, 1)
       },
       {
         id: "btnNPC",
         label: "\u{1F916}",
-        pos: import_math19.Vector3.create(5, 1.5, 2),
-        color: import_math19.Color4.create(0.2, 1, 0.8, 1)
+        pos: import_math20.Vector3.create(5, 1.5, 2),
+        color: import_math20.Color4.create(0.2, 1, 0.8, 1)
       }
     ];
     buttonConfigs.forEach((config) => {
-      const button = import_ecs21.engine.addEntity();
-      import_ecs21.Transform.create(button, {
+      const button = import_ecs22.engine.addEntity();
+      import_ecs22.Transform.create(button, {
         position: config.pos,
-        scale: import_math19.Vector3.create(0.4, 0.4, 0.1)
+        scale: import_math20.Vector3.create(0.4, 0.4, 0.1)
       });
-      import_ecs21.MeshRenderer.setBox(button);
-      import_ecs21.Material.setPbrMaterial(button, {
+      import_ecs22.MeshRenderer.setBox(button);
+      import_ecs22.Material.setPbrMaterial(button, {
         albedoColor: config.color,
         roughness: 0.1,
         metallic: 0.9,
         emissiveColor: config.color,
         emissiveIntensity: 2
       });
-      const buttonText = import_ecs21.engine.addEntity();
-      import_ecs21.Transform.create(buttonText, {
+      const buttonText = import_ecs22.engine.addEntity();
+      import_ecs22.Transform.create(buttonText, {
         parent: button,
-        position: import_math19.Vector3.create(0, 0, 0.1),
-        scale: import_math19.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math20.Vector3.create(0, 0, 0.1),
+        scale: import_math20.Vector3.create(0.5, 0.5, 0.5)
       });
-      import_ecs21.TextShape.create(buttonText, {
+      import_ecs22.TextShape.create(buttonText, {
         text: config.label,
-        textColor: import_math19.Color4.create(1, 1, 1, 1),
+        textColor: import_math20.Color4.create(1, 1, 1, 1),
         fontSize: 4,
         textAlign: 3
       });
@@ -10303,7 +10356,7 @@ var ResponsiveUISystem = class {
         entity: button,
         type: "button",
         position: config.pos,
-        size: import_math19.Vector3.create(0.4, 0.4, 0.1),
+        size: import_math20.Vector3.create(0.4, 0.4, 0.1),
         visible: true,
         interactive: true,
         gestureHandlers: /* @__PURE__ */ new Map([
@@ -10316,24 +10369,24 @@ var ResponsiveUISystem = class {
   }
   // Create touch feedback system
   createTouchFeedback() {
-    const rippleEffect = import_ecs21.engine.addEntity();
-    import_ecs21.Transform.create(rippleEffect, {
-      position: import_math19.Vector3.create(0, -10, 0),
+    const rippleEffect = import_ecs22.engine.addEntity();
+    import_ecs22.Transform.create(rippleEffect, {
+      position: import_math20.Vector3.create(0, -10, 0),
       // Hidden initially
-      scale: import_math19.Vector3.create(0.1, 0.1, 0.1)
+      scale: import_math20.Vector3.create(0.1, 0.1, 0.1)
     });
-    import_ecs21.MeshRenderer.setSphere(rippleEffect);
-    import_ecs21.Material.setPbrMaterial(rippleEffect, {
-      albedoColor: import_math19.Color4.create(0.5, 0.8, 1, 0.6),
-      emissiveColor: import_math19.Color4.create(0.5, 0.8, 1, 0.8),
+    import_ecs22.MeshRenderer.setSphere(rippleEffect);
+    import_ecs22.Material.setPbrMaterial(rippleEffect, {
+      albedoColor: import_math20.Color4.create(0.5, 0.8, 1, 0.6),
+      emissiveColor: import_math20.Color4.create(0.5, 0.8, 1, 0.8),
       emissiveIntensity: 3
     });
     this.addComponent("touchFeedback", {
       id: "touchFeedback",
       entity: rippleEffect,
       type: "panel",
-      position: import_math19.Vector3.create(0, -10, 0),
-      size: import_math19.Vector3.create(0.1, 0.1, 0.1),
+      position: import_math20.Vector3.create(0, -10, 0),
+      size: import_math20.Vector3.create(0.1, 0.1, 0.1),
       visible: false,
       interactive: false,
       gestureHandlers: /* @__PURE__ */ new Map()
@@ -10341,15 +10394,15 @@ var ResponsiveUISystem = class {
   }
   // Setup gesture recognition system
   setupGestureRecognition() {
-    import_ecs21.pointerEventsSystem.onPointerDown(
-      { entity: import_ecs21.engine.RootEntity, opts: { button: import_ecs21.InputAction.IA_POINTER } },
+    import_ecs22.pointerEventsSystem.onPointerDown(
+      { entity: import_ecs22.engine.RootEntity, opts: { button: import_ecs22.InputAction.IA_POINTER } },
       (e) => this.handleTouchStart(e)
     );
-    import_ecs21.pointerEventsSystem.onPointerUp(
-      { entity: import_ecs21.engine.RootEntity, opts: { button: import_ecs21.InputAction.IA_POINTER } },
+    import_ecs22.pointerEventsSystem.onPointerUp(
+      { entity: import_ecs22.engine.RootEntity, opts: { button: import_ecs22.InputAction.IA_POINTER } },
       (e) => this.handleTouchEnd(e)
     );
-    import_ecs21.engine.addSystem(() => {
+    import_ecs22.engine.addSystem(() => {
       this.updateHoverStates();
     });
   }
@@ -10357,7 +10410,7 @@ var ResponsiveUISystem = class {
   handleTouchStart(event) {
     const touchPoint = {
       id: Date.now(),
-      position: import_math19.Vector3.create(event.hit.hitPoint.x, event.hit.hitPoint.y, event.hit.hitPoint.z),
+      position: import_math20.Vector3.create(event.hit.hitPoint.x, event.hit.hitPoint.y, event.hit.hitPoint.z),
       timestamp: Date.now(),
       pressure: 1
     };
@@ -10369,13 +10422,13 @@ var ResponsiveUISystem = class {
   handleTouchEnd(event) {
     const touchPoint = Array.from(this.touchPoints.values()).pop();
     if (!touchPoint) return;
-    const endPosition = import_math19.Vector3.create(
+    const endPosition = import_math20.Vector3.create(
       event.hit.hitPoint.x,
       event.hit.hitPoint.y,
       event.hit.hitPoint.z
     );
     const duration = Date.now() - touchPoint.timestamp;
-    const distance = import_math19.Vector3.distance(touchPoint.position, endPosition);
+    const distance = import_math20.Vector3.distance(touchPoint.position, endPosition);
     this.detectAndTriggerGesture(touchPoint, endPosition, duration, distance);
     this.touchPoints.delete(touchPoint.id);
     this.hideTouchFeedback();
@@ -10402,7 +10455,7 @@ var ResponsiveUISystem = class {
     }
     const velocity = distance / duration * 1e3;
     if (velocity >= this.gestureThresholds.swipe.minVelocity && distance >= this.gestureThresholds.swipe.minDistance) {
-      const direction = import_math19.Vector3.subtract(endPosition, startPoint.position).normalize();
+      const direction = import_math20.Vector3.subtract(endPosition, startPoint.position).normalize();
       this.triggerGesture("swipe", startPoint.position, endPosition, duration, distance, direction);
       return;
     }
@@ -10429,18 +10482,18 @@ var ResponsiveUISystem = class {
   }
   // Check if point is within component bounds
   isPointInComponent(point, component) {
-    const halfSize = import_math19.Vector3.scale(component.size, 0.5);
-    const minBounds = import_math19.Vector3.subtract(component.position, halfSize);
-    const maxBounds = import_math19.Vector3.add(component.position, halfSize);
+    const halfSize = import_math20.Vector3.scale(component.size, 0.5);
+    const minBounds = import_math20.Vector3.subtract(component.position, halfSize);
+    const maxBounds = import_math20.Vector3.add(component.position, halfSize);
     return point.x >= minBounds.x && point.x <= maxBounds.x && point.y >= minBounds.y && point.y <= maxBounds.y && point.z >= minBounds.z && point.z <= maxBounds.z;
   }
   // Show touch feedback
   showTouchFeedback(position) {
     const feedback = this.components.get("touchFeedback");
     if (feedback) {
-      const transform = import_ecs21.Transform.getMutable(feedback.entity);
+      const transform = import_ecs22.Transform.getMutable(feedback.entity);
       transform.position = position;
-      transform.scale = import_math19.Vector3.create(0.1, 0.1, 0.1);
+      transform.scale = import_math20.Vector3.create(0.1, 0.1, 0.1);
       this.animateRipple(feedback.entity);
     }
   }
@@ -10448,8 +10501,8 @@ var ResponsiveUISystem = class {
   hideTouchFeedback() {
     const feedback = this.components.get("touchFeedback");
     if (feedback) {
-      const transform = import_ecs21.Transform.getMutable(feedback.entity);
-      transform.position = import_math19.Vector3.create(0, -10, 0);
+      const transform = import_ecs22.Transform.getMutable(feedback.entity);
+      transform.position = import_math20.Vector3.create(0, -10, 0);
     }
   }
   // Animate ripple effect
@@ -10459,11 +10512,11 @@ var ResponsiveUISystem = class {
     const animate = () => {
       scale += 0.02;
       opacity -= 0.02;
-      const transform = import_ecs21.Transform.getMutable(entity);
-      transform.scale = import_math19.Vector3.create(scale, scale, scale);
-      const material = import_ecs21.Material.getMutable(entity);
+      const transform = import_ecs22.Transform.getMutable(entity);
+      transform.scale = import_math20.Vector3.create(scale, scale, scale);
+      const material = import_ecs22.Material.getMutable(entity);
       if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = import_math19.Color4.create(0.5, 0.8, 1, opacity);
+        material.pbr.albedoColor = import_math20.Color4.create(0.5, 0.8, 1, opacity);
       }
       if (opacity > 0) {
         setTimeout(animate, 16);
@@ -10524,7 +10577,7 @@ var ResponsiveUISystem = class {
   updateHoverStates() {
     this.components.forEach((component) => {
       if (!component.interactive || !component.visible) return;
-      const material = import_ecs21.Material.getMutable(component.entity);
+      const material = import_ecs22.Material.getMutable(component.entity);
       if (material && material.$case === "pbr") {
         const time = Date.now() / 1e3;
         const pulse = Math.sin(time * 3) * 0.1 + 0.9;
@@ -10534,7 +10587,7 @@ var ResponsiveUISystem = class {
   }
   // Start animation loop
   startAnimationLoop() {
-    import_ecs21.engine.addSystem(() => {
+    import_ecs22.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.updateUIAnimations();
     });
@@ -10545,7 +10598,7 @@ var ResponsiveUISystem = class {
       if (!component.visible) return;
       if (component.interactive) {
         const time = Date.now() / 1e3;
-        const transform = import_ecs21.Transform.getMutable(component.entity);
+        const transform = import_ecs22.Transform.getMutable(component.entity);
         const floatOffset = Math.sin(time + component.position.x) * 0.02;
         transform.position.y = component.position.y + floatOffset;
       }
@@ -10564,18 +10617,18 @@ var ResponsiveUISystem = class {
     const component = this.components.get(id);
     if (component) {
       component.visible = visible;
-      const transform = import_ecs21.Transform.getMutable(component.entity);
+      const transform = import_ecs22.Transform.getMutable(component.entity);
       if (visible) {
         transform.scale = component.size;
       } else {
-        transform.scale = import_math19.Vector3.create(0, 0, 0);
+        transform.scale = import_math20.Vector3.create(0, 0, 0);
       }
     }
   }
   // Cleanup system
   cleanup() {
     this.components.forEach((component) => {
-      import_ecs21.engine.removeEntity(component.entity);
+      import_ecs22.engine.removeEntity(component.entity);
     });
     this.components.clear();
     this.touchPoints.clear();
@@ -10586,8 +10639,8 @@ var ResponsiveUISystem = class {
 var uiSystem = new ResponsiveUISystem();
 
 // src/smart-room-system.ts
-var import_ecs22 = require("@dcl/sdk/ecs");
-var import_math20 = require("@dcl/sdk/math");
+var import_ecs23 = require("@dcl/sdk/ecs");
+var import_math21 = require("@dcl/sdk/math");
 var SmartRoomSystem = class {
   constructor() {
     this.devices = /* @__PURE__ */ new Map();
@@ -10610,79 +10663,79 @@ var SmartRoomSystem = class {
   }
   // Create IoT devices
   createIoTDevices() {
-    this.createDevice("light_main", "Main Light", "light", import_math20.Vector3.create(8, 4, 8));
-    this.createDevice("light_desk", "Desk Light", "light", import_math20.Vector3.create(4, 2.5, 4));
-    this.createDevice("light_meeting", "Meeting Room Light", "light", import_math20.Vector3.create(12, 2.5, 12));
-    this.createDevice("temp_main", "Thermostat", "temperature", import_math20.Vector3.create(8, 3, 2));
-    this.createDevice("security_main", "Security System", "security", import_math20.Vector3.create(1, 2, 8));
-    this.createDevice("camera_entrance", "Entrance Camera", "security", import_math20.Vector3.create(8, 3, 15));
+    this.createDevice("light_main", "Main Light", "light", import_math21.Vector3.create(8, 4, 8));
+    this.createDevice("light_desk", "Desk Light", "light", import_math21.Vector3.create(4, 2.5, 4));
+    this.createDevice("light_meeting", "Meeting Room Light", "light", import_math21.Vector3.create(12, 2.5, 12));
+    this.createDevice("temp_main", "Thermostat", "temperature", import_math21.Vector3.create(8, 3, 2));
+    this.createDevice("security_main", "Security System", "security", import_math21.Vector3.create(1, 2, 8));
+    this.createDevice("camera_entrance", "Entrance Camera", "security", import_math21.Vector3.create(8, 3, 15));
     this.createDevice(
       "entertainment_display",
       "Smart Display",
       "entertainment",
-      import_math20.Vector3.create(8, 3, 0.5)
+      import_math21.Vector3.create(8, 3, 0.5)
     );
     this.createDevice(
       "entertainment_audio",
       "Audio System",
       "entertainment",
-      import_math20.Vector3.create(14, 2, 8)
+      import_math21.Vector3.create(14, 2, 8)
     );
-    this.createDevice("productivity_focus", "Focus Mode", "productivity", import_math20.Vector3.create(4, 3, 12));
-    this.createDevice("productivity_timer", "Work Timer", "productivity", import_math20.Vector3.create(12, 3, 4));
-    this.createDevice("energy_monitor", "Energy Monitor", "energy", import_math20.Vector3.create(2, 3, 2));
-    this.createDevice("energy_solar", "Solar Panels", "energy", import_math20.Vector3.create(14, 5, 14));
+    this.createDevice("productivity_focus", "Focus Mode", "productivity", import_math21.Vector3.create(4, 3, 12));
+    this.createDevice("productivity_timer", "Work Timer", "productivity", import_math21.Vector3.create(12, 3, 4));
+    this.createDevice("energy_monitor", "Energy Monitor", "energy", import_math21.Vector3.create(2, 3, 2));
+    this.createDevice("energy_solar", "Solar Panels", "energy", import_math21.Vector3.create(14, 5, 14));
   }
   // Create individual device
   createDevice(id, name, type, position) {
-    const device = import_ecs22.engine.addEntity();
-    import_ecs22.Transform.create(device, {
+    const device = import_ecs23.engine.addEntity();
+    import_ecs23.Transform.create(device, {
       position,
-      scale: import_math20.Vector3.create(0.3, 0.3, 0.3)
+      scale: import_math21.Vector3.create(0.3, 0.3, 0.3)
     });
     let deviceColor;
     let deviceIcon;
     switch (type) {
       case "light":
-        deviceColor = import_math20.Color4.create(1, 0.8, 0.2, 1);
+        deviceColor = import_math21.Color4.create(1, 0.8, 0.2, 1);
         deviceIcon = "\u{1F4A1}";
-        import_ecs22.MeshRenderer.setSphere(device);
+        import_ecs23.MeshRenderer.setSphere(device);
         break;
       case "temperature":
-        deviceColor = import_math20.Color4.create(0.2, 0.8, 1, 1);
+        deviceColor = import_math21.Color4.create(0.2, 0.8, 1, 1);
         deviceIcon = "\u{1F321}\uFE0F";
-        import_ecs22.MeshRenderer.setBox(device);
+        import_ecs23.MeshRenderer.setBox(device);
         break;
       case "security":
-        deviceColor = import_math20.Color4.create(0.8, 0.2, 0.2, 1);
+        deviceColor = import_math21.Color4.create(0.8, 0.2, 0.2, 1);
         deviceIcon = "\u{1F6E1}\uFE0F";
-        import_ecs22.MeshRenderer.setBox(device);
+        import_ecs23.MeshRenderer.setBox(device);
         break;
       case "entertainment":
-        deviceColor = import_math20.Color4.create(0.8, 0.2, 0.8, 1);
+        deviceColor = import_math21.Color4.create(0.8, 0.2, 0.8, 1);
         deviceIcon = "\u{1F3AE}";
-        import_ecs22.MeshRenderer.setBox(device);
+        import_ecs23.MeshRenderer.setBox(device);
         break;
       case "productivity":
-        deviceColor = import_math20.Color4.create(0.2, 0.8, 0.2, 1);
+        deviceColor = import_math21.Color4.create(0.2, 0.8, 0.2, 1);
         deviceIcon = "\u26A1";
-        import_ecs22.MeshRenderer.setBox(device);
+        import_ecs23.MeshRenderer.setBox(device);
         break;
       case "energy":
-        deviceColor = import_math20.Color4.create(1, 0.6, 0.2, 1);
+        deviceColor = import_math21.Color4.create(1, 0.6, 0.2, 1);
         deviceIcon = "\u26A1";
-        import_ecs22.MeshRenderer.setBox(device);
+        import_ecs23.MeshRenderer.setBox(device);
         break;
       default:
-        deviceColor = import_math20.Color4.create(0.5, 0.5, 0.5, 1);
+        deviceColor = import_math21.Color4.create(0.5, 0.5, 0.5, 1);
         deviceIcon = "\u{1F4F1}";
-        import_ecs22.MeshRenderer.setBox(device);
+        import_ecs23.MeshRenderer.setBox(device);
     }
-    import_ecs22.Material.setPbrMaterial(device, {
+    import_ecs23.Material.setPbrMaterial(device, {
       albedoColor: deviceColor,
       roughness: 0.2,
       metallic: 0.8,
-      emissiveColor: import_math20.Color4.create(
+      emissiveColor: import_math21.Color4.create(
         deviceColor.r * 0.5,
         deviceColor.g * 0.5,
         deviceColor.b * 0.5,
@@ -10690,28 +10743,28 @@ var SmartRoomSystem = class {
       ),
       emissiveIntensity: 1
     });
-    const label = import_ecs22.engine.addEntity();
-    import_ecs22.Transform.create(label, {
+    const label = import_ecs23.engine.addEntity();
+    import_ecs23.Transform.create(label, {
       parent: device,
-      position: import_math20.Vector3.create(0, 0.3, 0),
-      scale: import_math20.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math21.Vector3.create(0, 0.3, 0),
+      scale: import_math21.Vector3.create(0.3, 0.3, 0.3)
     });
-    import_ecs22.TextShape.create(label, {
+    import_ecs23.TextShape.create(label, {
       text: deviceIcon,
-      textColor: import_math20.Color4.create(1, 1, 1, 1),
+      textColor: import_math21.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
-    const statusIndicator = import_ecs22.engine.addEntity();
-    import_ecs22.Transform.create(statusIndicator, {
+    const statusIndicator = import_ecs23.engine.addEntity();
+    import_ecs23.Transform.create(statusIndicator, {
       parent: device,
-      position: import_math20.Vector3.create(0, -0.2, 0),
-      scale: import_math20.Vector3.create(0.1, 0.1, 0.1)
+      position: import_math21.Vector3.create(0, -0.2, 0),
+      scale: import_math21.Vector3.create(0.1, 0.1, 0.1)
     });
-    import_ecs22.MeshRenderer.setSphere(statusIndicator);
-    import_ecs22.Material.setPbrMaterial(statusIndicator, {
-      albedoColor: import_math20.Color4.create(0, 1, 0, 1),
-      emissiveColor: import_math20.Color4.create(0, 1, 0, 1),
+    import_ecs23.MeshRenderer.setSphere(statusIndicator);
+    import_ecs23.Material.setPbrMaterial(statusIndicator, {
+      albedoColor: import_math21.Color4.create(0, 1, 0, 1),
+      emissiveColor: import_math21.Color4.create(0, 1, 0, 1),
       emissiveIntensity: 2
     });
     const iotDevice = {
@@ -10725,10 +10778,10 @@ var SmartRoomSystem = class {
       lastUpdate: Date.now()
     };
     this.devices.set(id, iotDevice);
-    import_ecs22.pointerEventsSystem.onPointerDown(
+    import_ecs23.pointerEventsSystem.onPointerDown(
       {
         entity: device,
-        opts: { button: import_ecs22.InputAction.IA_POINTER, hoverText: `Control ${name}` }
+        opts: { button: import_ecs23.InputAction.IA_POINTER, hoverText: `Control ${name}` }
       },
       () => this.handleDeviceInteraction(id)
     );
@@ -10875,26 +10928,26 @@ var SmartRoomSystem = class {
   }
   // Create control panel
   createControlPanel() {
-    this.controlPanel = import_ecs22.engine.addEntity();
-    import_ecs22.Transform.create(this.controlPanel, {
-      position: import_math20.Vector3.create(8, 3, 14),
-      scale: import_math20.Vector3.create(4, 3, 0.1)
+    this.controlPanel = import_ecs23.engine.addEntity();
+    import_ecs23.Transform.create(this.controlPanel, {
+      position: import_math21.Vector3.create(8, 3, 14),
+      scale: import_math21.Vector3.create(4, 3, 0.1)
     });
-    import_ecs22.MeshRenderer.setBox(this.controlPanel);
-    import_ecs22.Material.setPbrMaterial(this.controlPanel, {
-      albedoColor: import_math20.Color4.create(0.1, 0.2, 0.4, 0.9),
-      emissiveColor: import_math20.Color4.create(0.2, 0.4, 0.8, 0.5),
+    import_ecs23.MeshRenderer.setBox(this.controlPanel);
+    import_ecs23.Material.setPbrMaterial(this.controlPanel, {
+      albedoColor: import_math21.Color4.create(0.1, 0.2, 0.4, 0.9),
+      emissiveColor: import_math21.Color4.create(0.2, 0.4, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const title = import_ecs22.engine.addEntity();
-    import_ecs22.Transform.create(title, {
+    const title = import_ecs23.engine.addEntity();
+    import_ecs23.Transform.create(title, {
       parent: this.controlPanel,
-      position: import_math20.Vector3.create(0, 1.2, 0.1),
-      scale: import_math20.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math21.Vector3.create(0, 1.2, 0.1),
+      scale: import_math21.Vector3.create(0.3, 0.3, 0.3)
     });
-    import_ecs22.TextShape.create(title, {
+    import_ecs23.TextShape.create(title, {
       text: "\u{1F3E0} SMART ROOM CONTROL",
-      textColor: import_math20.Color4.create(1, 1, 1, 1),
+      textColor: import_math21.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
@@ -10906,34 +10959,34 @@ var SmartRoomSystem = class {
   createSceneButtons() {
     let xOffset = -1.2;
     this.smartScenes.forEach((scene, id) => {
-      const button = import_ecs22.engine.addEntity();
-      import_ecs22.Transform.create(button, {
+      const button = import_ecs23.engine.addEntity();
+      import_ecs23.Transform.create(button, {
         parent: this.controlPanel,
-        position: import_math20.Vector3.create(xOffset, 0.5, 0.1),
-        scale: import_math20.Vector3.create(0.5, 0.3, 0.1)
+        position: import_math21.Vector3.create(xOffset, 0.5, 0.1),
+        scale: import_math21.Vector3.create(0.5, 0.3, 0.1)
       });
-      import_ecs22.MeshRenderer.setBox(button);
-      import_ecs22.Material.setPbrMaterial(button, {
-        albedoColor: import_math20.Color4.create(0.2, 0.6, 0.8, 1),
-        emissiveColor: import_math20.Color4.create(0.2, 0.6, 0.8, 0.5),
+      import_ecs23.MeshRenderer.setBox(button);
+      import_ecs23.Material.setPbrMaterial(button, {
+        albedoColor: import_math21.Color4.create(0.2, 0.6, 0.8, 1),
+        emissiveColor: import_math21.Color4.create(0.2, 0.6, 0.8, 0.5),
         emissiveIntensity: 2
       });
-      const buttonText = import_ecs22.engine.addEntity();
-      import_ecs22.Transform.create(buttonText, {
+      const buttonText = import_ecs23.engine.addEntity();
+      import_ecs23.Transform.create(buttonText, {
         parent: button,
-        position: import_math20.Vector3.create(0, 0, 0.1),
-        scale: import_math20.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math21.Vector3.create(0, 0, 0.1),
+        scale: import_math21.Vector3.create(0.5, 0.5, 0.5)
       });
-      import_ecs22.TextShape.create(buttonText, {
+      import_ecs23.TextShape.create(buttonText, {
         text: `${scene.icon} ${scene.name}`,
-        textColor: import_math20.Color4.create(1, 1, 1, 1),
+        textColor: import_math21.Color4.create(1, 1, 1, 1),
         fontSize: 1.5,
         textAlign: 3
       });
-      import_ecs22.pointerEventsSystem.onPointerDown(
+      import_ecs23.pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: import_ecs22.InputAction.IA_POINTER, hoverText: `Activate ${scene.name}` }
+          opts: { button: import_ecs23.InputAction.IA_POINTER, hoverText: `Activate ${scene.name}` }
         },
         () => this.activateScene(id)
       );
@@ -10942,39 +10995,39 @@ var SmartRoomSystem = class {
   }
   // Create device status display
   createDeviceStatusDisplay() {
-    const statusDisplay = import_ecs22.engine.addEntity();
-    import_ecs22.Transform.create(statusDisplay, {
+    const statusDisplay = import_ecs23.engine.addEntity();
+    import_ecs23.Transform.create(statusDisplay, {
       parent: this.controlPanel,
-      position: import_math20.Vector3.create(0, -0.3, 0.1),
-      scale: import_math20.Vector3.create(0.8, 0.3, 0.1)
+      position: import_math21.Vector3.create(0, -0.3, 0.1),
+      scale: import_math21.Vector3.create(0.8, 0.3, 0.1)
     });
-    import_ecs22.MeshRenderer.setBox(statusDisplay);
-    import_ecs22.Material.setPbrMaterial(statusDisplay, {
-      albedoColor: import_math20.Color4.create(0.1, 0.1, 0.1, 0.8),
-      emissiveColor: import_math20.Color4.create(0.1, 0.1, 0.1, 0.3),
+    import_ecs23.MeshRenderer.setBox(statusDisplay);
+    import_ecs23.Material.setPbrMaterial(statusDisplay, {
+      albedoColor: import_math21.Color4.create(0.1, 0.1, 0.1, 0.8),
+      emissiveColor: import_math21.Color4.create(0.1, 0.1, 0.1, 0.3),
       emissiveIntensity: 1
     });
     this.updateDeviceStatusDisplay();
   }
   // Create energy monitor
   createEnergyMonitor() {
-    const energyDisplay = import_ecs22.engine.addEntity();
-    import_ecs22.Transform.create(energyDisplay, {
+    const energyDisplay = import_ecs23.engine.addEntity();
+    import_ecs23.Transform.create(energyDisplay, {
       parent: this.controlPanel,
-      position: import_math20.Vector3.create(0, -0.8, 0.1),
-      scale: import_math20.Vector3.create(0.8, 0.2, 0.1)
+      position: import_math21.Vector3.create(0, -0.8, 0.1),
+      scale: import_math21.Vector3.create(0.8, 0.2, 0.1)
     });
-    import_ecs22.MeshRenderer.setBox(energyDisplay);
-    import_ecs22.Material.setPbrMaterial(energyDisplay, {
-      albedoColor: import_math20.Color4.create(0.1, 0.1, 0.1, 0.8),
-      emissiveColor: import_math20.Color4.create(0.1, 0.1, 0.1, 0.3),
+    import_ecs23.MeshRenderer.setBox(energyDisplay);
+    import_ecs23.Material.setPbrMaterial(energyDisplay, {
+      albedoColor: import_math21.Color4.create(0.1, 0.1, 0.1, 0.8),
+      emissiveColor: import_math21.Color4.create(0.1, 0.1, 0.1, 0.3),
       emissiveIntensity: 1
     });
     this.updateEnergyDisplay();
   }
   // Start automation engine
   startAutomationEngine() {
-    import_ecs22.engine.addSystem(() => {
+    import_ecs23.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.updateDeviceValues();
       this.checkAutomationRules();
@@ -11090,12 +11143,12 @@ var SmartRoomSystem = class {
   updateDeviceVisual(deviceId) {
     const device = this.devices.get(deviceId);
     if (!device) return;
-    const deviceEntity = Array.from(import_ecs22.engine.entities).find((e) => {
-      const transform = import_ecs22.Transform.get(e);
-      return transform && import_math20.Vector3.distance(transform.position, device.position) < 0.1;
+    const deviceEntity = Array.from(import_ecs23.engine.entities).find((e) => {
+      const transform = import_ecs23.Transform.get(e);
+      return transform && import_math21.Vector3.distance(transform.position, device.position) < 0.1;
     });
     if (deviceEntity) {
-      const material = import_ecs22.Material.getMutable(deviceEntity);
+      const material = import_ecs23.Material.getMutable(deviceEntity);
       if (material && material.$case === "pbr") {
         if (device.value === true) {
           material.pbr.emissiveIntensity = 3;
@@ -11168,7 +11221,7 @@ var SmartRoomSystem = class {
     this.automationRules.clear();
     this.smartScenes.clear();
     if (this.controlPanel) {
-      import_ecs22.engine.removeEntity(this.controlPanel);
+      import_ecs23.engine.removeEntity(this.controlPanel);
     }
     this.isInitialized = false;
   }
@@ -11176,8 +11229,8 @@ var SmartRoomSystem = class {
 var smartRoomSystem = new SmartRoomSystem();
 
 // src/voice-command-system.ts
-var import_ecs23 = require("@dcl/sdk/ecs");
-var import_math21 = require("@dcl/sdk/math");
+var import_ecs24 = require("@dcl/sdk/ecs");
+var import_math22 = require("@dcl/sdk/math");
 var VoiceCommandSystem = class {
   constructor() {
     this.commands = /* @__PURE__ */ new Map();
@@ -11302,26 +11355,26 @@ var VoiceCommandSystem = class {
   }
   // Create voice UI
   createVoiceUI() {
-    this.voiceUI = import_ecs23.engine.addEntity();
-    import_ecs23.Transform.create(this.voiceUI, {
-      position: import_math21.Vector3.create(8, 4, 14),
-      scale: import_math21.Vector3.create(3, 2, 0.1)
+    this.voiceUI = import_ecs24.engine.addEntity();
+    import_ecs24.Transform.create(this.voiceUI, {
+      position: import_math22.Vector3.create(8, 4, 14),
+      scale: import_math22.Vector3.create(3, 2, 0.1)
     });
-    import_ecs23.MeshRenderer.setBox(this.voiceUI);
-    import_ecs23.Material.setPbrMaterial(this.voiceUI, {
-      albedoColor: import_math21.Color4.create(0.1, 0.2, 0.4, 0.9),
-      emissiveColor: import_math21.Color4.create(0.2, 0.4, 0.8, 0.5),
+    import_ecs24.MeshRenderer.setBox(this.voiceUI);
+    import_ecs24.Material.setPbrMaterial(this.voiceUI, {
+      albedoColor: import_math22.Color4.create(0.1, 0.2, 0.4, 0.9),
+      emissiveColor: import_math22.Color4.create(0.2, 0.4, 0.8, 0.5),
       emissiveIntensity: 2
     });
-    const title = import_ecs23.engine.addEntity();
-    import_ecs23.Transform.create(title, {
+    const title = import_ecs24.engine.addEntity();
+    import_ecs24.Transform.create(title, {
       parent: this.voiceUI,
-      position: import_math21.Vector3.create(0, 0.7, 0.1),
-      scale: import_math21.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math22.Vector3.create(0, 0.7, 0.1),
+      scale: import_math22.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(title, {
       text: "\u{1F49C} ASISTENTE DE VOZ (NEXUS)",
-      textColor: import_math21.Color4.create(1, 1, 1, 1),
+      textColor: import_math22.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
     });
@@ -11331,43 +11384,43 @@ var VoiceCommandSystem = class {
   }
   // Create status indicator
   createStatusIndicator() {
-    const statusIndicator = import_ecs23.engine.addEntity();
-    import_ecs23.Transform.create(statusIndicator, {
+    const statusIndicator = import_ecs24.engine.addEntity();
+    import_ecs24.Transform.create(statusIndicator, {
       parent: this.voiceUI,
-      position: import_math21.Vector3.create(0, 0.3, 0.1),
-      scale: import_math21.Vector3.create(0.2, 0.2, 0.1)
+      position: import_math22.Vector3.create(0, 0.3, 0.1),
+      scale: import_math22.Vector3.create(0.2, 0.2, 0.1)
     });
-    import_ecs23.MeshRenderer.setBox(statusIndicator);
-    import_ecs23.Material.setPbrMaterial(statusIndicator, {
-      albedoColor: import_math21.Color4.create(0.2, 0.8, 0.2, 1),
-      emissiveColor: import_math21.Color4.create(0.2, 0.8, 0.2, 0.8),
+    import_ecs24.MeshRenderer.setBox(statusIndicator);
+    import_ecs24.Material.setPbrMaterial(statusIndicator, {
+      albedoColor: import_math22.Color4.create(0.2, 0.8, 0.2, 1),
+      emissiveColor: import_math22.Color4.create(0.2, 0.8, 0.2, 0.8),
       emissiveIntensity: 2
     });
     this.animateStatusIndicator(statusIndicator);
   }
   // Animate status indicator
   animateStatusIndicator(indicator) {
-    import_ecs23.engine.addSystem(() => {
+    import_ecs24.engine.addSystem(() => {
       if (!this.isInitialized) return;
       const time = Date.now() / 1e3;
-      const material = import_ecs23.Material.getMutable(indicator);
+      const material = import_ecs24.Material.getMutable(indicator);
       if (material && material.$case === "pbr") {
         switch (this.voiceAssistant.processingState) {
           case "idle":
-            material.pbr.albedoColor = import_math21.Color4.create(0.2, 0.8, 0.2, 1);
+            material.pbr.albedoColor = import_math22.Color4.create(0.2, 0.8, 0.2, 1);
             material.pbr.emissiveIntensity = 1;
             break;
           case "listening":
             const pulse = Math.sin(time * 3) * 0.5 + 0.5;
-            material.pbr.albedoColor = import_math21.Color4.create(1, 0.8, 0.2, 1);
+            material.pbr.albedoColor = import_math22.Color4.create(1, 0.8, 0.2, 1);
             material.pbr.emissiveIntensity = 2 + pulse * 2;
             break;
           case "processing":
-            material.pbr.albedoColor = import_math21.Color4.create(0.2, 0.2, 1, 1);
+            material.pbr.albedoColor = import_math22.Color4.create(0.2, 0.2, 1, 1);
             material.pbr.emissiveIntensity = 3;
             break;
           case "responding":
-            material.pbr.albedoColor = import_math21.Color4.create(0.8, 0.2, 0.8, 1);
+            material.pbr.albedoColor = import_math22.Color4.create(0.8, 0.2, 0.8, 1);
             material.pbr.emissiveIntensity = 2;
             break;
         }
@@ -11376,27 +11429,27 @@ var VoiceCommandSystem = class {
   }
   // Create transcript display
   createTranscriptDisplay() {
-    const transcriptDisplay = import_ecs23.engine.addEntity();
-    import_ecs23.Transform.create(transcriptDisplay, {
+    const transcriptDisplay = import_ecs24.engine.addEntity();
+    import_ecs24.Transform.create(transcriptDisplay, {
       parent: this.voiceUI,
-      position: import_math21.Vector3.create(0, -0.1, 0.1),
-      scale: import_math21.Vector3.create(0.8, 0.3, 0.1)
+      position: import_math22.Vector3.create(0, -0.1, 0.1),
+      scale: import_math22.Vector3.create(0.8, 0.3, 0.1)
     });
-    import_ecs23.MeshRenderer.setBox(transcriptDisplay);
-    import_ecs23.Material.setPbrMaterial(transcriptDisplay, {
-      albedoColor: import_math21.Color4.create(0.1, 0.1, 0.1, 0.8),
-      emissiveColor: import_math21.Color4.create(0.1, 0.1, 0.1, 0.3),
+    import_ecs24.MeshRenderer.setBox(transcriptDisplay);
+    import_ecs24.Material.setPbrMaterial(transcriptDisplay, {
+      albedoColor: import_math22.Color4.create(0.1, 0.1, 0.1, 0.8),
+      emissiveColor: import_math22.Color4.create(0.1, 0.1, 0.1, 0.3),
       emissiveIntensity: 1
     });
-    const transcriptText = import_ecs23.engine.addEntity();
-    import_ecs23.Transform.create(transcriptText, {
+    const transcriptText = import_ecs24.engine.addEntity();
+    import_ecs24.Transform.create(transcriptText, {
       parent: transcriptDisplay,
-      position: import_math21.Vector3.create(0, 0, 0.1),
-      scale: import_math21.Vector3.create(0.3, 0.3, 0.3)
+      position: import_math22.Vector3.create(0, 0, 0.1),
+      scale: import_math22.Vector3.create(0.3, 0.3, 0.3)
     });
     TextShape.create(transcriptText, {
       text: 'Di "Hola Nexus" para comenzar...',
-      textColor: import_math21.Color4.create(1, 1, 1, 1),
+      textColor: import_math22.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
       textAlign: 3
     });
@@ -11410,34 +11463,34 @@ var VoiceCommandSystem = class {
     ];
     let xOffset = -0.8;
     controls.forEach((control) => {
-      const button = import_ecs23.engine.addEntity();
-      import_ecs23.Transform.create(button, {
+      const button = import_ecs24.engine.addEntity();
+      import_ecs24.Transform.create(button, {
         parent: this.voiceUI,
-        position: import_math21.Vector3.create(xOffset, -0.6, 0.1),
-        scale: import_math21.Vector3.create(0.3, 0.3, 0.1)
+        position: import_math22.Vector3.create(xOffset, -0.6, 0.1),
+        scale: import_math22.Vector3.create(0.3, 0.3, 0.1)
       });
-      import_ecs23.MeshRenderer.setBox(button);
-      import_ecs23.Material.setPbrMaterial(button, {
-        albedoColor: import_math21.Color4.create(0.3, 0.6, 0.8, 1),
-        emissiveColor: import_math21.Color4.create(0.3, 0.6, 0.8, 0.5),
+      import_ecs24.MeshRenderer.setBox(button);
+      import_ecs24.Material.setPbrMaterial(button, {
+        albedoColor: import_math22.Color4.create(0.3, 0.6, 0.8, 1),
+        emissiveColor: import_math22.Color4.create(0.3, 0.6, 0.8, 0.5),
         emissiveIntensity: 2
       });
-      const buttonText = import_ecs23.engine.addEntity();
-      import_ecs23.Transform.create(buttonText, {
+      const buttonText = import_ecs24.engine.addEntity();
+      import_ecs24.Transform.create(buttonText, {
         parent: button,
-        position: import_math21.Vector3.create(0, 0, 0.1),
-        scale: import_math21.Vector3.create(0.5, 0.5, 0.5)
+        position: import_math22.Vector3.create(0, 0, 0.1),
+        scale: import_math22.Vector3.create(0.5, 0.5, 0.5)
       });
       TextShape.create(buttonText, {
         text: control.icon,
-        textColor: import_math21.Color4.create(1, 1, 1, 1),
+        textColor: import_math22.Color4.create(1, 1, 1, 1),
         fontSize: 2,
         textAlign: 3
       });
-      import_ecs23.pointerEventsSystem.onPointerDown(
+      import_ecs24.pointerEventsSystem.onPointerDown(
         {
           entity: button,
-          opts: { button: import_ecs23.InputAction.IA_POINTER, hoverText: control.name }
+          opts: { button: import_ecs24.InputAction.IA_POINTER, hoverText: control.name }
         },
         () => this.handleVoiceControl(control.id)
       );
@@ -11490,7 +11543,7 @@ var VoiceCommandSystem = class {
   }
   // Start voice engine
   startVoiceEngine() {
-    import_ecs23.engine.addSystem(() => {
+    import_ecs24.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.updateVoiceUI();
       this.simulateVoiceInput();
@@ -11848,7 +11901,7 @@ var VoiceCommandSystem = class {
     this.intents.clear();
     this.commandHistory = [];
     if (this.voiceUI) {
-      import_ecs23.engine.removeEntity(this.voiceUI);
+      import_ecs24.engine.removeEntity(this.voiceUI);
     }
     this.isInitialized = false;
   }
@@ -11856,8 +11909,8 @@ var VoiceCommandSystem = class {
 var voiceCommandSystem = new VoiceCommandSystem();
 
 // src/weather-system.ts
-var import_ecs24 = require("@dcl/sdk/ecs");
-var import_math22 = require("@dcl/sdk/math");
+var import_ecs25 = require("@dcl/sdk/ecs");
+var import_math23 = require("@dcl/sdk/math");
 var WeatherSystem = class {
   // 1 real second = 1 game minute
   constructor() {
@@ -11871,7 +11924,7 @@ var WeatherSystem = class {
       temperature: 22,
       humidity: 45,
       windSpeed: 5,
-      windDirection: import_math22.Vector3.create(1, 0, 0)
+      windDirection: import_math23.Vector3.create(1, 0, 0)
     };
     this.currentTime = {
       hour: 12,
@@ -11892,50 +11945,50 @@ var WeatherSystem = class {
   }
   // Create sky dome
   createSkyDome() {
-    this.skyDome = import_ecs24.engine.addEntity();
-    import_ecs24.Transform.create(this.skyDome, {
-      position: import_math22.Vector3.create(8, 50, 8),
-      scale: import_math22.Vector3.create(100, 100, 100)
+    this.skyDome = import_ecs25.engine.addEntity();
+    import_ecs25.Transform.create(this.skyDome, {
+      position: import_math23.Vector3.create(8, 50, 8),
+      scale: import_math23.Vector3.create(100, 100, 100)
     });
-    import_ecs24.MeshRenderer.setSphere(this.skyDome);
+    import_ecs25.MeshRenderer.setSphere(this.skyDome);
     this.updateSkyColor();
   }
   // Create sun and moon
   createCelestialBodies() {
-    const sun = import_ecs24.engine.addEntity();
-    import_ecs24.Transform.create(sun, {
-      position: import_math22.Vector3.create(8, 30, 8),
-      scale: import_math22.Vector3.create(3, 3, 3)
+    const sun = import_ecs25.engine.addEntity();
+    import_ecs25.Transform.create(sun, {
+      position: import_math23.Vector3.create(8, 30, 8),
+      scale: import_math23.Vector3.create(3, 3, 3)
     });
-    import_ecs24.MeshRenderer.setSphere(sun);
-    import_ecs24.Material.setPbrMaterial(sun, {
-      albedoColor: import_math22.Color4.create(1, 0.95, 0.8, 1),
-      emissiveColor: import_math22.Color4.create(1, 0.9, 0.6, 1),
+    import_ecs25.MeshRenderer.setSphere(sun);
+    import_ecs25.Material.setPbrMaterial(sun, {
+      albedoColor: import_math23.Color4.create(1, 0.95, 0.8, 1),
+      emissiveColor: import_math23.Color4.create(1, 0.9, 0.6, 1),
       emissiveIntensity: 5
     });
     this.celestialBodies.set("sun", {
       entity: sun,
       type: "sun",
-      basePosition: import_math22.Vector3.create(8, 30, 8),
+      basePosition: import_math23.Vector3.create(8, 30, 8),
       orbitRadius: 40,
       orbitSpeed: 0.1,
       currentAngle: 0
     });
-    const moon = import_ecs24.engine.addEntity();
-    import_ecs24.Transform.create(moon, {
-      position: import_math22.Vector3.create(8, 30, 8),
-      scale: import_math22.Vector3.create(2, 2, 2)
+    const moon = import_ecs25.engine.addEntity();
+    import_ecs25.Transform.create(moon, {
+      position: import_math23.Vector3.create(8, 30, 8),
+      scale: import_math23.Vector3.create(2, 2, 2)
     });
-    import_ecs24.MeshRenderer.setSphere(moon);
-    import_ecs24.Material.setPbrMaterial(moon, {
-      albedoColor: import_math22.Color4.create(0.9, 0.9, 1, 1),
-      emissiveColor: import_math22.Color4.create(0.6, 0.6, 0.8, 0.8),
+    import_ecs25.MeshRenderer.setSphere(moon);
+    import_ecs25.Material.setPbrMaterial(moon, {
+      albedoColor: import_math23.Color4.create(0.9, 0.9, 1, 1),
+      emissiveColor: import_math23.Color4.create(0.6, 0.6, 0.8, 0.8),
       emissiveIntensity: 2
     });
     this.celestialBodies.set("moon", {
       entity: moon,
       type: "moon",
-      basePosition: import_math22.Vector3.create(8, 30, 8),
+      basePosition: import_math23.Vector3.create(8, 30, 8),
       orbitRadius: 40,
       orbitSpeed: 0.1,
       currentAngle: 180
@@ -11951,92 +12004,92 @@ var WeatherSystem = class {
   // Create rain effect
   createRainEffect() {
     for (let i = 0; i < 100; i++) {
-      const rainDrop = import_ecs24.engine.addEntity();
-      import_ecs24.Transform.create(rainDrop, {
-        position: import_math22.Vector3.create(Math.random() * 16, Math.random() * 20 + 10, Math.random() * 16),
-        scale: import_math22.Vector3.create(0.02, 0.2, 0.02)
+      const rainDrop = import_ecs25.engine.addEntity();
+      import_ecs25.Transform.create(rainDrop, {
+        position: import_math23.Vector3.create(Math.random() * 16, Math.random() * 20 + 10, Math.random() * 16),
+        scale: import_math23.Vector3.create(0.02, 0.2, 0.02)
       });
-      import_ecs24.MeshRenderer.setBox(rainDrop);
-      import_ecs24.Material.setPbrMaterial(rainDrop, {
-        albedoColor: import_math22.Color4.create(0.6, 0.7, 0.9, 0.7),
-        emissiveColor: import_math22.Color4.create(0.4, 0.5, 0.8, 0.5),
+      import_ecs25.MeshRenderer.setBox(rainDrop);
+      import_ecs25.Material.setPbrMaterial(rainDrop, {
+        albedoColor: import_math23.Color4.create(0.6, 0.7, 0.9, 0.7),
+        emissiveColor: import_math23.Color4.create(0.4, 0.5, 0.8, 0.5),
         emissiveIntensity: 1
       });
       this.weatherEffects.push({
         entity: rainDrop,
         type: "rain",
-        velocity: import_math22.Vector3.create(0, -8, 0)
+        velocity: import_math23.Vector3.create(0, -8, 0)
       });
     }
   }
   // Create cloud system
   createCloudSystem() {
     for (let i = 0; i < 20; i++) {
-      const cloud = import_ecs24.engine.addEntity();
-      import_ecs24.Transform.create(cloud, {
-        position: import_math22.Vector3.create(Math.random() * 16, Math.random() * 10 + 15, Math.random() * 16),
-        scale: import_math22.Vector3.create(
+      const cloud = import_ecs25.engine.addEntity();
+      import_ecs25.Transform.create(cloud, {
+        position: import_math23.Vector3.create(Math.random() * 16, Math.random() * 10 + 15, Math.random() * 16),
+        scale: import_math23.Vector3.create(
           Math.random() * 3 + 2,
           Math.random() * 1 + 0.5,
           Math.random() * 3 + 2
         )
       });
-      import_ecs24.MeshRenderer.setBox(cloud);
-      import_ecs24.Material.setPbrMaterial(cloud, {
-        albedoColor: import_math22.Color4.create(0.9, 0.9, 0.9, 0.8),
+      import_ecs25.MeshRenderer.setBox(cloud);
+      import_ecs25.Material.setPbrMaterial(cloud, {
+        albedoColor: import_math23.Color4.create(0.9, 0.9, 0.9, 0.8),
         roughness: 0.8,
         metallic: 0.1
       });
       this.weatherEffects.push({
         entity: cloud,
         type: "cloud",
-        velocity: import_math22.Vector3.create((Math.random() - 0.5) * 0.5, 0, (Math.random() - 0.5) * 0.5)
+        velocity: import_math23.Vector3.create((Math.random() - 0.5) * 0.5, 0, (Math.random() - 0.5) * 0.5)
       });
     }
   }
   // Create fog effect
   createFogEffect() {
-    const fogVolume = import_ecs24.engine.addEntity();
-    import_ecs24.Transform.create(fogVolume, {
-      position: import_math22.Vector3.create(8, 2, 8),
-      scale: import_math22.Vector3.create(20, 4, 20)
+    const fogVolume = import_ecs25.engine.addEntity();
+    import_ecs25.Transform.create(fogVolume, {
+      position: import_math23.Vector3.create(8, 2, 8),
+      scale: import_math23.Vector3.create(20, 4, 20)
     });
-    import_ecs24.MeshRenderer.setBox(fogVolume);
-    import_ecs24.Material.setPbrMaterial(fogVolume, {
-      albedoColor: import_math22.Color4.create(0.8, 0.8, 0.85, 0.3),
-      emissiveColor: import_math22.Color4.create(0.7, 0.7, 0.75, 0.2),
+    import_ecs25.MeshRenderer.setBox(fogVolume);
+    import_ecs25.Material.setPbrMaterial(fogVolume, {
+      albedoColor: import_math23.Color4.create(0.8, 0.8, 0.85, 0.3),
+      emissiveColor: import_math23.Color4.create(0.7, 0.7, 0.75, 0.2),
       emissiveIntensity: 0.5
     });
     this.weatherEffects.push({
       entity: fogVolume,
       type: "fog",
-      velocity: import_math22.Vector3.create(0, 0, 0)
+      velocity: import_math23.Vector3.create(0, 0, 0)
     });
   }
   // Create snow effect
   createSnowEffect() {
     for (let i = 0; i < 50; i++) {
-      const snowFlake = import_ecs24.engine.addEntity();
-      import_ecs24.Transform.create(snowFlake, {
-        position: import_math22.Vector3.create(Math.random() * 16, Math.random() * 20 + 10, Math.random() * 16),
-        scale: import_math22.Vector3.create(0.1, 0.1, 0.1)
+      const snowFlake = import_ecs25.engine.addEntity();
+      import_ecs25.Transform.create(snowFlake, {
+        position: import_math23.Vector3.create(Math.random() * 16, Math.random() * 20 + 10, Math.random() * 16),
+        scale: import_math23.Vector3.create(0.1, 0.1, 0.1)
       });
-      import_ecs24.MeshRenderer.setSphere(snowFlake);
-      import_ecs24.Material.setPbrMaterial(snowFlake, {
-        albedoColor: import_math22.Color4.create(1, 1, 1, 0.9),
-        emissiveColor: import_math22.Color4.create(0.8, 0.8, 1, 0.6),
+      import_ecs25.MeshRenderer.setSphere(snowFlake);
+      import_ecs25.Material.setPbrMaterial(snowFlake, {
+        albedoColor: import_math23.Color4.create(1, 1, 1, 0.9),
+        emissiveColor: import_math23.Color4.create(0.8, 0.8, 1, 0.6),
         emissiveIntensity: 1
       });
       this.weatherEffects.push({
         entity: snowFlake,
         type: "snow",
-        velocity: import_math22.Vector3.create((Math.random() - 0.5) * 0.5, -1, (Math.random() - 0.5) * 0.5)
+        velocity: import_math23.Vector3.create((Math.random() - 0.5) * 0.5, -1, (Math.random() - 0.5) * 0.5)
       });
     }
   }
   // Start weather simulation
   startWeatherSimulation() {
-    import_ecs24.engine.addSystem(() => {
+    import_ecs25.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.updateWeatherEffects();
       this.simulateWeatherChanges();
@@ -12044,7 +12097,7 @@ var WeatherSystem = class {
   }
   // Start day/night cycle
   startDayNightCycle() {
-    import_ecs24.engine.addSystem(() => {
+    import_ecs25.engine.addSystem(() => {
       if (!this.isInitialized) return;
       this.updateTimeOfDay();
       this.updateCelestialBodies();
@@ -12070,48 +12123,48 @@ var WeatherSystem = class {
       const x = body.basePosition.x + Math.cos(angle) * body.orbitRadius;
       const y = body.basePosition.y + Math.sin(angle) * body.orbitRadius;
       const z = body.basePosition.z;
-      const transform = import_ecs24.Transform.getMutable(body.entity);
-      transform.position = import_math22.Vector3.create(x, y, z);
+      const transform = import_ecs25.Transform.getMutable(body.entity);
+      transform.position = import_math23.Vector3.create(x, y, z);
       const isVisible = y > body.basePosition.y;
-      transform.scale = isVisible ? import_math22.Vector3.create(
+      transform.scale = isVisible ? import_math23.Vector3.create(
         body.type === "sun" ? 3 : 2,
         body.type === "sun" ? 3 : 2,
         body.type === "sun" ? 3 : 2
-      ) : import_math22.Vector3.create(0, 0, 0);
+      ) : import_math23.Vector3.create(0, 0, 0);
     });
   }
   // Update sky color based on time and weather
   updateSkyColor() {
-    const material = import_ecs24.Material.getMutable(this.skyDome);
+    const material = import_ecs25.Material.getMutable(this.skyDome);
     if (!material || material.$case !== "pbr") return;
     let skyColor;
     const hour = this.currentTime.hour;
     if (hour >= 6 && hour < 12) {
       const progress = (hour - 6) / 6;
-      skyColor = import_math22.Color4.lerp(
-        import_math22.Color4.create(0.8, 0.6, 0.4, 1),
+      skyColor = import_math23.Color4.lerp(
+        import_math23.Color4.create(0.8, 0.6, 0.4, 1),
         // Dawn
-        import_math22.Color4.create(0.5, 0.7, 1, 1),
+        import_math23.Color4.create(0.5, 0.7, 1, 1),
         // Day
         progress
       );
     } else if (hour >= 12 && hour < 18) {
-      skyColor = import_math22.Color4.create(0.5, 0.7, 1, 1);
+      skyColor = import_math23.Color4.create(0.5, 0.7, 1, 1);
     } else if (hour >= 18 && hour < 21) {
       const progress = (hour - 18) / 3;
-      skyColor = import_math22.Color4.lerp(
-        import_math22.Color4.create(0.5, 0.7, 1, 1),
+      skyColor = import_math23.Color4.lerp(
+        import_math23.Color4.create(0.5, 0.7, 1, 1),
         // Day
-        import_math22.Color4.create(0.2, 0.3, 0.6, 1),
+        import_math23.Color4.create(0.2, 0.3, 0.6, 1),
         // Dusk
         progress
       );
     } else {
-      skyColor = import_math22.Color4.create(0.05, 0.05, 0.2, 1);
+      skyColor = import_math23.Color4.create(0.05, 0.05, 0.2, 1);
     }
     skyColor = this.applyWeatherToSkyColor(skyColor);
     material.pbr.albedoColor = skyColor;
-    material.pbr.emissiveColor = import_math22.Color4.create(
+    material.pbr.emissiveColor = import_math23.Color4.create(
       skyColor.r * 0.3,
       skyColor.g * 0.3,
       skyColor.b * 0.3,
@@ -12122,22 +12175,22 @@ var WeatherSystem = class {
   applyWeatherToSkyColor(baseColor) {
     switch (this.currentState.type) {
       case "cloudy":
-        return import_math22.Color4.lerp(
+        return import_math23.Color4.lerp(
           baseColor,
-          import_math22.Color4.create(0.6, 0.6, 0.6, 1),
+          import_math23.Color4.create(0.6, 0.6, 0.6, 1),
           this.currentState.intensity * 0.7
         );
       case "rainy":
       case "stormy":
-        return import_math22.Color4.lerp(
+        return import_math23.Color4.lerp(
           baseColor,
-          import_math22.Color4.create(0.3, 0.3, 0.4, 1),
+          import_math23.Color4.create(0.3, 0.3, 0.4, 1),
           this.currentState.intensity * 0.8
         );
       case "foggy":
-        return import_math22.Color4.lerp(
+        return import_math23.Color4.lerp(
           baseColor,
-          import_math22.Color4.create(0.7, 0.7, 0.75, 1),
+          import_math23.Color4.create(0.7, 0.7, 0.75, 1),
           this.currentState.intensity * 0.6
         );
       default:
@@ -12147,8 +12200,8 @@ var WeatherSystem = class {
   // Update weather effects
   updateWeatherEffects() {
     this.weatherEffects.forEach((effect) => {
-      const transform = import_ecs24.Transform.getMutable(effect.entity);
-      transform.position = import_math22.Vector3.add(transform.position, import_math22.Vector3.scale(effect.velocity, 0.016));
+      const transform = import_ecs25.Transform.getMutable(effect.entity);
+      transform.position = import_math23.Vector3.add(transform.position, import_math23.Vector3.scale(effect.velocity, 0.016));
       if (effect.type === "rain" || effect.type === "snow") {
         if (transform.position.y < 0) {
           transform.position.y = 30;
@@ -12162,7 +12215,7 @@ var WeatherSystem = class {
         if (transform.position.z < -4) transform.position.z = 20;
       }
       const shouldBeVisible = this.isEffectVisible(effect.type);
-      transform.scale = shouldBeVisible ? import_math22.Vector3.create(1, 1, 1) : import_math22.Vector3.create(0, 0, 0);
+      transform.scale = shouldBeVisible ? import_math23.Vector3.create(1, 1, 1) : import_math23.Vector3.create(0, 0, 0);
     });
   }
   // Check if effect should be visible
@@ -12246,15 +12299,15 @@ var WeatherSystem = class {
   // Cleanup system
   cleanup() {
     this.celestialBodies.forEach((body) => {
-      import_ecs24.engine.removeEntity(body.entity);
+      import_ecs25.engine.removeEntity(body.entity);
     });
     this.celestialBodies.clear();
     this.weatherEffects.forEach((effect) => {
-      import_ecs24.engine.removeEntity(effect.entity);
+      import_ecs25.engine.removeEntity(effect.entity);
     });
     this.weatherEffects = [];
     if (this.skyDome) {
-      import_ecs24.engine.removeEntity(this.skyDome);
+      import_ecs25.engine.removeEntity(this.skyDome);
     }
     this.isInitialized = false;
   }
@@ -12352,16 +12405,16 @@ function startRealTimeUpdates() {
   }, 1e4);
 }
 function initializeNPCs() {
-  npcManager.createNPC("NEXUS", "System Administrator", import_math23.Vector3.create(4, 1, 4));
-  npcManager.createNPC("DATA", "Data Analyst", import_math23.Vector3.create(12, 1, 4));
-  npcManager.createNPC("GUARD", "Security Expert", import_math23.Vector3.create(8, 1, 12));
+  npcManager.createNPC("NEXUS", "System Administrator", import_math24.Vector3.create(4, 1, 4));
+  npcManager.createNPC("DATA", "Data Analyst", import_math24.Vector3.create(12, 1, 4));
+  npcManager.createNPC("GUARD", "Security Expert", import_math24.Vector3.create(8, 1, 12));
   console.log("\u{1F916} AI Assistants Initialized");
 }
 function initializeDataVisualization() {
   const mainWall = dataVizManager.createWall(
     "main",
-    import_math23.Vector3.create(8, 4, 0.5),
-    import_math23.Vector3.create(16, 8, 0.2)
+    import_math24.Vector3.create(8, 4, 0.5),
+    import_math24.Vector3.create(16, 8, 0.2)
   );
   mainWall.addChart("systemStatus", {
     type: "bar",
@@ -12391,13 +12444,13 @@ function createParticleEffects() {
       offset: Math.random() * Math.PI * 2
     });
   }
-  import_ecs25.engine.addSystem(particleSystem);
+  import_ecs26.engine.addSystem(particleSystem);
   console.log(`\u2705 Created ${particleCount + energyCount} particles`);
 }
 function particleSystem(dt) {
   const t = Date.now() / 1e3;
   for (const p of particlePool) {
-    const transform = import_ecs25.Transform.getMutable(p.entity);
+    const transform = import_ecs26.Transform.getMutable(p.entity);
     if (p.type === "data") {
       transform.position.y += Math.sin(t + p.offset) * dt * 0.5;
       transform.rotation = { x: 0, y: (t * 20 + p.offset * 10) % 360, z: 0, w: 1 };
@@ -12411,37 +12464,37 @@ function particleSystem(dt) {
   }
 }
 function createParticle() {
-  const particle = import_ecs25.engine.addEntity();
-  import_ecs25.Transform.create(particle, {
-    position: import_math23.Vector3.create(Math.random() * 16, Math.random() * 4 + 1, Math.random() * 16),
-    scale: import_math23.Vector3.create(0.1, 0.1, 0.1)
+  const particle = import_ecs26.engine.addEntity();
+  import_ecs26.Transform.create(particle, {
+    position: import_math24.Vector3.create(Math.random() * 16, Math.random() * 4 + 1, Math.random() * 16),
+    scale: import_math24.Vector3.create(0.1, 0.1, 0.1)
   });
-  import_ecs25.MeshRenderer.setBox(particle);
-  import_ecs25.Material.setPbrMaterial(particle, {
-    albedoColor: import_math23.Color4.create(0, 1, 0.8, 0.6),
+  import_ecs26.MeshRenderer.setBox(particle);
+  import_ecs26.Material.setPbrMaterial(particle, {
+    albedoColor: import_math24.Color4.create(0, 1, 0.8, 0.6),
     roughness: 0,
     metallic: 0.5,
-    emissiveColor: import_math23.Color4.create(0, 1, 0.8, 1),
+    emissiveColor: import_math24.Color4.create(0, 1, 0.8, 1),
     emissiveIntensity: 3
   });
   return particle;
 }
 function createEnergyParticle() {
-  const energyParticle = import_ecs25.engine.addEntity();
-  import_ecs25.Transform.create(energyParticle, {
-    position: import_math23.Vector3.create(
+  const energyParticle = import_ecs26.engine.addEntity();
+  import_ecs26.Transform.create(energyParticle, {
+    position: import_math24.Vector3.create(
       8 + (Math.random() - 0.5) * 4,
       2 + Math.random() * 2,
       8 + (Math.random() - 0.5) * 4
     ),
-    scale: import_math23.Vector3.create(0.15, 0.15, 0.15)
+    scale: import_math24.Vector3.create(0.15, 0.15, 0.15)
   });
-  import_ecs25.MeshRenderer.setBox(energyParticle);
-  import_ecs25.Material.setPbrMaterial(energyParticle, {
-    albedoColor: import_math23.Color4.create(1, 0.8, 0.2, 0.7),
+  import_ecs26.MeshRenderer.setBox(energyParticle);
+  import_ecs26.Material.setPbrMaterial(energyParticle, {
+    albedoColor: import_math24.Color4.create(1, 0.8, 0.2, 0.7),
     roughness: 0.1,
     metallic: 0.8,
-    emissiveColor: import_math23.Color4.create(1, 0.8, 0.2, 1),
+    emissiveColor: import_math24.Color4.create(1, 0.8, 0.2, 1),
     emissiveIntensity: 5
   });
   return energyParticle;
@@ -12451,7 +12504,7 @@ function cleanupEnhancedScene() {
   if (diagnosticsInterval) clearInterval(diagnosticsInterval);
   if (alertsInterval) clearInterval(alertsInterval);
   particlePool.forEach((particle) => {
-    import_ecs25.engine.removeEntity(particle);
+    import_ecs26.engine.removeEntity(particle);
   });
   particlePool.length = 0;
   soundSystem.cleanup();

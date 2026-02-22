@@ -1,5 +1,6 @@
-import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs';
+import { engine, GltfContainer, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs';
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math';
+import { createNeuralPillar, createSovereignCore } from './utils/godmode-primitives';
 
 // Animation system for dynamic effects
 class AnimationSystem {
@@ -136,33 +137,18 @@ export function createEnhancedArchitecture() {
   });
 
   // Enhanced Entrance with futuristic pillars
-  const pillar1 = engine.addEntity();
-  Transform.create(pillar1, {
-    position: Vector3.create(2, 3, 0.5),
-    scale: Vector3.create(1.2, 6, 1.2),
-  });
-  MeshRenderer.setBox(pillar1);
-  Material.setPbrMaterial(pillar1, {
-    albedoColor: Color4.create(0.2, 0.4, 0.8, 1),
-    roughness: 0.2,
-    metallic: 0.8,
-    emissiveColor: Color4.create(0.2, 0.3, 0.7, 0.5),
-    emissiveIntensity: 3,
-  });
+  const pillar1 = createNeuralPillar(
+    Vector3.create(2, 3, 0.5),
+    Vector3.create(1.2, 6, 1.2)
+  );
+  // Future/Fallback: GltfContainer.create(pillar1, { src: 'models/neural_pillar.glb' })
+  // Note: createNeuralPillar handles the visual primitives internally
 
-  const pillar2 = engine.addEntity();
-  Transform.create(pillar2, {
-    position: Vector3.create(14, 3, 0.5),
-    scale: Vector3.create(1.2, 6, 1.2),
-  });
-  MeshRenderer.setBox(pillar2);
-  Material.setPbrMaterial(pillar2, {
-    albedoColor: Color4.create(0.2, 0.4, 0.8, 1),
-    roughness: 0.2,
-    metallic: 0.8,
-    emissiveColor: Color4.create(0.2, 0.3, 0.7, 0.5),
-    emissiveIntensity: 3,
-  });
+  const pillar2 = createNeuralPillar(
+    Vector3.create(14, 3, 0.5),
+    Vector3.create(1.2, 6, 1.2)
+  );
+  // Future/Fallback: GltfContainer.create(pillar2, { src: 'models/neural_pillar.glb' })
 
   // Multi-layered Neon Lighting System
   const neonStrip1 = engine.addEntity();
@@ -239,19 +225,8 @@ export function createEnhancedArchitecture() {
   }
 
   // Energy Core Centerpiece
-  const energyCore = engine.addEntity();
-  Transform.create(energyCore, {
-    position: Vector3.create(8, 2, 8),
-    scale: Vector3.create(1, 1, 1),
-  });
-  MeshRenderer.setBox(energyCore);
-  Material.setPbrMaterial(energyCore, {
-    albedoColor: Color4.create(1, 1, 1, 0.8),
-    roughness: 0.0,
-    metallic: 1.0,
-    emissiveColor: Color4.create(1, 0.8, 0.2, 1),
-    emissiveIntensity: 10,
-  });
+  const energyCore = createSovereignCore(Vector3.create(8, 2, 8));
+  // Future/Fallback: GltfContainer.create(energyCore, { src: 'models/sovereign_core.glb' })
 
   // Create Art Gallery on upper level
   createArtGallery();
