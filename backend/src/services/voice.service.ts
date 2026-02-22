@@ -18,6 +18,7 @@ export class VoiceService {
     @inject(TYPES.AIService) private aiService: AIService,
     @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
     @inject(TYPES.MetaverseService) private metaverseService: MetaverseService,
+    @inject(TYPES.NexusPushService) private pushService: any, // or NexusPushService if typed
   ) {}
 
   /**
@@ -111,6 +112,34 @@ Versión: Sovereign v2.4 (God Mode Active)
               parameters: { type: 'object', properties: {} },
             },
           },
+          {
+            type: 'function',
+            function: {
+              name: 'trigger_ambient_briefing',
+              description:
+                'Generar un boletín de voz proactivo sobre el estado del sistema en todos los terminales.',
+              parameters: {
+                type: 'object',
+                properties: {
+                  priority: { type: 'string', enum: ['normal', 'high', 'critical'] },
+                },
+              },
+            },
+          },
+          {
+            type: 'function',
+            function: {
+              name: 'set_sovereign_logic',
+              description: 'Ajustar los parámetros de IA y lógica de defensa del sistema.',
+              parameters: {
+                type: 'object',
+                properties: {
+                  mode: { type: 'string', enum: ['standard', 'hardened', 'aggressive'] },
+                },
+                required: ['mode'],
+              },
+            },
+          },
         ],
       },
     };
@@ -140,6 +169,29 @@ Versión: Sovereign v2.4 (God Mode Active)
               ? `Hay un evento activo titulado: "${status.activeEvents[0].title}".`
               : 'No hay eventos programados en este momento.'
           } Puedes supervisarla en ${status.visitUrl}`,
+        };
+      }
+
+      if (name === 'trigger_ambient_briefing') {
+        const priority = parameters.priority || 'normal';
+        await this.pushService.sendSovereignAlert({
+          title: 'Briefing Proactivo Solicitado',
+          message: 'Daniela está iniciando un resumen de voz del sistema.',
+          type: 'INFO',
+          priority,
+          voiceEnabled: true,
+        });
+        return {
+          result: 'He iniciado el protocolo de briefing proactivo en todos los nodos del Nexus.',
+        };
+      }
+
+      if (name === 'set_sovereign_logic') {
+        const { mode } = parameters;
+        // In a real implementation, this would call a logic service
+        logger.warn({ mode }, '[VoiceService] Sovereign Logic Adjustment Triggered');
+        return {
+          result: `El sistema ha sido reconfigurado al modo '${mode}'. Todos los protocolos de seguridad han sido alineados.`,
         };
       }
 

@@ -4,6 +4,7 @@ import * as admin from 'firebase-admin';
 import { TYPES } from '../types';
 import { logger } from '../utils/logger';
 import { FirebaseService } from './google/firebase.service';
+import { SocketService } from './socket.service';
 
 export interface PushPayload {
   title: string;
@@ -24,6 +25,7 @@ export class NexusPushService {
 
   constructor(
     @inject(TYPES.FirebaseService) private firebaseService: FirebaseService,
+    @inject(TYPES.SocketService) private socketService: SocketService,
   ) {
     logger.info('[NexusPush] 🔔 Sovereign Push Notification Service initialized');
   }
@@ -155,11 +157,7 @@ export class NexusPushService {
     });
   }
 
-  async notifyTaskComplete(
-    userId: string,
-    taskTitle: string,
-    completedBy: string,
-  ): Promise<void> {
+  async notifyTaskComplete(userId: string, taskTitle: string, completedBy: string): Promise<void> {
     await this.sendToUser(userId, {
       title: '✅ Tarea completada',
       body: `"${taskTitle}" completada por ${completedBy}`,
@@ -175,6 +173,36 @@ export class NexusPushService {
       channel: 'daniela_messages',
       data: { type: 'daniela_message' },
     });
+  }
+
+  // Sovereign Alert with Voice Support
+  async sendSovereignAlert(alert: {
+    title: string;
+    message: string;
+    type: string;
+    priority: 'normal' | 'high' | 'critical';
+    voiceEnabled: boolean;
+  }): Promise<void> {
+    logger.info({ alert }, '[NexusPush] 🌌 Broadcasting Sovereign Alert');
+
+    // 1. Send FCM Push to all registered tokens
+    const allTokens = Array.from(this.fcmTokens.values()).flat();
+    if (allTokens.length > 0) {
+      await this.sendMulticast(allTokens, {
+        title: alert.title,
+        body: alert.message,
+        data: {
+          type: 'sovereign_alert',
+          severity: alert.type,
+          priority: alert.priority,
+          voiceEnabled: String(alert.voiceEnabled),
+        },
+        priority: alert.priority === 'critical' || alert.priority === 'high' ? 'high' : 'normal',
+      });
+    }
+
+    // 2. Broadcast via Socket for web players
+    this.socketService.emit('sovereign:alert', alert);
   }
 
   // Test notification for verification

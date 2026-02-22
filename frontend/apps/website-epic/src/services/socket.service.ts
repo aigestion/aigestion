@@ -32,6 +32,11 @@ class SocketService {
     this.socket?.on('pulse:warning', callback);
   }
 
+  onSovereignAlert(callback: (alert: any) => void) {
+    if (!this.socket) this.connect();
+    this.socket?.on('sovereign:alert', callback);
+  }
+
   disconnect() {
     if (this.socket) {
       this.socket.disconnect();

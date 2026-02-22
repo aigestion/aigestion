@@ -21,6 +21,7 @@ import {
   ShieldCheck,
   Search,
   Smartphone,
+  Fingerprint,
 } from 'lucide-react';
 import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
 import { sovereignGodMode, SwarmMission } from '../services/sovereign-godmode';
@@ -35,6 +36,7 @@ import { NexusGrid } from './design-system/NexusGrid';
 import { SovereignCard } from './design-system/SovereignCard';
 import { PulseHistory } from './design-system/PulseHistory';
 import { socketService } from '../services/socket.service';
+import { useDanielaVoice } from '../hooks/useDanielaVoice';
 
 export const SovereignIntelligenceHub: React.FC = () => {
   const { notify } = useNotification();
@@ -45,9 +47,11 @@ export const SovereignIntelligenceHub: React.FC = () => {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isRecordingVoice, setIsRecordingVoice] = useState(false);
   const [sovereignSession, setSovereignSession] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<
-    'terminal' | 'missions' | 'memory' | 'sentinel' | 'swarm'
-  >('terminal');
+  const [voicePersonality, setVoicePersonality] = useState<
+    'sovereign' | 'professional' | 'empathy'
+  >('sovereign');
+  const { isListening, toggleListening, speak } = useDanielaVoice();
+
   const [decryptedFindings, setDecryptedFindings] = useState<Record<string, string>>({});
   const [isDecrypting, setIsDecrypting] = useState<string | null>(null);
   const [forecasts, setForecasts] = useState<any[]>([]);
@@ -95,6 +99,21 @@ export const SovereignIntelligenceHub: React.FC = () => {
 
     return () => socketService.disconnect();
   }, []);
+
+  // 🌌 Proactive AI Voice Alerts
+  useEffect(() => {
+    socketService.onSovereignAlert(alert => {
+      notify(
+        `🌌 ALERTA SOBERANA: ${alert.type}`,
+        alert.message,
+        alert.priority === 'critical' ? 'error' : alert.priority === 'high' ? 'warning' : 'info'
+      );
+
+      if (alert.voiceEnabled) {
+        speak(alert.message);
+      }
+    });
+  }, [speak, notify]);
 
   useEffect(() => {
     loadMissions();
@@ -617,6 +636,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
               { id: 'sentinel', icon: Eye, label: 'CENTINELA' },
               { id: 'swarm', icon: Share2, label: 'ENJAMBRE' },
               { id: 'infra', icon: Server, label: 'INFRAESTRUCTURA' },
+              { id: 'voice', icon: Mic, label: 'DANIELA VOICE' },
             ].map(item => (
               <button
                 key={item.id}
@@ -652,6 +672,167 @@ export const SovereignIntelligenceHub: React.FC = () => {
           {/* Content Area */}
           <div className="flex-grow p-10 overflow-y-auto custom-scrollbar">
             <AnimatePresence mode="wait">
+              {activeTab === 'voice' && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="max-w-4xl mx-auto space-y-6"
+                >
+                  <div className="flex items-center justify-between mb-8">
+                    <div>
+                      <h2 className="text-2xl font-orbitron font-black text-white tracking-widest uppercase">
+                        Daniela Voice Agent
+                      </h2>
+                      <p className="text-nexus-silver/40 text-[10px] font-orbitron tracking-[0.2em] mt-1">
+                        Sovereign Vocal Intelligence & Biometric Link
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="px-4 py-2 bg-nexus-cyan/5 border border-nexus-cyan/20 rounded-xl flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-nexus-cyan animate-pulse shadow-cyan-glow" />
+                        <span className="text-[10px] font-orbitron font-bold text-nexus-cyan">
+                          ENGINE: VAPI/ELEVENLABS
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Voice Status & Visualizer */}
+                    <SovereignCard
+                      title="Audio Processing"
+                      icon={<Mic size={14} />}
+                      pulse={healerStatus.pulse}
+                    >
+                      <div className="space-y-6">
+                        <div className="h-24 bg-black/40 rounded-xl border border-white/5 flex items-center justify-center relative overflow-hidden">
+                          {/* Visualizer Mockup */}
+                          <div className="flex items-end gap-1 h-12">
+                            {[...Array(24)].map((_, i) => (
+                              <motion.div
+                                key={i}
+                                animate={{
+                                  height: isRecordingVoice ? [4, Math.random() * 40 + 10, 4] : 4,
+                                }}
+                                transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.05 }}
+                                className="w-1 bg-nexus-cyan/40 rounded-full"
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
+                          <div>
+                            <span className="text-[10px] text-white/40 block mb-1">MIC STATE</span>
+                            <span className="text-xs font-bold text-white uppercase">
+                              {isRecordingVoice ? 'Capturing...' : 'Idle'}
+                            </span>
+                          </div>
+                          <button
+                            onClick={handleVoiceEnrollment}
+                            className={`p-3 rounded-xl transition-all ${isRecordingVoice ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30'}`}
+                          >
+                            <Mic size={18} />
+                          </button>
+                        </div>
+                      </div>
+                    </SovereignCard>
+
+                    {/* Personality Configuration */}
+                    <SovereignCard
+                      title="Personality Matrix"
+                      icon={<Cpu size={14} />}
+                      pulse={healerStatus.pulse}
+                    >
+                      <div className="space-y-4">
+                        {[
+                          {
+                            id: 'sovereign',
+                            label: 'MODO SOBERANO',
+                            desc: 'Directo, fáctico y protector.',
+                          },
+                          {
+                            id: 'professional',
+                            label: 'MODO PROFESIONAL',
+                            desc: 'Analítico, detallado y cortés.',
+                          },
+                          {
+                            id: 'empathy',
+                            label: 'MODO ASISTENTE',
+                            desc: 'Cercano, proactivo y empoderador.',
+                          },
+                        ].map(mode => (
+                          <div
+                            key={mode.id}
+                            onClick={() => {
+                              setVoicePersonality(mode.id as any);
+                              speak(`Cambiando a modo ${mode.id}.`);
+                            }}
+                            className={`p-4 rounded-xl border transition-all cursor-pointer group ${
+                              voicePersonality === mode.id
+                                ? 'bg-nexus-cyan/10 border-nexus-cyan/40'
+                                : 'bg-white/5 border-white/5 hover:border-nexus-cyan/30'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-orbitron font-black text-white tracking-widest">
+                                {mode.label}
+                              </span>
+                              <div
+                                className={`w-3 h-3 rounded-full border flex items-center justify-center ${
+                                  voicePersonality === mode.id
+                                    ? 'border-nexus-cyan'
+                                    : 'border-nexus-cyan/30'
+                                }`}
+                              >
+                                {voicePersonality === mode.id && (
+                                  <div className="w-1.5 h-1.5 bg-nexus-cyan rounded-full" />
+                                )}
+                              </div>
+                            </div>
+                            <p className="text-[9px] text-nexus-silver/40 uppercase tracking-tight">
+                              {mode.desc}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </SovereignCard>
+
+                    {/* Biometric Linkage */}
+                    <SovereignCard
+                      title="Biometric Security"
+                      icon={<Lock size={14} />}
+                      pulse={healerStatus.pulse}
+                      className="md:col-span-2"
+                    >
+                      <div className="flex flex-col md:flex-row gap-6 p-4 bg-nexus-violet/5 rounded-2xl border border-nexus-violet/20">
+                        <div className="flex-1">
+                          <h4 className="text-xs font-bold text-nexus-violet-glow mb-2">
+                            HUELLA VOCAL
+                          </h4>
+                          <p className="text-[10px] text-white/50 leading-relaxed mb-4">
+                            Tu voz está vinculada mediante hashing cuántico a la bóveda. Cualquier
+                            intento de acceso no autorizado activará el protocolo Shiled
+                            automáticamente.
+                          </p>
+                          <div className="flex gap-4">
+                            <button className="text-[10px] font-bold px-4 py-2 bg-nexus-violet/20 border border-nexus-violet/30 rounded-lg text-nexus-violet-glow hover:bg-nexus-violet/30 transition-all">
+                              RE-CALIBRAR VOZ
+                            </button>
+                            <button className="text-[10px] font-bold px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-white/50 hover:text-white transition-all">
+                              VER REGISTROS
+                            </button>
+                          </div>
+                        </div>
+                        <div className="w-full md:w-64 h-32 bg-black/40 rounded-xl border border-nexus-violet/30 flex items-center justify-center">
+                          <Fingerprint size={48} className="text-nexus-violet/40 animate-pulse" />
+                        </div>
+                      </div>
+                    </SovereignCard>
+                  </div>
+                </motion.div>
+              )}
               {activeTab === 'terminal' && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -1399,4 +1580,4 @@ export const SovereignIntelligenceHub: React.FC = () => {
       </SpotlightWrapper>
     </SystemAnxietyEffect>
   );
-};;
+};;;

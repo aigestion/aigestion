@@ -1,12 +1,34 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDanielaVoice } from '../hooks/useDanielaVoice';
 import { useSound } from '../services/audio-service';
+import { socketService } from '../services/socket.service';
 
 export const DanielaOmniWidget: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isListening, transcript, toggleListening } = useDanielaVoice();
+  const { isListening, transcript, toggleListening, speak } = useDanielaVoice();
   const { playHover, playClick } = useSound();
+  const [lastPulse, setLastPulse] = useState<string>('nominal');
+
+  useEffect(() => {
+    // Listen for critical pulse changes to speak alerts
+    const handlePulse = (metrics: any) => {
+      const status = metrics.status.toLowerCase();
+      if (status !== lastPulse) {
+        if (status === 'critical') {
+          speak('Alerta de nivel crítico. Protocolo de contingencia activado.');
+        } else if (status === 'degraded' || status === 'warning') {
+          speak('Atención: Se ha detectado una degradación en el núcleo del sistema.');
+        }
+        setLastPulse(status);
+      }
+    };
+
+    socketService.onPulse(handlePulse);
+    socketService.onPulseWarning(msg => {
+      speak(`Advertencia de seguridad detectada: ${msg}`);
+    });
+  }, [speak, lastPulse]);
 
   const handleToggleExpand = () => {
     setIsExpanded(!isExpanded);

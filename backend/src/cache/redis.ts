@@ -142,7 +142,7 @@ const inflateAsync = promisify(inflate);
  * L1: Memory (fastest)
  * L2: Redis (distributed)
  */
-export const getCache = async (key: string): Promise<any> => {
+export const getCache = async <T = any>(key: string): Promise<T | null> => {
   // Check L1 first
   const l1Item = l1Cache.get(key);
   if (l1Item && l1Item.expiry > Date.now()) {

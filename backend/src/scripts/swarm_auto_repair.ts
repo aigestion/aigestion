@@ -7,12 +7,15 @@ import { AIService } from '../services/ai.service';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 
+import { TYPES } from '../types';
+import { container } from '../config/inversify.config';
+
 const execAsync = promisify(exec);
 
 /**
  * 🛠️ Swarm Auto-Repair
  * Uses AI to automatically fix identified issues.
- * Note: Standalone bridge script — AI service used without full DI container.
+ * Note: Uses the DI container to ensure all integrated services are available.
  */
 async function main(): Promise<void> {
   const issues = process.argv.slice(2);
@@ -33,8 +36,8 @@ async function main(): Promise<void> {
   }
 
   // Protocol 1: Repair Logic via AIService
-  // Standalone bridge — uses AI service without full DI container
-  const aiService = new AIService(null as any, null as any, null as any);
+  // Initialize AI service via container
+  const aiService = container.get<AIService>(TYPES.AIService);
   const mission = `Repair Mission: Automatically resolve ${issues.join(', ')}. Focus on fixing syntax and semantic errors.`;
 
   const result = await aiService.triggerSwarmMission(mission);

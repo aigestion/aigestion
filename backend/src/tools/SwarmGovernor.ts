@@ -1,22 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { logger } from '../utils/logger';
 import { AIService } from '../services/ai.service';
 import { Redis } from 'ioredis';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { env } from '../config/env.schema';
+import { TYPES } from '../types';
+import { container } from '../config/inversify.config';
 
 const execAsync = promisify(exec);
 
 /**
  * 🌌 Sovereign Swarm Governor
  * The brain of the autonomous self-repair system.
- * Note: This is a standalone bridge script. AI/DI dependencies are intentionally
- * initialized with null to allow standalone execution outside the DI container.
+ * Note: Uses the DI container to ensure all integrated services are available.
  */
 export class SwarmGovernor {
   private redis: Redis;
@@ -24,8 +20,8 @@ export class SwarmGovernor {
 
   constructor() {
     this.redis = new Redis(env.REDIS_URL || 'redis://localhost:6379');
-    // Standalone bridge — AI service used without full DI container
-    this.aiService = new AIService(null as any, null as any, null as any);
+    // Initialize AI service via container
+    this.aiService = container.get<AIService>(TYPES.AIService);
   }
 
   /**
@@ -86,10 +82,7 @@ export class SwarmGovernor {
 
     logger.info(`🛰️ Swarm Governor: Dispatching repair mission to AI Swarm...`);
 
-    const result = await this.aiService.triggerSwarmMission(mission, {
-      governor: 'Sovereign-v1',
-      timestamp: new Date().toISOString(),
-    });
+    const result = await this.aiService.triggerSwarmMission(mission);
 
     if (result.success) {
       logger.info(`✅ Swarm Governor: Mission dispatched. Job ID: ${result.jobId}`);

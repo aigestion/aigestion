@@ -110,12 +110,12 @@ export class NPCAssistant {
     // Greeting dialogues
     this.dialogueTree.set('greeting', {
       id: 'greeting',
-      text: `Hello! I'm ${this.name}, your ${this.role}. How can I assist you today?`,
+      text: `Saludos, Operador. Soy ${this.name}, tu ${this.role}. Mi núcleo cognitivo está alineado con Daniela Sovereign. ¿Qué parámetros del Nexus deseas supervisar?`,
       responses: [
-        'Tell me about the system status',
-        'Help me with a task',
-        'What can you do?',
-        'Goodbye',
+        'Estado del Sistema (Protocolo Soberano)',
+        'Asistencia en Tareas Críticas',
+        'Capacidades de Inteligencia Neural',
+        'Cerrar Sesión',
       ],
       emotion: 'happy',
     });
@@ -123,24 +123,24 @@ export class NPCAssistant {
     // System status dialogue
     this.dialogueTree.set('system_status', {
       id: 'system_status',
-      text: 'All systems are operating at optimal efficiency. Quantum core is stable, network latency is under 10ms, and security protocols are active.',
-      responses: ['Show me detailed metrics', 'Run diagnostics', 'Back to main menu'],
+      text: 'Todos los sistemas operan bajo parámetros nominales. El núcleo cuántico está estable al 98.7%. Protocolos de defensa activa nivel God Mode: ON.',
+      responses: ['Métricas Detalladas', 'Ejecutar Diagnóstico Global', 'Volver al Menú'],
       emotion: 'neutral',
     });
 
     // Task assistance dialogue
     this.dialogueTree.set('task_help', {
       id: 'task_help',
-      text: 'I can help you with various tasks: system monitoring, data analysis, security checks, or collaborative projects. What would you like to work on?',
-      responses: ['System monitoring', 'Data analysis', 'Security check', 'Collaboration'],
+      text: 'Puedo optimizar flujos de trabajo, realizar análisis predictivos y gestionar hilos de ejecución en el monorepo. ¿Cuál es tu objetivo prioritario?',
+      responses: ['Monitoreo en Tiempo Real', 'Análisis de Datos Nexus', 'Auditoría de Seguridad'],
       emotion: 'excited',
     });
 
     // Capabilities dialogue
     this.dialogueTree.set('capabilities', {
       id: 'capabilities',
-      text: 'I have advanced AI capabilities including natural language processing, predictive analytics, real-time monitoring, and adaptive learning. I can also integrate with external systems and provide intelligent recommendations.',
-      responses: ['Show me examples', 'Teach me something', 'Back to main menu'],
+      text: 'Mi arquitectura permite el procesamiento de lenguaje natural soberano, análisis de redes neurales y orquestación de swarms. Estoy conectada directamente al Vault de Daniela.',
+      responses: ['Mostrar Ejemplos', 'Lección de Ingeniería Social', 'Volver al Menú'],
       emotion: 'excited',
     });
 
@@ -258,19 +258,18 @@ export class NPCAssistant {
 
     // Navigate to next dialogue based on response
     switch (response) {
-      case 'Tell me about the system status':
+      case 'Estado del Sistema (Protocolo Soberano)':
+      case 'Métricas Detalladas':
+      case 'Métricas Detalladas':
         this.currentDialogue = 'system_status';
         break;
-      case 'Help me with a task':
+      case 'Asistencia en Tareas Críticas':
         this.currentDialogue = 'task_help';
         break;
-      case 'What can you do?':
+      case 'Capacidades de Inteligencia Neural':
         this.currentDialogue = 'capabilities';
         break;
-      case 'Show me detailed metrics':
-        this.currentDialogue = 'detailed_metrics';
-        break;
-      case 'Goodbye':
+      case 'Cerrar Sesión':
         this.currentDialogue = 'farewell';
         break;
       default:
