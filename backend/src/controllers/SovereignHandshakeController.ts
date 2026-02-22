@@ -47,7 +47,7 @@ export class SovereignHandshakeController {
     try {
       const { handshakeId, clientPublicKey, clientCiphertext } = req.body;
 
-      const cachedKeysStr = await getCache(`pqc:handshake:${handshakeId}`);
+      const cachedKeysStr = await getCache<string>(`pqc:handshake:${handshakeId}`);
       if (!cachedKeysStr) {
         return res.status(400).json({ error: 'Handshake session expired or invalid' });
       }

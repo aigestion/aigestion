@@ -17,7 +17,7 @@ export class SystemController {
   async getSystemMetrics(_req: Request, res: Response, next: any): Promise<void> {
     try {
       const cacheKey = 'system:metrics:real';
-      const cachedData = await getCache(cacheKey);
+      const cachedData = await getCache<string>(cacheKey);
 
       if (cachedData) {
         res.json(JSON.parse(cachedData));

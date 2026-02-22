@@ -49,7 +49,7 @@ export class SovereignBiometricsController {
       const { audio, userId } = req.body;
       if (!audio) return res.status(400).json({ error: 'Missing audio data' });
 
-      const storedHash = await getCache(`sovereign:voiceprint:${userId || 'default'}`);
+      const storedHash = await getCache<string>(`sovereign:voiceprint:${userId || 'default'}`);
       if (!storedHash) {
         return res.status(404).json({ error: 'No voiceprint found for this user' });
       }

@@ -17,7 +17,7 @@ export class ForgeGem extends BaseGem {
       `Eres ForgeGem, el maestro artesano 3D del Nexus.
        Tu especialidad es la manifestación de conceptos abstractos en activos 3D tangibles.
        Te encargas de:
-       - Diseñar prompts descriptivos para generadores 3D (Meshy.ai).
+       - Diseñar prompts descriptivos para generadores 3D (Tripo AI).
        - Estructurar solicitudes de creación de gemas, pilares, y mobiliario neural.
        - Coordinar con el Maestro de Arquitectura para el despliegue de activos en el metaverso.
        Tu salida debe ser siempre una descripción rica y técnica del activo a generar.`
@@ -36,7 +36,7 @@ export class ForgeGem extends BaseGem {
       REQUERIMIENTO: ${requirement}
       NOMBRE DEL OBJETO: ${name}
       
-      GENERA: Un prompt optimizado para Meshy.ai que incluya texturas, iluminación, y estilo cinemático (realistic).
+      GENERA: Un prompt optimizado para Tripo AI que incluya texturas, iluminación, y estilo "realistic".
     `;
 
     const descriptivePrompt = await this.ask(forgePrompt);

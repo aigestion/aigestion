@@ -13,6 +13,10 @@ export class NotificationRepository
   extends BaseRepository<INotification>
   implements INotificationRepository
 {
+  override async findAll(): Promise<INotification[]> {
+    return await Notification.find().sort({ createdAt: -1 }).exec();
+  }
+
   override async create(idOrItem: any, maybeItem?: any): Promise<INotification> {
     const data = typeof idOrItem === 'string' ? (maybeItem ?? {}) : idOrItem;
     const notification = new Notification(data as any);

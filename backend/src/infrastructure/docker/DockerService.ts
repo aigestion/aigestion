@@ -21,7 +21,7 @@ export class DockerService {
    */
   async getContainers(): Promise<any[]> {
     const cacheKey = 'docker:containers:list';
-    const cachedData = await getCache(cacheKey);
+    const cachedData = await getCache<string>(cacheKey);
 
     if (cachedData) {
       return JSON.parse(cachedData);

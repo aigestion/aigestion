@@ -56,7 +56,7 @@ export class WebAuthnController {
       if (!user) return res.status(404).json({ error: 'User not found' });
 
       const challengeKey = `webauthn:challenge:${user.id}`;
-      const expectedChallenge = await getCache(challengeKey);
+      const expectedChallenge = await getCache<string>(challengeKey);
 
       if (!expectedChallenge) {
         return res.status(400).json({ error: 'Challenge expired or not found' });
@@ -131,7 +131,7 @@ export class WebAuthnController {
       }
 
       const challengeKey = `webauthn:challenge:${user.id}`;
-      const expectedChallenge = await getCache(challengeKey);
+      const expectedChallenge = await getCache<string>(challengeKey);
 
       if (!expectedChallenge) {
         return res.status(400).json({ error: 'Challenge expired or not found' });
