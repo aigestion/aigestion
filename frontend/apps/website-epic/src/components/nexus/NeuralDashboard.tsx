@@ -18,12 +18,6 @@ import {
   Terminal,
 } from 'lucide-react';
 import { apiConfig } from '../../config/app.config';
-import { NexusCard } from '../design-system/NexusCard';
-import { NexusMetricCard } from '../design-system/NexusMetricCard';
-import { NexusCommandBar } from '../design-system/NexusCommandBar';
-import { NexusStatusBadge } from '../design-system/NexusStatusBadge';
-import { SpotlightWrapper } from '../design-system/SpotlightWrapper';
-import { cn } from '../../utils/cn';
 
 /**
  * NEURAL DASHBOARD (Phase 8)
@@ -134,410 +128,355 @@ export const NeuralDashboard: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-nexus-obsidian text-white selection:bg-nexus-cyan/30 overflow-hidden">
-      <SpotlightWrapper>
-        {/* HEADER */}
-        <NexusCommandBar
-          title="NEXUS NEURAL PORTAL"
-          subtitle="Sovereign Intelligence | Autonomous Neural Monitoring"
-          status={
-            <div className="flex items-center gap-6">
-               <div className="flex flex-col items-end">
-                <span className="text-[10px] text-white/30 uppercase font-orbitron tracking-widest mb-1">Swarm Link</span>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map(i => (
-                    <motion.div
-                      key={i}
-                      animate={i <= 4 ? { opacity: [1, 0.4, 1] } : {}}
-                      transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-                      className={cn(
-                        "w-1 h-3 rounded-full",
-                        i <= 4 ? "bg-nexus-cyan shadow-[0_0_8px_rgba(6,182,212,0.5)]" : "bg-white/10"
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
-              <button
-                onClick={runVisualAudit}
-                disabled={isAuditing}
-                className={cn(
-                  "flex items-center gap-3 px-6 py-2.5 rounded-xl border transition-all duration-500 font-orbitron text-[10px] tracking-[0.2em] font-bold uppercase",
-                  isAuditing 
-                    ? "bg-nexus-violet/20 border-nexus-violet/50 text-nexus-violet animate-pulse" 
-                    : "bg-white/5 border-white/10 hover:border-nexus-cyan/50 hover:bg-nexus-cyan/5 text-white/70 hover:text-white"
-                )}
-              >
-                {isAuditing ? <Camera size={14} /> : <Eye size={14} />}
-                {isAuditing ? 'Auditing Matrix...' : 'Execute Visual Audit'}
-              </button>
-              <NexusStatusBadge status="online" label="GOD MODE" />
-            </div>
-          }
-        />
-
-        {/* VISION ALERTS (Overlay) */}
-        <AnimatePresence>
-          {visionReport && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: -20, x: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: -20 }}
-              className="fixed top-24 right-8 z-50 w-96"
-            >
-              <NexusCard variant={visionReport.status === 'ok' ? 'green' : 'critical'} glow className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h4 className="text-[10px] font-bold text-white uppercase tracking-widest flex items-center gap-2 font-orbitron">
-                    <Shield size={12} className="text-nexus-cyan" /> EYE OF NEXUS REPORT
-                  </h4>
-                  <button onClick={() => setVisionReport(null)} className="text-white/30 hover:text-white transition-colors">
-                    <XCircle size={16} />
-                  </button>
-                </div>
-                
-                <div className="space-y-4">
-                  <p className="text-xs text-white/80 leading-relaxed font-mono">
-                    {visionReport.details}
-                  </p>
-                  {visionReport.recommendation && (
-                    <div className="pt-4 border-t border-white/5">
-                      <p className="text-[10px] text-nexus-cyan font-bold font-orbitron uppercase tracking-wider mb-1">Directiva Nexus:</p>
-                      <p className="text-[11px] text-white/50 italic">"{visionReport.recommendation}"</p>
-                    </div>
-                  )}
-                </div>
-              </NexusCard>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <main className="max-w-7xl mx-auto p-8 relative z-10">
-          <div className="grid grid-cols-12 gap-8">
-            {/* LEFT COLUMN: REASONING & INFRA */}
-            <div className="col-span-12 lg:col-span-4 space-y-8">
-              {/* REASONING PULSE */}
-              <NexusCard variant="violet" glow className="p-6">
-                <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] font-orbitron flex items-center gap-2">
-                    <Zap size={14} className="text-nexus-violet" /> Reasoning Pulse
-                  </h3>
-                  <div className="animate-ping w-1.5 h-1.5 rounded-full bg-nexus-violet" />
-                </div>
-                
-                <div className="space-y-4">
-                  {[
-                    { gem: 'Jules', action: 'Code Audit Delta-X', status: 'Verifying', val: 88 },
-                    { gem: 'Stitch', action: 'Weaving BQ Context', status: 'Active', val: 99 },
-                    { gem: 'Aurora', action: 'Neural Briefing 2.0', status: 'Standby', val: 45 },
-                  ].map((p, idx) => (
-                    <div key={idx} className="group relative">
-                      <div className="flex items-center justify-between mb-2">
-                        <div>
-                          <p className="text-xs font-bold text-white uppercase tracking-wider font-orbitron">{p.gem}</p>
-                          <p className="text-[9px] text-white/40 font-mono italic">{'>> '}{p.action}</p>
-                        </div>
-                        <NexusStatusBadge status={p.status === 'Active' ? 'online' : 'syncing'} size="sm" />
-                      </div>
-                      <div className="h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          animate={{ width: `${p.val}%` }}
-                          transition={{ duration: 1, delay: idx * 0.2 }}
-                          className={cn(
-                            "h-full rounded-full",
-                            p.status === 'Active' ? "bg-nexus-cyan" : "bg-nexus-violet"
-                          )}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </NexusCard>
-
-              {/* INFRASTRUCTURE HEALTH */}
-              <NexusCard variant="default" className="p-6">
-                <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] font-orbitron mb-8 flex items-center gap-2">
-                  <Server size={14} className="text-nexus-cyan" /> Infra Matrix
-                </h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {[
-                    { name: 'MongoDB', status: health?.details?.mongodb?.status || 'checking', icon: <Database size={14} /> },
-                    { name: 'Pinecone', status: health?.details?.pinecone?.status || 'checking', icon: <Activity size={14} /> },
-                    { name: 'Redis', status: health?.details?.redis?.status || 'checking', icon: <Zap size={14} /> },
-                    { name: 'Vertex AI', status: health?.status === 'ok' ? 'ok' : 'checking', icon: <Cpu size={14} /> },
-                  ].map((s, idx) => (
-                    <div key={idx} className="p-4 bg-white/[0.02] border border-white/5 rounded-xl hover:border-white/20 transition-all duration-300">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="text-nexus-cyan opacity-50">{s.icon}</div>
-                        <NexusStatusBadge status={s.status === 'ok' ? 'online' : 'critical'} size="sm" />
-                      </div>
-                      <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest font-orbitron leading-none">{s.name}</p>
-                    </div>
-                  ))}
-                </div>
-              </NexusCard>
-
-              {/* LIVE TERMINAL */}
-              <NexusCard variant="default" glow className="p-6 flex flex-col h-[380px] border-nexus-cyan/20">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] font-orbitron flex items-center gap-2">
-                    <Terminal size={14} className="text-nexus-cyan" /> Live Terminal
-                  </h3>
-                  <button
-                    onClick={toggleLiveSession}
-                    className={cn(
-                      "px-4 py-1.5 rounded-lg text-[9px] font-bold font-orbitron tracking-widest border transition-all duration-300",
-                      liveSession 
-                        ? "bg-nexus-violet/20 border-nexus-violet/50 text-nexus-violet" 
-                        : "bg-nexus-cyan/10 border-nexus-cyan/30 text-nexus-cyan hover:bg-nexus-cyan/20"
-                    )}
-                  >
-                    {liveSession ? 'OFFLINE' : 'INITIALIZE'}
-                  </button>
-                </div>
-
-                <div className="flex-1 overflow-y-auto space-y-3 mb-6 scrollbar-hide font-mono text-[10px]">
-                  {liveLogs.map((log, i) => (
-                    <motion.div
-                      initial={{ opacity: 0, x: -5 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      key={i}
-                      className={cn(
-                        "leading-relaxed",
-                        log.startsWith('!!') ? 'text-red-400' : log.startsWith('>>') ? 'text-nexus-cyan' : 'text-white/50'
-                      )}
-                    >
-                      <span className="opacity-30 mr-2">[{new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
-                      {log}
-                    </motion.div>
-                  ))}
-                  {liveSession && (
-                    <motion.div
-                      animate={{ opacity: [0, 1] }}
-                      transition={{ repeat: Infinity, duration: 0.8 }}
-                      className="text-nexus-cyan font-bold"
-                    >
-                      _AWAITING_SIGNAL_
-                    </motion.div>
-                  )}
-                </div>
-
-                <form onSubmit={handleSendLive} className="relative mt-auto">
-                  <input
-                    type="text"
-                    value={inputText}
-                    onChange={e => setInputText(e.target.value)}
-                    placeholder={liveSession ? 'Comando Neural...' : 'Puente Desconectado'}
-                    disabled={!liveSession}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-4 pr-12 py-3 text-[10px] font-mono focus:outline-none focus:border-nexus-cyan/50 transition-all placeholder:text-white/20"
-                  />
-                  <button
-                    type="submit"
-                    disabled={!liveSession}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-nexus-cyan disabled:opacity-30 hover:scale-110 transition-transform"
-                  >
-                    <Mic size={16} />
-                  </button>
-                </form>
-              </NexusCard>
-            </div>
-
-            {/* CENTER COLUMN: STITCH MAP & NEURAL NETWORK */}
-            <div className="col-span-12 lg:col-span-8 flex flex-col gap-8">
-              <NexusCard variant="cyan" glow className="relative flex-1 min-h-[600px] overflow-hidden group">
-                {/* GRID OVERLAY */}
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.05)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_90%)]" />
-                
-                {/* SCANNER LINE */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                   <motion.div 
-                     animate={{ y: ['-100%', '200%'] }}
-                     transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
-                     className="w-full h-40 bg-gradient-to-b from-transparent via-nexus-cyan/10 to-transparent opacity-50"
-                   />
-                </div>
-
-                <div className="relative z-10 w-full h-full flex flex-col p-12">
-                   <div className="flex justify-between items-start mb-20">
-                      <div>
-                        <h2 className="text-2xl font-black font-orbitron tracking-[0.3em] text-white">
-                          STITCH MATRIX <span className="text-nexus-cyan">V1.4</span>
-                        </h2>
-                        <p className="text-[10px] font-mono text-white/30 uppercase tracking-[0.2em] mt-2 italic">
-                          {'>> '}Visualización Multimodal en Tiempo Real
-                        </p>
-                      </div>
-                      <div className="text-right">
-                         <div className="text-3xl font-black font-orbitron text-white">99.8%</div>
-                         <div className="text-[9px] font-bold text-nexus-cyan uppercase tracking-widest">Efficiency Vector</div>
-                      </div>
-                   </div>
-
-                   {/* NEURAL NETWORK VISUALIZATION */}
-                   <div className="relative flex-1 flex items-center justify-center">
-                      <div className="absolute w-full h-full">
-                         <svg width="100%" height="100%" viewBox="0 0 800 500" className="opacity-40">
-                            {/* Lines */}
-                            {[...Array(20)].map((_, i) => (
-                              <motion.line
-                                key={`line-${i}`}
-                                x1={Math.random() * 800}
-                                y1={Math.random() * 500}
-                                x2={Math.random() * 800}
-                                y2={Math.random() * 500}
-                                stroke="rgba(6,182,212,0.2)"
-                                strokeWidth="1"
-                                initial={{ pathLength: 0, opacity: 0 }}
-                                animate={{ pathLength: 1, opacity: [0, 1, 0] }}
-                                transition={{ duration: Math.random() * 5 + 5, repeat: Infinity }}
-                              />
-                            ))}
-                            {/* Nodes */}
-                            {[...Array(15)].map((_, i) => (
-                              <motion.circle
-                                key={`node-${i}`}
-                                cx={Math.random() * 800}
-                                cy={Math.random() * 500}
-                                r="3"
-                                fill="#06b6d4"
-                                animate={{ opacity: [0.2, 1, 0.2], scale: [1, 1.5, 1] }}
-                                transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
-                              />
-                            ))}
-                         </svg>
-                      </div>
-
-                      <div className="z-20 grid grid-cols-3 gap-24 relative">
-                        {[
-                          { id: 'distributed', name: 'Distributed State', icon: <Globe size={40} />, color: 'cyan' },
-                          { id: 'analytics', name: 'Neural Engine', icon: <Cpu size={56} />, color: 'violet', active: true },
-                          { id: 'local', name: 'Knowledge Hub', icon: <Database size={40} />, color: 'cyan' },
-                        ].map((layer) => (
-                          <motion.div
-                            key={layer.id}
-                            onClick={() => setActiveLayer(layer.id as any)}
-                            whileHover={{ scale: 1.05 }}
-                            className={cn(
-                              "cursor-pointer text-center group transition-all duration-500",
-                              activeLayer === layer.id ? "scale-110" : "opacity-30 blur-[2px] grayscale hover:blur-0 hover:grayscale-0 hover:opacity-60"
-                            )}
-                          >
-                            <div className={cn(
-                              "w-32 h-32 mx-auto rounded-[2rem] flex items-center justify-center border transition-all duration-700 relative",
-                              layer.color === 'violet' 
-                                ? "bg-nexus-violet/20 border-nexus-violet/40 shadow-[0_0_50px_rgba(139,92,246,0.2)]" 
-                                : "bg-nexus-cyan/20 border-nexus-cyan/40 shadow-[0_0_50px_rgba(6,182,212,0.2)]"
-                            )}>
-                               <div className={cn(
-                                 "absolute inset-0 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity animate-pulse",
-                                 layer.color === 'violet' ? "shadow-[inset_0_0_20px_rgba(139,92,246,0.3)]" : "shadow-[inset_0_0_20px_rgba(6,182,212,0.3)]"
-                               )} />
-                               {React.cloneElement(layer.icon as React.ReactElement, { 
-                                 className: layer.color === 'violet' ? 'text-nexus-violet' : 'text-nexus-cyan',
-                                 size: layer.active ? 48 : 32
-                               })}
-                            </div>
-                            <p className={cn(
-                              "mt-6 text-[10px] font-black uppercase tracking-[0.3em] font-orbitron",
-                              layer.color === 'violet' ? 'text-nexus-violet' : 'text-white/60'
-                            )}>
-                              {layer.name}
-                            </p>
-                          </motion.div>
-                        ))}
-                      </div>
-                   </div>
-
-                   <div className="mt-auto grid grid-cols-3 gap-12 pt-12 border-t border-white/5">
-                      <div>
-                         <p className="text-[10px] text-white/30 uppercase font-orbitron tracking-widest mb-2">Neural Threads</p>
-                         <p className="text-xl font-bold text-white font-mono tracking-tighter">14.092 <span className="text-nexus-cyan text-[10px]">ACTIVE</span></p>
-                      </div>
-                      <div className="text-center">
-                         <p className="text-[10px] text-white/30 uppercase font-orbitron tracking-widest mb-2">Sync Latency</p>
-                         <p className="text-xl font-bold text-white font-mono tracking-tighter">1.2ms <span className="text-emerald-500 text-[10px]">FIXED</span></p>
-                      </div>
-                      <div className="text-right">
-                         <p className="text-[10px] text-white/30 uppercase font-orbitron tracking-widest mb-2">Region Identity</p>
-                         <p className="text-xl font-bold text-white font-mono tracking-tighter">NEXUS_ALPHA_01</p>
-                      </div>
-                   </div>
-                </div>
-              </NexusCard>
-
-              {/* SECONDARY PANELS */}
-              <div className="grid grid-cols-2 gap-8">
-                <NexusCard className="p-8">
-                  <h4 className="text-[10px] font-bold text-white/40 uppercase tracking-widest font-orbitron mb-6 flex items-center gap-2">
-                    <Shield size={14} className="text-nexus-cyan" /> Secure Enclave
-                  </h4>
-                  <div className="flex items-center gap-6">
-                     <div className="w-16 h-16 rounded-full border border-nexus-cyan/30 flex items-center justify-center relative">
-                        <motion.div 
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-                          className="absolute inset-0 border-t-2 border-nexus-cyan rounded-full"
-                        />
-                        <Shield className="text-nexus-cyan" size={24} />
-                     </div>
-                     <div>
-                        <p className="text-lg font-bold text-white font-orbitron italic">Protocols Active</p>
-                        <p className="text-[10px] text-white/40 font-mono tracking-widest uppercase mt-1">Sovereign Encryption V6</p>
-                     </div>
-                  </div>
-                </NexusCard>
-
-                <NexusCard className="p-8">
-                  <h4 className="text-[10px] font-bold text-white/40 uppercase tracking-widest font-orbitron mb-6 flex items-center gap-2">
-                    <Activity size={14} className="text-nexus-violet" /> Pulse Analysis
-                  </h4>
-                  <div className="flex items-end gap-1 h-12">
-                     {[40, 70, 45, 90, 65, 30, 80, 50, 95, 60].map((h, i) => (
-                       <motion.div
-                         key={i}
-                         initial={{ height: 0 }}
-                         animate={{ height: `${h}%` }}
-                         transition={{ duration: 0.5, delay: i * 0.1, repeat: Infinity, repeatType: 'reverse' }}
-                         className="flex-1 bg-nexus-violet/40 rounded-t-sm"
-                       />
-                     ))}
-                  </div>
-                   <p className="text-[9px] text-white/30 font-mono tracking-widest uppercase mt-4 text-center">Spectral Signature Stable</p>
-                </NexusCard>
-              </div>
-            </div>
-          </div>
-        </main>
-
-        {/* STATUS BAR */}
-        <footer className="fixed bottom-0 left-0 w-full bg-nexus-obsidian/90 backdrop-blur-xl border-t border-white/5 py-4 px-8 z-50 flex justify-between items-center selection:none">
-          <div className="flex items-center gap-12">
-            <div className="flex items-center gap-3">
-               <span className="text-[9px] font-orbitron text-white/30 tracking-[0.2em]">CLOUD RUN</span>
-               <NexusStatusBadge status={health?.status === 'ok' ? 'online' : 'critical'} label={health?.status?.toUpperCase() || 'BUSCANDO'} size="sm" />
-            </div>
-            <div className="flex items-center gap-3 border-l border-white/10 pl-12">
-               <span className="text-[9px] font-orbitron text-white/30 tracking-[0.2em]">MONGODB</span>
-               <NexusStatusBadge status={health?.details?.mongodb?.status === 'ok' ? 'online' : 'critical'} label={health?.details?.mongodb?.status?.toUpperCase() || 'BUSCANDO'} size="sm" />
-            </div>
-            <div className="flex items-center gap-3 border-l border-white/10 pl-12">
-               <span className="text-[9px] font-orbitron text-white/30 tracking-[0.2em]">AI STUDIO</span>
-               <span className="text-[10px] font-black text-nexus-cyan font-orbitron tracking-widest glow-cyan">SUPREME</span>
-            </div>
-          </div>
-          <div className="text-[9px] font-black font-orbitron text-white/20 tracking-[0.4em]">
-            © 2026 ANTIGRAVITY // SOVEREIGN NEXUS 
-          </div>
-        </footer>
-      </SpotlightWrapper>
-
-      {/* AMBIENT BACKGROUND GLOWS */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-nexus-violet/5 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-nexus-cyan/5 rounded-full blur-[120px] animate-pulse" />
+    <div className="relative min-h-screen bg-black text-white p-8 font-mono overflow-hidden">
+      {/* BACKGROUND MESH GRADIENT */}
+      <div className="absolute inset-0 opacity-20 pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,#4f46e5,transparent_50%)] animate-pulse" />
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,#ec4899,transparent_40%)]" />
       </div>
+
+      {/* HEADER */}
+      <header className="relative z-10 flex justify-between items-center mb-12 border-b border-indigo-500/30 pb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.5)]">
+            <Shield className="text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tighter">NEXUS NEURAL PORTAL</h1>
+            <p className="text-xs text-indigo-400 uppercase tracking-widest">
+              Sovereign Intelligence | God Mode Active
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-6 items-center">
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] text-gray-500 uppercase">Swarm Connectivity</span>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map(i => (
+                <div
+                  key={i}
+                  className={`w-1 h-3 rounded-full ${i <= 4 ? 'bg-green-500 shadow-[0_0_5px_#22c55e]' : 'bg-gray-700'}`}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="h-10 w-px bg-gray-800" />
+          <button
+            onClick={runVisualAudit}
+            disabled={isAuditing}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${isAuditing ? 'bg-indigo-600/20 border-indigo-500/50 animate-pulse' : 'bg-gray-900 border-white/10 hover:border-indigo-500/50'}`}
+          >
+            {isAuditing ? (
+              <Camera size={16} className="text-indigo-400" />
+            ) : (
+              <Eye size={16} className="text-indigo-400" />
+            )}
+            <span className="text-[10px] font-bold uppercase tracking-wider">
+              {isAuditing ? 'Auditing UI...' : 'Run Visual Audit'}
+            </span>
+          </button>
+          <Activity className={`text-indigo-400 ${pulseActive ? 'animate-bounce' : ''}`} />
+        </div>
+      </header>
+
+      {/* VISION ALERTS (Overlay) */}
+      <AnimatePresence>
+        {visionReport && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-24 right-8 z-50 w-80 p-4 bg-gray-900/90 border border-indigo-500/50 rounded-2xl backdrop-blur-2xl shadow-[0_0_50px_rgba(79,70,229,0.3)]"
+          >
+            <div className="flex justify-between items-start mb-2">
+              <h4 className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-2">
+                <Shield size={12} /> EYE OF NEXUS REPORT
+              </h4>
+              <button
+                onClick={() => setVisionReport(null)}
+                className="text-gray-500 hover:text-white"
+              >
+                <XCircle size={14} />
+              </button>
+            </div>
+            <div
+              className={`p-3 rounded-xl border mb-3 ${visionReport.status === 'ok' ? 'bg-green-500/10 border-green-500/20' : 'bg-red-500/10 border-red-500/20'}`}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                {visionReport.status === 'ok' ? (
+                  <CheckCircle size={14} className="text-green-500" />
+                ) : (
+                  <AlertTriangle size={14} className="text-red-500" />
+                )}
+                <span
+                  className={`text-[11px] font-bold uppercase ${visionReport.status === 'ok' ? 'text-green-400' : 'text-red-400'}`}
+                >
+                  {visionReport.status === 'ok' ? 'Vision Optimal' : 'Anomaly Detected'}
+                </span>
+              </div>
+              <p className="text-[10px] text-gray-300 leading-relaxed">{visionReport.details}</p>
+            </div>
+            {visionReport.recommendation && (
+              <p className="text-[9px] text-indigo-300 italic">
+                "G-Mode Sugerencia: {visionReport.recommendation}"
+              </p>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* MAIN GRID */}
+      <div className="relative z-10 grid grid-cols-12 gap-8">
+        {/* REASONING PULSE (Left Column) */}
+        <section className="col-span-12 lg:col-span-4 space-y-6">
+          <div className="p-6 bg-gray-900/50 border border-indigo-500/20 rounded-2xl backdrop-blur-xl">
+            <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
+              <Zap size={16} className="text-yellow-400" /> REASONING PULSE
+            </h3>
+            <div className="space-y-4">
+              {[
+                { gem: 'Jules', action: 'Code Audit Delta-X', status: 'Verifying' },
+                { gem: 'Stitch', action: 'Weaving BQ Context', status: 'Active' },
+                { gem: 'Aurora', action: 'Neural Briefing 2.0', status: 'Standby' },
+              ].map((p, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="flex items-center justify-between p-3 bg-indigo-950/20 rounded-xl border border-white/5"
+                >
+                  <div>
+                    <p className="text-xs font-bold text-indigo-300">{p.gem}</p>
+                    <p className="text-[10px] text-gray-400">{p.action}</p>
+                  </div>
+                  <span
+                    className={`text-[9px] px-2 py-0.5 rounded-full border ${p.status === 'Active' ? 'bg-green-500/20 border-green-500/50 text-green-400 animate-pulse' : 'border-gray-700 text-gray-500'}`}
+                  >
+                    {p.status}
+                  </span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="p-6 bg-gray-900/50 border border-green-500/20 rounded-2xl backdrop-blur-xl">
+            <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
+              <Server size={16} className="text-green-400" /> INFRASTRUCTURE HEALTH
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                {
+                  name: 'MongoDB',
+                  status: health?.details?.mongodb?.status || 'checking',
+                  icon: <Database size={14} />,
+                },
+                {
+                  name: 'Pinecone',
+                  status: health?.details?.pinecone?.status || 'checking',
+                  icon: <Activity size={14} />,
+                },
+                {
+                  name: 'Redis',
+                  status: health?.details?.redis?.status || 'checking',
+                  icon: <Zap size={14} />,
+                },
+                {
+                  name: 'Vertex AI',
+                  status: health?.status === 'ok' ? 'ok' : 'checking',
+                  icon: <Cpu size={14} />,
+                },
+              ].map((s, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 bg-white/5 rounded-xl border border-white/5 flex flex-col gap-2"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="text-indigo-400">{s.icon}</div>
+                    {s.status === 'ok' ? (
+                      <CheckCircle size={12} className="text-green-500" />
+                    ) : (
+                      <XCircle size={12} className="text-red-500 animate-pulse" />
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-bold text-gray-300 uppercase tracking-tighter">
+                      {s.name}
+                    </p>
+                    <p
+                      className={`text-[8px] uppercase ${s.status === 'ok' ? 'text-green-500' : 'text-red-400'}`}
+                    >
+                      {s.status === 'ok' ? 'Operational' : 'Degraded'}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* LIVE TERMINAL (Phase 12) */}
+          <div className="p-6 bg-black border border-indigo-500/50 rounded-2xl backdrop-blur-xl flex flex-col h-[300px]">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-sm font-bold flex items-center gap-2">
+                <Terminal size={16} className="text-indigo-400" /> LIVE TERMINAL
+              </h3>
+              <button
+                onClick={toggleLiveSession}
+                className={`px-3 py-1 rounded-lg text-[10px] font-bold border transition-all ${liveSession ? 'bg-red-500/20 border-red-500/50 text-red-400' : 'bg-green-500/20 border-green-500/50 text-green-400'}`}
+              >
+                {liveSession ? 'DISCONNECT' : 'INITIALIZE LIVE'}
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto space-y-2 mb-4 scrollbar-hide text-[10px]">
+              {liveLogs.map((log, i) => (
+                <div
+                  key={i}
+                  className={`${log.startsWith('!!') ? 'text-red-400' : log.startsWith('>>') ? 'text-indigo-400' : 'text-gray-300'}`}
+                >
+                  {log}
+                </div>
+              ))}
+              {liveSession && (
+                <motion.div
+                  animate={{ opacity: [0, 1] }}
+                  transition={{ repeat: Infinity }}
+                  className="text-indigo-500 text-[8px]"
+                >
+                  _LISTENING_
+                </motion.div>
+              )}
+            </div>
+            <form onSubmit={handleSendLive} className="flex gap-2">
+              <input
+                type="text"
+                value={inputText}
+                onChange={e => setInputText(e.target.value)}
+                placeholder={liveSession ? 'Interrogate the Nexus...' : 'Live Session Offline'}
+                disabled={!liveSession}
+                className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[10px] focus:outline-none focus:border-indigo-500 transition-all"
+              />
+              <button
+                type="submit"
+                disabled={!liveSession}
+                className="p-2 bg-indigo-600 rounded-lg disabled:opacity-50 disabled:grayscale transition-all"
+              >
+                <Mic size={14} />
+              </button>
+            </form>
+          </div>
+        </section>
+
+        {/* STITCH MAP (Center Column) */}
+        <section className="col-span-12 lg:col-span-8 p-8 bg-gray-900/80 border border-indigo-500/40 rounded-3xl relative overflow-hidden flex flex-col items-center justify-center min-h-[500px]">
+          <div className="absolute inset-0 opacity-10 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] blend-overlay" />
+
+          {/* Visual representation of the Stitch layer */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
+              className="absolute w-80 h-80 border-2 border-dashed border-indigo-500/20 rounded-full"
+            />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
+              className="absolute w-60 h-60 border border-pink-500/30 rounded-full"
+            />
+
+            <div className="z-10 grid grid-cols-3 gap-12 text-center">
+              <div
+                onClick={() => setActiveLayer('distributed')}
+                className={`group cursor-pointer transition-all ${activeLayer === 'distributed' ? 'scale-110' : 'opacity-40 grayscale'}`}
+              >
+                <div className="w-20 h-20 mx-auto bg-indigo-600/20 rounded-2xl flex items-center justify-center border border-indigo-500/50 group-hover:shadow-[0_0_30px_#4f46e5]">
+                  <Globe className="text-indigo-400" size={32} />
+                </div>
+                <p className="mt-4 text-[10px] font-bold tracking-widest uppercase">
+                  Distributed State
+                </p>
+              </div>
+
+              <div
+                onClick={() => setActiveLayer('analytics')}
+                className={`group cursor-pointer transition-all ${activeLayer === 'analytics' ? 'scale-110' : 'opacity-40 grayscale'}`}
+              >
+                <div className="w-24 h-24 mx-auto bg-pink-600/20 rounded-3xl flex items-center justify-center border border-pink-500/50 shadow-[0_0_50px_rgba(236,72,153,0.3)]">
+                  <Cpu className="text-pink-400" size={40} />
+                </div>
+                <p className="mt-4 text-[10px] font-bold tracking-widest uppercase text-pink-400">
+                  Consensus Engine
+                </p>
+              </div>
+
+              <div
+                onClick={() => setActiveLayer('local')}
+                className={`group cursor-pointer transition-all ${activeLayer === 'local' ? 'scale-110' : 'opacity-40 grayscale'}`}
+              >
+                <div className="w-20 h-20 mx-auto bg-cyan-600/20 rounded-2xl flex items-center justify-center border border-cyan-500/50 group-hover:shadow-[0_0_30px_#06b6d4]">
+                  <Database className="text-cyan-400" size={32} />
+                </div>
+                <p className="mt-4 text-[10px] font-bold tracking-widest uppercase">
+                  Knowledge Hub
+                </p>
+              </div>
+            </div>
+
+            {/* Interactive lines simulation (Visual only) */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none">
+              <line
+                x1="10%"
+                y1="50%"
+                x2="50%"
+                y2="50%"
+                stroke="rgba(79, 70, 229, 0.2)"
+                strokeWidth="1"
+                strokeDasharray="4 4"
+              />
+              <line
+                x1="90%"
+                y1="50%"
+                x2="50%"
+                y2="50%"
+                stroke="rgba(6, 182, 212, 0.2)"
+                strokeWidth="1"
+                strokeDasharray="4 4"
+              />
+            </svg>
+          </div>
+
+          <div className="absolute bottom-8 left-8 right-8 flex justify-between text-[10px] text-gray-500 font-bold uppercase tracking-[0.2em]">
+            <span>Stitch Efficiency: 99.8%</span>
+            <span>Neural Threads: 14,092 Active</span>
+            <span>Region: Sovereign Nexus v1</span>
+          </div>
+        </section>
+      </div>
+
+      {/* STATUS BAR */}
+      <footer className="fixed bottom-0 left-0 w-full bg-black/80 backdrop-blur-md border-t border-white/10 p-2 text-[8px] text-gray-600 flex justify-between px-8 z-50">
+        <div className="flex gap-4">
+          <span>
+            Cloud Run:{' '}
+            <span className={health?.status === 'ok' ? 'text-green-500' : 'text-red-500'}>
+              🟢 {health?.status?.toUpperCase() || 'CHECKING'}
+            </span>
+          </span>
+          <span>
+            MongoDB Atlas:{' '}
+            <span
+              className={
+                health?.details?.mongodb?.status === 'ok' ? 'text-green-500' : 'text-red-500'
+              }
+            >
+              🟢 {health?.details?.mongodb?.status?.toUpperCase() || 'CHECKING'}
+            </span>
+          </span>
+          <span>
+            AI Studio: <span className="text-blue-400">🔵 SUPREME</span>
+          </span>
+        </div>
+        <div>© 2026 ANTIGRAVITY | GOD MODE V4.2</div>
+      </footer>
     </div>
   );
 };
-
-

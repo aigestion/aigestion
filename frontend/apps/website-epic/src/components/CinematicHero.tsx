@@ -6,10 +6,6 @@ import { FluidBackground } from './FluidBackground';
 import { MiniDashboard } from './MiniDashboard';
 import { useAppContext } from '../contexts/AppContext';
 import { useLocation } from 'react-router-dom';
-import { NexusCommandBar } from './design-system/NexusCommandBar';
-import { NexusStatusBadge } from './design-system/NexusStatusBadge';
-import { SpotlightWrapper } from './design-system/SpotlightWrapper';
-import { NexusCard } from './design-system/NexusCard';
 
 interface Scene {
   id: string;
@@ -157,254 +153,250 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
 
   return (
     <div
-      className="relative w-full h-screen overflow-hidden bg-nexus-obsidian font-orbitron"
+      className="relative w-full h-screen overflow-hidden bg-black font-orbitron"
       data-build="website-epic-v4"
     >
-      <SpotlightWrapper>
-        {/* Background Layer with Multi-layered effects */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
+      {/* Background Layer with Multi-layered effects */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeScenes[currentScene].id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }}
+            className="relative w-full h-full"
+          >
+            {/* Base Layer: smooth mesh or fallback */}
+            <div
+              className={`absolute inset-0 smooth-mesh-bg scale-110 blur-[2px] transition-opacity duration-1000 ${videoError ? 'opacity-80' : 'opacity-40'}`}
+            />
+
+            {!videoError && (
+              <motion.video
+                ref={videoRef}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-20 filter grayscale contrast-125"
+                onLoadedData={handleVideoLoaded}
+                onError={handleVideoError}
+              >
+                <source src={activeScenes[currentScene].video} type="video/mp4" />
+              </motion.video>
+            )}
+
+            {/* 3D Neural Core - Interactive Layer (Fallback & Enhancement) */}
+            <div
+              className={`absolute inset-0 z-10 flex items-center justify-center pointer-events-none transition-opacity duration-1000 ${videoError ? 'opacity-100' : 'opacity-80'}`}
+            >
+              <div className="w-full h-full md:w-1/2 md:h-1/2 mix-blend-screen pointer-events-auto">
+                <NeuralServer />
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Fluid Interaction Layer */}
+        <FluidBackground />
+
+        {/* Scanline Effect Overlay */}
+        <div className="scanline" />
+
+        {/* Global Overlays */}
+        <div className="absolute inset-0 bg-linear-to-b from-black via-transparent to-black" />
+        <div className="absolute inset-0 bg-radial-at-center from-nexus-cyan/5 via-transparent to-transparent" />
+      </div>
+
+      {/* Content Layer */}
+      <div className="relative z-10 h-full flex flex-col justify-between p-8">
+        {/* Top Controls */}
+        <div className="flex justify-between items-start">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+            className="flex items-center gap-6"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-nexus-cyan/40 blur-2xl animate-pulse" />
+              <div className="relative w-16 h-16 bg-black/40 backdrop-blur-xl rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden group">
+                <div className="absolute inset-0 bg-linear-to-br from-nexus-cyan/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="w-8 h-8 rounded-full border-2 border-nexus-cyan/50 border-t-nexus-cyan animate-spin-slow" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-white font-orbitron text-4xl font-black tracking-tighter">
+                AIGESTION<span className="text-nexus-cyan font-light">.NET</span>
+              </h1>
+              <div className="flex items-center gap-2">
+                <div className="h-[1px] w-12 bg-linear-to-r from-nexus-violet to-transparent" />
+                <p className="text-nexus-cyan/60 text-[8px] font-mono tracking-[0.5em] uppercase">
+                  SOVEREIGN INTELLIGENCE NEXUS
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.7 }}
+            className="flex gap-4 items-center"
+          >
+            <button
+              onClick={handlePlayPause}
+              className="premium-glass px-6 py-3 rounded-full text-white text-xs font-bold tracking-widest uppercase hover:text-nexus-cyan transition-colors"
+            >
+              {isPlaying ? '⏸ PAUSA' : '▶ PLAY'}
+            </button>
+            <button
+              onClick={handleSkip}
+              className="premium-glass px-6 py-3 rounded-full text-nexus-cyan text-xs font-bold tracking-widest uppercase hover:bg-nexus-cyan/20 transition-all border border-nexus-cyan/30"
+            >
+              SALTAR INTRO
+            </button>
+            <button
+              onClick={() => setIsContactModalOpen(true)}
+              className="btn-enterprise px-8 py-3 rounded-full text-xs"
+            >
+              INGRESAR AL NEXUS
+            </button>
+          </motion.div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 flex items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeScenes[currentScene].id}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 1.5 }}
-              className="relative w-full h-full"
+              className="text-center max-w-7xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -30 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
             >
-              {/* Base Layer: grid overlay for depth */}
-              <div className="absolute inset-0 grid-overlay opacity-20 pointer-events-none" />
-
-              {/* Diffuse Orbs for atmospheric glow */}
-              <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-nexus-cyan/5 rounded-full blur-[120px] animate-glow-pulse" />
-              <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-nexus-violet/5 rounded-full blur-[120px] animate-glow-pulse [animation-delay:1.5s]" />
-
-              {!videoError && (
-                <motion.video
-                  ref={videoRef}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-10 filter grayscale brightness-125 contrast-125"
-                  onLoadedData={handleVideoLoaded}
-                  onError={handleVideoError}
+              <div className="relative inline-block mb-4">
+                <div className="absolute -inset-4 bg-nexus-violet/20 blur-3xl rounded-full" />
+                <motion.h2
+                  className="relative text-responsive-h1 font-orbitron font-black text-white leading-none glitch-text tracking-tighter"
+                  style={{
+                    textShadow: '0 0 40px rgba(0, 240, 255, 0.3)',
+                  }}
                 >
-                  <source src={activeScenes[currentScene].video} type="video/mp4" />
-                </motion.video>
+                  {activeScenes[currentScene].title}
+                </motion.h2>
+              </div>
+
+              <motion.p
+                className="text-responsive-h2 text-nexus-cyan mb-8 font-light italic opacity-80"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                {activeScenes[currentScene].subtitle}
+              </motion.p>
+
+              {/* Scene-specific content */}
+              {activeScenes[currentScene].id === 'daniela-assistant' && (
+                <motion.div
+                  className="mt-8"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  <div className="w-48 h-48 md:w-64 md:h-64 mx-auto rounded-full overflow-hidden border-2 border-nexus-violet-glow shadow-2xl shadow-nexus-violet/50 relative group">
+                    <div className="absolute inset-0 bg-nexus-violet/20 group-hover:bg-transparent transition-colors duration-500" />
+                    <img
+                      src="/images/daniela/daniela_lab_godmode.png"
+                      alt="Daniela AI"
+                      className="w-full h-full object-cover filter brightness-110 contrast-110"
+                    />
+                  </div>
+                  <p className="text-nexus-violet-glow mt-6 text-sm font-orbitron tracking-widest uppercase animate-pulse">
+                    Tu aliada perfecta para el éxito
+                  </p>
+                </motion.div>
               )}
 
-              {/* 3D Neural Core - Interactive Layer */}
-              <div
-                className={`absolute inset-0 z-10 flex items-center justify-center pointer-events-none transition-opacity duration-1000 ${videoError ? 'opacity-100' : 'opacity-80'}`}
-              >
-                <div className="w-full h-full md:w-2/3 md:h-2/3 mix-blend-lighten pointer-events-auto">
-                  <NeuralServer />
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Interaction Layer */}
-          <FluidBackground />
-
-          {/* Scanline Effect Overlay */}
-          <div className="scanline opacity-30" />
-
-          {/* Global Overlays */}
-          <div className="absolute inset-0 bg-linear-to-b from-nexus-obsidian via-transparent to-nexus-obsidian" />
-        </div>
-
-        {/* Content Layer */}
-        <div className="relative z-20 h-full flex flex-col justify-between">
-          {/* Header Upgraded to NexusCommandBar */}
-          <NexusCommandBar
-            title="AIGESTION NEXUS"
-            subtitle={`Phase 60+ Initialization | Scene: ${activeScenes[currentScene].title}`}
-            status={
-              <div className="flex items-center gap-6">
-                <NexusStatusBadge status="online" label="MISSION TELEMETRY ACTIVE" size="sm" />
-                <div className="flex gap-3">
-                  <button
-                    onClick={handlePlayPause}
-                    className="glass-premium px-4 py-1.5 rounded text-white/60 text-[10px] font-bold tracking-widest uppercase hover:text-nexus-cyan hover:border-nexus-cyan/30 transition-all border border-white/10"
-                  >
-                    {isPlaying ? '⏸ PAUSE' : '▶ PLAY'}
-                  </button>
-                  <button
-                    onClick={handleSkip}
-                    className="glass-premium px-4 py-1.5 rounded text-nexus-cyan/70 text-[10px] font-bold tracking-widest uppercase hover:text-nexus-cyan hover:bg-nexus-cyan/10 transition-all border border-nexus-cyan/20"
-                  >
-                    SKIP INTRO
-                  </button>
-                </div>
-              </div>
-            }
-          />
-
-          {/* Main Content */}
-          <div className="flex-1 flex items-center justify-center px-8">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeScenes[currentScene].id}
-                className="text-center max-w-7xl mx-auto"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.8, ease: 'easeOut' }}
-              >
-                <div className="relative inline-block mb-4">
-                  <div className="absolute -inset-8 bg-nexus-cyan/10 blur-[100px] rounded-full opacity-50" />
-                  <motion.h2
-                    className="relative text-responsive-h1 font-orbitron font-black text-white leading-none tracking-tighter"
-                    style={{
-                      textShadow: '0 0 40px rgba(0, 240, 255, 0.4)',
-                    }}
-                  >
-                    {activeScenes[currentScene].title}
-                  </motion.h2>
-                </div>
-
-                <motion.p
-                  className="text-responsive-h2 text-nexus-cyan mb-12 font-light italic opacity-90 tracking-tight"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                >
-                  {activeScenes[currentScene].subtitle}
-                </motion.p>
-
-                {/* New Unified Call to Action Area */}
+              {activeScenes[currentScene].id === 'nexus-control' && (
                 <motion.div
-                  className="flex flex-col items-center gap-6"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
+                  className="mt-8"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 }}
                 >
-                  <button
-                    onClick={() => setIsContactModalOpen(true)}
-                    className="group relative px-12 py-5 bg-nexus-cyan text-black font-black font-orbitron tracking-[0.3em] uppercase transition-all rounded-sm overflow-hidden hover:shadow-[0_0_50px_rgba(0,245,255,0.5)]"
-                  >
-                    <div className="absolute inset-0 bg-linear-to-r from-white/0 via-white/40 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                    <span className="relative z-10">INGRESAR AL NEXUS</span>
-                  </button>
-
-                  <div className="flex items-center gap-4">
-                    <div className="h-px w-8 bg-white/20" />
-                    <span className="text-[10px] font-mono text-white/40 tracking-[0.4em]">
-                      SOVEREIGN ACCESS GRANTED
-                    </span>
-                    <div className="h-px w-8 bg-white/20" />
+                  <div className="max-w-xs mx-auto">
+                     <img
+                      src="/images/nexus/nexus_guardian_godmode.png"
+                      alt="Nexus Control"
+                      className="w-full h-auto drop-shadow-[0_0_30px_rgba(0,240,255,0.3)]"
+                    />
                   </div>
                 </motion.div>
-
-                {/* Scene-specific content overlays */}
-                <div className="mt-16">
-                  {activeScenes[currentScene].id === 'daniela-assistant' && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="inline-block p-1 glass-premium rounded-full"
-                    >
-                      <div className="w-40 h-40 rounded-full overflow-hidden border border-nexus-violet-glow/30 shadow-[0_0_30px_rgba(168,85,247,0.2)]">
-                        <img
-                          src="/images/daniela/daniela_lab_godmode.png"
-                          alt="Daniela AI"
-                          className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                        />
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {activeScenes[currentScene].id === 'nexus-control' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="max-w-xs mx-auto opacity-60 grayscale"
-                    >
-                      <img
-                        src="/images/nexus/nexus_guardian_godmode.png"
-                        alt="Nexus Control"
-                        className="w-full h-auto drop-shadow-[0_0_20px_rgba(0,240,255,0.2)]"
-                      />
-                    </motion.div>
-                  )}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Bottom Scene Selector Upgraded */}
-          <div className="p-8 backdrop-blur-md border-t border-white/5 flex justify-center items-center gap-4 bg-nexus-obsidian/40">
-            {activeScenes.map((scene, index) => (
-              <motion.button
-                key={scene.id}
-                onClick={() => handleSceneClick(index)}
-                className={`relative w-48 h-16 glass-premium rounded-lg border transition-all duration-500 overflow-hidden ${
-                  currentScene === index
-                    ? 'border-nexus-cyan/40 bg-nexus-cyan/5'
-                    : 'border-white/5 hover:border-white/20'
-                }`}
-                whileHover={{ scale: 1.02 }}
-                onMouseEnter={playHover}
-              >
-                <div className="relative z-10 px-4 h-full flex flex-col justify-center gap-1">
-                  <p
-                    className={`text-[8px] font-black tracking-[0.2em] transition-colors ${currentScene === index ? 'text-nexus-cyan' : 'text-white/40'}`}
-                  >
-                    {scene.title}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] font-mono text-white/20">0{index + 1} / 05</span>
-                    {currentScene === index && (
-                      <div className="w-1 h-1 bg-nexus-cyan rounded-full animate-ping" />
-                    )}
-                  </div>
-                </div>
-                {currentScene === index && (
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-nexus-cyan"
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: activeScenes[index].duration / 1000, ease: 'linear' }}
-                    style={{ originX: 0 }}
-                  />
-                )}
-              </motion.button>
-            ))}
-          </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </SpotlightWrapper>
 
-      {/* Loading Overlay Upgraded */}
+        {/* Bottom Scene Selector */}
+        <div className="flex justify-center items-center gap-4">
+          {activeScenes.map((scene, index) => (
+            <motion.button
+              key={scene.id}
+              onClick={() => handleSceneClick(index)}
+              className={`relative w-40 h-24 rounded-xl overflow-hidden border transition-all duration-500 ${
+                currentScene === index
+                  ? 'border-nexus-cyan/60 bg-nexus-cyan/5 shadow-[0_0_40px_rgba(0,245,255,0.2)]'
+                  : 'border-white/5 bg-white/2 hover:border-white/20 hover:bg-white/5'
+              }`}
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.95 }}
+              onMouseEnter={playHover}
+            >
+              <div className="absolute inset-0 bg-linear-to-br from-nexus-violet/10 to-nexus-cyan/10 opacity-40" />
+              <div className="relative z-10 p-3 h-full flex flex-col justify-between">
+                <p
+                  className={`text-[9px] font-bold tracking-widest uppercase transition-colors ${
+                    currentScene === index ? 'text-white' : 'text-white/40'
+                  }`}
+                >
+                  {scene.title}
+                </p>
+                <div className="flex justify-between items-end">
+                  <p className="text-nexus-cyan text-[8px] font-mono">0{index + 1}</p>
+                  <div
+                    className={`w-1 h-1 rounded-full ${currentScene === index ? 'bg-nexus-cyan animate-pulse' : 'bg-white/10'}`}
+                  />
+                </div>
+              </div>
+              {currentScene === index && (
+                <motion.div
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-nexus-cyan shadow-[0_0_10px_rgba(0,245,255,1)]"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: activeScenes[index].duration / 1000, ease: 'linear' }}
+                  style={{ originX: 0 }}
+                />
+              )}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+
+      {/* Loading Overlay */}
       <AnimatePresence>
         {isLoading && (
           <motion.div
-            className="absolute inset-0 z-50 bg-nexus-obsidian flex items-center justify-center p-12"
+            className="absolute inset-0 z-20 bg-black flex items-center justify-center"
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.5 }}
           >
-            <div className="text-center max-w-md w-full">
-              <div className="relative w-24 h-24 mx-auto mb-8">
-                <div className="absolute inset-0 border-2 border-nexus-cyan/20 rounded-full" />
-                <div className="absolute inset-0 border-2 border-nexus-cyan border-t-transparent rounded-full animate-spin" />
-                <div className="absolute inset-4 border border-nexus-violet/30 rounded-full animate-pulse" />
-              </div>
-              <h3 className="text-white font-orbitron font-black text-xl tracking-[0.3em] mb-4">
-                INITIALIZING BRIDGE
-              </h3>
-              <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-nexus-cyan shadow-[0_0_15px_rgba(0,245,255,0.5)]"
-                  initial={{ width: '0%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 2, ease: 'easeInOut' }}
-                />
-              </div>
-              <p className="text-[10px] font-mono text-white/30 mt-4 tracking-widest">
-                SOVEREIGN PROTOCOL V60.4 ACTIVE
-              </p>
+            <div className="text-center">
+              <div className="w-16 h-16 border-4 border-nexus-cyan border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+              <p className="text-white text-lg">Cargando Experiencia Cinematográfica...</p>
             </div>
           </motion.div>
         )}

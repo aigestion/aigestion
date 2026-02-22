@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math';
@@ -230,7 +231,7 @@ export class PhysicsInteractionSystem {
       scale: Vector3.create(0.3, 0.3, 0.3),
     });
     TextShape.create(title, {
-      text: '⚛️ PHYSICS INTERACTION',
+      text: 'PHYSICS INTERACTION',
       textColor: Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3,
@@ -252,10 +253,10 @@ export class PhysicsInteractionSystem {
   // Create object controls
   private createObjectControls() {
     const controls = [
-      { id: 'spawn_ball', icon: '⚪', name: 'Spawn Ball' },
-      { id: 'spawn_box', icon: '⬜', name: 'Spawn Box' },
-      { id: 'spawn_cylinder', icon: '🥤', name: 'Spawn Cylinder' },
-      { id: 'clear_all', icon: '🗑️', name: 'Clear All' },
+      { id: 'spawn_ball', icon: 'Spawn Ball', name: 'Spawn Ball' },
+      { id: 'spawn_box', icon: 'Spawn Box', name: 'Spawn Box' },
+      { id: 'spawn_cylinder', icon: 'Spawn Cylinder', name: 'Spawn Cylinder' },
+      { id: 'clear_all', icon: 'Clear All', name: 'Clear All' },
     ];
 
     let xOffset = -0.9;
@@ -283,7 +284,7 @@ export class PhysicsInteractionSystem {
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color4.create(1, 1, 1, 1),
-        fontSize: 2,
+        fontSize: 1,
         textAlign: 3,
       });
 
@@ -302,10 +303,10 @@ export class PhysicsInteractionSystem {
   // Create force field controls
   private createForceFieldControls() {
     const controls = [
-      { id: 'gravity_field', icon: '🌍', name: 'Gravity Field' },
-      { id: 'magnetic_field', icon: '🧲', name: 'Magnetic Field' },
-      { id: 'wind_field', icon: '💨', name: 'Wind Field' },
-      { id: 'explosion', icon: '💥', name: 'Explosion' },
+      { id: 'gravity_field', icon: 'Gravity', name: 'Gravity Field' },
+      { id: 'magnetic_field', icon: 'Magnetic', name: 'Magnetic Field' },
+      { id: 'wind_field', icon: 'Wind', name: 'Wind Field' },
+      { id: 'explosion', icon: 'Explosion', name: 'Explosion' },
     ];
 
     let xOffset = -0.9;
@@ -333,7 +334,7 @@ export class PhysicsInteractionSystem {
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color4.create(1, 1, 1, 1),
-        fontSize: 2,
+        fontSize: 1,
         textAlign: 3,
       });
 
@@ -352,9 +353,9 @@ export class PhysicsInteractionSystem {
   // Create constraint controls
   private createConstraintControls() {
     const controls = [
-      { id: 'spring_constraint', icon: '🌀', name: 'Spring' },
-      { id: 'hinge_constraint', icon: '🚪', name: 'Hinge' },
-      { id: 'fixed_constraint', icon: '🔒', name: 'Fixed' },
+      { id: 'spring_constraint', icon: 'Spring', name: 'Spring' },
+      { id: 'hinge_constraint', icon: 'Hinge', name: 'Hinge' },
+      { id: 'fixed_constraint', icon: 'Fixed', name: 'Fixed' },
     ];
 
     let xOffset = -0.6;
@@ -382,7 +383,7 @@ export class PhysicsInteractionSystem {
       TextShape.create(buttonText, {
         text: control.icon,
         textColor: Color4.create(1, 1, 1, 1),
-        fontSize: 2,
+        fontSize: 1,
         textAlign: 3,
       });
 
@@ -420,7 +421,7 @@ export class PhysicsInteractionSystem {
       scale: Vector3.create(0.3, 0.3, 0.3),
     });
     TextShape.create(statsText, {
-      text: '📊 Objects: 0 | Collisions: 0',
+      text: 'Objects: 0 | Collisions: 0',
       textColor: Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
       textAlign: 3,
@@ -460,7 +461,7 @@ export class PhysicsInteractionSystem {
     };
 
     this.objects.set(ground.id, ground);
-    this.createPhysicsEntity(ground, 'material_metal');
+    this.createPhysicsObject(ground, 'material_metal');
   }
 
   // Create initial objects
@@ -471,7 +472,7 @@ export class PhysicsInteractionSystem {
     }
   }
 
-  // Create physics entity
+  // Create physics object
   private createPhysicsObject(obj: PhysicsObject, materialId: string) {
     const entity = engine.addEntity();
     Transform.create(entity, {
@@ -489,7 +490,7 @@ export class PhysicsInteractionSystem {
     } else if (obj.id.includes('box')) {
       MeshRenderer.setBox(entity);
     } else if (obj.id.includes('cylinder')) {
-      MeshRenderer.setCylinder(entity, 1, 1, 1, 1, 1);
+      MeshRenderer.setCylinder(entity, 0.5, 0.5);
     } else {
       MeshRenderer.setBox(entity);
     }
@@ -588,18 +589,21 @@ export class PhysicsInteractionSystem {
   // Check ground collision
   private checkGroundCollision(obj: PhysicsObject) {
     if (obj.position.y <= obj.scale.y / 2) {
-      obj.position.y = obj.scale.y / 2;
+      obj.position = Vector3.create(obj.position.x, obj.scale.y / 2, obj.position.z);
 
       if (obj.velocity.y < 0) {
-        obj.velocity.y = -obj.velocity.y * obj.restitution;
+        obj.velocity = Vector3.create(obj.velocity.x, -obj.velocity.y * obj.restitution, obj.velocity.z);
 
         // Apply friction
-        obj.velocity.x *= 1 - obj.friction * 0.1;
-        obj.velocity.z *= 1 - obj.friction * 0.1;
+        obj.velocity = Vector3.create(
+          obj.velocity.x * (1 - obj.friction * 0.1),
+          obj.velocity.y,
+          obj.velocity.z * (1 - obj.friction * 0.1)
+        );
 
         // Play impact sound
         if (Math.abs(obj.velocity.y) > 0.5) {
-          soundSystem.playInteractionSound('impact');
+          soundSystem.playInteractionSound('click');
         }
       }
 
@@ -615,7 +619,6 @@ export class PhysicsInteractionSystem {
     if (!obj) return;
 
     // Find the entity and update its transform
-    // In a real implementation, we'd track entity references
   }
 
   // Detect collisions
@@ -713,7 +716,7 @@ export class PhysicsInteractionSystem {
     this.collisions.set(collision.id, collision);
 
     // Play collision sound
-    soundSystem.playInteractionSound('collision');
+    soundSystem.playInteractionSound('click');
   }
 
   // Apply force fields
@@ -778,7 +781,7 @@ export class PhysicsInteractionSystem {
   // Apply spring constraint
   private applySpringConstraint(objA: PhysicsObject, objB: PhysicsObject, constraint: Constraint) {
     const distance = Vector3.distance(objA.position, objB.position);
-    const restLength = constraint.minDistance || 2;
+    const restLength = (constraint.limits && constraint.limits.minDistance) || 2;
     const displacement = distance - restLength;
 
     if (Math.abs(displacement) > 0.01) {
@@ -793,7 +796,7 @@ export class PhysicsInteractionSystem {
   // Apply hinge constraint
   private applyHingeConstraint(objA: PhysicsObject, objB: PhysicsObject, constraint: Constraint) {
     // Simplified hinge implementation
-    const targetPos = Vector3.add(objB.position, constraint.positionB);
+    const targetPos = Vector3.add(objB.position, constraint.positionB || Vector3.Zero());
     const direction = Vector3.subtract(targetPos, objA.position);
 
     objA.position = Vector3.add(targetPos, Vector3.scale(direction, -0.5));
@@ -803,7 +806,7 @@ export class PhysicsInteractionSystem {
   // Apply fixed constraint
   private applyFixedConstraint(objA: PhysicsObject, objB: PhysicsObject, constraint: Constraint) {
     // Keep objects at fixed relative positions
-    const targetPos = Vector3.add(objB.position, constraint.positionB);
+    const targetPos = Vector3.add(objB.position, constraint.positionB || Vector3.Zero());
     objA.position = targetPos;
     objA.velocity = Vector3.create(0, 0, 0);
   }
@@ -812,10 +815,7 @@ export class PhysicsInteractionSystem {
   private updatePhysicsStats() {
     const objectCount = this.objects.size;
     const collisionCount = this.collisions.size;
-
-    // Update UI with stats
-    // In real implementation, this would update the text display
-    console.log(`📊 Objects: ${objectCount} | Collisions: ${collisionCount}`);
+    console.log(`Objects: ${objectCount} | Collisions: ${collisionCount}`);
   }
 
   // Handle object control
@@ -909,7 +909,7 @@ export class PhysicsInteractionSystem {
     this.objects.set(obj.id, obj);
     this.createPhysicsObject(obj, 'material_rubber');
 
-    console.log(`🎾 Spawned ${type}: ${obj.id}`);
+    console.log(`Spawned ${type}: ${obj.id}`);
   }
 
   // Create force field
@@ -926,8 +926,7 @@ export class PhysicsInteractionSystem {
     };
 
     this.forceFields.set(field.id, field);
-
-    console.log(`⚡ Created ${type} force field: ${field.id}`);
+    console.log(`Created ${type} force field: ${field.id}`);
   }
 
   // Create explosion
@@ -948,8 +947,8 @@ export class PhysicsInteractionSystem {
       }
     });
 
-    soundSystem.playInteractionSound('explosion');
-    console.log('💥 Explosion created!');
+    soundSystem.playInteractionSound('alert');
+    console.log('Explosion created!');
   }
 
   // Create spring constraint
@@ -964,13 +963,15 @@ export class PhysicsInteractionSystem {
       objectB: objectIds[1],
       positionA: Vector3.create(0, 0, 0),
       positionB: Vector3.create(0, 0, 0),
-      minDistance: 2,
+      limits: {
+        minDistance: 2,
+      },
       strength: 5,
       damping: 0.5,
     };
 
     this.constraints.set(constraint.id, constraint);
-    console.log(`🌀 Created spring constraint: ${constraint.id}`);
+    console.log(`Created spring constraint: ${constraint.id}`);
   }
 
   // Create hinge constraint
@@ -994,7 +995,7 @@ export class PhysicsInteractionSystem {
     };
 
     this.constraints.set(constraint.id, constraint);
-    console.log(`🚪 Created hinge constraint: ${constraint.id}`);
+    console.log(`Created hinge constraint: ${constraint.id}`);
   }
 
   // Create fixed constraint
@@ -1014,7 +1015,7 @@ export class PhysicsInteractionSystem {
     };
 
     this.constraints.set(constraint.id, constraint);
-    console.log(`🔒 Created fixed constraint: ${constraint.id}`);
+    console.log(`Created fixed constraint: ${constraint.id}`);
   }
 
   // Interact with object
@@ -1030,9 +1031,7 @@ export class PhysicsInteractionSystem {
     );
 
     obj.velocity = Vector3.add(obj.velocity, impulse);
-
-    soundSystem.playInteractionSound('impact');
-    console.log(`👊 Applied impulse to ${objectId}`);
+    soundSystem.playInteractionSound('click');
   }
 
   // Clear all objects
@@ -1047,7 +1046,7 @@ export class PhysicsInteractionSystem {
     this.constraints.clear();
     this.collisions.clear();
 
-    console.log('🗑️ Cleared all physics objects');
+    console.log('Cleared all physics objects');
     soundSystem.playInteractionSound('click');
   }
 
@@ -1069,7 +1068,7 @@ export class PhysicsInteractionSystem {
   // Set gravity
   public setGravity(gravity: Vector3) {
     this.gravity = gravity;
-    console.log(`🌍 Gravity set to: (${gravity.x}, ${gravity.y}, ${gravity.z})`);
+    console.log(`Gravity set to: (${gravity.x}, ${gravity.y}, ${gravity.z})`);
   }
 
   // Cleanup system
