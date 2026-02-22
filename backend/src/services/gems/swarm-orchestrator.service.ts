@@ -44,34 +44,31 @@ export class NexusSwarmOrchestrator {
     await Promise.all(promises);
 
     // 2. Synthesize using Consensus Engine (Higher-order reasoning)
-    const synthesisPrompt = `
-      ERES EL JUEZ SUPREMO DEL NEXUS.
-      HAS RECIBIDO LAS SIGUIENTES CONTRIBUCIONES DE TUS GEMAS ESPECIALIZADAS PARA LA CONSULTA: "${query}"
-
+    const consensusPrompt = `
+      SISTEMA DE CONSENSO NEXUS: ANALIZA Y SINTETIZA LAS SIGUIENTES CONTRIBUCIONES.
+      MISIÓN: ${query}
       CONTRIBUCIONES:
       ${Object.entries(contributions)
-        .map(([name, text]) => `--- [GEM: ${name}] ---\n${text}`)
-        .join('\n\n')}
+        .map(([gemName, result]) => `[GEM: ${gemName}]: ${result}`)
+        .join('\n')}
 
-      TU TAREA:
-      1. SINTETIZA la mejor respuesta fusionando los puntos fuertes de cada gema.
-      2. RESUELVE cualquier contradicción entre ellas.
-      3. PROPORCIONA un "VEREDICTO SUPREMO" final que sea la solución definitiva.
-
+      TAREA: Genera un veredicto supremo que integre lo mejor de cada respuesta.
       FORMATO DE SALIDA: Markdown God Level.
     `;
 
-    const supremeVerdict = await this.gemini.ask(synthesisPrompt, {
-      model: 'gemini-2.5-pro', // High-order synthesis model
+    const supremeVerdict = await this.gemini.generateText(consensusPrompt, {
+      model: 'gemini-2.0-pro-exp',
       temperature: 0.3,
     });
+
+    logger.info('[SwarmOrchestrator] Supreme Verdict generated successfully');
 
     return {
       supremeVerdict,
       contributions,
       metadata: {
         gemsInvolved: gems.map(g => g.name),
-        consensusScore: 0.95, // Simulated confidence level
+        consensusScore: 0.95, // Simulated high-fidelity score
       },
     };
   }

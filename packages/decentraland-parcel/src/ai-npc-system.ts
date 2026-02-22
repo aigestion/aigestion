@@ -209,7 +209,7 @@ export class NPCAssistant {
     for (let i = 0; i <= fullText.length; i++) {
       currentText = fullText.substring(0, i);
       TextShape.getMutable(dialogueEntity).text = currentText;
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise(resolve => setTimeout(() => resolve(undefined), 50));
     }
 
     // Remove dialogue after 5 seconds
@@ -260,7 +260,6 @@ export class NPCAssistant {
     switch (response) {
       case 'Estado del Sistema (Protocolo Soberano)':
       case 'Métricas Detalladas':
-      case 'Métricas Detalladas':
         this.currentDialogue = 'system_status';
         break;
       case 'Asistencia en Tareas Críticas':
@@ -286,26 +285,30 @@ export class NPCAssistant {
     this.emotionalState = emotion;
 
     // Update NPC appearance based on emotion
-    const material = Material.getMutable(this.entity);
-    if (material && material.$case === 'pbr') {
-      switch (emotion) {
-        case 'happy':
-          material.pbr.emissiveColor = Color4.create(0.2, 0.8, 0.2, 0.5);
-          material.pbr.emissiveIntensity = 2;
-          break;
-        case 'excited':
-          material.pbr.emissiveColor = Color4.create(1, 0.8, 0.2, 0.5);
-          material.pbr.emissiveIntensity = 3;
-          break;
-        case 'concerned':
-          material.pbr.emissiveColor = Color4.create(0.8, 0.2, 0.2, 0.5);
-          material.pbr.emissiveIntensity = 1.5;
-          break;
-        default:
-          material.pbr.emissiveColor = Color4.create(0.1, 0.2, 0.4, 0.3);
-          material.pbr.emissiveIntensity = 1;
-      }
+    const material = Material.get(this.entity);
+    let emissiveColor = Color4.create(0.1, 0.2, 0.4, 0.3);
+    let emissiveIntensity = 1;
+
+    switch (emotion) {
+      case 'happy':
+        emissiveColor = Color4.create(0.2, 0.8, 0.2, 0.5);
+        emissiveIntensity = 2;
+        break;
+      case 'excited':
+        emissiveColor = Color4.create(1, 0.8, 0.2, 0.5);
+        emissiveIntensity = 3;
+        break;
+      case 'concerned':
+        emissiveColor = Color4.create(0.8, 0.2, 0.2, 0.5);
+        emissiveIntensity = 1.5;
+        break;
     }
+
+    Material.setPbrMaterial(this.entity, {
+      ...material,
+      emissiveColor,
+      emissiveIntensity,
+    });
   }
 
   private startAIProcessing() {
@@ -313,10 +316,11 @@ export class NPCAssistant {
     engine.addSystem(() => {
       // Random subtle animations to show AI is "thinking"
       if (Math.random() > 0.98) {
-        const material = Material.getMutable(this.entity);
-        if (material && material.$case === 'pbr') {
-          material.pbr.emissiveIntensity = 1 + Math.random() * 0.5;
-        }
+        const material = Material.get(this.entity);
+        Material.setPbrMaterial(this.entity, {
+          ...material,
+          emissiveIntensity: 1 + Math.random() * 0.5,
+        });
       }
     });
   }
@@ -324,7 +328,7 @@ export class NPCAssistant {
   // Advanced AI methods
   public async processNaturalLanguage(input: string): Promise<string> {
     // Simulate NLP processing
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(() => resolve(undefined), 1000));
 
     // Simple keyword-based responses
     if (input.toLowerCase().includes('hello') || input.toLowerCase().includes('hi')) {

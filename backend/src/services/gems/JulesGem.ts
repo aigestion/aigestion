@@ -60,4 +60,8 @@ export class JulesGem extends BaseGem {
       },
     );
   }
+
+  async generateCanonical(topic: string): Promise<string> {
+    return this.conductResearch(topic);
+  }
 }

@@ -78,10 +78,10 @@ export class PineconeService {
     const hash = crypto.createHash('sha256').update(text).digest('hex');
     const cacheKey = `embedding:${hash}`;
 
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<number[]>(cacheKey);
     if (cached) {
       logger.debug({ hash }, '[PineconeService] Embedding Cache Hit');
-      return cached;
+      return cached as number[];
     }
 
     const embedding = await this.vertexAIService.generateEmbeddings(text);
@@ -263,7 +263,7 @@ export class PineconeService {
     const cachedResults = await getCache(searchCacheKey);
     if (cachedResults) {
       logger.debug('[PineconeService] Search Cache Hit');
-      return cachedResults;
+      return cachedResults as any[];
     }
 
     try {

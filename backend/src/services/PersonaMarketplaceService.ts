@@ -77,4 +77,17 @@ export class PersonaMarketplaceService {
       ]),
     };
   }
+
+  public async ratePersona(personaId: string, rating: number) {
+    const persona = await Persona.findById(personaId);
+    if (!persona) throw new Error('Persona not found');
+
+    // Protocol: Weighted reputation update based on executions
+    const totalWeight = persona.totalExecutions || 1;
+    const currentReputation = persona.reputationScore || 5;
+    persona.reputationScore = (currentReputation * totalWeight + rating) / (totalWeight + 1);
+
+    await persona.save();
+    return persona;
+  }
 }

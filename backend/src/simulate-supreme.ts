@@ -1,5 +1,5 @@
 import { Container } from 'inversify';
-import { inversifyConfig } from './config/inversify.config';
+import { container } from './config/inversify.config';
 import { TYPES } from './types';
 import { NexusSwarmOrchestrator } from './services/gems/swarm-orchestrator.service';
 import { JulesGem } from './services/gems/JulesGem';
@@ -12,30 +12,31 @@ import { NeuralHomeBridge } from './services/google/neural-home.service';
  * Demonstrates the full power of the Nexus expansion.
  */
 async function runSupremeSimulation() {
-    const container = new Container();
-    // In a real environment, we'd use the pre-configured container, 
-    // but here we simulate the resolution for the demo.
-    
-    const swarm = inversifyConfig.get<NexusSwarmOrchestrator>(TYPES.NexusSwarmOrchestrator);
-    const jules = inversifyConfig.get<JulesGem>(TYPES.JulesGem);
-    const stitchGem = inversifyConfig.get<NexusStitchGem>(TYPES.NexusStitchGem);
-    const homeBridge = inversifyConfig.get<NeuralHomeBridge>(TYPES.NeuralHomeBridge);
+  const container = new Container();
+  // In a real environment, we'd use the pre-configured container,
+  // but here we simulate the resolution for the demo.
 
-    const query = "Analyze the impact of a 25% throughput surge in the Nexus Swarm Engine and propose an autonomic scaling mission with grounded context.";
+  const swarm = container.get<NexusSwarmOrchestrator>(TYPES.NexusSwarmOrchestrator);
+  const jules = container.get<JulesGem>(TYPES.JulesGem);
+  const stitchGem = container.get<NexusStitchGem>(TYPES.NexusStitchGem);
+  const homeBridge = container.get<NeuralHomeBridge>(TYPES.NeuralHomeBridge);
 
-    logger.info('🌌 [SIMULATION] Initiating Supreme Nexus Pulse...');
-    
-    // 1. Physical/Ambient Signal
-    await homeBridge.syncAmbientState('medium');
+  const query =
+    'Analyze the impact of a 25% throughput surge in the Nexus Swarm Engine and propose an autonomic scaling mission with grounded context.';
 
-    // 2. Swarm Collaboration
-    logger.info('🐝 [SIMULATION] Gems assembly initiated.');
-    const result = await swarm.collaborate(query, [jules, stitchGem]);
+  logger.info('🌌 [SIMULATION] Initiating Supreme Nexus Pulse...');
 
-    logger.info('✅ [SIMULATION] Supreme Verdict Acquired.');
-    console.log('\n--- FINAL VERDICT ---\n');
-    console.log(result.supremeVerdict);
-    console.log('\n---------------------\n');
+  // 1. Physical/Ambient Signal
+  await homeBridge.syncAmbientState('medium');
+
+  // 2. Swarm Collaboration
+  logger.info('🐝 [SIMULATION] Gems assembly initiated.');
+  const result = await swarm.collaborate(query, [jules, stitchGem]);
+
+  logger.info('✅ [SIMULATION] Supreme Verdict Acquired.');
+  console.log('\n--- FINAL VERDICT ---\n');
+  console.log(result.supremeVerdict);
+  console.log('\n---------------------\n');
 }
 
 // runSupremeSimulation(); // To be triggered by API/CLI

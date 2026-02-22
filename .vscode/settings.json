@@ -104,5 +104,8 @@
   },
   "[java]": {
     "editor.defaultFormatter": "redhat.java"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
   }
 }

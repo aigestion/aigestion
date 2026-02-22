@@ -657,20 +657,19 @@ export class SmartRoomSystem {
     if (!device) return;
 
     // Update device entity appearance based on state
-    const deviceEntity = Array.from(engine.entities).find(e => {
-      const transform = Transform.get(e);
-      return transform && Vector3.distance(transform.position, device.position) < 0.1;
-    });
+    let deviceEntity: any = null;
+    for (const [entity] of engine.getEntitiesWith(Transform)) {
+      const transform = Transform.get(entity);
+      if (Vector3.distance(transform.position, device.position) < 0.1) {
+        deviceEntity = entity;
+        break;
+      }
+    }
 
     if (deviceEntity) {
-      const material = Material.getMutable(deviceEntity);
-      if (material && material.$case === 'pbr') {
-        if (device.value === true) {
-          material.pbr.emissiveIntensity = 3;
-        } else {
-          material.pbr.emissiveIntensity = 1;
-        }
-      }
+      Material.setPbrMaterial(deviceEntity, {
+        emissiveIntensity: device.value === true ? 3 : 1,
+      });
     }
   }
 

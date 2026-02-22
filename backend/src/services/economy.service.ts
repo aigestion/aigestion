@@ -74,7 +74,7 @@ export class EconomyService {
 
   private async fetchPrice(asset: { symbol: string; type: string }): Promise<AssetPrice | null> {
     const cacheKey = `economy:price:${asset.symbol}`;
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<AssetPrice>(cacheKey);
     if (cached) return cached;
 
     if (!this.alphaVantageKey) {
@@ -150,7 +150,7 @@ export class EconomyService {
    */
   async getMarketSentiment(): Promise<string> {
     const cacheKey = 'economy:sentiment';
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<string>(cacheKey);
     if (cached) return cached;
 
     if (!this.alphaVantageKey) return 'NEUTRAL';
@@ -174,7 +174,7 @@ export class EconomyService {
    */
   async getGeopoliticalContext(): Promise<string> {
     const cacheKey = 'economy:geopolitical';
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<string>(cacheKey);
     if (cached) return cached;
 
     if (!this.tavilyKey) return 'Contexto geopolítico no disponible (Falta API Key).';
@@ -328,7 +328,7 @@ export class EconomyService {
 
     const fullAlert: PriceAlert = { ...alert, condition };
     const cacheKey = `economy:alerts:${alert.userId}`;
-    const existing = (await getCache(cacheKey)) || [];
+    const existing = (await getCache<PriceAlert[]>(cacheKey)) || [];
 
     existing.push(fullAlert);
     await setCache(cacheKey, existing, 0); // No expiry for user alerts
@@ -340,7 +340,7 @@ export class EconomyService {
   }
 
   async getActiveAlerts(userId: string): Promise<PriceAlert[]> {
-    return (await getCache(`economy:alerts:${userId}`)) || [];
+    return (await getCache<PriceAlert[]>(`economy:alerts:${userId}`)) || [];
   }
 
   async checkPriceAlerts(): Promise<PriceAlert[]> {
@@ -352,7 +352,7 @@ export class EconomyService {
     const triggeredAlerts: PriceAlert[] = [];
 
     for (const key of alertKeys) {
-      const alerts: PriceAlert[] = (await getCache(key)) || [];
+      const alerts: PriceAlert[] = (await getCache<PriceAlert[]>(key)) || [];
       const stillActive: PriceAlert[] = [];
 
       alerts.forEach(alert => {
@@ -392,7 +392,7 @@ export class EconomyService {
     entryPrice: number,
   ): Promise<void> {
     const cacheKey = `economy:portfolio:${userId}`;
-    const portfolio: any[] = (await getCache(cacheKey)) || [];
+    const portfolio: any[] = (await getCache<any[]>(cacheKey)) || [];
 
     // Simple append or update
     const existingIndex = portfolio.findIndex(p => p.symbol === symbol);
@@ -407,7 +407,7 @@ export class EconomyService {
 
   async getPortfolioStats(userId: string): Promise<PortfolioItem[]> {
     const cacheKey = `economy:portfolio:${userId}`;
-    const positions: any[] = (await getCache(cacheKey)) || [];
+    const positions: any[] = (await getCache<any[]>(cacheKey)) || [];
     const prices = await this.getEconomyUpdate();
     const stats: PortfolioItem[] = [];
 
@@ -436,7 +436,7 @@ export class EconomyService {
    */
   async getHistoricalPrices(symbol: string): Promise<number[]> {
     const cacheKey = `economy:history:${symbol}`;
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<number[]>(cacheKey);
     if (cached) return cached;
 
     if (!this.alphaVantageKey) {

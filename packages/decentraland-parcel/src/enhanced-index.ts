@@ -35,6 +35,7 @@ import { uiSystem } from './responsive-ui-system';
 import { smartRoomSystem } from './smart-room-system';
 import { voiceCommandSystem } from './voice-command-system';
 import { weatherSystem } from './weather-system';
+import { perceptionSensors } from './perception-sensors';
 
 // Enhanced main function with real-time updates
 export function enhancedMain() {
@@ -44,6 +45,7 @@ export function enhancedMain() {
   soundSystem.initialize();
   lightingSystem.initialize();
   uiSystem.initialize();
+  perceptionSensors.initialize();
 
   // Create enhanced architecture first
   createEnhancedArchitecture();
@@ -93,9 +95,9 @@ export function enhancedMain() {
 }
 
 // Real-time update system with memory management
-let systemUpdateInterval: NodeJS.Timeout;
-let diagnosticsInterval: NodeJS.Timeout;
-let alertsInterval: NodeJS.Timeout;
+let systemUpdateInterval: any;
+let diagnosticsInterval: any;
+let alertsInterval: any;
 
 function startRealTimeUpdates() {
   // Clear existing intervals to prevent memory leaks

@@ -1,5 +1,5 @@
 // Holographic Data Visualization Walls for AIGestion Virtual Office
-import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs';
+import { engine, Material, MeshRenderer, TextShape, Transform } from '@dcl/sdk/ecs';
 import { setTimeout, setInterval } from './utils/timers';
 import { Color3, Color4, Vector3 } from '@dcl/sdk/math';
 
@@ -354,11 +354,12 @@ export class HolographicDataWall {
       this.visualElements.forEach((element, index) => {
         if (index % 3 === 0) {
           // Animate every 3rd element
-          const material = Material.getMutable(element);
-          if (material && material.$case === 'pbr') {
-            const pulse = Math.sin(this.animationTime * 2 + index * 0.1) * 0.3 + 0.7;
-            material.pbr.emissiveIntensity = pulse * 2;
-          }
+          const material = Material.get(element);
+          const pulse = Math.sin(this.animationTime * 2 + index * 0.1) * 0.3 + 0.7;
+          Material.setPbrMaterial(element, {
+            ...material,
+            emissiveIntensity: pulse * 2,
+          });
         }
       });
     });

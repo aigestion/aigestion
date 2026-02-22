@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { setTimeout, setInterval } from './utils/timers';
@@ -188,11 +189,11 @@ export class CrossPlatformSyncSystem {
           case 'first_write_wins':
             return conflict.changes[0];
           case 'merge':
-            return this.mergeChanges(conflict.changes);
+            return this.conflictResolver.merge(conflict.changes);
           case 'manual':
             return null; // Requires manual intervention
           case 'voting':
-            return this.resolveByVoting(conflict.changes);
+            return this.conflictResolver.resolveByVoting(conflict.changes);
           default:
             return conflict.changes[conflict.changes.length - 1];
         }

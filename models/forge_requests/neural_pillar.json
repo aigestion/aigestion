@@ -1,0 +1,7 @@
+{
+  "id": "neural_pillar",
+  "name": "Neural Data Pillar",
+  "description": "A vertical pillar with hex-patterned surface, pulsating data streams inside (neon blue), floating data crystals on top. Cyberpunk aesthetic.",
+  "model_type": "shap-e",
+  "dimensions": { "x": 1.2, "y": 6, "z": 1.2 }
+}

@@ -24,8 +24,8 @@ __export(enhanced_index_exports, {
   enhancedMain: () => enhancedMain
 });
 module.exports = __toCommonJS(enhanced_index_exports);
-var import_ecs26 = require("@dcl/sdk/ecs");
-var import_math24 = require("@dcl/sdk/math");
+var import_ecs27 = require("@dcl/sdk/ecs");
+var import_math25 = require("@dcl/sdk/math");
 
 // src/utils/timers.ts
 var import_ecs = require("@dcl/sdk/ecs");
@@ -137,9 +137,7 @@ var AdvancedLightingSystem = class {
       });
       import_ecs2.MeshRenderer.setBox(shadowCaster);
       import_ecs2.Material.setPbrMaterial(shadowCaster, {
-        alphaTest: 0.01,
-        castShadows: true,
-        receiveShadows: true
+        alphaTest: 0.01
       });
       this.shadowCasters.push(shadowCaster);
     });
@@ -216,31 +214,36 @@ var AdvancedLightingSystem = class {
       const sunIntensity = Math.max(0, sunHeight);
       const sunTransform = import_ecs2.Transform.getMutable(sunLight);
       sunTransform.rotation = import_math.Quaternion.fromEulerDegrees(sunAngle * 180 / Math.PI - 90, 0, 0);
-      const sunMaterial = import_ecs2.Material.getMutable(sunLight);
-      if (sunMaterial && sunMaterial.$case === "pbr") {
-        sunMaterial.pbr.emissiveIntensity = sunIntensity * 2;
-        if (sunIntensity > 0.5) {
-          sunMaterial.pbr.albedoColor = import_math.Color4.create(1, 0.95, 0.8, 0.8);
-          sunMaterial.pbr.emissiveColor = import_math.Color4.create(1, 0.95, 0.8, 1);
-        } else if (sunIntensity > 0.1) {
-          sunMaterial.pbr.albedoColor = import_math.Color4.create(1, 0.7, 0.4, 0.8);
-          sunMaterial.pbr.emissiveColor = import_math.Color4.create(1, 0.7, 0.4, 1);
-        } else {
-          sunMaterial.pbr.albedoColor = import_math.Color4.create(0.2, 0.3, 0.6, 0.8);
-          sunMaterial.pbr.emissiveColor = import_math.Color4.create(0.2, 0.3, 0.6, 1);
-        }
+      const sunMaterial = import_ecs2.Material.get(sunLight);
+      let sunAlbedo = import_math.Color4.create(1, 0.95, 0.8, 0.8);
+      let sunEmissive = import_math.Color4.create(1, 0.95, 0.8, 1);
+      if (sunIntensity > 0.5) {
+      } else if (sunIntensity > 0.1) {
+        sunAlbedo = import_math.Color4.create(1, 0.7, 0.4, 0.8);
+        sunEmissive = import_math.Color4.create(1, 0.7, 0.4, 1);
+      } else {
+        sunAlbedo = import_math.Color4.create(0.2, 0.3, 0.6, 0.8);
+        sunEmissive = import_math.Color4.create(0.2, 0.3, 0.6, 1);
       }
-      const ambientMaterial = import_ecs2.Material.getMutable(ambientLight);
-      if (ambientMaterial && ambientMaterial.$case === "pbr") {
-        ambientMaterial.pbr.emissiveIntensity = 0.3 + sunIntensity * 0.2;
-        if (sunIntensity < 0.1) {
-          ambientMaterial.pbr.albedoColor = import_math.Color4.create(0.1, 0.15, 0.3, 0.1);
-          ambientMaterial.pbr.emissiveColor = import_math.Color4.create(0.1, 0.15, 0.3, 0.3);
-        } else {
-          ambientMaterial.pbr.albedoColor = import_math.Color4.create(0.4, 0.45, 0.5, 0.1);
-          ambientMaterial.pbr.emissiveColor = import_math.Color4.create(0.4, 0.45, 0.5, 0.3);
-        }
+      import_ecs2.Material.setPbrMaterial(sunLight, {
+        ...sunMaterial,
+        albedoColor: sunAlbedo,
+        emissiveColor: sunEmissive,
+        emissiveIntensity: sunIntensity * 2
+      });
+      const ambientMaterial = import_ecs2.Material.get(ambientLight);
+      let ambientAlbedo = import_math.Color4.create(0.4, 0.45, 0.5, 0.1);
+      let ambientEmissive = import_math.Color4.create(0.4, 0.45, 0.5, 0.3);
+      if (sunIntensity < 0.1) {
+        ambientAlbedo = import_math.Color4.create(0.1, 0.15, 0.3, 0.1);
+        ambientEmissive = import_math.Color4.create(0.1, 0.15, 0.3, 0.3);
       }
+      import_ecs2.Material.setPbrMaterial(ambientLight, {
+        ...ambientMaterial,
+        albedoColor: ambientAlbedo,
+        emissiveColor: ambientEmissive,
+        emissiveIntensity: 0.3 + sunIntensity * 0.2
+      });
     }
   }
   // Update volumetric lights with pulsing effect
@@ -248,10 +251,11 @@ var AdvancedLightingSystem = class {
     this.volumetricLights.forEach((light, index) => {
       const time = this.timeOfDay * 2 + index * 0.5;
       const pulse = Math.sin(time) * 0.3 + 0.7;
-      const material = import_ecs2.Material.getMutable(light);
-      if (material && material.$case === "pbr") {
-        material.pbr.emissiveIntensity = pulse * 5;
-      }
+      const material = import_ecs2.Material.get(light);
+      import_ecs2.Material.setPbrMaterial(light, {
+        ...material,
+        emissiveIntensity: pulse * 5
+      });
     });
   }
   // Create dynamic spotlight for events
@@ -296,10 +300,11 @@ var AdvancedLightingSystem = class {
       import_ecs2.engine.addSystem(() => {
         const time = Date.now() / 200;
         const pulse = Math.sin(time) > 0 ? 1 : 0.2;
-        const material = import_ecs2.Material.getMutable(emergencyLight);
-        if (material && material.$case === "pbr") {
-          material.pbr.emissiveIntensity = pulse * 4;
-        }
+        const material = import_ecs2.Material.get(emergencyLight);
+        import_ecs2.Material.setPbrMaterial(emergencyLight, {
+          ...material,
+          emissiveIntensity: pulse * 4
+        });
       });
     });
   }
@@ -505,31 +510,31 @@ ${this.role}`,
   initializeDialogueTree() {
     this.dialogueTree.set("greeting", {
       id: "greeting",
-      text: `Hello! I'm ${this.name}, your ${this.role}. How can I assist you today?`,
+      text: `Saludos, Operador. Soy ${this.name}, tu ${this.role}. Mi n\xFAcleo cognitivo est\xE1 alineado con Daniela Sovereign. \xBFQu\xE9 par\xE1metros del Nexus deseas supervisar?`,
       responses: [
-        "Tell me about the system status",
-        "Help me with a task",
-        "What can you do?",
-        "Goodbye"
+        "Estado del Sistema (Protocolo Soberano)",
+        "Asistencia en Tareas Cr\xEDticas",
+        "Capacidades de Inteligencia Neural",
+        "Cerrar Sesi\xF3n"
       ],
       emotion: "happy"
     });
     this.dialogueTree.set("system_status", {
       id: "system_status",
-      text: "All systems are operating at optimal efficiency. Quantum core is stable, network latency is under 10ms, and security protocols are active.",
-      responses: ["Show me detailed metrics", "Run diagnostics", "Back to main menu"],
+      text: "Todos los sistemas operan bajo par\xE1metros nominales. El n\xFAcleo cu\xE1ntico est\xE1 estable al 98.7%. Protocolos de defensa activa nivel God Mode: ON.",
+      responses: ["M\xE9tricas Detalladas", "Ejecutar Diagn\xF3stico Global", "Volver al Men\xFA"],
       emotion: "neutral"
     });
     this.dialogueTree.set("task_help", {
       id: "task_help",
-      text: "I can help you with various tasks: system monitoring, data analysis, security checks, or collaborative projects. What would you like to work on?",
-      responses: ["System monitoring", "Data analysis", "Security check", "Collaboration"],
+      text: "Puedo optimizar flujos de trabajo, realizar an\xE1lisis predictivos y gestionar hilos de ejecuci\xF3n en el monorepo. \xBFCu\xE1l es tu objetivo prioritario?",
+      responses: ["Monitoreo en Tiempo Real", "An\xE1lisis de Datos Nexus", "Auditor\xEDa de Seguridad"],
       emotion: "excited"
     });
     this.dialogueTree.set("capabilities", {
       id: "capabilities",
-      text: "I have advanced AI capabilities including natural language processing, predictive analytics, real-time monitoring, and adaptive learning. I can also integrate with external systems and provide intelligent recommendations.",
-      responses: ["Show me examples", "Teach me something", "Back to main menu"],
+      text: "Mi arquitectura permite el procesamiento de lenguaje natural soberano, an\xE1lisis de redes neurales y orquestaci\xF3n de swarms. Estoy conectada directamente al Vault de Daniela.",
+      responses: ["Mostrar Ejemplos", "Lecci\xF3n de Ingenier\xEDa Social", "Volver al Men\xFA"],
       emotion: "excited"
     });
     this.dialogueTree.set("detailed_metrics", {
@@ -578,7 +583,7 @@ ${this.role}`,
     for (let i = 0; i <= fullText.length; i++) {
       currentText = fullText.substring(0, i);
       import_ecs4.TextShape.getMutable(dialogueEntity).text = currentText;
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(() => resolve(void 0), 50));
     }
     setTimeout(() => {
       import_ecs4.engine.removeEntity(dialogueEntity);
@@ -617,19 +622,17 @@ ${this.role}`,
     if (!dialogue || responseIndex >= dialogue.responses.length) return;
     const response = dialogue.responses[responseIndex];
     switch (response) {
-      case "Tell me about the system status":
+      case "Estado del Sistema (Protocolo Soberano)":
+      case "M\xE9tricas Detalladas":
         this.currentDialogue = "system_status";
         break;
-      case "Help me with a task":
+      case "Asistencia en Tareas Cr\xEDticas":
         this.currentDialogue = "task_help";
         break;
-      case "What can you do?":
+      case "Capacidades de Inteligencia Neural":
         this.currentDialogue = "capabilities";
         break;
-      case "Show me detailed metrics":
-        this.currentDialogue = "detailed_metrics";
-        break;
-      case "Goodbye":
+      case "Cerrar Sesi\xF3n":
         this.currentDialogue = "farewell";
         break;
       default:
@@ -641,40 +644,43 @@ ${this.role}`,
   }
   updateEmotionalState(emotion) {
     this.emotionalState = emotion;
-    const material = import_ecs4.Material.getMutable(this.entity);
-    if (material && material.$case === "pbr") {
-      switch (emotion) {
-        case "happy":
-          material.pbr.emissiveColor = import_math2.Color4.create(0.2, 0.8, 0.2, 0.5);
-          material.pbr.emissiveIntensity = 2;
-          break;
-        case "excited":
-          material.pbr.emissiveColor = import_math2.Color4.create(1, 0.8, 0.2, 0.5);
-          material.pbr.emissiveIntensity = 3;
-          break;
-        case "concerned":
-          material.pbr.emissiveColor = import_math2.Color4.create(0.8, 0.2, 0.2, 0.5);
-          material.pbr.emissiveIntensity = 1.5;
-          break;
-        default:
-          material.pbr.emissiveColor = import_math2.Color4.create(0.1, 0.2, 0.4, 0.3);
-          material.pbr.emissiveIntensity = 1;
-      }
+    const material = import_ecs4.Material.get(this.entity);
+    let emissiveColor = import_math2.Color4.create(0.1, 0.2, 0.4, 0.3);
+    let emissiveIntensity = 1;
+    switch (emotion) {
+      case "happy":
+        emissiveColor = import_math2.Color4.create(0.2, 0.8, 0.2, 0.5);
+        emissiveIntensity = 2;
+        break;
+      case "excited":
+        emissiveColor = import_math2.Color4.create(1, 0.8, 0.2, 0.5);
+        emissiveIntensity = 3;
+        break;
+      case "concerned":
+        emissiveColor = import_math2.Color4.create(0.8, 0.2, 0.2, 0.5);
+        emissiveIntensity = 1.5;
+        break;
     }
+    import_ecs4.Material.setPbrMaterial(this.entity, {
+      ...material,
+      emissiveColor,
+      emissiveIntensity
+    });
   }
   startAIProcessing() {
     import_ecs4.engine.addSystem(() => {
       if (Math.random() > 0.98) {
-        const material = import_ecs4.Material.getMutable(this.entity);
-        if (material && material.$case === "pbr") {
-          material.pbr.emissiveIntensity = 1 + Math.random() * 0.5;
-        }
+        const material = import_ecs4.Material.get(this.entity);
+        import_ecs4.Material.setPbrMaterial(this.entity, {
+          ...material,
+          emissiveIntensity: 1 + Math.random() * 0.5
+        });
       }
     });
   }
   // Advanced AI methods
   async processNaturalLanguage(input) {
-    await new Promise((resolve) => setTimeout(resolve, 1e3));
+    await new Promise((resolve) => setTimeout(() => resolve(void 0), 1e3));
     if (input.toLowerCase().includes("hello") || input.toLowerCase().includes("hi")) {
       return `Hello! I'm ${this.name}. How can I help you today?`;
     } else if (input.toLowerCase().includes("status")) {
@@ -788,7 +794,7 @@ var AnalyticsDashboardSystem = class {
       position: import_math3.Vector3.create(0, 1.7, 0.1),
       scale: import_math3.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs5.TextShape.create(title, {
       text: "\u{1F4CA} ANALYTICS DASHBOARD",
       textColor: import_math3.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -865,7 +871,7 @@ var AnalyticsDashboardSystem = class {
         position: import_math3.Vector3.create(0, 0, 0.1),
         scale: import_math3.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs5.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math3.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -901,7 +907,7 @@ var AnalyticsDashboardSystem = class {
       position: import_math3.Vector3.create(0, 0, 0.1),
       scale: import_math3.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(statusText, {
+    import_ecs5.TextShape.create(statusText, {
       text: "\u{1F4CA} Last Update: Just Now | Events: 0",
       textColor: import_math3.Color4.create(1, 1, 1, 1),
       fontSize: 1.2,
@@ -1655,7 +1661,7 @@ var ARIntegrationSystem = class {
       position: import_math4.Vector3.create(0, 1.7, 0.1),
       scale: import_math4.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs6.TextShape.create(title, {
       text: "\u{1F4F1} AR OVERLAY SYSTEM",
       textColor: import_math4.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -1686,7 +1692,7 @@ var ARIntegrationSystem = class {
       position: import_math4.Vector3.create(0, 0, 0.1),
       scale: import_math4.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(deviceText, {
+    import_ecs6.TextShape.create(deviceText, {
       text: "\u{1F4F1} Select Device",
       textColor: import_math4.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -1712,7 +1718,7 @@ var ARIntegrationSystem = class {
         position: import_math4.Vector3.create(0, 0, 0.1),
         scale: import_math4.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs6.TextShape.create(buttonText, {
         text: device.type === "smartphone" ? "\u{1F4F1}" : device.type === "tablet" ? "\u{1F4F1}" : "\u{1F97D}",
         textColor: import_math4.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -1755,7 +1761,7 @@ var ARIntegrationSystem = class {
         position: import_math4.Vector3.create(0, 0, 0.1),
         scale: import_math4.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs6.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math4.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -1799,7 +1805,7 @@ var ARIntegrationSystem = class {
         position: import_math4.Vector3.create(0, 0, 0.1),
         scale: import_math4.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs6.TextShape.create(buttonText, {
         text: type.icon,
         textColor: import_math4.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -1835,7 +1841,7 @@ var ARIntegrationSystem = class {
       position: import_math4.Vector3.create(0, 0, 0.1),
       scale: import_math4.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(statusText, {
+    import_ecs6.TextShape.create(statusText, {
       text: "\u{1F4CA} Status: Ready",
       textColor: import_math4.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -2032,7 +2038,8 @@ var ARIntegrationSystem = class {
     overlays.forEach((overlay) => {
       if (overlay.isVisible) {
         const time = Date.now() / 1e3;
-        overlay.position.y += Math.sin(time * 2 + parseInt(overlay.id)) * 1e-3;
+        const newY = overlay.position.y + Math.sin(time * 2 + parseInt(overlay.id)) * 1e-3;
+        overlay.position = import_math4.Vector3.create(overlay.position.x, newY, overlay.position.z);
       }
     });
   }
@@ -2753,22 +2760,19 @@ var AvatarSystem = class {
     this.currentAvatar.secondaryColor = secondaryColor;
     const body = this.avatarParts.get("body");
     if (body) {
-      const material = import_ecs7.Material.getMutable(body);
-      if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = import_math5.Color4.create(primaryColor.r, primaryColor.g, primaryColor.b, 1);
-      }
+      const material = import_ecs7.Material.get(body);
+      import_ecs7.Material.setPbrMaterial(body, {
+        ...material,
+        albedoColor: import_math5.Color4.create(primaryColor.r, primaryColor.g, primaryColor.b, 1)
+      });
     }
     const head = this.avatarParts.get("head");
     if (head) {
-      const material = import_ecs7.Material.getMutable(head);
-      if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = import_math5.Color4.create(
-          secondaryColor.r,
-          secondaryColor.g,
-          secondaryColor.b,
-          1
-        );
-      }
+      const material = import_ecs7.Material.get(head);
+      import_ecs7.Material.setPbrMaterial(head, {
+        ...material,
+        albedoColor: import_math5.Color4.create(secondaryColor.r, secondaryColor.g, secondaryColor.b, 1)
+      });
     }
   }
   // Add accessory
@@ -2980,7 +2984,7 @@ var BlockchainIntegrationSystem = class {
       position: import_math6.Vector3.create(0, 1.7, 0.1),
       scale: import_math6.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs8.TextShape.create(title, {
       text: "\u26D3\uFE0F BLOCKCHAIN ASSETS",
       textColor: import_math6.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -3011,7 +3015,7 @@ var BlockchainIntegrationSystem = class {
       position: import_math6.Vector3.create(0, 0, 0.1),
       scale: import_math6.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(walletText, {
+    import_ecs8.TextShape.create(walletText, {
       text: "\u{1F45B} WALLET: Not Connected",
       textColor: import_math6.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -3038,7 +3042,7 @@ var BlockchainIntegrationSystem = class {
       position: import_math6.Vector3.create(0, 0.1, 0.1),
       scale: import_math6.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(assetsText, {
+    import_ecs8.TextShape.create(assetsText, {
       text: "\u{1F3A8} ASSETS: 0",
       textColor: import_math6.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -3065,7 +3069,7 @@ var BlockchainIntegrationSystem = class {
       position: import_math6.Vector3.create(0, 0, 0.1),
       scale: import_math6.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(transactionsText, {
+    import_ecs8.TextShape.create(transactionsText, {
       text: "\u{1F4CA} TRANSACTIONS: 0",
       textColor: import_math6.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -3100,7 +3104,7 @@ var BlockchainIntegrationSystem = class {
         position: import_math6.Vector3.create(0, 0, 0.1),
         scale: import_math6.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs8.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math6.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -3509,10 +3513,10 @@ var BlockchainIntegrationSystem = class {
   }
   // Cleanup system
   cleanup() {
-    this.wallets.clear();
-    this.assets.clear();
-    this.transactions.clear();
-    this.contracts.clear();
+    this.wallets = /* @__PURE__ */ new Map();
+    this.assets = /* @__PURE__ */ new Map();
+    this.transactions = /* @__PURE__ */ new Map();
+    this.contracts = /* @__PURE__ */ new Map();
     if (this.blockchainUI) {
       import_ecs8.engine.removeEntity(this.blockchainUI);
     }
@@ -3645,13 +3649,6 @@ var CollaborationWhiteboardSystem = class {
       },
       () => this.stopDrawing()
     );
-    import_ecs9.pointerEventsSystem.onPointerMove(
-      {
-        entity: this.whiteboardEntity,
-        opts: { button: import_ecs9.InputAction.IA_POINTER }
-      },
-      (e) => this.continueDrawing(e)
-    );
   }
   // Create toolbar
   createToolbar() {
@@ -3699,7 +3696,7 @@ var CollaborationWhiteboardSystem = class {
         position: import_math7.Vector3.create(0, 0, 0.1),
         scale: import_math7.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs9.TextShape.create(buttonText, {
         text: tool.icon,
         textColor: import_math7.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -3787,7 +3784,7 @@ var CollaborationWhiteboardSystem = class {
         position: import_math7.Vector3.create(0, 0, 0.1),
         scale: import_math7.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs9.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math7.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -3861,9 +3858,10 @@ var CollaborationWhiteboardSystem = class {
     if (!this.isDrawing || !this.currentDrawing) return;
     this.isDrawing = false;
     this.currentUser.isDrawing = false;
-    if (this.currentDrawing.points.length > 1) {
-      this.currentSession.drawings.push(this.currentDrawing);
-      this.currentSession.lastModified = Date.now();
+    const session = this.currentSession;
+    if (this.currentDrawing.points.length > 1 && session) {
+      session.drawings.push(this.currentDrawing);
+      session.lastModified = Date.now();
       this.shareDrawing(this.currentDrawing);
     }
     this.currentDrawing = null;
@@ -4403,7 +4401,7 @@ var ContentManagementSystem = class {
       position: import_math8.Vector3.create(0, 1.7, 0.1),
       scale: import_math8.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs10.TextShape.create(title, {
       text: "\u{1F4DA} CONTENT MANAGEMENT",
       textColor: import_math8.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -4434,7 +4432,7 @@ var ContentManagementSystem = class {
       position: import_math8.Vector3.create(0, 0.1, 0.1),
       scale: import_math8.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(browserText, {
+    import_ecs10.TextShape.create(browserText, {
       text: "\u{1F4C2} Content Browser",
       textColor: import_math8.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -4470,7 +4468,7 @@ var ContentManagementSystem = class {
         position: import_math8.Vector3.create(0, 0, 0.1),
         scale: import_math8.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs10.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math8.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -4506,7 +4504,7 @@ var ContentManagementSystem = class {
       position: import_math8.Vector3.create(0, 0.1, 0.1),
       scale: import_math8.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(editorText, {
+    import_ecs10.TextShape.create(editorText, {
       text: "\u270F\uFE0F Content Editor",
       textColor: import_math8.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -4533,7 +4531,7 @@ var ContentManagementSystem = class {
       position: import_math8.Vector3.create(0, 0, 0.1),
       scale: import_math8.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(managerText, {
+    import_ecs10.TextShape.create(managerText, {
       text: "\u{1F4C1} Collections",
       textColor: import_math8.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -4560,7 +4558,7 @@ var ContentManagementSystem = class {
       position: import_math8.Vector3.create(0, 0, 0.1),
       scale: import_math8.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(analyticsText, {
+    import_ecs10.TextShape.create(analyticsText, {
       text: "\u{1F4CA} Analytics",
       textColor: import_math8.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -4727,7 +4725,7 @@ var ContentManagementSystem = class {
   updateSearchIndex(item) {
     const searchableText = [
       item.title,
-      item.description,
+      item.metadata.description,
       item.category,
       ...item.tags,
       item.metadata.author
@@ -5052,12 +5050,12 @@ var CrossPlatformSyncSystem = class {
           case "first_write_wins":
             return conflict.changes[0];
           case "merge":
-            return this.mergeChanges(conflict.changes);
+            return this.conflictResolver.merge(conflict.changes);
           case "manual":
             return null;
           // Requires manual intervention
           case "voting":
-            return this.resolveByVoting(conflict.changes);
+            return this.conflictResolver.resolveByVoting(conflict.changes);
           default:
             return conflict.changes[conflict.changes.length - 1];
         }
@@ -5105,7 +5103,7 @@ var CrossPlatformSyncSystem = class {
       position: import_math9.Vector3.create(0, 1.7, 0.1),
       scale: import_math9.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs11.TextShape.create(title, {
       text: "\u{1F504} CROSS-PLATFORM SYNC",
       textColor: import_math9.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -5144,7 +5142,7 @@ var CrossPlatformSyncSystem = class {
         position: import_math9.Vector3.create(0, 0, 0.1),
         scale: import_math9.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs11.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math9.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -5183,7 +5181,7 @@ var CrossPlatformSyncSystem = class {
         position: import_math9.Vector3.create(0, 0, 0.1),
         scale: import_math9.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(platformText, {
+      import_ecs11.TextShape.create(platformText, {
         text: this.getPlatformIcon(platform),
         textColor: import_math9.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -5219,7 +5217,7 @@ var CrossPlatformSyncSystem = class {
       position: import_math9.Vector3.create(0, 0, 0.1),
       scale: import_math9.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(statusText, {
+    import_ecs11.TextShape.create(statusText, {
       text: "\u{1F4CA} Status: Ready",
       textColor: import_math9.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -5246,7 +5244,7 @@ var CrossPlatformSyncSystem = class {
       position: import_math9.Vector3.create(0, 0, 0.1),
       scale: import_math9.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(conflictText, {
+    import_ecs11.TextShape.create(conflictText, {
       text: "\u26A0\uFE0F Conflicts: 0",
       textColor: import_math9.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -5730,9 +5728,9 @@ var EmotionDetectionSystem = class {
       action: {
         type: "play_music",
         parameters: /* @__PURE__ */ new Map([
-          ["genre", "upbeat"],
-          ["volume", 0.6],
-          ["duration", 3e3]
+          ["hue", 240],
+          ["saturation", 0.8],
+          ["intensity", 0.5]
         ]),
         duration: 3e3,
         intensity: 0.7
@@ -5747,9 +5745,9 @@ var EmotionDetectionSystem = class {
       action: {
         type: "adjust_lighting",
         parameters: /* @__PURE__ */ new Map([
-          ["brightness", 0.7],
-          ["color", "cool"],
-          ["duration", 1e4]
+          ["frequency", 0.8],
+          ["color", "calm"],
+          ["pattern", "pulsing"]
         ]),
         duration: 1e4,
         intensity: 0.9
@@ -5844,7 +5842,7 @@ var EmotionDetectionSystem = class {
       position: import_math10.Vector3.create(0, 1.2, 0.1),
       scale: import_math10.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs12.TextShape.create(title, {
       text: "\u{1F60A} EMOTION DETECTION",
       textColor: import_math10.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -5877,7 +5875,7 @@ var EmotionDetectionSystem = class {
         position: import_math10.Vector3.create(0, 0, 0.1),
         scale: import_math10.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(emotionText, {
+      import_ecs12.TextShape.create(emotionText, {
         text: this.getEmotionIcon(emotion),
         textColor: import_math10.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -5920,7 +5918,7 @@ var EmotionDetectionSystem = class {
         position: import_math10.Vector3.create(0, 0, 0.1),
         scale: import_math10.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs12.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math10.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -5956,7 +5954,7 @@ var EmotionDetectionSystem = class {
       position: import_math10.Vector3.create(0, 0, 0.1),
       scale: import_math10.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(profileText, {
+    import_ecs12.TextShape.create(profileText, {
       text: "\u{1F464} Profile: Active",
       textColor: import_math10.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -6140,26 +6138,32 @@ var EmotionDetectionSystem = class {
   }
   // Trigger adaptive response
   triggerAdaptiveResponse(emotionData, profile) {
-    const responseKey = `${emotionData.primaryEmotion}_${this.getBestResponseType(emotionData, profile)}`;
-    const response = this.adaptiveResponses.get(responseKey);
-    if (response) {
-      const conditionsMet = response.conditions.every((condition) => {
-        const value = emotionData.intensity;
-        switch (condition.operator) {
-          case "greater":
-            return value > condition.value;
-          case "less":
-            return value < condition.value;
-          case "equals":
-            return value === condition.value;
-          case "between":
-            return value >= condition.value[0] && value <= condition.value[1];
-          default:
-            return false;
+    const responseType = this.getBestResponseType(emotionData, profile);
+    const responseKey = `${emotionData.primaryEmotion}_${responseType}`;
+    for (const [key, response] of this.adaptiveResponses.entries()) {
+      if (response.emotionTrigger === emotionData.primaryEmotion) {
+        const conditionsMet = response.conditions.every((condition) => {
+          const value = emotionData.intensity;
+          switch (condition.operator) {
+            case "greater":
+              return value > condition.value;
+            case "less":
+              return value < condition.value;
+            case "equals":
+              return value === condition.value;
+            case "between":
+              if (Array.isArray(condition.value) && condition.value.length === 2) {
+                return value >= condition.value[0] && value <= condition.value[1];
+              }
+              return false;
+            default:
+              return false;
+          }
+        });
+        if (conditionsMet) {
+          this.executeAdaptiveResponse(response, emotionData);
+          return;
         }
-      });
-      if (conditionsMet) {
-        this.executeAdaptiveResponse(response, emotionData);
       }
     }
   }
@@ -6450,7 +6454,8 @@ var AnimationSystem = class {
       } else if (data.type === "rotate") {
         transform.rotation = import_math12.Quaternion.fromEulerDegrees(0, data.time * data.speed * 10, 0);
       } else if (data.type === "float") {
-        transform.position.y = data.baseY + Math.sin(data.time * data.speed) * data.intensity;
+        const baseY = data.baseY || 0;
+        transform.position.y = baseY + Math.sin(data.time * data.speed) * data.intensity;
       }
     });
   }
@@ -6539,14 +6544,8 @@ function createEnhancedArchitecture() {
     emissiveColor: import_math12.Color4.create(0.3, 0.5, 1, 0.4),
     emissiveIntensity: 2
   });
-  const pillar1 = createNeuralPillar(
-    import_math12.Vector3.create(2, 3, 0.5),
-    import_math12.Vector3.create(1.2, 6, 1.2)
-  );
-  const pillar2 = createNeuralPillar(
-    import_math12.Vector3.create(14, 3, 0.5),
-    import_math12.Vector3.create(1.2, 6, 1.2)
-  );
+  const pillar1 = createNeuralPillar(import_math12.Vector3.create(2, 3, 0.5), import_math12.Vector3.create(1.2, 6, 1.2));
+  const pillar2 = createNeuralPillar(import_math12.Vector3.create(14, 3, 0.5), import_math12.Vector3.create(1.2, 6, 1.2));
   const neonStrip1 = import_ecs14.engine.addEntity();
   import_ecs14.Transform.create(neonStrip1, {
     position: import_math12.Vector3.create(8, 5.9, 8),
@@ -6896,6 +6895,8 @@ function updateAlert(message, alertType = "INFO") {
 }
 
 // src/enhanced-network.ts
+var BACKEND_URL = "http://localhost:5000";
+var API_KEY = "nexus_sovereign_dev_key_2026";
 async function fetchEnhancedSystemStats() {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -6946,6 +6947,31 @@ async function fetchAlertMessages() {
       resolve(alerts);
     }, 150);
   });
+}
+async function reportPresence(zoneId, occupied) {
+  console.log(`[Network] Reporting presence change: ${zoneId} -> ${occupied}`);
+  try {
+    const response = await fetch(`${BACKEND_URL}/api/v1/iot/webhook`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-API-Key": API_KEY
+      },
+      body: JSON.stringify({
+        event: occupied ? "meta_presence_enter" : "meta_presence_exit",
+        source: "decentraland-parcel",
+        data: {
+          zone: zoneId,
+          timestamp: Date.now(),
+          platform: "decentraland"
+        }
+      })
+    });
+    return response.status === 200;
+  } catch (error) {
+    console.warn(`[Network] Presence sync failed (expected in isolated local): ${error}`);
+    return false;
+  }
 }
 async function runSystemDiagnostics() {
   return new Promise((resolve) => {
@@ -7041,7 +7067,7 @@ var GestureRecognitionSystem = class {
       position: import_math14.Vector3.create(0, 0.3, 0.1),
       scale: import_math14.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs16.TextShape.create(title, {
       text: "\u{1F44B} GESTURE CONTROL ACTIVE",
       textColor: import_math14.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -7077,7 +7103,7 @@ var GestureRecognitionSystem = class {
         position: import_math14.Vector3.create(0, 0, 0.1),
         scale: import_math14.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(gestureText, {
+      import_ecs16.TextShape.create(gestureText, {
         text: pos.gesture,
         textColor: import_math14.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -7443,10 +7469,11 @@ var GestureRecognitionSystem = class {
       opacity -= 0.02;
       const transform = import_ecs16.Transform.getMutable(feedback);
       transform.scale = import_math14.Vector3.create(scale, scale, scale);
-      const material = import_ecs16.Material.getMutable(feedback);
-      if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = import_math14.Color4.create(0.2, 0.8, 1, opacity);
-      }
+      const material = import_ecs16.Material.get(feedback);
+      import_ecs16.Material.setPbrMaterial(feedback, {
+        ...material,
+        albedoColor: import_math14.Color4.create(0.2, 0.8, 1, opacity)
+      });
       if (opacity > 0) {
         setTimeout(animate, 16);
       } else {
@@ -7482,10 +7509,11 @@ var GestureRecognitionSystem = class {
     }
     trail.forEach((point, index) => {
       const opacity = index / trail.length * 0.6;
-      const material = import_ecs16.Material.getMutable(point);
-      if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = import_math14.Color4.create(0.5, 0.8, 1, opacity);
-      }
+      const material = import_ecs16.Material.get(point);
+      import_ecs16.Material.setPbrMaterial(point, {
+        ...material,
+        albedoColor: import_math14.Color4.create(0.5, 0.8, 1, opacity)
+      });
     });
   }
   // Enable/disable gesture recognition
@@ -7535,51 +7563,31 @@ var HapticFeedbackSystem = class {
     this.devices = /* @__PURE__ */ new Map();
     this.patterns = /* @__PURE__ */ new Map();
     this.zones = /* @__PURE__ */ new Map();
-    this.isInitialized = false;
     this.activeEvents = /* @__PURE__ */ new Map();
-    this.globalIntensity = 0.8;
+    this.isInitialized = false;
+    this.globalIntensity = 0.6;
     this.isSystemEnabled = true;
-    this.initializeHapticEngine();
+    this.hapticEngine = {
+      playPattern: (device, pattern, intensity) => {
+        console.log(
+          `\u{1F4F3} Playing ${pattern.name} on ${device.name} at ${intensity.toFixed(2)} intensity`
+        );
+      },
+      stopPattern: (device, patternId) => {
+        console.log(`\u{1F4F4} Stopping pattern ${patternId} on ${device.name}`);
+      }
+    };
   }
-  // Initialize haptic feedback system
+  // Initialize haptic system
   initialize() {
-    console.log("\u{1F3AF} Haptic Feedback System Initializing...");
+    console.log("\u{1F4F1} Haptic Feedback System Initializing...");
     this.setupHapticDevices();
     this.createHapticPatterns();
     this.createHapticZones();
     this.createHapticUI();
     this.startHapticEngine();
     this.isInitialized = true;
-    console.log("\u{1F3AF} Haptic Feedback System Ready!");
-  }
-  // Initialize haptic engine
-  initializeHapticEngine() {
-    this.hapticEngine = {
-      playPattern: (device, pattern, intensity) => {
-        console.log(`\u{1F4F3} Playing pattern ${pattern.name} on ${device.name}`);
-        const effectiveIntensity = Math.min(
-          intensity * device.intensity * this.globalIntensity,
-          device.capabilities.maxIntensity
-        );
-        return {
-          success: true,
-          duration: pattern.duration,
-          intensity: effectiveIntensity
-        };
-      },
-      stopPattern: (device, patternId) => {
-        console.log(`\u{1F6D1} Stopping pattern ${patternId} on ${device.name}`);
-        return { success: true };
-      },
-      playWaveform: (device, waveform, intensity) => {
-        console.log(`\u{1F30A} Playing waveform on ${device.name}`);
-        return { success: true };
-      },
-      setIntensity: (device, intensity) => {
-        device.intensity = Math.max(0, Math.min(1, intensity));
-        return { success: true };
-      }
-    };
+    console.log("\u{1F4F1} Haptic Feedback System Ready!");
   }
   // Setup haptic devices
   setupHapticDevices() {
@@ -7590,12 +7598,12 @@ var HapticFeedbackSystem = class {
       isConnected: true,
       capabilities: {
         supportsVibration: true,
-        supportsForceFeedback: true,
+        supportsForceFeedback: false,
         supportsTemperature: false,
-        supportsTexture: true,
+        supportsTexture: false,
         maxIntensity: 1,
         responseTime: 10,
-        channels: 2
+        channels: 1
       },
       intensity: 0.8,
       batteryLevel: 0.85
@@ -7608,26 +7616,26 @@ var HapticFeedbackSystem = class {
       capabilities: {
         supportsVibration: true,
         supportsForceFeedback: true,
-        supportsTemperature: true,
+        supportsTemperature: false,
         supportsTexture: true,
         maxIntensity: 0.9,
         responseTime: 15,
         channels: 5
       },
       intensity: 0.7,
-      batteryLevel: 0.6
+      batteryLevel: 0.75
     };
     const hapticVest = {
       id: "device_haptic_vest",
       name: "Haptic Vest",
       type: "vest",
-      isConnected: false,
+      isConnected: true,
       capabilities: {
         supportsVibration: true,
         supportsForceFeedback: false,
-        supportsTemperature: true,
+        supportsTemperature: false,
         supportsTexture: false,
-        maxIntensity: 1,
+        maxIntensity: 0.7,
         responseTime: 25,
         channels: 8
       },
@@ -7863,7 +7871,7 @@ var HapticFeedbackSystem = class {
       position: import_math15.Vector3.create(0, 1.7, 0.1),
       scale: import_math15.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs17.TextShape.create(title, {
       text: "\u{1F3AF} HAPTIC FEEDBACK",
       textColor: import_math15.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -7897,7 +7905,7 @@ var HapticFeedbackSystem = class {
         position: import_math15.Vector3.create(0, 0, 0.1),
         scale: import_math15.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(deviceText, {
+      import_ecs17.TextShape.create(deviceText, {
         text: this.getDeviceIcon(device.type),
         textColor: import_math15.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -7936,7 +7944,7 @@ var HapticFeedbackSystem = class {
         position: import_math15.Vector3.create(0, 0, 0.1),
         scale: import_math15.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs17.TextShape.create(buttonText, {
         text: this.getPatternIcon(pattern),
         textColor: import_math15.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -7972,7 +7980,7 @@ var HapticFeedbackSystem = class {
       position: import_math15.Vector3.create(0, 0, 0.1),
       scale: import_math15.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(intensityText, {
+    import_ecs17.TextShape.create(intensityText, {
       text: `\u{1F50A} Intensity: ${(this.globalIntensity * 100).toFixed(0)}%`,
       textColor: import_math15.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -8009,7 +8017,7 @@ var HapticFeedbackSystem = class {
         position: import_math15.Vector3.create(0, 0, 0.1),
         scale: import_math15.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(zoneText, {
+      import_ecs17.TextShape.create(zoneText, {
         text: zone.name,
         textColor: import_math15.Color4.create(1, 1, 1, 1),
         fontSize: 1.2,
@@ -8079,8 +8087,9 @@ var HapticFeedbackSystem = class {
       this.applyHapticFeedback(event, zone, devices);
       event.processed = true;
     });
+    const now = Date.now();
     this.activeEvents.forEach((event, id) => {
-      if (event.processed && Date.now() - event.timestamp > 5e3) {
+      if (event.processed && now - event.timestamp > 5e3) {
         this.activeEvents.delete(id);
       }
     });
@@ -8123,15 +8132,14 @@ var HapticFeedbackSystem = class {
     switch (eventType) {
       case "touch":
       case "interaction":
-        return this.patterns.get("pattern_click");
+        return this.patterns.get("pattern_click") || null;
       case "collision":
-        return this.patterns.get("pattern_impact");
+        return this.patterns.get("pattern_impact") || null;
       case "feedback":
-        return this.patterns.get("pattern_pulse");
       case "alert":
-        return this.patterns.get("pattern_pulse");
+        return this.patterns.get("pattern_pulse") || null;
       case "ambient":
-        return this.patterns.get("pattern_ambient");
+        return this.patterns.get("pattern_ambient") || null;
       default:
         return null;
     }
@@ -8156,7 +8164,8 @@ var HapticFeedbackSystem = class {
           if (effect.type === "vibration" && effect.pattern) {
             const devices = this.findDevicesForZone(zone);
             devices.forEach((device) => {
-              const pattern = this.patterns.get(effect.pattern);
+              const patternId = effect.pattern;
+              const pattern = this.patterns.get(patternId);
               if (pattern) {
                 this.hapticEngine.playPattern(device, pattern, effect.intensity);
               }
@@ -8365,7 +8374,7 @@ var HolographicDataWall = class {
       position: import_math16.Vector3.create(0, 4.5, 0.1),
       scale: import_math16.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(titleEntity, {
+    import_ecs18.TextShape.create(titleEntity, {
       text: "\u{1F4CA} HOLOGRAPHIC DATA VISUALIZATION",
       textColor: import_math16.Color4.create(0.5, 0.8, 1, 1),
       fontSize: 4,
@@ -8431,7 +8440,7 @@ var HolographicDataWall = class {
         position: import_math16.Vector3.create(startX + index * spacing, -3.5, 0.3),
         scale: import_math16.Vector3.create(0.2, 0.2, 0.2)
       });
-      TextShape.create(label, {
+      import_ecs18.TextShape.create(label, {
         text: point.label,
         textColor: import_math16.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -8591,11 +8600,12 @@ var HolographicDataWall = class {
       this.animationTime += 0.016;
       this.visualElements.forEach((element, index) => {
         if (index % 3 === 0) {
-          const material = import_ecs18.Material.getMutable(element);
-          if (material && material.$case === "pbr") {
-            const pulse = Math.sin(this.animationTime * 2 + index * 0.1) * 0.3 + 0.7;
-            material.pbr.emissiveIntensity = pulse * 2;
-          }
+          const material = import_ecs18.Material.get(element);
+          const pulse = Math.sin(this.animationTime * 2 + index * 0.1) * 0.3 + 0.7;
+          import_ecs18.Material.setPbrMaterial(element, {
+            ...material,
+            emissiveIntensity: pulse * 2
+          });
         }
       });
     });
@@ -8933,7 +8943,7 @@ var MultiplayerSystem = class {
   async connectToServer() {
     this.connectionStatus = "connecting";
     console.log("\u{1F50C} Connecting to multiplayer server...");
-    await new Promise((resolve) => setTimeout(resolve, 2e3));
+    await new Promise((resolve) => setTimeout(() => resolve(), 2e3));
     this.connectionStatus = "connected";
     console.log("\u2705 Connected to multiplayer server");
     setTimeout(() => {
@@ -9249,8 +9259,8 @@ var PhysicsInteractionSystem = class {
       position: import_math18.Vector3.create(0, 1.7, 0.1),
       scale: import_math18.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
-      text: "\u269B\uFE0F PHYSICS INTERACTION",
+    import_ecs20.TextShape.create(title, {
+      text: "PHYSICS INTERACTION",
       textColor: import_math18.Color4.create(1, 1, 1, 1),
       fontSize: 2,
       textAlign: 3
@@ -9263,10 +9273,10 @@ var PhysicsInteractionSystem = class {
   // Create object controls
   createObjectControls() {
     const controls = [
-      { id: "spawn_ball", icon: "\u26AA", name: "Spawn Ball" },
-      { id: "spawn_box", icon: "\u2B1C", name: "Spawn Box" },
-      { id: "spawn_cylinder", icon: "\u{1F964}", name: "Spawn Cylinder" },
-      { id: "clear_all", icon: "\u{1F5D1}\uFE0F", name: "Clear All" }
+      { id: "spawn_ball", icon: "Spawn Ball", name: "Spawn Ball" },
+      { id: "spawn_box", icon: "Spawn Box", name: "Spawn Box" },
+      { id: "spawn_cylinder", icon: "Spawn Cylinder", name: "Spawn Cylinder" },
+      { id: "clear_all", icon: "Clear All", name: "Clear All" }
     ];
     let xOffset = -0.9;
     controls.forEach((control) => {
@@ -9288,10 +9298,10 @@ var PhysicsInteractionSystem = class {
         position: import_math18.Vector3.create(0, 0, 0.1),
         scale: import_math18.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs20.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math18.Color4.create(1, 1, 1, 1),
-        fontSize: 2,
+        fontSize: 1,
         textAlign: 3
       });
       import_ecs20.pointerEventsSystem.onPointerDown(
@@ -9307,10 +9317,10 @@ var PhysicsInteractionSystem = class {
   // Create force field controls
   createForceFieldControls() {
     const controls = [
-      { id: "gravity_field", icon: "\u{1F30D}", name: "Gravity Field" },
-      { id: "magnetic_field", icon: "\u{1F9F2}", name: "Magnetic Field" },
-      { id: "wind_field", icon: "\u{1F4A8}", name: "Wind Field" },
-      { id: "explosion", icon: "\u{1F4A5}", name: "Explosion" }
+      { id: "gravity_field", icon: "Gravity", name: "Gravity Field" },
+      { id: "magnetic_field", icon: "Magnetic", name: "Magnetic Field" },
+      { id: "wind_field", icon: "Wind", name: "Wind Field" },
+      { id: "explosion", icon: "Explosion", name: "Explosion" }
     ];
     let xOffset = -0.9;
     controls.forEach((control) => {
@@ -9332,10 +9342,10 @@ var PhysicsInteractionSystem = class {
         position: import_math18.Vector3.create(0, 0, 0.1),
         scale: import_math18.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs20.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math18.Color4.create(1, 1, 1, 1),
-        fontSize: 2,
+        fontSize: 1,
         textAlign: 3
       });
       import_ecs20.pointerEventsSystem.onPointerDown(
@@ -9351,9 +9361,9 @@ var PhysicsInteractionSystem = class {
   // Create constraint controls
   createConstraintControls() {
     const controls = [
-      { id: "spring_constraint", icon: "\u{1F300}", name: "Spring" },
-      { id: "hinge_constraint", icon: "\u{1F6AA}", name: "Hinge" },
-      { id: "fixed_constraint", icon: "\u{1F512}", name: "Fixed" }
+      { id: "spring_constraint", icon: "Spring", name: "Spring" },
+      { id: "hinge_constraint", icon: "Hinge", name: "Hinge" },
+      { id: "fixed_constraint", icon: "Fixed", name: "Fixed" }
     ];
     let xOffset = -0.6;
     controls.forEach((control) => {
@@ -9375,10 +9385,10 @@ var PhysicsInteractionSystem = class {
         position: import_math18.Vector3.create(0, 0, 0.1),
         scale: import_math18.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs20.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math18.Color4.create(1, 1, 1, 1),
-        fontSize: 2,
+        fontSize: 1,
         textAlign: 3
       });
       import_ecs20.pointerEventsSystem.onPointerDown(
@@ -9411,8 +9421,8 @@ var PhysicsInteractionSystem = class {
       position: import_math18.Vector3.create(0, 0, 0.1),
       scale: import_math18.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(statsText, {
-      text: "\u{1F4CA} Objects: 0 | Collisions: 0",
+    import_ecs20.TextShape.create(statsText, {
+      text: "Objects: 0 | Collisions: 0",
       textColor: import_math18.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
       textAlign: 3
@@ -9446,7 +9456,7 @@ var PhysicsInteractionSystem = class {
       collisionMask: 255
     };
     this.objects.set(ground.id, ground);
-    this.createPhysicsEntity(ground, "material_metal");
+    this.createPhysicsObject(ground, "material_metal");
   }
   // Create initial objects
   createInitialObjects() {
@@ -9454,7 +9464,7 @@ var PhysicsInteractionSystem = class {
       this.spawnPhysicsObject("ball", import_math18.Vector3.create(6 + i * 2, 3 + i, 6 + i));
     }
   }
-  // Create physics entity
+  // Create physics object
   createPhysicsObject(obj, materialId) {
     const entity = import_ecs20.engine.addEntity();
     import_ecs20.Transform.create(entity, {
@@ -9469,7 +9479,7 @@ var PhysicsInteractionSystem = class {
     } else if (obj.id.includes("box")) {
       import_ecs20.MeshRenderer.setBox(entity);
     } else if (obj.id.includes("cylinder")) {
-      import_ecs20.MeshRenderer.setCylinder(entity, 1, 1, 1, 1, 1);
+      import_ecs20.MeshRenderer.setCylinder(entity, 0.5, 0.5);
     } else {
       import_ecs20.MeshRenderer.setBox(entity);
     }
@@ -9541,13 +9551,16 @@ var PhysicsInteractionSystem = class {
   // Check ground collision
   checkGroundCollision(obj) {
     if (obj.position.y <= obj.scale.y / 2) {
-      obj.position.y = obj.scale.y / 2;
+      obj.position = import_math18.Vector3.create(obj.position.x, obj.scale.y / 2, obj.position.z);
       if (obj.velocity.y < 0) {
-        obj.velocity.y = -obj.velocity.y * obj.restitution;
-        obj.velocity.x *= 1 - obj.friction * 0.1;
-        obj.velocity.z *= 1 - obj.friction * 0.1;
+        obj.velocity = import_math18.Vector3.create(obj.velocity.x, -obj.velocity.y * obj.restitution, obj.velocity.z);
+        obj.velocity = import_math18.Vector3.create(
+          obj.velocity.x * (1 - obj.friction * 0.1),
+          obj.velocity.y,
+          obj.velocity.z * (1 - obj.friction * 0.1)
+        );
         if (Math.abs(obj.velocity.y) > 0.5) {
-          soundSystem.playInteractionSound("impact");
+          soundSystem.playInteractionSound("click");
         }
       }
       obj.isGrounded = true;
@@ -9623,7 +9636,7 @@ var PhysicsInteractionSystem = class {
       objB.velocity = import_math18.Vector3.add(objB.velocity, impulse);
     }
     this.collisions.set(collision.id, collision);
-    soundSystem.playInteractionSound("collision");
+    soundSystem.playInteractionSound("click");
   }
   // Apply force fields
   applyForceFields() {
@@ -9678,7 +9691,7 @@ var PhysicsInteractionSystem = class {
   // Apply spring constraint
   applySpringConstraint(objA, objB, constraint) {
     const distance = import_math18.Vector3.distance(objA.position, objB.position);
-    const restLength = constraint.minDistance || 2;
+    const restLength = constraint.limits && constraint.limits.minDistance || 2;
     const displacement = distance - restLength;
     if (Math.abs(displacement) > 0.01) {
       const direction = import_math18.Vector3.normalize(import_math18.Vector3.subtract(objB.position, objA.position));
@@ -9689,14 +9702,14 @@ var PhysicsInteractionSystem = class {
   }
   // Apply hinge constraint
   applyHingeConstraint(objA, objB, constraint) {
-    const targetPos = import_math18.Vector3.add(objB.position, constraint.positionB);
+    const targetPos = import_math18.Vector3.add(objB.position, constraint.positionB || import_math18.Vector3.Zero());
     const direction = import_math18.Vector3.subtract(targetPos, objA.position);
     objA.position = import_math18.Vector3.add(targetPos, import_math18.Vector3.scale(direction, -0.5));
     objB.position = import_math18.Vector3.add(targetPos, import_math18.Vector3.scale(direction, 0.5));
   }
   // Apply fixed constraint
   applyFixedConstraint(objA, objB, constraint) {
-    const targetPos = import_math18.Vector3.add(objB.position, constraint.positionB);
+    const targetPos = import_math18.Vector3.add(objB.position, constraint.positionB || import_math18.Vector3.Zero());
     objA.position = targetPos;
     objA.velocity = import_math18.Vector3.create(0, 0, 0);
   }
@@ -9704,7 +9717,7 @@ var PhysicsInteractionSystem = class {
   updatePhysicsStats() {
     const objectCount = this.objects.size;
     const collisionCount = this.collisions.size;
-    console.log(`\u{1F4CA} Objects: ${objectCount} | Collisions: ${collisionCount}`);
+    console.log(`Objects: ${objectCount} | Collisions: ${collisionCount}`);
   }
   // Handle object control
   handleObjectControl(controlId) {
@@ -9789,7 +9802,7 @@ var PhysicsInteractionSystem = class {
     };
     this.objects.set(obj.id, obj);
     this.createPhysicsObject(obj, "material_rubber");
-    console.log(`\u{1F3BE} Spawned ${type}: ${obj.id}`);
+    console.log(`Spawned ${type}: ${obj.id}`);
   }
   // Create force field
   createForceField(type) {
@@ -9804,7 +9817,7 @@ var PhysicsInteractionSystem = class {
       affectedObjects: Array.from(this.objects.keys()).filter((id) => id !== "ground_plane")
     };
     this.forceFields.set(field.id, field);
-    console.log(`\u26A1 Created ${type} force field: ${field.id}`);
+    console.log(`Created ${type} force field: ${field.id}`);
   }
   // Create explosion
   createExplosion() {
@@ -9820,8 +9833,8 @@ var PhysicsInteractionSystem = class {
         obj.velocity = import_math18.Vector3.add(obj.velocity, force);
       }
     });
-    soundSystem.playInteractionSound("explosion");
-    console.log("\u{1F4A5} Explosion created!");
+    soundSystem.playInteractionSound("alert");
+    console.log("Explosion created!");
   }
   // Create spring constraint
   createSpringConstraint() {
@@ -9834,12 +9847,14 @@ var PhysicsInteractionSystem = class {
       objectB: objectIds[1],
       positionA: import_math18.Vector3.create(0, 0, 0),
       positionB: import_math18.Vector3.create(0, 0, 0),
-      minDistance: 2,
+      limits: {
+        minDistance: 2
+      },
       strength: 5,
       damping: 0.5
     };
     this.constraints.set(constraint.id, constraint);
-    console.log(`\u{1F300} Created spring constraint: ${constraint.id}`);
+    console.log(`Created spring constraint: ${constraint.id}`);
   }
   // Create hinge constraint
   createHingeConstraint() {
@@ -9860,7 +9875,7 @@ var PhysicsInteractionSystem = class {
       damping: 0.5
     };
     this.constraints.set(constraint.id, constraint);
-    console.log(`\u{1F6AA} Created hinge constraint: ${constraint.id}`);
+    console.log(`Created hinge constraint: ${constraint.id}`);
   }
   // Create fixed constraint
   createFixedConstraint() {
@@ -9877,7 +9892,7 @@ var PhysicsInteractionSystem = class {
       damping: 1
     };
     this.constraints.set(constraint.id, constraint);
-    console.log(`\u{1F512} Created fixed constraint: ${constraint.id}`);
+    console.log(`Created fixed constraint: ${constraint.id}`);
   }
   // Interact with object
   interactWithObject(objectId) {
@@ -9889,8 +9904,7 @@ var PhysicsInteractionSystem = class {
       (Math.random() - 0.5) * 10
     );
     obj.velocity = import_math18.Vector3.add(obj.velocity, impulse);
-    soundSystem.playInteractionSound("impact");
-    console.log(`\u{1F44A} Applied impulse to ${objectId}`);
+    soundSystem.playInteractionSound("click");
   }
   // Clear all objects
   clearAllObjects() {
@@ -9902,7 +9916,7 @@ var PhysicsInteractionSystem = class {
     this.forceFields.clear();
     this.constraints.clear();
     this.collisions.clear();
-    console.log("\u{1F5D1}\uFE0F Cleared all physics objects");
+    console.log("Cleared all physics objects");
     soundSystem.playInteractionSound("click");
   }
   // Get physics objects
@@ -9920,7 +9934,7 @@ var PhysicsInteractionSystem = class {
   // Set gravity
   setGravity(gravity) {
     this.gravity = gravity;
-    console.log(`\u{1F30D} Gravity set to: (${gravity.x}, ${gravity.y}, ${gravity.z})`);
+    console.log(`Gravity set to: (${gravity.x}, ${gravity.y}, ${gravity.z})`);
   }
   // Cleanup system
   cleanup() {
@@ -9973,7 +9987,7 @@ var ProceduralGenerationSystem = class {
       position: import_math19.Vector3.create(0, 0.7, 0.1),
       scale: import_math19.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs21.TextShape.create(title, {
       text: "\u{1F30D} INFINITE WORLD",
       textColor: import_math19.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -10004,7 +10018,7 @@ var ProceduralGenerationSystem = class {
         position: import_math19.Vector3.create(0, 0, 0.1),
         scale: import_math19.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs21.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math19.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -10455,7 +10469,7 @@ var ResponsiveUISystem = class {
     }
     const velocity = distance / duration * 1e3;
     if (velocity >= this.gestureThresholds.swipe.minVelocity && distance >= this.gestureThresholds.swipe.minDistance) {
-      const direction = import_math20.Vector3.subtract(endPosition, startPoint.position).normalize();
+      const direction = import_math20.Vector3.normalize(import_math20.Vector3.subtract(endPosition, startPoint.position));
       this.triggerGesture("swipe", startPoint.position, endPosition, duration, distance, direction);
       return;
     }
@@ -10514,10 +10528,11 @@ var ResponsiveUISystem = class {
       opacity -= 0.02;
       const transform = import_ecs22.Transform.getMutable(entity);
       transform.scale = import_math20.Vector3.create(scale, scale, scale);
-      const material = import_ecs22.Material.getMutable(entity);
-      if (material && material.$case === "pbr") {
-        material.pbr.albedoColor = import_math20.Color4.create(0.5, 0.8, 1, opacity);
-      }
+      import_ecs22.Material.setPbrMaterial(entity, {
+        albedoColor: import_math20.Color4.create(0.5, 0.8, 1, opacity),
+        emissiveColor: import_math20.Color4.create(0.5, 0.8, 1, opacity),
+        emissiveIntensity: 3
+      });
       if (opacity > 0) {
         setTimeout(animate, 16);
       }
@@ -10577,12 +10592,11 @@ var ResponsiveUISystem = class {
   updateHoverStates() {
     this.components.forEach((component) => {
       if (!component.interactive || !component.visible) return;
-      const material = import_ecs22.Material.getMutable(component.entity);
-      if (material && material.$case === "pbr") {
-        const time = Date.now() / 1e3;
-        const pulse = Math.sin(time * 3) * 0.1 + 0.9;
-        material.pbr.emissiveIntensity = pulse * 2;
-      }
+      const time = Date.now() / 1e3;
+      const pulse = Math.sin(time * 3) * 0.1 + 0.9;
+      import_ecs22.Material.setPbrMaterial(component.entity, {
+        emissiveIntensity: pulse * 2
+      });
     });
   }
   // Start animation loop
@@ -11143,19 +11157,18 @@ var SmartRoomSystem = class {
   updateDeviceVisual(deviceId) {
     const device = this.devices.get(deviceId);
     if (!device) return;
-    const deviceEntity = Array.from(import_ecs23.engine.entities).find((e) => {
-      const transform = import_ecs23.Transform.get(e);
-      return transform && import_math21.Vector3.distance(transform.position, device.position) < 0.1;
-    });
-    if (deviceEntity) {
-      const material = import_ecs23.Material.getMutable(deviceEntity);
-      if (material && material.$case === "pbr") {
-        if (device.value === true) {
-          material.pbr.emissiveIntensity = 3;
-        } else {
-          material.pbr.emissiveIntensity = 1;
-        }
+    let deviceEntity = null;
+    for (const [entity] of import_ecs23.engine.getEntitiesWith(import_ecs23.Transform)) {
+      const transform = import_ecs23.Transform.get(entity);
+      if (import_math21.Vector3.distance(transform.position, device.position) < 0.1) {
+        deviceEntity = entity;
+        break;
       }
+    }
+    if (deviceEntity) {
+      import_ecs23.Material.setPbrMaterial(deviceEntity, {
+        emissiveIntensity: device.value === true ? 3 : 1
+      });
     }
   }
   // Activate scene
@@ -11372,7 +11385,7 @@ var VoiceCommandSystem = class {
       position: import_math22.Vector3.create(0, 0.7, 0.1),
       scale: import_math22.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(title, {
+    import_ecs24.TextShape.create(title, {
       text: "\u{1F49C} ASISTENTE DE VOZ (NEXUS)",
       textColor: import_math22.Color4.create(1, 1, 1, 1),
       fontSize: 2,
@@ -11403,25 +11416,36 @@ var VoiceCommandSystem = class {
     import_ecs24.engine.addSystem(() => {
       if (!this.isInitialized) return;
       const time = Date.now() / 1e3;
-      const material = import_ecs24.Material.getMutable(indicator);
-      if (material && material.$case === "pbr") {
+      if (indicator) {
         switch (this.voiceAssistant.processingState) {
           case "idle":
-            material.pbr.albedoColor = import_math22.Color4.create(0.2, 0.8, 0.2, 1);
-            material.pbr.emissiveIntensity = 1;
+            import_ecs24.Material.setPbrMaterial(indicator, {
+              albedoColor: import_math22.Color4.create(0.2, 0.8, 0.2, 1),
+              emissiveIntensity: 1,
+              emissiveColor: import_math22.Color4.create(0.2, 0.8, 0.2, 1)
+            });
             break;
           case "listening":
             const pulse = Math.sin(time * 3) * 0.5 + 0.5;
-            material.pbr.albedoColor = import_math22.Color4.create(1, 0.8, 0.2, 1);
-            material.pbr.emissiveIntensity = 2 + pulse * 2;
+            import_ecs24.Material.setPbrMaterial(indicator, {
+              albedoColor: import_math22.Color4.create(1, 0.8, 0.2, 1),
+              emissiveIntensity: 2 + pulse * 2,
+              emissiveColor: import_math22.Color4.create(1, 0.8, 0.2, 1)
+            });
             break;
           case "processing":
-            material.pbr.albedoColor = import_math22.Color4.create(0.2, 0.2, 1, 1);
-            material.pbr.emissiveIntensity = 3;
+            import_ecs24.Material.setPbrMaterial(indicator, {
+              albedoColor: import_math22.Color4.create(0.2, 0.2, 1, 1),
+              emissiveIntensity: 3,
+              emissiveColor: import_math22.Color4.create(0.2, 0.2, 1, 1)
+            });
             break;
           case "responding":
-            material.pbr.albedoColor = import_math22.Color4.create(0.8, 0.2, 0.8, 1);
-            material.pbr.emissiveIntensity = 2;
+            import_ecs24.Material.setPbrMaterial(indicator, {
+              albedoColor: import_math22.Color4.create(0.8, 0.2, 0.8, 1),
+              emissiveIntensity: 2,
+              emissiveColor: import_math22.Color4.create(0.8, 0.2, 0.8, 1)
+            });
             break;
         }
       }
@@ -11447,7 +11471,7 @@ var VoiceCommandSystem = class {
       position: import_math22.Vector3.create(0, 0, 0.1),
       scale: import_math22.Vector3.create(0.3, 0.3, 0.3)
     });
-    TextShape.create(transcriptText, {
+    import_ecs24.TextShape.create(transcriptText, {
       text: 'Di "Hola Nexus" para comenzar...',
       textColor: import_math22.Color4.create(1, 1, 1, 1),
       fontSize: 1.5,
@@ -11481,7 +11505,7 @@ var VoiceCommandSystem = class {
         position: import_math22.Vector3.create(0, 0, 0.1),
         scale: import_math22.Vector3.create(0.5, 0.5, 0.5)
       });
-      TextShape.create(buttonText, {
+      import_ecs24.TextShape.create(buttonText, {
         text: control.icon,
         textColor: import_math22.Color4.create(1, 1, 1, 1),
         fontSize: 2,
@@ -11934,14 +11958,14 @@ var WeatherSystem = class {
   }
   // Initialize weather system
   initialize() {
-    console.log("\u{1F324}\uFE0F Weather System Initializing...");
+    console.log("Weather System Initializing...");
     this.createSkyDome();
     this.createCelestialBodies();
     this.createWeatherEffects();
     this.startWeatherSimulation();
     this.startDayNightCycle();
     this.isInitialized = true;
-    console.log("\u{1F324}\uFE0F Weather System Ready!");
+    console.log("Weather System Ready!");
   }
   // Create sky dome
   createSkyDome() {
@@ -12135,8 +12159,6 @@ var WeatherSystem = class {
   }
   // Update sky color based on time and weather
   updateSkyColor() {
-    const material = import_ecs25.Material.getMutable(this.skyDome);
-    if (!material || material.$case !== "pbr") return;
     let skyColor;
     const hour = this.currentTime.hour;
     if (hour >= 6 && hour < 12) {
@@ -12163,13 +12185,13 @@ var WeatherSystem = class {
       skyColor = import_math23.Color4.create(0.05, 0.05, 0.2, 1);
     }
     skyColor = this.applyWeatherToSkyColor(skyColor);
-    material.pbr.albedoColor = skyColor;
-    material.pbr.emissiveColor = import_math23.Color4.create(
-      skyColor.r * 0.3,
-      skyColor.g * 0.3,
-      skyColor.b * 0.3,
-      1
-    );
+    if (this.skyDome) {
+      import_ecs25.Material.setPbrMaterial(this.skyDome, {
+        albedoColor: skyColor,
+        emissiveColor: import_math23.Color4.create(skyColor.r * 0.3, skyColor.g * 0.3, skyColor.b * 0.3, 1),
+        emissiveIntensity: 1
+      });
+    }
   }
   // Apply weather effects to sky color
   applyWeatherToSkyColor(baseColor) {
@@ -12252,7 +12274,7 @@ var WeatherSystem = class {
       this.currentState.windSpeed = Math.random() * 15;
     }
     console.log(
-      `\u{1F324}\uFE0F Weather changed to: ${this.currentState.type} (intensity: ${this.currentState.intensity.toFixed(2)})`
+      `Weather changed to: ${this.currentState.type} (intensity: ${this.currentState.intensity.toFixed(2)})`
     );
   }
   // Get current weather state
@@ -12314,12 +12336,70 @@ var WeatherSystem = class {
 };
 var weatherSystem = new WeatherSystem();
 
+// src/perception-sensors.ts
+var import_ecs26 = require("@dcl/sdk/ecs");
+var import_math24 = require("@dcl/sdk/math");
+var PerceptionSensors = class {
+  constructor() {
+    this.zones = [];
+    this.lastUpdate = 0;
+  }
+  initialize() {
+    console.log("\u{1F441}\uFE0F Perception Sensors: initializing spatial awareness...");
+    this.createZone("sovereign_core", import_math24.Vector3.create(8, 2, 8), import_math24.Vector3.create(6, 4, 6));
+    this.createZone("entrance", import_math24.Vector3.create(8, 2, 1), import_math24.Vector3.create(4, 4, 2));
+    import_ecs26.engine.addSystem((dt) => {
+      this.lastUpdate += dt;
+      if (this.lastUpdate >= 1) {
+        this.lastUpdate = 0;
+        this.updatePresence();
+      }
+    });
+  }
+  createZone(id, center, size) {
+    const entity = import_ecs26.engine.addEntity();
+    import_ecs26.Transform.create(entity, {
+      position: center,
+      scale: size
+    });
+    import_ecs26.MeshRenderer.setBox(entity);
+    import_ecs26.Material.setPbrMaterial(entity, {
+      albedoColor: import_math24.Color4.create(0, 1, 0, 0.05),
+      emissiveColor: import_math24.Color4.create(0, 1, 0.1, 0.1),
+      emissiveIntensity: 0.5
+    });
+    this.zones.push({ id, center, size, entity, isOccupied: false });
+  }
+  updatePresence() {
+    const playerTransform = import_ecs26.Transform.getOrNull(import_ecs26.engine.PlayerEntity);
+    if (!playerTransform) return;
+    const pos = playerTransform.position;
+    for (const zone of this.zones) {
+      const inX = Math.abs(pos.x - zone.center.x) < zone.size.x / 2;
+      const inZ = Math.abs(pos.z - zone.center.z) < zone.size.z / 2;
+      const inY = pos.y > zone.center.y - zone.size.y / 2 && pos.y < zone.center.y + zone.size.y / 2;
+      const occupied = inX && inY && inZ;
+      if (occupied !== zone.isOccupied) {
+        zone.isOccupied = occupied;
+        this.onPresenceChange(zone.id, occupied);
+      }
+    }
+  }
+  onPresenceChange(zoneId, occupied) {
+    console.log(`\u{1F4E1} Perception Event: Zone ${zoneId} -> ${occupied ? "OCCUPIED" : "VACANT"}`);
+    updateSystemStatus(`META_PRESENCE_${zoneId.toUpperCase()}`, occupied);
+    reportPresence(zoneId, occupied);
+  }
+};
+var perceptionSensors = new PerceptionSensors();
+
 // src/enhanced-index.ts
 function enhancedMain() {
   console.log(" Initializing AIGestion Enhanced Virtual Office...");
   soundSystem.initialize();
   lightingSystem.initialize();
   uiSystem.initialize();
+  perceptionSensors.initialize();
   createEnhancedArchitecture();
   createEnhancedInteractables();
   console.log(" Core systems initialized - Starting advanced systems...");
@@ -12405,16 +12485,16 @@ function startRealTimeUpdates() {
   }, 1e4);
 }
 function initializeNPCs() {
-  npcManager.createNPC("NEXUS", "System Administrator", import_math24.Vector3.create(4, 1, 4));
-  npcManager.createNPC("DATA", "Data Analyst", import_math24.Vector3.create(12, 1, 4));
-  npcManager.createNPC("GUARD", "Security Expert", import_math24.Vector3.create(8, 1, 12));
+  npcManager.createNPC("NEXUS", "System Administrator", import_math25.Vector3.create(4, 1, 4));
+  npcManager.createNPC("DATA", "Data Analyst", import_math25.Vector3.create(12, 1, 4));
+  npcManager.createNPC("GUARD", "Security Expert", import_math25.Vector3.create(8, 1, 12));
   console.log("\u{1F916} AI Assistants Initialized");
 }
 function initializeDataVisualization() {
   const mainWall = dataVizManager.createWall(
     "main",
-    import_math24.Vector3.create(8, 4, 0.5),
-    import_math24.Vector3.create(16, 8, 0.2)
+    import_math25.Vector3.create(8, 4, 0.5),
+    import_math25.Vector3.create(16, 8, 0.2)
   );
   mainWall.addChart("systemStatus", {
     type: "bar",
@@ -12444,13 +12524,13 @@ function createParticleEffects() {
       offset: Math.random() * Math.PI * 2
     });
   }
-  import_ecs26.engine.addSystem(particleSystem);
+  import_ecs27.engine.addSystem(particleSystem);
   console.log(`\u2705 Created ${particleCount + energyCount} particles`);
 }
 function particleSystem(dt) {
   const t = Date.now() / 1e3;
   for (const p of particlePool) {
-    const transform = import_ecs26.Transform.getMutable(p.entity);
+    const transform = import_ecs27.Transform.getMutable(p.entity);
     if (p.type === "data") {
       transform.position.y += Math.sin(t + p.offset) * dt * 0.5;
       transform.rotation = { x: 0, y: (t * 20 + p.offset * 10) % 360, z: 0, w: 1 };
@@ -12464,37 +12544,37 @@ function particleSystem(dt) {
   }
 }
 function createParticle() {
-  const particle = import_ecs26.engine.addEntity();
-  import_ecs26.Transform.create(particle, {
-    position: import_math24.Vector3.create(Math.random() * 16, Math.random() * 4 + 1, Math.random() * 16),
-    scale: import_math24.Vector3.create(0.1, 0.1, 0.1)
+  const particle = import_ecs27.engine.addEntity();
+  import_ecs27.Transform.create(particle, {
+    position: import_math25.Vector3.create(Math.random() * 16, Math.random() * 4 + 1, Math.random() * 16),
+    scale: import_math25.Vector3.create(0.1, 0.1, 0.1)
   });
-  import_ecs26.MeshRenderer.setBox(particle);
-  import_ecs26.Material.setPbrMaterial(particle, {
-    albedoColor: import_math24.Color4.create(0, 1, 0.8, 0.6),
+  import_ecs27.MeshRenderer.setBox(particle);
+  import_ecs27.Material.setPbrMaterial(particle, {
+    albedoColor: import_math25.Color4.create(0, 1, 0.8, 0.6),
     roughness: 0,
     metallic: 0.5,
-    emissiveColor: import_math24.Color4.create(0, 1, 0.8, 1),
+    emissiveColor: import_math25.Color4.create(0, 1, 0.8, 1),
     emissiveIntensity: 3
   });
   return particle;
 }
 function createEnergyParticle() {
-  const energyParticle = import_ecs26.engine.addEntity();
-  import_ecs26.Transform.create(energyParticle, {
-    position: import_math24.Vector3.create(
+  const energyParticle = import_ecs27.engine.addEntity();
+  import_ecs27.Transform.create(energyParticle, {
+    position: import_math25.Vector3.create(
       8 + (Math.random() - 0.5) * 4,
       2 + Math.random() * 2,
       8 + (Math.random() - 0.5) * 4
     ),
-    scale: import_math24.Vector3.create(0.15, 0.15, 0.15)
+    scale: import_math25.Vector3.create(0.15, 0.15, 0.15)
   });
-  import_ecs26.MeshRenderer.setBox(energyParticle);
-  import_ecs26.Material.setPbrMaterial(energyParticle, {
-    albedoColor: import_math24.Color4.create(1, 0.8, 0.2, 0.7),
+  import_ecs27.MeshRenderer.setBox(energyParticle);
+  import_ecs27.Material.setPbrMaterial(energyParticle, {
+    albedoColor: import_math25.Color4.create(1, 0.8, 0.2, 0.7),
     roughness: 0.1,
     metallic: 0.8,
-    emissiveColor: import_math24.Color4.create(1, 0.8, 0.2, 1),
+    emissiveColor: import_math25.Color4.create(1, 0.8, 0.2, 1),
     emissiveIntensity: 5
   });
   return energyParticle;
@@ -12504,7 +12584,7 @@ function cleanupEnhancedScene() {
   if (diagnosticsInterval) clearInterval(diagnosticsInterval);
   if (alertsInterval) clearInterval(alertsInterval);
   particlePool.forEach((particle) => {
-    import_ecs26.engine.removeEntity(particle);
+    import_ecs27.engine.removeEntity(particle);
   });
   particlePool.length = 0;
   soundSystem.cleanup();

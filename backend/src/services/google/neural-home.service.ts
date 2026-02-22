@@ -3,6 +3,7 @@ import { TYPES } from '../../types';
 import { logger } from '../../utils/logger';
 import { FirebaseService } from './firebase.service';
 import { RagService } from '../rag.service';
+import { NexusPushService } from '../nexus-push.service';
 
 /**
  * NEURAL HOME BRIDGE
@@ -13,6 +14,7 @@ export class NeuralHomeBridge {
   constructor(
     @inject(TYPES.FirebaseService) private readonly firebase: FirebaseService,
     @inject(TYPES.RagService) private readonly rag: RagService,
+    @inject(TYPES.NexusPushService) private readonly push: NexusPushService,
   ) {}
 
   /**
@@ -104,6 +106,30 @@ export class NeuralHomeBridge {
     // Sync ambient state if it's a critical event
     if (event.toLowerCase().includes('critical') || event.toLowerCase().includes('alert')) {
       await this.syncAmbientState('critical');
+    }
+
+    // [PHASE 5] Metaverse Reaction Logic
+    if (source === 'decentraland-parcel' && event === 'meta_presence_enter') {
+      const zone = data?.zone || 'unknown';
+      logger.info({ zone }, '[NeuralHome] 🌌 Player entered virtual zone, triggering greeting');
+
+      if (zone === 'sovereign_core') {
+        await this.push.sendSovereignAlert({
+          title: 'Presencia Detectada',
+          message: 'Bienvenido al Núcleo Soberano. Los sistemas están a su disposición.',
+          type: 'info',
+          priority: 'normal',
+          voiceEnabled: true,
+        });
+      } else if (zone === 'entrance') {
+        await this.push.sendSovereignAlert({
+          title: 'Acceso Detectado',
+          message: 'Detectado acceso a la oficina virtual por el portal principal.',
+          type: 'info',
+          priority: 'normal',
+          voiceEnabled: true,
+        });
+      }
     }
 
     return { ingested: true, filename };

@@ -55,9 +55,10 @@ export class SovereignKnowledgeService {
     logger.info(`[KnowledgeService] Grounding query in Source Set: ${sourceSet.name}`);
 
     // Filter sources by simple relevance (simulation of local grounding)
-    const relevantSources = sourceSet.sources.filter(s => 
-      s.content.toLowerCase().includes(query.toLowerCase()) || 
-      s.name.toLowerCase().includes(query.toLowerCase())
+    const relevantSources = sourceSet.sources.filter(
+      (s: any) =>
+        s.content.toLowerCase().includes(query.toLowerCase()) ||
+        s.name.toLowerCase().includes(query.toLowerCase()),
     );
 
     if (relevantSources.length === 0) {

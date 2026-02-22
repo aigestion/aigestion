@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math';
@@ -769,7 +770,8 @@ export class ARIntegrationSystem {
       if (overlay.isVisible) {
         // Add subtle animation
         const time = Date.now() / 1000;
-        overlay.position.y += Math.sin(time * 2 + parseInt(overlay.id)) * 0.001;
+        const newY = overlay.position.y + Math.sin(time * 2 + parseInt(overlay.id)) * 0.001;
+        overlay.position = Vector3.create(overlay.position.x, newY, overlay.position.z);
       }
     });
   }

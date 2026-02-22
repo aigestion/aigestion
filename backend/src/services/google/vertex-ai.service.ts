@@ -87,7 +87,7 @@ export class VertexAIService {
       // Path A: Check Redis Cache First
       const textHash = this.hashText(text);
       const cacheKey = `embedding_cache:${textHash}`;
-      const cachedEmbedding = await getCache(cacheKey);
+      const cachedEmbedding = await getCache<number[]>(cacheKey);
 
       if (cachedEmbedding) {
         logger.debug({ textHash }, '[VertexAI] L2 Cache Hit: Returning cached embedding');
@@ -161,14 +161,14 @@ export class VertexAIService {
       // 1. Identify which texts are cached
       const hashes = texts.map(t => this.hashText(t));
       const cacheKeys = hashes.map(h => `embedding_cache:${h}`);
-      const cachedEmbeddings = await Promise.all(cacheKeys.map(k => getCache(k)));
+      const cachedEmbeddings = await Promise.all(cacheKeys.map(k => getCache<number[]>(k)));
 
       const results: number[][] = new Array(texts.length).fill(null);
       const missingIndices: number[] = [];
 
       cachedEmbeddings.forEach((emb, idx) => {
         if (emb) {
-          results[idx] = emb;
+          results[idx] = emb as number[];
         } else {
           missingIndices.push(idx);
         }

@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { Color3, Color4, Vector3 } from '@dcl/sdk/math';
@@ -134,7 +135,7 @@ export class EmotionDetectionSystem {
       responseType: 'environmental',
       action: {
         type: 'adjust_lighting',
-        parameters: new Map([
+        parameters: new Map<string, any>([
           ['brightness', 1.2],
           ['color', 'warm'],
           ['duration', 5000],
@@ -152,10 +153,10 @@ export class EmotionDetectionSystem {
       responseType: 'audio',
       action: {
         type: 'play_music',
-        parameters: new Map([
-          ['genre', 'upbeat'],
-          ['volume', 0.6],
-          ['duration', 3000],
+        parameters: new Map<string, any>([
+          ['hue', 240],
+          ['saturation', 0.8],
+          ['intensity', 0.5],
         ]),
         duration: 3000,
         intensity: 0.7,
@@ -171,10 +172,10 @@ export class EmotionDetectionSystem {
       responseType: 'environmental',
       action: {
         type: 'adjust_lighting',
-        parameters: new Map([
-          ['brightness', 0.7],
-          ['color', 'cool'],
-          ['duration', 10000],
+        parameters: new Map<string, any>([
+          ['frequency', 0.8],
+          ['color', 'calm'],
+          ['pattern', 'pulsing'],
         ]),
         duration: 10000,
         intensity: 0.9,
@@ -189,7 +190,7 @@ export class EmotionDetectionSystem {
       responseType: 'visual',
       action: {
         type: 'breathing_guide',
-        parameters: new Map([
+        parameters: new Map<string, any>([
           ['rate', 0.2],
           ['duration', 5000],
         ]),
@@ -207,7 +208,7 @@ export class EmotionDetectionSystem {
       responseType: 'environmental',
       action: {
         type: 'minimize_distractions',
-        parameters: new Map([
+        parameters: new Map<string, any>([
           ['ui_opacity', 0.3],
           ['notifications', false],
           ['duration', 15000],
@@ -226,7 +227,7 @@ export class EmotionDetectionSystem {
       responseType: 'audio',
       action: {
         type: 'play_music',
-        parameters: new Map([
+        parameters: new Map<string, any>([
           ['genre', 'comforting'],
           ['volume', 0.4],
           ['duration', 8000],
@@ -245,7 +246,7 @@ export class EmotionDetectionSystem {
       responseType: 'environmental',
       action: {
         type: 'adjust_temperature',
-        parameters: new Map([
+        parameters: new Map<string, any>([
           ['temperature', 20],
           ['duration', 10000],
         ]),
@@ -462,7 +463,7 @@ export class EmotionDetectionSystem {
   private createDefaultProfiles() {
     const defaultProfile: EmotionProfile = {
       userId: 'user_default',
-      baselineEmotions: new Map([
+      baselineEmotions: new Map<EmotionType, number>([
         ['joy', 0.3],
         ['stress', 0.2],
         ['focus', 0.4],
@@ -624,29 +625,38 @@ export class EmotionDetectionSystem {
 
   // Trigger adaptive response
   private triggerAdaptiveResponse(emotionData: EmotionData, profile: EmotionProfile) {
-    const responseKey = `${emotionData.primaryEmotion}_${this.getBestResponseType(emotionData, profile)}`;
-    const response = this.adaptiveResponses.get(responseKey);
+    // This logic needs to be more sophisticated to pick the 'best' response type
+    // For now, it defaults to 'environmental' if interactionStyle is 'direct', etc.
+    const responseType = this.getBestResponseType(emotionData, profile);
+    const responseKey = `${emotionData.primaryEmotion}_${responseType}`; // This key might not exist for all combinations
 
-    if (response) {
-      // Check conditions
-      const conditionsMet = response.conditions.every(condition => {
-        const value = emotionData.intensity;
-        switch (condition.operator) {
-          case 'greater':
-            return value > condition.value;
-          case 'less':
-            return value < condition.value;
-          case 'equals':
-            return value === condition.value;
-          case 'between':
-            return value >= condition.value[0] && value <= condition.value[1];
-          default:
-            return false;
+    // Iterate through all responses for the triggered emotion and find one that matches conditions
+    for (const [key, response] of this.adaptiveResponses.entries()) {
+      if (response.emotionTrigger === emotionData.primaryEmotion) {
+        const conditionsMet = response.conditions.every(condition => {
+          const value = emotionData.intensity; // Assuming 'intensity' is the parameter being checked
+          switch (condition.operator) {
+            case 'greater':
+              return value > condition.value;
+            case 'less':
+              return value < condition.value;
+            case 'equals':
+              return value === condition.value;
+            case 'between':
+              // Ensure value is an array for 'between' operator
+              if (Array.isArray(condition.value) && condition.value.length === 2) {
+                return value >= condition.value[0] && value <= condition.value[1];
+              }
+              return false;
+            default:
+              return false;
+          }
+        });
+
+        if (conditionsMet) {
+          this.executeAdaptiveResponse(response, emotionData);
+          return; // Execute the first matching response and exit
         }
-      });
-
-      if (conditionsMet) {
-        this.executeAdaptiveResponse(response, emotionData);
       }
     }
   }
@@ -829,7 +839,7 @@ export class EmotionDetectionSystem {
   public createProfile(userId: string, preferences: Partial<EmotionPreferences>): EmotionProfile {
     const profile: EmotionProfile = {
       userId: userId,
-      baselineEmotions: new Map([
+      baselineEmotions: new Map<EmotionType, number>([
         ['joy', 0.3],
         ['stress', 0.2],
         ['focus', 0.4],

@@ -760,23 +760,20 @@ export class AvatarSystem {
     // Update avatar materials
     const body = this.avatarParts.get('body');
     if (body) {
-      const material = Material.getMutable(body);
-      if (material && material.$case === 'pbr') {
-        material.pbr.albedoColor = Color4.create(primaryColor.r, primaryColor.g, primaryColor.b, 1);
-      }
+      const material = Material.get(body);
+      Material.setPbrMaterial(body, {
+        ...material,
+        albedoColor: Color4.create(primaryColor.r, primaryColor.g, primaryColor.b, 1),
+      });
     }
 
     const head = this.avatarParts.get('head');
     if (head) {
-      const material = Material.getMutable(head);
-      if (material && material.$case === 'pbr') {
-        material.pbr.albedoColor = Color4.create(
-          secondaryColor.r,
-          secondaryColor.g,
-          secondaryColor.b,
-          1
-        );
-      }
+      const material = Material.get(head);
+      Material.setPbrMaterial(head, {
+        ...material,
+        albedoColor: Color4.create(secondaryColor.r, secondaryColor.g, secondaryColor.b, 1),
+      });
     }
   }
 

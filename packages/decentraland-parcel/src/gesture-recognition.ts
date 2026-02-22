@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { setTimeout, setInterval } from './utils/timers';
@@ -637,10 +638,11 @@ export class GestureRecognitionSystem {
       const transform = Transform.getMutable(feedback);
       transform.scale = Vector3.create(scale, scale, scale);
 
-      const material = Material.getMutable(feedback);
-      if (material && material.$case === 'pbr') {
-        material.pbr.albedoColor = Color4.create(0.2, 0.8, 1, opacity);
-      }
+      const material = Material.get(feedback);
+      Material.setPbrMaterial(feedback, {
+        ...material,
+        albedoColor: Color4.create(0.2, 0.8, 1, opacity),
+      });
 
       if (opacity > 0) {
         setTimeout(animate, 16);
@@ -689,10 +691,11 @@ export class GestureRecognitionSystem {
     // Fade trail
     trail.forEach((point, index) => {
       const opacity = (index / trail.length) * 0.6;
-      const material = Material.getMutable(point);
-      if (material && material.$case === 'pbr') {
-        material.pbr.albedoColor = Color4.create(0.5, 0.8, 1, opacity);
-      }
+      const material = Material.get(point);
+      Material.setPbrMaterial(point, {
+        ...material,
+        albedoColor: Color4.create(0.5, 0.8, 1, opacity),
+      });
     });
   }
 

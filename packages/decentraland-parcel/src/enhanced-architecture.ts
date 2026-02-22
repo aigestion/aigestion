@@ -21,7 +21,8 @@ class AnimationSystem {
       } else if (data.type === 'rotate') {
         transform.rotation = Quaternion.fromEulerDegrees(0, data.time * data.speed * 10, 0);
       } else if (data.type === 'float') {
-        transform.position.y = data.baseY + Math.sin(data.time * data.speed) * data.intensity;
+        const baseY = data.baseY || 0;
+        transform.position.y = baseY + Math.sin(data.time * data.speed) * data.intensity;
       }
     });
   }
@@ -137,17 +138,11 @@ export function createEnhancedArchitecture() {
   });
 
   // Enhanced Entrance with futuristic pillars
-  const pillar1 = createNeuralPillar(
-    Vector3.create(2, 3, 0.5),
-    Vector3.create(1.2, 6, 1.2)
-  );
+  const pillar1 = createNeuralPillar(Vector3.create(2, 3, 0.5), Vector3.create(1.2, 6, 1.2));
   // Future/Fallback: GltfContainer.create(pillar1, { src: 'models/neural_pillar.glb' })
   // Note: createNeuralPillar handles the visual primitives internally
 
-  const pillar2 = createNeuralPillar(
-    Vector3.create(14, 3, 0.5),
-    Vector3.create(1.2, 6, 1.2)
-  );
+  const pillar2 = createNeuralPillar(Vector3.create(14, 3, 0.5), Vector3.create(1.2, 6, 1.2));
   // Future/Fallback: GltfContainer.create(pillar2, { src: 'models/neural_pillar.glb' })
 
   // Multi-layered Neon Lighting System

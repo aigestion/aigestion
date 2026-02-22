@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { Color4, Vector3 } from '@dcl/sdk/math';
@@ -674,7 +675,7 @@ export class ContentManagementSystem {
   private updateSearchIndex(item: ContentItem) {
     const searchableText = [
       item.title,
-      item.description,
+      item.metadata.description,
       item.category,
       ...item.tags,
       item.metadata.author,

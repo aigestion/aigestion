@@ -22,9 +22,7 @@ export interface PushPayload {
 export class NexusPushService {
   private fcmTokens = new Map<string, string[]>(); // userId → [tokens]
 
-  constructor(
-    @inject(TYPES.FirebaseService) private firebaseService: FirebaseService,
-  ) {
+  constructor(@inject(TYPES.FirebaseService) private firebaseService: FirebaseService) {
     logger.info('[NexusPush] 🔔 Sovereign Push Notification Service initialized');
   }
 
@@ -155,11 +153,7 @@ export class NexusPushService {
     });
   }
 
-  async notifyTaskComplete(
-    userId: string,
-    taskTitle: string,
-    completedBy: string,
-  ): Promise<void> {
+  async notifyTaskComplete(userId: string, taskTitle: string, completedBy: string): Promise<void> {
     await this.sendToUser(userId, {
       title: '✅ Tarea completada',
       body: `"${taskTitle}" completada por ${completedBy}`,
@@ -186,5 +180,29 @@ export class NexusPushService {
       priority: 'high',
       data: { type: 'test' },
     });
+  }
+
+  /**
+   * [GOD MODE] Sovereign Alert System
+   * Dispatches high-priority alerts to users across multiple channels.
+   */
+  async sendSovereignAlert(payload: {
+    title: string;
+    message: string;
+    type: 'info' | 'warning' | 'critical';
+    priority: 'normal' | 'high';
+    voiceEnabled?: boolean;
+  }): Promise<void> {
+    logger.info(`[NexusPush] Dispatching sovereign alert: ${payload.title}`);
+
+    // For now, we notify the system channel. In a full scale app,
+    // we'd resolve the godUserId from session or config.
+    const systemUserId = 'god-mode-sovereign';
+
+    await this.notifySystemEvent(
+      systemUserId,
+      `${payload.title}: ${payload.message}`,
+      payload.type,
+    );
   }
 }

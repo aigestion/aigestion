@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { Color4, Vector3 } from '@dcl/sdk/math';
@@ -42,7 +43,15 @@ interface HapticPattern {
   fadeOut: number;
 }
 
-type PatternType = 'click' | 'impact' | 'texture' | 'pulse' | 'wave' | 'custom' | 'continuous';
+type PatternType =
+  | 'click'
+  | 'impact'
+  | 'texture'
+  | 'pulse'
+  | 'wave'
+  | 'custom'
+  | 'continuous'
+  | 'ambient';
 
 interface HapticWaveform {
   channel: number;
@@ -64,14 +73,7 @@ interface HapticEvent {
   processed: boolean;
 }
 
-type HapticEventType =
-  | 'touch'
-  | 'collision'
-  | 'interaction'
-  | 'notification'
-  | 'feedback'
-  | 'alert'
-  | 'ambient';
+type HapticEventType = 'touch' | 'collision' | 'interaction' | 'feedback' | 'alert' | 'ambient';
 
 interface HapticZone {
   id: string;
@@ -85,30 +87,38 @@ interface HapticZone {
 }
 
 interface HapticEffect {
-  type: 'vibration' | 'heat' | 'cool' | 'texture' | 'pressure';
+  type: 'vibration' | 'force_feedback' | 'temperature' | 'texture';
   intensity: number;
   duration: number;
   pattern?: string;
+  parameters?: any;
 }
 
 export class HapticFeedbackSystem {
   private devices: Map<string, HapticDevice> = new Map();
   private patterns: Map<string, HapticPattern> = new Map();
   private zones: Map<string, HapticZone> = new Map();
+  private activeEvents: Map<string, HapticEvent> = new Map();
   private hapticUI: any;
   private isInitialized: boolean = false;
-  private activeEvents: Map<string, HapticEvent> = new Map();
-  private globalIntensity: number = 0.8;
+  private globalIntensity: number = 0.6;
   private isSystemEnabled: boolean = true;
-  private hapticEngine: any;
+  private hapticEngine: any = {
+    playPattern: (device: HapticDevice, pattern: HapticPattern, intensity: number) => {
+      console.log(
+        `📳 Playing ${pattern.name} on ${device.name} at ${intensity.toFixed(2)} intensity`
+      );
+    },
+    stopPattern: (device: HapticDevice, patternId: string) => {
+      console.log(`📴 Stopping pattern ${patternId} on ${device.name}`);
+    },
+  };
 
-  constructor() {
-    this.initializeHapticEngine();
-  }
+  constructor() {}
 
-  // Initialize haptic feedback system
+  // Initialize haptic system
   initialize() {
-    console.log('🎯 Haptic Feedback System Initializing...');
+    console.log('📱 Haptic Feedback System Initializing...');
 
     this.setupHapticDevices();
     this.createHapticPatterns();
@@ -117,48 +127,12 @@ export class HapticFeedbackSystem {
     this.startHapticEngine();
 
     this.isInitialized = true;
-    console.log('🎯 Haptic Feedback System Ready!');
-  }
-
-  // Initialize haptic engine
-  private initializeHapticEngine() {
-    this.hapticEngine = {
-      playPattern: (device: HapticDevice, pattern: HapticPattern, intensity: number) => {
-        console.log(`📳 Playing pattern ${pattern.name} on ${device.name}`);
-
-        // Simulate haptic playback
-        const effectiveIntensity = Math.min(
-          intensity * device.intensity * this.globalIntensity,
-          device.capabilities.maxIntensity
-        );
-
-        return {
-          success: true,
-          duration: pattern.duration,
-          intensity: effectiveIntensity,
-        };
-      },
-
-      stopPattern: (device: HapticDevice, patternId: string) => {
-        console.log(`🛑 Stopping pattern ${patternId} on ${device.name}`);
-        return { success: true };
-      },
-
-      playWaveform: (device: HapticDevice, waveform: HapticWaveform, intensity: number) => {
-        console.log(`🌊 Playing waveform on ${device.name}`);
-        return { success: true };
-      },
-
-      setIntensity: (device: HapticDevice, intensity: number) => {
-        device.intensity = Math.max(0, Math.min(1, intensity));
-        return { success: true };
-      },
-    };
+    console.log('📱 Haptic Feedback System Ready!');
   }
 
   // Setup haptic devices
   private setupHapticDevices() {
-    // VR Controller
+    // VR Controllers
     const vrController: HapticDevice = {
       id: 'device_vr_controller',
       name: 'VR Controller',
@@ -166,12 +140,12 @@ export class HapticFeedbackSystem {
       isConnected: true,
       capabilities: {
         supportsVibration: true,
-        supportsForceFeedback: true,
+        supportsForceFeedback: false,
         supportsTemperature: false,
-        supportsTexture: true,
+        supportsTexture: false,
         maxIntensity: 1.0,
         responseTime: 10,
-        channels: 2,
+        channels: 1,
       },
       intensity: 0.8,
       batteryLevel: 0.85,
@@ -186,14 +160,14 @@ export class HapticFeedbackSystem {
       capabilities: {
         supportsVibration: true,
         supportsForceFeedback: true,
-        supportsTemperature: true,
+        supportsTemperature: false,
         supportsTexture: true,
         maxIntensity: 0.9,
         responseTime: 15,
         channels: 5,
       },
       intensity: 0.7,
-      batteryLevel: 0.6,
+      batteryLevel: 0.75,
     };
 
     // Haptic Vest
@@ -201,13 +175,13 @@ export class HapticFeedbackSystem {
       id: 'device_haptic_vest',
       name: 'Haptic Vest',
       type: 'vest',
-      isConnected: false,
+      isConnected: true,
       capabilities: {
         supportsVibration: true,
         supportsForceFeedback: false,
-        supportsTemperature: true,
+        supportsTemperature: false,
         supportsTexture: false,
-        maxIntensity: 1.0,
+        maxIntensity: 0.7,
         responseTime: 25,
         channels: 8,
       },
@@ -735,8 +709,9 @@ export class HapticFeedbackSystem {
     });
 
     // Clean up processed events
+    const now = Date.now();
     this.activeEvents.forEach((event, id) => {
-      if (event.processed && Date.now() - event.timestamp > 5000) {
+      if (event.processed && now - event.timestamp > 5000) {
         this.activeEvents.delete(id);
       }
     });
@@ -785,15 +760,14 @@ export class HapticFeedbackSystem {
     switch (eventType) {
       case 'touch':
       case 'interaction':
-        return this.patterns.get('pattern_click');
+        return this.patterns.get('pattern_click') || null;
       case 'collision':
-        return this.patterns.get('pattern_impact');
+        return this.patterns.get('pattern_impact') || null;
       case 'feedback':
-        return this.patterns.get('pattern_pulse');
       case 'alert':
-        return this.patterns.get('pattern_pulse');
+        return this.patterns.get('pattern_pulse') || null;
       case 'ambient':
-        return this.patterns.get('pattern_ambient');
+        return this.patterns.get('pattern_ambient') || null;
       default:
         return null;
     }
@@ -822,7 +796,8 @@ export class HapticFeedbackSystem {
           if (effect.type === 'vibration' && effect.pattern) {
             const devices = this.findDevicesForZone(zone);
             devices.forEach(device => {
-              const pattern = this.patterns.get(effect.pattern);
+              const patternId = effect.pattern as string;
+              const pattern = this.patterns.get(patternId);
               if (pattern) {
                 this.hapticEngine.playPattern(device, pattern, effect.intensity);
               }
@@ -893,7 +868,7 @@ export class HapticFeedbackSystem {
 
     zone.isActive = !zone.isActive;
     console.log(
-      `${zone.isActive ? '✅' : '❌'} Zone ${zone.name} ${zone.isActive ? 'activated' : 'deactivated'}`
+    `${zone.isActive ? '✅' : '❌'} Zone ${zone.name} ${zone.isActive ? 'activated' : 'deactivated'}`
     );
     soundSystem.playInteractionSound('click');
   }

@@ -15,12 +15,13 @@ export class NexusRadioService {
     @inject(TYPES.Gemini2Service) private readonly gemini: Gemini2Service,
     @inject(TYPES.VoiceService) private readonly voice: VoiceService,
     @inject(TYPES.SovereignKnowledgeService) private readonly knowledge: SovereignKnowledgeService,
+    @inject(TYPES.ElevenLabsService) private readonly eleven: any,
   ) {}
 
   /**
    * Generates a conversational briefing from a specific Source Set.
    */
-  async generateSovereignBriefing(sourceSetId: string): Promise<Buffer> {
+  async generateSovereignBriefing(sourceSetId: string): Promise<string> {
     logger.info(`[NexusRadio] Generating source-grounded briefing for set: ${sourceSetId}`);
 
     // 1. Get grounded context

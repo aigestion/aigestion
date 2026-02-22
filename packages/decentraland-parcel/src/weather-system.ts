@@ -54,7 +54,7 @@ export class WeatherSystem {
 
   // Initialize weather system
   initialize() {
-    console.log('🌤️ Weather System Initializing...');
+    console.log('Weather System Initializing...');
 
     this.createSkyDome();
     this.createCelestialBodies();
@@ -63,7 +63,7 @@ export class WeatherSystem {
     this.startDayNightCycle();
 
     this.isInitialized = true;
-    console.log('🌤️ Weather System Ready!');
+    console.log('Weather System Ready!');
   }
 
   // Create sky dome
@@ -299,9 +299,6 @@ export class WeatherSystem {
 
   // Update sky color based on time and weather
   private updateSkyColor() {
-    const material = Material.getMutable(this.skyDome);
-    if (!material || material.$case !== 'pbr') return;
-
     let skyColor: Color4;
     const hour = this.currentTime.hour;
 
@@ -333,13 +330,13 @@ export class WeatherSystem {
     // Apply weather modifications
     skyColor = this.applyWeatherToSkyColor(skyColor);
 
-    material.pbr.albedoColor = skyColor;
-    material.pbr.emissiveColor = Color4.create(
-      skyColor.r * 0.3,
-      skyColor.g * 0.3,
-      skyColor.b * 0.3,
-      1
-    );
+    if (this.skyDome) {
+      Material.setPbrMaterial(this.skyDome, {
+        albedoColor: skyColor,
+        emissiveColor: Color4.create(skyColor.r * 0.3, skyColor.g * 0.3, skyColor.b * 0.3, 1),
+        emissiveIntensity: 1,
+      });
+    }
   }
 
   // Apply weather effects to sky color
@@ -441,7 +438,7 @@ export class WeatherSystem {
     }
 
     console.log(
-      `🌤️ Weather changed to: ${this.currentState.type} (intensity: ${this.currentState.intensity.toFixed(2)})`
+      `Weather changed to: ${this.currentState.type} (intensity: ${this.currentState.intensity.toFixed(2)})`
     );
   }
 

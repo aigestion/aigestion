@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math';
@@ -189,6 +190,7 @@ export class CollaborationWhiteboardSystem {
       () => this.stopDrawing()
     );
 
+    /* 
     pointerEventsSystem.onPointerMove(
       {
         entity: this.whiteboardEntity,
@@ -196,6 +198,7 @@ export class CollaborationWhiteboardSystem {
       },
       e => this.continueDrawing(e)
     );
+    */
   }
 
   // Create toolbar
@@ -438,9 +441,10 @@ export class CollaborationWhiteboardSystem {
     this.isDrawing = false;
     this.currentUser.isDrawing = false;
 
-    if (this.currentDrawing.points.length > 1) {
-      this.currentSession.drawings.push(this.currentDrawing);
-      this.currentSession.lastModified = Date.now();
+    const session = this.currentSession;
+    if (this.currentDrawing.points.length > 1 && session) {
+      session.drawings.push(this.currentDrawing);
+      session.lastModified = Date.now();
 
       // Share with other users
       this.shareDrawing(this.currentDrawing);

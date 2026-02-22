@@ -29,6 +29,10 @@ export type NetworkNode = {
   location: string;
 };
 
+// Global config for backend connectivity
+const BACKEND_URL = 'http://localhost:5000'; // Development local
+const API_KEY = 'nexus_sovereign_dev_key_2026';
+
 // Simulated real-time data with enhanced complexity
 export async function fetchEnhancedSystemStats(): Promise<EnhancedSystemStats> {
   return new Promise(resolve => {
@@ -159,6 +163,35 @@ export function performSecurityScan(): Promise<{
       resolve({ threats, status });
     }, 800);
   });
+}
+
+// Actual presence reporting to the Nexus Core
+export async function reportPresence(zoneId: string, occupied: boolean): Promise<boolean> {
+    console.log(`[Network] Reporting presence change: ${zoneId} -> ${occupied}`);
+    
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/v1/iot/webhook`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': API_KEY
+            },
+            body: JSON.stringify({
+                event: occupied ? 'meta_presence_enter' : 'meta_presence_exit',
+                source: 'decentraland-parcel',
+                data: {
+                    zone: zoneId,
+                    timestamp: Date.now(),
+                    platform: 'decentraland'
+                }
+            })
+        });
+        
+        return response.status === 200;
+    } catch (error) {
+        console.warn(`[Network] Presence sync failed (expected in isolated local): ${error}`);
+        return false;
+    }
 }
 
 // Real-time data stream simulation

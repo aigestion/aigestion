@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { setTimeout, setInterval } from './utils/timers';
@@ -516,7 +517,7 @@ export class BlockchainIntegrationSystem {
       metadata: {
         description: 'AIGestion Virtual Office Asset',
         image: 'ipfs://QmHash...',
-        attributes: new Map([
+        attributes: new Map<string, any>([
           ['created_by', 'AIGestion'],
           ['office_space', 'virtual'],
           ['utility', 'productivity'],
@@ -643,7 +644,7 @@ export class BlockchainIntegrationSystem {
       metadata: {
         description: 'AIGestion Achievement Certificate',
         image: 'ipfs://QmCertHash...',
-        attributes: new Map([
+        attributes: new Map<string, any>([
           ['type', 'achievement'],
           ['issuer', 'AIGestion'],
           ['metadata', metadata],
@@ -694,7 +695,7 @@ export class BlockchainIntegrationSystem {
       metadata: {
         description: `${badgeType} Achievement Badge`,
         image: 'ipfs://QmBadgeHash...',
-        attributes: new Map([
+        attributes: new Map<string, any>([
           ['type', badgeType],
           ['issuer', 'AIGestion'],
           ['achievement_level', 'gold'],
@@ -764,7 +765,7 @@ export class BlockchainIntegrationSystem {
       metadata: {
         description: 'Received asset',
         image: 'ipfs://QmReceivedHash...',
-        attributes: new Map([
+        attributes: new Map<string, any>([
           ['received', 'true'],
           ['sender', '0xSenderAddress'],
         ]),
@@ -884,10 +885,10 @@ export class BlockchainIntegrationSystem {
 
   // Cleanup system
   public cleanup() {
-    this.wallets.clear();
-    this.assets.clear();
-    this.transactions.clear();
-    this.contracts.clear();
+    this.wallets = new Map<string, Wallet>();
+    this.assets = new Map<string, DigitalAsset>();
+    this.transactions = new Map<string, Transaction>();
+    this.contracts = new Map<string, SmartContract>();
 
     if (this.blockchainUI) {
       engine.removeEntity(this.blockchainUI);

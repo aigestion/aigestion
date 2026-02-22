@@ -36,8 +36,8 @@ export class SemanticCacheService {
     const key = `semantic_cache:${this.hashPrompt(prompt)}`;
 
     // Level 2: Exact Match (Fastest)
-    const exactMatch = await getCache(key);
-    if (exactMatch) {
+    const exactMatch = await getCache<string>(key);
+    if (exactMatch && typeof exactMatch === 'string') {
       logger.info({ key }, '[SemanticCache] L2 Hit: Exact match found');
       return exactMatch;
     }

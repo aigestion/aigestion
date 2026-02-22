@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { setTimeout, setInterval } from './utils/timers';
@@ -467,7 +468,7 @@ export class AnalyticsDashboardSystem {
         timestamp: Date.now() - Math.random() * 3600000, // Last hour
         userId: `user_${Math.floor(Math.random() * 100)}`,
         sessionId: `session_${Math.floor(Math.random() * 20)}`,
-        properties: new Map([
+        properties: new Map<string, any>([
           ['action', this.getRandomAction()],
           ['page', this.getRandomPage()],
           ['duration', Math.floor(Math.random() * 300)],

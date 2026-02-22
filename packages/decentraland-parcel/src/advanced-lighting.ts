@@ -76,8 +76,6 @@ export class AdvancedLightingSystem {
       // Shadow material with proper DCL properties
       Material.setPbrMaterial(shadowCaster, {
         alphaTest: 0.01,
-        castShadows: true,
-        receiveShadows: true,
       });
 
       this.shadowCasters.push(shadowCaster);
@@ -96,7 +94,7 @@ export class AdvancedLightingSystem {
     ];
 
     beamPositions.forEach((pos, index) => {
-      const volumetricLight = engine.addEntity();
+      const volumetricLight = engine.addEntity(); // Added missing declaration for volumetricLight
       Transform.create(volumetricLight, {
         position: pos,
         scale: Vector3.create(0.3, 8, 0.3),
@@ -170,39 +168,45 @@ export class AdvancedLightingSystem {
       sunTransform.rotation = Quaternion.fromEulerDegrees((sunAngle * 180) / Math.PI - 90, 0, 0);
 
       // Update sun material
-      const sunMaterial = Material.getMutable(sunLight);
-      if (sunMaterial && sunMaterial.$case === 'pbr') {
-        sunMaterial.pbr.emissiveIntensity = sunIntensity * 2;
+      const sunMaterial = Material.get(sunLight);
+      let sunAlbedo = Color4.create(1, 0.95, 0.8, 0.8);
+      let sunEmissive = Color4.create(1, 0.95, 0.8, 1);
 
-        // Update sun color based on time
-        if (sunIntensity > 0.5) {
-          // Day time - warm white
-          sunMaterial.pbr.albedoColor = Color4.create(1, 0.95, 0.8, 0.8);
-          sunMaterial.pbr.emissiveColor = Color4.create(1, 0.95, 0.8, 1);
-        } else if (sunIntensity > 0.1) {
-          // Sunrise/sunset - orange
-          sunMaterial.pbr.albedoColor = Color4.create(1, 0.7, 0.4, 0.8);
-          sunMaterial.pbr.emissiveColor = Color4.create(1, 0.7, 0.4, 1);
-        } else {
-          // Night - cool blue
-          sunMaterial.pbr.albedoColor = Color4.create(0.2, 0.3, 0.6, 0.8);
-          sunMaterial.pbr.emissiveColor = Color4.create(0.2, 0.3, 0.6, 1);
-        }
+      if (sunIntensity > 0.5) {
+        // Day time - warm white
+      } else if (sunIntensity > 0.1) {
+        // Sunrise/sunset - orange
+        sunAlbedo = Color4.create(1, 0.7, 0.4, 0.8);
+        sunEmissive = Color4.create(1, 0.7, 0.4, 1);
+      } else {
+        // Night - cool blue
+        sunAlbedo = Color4.create(0.2, 0.3, 0.6, 0.8);
+        sunEmissive = Color4.create(0.2, 0.3, 0.6, 1);
       }
+
+      Material.setPbrMaterial(sunLight, {
+        ...sunMaterial,
+        albedoColor: sunAlbedo,
+        emissiveColor: sunEmissive,
+        emissiveIntensity: sunIntensity * 2,
+      });
 
       // Update ambient light
-      const ambientMaterial = Material.getMutable(ambientLight);
-      if (ambientMaterial && ambientMaterial.$case === 'pbr') {
-        ambientMaterial.pbr.emissiveIntensity = 0.3 + sunIntensity * 0.2;
+      const ambientMaterial = Material.get(ambientLight);
+      let ambientAlbedo = Color4.create(0.4, 0.45, 0.5, 0.1);
+      let ambientEmissive = Color4.create(0.4, 0.45, 0.5, 0.3);
 
-        if (sunIntensity < 0.1) {
-          ambientMaterial.pbr.albedoColor = Color4.create(0.1, 0.15, 0.3, 0.1);
-          ambientMaterial.pbr.emissiveColor = Color4.create(0.1, 0.15, 0.3, 0.3);
-        } else {
-          ambientMaterial.pbr.albedoColor = Color4.create(0.4, 0.45, 0.5, 0.1);
-          ambientMaterial.pbr.emissiveColor = Color4.create(0.4, 0.45, 0.5, 0.3);
-        }
+      if (sunIntensity < 0.1) {
+        ambientAlbedo = Color4.create(0.1, 0.15, 0.3, 0.1);
+        ambientEmissive = Color4.create(0.1, 0.15, 0.3, 0.3);
       }
+
+      Material.setPbrMaterial(ambientLight, {
+        ...ambientMaterial,
+        albedoColor: ambientAlbedo,
+        emissiveColor: ambientEmissive,
+        emissiveIntensity: 0.3 + sunIntensity * 0.2,
+      });
     }
   }
 
@@ -213,10 +217,11 @@ export class AdvancedLightingSystem {
       const pulse = Math.sin(time) * 0.3 + 0.7;
 
       // Update material glow
-      const material = Material.getMutable(light);
-      if (material && material.$case === 'pbr') {
-        material.pbr.emissiveIntensity = pulse * 5;
-      }
+      const material = Material.get(light);
+      Material.setPbrMaterial(light, {
+        ...material,
+        emissiveIntensity: pulse * 5,
+      });
     });
   }
 
@@ -271,10 +276,11 @@ export class AdvancedLightingSystem {
       engine.addSystem(() => {
         const time = Date.now() / 200;
         const pulse = Math.sin(time) > 0 ? 1 : 0.2;
-        const material = Material.getMutable(emergencyLight);
-        if (material && material.$case === 'pbr') {
-          material.pbr.emissiveIntensity = pulse * 4;
-        }
+        const material = Material.get(emergencyLight);
+        Material.setPbrMaterial(emergencyLight, {
+          ...material,
+          emissiveIntensity: pulse * 4,
+        });
       });
     });
   }

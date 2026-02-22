@@ -25,7 +25,7 @@ export const getRedisClient = (): RedisClientType => {
         get: async () => null,
         set: async () => 'OK',
         setEx: async () => 'OK',
-        sendCommand: async () => ({}), // Satisfies rate-limit-redis
+        sendCommand: async () => null,
         del: async () => 1,
         hGet: async () => null,
         hSet: async () => 1,
@@ -131,6 +131,14 @@ export const closeRedis = async (): Promise<void> => {
 const l1Cache = new Map<string, { value: any; expiry: number }>();
 const MAX_L1_SIZE = 1000;
 
+// Proactive L1 GC — sweeps every 5 minutes regardless of write volume
+setInterval(() => {
+  const now = Date.now();
+  for (const [k, v] of l1Cache) {
+    if (v.expiry < now) l1Cache.delete(k);
+  }
+}, 5 * 60 * 1000).unref();
+
 import { promisify } from 'node:util';
 import { deflate, inflate } from 'node:zlib';
 
@@ -142,7 +150,7 @@ const inflateAsync = promisify(inflate);
  * L1: Memory (fastest)
  * L2: Redis (distributed)
  */
-export const getCache = async (key: string): Promise<any> => {
+export const getCache = async <T>(key: string): Promise<T | null> => {
   // Check L1 first
   const l1Item = l1Cache.get(key);
   if (l1Item && l1Item.expiry > Date.now()) {

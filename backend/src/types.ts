@@ -193,4 +193,12 @@ export const TYPES = {
   VapiService: Symbol.for('VapiService'),
   AstraeaService: Symbol.for('AstraeaService'),
   AstraeaController: Symbol.for('AstraeaController'),
+  ForgeGem: Symbol.for('ForgeGem'),
+  ForgeController: Symbol.for('ForgeController'),
+  PixelBridgeService: Symbol.for('PixelBridgeService'),
+  PixelSensorService: Symbol.for('PixelSensorService'),
+  ProactiveVoiceService: Symbol.for('ProactiveVoiceService'),
+  SovereignCodeRepairService: Symbol.for('SovereignCodeRepairService'),
+  TwilioService: Symbol.for('TwilioService'),
+  TwilioWebhookController: Symbol.for('TwilioWebhookController'),
 };

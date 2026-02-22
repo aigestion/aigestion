@@ -1,9 +1,9 @@
 import { injectable, inject } from 'inversify';
-import { BaseGem } from '../BaseGem';
-import { Gemini2Service } from '../../gemini-2.service';
-import { TYPES } from '../../../types';
-import { SovereignStitchService } from '../../google/stitch.service';
-import { logger } from '../../../utils/logger';
+import { BaseGem } from './BaseGem';
+import { Gemini2Service } from '../gemini-2.service';
+import { TYPES } from '../../types';
+import { SovereignStitchService } from '../google/stitch.service';
+import { logger } from '../../utils/logger';
 
 /**
  * NEXUS STITCH GEM (Super Gem)
@@ -47,7 +47,7 @@ export class NexusStitchGem extends BaseGem {
     `;
 
     const response = await this.ask(prompt, {
-      model: 'gemini-2.5-pro',
+      model: 'gemini-2.0-pro-exp',
       temperature: 0.2,
     });
 

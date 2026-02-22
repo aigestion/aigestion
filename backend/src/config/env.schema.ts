@@ -460,6 +460,11 @@ const envSchema = baseEnvSchema.extend({
   VAPI_API_KEY: z.string().optional().describe('Vapi.ai API Key'),
   VAPI_API_URL: z.string().url().default('https://api.vapi.ai').describe('Vapi.ai API Base URL'),
   VAPI_PHONE_NUMBER_ID: z.string().optional().describe('Vapi.ai Phone Number ID'),
+
+  // Environment Aliases (Legacy/Compatible)
+  GOOGLE_PROJECT_ID: z.string().optional().describe('Alias for GOOGLE_CLOUD_PROJECT_ID'),
+  GOOGLE_LOCATION: z.string().optional().describe('Alias for GOOGLE_CLOUD_LOCATION'),
+  BACKEND_URL: z.string().url().optional().describe('Base URL of the backend service'),
 });
 
 /**

@@ -23,7 +23,7 @@ export class AnalyticsService {
   async getOverview(): Promise<any> {
     const cacheKey = 'analytics:overview:real';
     try {
-      const cachedData = await getCache(cacheKey);
+      const cachedData = await getCache<string>(cacheKey);
       if (cachedData) {
         return JSON.parse(cachedData);
       }
@@ -118,7 +118,7 @@ export class AnalyticsService {
    */
   async getDashboardData(): Promise<any> {
     const cacheKey = 'analytics:dashboard:real';
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<string>(cacheKey);
     if (cached) return JSON.parse(cached);
 
     // 1. Revenue (Last 6 Months) from UsageRecord costEstimate

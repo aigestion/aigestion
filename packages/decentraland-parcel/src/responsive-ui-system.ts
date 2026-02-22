@@ -363,7 +363,7 @@ export class ResponsiveUISystem {
       velocity >= this.gestureThresholds.swipe.minVelocity &&
       distance >= this.gestureThresholds.swipe.minDistance
     ) {
-      const direction = Vector3.subtract(endPosition, startPoint.position).normalize();
+      const direction = Vector3.normalize(Vector3.subtract(endPosition, startPoint.position));
       this.triggerGesture('swipe', startPoint.position, endPosition, duration, distance, direction);
       return;
     }
@@ -454,10 +454,11 @@ export class ResponsiveUISystem {
       const transform = Transform.getMutable(entity);
       transform.scale = Vector3.create(scale, scale, scale);
 
-      const material = Material.getMutable(entity);
-      if (material && material.$case === 'pbr') {
-        material.pbr.albedoColor = Color4.create(0.5, 0.8, 1, opacity);
-      }
+      Material.setPbrMaterial(entity, {
+        albedoColor: Color4.create(0.5, 0.8, 1, opacity),
+        emissiveColor: Color4.create(0.5, 0.8, 1, opacity),
+        emissiveIntensity: 3,
+      });
 
       if (opacity > 0) {
         setTimeout(animate, 16);
@@ -543,14 +544,11 @@ export class ResponsiveUISystem {
     this.components.forEach(component => {
       if (!component.interactive || !component.visible) return;
 
-      // Check for hover state and update appearance
-      const material = Material.getMutable(component.entity);
-      if (material && material.$case === 'pbr') {
-        // Add hover glow effect
-        const time = Date.now() / 1000;
-        const pulse = Math.sin(time * 3) * 0.1 + 0.9;
-        material.pbr.emissiveIntensity = pulse * 2;
-      }
+      const time = Date.now() / 1000;
+      const pulse = Math.sin(time * 3) * 0.1 + 0.9;
+      Material.setPbrMaterial(component.entity, {
+        emissiveIntensity: pulse * 2,
+      });
     });
   }
 

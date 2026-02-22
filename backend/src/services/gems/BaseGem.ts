@@ -12,8 +12,8 @@ export interface GemOptions {
 export abstract class BaseGem {
   constructor(
     @inject(Gemini2Service) protected gemini: Gemini2Service,
-    protected name: string,
-    protected systemInstruction: string
+    public name: string,
+    protected systemInstruction: string,
   ) {}
 
   async ask(prompt: string, options: GemOptions = {}): Promise<string> {
@@ -23,7 +23,7 @@ export abstract class BaseGem {
         systemInstruction: this.systemInstruction,
         temperature: options.temperature,
         maxTokens: options.maxTokens,
-        model: options.model
+        model: options.model,
       });
       logger.info(`[${this.name}] Response received.`);
       return response;

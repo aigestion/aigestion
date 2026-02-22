@@ -5,6 +5,7 @@ import {
   Material,
   MeshRenderer,
   pointerEventsSystem,
+  TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
 import { setTimeout, setInterval } from './utils/timers';
@@ -263,26 +264,36 @@ export class VoiceCommandSystem {
       if (!this.isInitialized) return;
 
       const time = Date.now() / 1000;
-      const material = Material.getMutable(indicator);
-
-      if (material && material.$case === 'pbr') {
+      if (indicator) {
         switch (this.voiceAssistant.processingState) {
           case 'idle':
-            material.pbr.albedoColor = Color4.create(0.2, 0.8, 0.2, 1);
-            material.pbr.emissiveIntensity = 1;
+            Material.setPbrMaterial(indicator, {
+              albedoColor: Color4.create(0.2, 0.8, 0.2, 1),
+              emissiveIntensity: 1,
+              emissiveColor: Color4.create(0.2, 0.8, 0.2, 1),
+            });
             break;
           case 'listening':
             const pulse = Math.sin(time * 3) * 0.5 + 0.5;
-            material.pbr.albedoColor = Color4.create(1, 0.8, 0.2, 1);
-            material.pbr.emissiveIntensity = 2 + pulse * 2;
+            Material.setPbrMaterial(indicator, {
+              albedoColor: Color4.create(1, 0.8, 0.2, 1),
+              emissiveIntensity: 2 + pulse * 2,
+              emissiveColor: Color4.create(1, 0.8, 0.2, 1),
+            });
             break;
           case 'processing':
-            material.pbr.albedoColor = Color4.create(0.2, 0.2, 1, 1);
-            material.pbr.emissiveIntensity = 3;
+            Material.setPbrMaterial(indicator, {
+              albedoColor: Color4.create(0.2, 0.2, 1, 1),
+              emissiveIntensity: 3,
+              emissiveColor: Color4.create(0.2, 0.2, 1, 1),
+            });
             break;
           case 'responding':
-            material.pbr.albedoColor = Color4.create(0.8, 0.2, 0.8, 1);
-            material.pbr.emissiveIntensity = 2;
+            Material.setPbrMaterial(indicator, {
+              albedoColor: Color4.create(0.8, 0.2, 0.8, 1),
+              emissiveIntensity: 2,
+              emissiveColor: Color4.create(0.8, 0.2, 0.8, 1),
+            });
             break;
         }
       }

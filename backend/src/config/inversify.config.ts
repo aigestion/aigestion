@@ -43,6 +43,7 @@ import { MCPController } from '../controllers/MCPController';
 import { PersonaController } from '../controllers/PersonaController';
 import { FinanceController } from '../controllers/FinanceController';
 import { IoTController } from '../controllers/iot.controller';
+import { ForgeController } from '../controllers/ForgeController';
 
 // Services
 import { AIService } from '../services/ai.service';
@@ -158,6 +159,7 @@ import { NeuralHomeBridge } from '../services/google/neural-home.service';
 import { ContactRegistryService } from '../services/contact-registry.service';
 import { DanielaCallAgent } from '../services/daniela-call-agent.service';
 import { NexusPushService } from '../services/nexus-push.service';
+import { ForgeGem } from '../services/gems/ForgeGem';
 import { DeviceStateStore } from '../services/device-state.store';
 import { QuantumSecurityService } from '../services/security/quantum-security.service';
 import { PineconeService } from '../services/pinecone.service';
@@ -506,5 +508,7 @@ bind<ContactRegistryService>(TYPES.ContactRegistryService, ContactRegistryServic
 bind<AstraeaController>(TYPES.AstraeaController, AstraeaController);
 bind<DanielaCallAgent>(TYPES.DanielaCallAgent, DanielaCallAgent);
 bind<NexusPushService>(TYPES.NexusPushService, NexusPushService);
+bind<ForgeGem>(TYPES.ForgeGem, ForgeGem);
+bind<ForgeController>(TYPES.ForgeController, ForgeController);
 
-export { container, TYPES };
+export { container, container as inversifyConfig, TYPES };

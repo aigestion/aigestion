@@ -353,7 +353,7 @@ export class MultiplayerSystem {
     console.log('🔌 Connecting to multiplayer server...');
 
     // Simulate connection
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise<void>(resolve => setTimeout(() => resolve(), 2000));
 
     this.connectionStatus = 'connected';
     console.log('✅ Connected to multiplayer server');

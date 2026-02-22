@@ -1,0 +1,7 @@
+{
+  "id": "sovereign_core",
+  "name": "Sovereign Energy Core",
+  "description": "A futuristic energy reactor, sleek crystalline structure with glowing internal orbits and floating magnetic rings. High-tech, metallic, cyan and violet accents.",
+  "model_type": "shap-e",
+  "dimensions": { "x": 1, "y": 1, "z": 1 }
+}
