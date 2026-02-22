@@ -256,8 +256,8 @@ class SubscriptionService {
     const endDate = subscription?.endDate ? new Date(subscription.endDate) : null;
     const trialEnd = subscription?.trialEnd ? new Date(subscription.trialEnd) : null;
 
-    const isExpired = endDate && endDate < now;
-    const isTrial = trialEnd && trialEnd > now && !endDate;
+    const isExpired = !!(endDate && endDate < now);
+    const isTrial = !!(trialEnd && trialEnd > now && !endDate);
     const daysUntilExpiry = endDate ? Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)) : Infinity;
 
     const canAccessDashboard = !isExpired && (plan.hasDashboardAccess || isTrial);
@@ -275,10 +275,16 @@ class SubscriptionService {
         maxProjectsReached: false, // TODO: Implementar conteo de proyectos
         maxUsersReached: false, // TODO: Implementar conteo de usuarios
         daysUntilExpiry,
-        isTrial,
-        isExpired,
+        isTrial: !!isTrial,
+        isExpired: !!isExpired,
       },
-      messages: this.generateValidationMessages(accessType, plan, isExpired, isTrial, daysUntilExpiry),
+      messages: this.generateValidationMessages(
+        accessType,
+        plan,
+        isExpired,
+        isTrial,
+        daysUntilExpiry
+      ),
     };
 
     console.log('[SubscriptionService] Access validation:', validation);

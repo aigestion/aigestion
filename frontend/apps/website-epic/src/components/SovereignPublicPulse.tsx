@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Activity, Cpu, Globe, Shield, Zap, Server, Wifi, Lock } from 'lucide-react';
+import { Activity, Cpu, Globe, Shield, Server } from 'lucide-react';
 import { GodModeText } from './design-system/GodModeText';
 import { TiltCard } from './design-system/TiltCard';
 

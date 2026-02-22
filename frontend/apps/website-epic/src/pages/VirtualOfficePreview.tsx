@@ -1,17 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import {
-  ArrowRight,
   ExternalLink,
   MapPin,
-  Users,
   Monitor,
   Brain,
-  Zap,
   Globe,
   Shield,
   Layers,
-  DraftingCompass,
   ChevronLeft,
   CheckCircle2,
   Building2,
@@ -41,7 +37,7 @@ const Office3DBuilding: React.FC<{ status: PulseStatus }> = ({ status }) => {
   }, []);
 
   const autoRotate = (tick * 0.4) % 360;
-  const rotateY = hovering ? autoRotate : autoRotate;
+  const _rotateY = hovering ? autoRotate : autoRotate;
 
   return (
     <div
@@ -453,7 +449,7 @@ const VirtualOfficePreview: React.FC = () => {
       else setPulseStatus('nominal');
     });
 
-    socketService.onPulseWarning(metrics => {
+    socketService.onPulseWarning(_metrics => {
       setPulseStatus('warning');
     });
 

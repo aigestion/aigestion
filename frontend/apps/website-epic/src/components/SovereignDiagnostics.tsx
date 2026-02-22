@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Activity,
   Cpu,
@@ -7,9 +7,8 @@ import {
   Zap,
   ShieldCheck,
   AlertTriangle,
-  ChevronRight,
   RefreshCcw,
-  Network
+  Network,
 } from 'lucide-react';
 import { sovereignGodMode } from '../services/sovereign-godmode';
 import { api } from '../services/api';

@@ -8,6 +8,7 @@ interface SovereignCardProps {
   pulse?: 'nominal' | 'warning' | 'critical';
   title?: string;
   icon?: React.ReactNode;
+  onClick?: () => void;
 }
 
 export const SovereignCard: React.FC<SovereignCardProps> = ({
@@ -16,6 +17,7 @@ export const SovereignCard: React.FC<SovereignCardProps> = ({
   pulse = 'nominal',
   title,
   icon,
+  onClick,
 }) => {
   const borderColor = {
     nominal: 'group-hover:border-nexus-cyan/50 border-white/5',
@@ -32,8 +34,9 @@ export const SovereignCard: React.FC<SovereignCardProps> = ({
   return (
     <motion.div
       whileHover={{ y: -5 }}
+      onClick={onClick}
       className={cn(
-        "group relative rounded-2xl border bg-black/40 backdrop-blur-xl p-6 transition-all duration-500 overflow-hidden",
+        'group relative rounded-2xl border bg-black/40 backdrop-blur-xl p-6 transition-all duration-500 overflow-hidden',
         borderColor,
         className
       )}
@@ -41,35 +44,38 @@ export const SovereignCard: React.FC<SovereignCardProps> = ({
       {/* Liquid Metal Refraction Effect */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.05] via-transparent to-transparent" />
-        <div className={cn("absolute -inset-[50%] animate-spin-slow blur-3xl", glowColor)} />
+        <div className={cn('absolute -inset-[50%] animate-spin-slow blur-3xl', glowColor)} />
       </div>
 
       {/* Header */}
       {(title || icon) && (
         <div className="flex items-center gap-3 mb-4 relative z-10">
           {icon && (
-            <div className={cn(
-              "p-2 rounded-lg bg-white/5 transition-colors",
-              pulse === 'critical' ? 'text-red-500' : 'text-nexus-cyan'
-            )}>
+            <div
+              className={cn(
+                'p-2 rounded-lg bg-white/5 transition-colors',
+                pulse === 'critical' ? 'text-red-500' : 'text-nexus-cyan'
+              )}
+            >
               {icon}
             </div>
           )}
-          {title && <h3 className="text-sm font-medium tracking-wider text-white/70 uppercase">{title}</h3>}
+          {title && (
+            <h3 className="text-sm font-medium tracking-wider text-white/70 uppercase">{title}</h3>
+          )}
         </div>
       )}
 
       {/* Content */}
-      <div className="relative z-10">
-        {children}
-      </div>
+      <div className="relative z-10">{children}</div>
 
       {/* Pulse Indicator Line */}
       <motion.div
         initial={false}
         animate={{
           scaleX: pulse === 'critical' ? 1 : 0.3,
-          backgroundColor: pulse === 'critical' ? '#EF4444' : pulse === 'warning' ? '#F59E0B' : '#06B6D4',
+          backgroundColor:
+            pulse === 'critical' ? '#EF4444' : pulse === 'warning' ? '#F59E0B' : '#06B6D4',
         }}
         className="absolute bottom-0 left-0 h-[2px] w-full origin-left opacity-50"
       />

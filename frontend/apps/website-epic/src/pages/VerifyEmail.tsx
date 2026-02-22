@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Mail, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
+import { Mail, CheckCircle, AlertCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';

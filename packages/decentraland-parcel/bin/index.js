@@ -6633,6 +6633,15 @@ var import_ecs15 = require("@dcl/sdk/ecs");
 var import_math13 = require("@dcl/sdk/math");
 var systemStatusEntity;
 var alertSystemEntity;
+var scanInProgress = false;
+var scanTimer = 0;
+var scanPhase = 0;
+var SCAN_PHASES = [
+  { delay: 0, status: "\u{1F50D} INITIATING SECURITY SCAN\u2026", alert: { msg: "Scan started \u2014 standby", type: "INFO" } },
+  { delay: 1.5, status: "\u{1F50D} SCANNING PERIMETER LAYER\u2026", alert: { msg: "Layer 1/3 scanning", type: "INFO" } },
+  { delay: 3, status: "\u{1F50D} ANALYZING QUANTUM STREAM\u2026", alert: { msg: "Layer 2/3 deep analysis", type: "WARNING" } },
+  { delay: 4.5, status: "\u{1F50D} CROSS-CHECKING SIGNATURES\u2026", alert: { msg: "Layer 3/3 signature verify", type: "INFO" } }
+];
 function createEnhancedInteractables() {
   const mainDashboard = import_ecs15.engine.addEntity();
   import_ecs15.Transform.create(mainDashboard, {
@@ -6834,13 +6843,41 @@ function createEnhancedInteractables() {
   import_ecs15.pointerEventsSystem.onPointerDown(
     {
       entity: securityTerminal,
-      opts: { button: import_ecs15.InputAction.IA_POINTER, hoverText: "\u{1F6E1}\uFE0F Access Security Systems" }
+      opts: { button: import_ecs15.InputAction.IA_POINTER, hoverText: "\u{1F6E1}\uFE0F Run Security Scan" }
     },
     () => {
-      console.log("\u{1F6E1}\uFE0F Security Systems Accessed");
-      updateSystemStatus("SECURITY_BREACH", false);
+      if (scanInProgress) {
+        console.log("\u{1F6E1}\uFE0F Scan already in progress\u2026");
+        return;
+      }
+      console.log("\u{1F6E1}\uFE0F Security Scan Initiated");
+      soundSystem.playInteractionSound("click");
+      startSecurityScan();
     }
   );
+  import_ecs15.engine.addSystem((dt) => {
+    if (!scanInProgress) return;
+    scanTimer += dt;
+    if (scanPhase < SCAN_PHASES.length && scanTimer >= SCAN_PHASES[scanPhase].delay) {
+      const phase = SCAN_PHASES[scanPhase];
+      updateSystemStatus(phase.status, true);
+      updateAlert(phase.alert.msg, phase.alert.type);
+      scanPhase++;
+    }
+    if (scanTimer >= 6) {
+      scanInProgress = false;
+      scanTimer = 0;
+      scanPhase = 0;
+      const breach = Math.random() > 0.85;
+      if (breach) {
+        updateSystemStatus("\u{1F6A8} SECURITY BREACH DETECTED", false);
+        updateAlert("BREACH: Anomaly in quantum stream!", "CRITICAL");
+      } else {
+        updateSystemStatus("\u2705 SCAN COMPLETE \u2014 SECURE", true);
+        updateAlert("Security scan complete \u2014 NO threats found \u2705", "INFO");
+      }
+    }
+  });
   for (let i = 0; i < 3; i++) {
     const energyCrystal = import_ecs15.engine.addEntity();
     import_ecs15.Transform.create(energyCrystal, {
@@ -6866,6 +6903,13 @@ function createEnhancedInteractables() {
       }
     );
   }
+}
+function startSecurityScan() {
+  scanInProgress = true;
+  scanTimer = 0;
+  scanPhase = 0;
+  updateSystemStatus("\u{1F6E1}\uFE0F SCAN INITIALIZING\u2026", true);
+  updateAlert("Security scan started\u2026", "INFO");
 }
 function updateSystemStatus(system, active) {
   if (!systemStatusEntity) return;

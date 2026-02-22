@@ -31,8 +31,8 @@ export class ComponentRegistry {
     defaultProps?: P
   ): void {
     compositionContext.components.set(name, {
-      Component: component,
-      props: defaultProps,
+      Component: component as any,
+      props: defaultProps as any,
     });
   }
 
@@ -110,7 +110,7 @@ export function composeComponent<P = ComponentProps>(
   const { Component, props: defaultProps } = registered;
   const finalProps = { ...defaultProps, ...overrides };
 
-  return (props: P) => <Component {...finalProps} {...props} />;
+  return (props: P) => <Component {...(finalProps as any)} {...props} />;
 }
 
 // Multi-component composer
@@ -216,7 +216,7 @@ export function createComponentFactory<P = ComponentProps>(defaultConfig: {
     readonly props?: P;
     readonly children?: ReactNode;
   }) {
-    const Component = composeComponent(name, props);
+    const Component = composeComponent<P>(name, props);
     if (!Component) return null;
 
     let content = <Component {...(props as P)}>{children}</Component>;

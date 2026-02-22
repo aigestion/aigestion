@@ -10,6 +10,7 @@ import {
   TrendingUp,
   User,
   X,
+} from 'lucide-react';
 import { SpotlightWrapper } from './design-system/SpotlightWrapper';
 import { NexusCommandBar } from './design-system/NexusCommandBar';
 import { NexusMetricCard } from './design-system/NexusMetricCard';

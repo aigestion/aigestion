@@ -20,7 +20,6 @@ import {
   CheckCircle,
   AlertCircle,
   Play,
-  Pause,
   RefreshCw,
 } from 'lucide-react';
 
@@ -57,7 +56,7 @@ export const VoiceAIGodModeDashboard: React.FC = () => {
     vapi: { calls_made: 0, minutes_used: 0, minutes_limit: 100 },
     twilio: { messages_sent: 0, messages_limit: 100, cost_saved: 0 },
   });
-  const [systemStatus, setSystemStatus] = useState<SystemStatus>({
+  const [systemStatus] = useState<SystemStatus>({
     elevenlabs: 'online',
     vapi: 'online',
     twilio: 'online',

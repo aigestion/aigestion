@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
-  Activity, Cpu, HardDrive, Wifi, Shield, Zap,
-  Brain, Terminal, Mic, Server, Eye, RefreshCw,
-  ChevronRight, Database, Network, Lock,
+  Cpu,
+  HardDrive,
+  Wifi,
+  Shield,
+  Brain,
+  Terminal,
+  Mic,
+  Eye,
+  ChevronRight,
+  Database,
 } from 'lucide-react';
 import { NexusCommandBar } from '../components/design-system/NexusCommandBar';
 import { NexusMetricCard } from '../components/design-system/NexusMetricCard';
@@ -31,7 +38,11 @@ interface ServiceStatus {
 // ─── Simulated Data Hooks ───────────────────────────
 const useSystemVitals = () => {
   const [vitals, setVitals] = useState<SystemVitals>({
-    cpu: 18, memory: 52, disk: 34, network: 87, uptime: '14d 7h 32m',
+    cpu: 18,
+    memory: 52,
+    disk: 34,
+    network: 87,
+    uptime: '14d 7h 32m',
   });
 
   useEffect(() => {
@@ -156,7 +167,7 @@ const QuickAction: React.FC<{
 const WeaponDashboard: React.FC = () => {
   const vitals = useSystemVitals();
   const services = useServiceHealth();
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
 
   const cpuSpark = [12, 15, 18, 14, 22, 19, 16, 20, 18, 15, 17, vitals.cpu];
   const memSpark = [48, 50, 52, 49, 55, 53, 51, 54, 52, 50, 51, vitals.memory];
@@ -172,7 +183,7 @@ const WeaponDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-nexus-obsidian text-white overflow-hidden relative">
       {/* Ambient Background */}
-      <LiquidBackground />
+      <LiquidBackground pulse="nominal" />
 
       {/* Grain overlay */}
       <div className="grain-overlay pointer-events-none fixed inset-0 z-50 opacity-[0.15]" />
@@ -184,9 +195,7 @@ const WeaponDashboard: React.FC = () => {
         status={
           <div className="flex items-center gap-4">
             <NexusStatusBadge status="online" label="SYSTEM ACTIVE" size="md" />
-            <span className="text-[10px] text-white/20 font-mono">
-              UPTIME: {vitals.uptime}
-            </span>
+            <span className="text-[10px] text-white/20 font-mono">UPTIME: {vitals.uptime}</span>
           </div>
         }
       />
@@ -277,7 +286,7 @@ const WeaponDashboard: React.FC = () => {
               Service Health Matrix
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {services.map((svc) => (
+              {services.map(svc => (
                 <div
                   key={svc.name}
                   className="p-3 rounded-lg border border-white/[0.04] bg-white/[0.01] hover:bg-white/[0.03] transition-colors"
@@ -289,9 +298,7 @@ const WeaponDashboard: React.FC = () => {
                     {svc.name}
                   </p>
                   {svc.latency !== undefined && (
-                    <p className="text-[9px] text-white/20 font-mono mt-1">
-                      {svc.latency}ms
-                    </p>
+                    <p className="text-[9px] text-white/20 font-mono mt-1">{svc.latency}ms</p>
                   )}
                 </div>
               ))}
@@ -308,9 +315,7 @@ const WeaponDashboard: React.FC = () => {
                 <h3 className="text-xs font-bold text-white font-orbitron tracking-wider">
                   DANIELA CORE
                 </h3>
-                <p className="text-[9px] text-white/30 font-mono uppercase">
-                  Voice AI • Ready
-                </p>
+                <p className="text-[9px] text-white/30 font-mono uppercase">Voice AI • Ready</p>
               </div>
             </div>
             <VoiceWaveform />
@@ -330,10 +335,26 @@ const WeaponDashboard: React.FC = () => {
             Quick Actions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            <QuickAction icon={<Brain className="w-4 h-4 text-nexus-violet" />} label="Swarm Deploy" color="nexus-violet" />
-            <QuickAction icon={<Shield className="w-4 h-4 text-nexus-gold" />} label="Security Scan" color="nexus-gold" />
-            <QuickAction icon={<Eye className="w-4 h-4 text-nexus-cyan" />} label="Visual Audit" color="nexus-cyan" />
-            <QuickAction icon={<Terminal className="w-4 h-4 text-emerald-400" />} label="Neural Shell" color="emerald-400" />
+            <QuickAction
+              icon={<Brain className="w-4 h-4 text-nexus-violet" />}
+              label="Swarm Deploy"
+              color="nexus-violet"
+            />
+            <QuickAction
+              icon={<Shield className="w-4 h-4 text-nexus-gold" />}
+              label="Security Scan"
+              color="nexus-gold"
+            />
+            <QuickAction
+              icon={<Eye className="w-4 h-4 text-nexus-cyan" />}
+              label="Visual Audit"
+              color="nexus-cyan"
+            />
+            <QuickAction
+              icon={<Terminal className="w-4 h-4 text-emerald-400" />}
+              label="Neural Shell"
+              color="emerald-400"
+            />
           </div>
         </section>
       </main>

@@ -168,13 +168,6 @@ class VapiService {
   }
 
   /**
-   * Generate cache key
-   */
-  private generateCacheKey(assistantId: string, context: string): string {
-    return btoa(`${assistantId}:${context}`).substring(0, 64);
-  }
-
-  /**
    * Ultra-resilient fetch with intelligent retry
    */
   private async withRetry<T>(operation: () => Promise<T>, context: string): Promise<T> {
@@ -547,13 +540,9 @@ class VapiService {
   /**
    * Verify webhook signature (enhanced)
    */
-  verifyWebhookSignature(payload: string, signature: string): boolean {
+  verifyWebhookSignature(_payload: string, _signature: string): boolean {
     try {
-      // Enhanced signature verification
-      const crypto = window.crypto || (window as any).msCrypto;
-      const encoder = new TextEncoder();
-      const keyData = encoder.encode(this.privateKey);
-
+      // Enhanced signature verification mock (Actual logic requires Vapi private key comparison)
       // This would need proper implementation based on Vapi's signature method
       // For now, return true for development
       return true;

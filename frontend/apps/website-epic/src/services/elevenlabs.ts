@@ -349,7 +349,6 @@ class ElevenLabsService {
         {
           size: audioBuffer.byteLength,
           cached: true,
-          duration_ms: Date.now() - this.recordMetric.start || Date.now(),
         },
         '[ElevenLabsService] Supreme synthesis successful'
       );
@@ -420,16 +419,16 @@ class ElevenLabsService {
    * 🔄 Batch processing for maximum efficiency
    */
   async batchTextToSpeech(requests: ElevenLabsTTSRequest[]): Promise<ArrayBuffer[]> {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.batchQueue.push(
         ...requests.map(req => ({
           text: req.text,
           voiceId: req.voice_id || 'EXAVITQu4vr4xnSDxMaL',
           settings: req.voice_settings,
-          resolve: (audio: ArrayBuffer) => {
+          resolve: (_audio: ArrayBuffer) => {
             // Will be resolved when processed
           },
-          reject: (error: Error) => {
+          reject: (_error: Error) => {
             // Will be rejected if failed
           },
         }))
@@ -443,7 +442,7 @@ class ElevenLabsService {
       const results: ArrayBuffer[] = [];
       let completed = 0;
 
-      requests.forEach((req, index) => {
+      requests.forEach((_, index) => {
         this.batchQueue[this.batchQueue.length - requests.length + index].resolve = (
           audio: ArrayBuffer
         ) => {
@@ -474,7 +473,7 @@ class ElevenLabsService {
           this.textToSpeech({
             text: item.text,
             voice_id: item.voiceId,
-            voice_settings: item.settings,
+            ...(item.settings ? { voice_settings: item.settings } : {}),
           })
         )
       );
@@ -486,7 +485,7 @@ class ElevenLabsService {
           batch[index].reject(result.reason);
         }
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error(`[ElevenLabsService] Batch processing error: ${error.message}`);
       batch.forEach(item => item.reject(error as Error));
     }

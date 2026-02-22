@@ -32,14 +32,16 @@ self.onmessage = (event: MessageEvent) => {
   }
 };
 
-function processMetrics(data: any[], options: any) {
+function processMetrics(data: any[], _options: any) {
   // Simulate heavy processing of swarm/agent metrics
-  return data.map(item => ({
-    ...item,
-    loadFactor: (item.cpu + item.memory) / 2,
-    efficiencyScore: item.tasksCompleted / (item.uptime || 1),
-    timestamp: Date.now()
-  })).sort((a, b) => b.efficiencyScore - a.efficiencyScore);
+  return data
+    .map(item => ({
+      ...item,
+      loadFactor: (item.cpu + item.memory) / 2,
+      efficiencyScore: item.tasksCompleted / (item.uptime || 1),
+      timestamp: Date.now(),
+    }))
+    .sort((a, b) => b.efficiencyScore - a.efficiencyScore);
 }
 
 function transformRAGData(data: any) {

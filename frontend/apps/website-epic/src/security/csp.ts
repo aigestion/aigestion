@@ -219,7 +219,9 @@ export class CSPViolationReporter {
 
   constructor(maxViolations: number = 100, reportEndpoint?: string) {
     this.maxViolations = maxViolations;
-    this.reportEndpoint = reportEndpoint || undefined;
+    if (reportEndpoint) {
+      this.reportEndpoint = reportEndpoint;
+    }
   }
 
   reportViolation(violation: CSPViolation): void {

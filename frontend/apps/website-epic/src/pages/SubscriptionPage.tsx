@@ -12,13 +12,13 @@ import {
   Smartphone,
   BarChart3,
   Rocket,
-  ArrowRight,
-  Loader2,
-  AlertCircle,
-  TrendingUp,
   Award,
 } from 'lucide-react';
-import { subscriptionService, SUBSCRIPTION_PLANS, SubscriptionPlan } from '../services/subscription-service';
+import {
+  subscriptionService,
+  SUBSCRIPTION_PLANS,
+  SubscriptionPlan,
+} from '../services/subscription-service';
 import { useAuth } from '../hooks/useAuth';
 import { GodModeText } from '../components/design-system/GodModeText';
 import { TiltCard } from '../components/design-system/TiltCard';
@@ -26,7 +26,6 @@ import { TiltCard } from '../components/design-system/TiltCard';
 const SubscriptionPage: React.FC = () => {
   const { user } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<string>('basic');
-  const [loading, setLoading] = useState(false);
   const [currentSubscription, setCurrentSubscription] = useState<any>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -34,11 +33,11 @@ const SubscriptionPage: React.FC = () => {
   useEffect(() => {
     const loadCurrentSubscription = async () => {
       if (!user?.id) return;
-      
+
       try {
         const subscription = await subscriptionService.getUserSubscription(user.id);
         setCurrentSubscription(subscription);
-        
+
         if (subscription?.planId) {
           setSelectedPlan(subscription.planId);
         }
@@ -50,19 +49,15 @@ const SubscriptionPage: React.FC = () => {
     loadCurrentSubscription();
   }, [user?.id]);
 
-  const handlePlanSelect = (planId: string) => {
-    setSelectedPlan(planId);
-  };
-
   const handleUpgrade = async (planId: string) => {
     if (!user?.id) return;
 
     setPaymentLoading(true);
-    
+
     try {
       // Create payment session
-      const { sessionId, url } = await subscriptionService.createPaymentSession(user.id, planId);
-      
+      const { url } = await subscriptionService.createPaymentSession(user.id, planId);
+
       // Redirect to payment page
       window.location.href = url;
     } catch (error) {
@@ -92,10 +87,10 @@ const SubscriptionPage: React.FC = () => {
 
   const canUpgrade = (planId: string) => {
     if (!currentSubscription) return true;
-    
+
     const currentPlan = SUBSCRIPTION_PLANS[currentSubscription.planId];
     const targetPlan = SUBSCRIPTION_PLANS[planId];
-    
+
     return targetPlan.price > currentPlan.price;
   };
 
@@ -174,8 +169,8 @@ const SubscriptionPage: React.FC = () => {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3 + index * 0.1 }}
                     className={`relative bg-black/40 backdrop-blur-xl rounded-2xl p-8 border-2 h-full flex flex-col ${
-                      isPopular 
-                        ? 'border-nexus-cyan shadow-[0_0_30px_rgba(34,211,238,0.3)]' 
+                      isPopular
+                        ? 'border-nexus-cyan shadow-[0_0_30px_rgba(34,211,238,0.3)]'
                         : isCurrent
                           ? 'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]'
                           : 'border-white/10 hover:border-white/20'
@@ -260,7 +255,7 @@ const SubscriptionPage: React.FC = () => {
                     <motion.button
                       whileHover={{ scale: isCurrent || !canUpgradeTo ? 1 : 1.02 }}
                       whileTap={{ scale: isCurrent || !canUpgradeTo ? 1 : 0.98 }}
-                      onClick={() => isCurrent ? {} : handleUpgrade(plan.id)}
+                      onClick={() => (isCurrent ? {} : handleUpgrade(plan.id))}
                       disabled={isCurrent || !canUpgradeTo || paymentLoading}
                       className={`w-full py-4 rounded-xl font-semibold transition-all duration-300 ${
                         isCurrent
@@ -309,7 +304,7 @@ const SubscriptionPage: React.FC = () => {
                   <Award className="w-6 h-6 text-nexus-cyan" />
                   Estado Actual de tu Suscripción
                 </h3>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                     <p className="text-nexus-silver/60 text-sm mb-1">Plan Actual</p>
@@ -317,19 +312,26 @@ const SubscriptionPage: React.FC = () => {
                       {SUBSCRIPTION_PLANS[currentSubscription.planId]?.name || 'Gratis'}
                     </p>
                   </div>
-                  
+
                   <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                     <p className="text-nexus-silver/60 text-sm mb-1">Estado</p>
-                    <p className={`text-xl font-bold ${
-                      currentSubscription.status === 'active' ? 'text-emerald-400' : 'text-red-400'
-                    }`}>
-                      {currentSubscription.status === 'active' ? 'Activa' : 
-                       currentSubscription.status === 'expired' ? 'Expirada' :
-                       currentSubscription.status === 'cancelled' ? 'Cancelada' :
-                       currentSubscription.status}
+                    <p
+                      className={`text-xl font-bold ${
+                        currentSubscription.status === 'active'
+                          ? 'text-emerald-400'
+                          : 'text-red-400'
+                      }`}
+                    >
+                      {currentSubscription.status === 'active'
+                        ? 'Activa'
+                        : currentSubscription.status === 'expired'
+                          ? 'Expirada'
+                          : currentSubscription.status === 'cancelled'
+                            ? 'Cancelada'
+                            : currentSubscription.status}
                     </p>
                   </div>
-                  
+
                   {currentSubscription.endDate && (
                     <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                       <p className="text-nexus-silver/60 text-sm mb-1">Próximo Renovación</p>
@@ -342,25 +344,29 @@ const SubscriptionPage: React.FC = () => {
 
                 <div className="mt-6 flex gap-4">
                   <button
-                    onClick={() => window.location.href = 'mailto:soporte@aigestion.net?subject=Consulta%20de%20Suscripción'}
+                    onClick={() =>
+                      (window.location.href =
+                        'mailto:soporte@aigestion.net?subject=Consulta%20de%20Suscripción')
+                    }
                     className="px-6 py-3 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-colors border border-white/20 flex items-center gap-2"
                   >
                     <Shield className="w-4 h-4" />
                     Contactar Soporte
                   </button>
-                  
-                  {currentSubscription.status === 'active' && currentSubscription.planId !== 'free' && (
-                    <button
-                      onClick={() => {
-                        if (confirm('¿Estás seguro de que quieres cancelar tu suscripción?')) {
-                          subscriptionService.cancelSubscription(user!.id);
-                        }
-                      }}
-                      className="px-6 py-3 bg-red-500/10 text-red-400 rounded-xl font-medium hover:bg-red-500/20 transition-colors border border-red-500/20"
-                    >
-                      Cancelar Suscripción
-                    </button>
-                  )}
+
+                  {currentSubscription.status === 'active' &&
+                    currentSubscription.planId !== 'free' && (
+                      <button
+                        onClick={() => {
+                          if (confirm('¿Estás seguro de que quieres cancelar tu suscripción?')) {
+                            subscriptionService.cancelSubscription(user!.id);
+                          }
+                        }}
+                        className="px-6 py-3 bg-red-500/10 text-red-400 rounded-xl font-medium hover:bg-red-500/20 transition-colors border border-red-500/20"
+                      >
+                        Cancelar Suscripción
+                      </button>
+                    )}
                 </div>
               </div>
             </TiltCard>

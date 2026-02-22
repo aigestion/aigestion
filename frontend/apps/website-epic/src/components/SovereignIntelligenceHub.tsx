@@ -41,6 +41,9 @@ import { useDanielaVoice } from '../hooks/useDanielaVoice';
 export const SovereignIntelligenceHub: React.FC = () => {
   const { notify } = useNotification();
   const [objective, setObjective] = useState('');
+  const [activeTab, setActiveTab] = useState<
+    'terminal' | 'missions' | 'memory' | 'sentinel' | 'swarm' | 'infra' | 'voice'
+  >('terminal');
   const [missions, setMissions] = useState<SwarmMission[]>([]);
   const [isLaunching, setIsLaunching] = useState(false);
   const [isVaultLocked, setIsVaultLocked] = useState(true);
@@ -50,11 +53,10 @@ export const SovereignIntelligenceHub: React.FC = () => {
   const [voicePersonality, setVoicePersonality] = useState<
     'sovereign' | 'professional' | 'empathy'
   >('sovereign');
-  const { isListening, toggleListening, speak } = useDanielaVoice();
+  const { speak } = useDanielaVoice();
 
   const [decryptedFindings, setDecryptedFindings] = useState<Record<string, string>>({});
   const [isDecrypting, setIsDecrypting] = useState<string | null>(null);
-  const [forecasts, setForecasts] = useState<any[]>([]);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [hasGreeted, setHasGreeted] = useState(false);
   const [healerStatus, setHealerStatus] = useState<{
@@ -78,7 +80,6 @@ export const SovereignIntelligenceHub: React.FC = () => {
     setPulseHistory(prev => [...prev.slice(1), healerStatus.pulse]);
   }, [healerStatus.pulse]);
   const [pixelSnapshot, setPixelSnapshot] = useState<any>(null);
-  const [pixelStats, setPixelStats] = useState<any>(null);
 
   // 🌌 Real-Time Neural Pulse via Socket.io
   useEffect(() => {
@@ -127,9 +128,8 @@ export const SovereignIntelligenceHub: React.FC = () => {
     loadMissions();
     loadHealerStatus();
     loadPixelSensors();
-    loadPixelStats();
+    loadPixelSensors();
     if (activeTab === 'sentinel') {
-      loadForecasts();
       loadHealerStatus();
     }
 
@@ -164,16 +164,8 @@ export const SovereignIntelligenceHub: React.FC = () => {
     }
   };
 
-  const loadForecasts = async () => {
-    try {
-      const data = await sovereignGodMode.getResourceForecast();
-      if (data.success) {
-        setForecasts(data.forecasts);
-      }
-    } catch (err) {
-      console.error('Failed to load forecasts:', err);
-    }
-  };
+  // 🌌 Forecast Data - Optimization Hub (Removed for stability)
+
 
   const loadHealerStatus = async () => {
     try {

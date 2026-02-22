@@ -109,6 +109,9 @@ const environmentConfigs: Record<string, Partial<AppConfig>> = {
     features: {
       enableAnalytics: false,
       enablePWA: false,
+      enableDarkMode: true,
+      enableSoundEffects: true,
+      enableAnimations: true,
       enableDevTools: true,
     },
     monitoring: {
@@ -120,6 +123,9 @@ const environmentConfigs: Record<string, Partial<AppConfig>> = {
     features: {
       enableAnalytics: true,
       enablePWA: true,
+      enableDarkMode: true,
+      enableSoundEffects: true,
+      enableAnimations: true,
       enableDevTools: true,
     },
     monitoring: {
@@ -131,8 +137,10 @@ const environmentConfigs: Record<string, Partial<AppConfig>> = {
     features: {
       enableAnalytics: true,
       enablePWA: true,
+      enableDarkMode: true,
+      enableSoundEffects: false,
+      enableAnimations: true,
       enableDevTools: false,
-      enableSoundEffects: false, // Optional: disable in production for performance
     },
     monitoring: {
       enableErrorReporting: true,

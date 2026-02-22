@@ -171,10 +171,9 @@ class VoiceAIIntegrationService {
     try {
       const request: ElevenLabsTTSRequest = {
         text,
-        voice_id: this.config.elevenLabs.defaultVoiceId,
-        model_id: this.config.elevenLabs.modelId,
-        voice_settings: this.config.elevenLabs.voiceSettings,
-        ...options,
+        voice_id: options?.voice_id || this.config.elevenLabs.defaultVoiceId,
+        model_id: options?.model_id || this.config.elevenLabs.modelId,
+        voice_settings: options?.voice_settings || this.config.elevenLabs.voiceSettings,
       };
 
       const startTime = Date.now();
