@@ -23,11 +23,15 @@ import {
   ArrowUpRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { socketService } from '../services/socket.service';
+
+// 🌌 Healer Status Type
+type PulseStatus = 'nominal' | 'warning' | 'critical';
 
 // ─────────────────────────────────────────────
 // 3D CSS Building Component
 // ─────────────────────────────────────────────
-const Office3DBuilding: React.FC = () => {
+const Office3DBuilding: React.FC<{ status: PulseStatus }> = ({ status }) => {
   const [tick, setTick] = useState(0);
   const [hovering, setHovering] = useState(false);
 
@@ -57,9 +61,24 @@ const Office3DBuilding: React.FC = () => {
             position: 'absolute',
             width: 220,
             height: 280,
-            background: 'linear-gradient(180deg, #0a1628 0%, #0d1f3c 100%)',
-            border: '1px solid rgba(0,245,255,0.3)',
-            boxShadow: '0 0 40px rgba(0,245,255,0.15), inset 0 0 60px rgba(0,245,255,0.05)',
+            background:
+              status === 'critical'
+                ? 'linear-gradient(180deg, #1a0505 0%, #2a0a0a 100%)'
+                : status === 'warning'
+                  ? 'linear-gradient(180deg, #1a1505 0%, #2a200a 100%)'
+                  : 'linear-gradient(180deg, #0a1628 0%, #0d1f3c 100%)',
+            border:
+              status === 'critical'
+                ? '1px solid rgba(255,50,50,0.4)'
+                : status === 'warning'
+                  ? '1px solid rgba(255,200,50,0.4)'
+                  : '1px solid rgba(0,245,255,0.3)',
+            boxShadow:
+              status === 'critical'
+                ? '0 0 40px rgba(255,50,50,0.2), inset 0 0 60px rgba(255,50,50,0.1)'
+                : status === 'warning'
+                  ? '0 0 40px rgba(255,200,50,0.2), inset 0 0 60px rgba(255,200,50,0.1)'
+                  : '0 0 40px rgba(0,245,255,0.15), inset 0 0 60px rgba(0,245,255,0.05)',
             transform: 'translateZ(55px)',
             backfaceVisibility: 'hidden',
           }}
@@ -103,11 +122,25 @@ const Office3DBuilding: React.FC = () => {
               fontFamily: 'monospace',
               fontSize: 10,
               letterSpacing: '0.3em',
-              color: 'rgba(0,245,255,0.8)',
-              textShadow: '0 0 10px rgba(0,245,255,0.6)',
+              color:
+                status === 'critical'
+                  ? '#ff3232'
+                  : status === 'warning'
+                    ? '#ffc832'
+                    : 'rgba(0,245,255,0.8)',
+              textShadow:
+                status === 'critical'
+                  ? '0 0 10px #ff3232'
+                  : status === 'warning'
+                    ? '0 0 10px #ffc832'
+                    : '0 0 10px rgba(0,245,255,0.6)',
             }}
           >
-            AIGESTION HQ
+            {status === 'critical'
+              ? 'CRITICAL ERROR'
+              : status === 'warning'
+                ? 'SYSTEM DEGRADED'
+                : 'AIGESTION HQ'}
           </div>
         </div>
 
@@ -411,6 +444,22 @@ const HOW_IT_WORKS = [
 // Main Component
 // ─────────────────────────────────────────────
 const VirtualOfficePreview: React.FC = () => {
+  const [pulseStatus, setPulseStatus] = useState<PulseStatus>('nominal');
+
+  useEffect(() => {
+    socketService.onPulse(metrics => {
+      if (metrics.status === 'CRITICAL') setPulseStatus('critical');
+      else if (metrics.status === 'DEGRADED') setPulseStatus('warning');
+      else setPulseStatus('nominal');
+    });
+
+    socketService.onPulseWarning(metrics => {
+      setPulseStatus('warning');
+    });
+
+    return () => socketService.disconnect();
+  }, []);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
@@ -542,21 +591,33 @@ const VirtualOfficePreview: React.FC = () => {
                     'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,245,255,0.015) 2px, rgba(0,245,255,0.015) 4px)',
                 }}
               />
-              <Office3DBuilding />
+              <Office3DBuilding status={pulseStatus} />
 
               {/* Status bar */}
               <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                 <div className="flex gap-2">
-                  {['bg-red-500', 'bg-yellow-500', 'bg-green-500'].map((c, i) => (
-                    <div key={i} className={`w-2.5 h-2.5 rounded-full ${c}`} />
-                  ))}
+                  <div
+                    className={`w-2.5 h-2.5 rounded-full ${pulseStatus === 'critical' ? 'bg-red-500 animate-pulse' : 'bg-red-900 opacity-30'}`}
+                  />
+                  <div
+                    className={`w-2.5 h-2.5 rounded-full ${pulseStatus === 'warning' ? 'bg-yellow-500 animate-pulse' : 'bg-yellow-900 opacity-30'}`}
+                  />
+                  <div
+                    className={`w-2.5 h-2.5 rounded-full ${pulseStatus === 'nominal' ? 'bg-green-500 animate-pulse' : 'bg-green-900 opacity-30'}`}
+                  />
                 </div>
-                <div className="text-[10px] font-mono text-white/30 tracking-widest">
-                  AIGESTION · NEXTGEN OFFICE
+                <div className="text-[10px] font-mono text-white/30 tracking-widest uppercase">
+                  AIGESTION · {pulseStatus} pulse
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-[10px] font-mono text-green-400">LIVE</span>
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full animate-pulse ${pulseStatus === 'critical' ? 'bg-red-500' : pulseStatus === 'warning' ? 'bg-yellow-500' : 'bg-green-500'}`}
+                  />
+                  <span
+                    className={`text-[10px] font-mono ${pulseStatus === 'critical' ? 'text-red-400' : pulseStatus === 'warning' ? 'text-yellow-400' : 'text-green-400'}`}
+                  >
+                    {pulseStatus === 'nominal' ? 'OPTIMAL' : pulseStatus.toUpperCase()}
+                  </span>
                 </div>
               </div>
             </div>
