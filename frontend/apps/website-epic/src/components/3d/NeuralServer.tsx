@@ -47,7 +47,7 @@ export const NeuralServer: React.FC = () => {
   return (
     <div className="w-full h-full relative" style={{ pointerEvents: 'auto' }}>
       <Canvas camera={{ position: [0, 0, 4] }}>
-        <Environment preset="city" />
+        <Environment preset="sunset" />
 
         <ServerCore />
         <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />

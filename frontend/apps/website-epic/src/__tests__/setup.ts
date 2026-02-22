@@ -1,11 +1,35 @@
 import '@testing-library/jest-dom';
 import { configure } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
+import React from 'react';
+
+// Ensure React is available globally for legacy transformation or specific test scenarios
+global.React = React;
 
 // Configure testing library
 configure({
+
   testIdAttribute: 'data-testid',
   asyncUtilTimeout: 5000,
+});
+
+// Mock framer-motion
+vi.mock('framer-motion', () => {
+  const actual = vi.importActual('framer-motion');
+  return {
+    ...actual,
+    motion: {
+      div: ({ children, ...props }: any) => React.createElement('div', props, children),
+      span: ({ children, ...props }: any) => React.createElement('span', props, children),
+      p: ({ children, ...props }: any) => React.createElement('p', props, children),
+      h1: ({ children, ...props }: any) => React.createElement('h1', props, children),
+      h2: ({ children, ...props }: any) => React.createElement('h2', props, children),
+      h3: ({ children, ...props }: any) => React.createElement('h3', props, children),
+      button: ({ children, ...props }: any) => React.createElement('button', props, children),
+      img: (props: any) => React.createElement('img', props),
+    },
+    AnimatePresence: ({ children }: any) => children,
+  };
 });
 
 // Mock IntersectionObserver
@@ -48,6 +72,14 @@ global.getComputedStyle = vi.fn().mockReturnValue({
 // Mock URL.createObjectURL
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 global.URL.revokeObjectURL = vi.fn();
+
+// Mock scrollIntoView for jsdom
+if (typeof window !== 'undefined') {
+  Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+    configurable: true,
+    value: vi.fn(),
+  });
+}
 
 // Mock canvas
 HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({

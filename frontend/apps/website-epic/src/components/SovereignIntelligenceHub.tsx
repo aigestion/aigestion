@@ -13,11 +13,11 @@ import {
   CheckCircle2,
   Play,
   History,
-  Cpu,
   Database,
-  Shield,
   AlertTriangle,
-  Server
+  Server,
+  Share2,
+  Cpu,
 } from 'lucide-react';
 import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
 import { sovereignGodMode, SwarmMission } from '../services/sovereign-godmode';
@@ -35,14 +35,15 @@ export const SovereignIntelligenceHub: React.FC = () => {
   const [isVaultLocked, setIsVaultLocked] = useState(true);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
   const [isRecordingVoice, setIsRecordingVoice] = useState(false);
-  const [voiceEnrollmentActive, setVoiceEnrollmentActive] = useState(false);
   const [sovereignSession, setSovereignSession] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'terminal' | 'missions' | 'memory' | 'sentinel'>(
-    'terminal'
-  );
+  const [activeTab, setActiveTab] = useState<
+    'terminal' | 'missions' | 'memory' | 'sentinel' | 'swarm'
+  >('terminal');
   const [decryptedFindings, setDecryptedFindings] = useState<Record<string, string>>({});
   const [isDecrypting, setIsDecrypting] = useState<string | null>(null);
   const [forecasts, setForecasts] = useState<any[]>([]);
+  const [isFocusMode, setIsFocusMode] = useState(false);
+  const [hasGreeted, setHasGreeted] = useState(false);
 
   useEffect(() => {
     loadMissions();
@@ -50,6 +51,19 @@ export const SovereignIntelligenceHub: React.FC = () => {
       loadForecasts();
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    if (!isVaultLocked && !hasGreeted) {
+      playDanielaGreeting();
+      setHasGreeted(true);
+    }
+  }, [isVaultLocked, hasGreeted]);
+
+  const playDanielaGreeting = () => {
+    // In a final version, this would be a real mp3/wav
+    // For the prototype, we use notify to simulate the voice interaction
+    notify('DANIELA', 'Bienvenido, Alejandro. Entorno soberano listo para tu revisión estratégica.', 'info');
+  };
 
   const loadMissions = async () => {
     try {
@@ -199,7 +213,6 @@ export const SovereignIntelligenceHub: React.FC = () => {
           const base64Audio = (reader.result as string).split(',')[1];
           await sovereignGodMode.enrollVoice(base64Audio);
           notify('BIO-LLAVE REGISTRADA', 'Tu huella de voz ha sido vinculada al vault.', 'success');
-          setVoiceEnrollmentActive(false);
           setIsRecordingVoice(false);
         };
       };
@@ -262,7 +275,12 @@ export const SovereignIntelligenceHub: React.FC = () => {
   const standardMissions = missions.filter(m => !m.metadata?.isHealingProposal);
 
   return (
-    <SpotlightWrapper className="flex flex-col h-full text-white font-sans overflow-hidden relative">
+    <SpotlightWrapper
+      className={cn(
+        'flex flex-col h-full text-white font-sans overflow-hidden relative smooth-mesh-bg transition-all',
+        isFocusMode && 'focus-mode-active'
+      )}
+    >
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(6,182,212,0.1),transparent_70%)]" />
@@ -274,22 +292,22 @@ export const SovereignIntelligenceHub: React.FC = () => {
       <div className="p-8 border-b border-white/5 flex justify-between items-center bg-black/50 backdrop-blur-md relative z-10">
         <div>
           <GodModeText
-            text="SOVEREIGN INTELLIGENCE HUB"
+            text="HUB DE INTELIGENCIA SOBERANA"
             effect="hologram"
-            className="text-3xl font-black tracking-[0.2em] mb-1"
+            className="text-2xl md:text-3xl font-black tracking-[0.2em] mb-1"
           />
-          <div className="flex items-center gap-2 text-nexus-silver/40 text-xs font-orbitron tracking-widest uppercase">
-             <div className="w-1.5 h-1.5 rounded-full bg-nexus-cyan animate-pulse" />
-             Centro de Mando de Enjambre Autónomo v2.5
+          <div className="flex items-center gap-2 text-nexus-silver/40 text-[10px] font-orbitron tracking-widest uppercase">
+            <div className="w-1.5 h-1.5 rounded-full bg-nexus-cyan animate-pulse shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+            CENTRO DE COORDINACIÓN DE ENJAMBRES v2.6.0
           </div>
         </div>
 
         <div className="flex gap-4 items-center">
           {healingProposals.length > 0 && !isVaultLocked && (
-            <div className="flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-lg animate-pulse">
+            <div className="flex items-center gap-2 px-3 py-1 bg-amber-500/20 border border-amber-500/40 rounded-lg animate-pulse shadow-amber-glow/20">
               <Activity size={12} className="text-amber-500" />
               <span className="text-[10px] text-amber-500 font-orbitron font-bold">
-                SYSTEM HEALING REQUIRED
+                AUTO-REPARACIÓN REQUERIDA
               </span>
             </div>
           )}
@@ -298,32 +316,50 @@ export const SovereignIntelligenceHub: React.FC = () => {
             <button
               onClick={isVaultLocked ? handleSovereignUnlock : () => setIsVaultLocked(true)}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-orbitron font-bold transition-all border shadow-[0_0_15px_rgba(0,0,0,0.5)]",
-                 isVaultLocked
-                   ? 'bg-red-500/10 text-red-500 border-red-500/30 animate-pulse hover:bg-red-500/20'
-                   : 'bg-nexus-cyan/10 text-nexus-cyan border-nexus-cyan/30 hover:bg-nexus-cyan/20'
+                'flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-orbitron font-bold transition-all border shadow-[0_0_15px_rgba(0,0,0,0.5)]',
+                isVaultLocked
+                  ? 'bg-red-500/10 text-red-500 border-red-500/30 animate-pulse hover:bg-red-500/20'
+                  : 'bg-nexus-cyan/10 text-nexus-cyan border-nexus-cyan/30 hover:bg-nexus-cyan/20'
               )}
             >
               {isAuthenticating ? (
                 'VERIFICANDO...'
               ) : isVaultLocked ? (
                 <>
-                  <Lock size={12} /> VAULT LOCKED
+                  <Lock size={12} /> BÓVEDA <span className="hidden md:inline">BLOQUEADA</span>
                 </>
               ) : (
                 <>
-                  <Unlock size={12} /> VAULT OPEN
+                  <Unlock size={12} /> BÓVEDA <span className="hidden md:inline">ABIERTA</span>
                 </>
               )}
             </button>
           </div>
 
           <div className="flex flex-col items-end">
-            <span className="text-[10px] text-nexus-cyan font-bold tracking-widest">IA STATUS</span>
-            <span className={cn("text-xs uppercase font-bold", isVaultLocked ? "text-red-400" : "text-green-400")}>
-              {isVaultLocked ? 'RESTRICTED' : 'GOD MODE ACTIVE'}
+            <span className="text-[10px] text-nexus-cyan font-bold tracking-widest">ESTADO IA</span>
+            <span
+              className={cn(
+                'text-xs uppercase font-bold',
+                isVaultLocked ? 'text-red-400' : 'text-green-400'
+              )}
+            >
+              {isVaultLocked ? 'RESTRINGIDO' : 'MODO DIOS ACTIVO'}
             </span>
           </div>
+
+          <button
+            onClick={() => setIsFocusMode(!isFocusMode)}
+            className={cn(
+              'w-10 h-10 rounded-xl border flex items-center justify-center transition-all',
+              isFocusMode
+                ? 'bg-nexus-cyan/20 border-nexus-cyan text-nexus-cyan shadow-cyan-glow'
+                : 'bg-white/5 border-white/10 text-white/40 hover:text-white hover:border-white/30'
+            )}
+            title={isFocusMode ? 'Desactivar Modo Enfoque' : 'Activar Modo Enfoque (Accesibilidad)'}
+          >
+            <Eye size={18} />
+          </button>
 
           {sovereignSession && (
             <div className="flex flex-col items-start px-3 py-1 bg-nexus-cyan/5 rounded-lg border border-nexus-cyan/20">
@@ -338,25 +374,25 @@ export const SovereignIntelligenceHub: React.FC = () => {
 
           <div className="flex gap-2">
             <button
-               className={cn(
-                 "w-10 h-10 rounded-full border flex items-center justify-center transition-all",
-                 isRecordingVoice
-                   ? 'bg-red-500/20 border-red-500 animate-pulse shadow-red-glow'
-                   : 'bg-nexus-cyan/5 border-nexus-cyan/30 hover:bg-nexus-cyan/20 hover:border-nexus-cyan/50 hover:shadow-cyan-glow'
-               )}
-               onClick={handleVoiceEnrollment}
-               title="Enroll Sovereign VoiceKey"
+              className={cn(
+                'w-10 h-10 rounded-full border flex items-center justify-center transition-all',
+                isRecordingVoice
+                  ? 'bg-red-500/20 border-red-500 animate-pulse shadow-red-glow'
+                  : 'bg-nexus-cyan/5 border-nexus-cyan/30 hover:bg-nexus-cyan/20 hover:border-nexus-cyan/50 hover:shadow-cyan-glow'
+              )}
+              onClick={handleVoiceEnrollment}
+              title="Registrar Llave de Voz Soberana"
             >
-               <Mic size={18} className={isRecordingVoice ? "text-red-500" : "text-nexus-cyan"} />
+              <Mic size={18} className={isRecordingVoice ? 'text-white' : 'text-nexus-cyan'} />
             </button>
 
-             <button
-               className="w-10 h-10 rounded-full bg-nexus-cyan/5 border border-nexus-cyan/30 flex items-center justify-center hover:bg-nexus-cyan/20 hover:border-nexus-cyan/50 transition-all hover:shadow-cyan-glow"
-               onClick={handleEnrollHardwareKey}
-               title="Register Hardware Key"
-             >
-               <Key size={18} className="text-nexus-cyan" />
-             </button>
+            <button
+              className="w-10 h-10 rounded-full bg-nexus-cyan/5 border border-nexus-cyan/30 flex items-center justify-center hover:bg-nexus-cyan/20 hover:border-nexus-cyan/50 transition-all hover:shadow-cyan-glow"
+              onClick={handleEnrollHardwareKey}
+              title="Registrar Llave de Hardware"
+            >
+              <Key size={18} className="text-nexus-cyan" />
+            </button>
           </div>
         </div>
       </div>
@@ -372,12 +408,23 @@ export const SovereignIntelligenceHub: React.FC = () => {
           >
             <div className="relative w-48 h-48 flex items-center justify-center">
               <motion.div
-                animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0.5, 0.2] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="absolute inset-0 bg-red-500 rounded-full blur-xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.7, 0.3],
+                  boxShadow: [
+                    '0 0 20px rgba(6,182,212,0.3)',
+                    '0 0 60px rgba(6,182,212,0.6)',
+                    '0 0 20px rgba(6,182,212,0.3)',
+                  ],
+                }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="absolute inset-0 bg-nexus-cyan rounded-full blur-2xl"
               />
-              <div className="relative w-24 h-24 rounded-full bg-red-500/20 border-2 border-red-500 flex items-center justify-center shadow-red-glow">
-                <Mic size={40} className="text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+              <div className="relative w-24 h-24 rounded-full bg-black/40 border-2 border-nexus-cyan flex items-center justify-center shadow-cyan-glow">
+                <Mic
+                  size={40}
+                  className="text-nexus-cyan drop-shadow-[0_0_15px_rgba(6,182,212,0.8)]"
+                />
               </div>
             </div>
             <GodModeText
@@ -385,7 +432,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
               effect="glitch"
               className="mt-8 text-2xl font-bold text-white"
             />
-            <p className="text-nexus-silver/60 font-orbitron text-xs mt-4 animate-pulse uppercase tracking-widest">
+            <p className="text-nexus-silver/60 font-orbitron text-[10px] mt-4 animate-pulse uppercase tracking-[0.3em]">
               Habla ahora: "Soberanía AIGestion activa"
             </p>
           </motion.div>
@@ -397,33 +444,45 @@ export const SovereignIntelligenceHub: React.FC = () => {
         <div className="w-20 border-r border-white/5 flex flex-col items-center py-8 gap-8 bg-black/20 backdrop-blur-sm">
           {[
             { id: 'terminal', icon: Terminal, label: 'TERMINAL' },
-            { id: 'missions', icon: Activity, label: 'MISIONES', alert: healingProposals.length > 0 },
+            {
+              id: 'missions',
+              icon: Activity,
+              label: 'MISIONES',
+              alert: healingProposals.length > 0,
+            },
             { id: 'memory', icon: Network, label: 'MEMORIA' },
             { id: 'sentinel', icon: Eye, label: 'CENTINELA' },
-            { id: 'infra', icon: Server, label: 'INFRAESTRUCTURA' }
-          ].map((item) => (
-             <button
-               key={item.id}
-               onClick={() => setActiveTab(item.id as any)}
-               className={cn(
-                 "p-3 rounded-xl transition-all relative group",
-                 activeTab === item.id
-                   ? 'bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
-                   : 'text-white/30 hover:text-white hover:bg-white/5'
-               )}
-               title={item.label}
-             >
-               <item.icon size={24} className={cn("transition-transform duration-300", activeTab === item.id ? "scale-110" : "group-hover:scale-105")} />
-               {item.alert && (
-                 <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                   <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-                 </span>
-               )}
-               {activeTab === item.id && (
-                  <div className="absolute inset-y-0 -left-4 w-1 bg-nexus-cyan rounded-r-full shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
-               )}
-             </button>
+            { id: 'swarm', icon: Share2, label: 'ENJAMBRE' },
+            { id: 'infra', icon: Server, label: 'INFRAESTRUCTURA' },
+          ].map(item => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id as any)}
+              className={cn(
+                'p-3 rounded-xl transition-all relative group',
+                activeTab === item.id
+                  ? 'bg-nexus-cyan/10 text-nexus-cyan border border-nexus-cyan/30 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                  : 'text-white/30 hover:text-white hover:bg-white/5'
+              )}
+              title={item.label}
+            >
+              <item.icon
+                size={24}
+                className={cn(
+                  'transition-transform duration-300',
+                  activeTab === item.id ? 'scale-110' : 'group-hover:scale-105'
+                )}
+              />
+              {item.alert && (
+                <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                </span>
+              )}
+              {activeTab === item.id && (
+                <div className="absolute inset-y-0 -left-4 w-1 bg-nexus-cyan rounded-r-full shadow-[0_0_10px_rgba(6,182,212,0.8)]" />
+              )}
+            </button>
           ))}
         </div>
 
@@ -470,44 +529,44 @@ export const SovereignIntelligenceHub: React.FC = () => {
                 {/* Mission Launch Section */}
                 <TiltCard className="premium-glass p-1 rounded-3xl border border-white/10 group relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-tr from-nexus-cyan/5 via-transparent to-nexus-violet/5 opacity-50 transition-opacity duration-500 group-hover:opacity-100" />
-                  
+
                   <div className="bg-black/40 backdrop-blur-xl p-8 rounded-[22px] relative h-full">
-                     <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-                       <Zap size={120} className="text-nexus-cyan" />
-                     </div>
+                    <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+                      <Zap size={120} className="text-nexus-cyan" />
+                    </div>
 
-                     <h3 className="text-xl font-orbitron font-bold text-nexus-cyan mb-8 tracking-wider flex items-center gap-3">
-                       <Play className="w-5 h-5" />
-                       DESPLEGAR MISIÓN DE ENJAMBRE
-                     </h3>
+                    <h3 className="text-xl font-orbitron font-bold text-nexus-cyan mb-8 tracking-wider flex items-center gap-3">
+                      <Play className="w-5 h-5" />
+                      DESPLEGAR MISIÓN DE ENJAMBRE
+                    </h3>
 
-                     <div className="relative">
-                       <textarea
-                         value={objective}
-                         onChange={e => setObjective(e.target.value)}
-                         placeholder="Define el objetivo estratégico para el enjambre soberano..."
-                         className="w-full h-40 bg-black/40 border border-white/10 rounded-2xl p-6 text-nexus-silver focus:border-nexus-cyan/50 outline-none transition-all resize-none placeholder:text-white/10 font-mono text-sm leading-relaxed"
-                       />
-                       <div className="absolute bottom-4 right-4 flex gap-2">
-                           <span className="text-[10px] text-white/20 font-mono self-end mr-4">
-                              {objective.length} chars
-                           </span>
-                           <button
-                             onClick={handleLaunch}
-                             disabled={isLaunching || !objective.trim()}
-                             className="flex items-center gap-3 bg-gradient-to-r from-nexus-cyan to-nexus-violet px-8 py-3 rounded-xl font-orbitron font-bold text-xs tracking-widest uppercase hover:shadow-cyan-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed group/btn"
-                           >
-                             {isLaunching ? (
-                               'DESPLEGANDO...'
-                             ) : (
-                               <>
-                                 <div className="w-2 h-2 bg-white rounded-full group-hover/btn:animate-ping" />
-                                 INICIAR MISIÓN
-                               </>
-                             )}
-                           </button>
-                       </div>
-                     </div>
+                    <div className="relative">
+                      <textarea
+                        value={objective}
+                        onChange={e => setObjective(e.target.value)}
+                        placeholder="Define el objetivo estratégico para el enjambre soberano..."
+                        className="w-full h-40 bg-black/40 border border-white/10 rounded-2xl p-6 text-nexus-silver focus:border-nexus-cyan/50 outline-none transition-all resize-none placeholder:text-white/10 font-mono text-sm leading-relaxed"
+                      />
+                      <div className="absolute bottom-4 right-4 flex gap-2">
+                        <span className="text-[10px] text-white/20 font-mono self-end mr-4">
+                          {objective.length} chars
+                        </span>
+                        <button
+                          onClick={handleLaunch}
+                          disabled={isLaunching || !objective.trim()}
+                          className="flex items-center gap-3 bg-gradient-to-r from-nexus-cyan to-nexus-violet px-8 py-3 rounded-xl font-orbitron font-bold text-xs tracking-widest uppercase hover:shadow-cyan-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed group/btn"
+                        >
+                          {isLaunching ? (
+                            'DESPLEGANDO...'
+                          ) : (
+                            <>
+                              <div className="w-2 h-2 bg-white rounded-full group-hover/btn:animate-ping" />
+                              INICIAR MISIÓN
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </TiltCard>
 
@@ -546,37 +605,61 @@ export const SovereignIntelligenceHub: React.FC = () => {
                   ))}
                   {/* Placeholder Stats if empty */}
                   {forecasts.length === 0 && (
-                     <>
-                        <div className="bg-white/5 p-5 rounded-2xl border border-white/5 opacity-50">
-                           <span className="text-[10px] font-orbitron text-white/30 uppercase tracking-widest">CPU LOAD</span>
-                             <div className="h-6 w-full bg-white/5 rounded mt-2 animate-pulse" />
-                        </div>
-                        <div className="bg-white/5 p-5 rounded-2xl border border-white/5 opacity-50">
-                           <span className="text-[10px] font-orbitron text-white/30 uppercase tracking-widest">MEMORY</span>
-                           <div className="h-6 w-full bg-white/5 rounded mt-2 animate-pulse" />
-                        </div>
-                        <div className="bg-white/5 p-5 rounded-2xl border border-white/5 opacity-50">
-                           <span className="text-[10px] font-orbitron text-white/30 uppercase tracking-widest">I/O OPS</span>
-                           <div className="h-6 w-full bg-white/5 rounded mt-2 animate-pulse" />
-                        </div>
-                     </>
+                    <>
+                      <div className="bg-white/5 p-5 rounded-2xl border border-white/5 opacity-50">
+                        <span className="text-[10px] font-orbitron text-white/30 uppercase tracking-widest">
+                          CPU LOAD
+                        </span>
+                        <div className="h-6 w-full bg-white/5 rounded mt-2 animate-pulse" />
+                      </div>
+                      <div className="bg-white/5 p-5 rounded-2xl border border-white/5 opacity-50">
+                        <span className="text-[10px] font-orbitron text-white/30 uppercase tracking-widest">
+                          MEMORY
+                        </span>
+                        <div className="h-6 w-full bg-white/5 rounded mt-2 animate-pulse" />
+                      </div>
+                      <div className="bg-white/5 p-5 rounded-2xl border border-white/5 opacity-50">
+                        <span className="text-[10px] font-orbitron text-white/30 uppercase tracking-widest">
+                          I/O OPS
+                        </span>
+                        <div className="h-6 w-full bg-white/5 rounded mt-2 animate-pulse" />
+                      </div>
+                    </>
                   )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {[
-                     { color: 'text-nexus-cyan', title: 'ORQUESTACIÓN', desc: 'Multimodelo y multiagente autónomo.' },
-                     { color: 'text-nexus-violet', title: 'SOBERANÍA', desc: 'Datos persistidos en Knowledge Graph privado.' },
-                     { color: 'text-green-400', title: 'ZERO TRUST', desc: 'Comunicación cifrada inter-servicios.' }
+                    {
+                      color: 'text-nexus-cyan',
+                      title: 'ORQUESTACIÓN',
+                      desc: 'Multimodelo y multiagente autónomo.',
+                    },
+                    {
+                      color: 'text-nexus-violet',
+                      title: 'SOBERANÍA',
+                      desc: 'Datos persistidos en Knowledge Graph privado.',
+                    },
+                    {
+                      color: 'text-green-400',
+                      title: 'ZERO TRUST',
+                      desc: 'Comunicación cifrada inter-servicios.',
+                    },
                   ].map((feature, i) => (
-                      <TiltCard key={i} className="bg-black/20 p-6 rounded-2xl border border-white/5 group hover:bg-white/5 transition-all">
-                        <div className={cn("text-[10px] font-bold tracking-[0.2em] mb-2 uppercase", feature.color)}>
-                          {feature.title}
-                        </div>
-                        <p className="text-xs text-nexus-silver/60">
-                          {feature.desc}
-                        </p>
-                      </TiltCard>
+                    <TiltCard
+                      key={i}
+                      className="bg-black/20 p-6 rounded-2xl border border-white/5 group hover:bg-white/5 transition-all"
+                    >
+                      <div
+                        className={cn(
+                          'text-[10px] font-bold tracking-[0.2em] mb-2 uppercase',
+                          feature.color
+                        )}
+                      >
+                        {feature.title}
+                      </div>
+                      <p className="text-xs text-nexus-silver/60">{feature.desc}</p>
+                    </TiltCard>
                   ))}
                 </div>
               </motion.div>
@@ -590,11 +673,15 @@ export const SovereignIntelligenceHub: React.FC = () => {
                 className="max-w-5xl mx-auto pb-10"
               >
                 <div className="mb-8 flex justify-between items-end border-b border-white/10 pb-4">
-                  <GodModeText effect="glitch" text="HISTORIAL DE OPERACIONES" className="text-2xl font-black" />
+                  <GodModeText
+                    effect="glitch"
+                    text="HISTORIAL DE OPERACIONES"
+                    className="text-2xl font-black"
+                  />
                   <button
                     onClick={loadMissions}
                     className="p-2 rounded-lg bg-white/5 hover:bg-nexus-cyan/20 hover:text-nexus-cyan transition-all"
-                    title="Refresh Missions"
+                    title="Actualizar Misiones"
                   >
                     <History size={18} />
                   </button>
@@ -617,7 +704,9 @@ export const SovereignIntelligenceHub: React.FC = () => {
                               <Zap className="text-amber-500 w-6 h-6" />
                             </div>
                             <div>
-                              <h5 className="font-bold text-amber-500 text-sm mb-1">{proposal.objective}</h5>
+                              <h5 className="font-bold text-amber-500 text-sm mb-1">
+                                {proposal.objective}
+                              </h5>
                               <p className="text-[10px] text-nexus-silver/40 uppercase tracking-widest flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                                 Acción sugerida por el detective de infraestructura
@@ -663,12 +752,12 @@ export const SovereignIntelligenceHub: React.FC = () => {
                     >
                       <div className="bg-[#050505] p-6 rounded-2xl border border-white/5 group hover:border-nexus-cyan/30 transition-all relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-12 bg-nexus-cyan/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                        
+
                         <div className="flex items-center justify-between relative z-10">
                           <div className="flex items-start gap-4">
                             <div
                               className={cn(
-                                "p-3 rounded-xl border transition-colors",
+                                'p-3 rounded-xl border transition-colors',
                                 mission.status === 'completed'
                                   ? 'bg-green-500/10 border-green-500/20 text-green-400'
                                   : 'bg-nexus-cyan/10 border-nexus-cyan/20 text-nexus-cyan animate-pulse'
@@ -687,7 +776,9 @@ export const SovereignIntelligenceHub: React.FC = () => {
                               <div className="flex items-center gap-4 mt-2 text-[10px] text-white/30 uppercase tracking-widest font-mono">
                                 <span>ID: {mission.id.substring(0, 8)}</span>
                                 <span className="w-1 h-1 rounded-full bg-white/20" />
-                                <span>{new Date(mission.createdAt).toLocaleDateString('es-ES')}</span>
+                                <span>
+                                  {new Date(mission.createdAt).toLocaleDateString('es-ES')}
+                                </span>
                                 <span className="w-1 h-1 rounded-full bg-white/20" />
                                 <span
                                   className={
@@ -703,25 +794,25 @@ export const SovereignIntelligenceHub: React.FC = () => {
                           </div>
                           <div className="flex items-center">
                             {mission.isEncrypted && isVaultLocked ? (
-                              <div className="flex items-center gap-2 text-red-400 text-[10px] font-orbitron tracking-wider px-4 py-2 rounded-lg bg-red-500/5 border border-red-500/10">
-                                <Lock size={12} /> ENCRYPTED
+                              <div className="flex items-center gap-2 text-red-400 text-[10px] font-orbitron tracking-wider px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20">
+                                <Lock size={12} /> ENCRIPTADO
                               </div>
                             ) : (
                               <button
                                 onClick={() => handleRevealFindings(mission)}
                                 disabled={isDecrypting === mission.id}
                                 className={cn(
-                                  "px-5 py-2 rounded-lg text-[10px] font-bold transition-all uppercase tracking-wider border",
+                                  'px-5 py-2 rounded-lg text-[10px] font-bold transition-all uppercase tracking-wider border shadow-sm',
                                   decryptedFindings[mission.id]
-                                    ? "bg-white/5 border-white/10 text-white/50"
-                                    : "bg-nexus-cyan/10 border-nexus-cyan/30 text-nexus-cyan hover:bg-nexus-cyan/20"
+                                    ? 'bg-white/5 border-white/10 text-white/50'
+                                    : 'bg-nexus-cyan/20 border-nexus-cyan/40 text-white hover:bg-nexus-cyan/30 hover:shadow-cyan-glow/20'
                                 )}
                               >
                                 {isDecrypting === mission.id
-                                  ? 'DECRYPTING...'
+                                  ? 'DESCIFRANDO...'
                                   : decryptedFindings[mission.id]
-                                    ? 'UNLOCKED'
-                                    : 'VER FINDINGS'}
+                                    ? 'DESBLOQUEADO'
+                                    : 'VER HALLAZGOS'}
                               </button>
                             )}
                           </div>
@@ -733,7 +824,9 @@ export const SovereignIntelligenceHub: React.FC = () => {
                             animate={{ height: 'auto', opacity: 1 }}
                             className="mt-4 p-4 bg-black/40 rounded-xl border border-nexus-cyan/10 text-xs text-nexus-cyan/80 font-mono overflow-hidden shadow-inner"
                           >
-                            <pre className="whitespace-pre-wrap">{decryptedFindings[mission.id]}</pre>
+                            <pre className="whitespace-pre-wrap">
+                              {decryptedFindings[mission.id]}
+                            </pre>
                           </motion.div>
                         )}
                       </div>
@@ -742,35 +835,276 @@ export const SovereignIntelligenceHub: React.FC = () => {
                 </div>
               </motion.div>
             )}
-            
+
             {activeTab === 'memory' && (
-               <div className="flex flex-col items-center justify-center h-64 opacity-50">
-                  <Database size={48} className="text-nexus-cyan mb-4 animate-pulse" />
-                  <div className="text-sm font-orbitron tracking-widest text-nexus-silver">
-                     MEMORY GRAPH VISUALIZATION
+              <div className="flex flex-col items-center justify-center h-[50vh] opacity-50">
+                <Database size={64} className="text-nexus-cyan mb-6 animate-pulse" />
+                <div className="text-sm font-orbitron tracking-[0.3em] text-nexus-silver uppercase">
+                  Visualización de Grafo de Memoria
+                </div>
+                <div className="text-[10px] uppercase mt-4 text-white/20 tracking-widest">
+                  Nodo Soberano Inactivo · Sincronización Requerida
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'swarm' && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                className="max-w-6xl mx-auto space-y-12 pb-20"
+              >
+                <div className="flex justify-between items-end border-b border-white/10 pb-4">
+                  <div>
+                    <GodModeText
+                      effect="hologram"
+                      text="VISUALIZACIÓN DE ENJAMBRE NEURAL"
+                      className="text-2xl font-black"
+                    />
+                    <p className="text-[10px] text-nexus-silver/40 font-orbitron tracking-[0.2em] mt-1 uppercase">
+                      Topografía de conexiones activas y telemetría de agentes
+                    </p>
                   </div>
-                  <div className="text-[10px] uppercase mt-2 text-white/30">
-                     Sovereign Node Link Inactive
+                  <div className="flex items-center gap-3 px-4 py-2 bg-nexus-cyan/5 border border-nexus-cyan/20 rounded-xl">
+                    <Activity size={12} className="text-nexus-cyan" />
+                    <span className="text-[10px] font-mono text-nexus-cyan uppercase">
+                      Sinc: 99.9%
+                    </span>
                   </div>
-               </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Left: Neural Graph (SVG Visualization) */}
+                  <div className="lg:col-span-2 premium-glass rounded-3xl border border-white/5 aspect-[4/3] relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-nexus-cyan/2 pointer-events-none" />
+                    <div className="absolute top-6 left-6 flex items-center gap-2">
+                      <Network size={14} className="text-nexus-cyan" />
+                      <span className="text-[10px] font-orbitron font-bold text-nexus-cyan/60 uppercase">
+                        Mapa Neural en Tiempo Real
+                      </span>
+                    </div>
+
+                    <svg viewBox="0 0 800 600" className="w-full h-full p-12">
+                      <defs>
+                        <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
+                          <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.4" />
+                          <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
+                        </radialGradient>
+                      </defs>
+
+                      {/* Connections */}
+                      <g className="data-pulse stroke-nexus-cyan/20" strokeWidth="1">
+                        <line x1="400" y1="300" x2="200" y2="150" />
+                        <line x1="400" y1="300" x2="600" y2="150" />
+                        <line x1="400" y1="300" x2="200" y2="450" />
+                        <line x1="400" y1="300" x2="600" y2="450" />
+                        <line x1="200" y1="150" x2="600" y2="150" />
+                      </g>
+
+                      {/* Nodes */}
+                      {[
+                        { x: 400, y: 300, label: 'NÚCLEO', id: 'nucleus', type: 'CORE' },
+                        { x: 200, y: 150, label: 'DANIELA', id: 'daniela', type: 'INTEL' },
+                        { x: 600, y: 150, label: 'SENTINEL', id: 'sentinel', type: 'SURV' },
+                        { x: 200, y: 450, label: 'BRIDGE', id: 'bridge', type: 'SYNC' },
+                        { x: 600, y: 450, label: 'GEMS', id: 'gems', type: 'AUTO' },
+                      ].map(node => (
+                        <motion.g
+                          key={node.id}
+                          className="cursor-pointer group/node"
+                          whileHover={{ scale: 1.05 }}
+                        >
+                          <circle
+                            cx={node.x}
+                            cy={node.y}
+                            r="25"
+                            fill="url(#nodeGlow)"
+                            className="neural-node-glow"
+                          />
+                          <circle cx={node.x} cy={node.y} r="8" fill="#06b6d4" className="shadow-cyan-glow" />
+                          <text
+                            x={node.x}
+                            y={node.y + 40}
+                            textAnchor="middle"
+                            fill="white"
+                            className="text-[10px] font-orbitron font-bold opacity-40 group-hover/node:opacity-100 transition-opacity"
+                          >
+                            {node.label}
+                          </text>
+                          <text
+                            x={node.x}
+                            y={node.y + 52}
+                            textAnchor="middle"
+                            fill="#06b6d4"
+                            className="text-[8px] font-mono opacity-20 group-hover/node:opacity-60 transition-opacity"
+                          >
+                            {node.type}
+                          </text>
+                        </motion.g>
+                      ))}
+                    </svg>
+
+                    <div className="absolute bottom-6 left-6 right-6 flex justify-between">
+                      <div className="flex gap-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-nexus-cyan shadow-cyan-glow" />
+                          <span className="text-[10px] font-mono text-white/40">
+                            NODO_ACTUALIZADO
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-mono text-nexus-cyan/40">
+                        ID_PROTOCOLO: XRP-61
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Right: Telemetry Sidecards */}
+                  <div className="space-y-4">
+                    <h4 className="text-[10px] font-orbitron font-bold text-white/30 tracking-[0.3em] uppercase mb-6">
+                      ESTADO DE AGENTES
+                    </h4>
+
+                    {[
+                      {
+                        icon: Zap,
+                        name: 'Núcleo Central',
+                        state: 'DETERMINISTA',
+                        value: '14.2 TFLOPS',
+                        color: 'text-nexus-cyan',
+                        load: 45,
+                      },
+                      {
+                        icon: Mic,
+                        name: 'Voz Daniela',
+                        state: 'SINCRONIZADO',
+                        value: 'Sinc 99%',
+                        color: 'text-white',
+                        load: 12,
+                      },
+                      {
+                        icon: Eye,
+                        name: 'Centinela AR',
+                        state: 'VIGILANDO',
+                        value: '4 Cámaras',
+                        color: 'text-nexus-cyan',
+                        load: 28,
+                      },
+                      {
+                        icon: Cpu,
+                        name: 'Gems Auto-Healing',
+                        state: 'STANDBY',
+                        value: '0 Fallos',
+                        color: 'text-emerald-400',
+                        load: 5,
+                      },
+                    ].map((agent, i) => (
+                      <TiltCard
+                        key={i}
+                        className="bg-white/5 border border-white/10 p-5 rounded-2xl group hover:border-nexus-cyan/40 transition-all"
+                      >
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="flex gap-4 items-center">
+                            <div className={cn('p-2 rounded-xl bg-white/5', agent.color)}>
+                              <agent.icon size={18} />
+                            </div>
+                            <div>
+                              <div className="text-xs font-bold text-white">{agent.name}</div>
+                              <div className="text-[9px] text-white/20 uppercase tracking-widest">
+                                {agent.state}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-[10px] font-mono text-nexus-cyan">{agent.value}</div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-[8px] font-mono uppercase text-white/20">
+                            <span>Carga Neuronal</span>
+                            <span>{agent.load}%</span>
+                          </div>
+                          <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${agent.load}%` }}
+                              className="h-full bg-nexus-cyan shadow-cyan-glow"
+                            />
+                          </div>
+                        </div>
+                      </TiltCard>
+                    ))}
+
+                    <div className="p-6 rounded-3xl bg-nexus-cyan/5 border border-nexus-cyan/20 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <Share2 size={14} className="text-nexus-cyan" />
+                        <span className="text-[10px] font-orbitron font-bold text-white">
+                          RED SOBERANA
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-nexus-silver/50 leading-tight">
+                        Todos los agentes están operando bajo el protocolo Zero-Trust en el canal PQC
+                        activo.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
       </div>
-      
-      {/* Footer Status Ticker - Absolute Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-10 border-t border-white/5 bg-black/80 backdrop-blur-md flex items-center px-4 overflow-hidden z-20">
-         <div className="flex gap-8 animate-marquee whitespace-nowrap">
-            {['NEUROCORE_READY', 'SWARM_ENGINE_STABLE', 'MEMORY_GRAPH_SYNCED', 'QUANTUM_TUNNEL_ESTABLISHED', 'ZERO_TRUST_ENFORCED'].map((tag, i) => (
-               <div
-                  key={i}
-                  className="flex items-center gap-2 text-[9px] font-orbitron tracking-[0.2em] text-nexus-silver/30 uppercase"
-               >
-                  <div className="w-1 h-1 rounded-full bg-nexus-cyan" />
-                  {tag}
-               </div>
-            ))}
-         </div>
+
+      {/* Footer Status Ticker - Global PQC Monitor */}
+      <div className="absolute bottom-0 left-0 right-0 h-10 border-t border-white/5 bg-black/80 backdrop-blur-md flex items-center justify-between px-6 overflow-hidden z-20">
+        <div className="flex gap-12 animate-marquee whitespace-nowrap">
+          {[
+            'PQC_KYBER_ENABLED',
+            'ENTROPÍA_CUÁNTICA: 99.98%',
+            'MISIÓN_ENJAMBRE_ACTIVA',
+            'ZERO_TRUST_VERIFIED',
+            'DANIEL_VOICE_ENCRYPTION_ON',
+            'SINC_NEXUS_ESTABLE',
+            'SISTEMA_DETERMINISTA_ACTIVO',
+          ].map((tag, i) => (
+            <div
+              key={i}
+              className="flex items-center gap-3 text-[9px] font-orbitron tracking-[0.3em] text-nexus-cyan/40 hover:text-nexus-cyan transition-colors uppercase cursor-default"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-nexus-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+              {tag}
+            </div>
+          ))}
+          {/* Repeat for seamless marquee */}
+          {[
+            'PQC_KYBER_ENABLED',
+            'ENTROPÍA_CUÁNTICA: 99.98%',
+            'MISIÓN_ENJAMBRE_ACTIVA',
+            'ZERO_TRUST_VERIFIED',
+            'DANIEL_VOICE_ENCRYPTION_ON',
+            'SINC_NEXUS_ESTABLE',
+            'SISTEMA_DETERMINISTA_ACTIVO',
+          ].map((tag, i) => (
+            <div
+              key={`repeat-${i}`}
+              className="flex items-center gap-3 text-[9px] font-orbitron tracking-[0.3em] text-nexus-cyan/40 hover:text-nexus-cyan transition-colors uppercase cursor-default"
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-nexus-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+              {tag}
+            </div>
+          ))}
+        </div>
+
+        <div className="hidden md:flex items-center gap-6 border-l border-white/10 pl-6 ml-6 bg-black/40 h-full">
+          <div className="flex flex-col items-end">
+            <span className="text-[8px] text-white/30 font-orbitron">LATENCIA PQC</span>
+            <span className="text-[10px] text-green-400 font-mono">1.2ms</span>
+          </div>
+          <div className="flex flex-col items-end">
+            <span className="text-[8px] text-white/30 font-orbitron">ENTROPÍA</span>
+            <span className="text-[10px] text-nexus-cyan font-mono">0.9998</span>
+          </div>
+        </div>
       </div>
     </SpotlightWrapper>
   );

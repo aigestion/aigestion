@@ -5,17 +5,25 @@
 @layer base {
   :root {
     /* Sovereign Palette */
-    --color-sovereign-black: #050505;
-    --color-sovereign-void: #0A0A0A;
+    --color-sovereign-black: #020202;
+      --color-sovereign-void: #080808;
     --color-sovereign-neon-cyan: #00F0FF;
     --color-sovereign-neon-purple: #BD00FF;
+    --color-sovereign-gold: #FFD700;
     --color-sovereign-glass: rgba(255, 255, 255, 0.03);
+    --color-sovereign-glass-dark: rgba(0, 0, 0, 0.6);
+    
+      /* Glow Tokens */
+      --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.5);
+      --glow-purple: 0 0 20px rgba(189, 0, 255, 0.5);
+      --glow-gold: 0 0 20px rgba(255, 215, 0, 0.5);
 
     /* Legacy/Compat (Mappings to Sovereign) */
     --color-nexus-obsidian: var(--color-sovereign-black);
     --color-nexus-void: var(--color-sovereign-void);
     --color-nexus-cyan: var(--color-sovereign-neon-cyan);
     --color-nexus-violet: var(--color-sovereign-neon-purple);
+    --color-nexus-gold: var(--color-sovereign-gold);
 
     /* Typography */
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
@@ -36,8 +44,10 @@
     overflow-x: hidden;
     cursor: default;
     background-image:
-      radial-gradient(circle at 50% 0%, #1a0b2e 0%, transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.05) 0%, transparent 30%);
+      radial-gradient(circle at 50% -20%, #1a0b2e 0%, transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(138, 43, 226, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 0% 100%, rgba(0, 240, 255, 0.05) 0%, transparent 40%);
+        background-attachment: fixed;
   }
 
   /* Sovereign Selection */
@@ -104,15 +114,37 @@
   /* Premium Glass */
   .premium-glass {
     background: rgba(10, 10, 15, 0.4);
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
   }
 
   .premium-glass-hover:hover {
     background: rgba(20, 20, 30, 0.6);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 25px 50px -12px rgba(0, 240, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 25px 50px -12px rgba(0, 240, 255, 0.2);
+    }
+    
+    /* God Level Gradients - Fixing Pixelation */
+    .smooth-mesh-bg {
+      background-color: var(--color-sovereign-black);
+      background-image:
+        radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 0.2) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 0.15) 0, transparent 50%);
+      position: relative;
+      z-index: 0;
+    }
+    
+    .smooth-mesh-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: -1;
   }
 
   /* Grain Overlay */
@@ -124,13 +156,139 @@
     height: 100%;
     pointer-events: none;
     z-index: 9998;
-    opacity: 0.03;
+    opacity: 0.05;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
-    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+    mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+    }
+    
+    /* Responsive Text Utilities */
+    .text-responsive-h1 {
+      font-size: clamp(2.5rem, 8vw, 6rem);
+      line-height: 0.9;
+    }
+    
+    .text-responsive-h2 {
+      font-size: clamp(1.8rem, 5vw, 4rem);
+      line-height: 1.1;
+    }
+    
+    .text-responsive-body {
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
   }
 
   /* Stacking Reveal Animation */
   .stack-reveal {
     animation: stack-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    opacity: 0.5;
+    filter: blur(80px);
+  }
+
+  50% {
+    opacity: 0.8;
+    filter: blur(100px);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Phase 58: UX & Accessibility Utilities */
+.animate-marquee {
+  animation: marquee 60s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.skeleton-glitch {
+  background: linear-gradient(90deg, #111 25%, #222 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-glitch::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0%, rgba(0, 240, 255, 0.05) 1px, transparent 2px);
+  pointer-events: none;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Focus Mode Overrides */
+.focus-mode-active * {
+  animation-duration: 0.1s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.1s !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+.focus-mode-active .smooth-mesh-bg {
+  background: var(--color-sovereign-black) !important;
+}
+
+.focus-mode-active .animate-marquee {
+  animation: none !important;
+  overflow-x: auto;
+}
+
+/* Phase 61: Neural Swarm Animations */
+.neural-node-glow {
+  filter: drop-shadow(0 0 8px rgba(6, 182, 212, 0.6));
+  animation: node-pulse 3s ease-in-out infinite;
+}
+
+@keyframes node-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+.data-pulse {
+  stroke-dasharray: 4;
+  animation: dash-flow 2s linear infinite;
+}
+
+@keyframes dash-flow {
+  from {
+    stroke-dashoffset: 20;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
 }

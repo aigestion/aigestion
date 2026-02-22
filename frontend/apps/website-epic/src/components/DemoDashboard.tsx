@@ -30,6 +30,8 @@ const DemoDashboard = () => {
   });
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const checkConnection = async () => {
       try {
         const data = await api.getSystemHealth();
@@ -43,7 +45,13 @@ const DemoDashboard = () => {
     const fetchAnalytics = async () => {
       try {
         const analytics = await api.getAnalyticsOverview();
-        if (analytics && analytics.success && analytics.data) {
+        // api may throw or return 429 — guard silently
+        if (!analytics) return;
+        if (analytics.status === 429) {
+          console.warn('[DemoDashboard] Analytics rate limited.');
+          return;
+        }
+        if (analytics.success && analytics.data) {
           // Map backend metrics to local metrics
           // Fallback to random if expected fields are missing, but prioritize real data
           setMetrics(prev => ({
@@ -53,7 +61,8 @@ const DemoDashboard = () => {
             daniela: analytics.data.danielaEfficiency || analytics.data.efficiency || prev.daniela,
           }));
         }
-      } catch (error) {
+      } catch (error: any) {
+        if (error.name === 'AbortError') return;
         console.warn('Silent analytics fetch error:', error);
       }
     };
@@ -61,9 +70,12 @@ const DemoDashboard = () => {
     checkConnection();
     fetchAnalytics();
 
-    const interval = setInterval(fetchAnalytics, 10000); // Fetch real data every 10s
+    const interval = setInterval(fetchAnalytics, 60000); // Fetch real data every 60s (rate-limit friendly)
 
-    return () => clearInterval(interval);
+    return () => {
+      controller.abort();
+      clearInterval(interval);
+    };
   }, []);
 
   const features = [
@@ -83,25 +95,24 @@ const DemoDashboard = () => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8 text-center md:text-left">
           <div>
-            <span className="text-nexus-cyan text-[10px] font-mono tracking-[0.5em] uppercase mb-4 block">
-              Ecosistema en Tiempo Real
+            <span className="text-nexus-cyan text-[10px] font-mono tracking-[0.5em] uppercase mb-4 block animate-pulse">
+              Ecosistema Visionario AIGestion.net
             </span>
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight">
+            <h2 className="text-responsive-h1 font-black text-white mb-6 uppercase tracking-tight">
               Sovereign <span className="text-nexus-cyan">Workspace</span>
             </h2>
-            <p className="text-nexus-silver/60 max-w-xl text-lg font-light leading-relaxed">
-              Experimente la arquitectura de orquestación neural. Un entorno diseñado para la
-              soberanía operativa y el control total de sus activos digitales.
+            <p className="text-nexus-silver/80 max-w-xl text-lg font-light leading-relaxed">
+              Experimente el centro neurálgico del ecosistema AIGestion.net. Una arquitectura de orquestación diseñada para la soberanía absoluta y el control total de su infraestructura.
             </p>
           </div>
           <div className="flex gap-4">
-            <div className="px-6 py-4 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 text-right">
+            <div className="px-6 py-4 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 text-right shadow-2xl">
               <div className="text-[10px] text-nexus-silver/40 uppercase tracking-widest mb-1">
-                Status
+                Estado del Sistema
               </div>
               <div className="flex items-center gap-2 text-nexus-cyan font-bold">
-                <div className="w-2 h-2 rounded-full bg-nexus-cyan animate-pulse" />
-                ONLINE
+                <div className="w-2 h-2 rounded-full bg-nexus-cyan animate-pulse shadow-[0_0_10px_rgba(0,245,255,1)]" />
+                SÍNCRONO
               </div>
             </div>
           </div>
@@ -125,17 +136,16 @@ const DemoDashboard = () => {
               </button>
             ))}
 
-            <div className="mt-12 p-6 bg-linear-to-br from-nexus-violet/20 to-nexus-cyan/20 rounded-2xl border border-white/10">
+            <div className="mt-12 p-6 bg-linear-to-br from-nexus-violet/20 to-nexus-cyan/20 rounded-2xl border border-white/10 shadow-inner">
               <div className="flex items-center gap-2 mb-4 text-white text-[10px] font-bold tracking-widest">
-                <span className="text-nexus-gold">
+                <span className="text-nexus-gold animate-bounce">
                   <Zap size={16} />
                 </span>
-                POWERED BY DANIELA
+                IMPULSADO POR DANIELA
               </div>
 
-              <p className="text-[10px] text-nexus-silver/40 leading-relaxed uppercase">
-                Optimización de recursos activa en un 98.4%. No se requieren intervenciones manuales
-                detectadas.
+              <p className="text-[10px] text-nexus-silver/60 leading-relaxed uppercase font-bold">
+                Optimización activa al 99.8%. Todos los nodos operando bajo protocolo de soberanía.
               </p>
             </div>
           </div>

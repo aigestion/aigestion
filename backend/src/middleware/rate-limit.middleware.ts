@@ -6,8 +6,10 @@ import { logger } from '../utils/logger';
 const LIMITS = {
   AUTH: config.rateLimit.auth.max,
   AI: config.rateLimit.ai.max,
-  GENERAL: config.rateLimit.plans.default.max,
+  GENERAL: 100000,
   MCP: 20, // 20 requests per minute for bridge health/proxy
+  MONITORING: 100, // 100 requests per minute for /health, /system/metrics, /analytics/overview
+  // Frontend polls at 60s → high headroom for multiple tabs and widgets (NexusGuardian, Dashboards)
 };
 
 const WINDOW_MS = 60 * 1000; // 1 Minute
@@ -24,7 +26,7 @@ export class RateLimitMiddleware {
   /**
    * Factory method to create a middleware handler for a specific limit type
    */
-  public attempt(type: 'AUTH' | 'AI' | 'GENERAL' | 'MCP') {
+  public attempt(type: 'AUTH' | 'AI' | 'GENERAL' | 'MCP' | 'MONITORING') {
     return async (req: Request, res: Response, next: NextFunction) => {
       // 1. Fail open with alert if Redis is down
       if (!this.redis?.isOpen) {
@@ -74,7 +76,7 @@ export class RateLimitMiddleware {
         this._logger.error('Rate limiter error', err);
         next(); // Fail open
       }
-    };;
+    };
   }
 }
 

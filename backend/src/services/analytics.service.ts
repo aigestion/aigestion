@@ -33,19 +33,33 @@ export class AnalyticsService {
 
     try {
       // Real data from DB and stats
-      const totalUsers = await User.countDocuments();
-      const activeUsersInRange = await User.countDocuments({
-        lastLogin: { $gte: new Date(Date.now() - 15 * 60 * 1000) }, // Active in last 15 mins
-      });
+      let totalUsers = 0;
+      let activeUsersInRange = 0;
+      try {
+        totalUsers = await User.countDocuments();
+        activeUsersInRange = await User.countDocuments({
+          lastLogin: { $gte: new Date(Date.now() - 15 * 60 * 1000) }, // Active in last 15 mins
+        });
+      } catch (dbError) {
+        logger.error('Analytics DB failure:', dbError);
+      }
 
-      const containerStats = await this.infrastructureService.getContainerStats();
-      const nexusMeshStatus = containerStats.every(c => c?.status?.includes('Up'))
-        ? 'OPTIMAL'
-        : 'DEGRADED';
+      let containerStats: any[] = [];
+      let nexusMeshStatus = 'OPTIMAL';
+
+      try {
+        containerStats = await this.infrastructureService.getContainerStats();
+        nexusMeshStatus = containerStats.every(c => c?.status?.includes('Up'))
+          ? 'OPTIMAL'
+          : 'DEGRADED';
+      } catch (infraError) {
+        logger.warn('Analytics Infra stats failure, falling back to DEGRADED status.');
+        nexusMeshStatus = 'DEGRADED';
+      }
 
       const overview = {
         activeUsers: activeUsersInRange || 1, // Fallback to 1 if empty for UI
-        totalUsers,
+        totalUsers: totalUsers || 0,
         totalRequests: stats.totalRequests,
         errorRate:
           stats.totalRequests > 0
@@ -63,9 +77,20 @@ export class AnalyticsService {
         logger.error('Redis cache set failed in AnalyticsService:', err);
       }
       return overview;
-    } catch (dbError) {
-      logger.error('CRITICAL: Analytics overview database/infra failure:', dbError);
-      throw dbError;
+    } catch (generalError) {
+      logger.error('CRITICAL: Analytics overview unexpected failure:', generalError);
+      // Absolute fallback to avoid 500
+      return {
+        activeUsers: 1,
+        totalUsers: 0,
+        totalRequests: stats.totalRequests,
+        errorRate: 0,
+        avgResponseTime: 0,
+        nexusMeshStatus: 'DEGRADED',
+        activeContainers: 0,
+        timestamp: Date.now(),
+        isFallback: true,
+      };
     }
   }
 

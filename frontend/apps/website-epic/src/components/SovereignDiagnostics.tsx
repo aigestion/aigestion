@@ -56,7 +56,7 @@ export const SovereignDiagnostics: React.FC = () => {
 
   useEffect(() => {
     fetchDiagnostics();
-    const interval = setInterval(fetchDiagnostics, 10000); // 10s updates
+    const interval = setInterval(fetchDiagnostics, 30000); // 30s updates
     return () => clearInterval(interval);
   }, []);
 

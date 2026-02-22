@@ -16,14 +16,14 @@ export const NexusAndroid: React.FC = () => {
   const modes = [
     {
       id: 'mobile',
-      name: 'CONTROL TOTAL MÓVIL',
+      name: 'CENTRO DE CONTROL NEXUS',
       description:
-        'Tu suscripción incluye la APK exclusiva de Nexus Android. Gestiona toda tu casa o empresa desde tu mano.',
+        'Tu suscripción incluye la APK exclusiva de Nexus para Android. Gestiona toda tu infraestructura desde tu teléfono.',
       icon: <Smartphone className="w-6 h-6" />,
       color: 'from-nexus-cyan to-blue-600',
       accent: 'text-nexus-cyan-glow',
-      image: '/images/nexus/nexus_guardian_godmode.png', // Placeholder, using premium assets
-      benefits: ['Control desde el móvil', 'Gestión de tareas', 'Acceso remoto seguro'],
+      image: '/images/nexus/nexus_guardian_godmode.png',
+      benefits: ['Control Biométrico', 'Gestión de Nodos', 'Soberanía Portátil'],
     },
     {
       id: 'security',
@@ -69,15 +69,30 @@ export const NexusAndroid: React.FC = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-nexus-cyan/20 bg-nexus-cyan/5 mb-8">
             <Download className="w-4 h-4 text-nexus-cyan-glow" />
-            <GodModeText text="INCLUYE NEXUS APP (APK)" effect="hologram" className="text-[10px] font-orbitron tracking-[0.2em] text-nexus-cyan-glow uppercase" />
+            <GodModeText
+              text="INCLUYE NEXUS APP (APK)"
+              effect="hologram"
+              className="text-[10px] font-orbitron tracking-[0.2em] text-nexus-cyan-glow uppercase"
+            />
           </div>
           <div className="mb-8">
-            <GodModeText text="TU SISTEMA" effect="none" className="text-5xl md:text-7xl font-orbitron font-black text-white tracking-tighter uppercase mr-4" />
-            <GodModeText text="SOBERANO" effect="glitch" className="text-5xl md:text-7xl font-orbitron font-black text-white tracking-tighter uppercase" />
+            <GodModeText
+              text="TU SISTEMA"
+              effect="none"
+              className="text-5xl md:text-7xl font-orbitron font-black text-white tracking-tighter uppercase mr-4"
+            />
+            <GodModeText
+              text="SOBERANO"
+              effect="glitch"
+              className="text-5xl md:text-7xl font-orbitron font-black text-white tracking-tighter uppercase"
+            />
           </div>
-          <p className="text-lg text-nexus-silver/60 max-w-3xl mx-auto font-light leading-relaxed">
-            Hemos convertido la tecnología más avanzada del mundo en algo tan sencillo como usar tu
-            teléfono. Sin complicaciones, sin riesgos de privacidad. solo control absoluto.
+          <p className="text-xl text-nexus-silver/80 max-w-3xl mx-auto font-light leading-relaxed">
+            Hemos transformado la tecnología de vanguardia en una experiencia intuitiva para tu
+            teléfono. <br />
+            <span className="text-nexus-cyan font-bold italic">
+              Privacidad absoluta sin configuraciones complejas.
+            </span>
           </p>
         </motion.div>
 
@@ -97,38 +112,38 @@ export const NexusAndroid: React.FC = () => {
                 tiltMaxAngleY={10}
               >
                 <div className="w-full h-full relative overflow-hidden rounded-[2.5rem]">
-                    <AnimatePresence mode="wait">
+                  <AnimatePresence mode="wait">
                     <motion.div
-                        key={activeMode}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.5 }}
-                        className="w-full h-full relative"
+                      key={activeMode}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.5 }}
+                      className="w-full h-full relative"
                     >
-                        <img
+                      <img
                         src={currentMode.image}
                         alt={currentMode.name}
                         className="w-full h-full object-cover rounded-[2.5rem] opacity-70"
-                        />
-                        <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent" />
+                      />
+                      <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent" />
 
-                        {/* Simplified HUD Overlay */}
-                        <div className="absolute bottom-10 left-10 right-10">
+                      {/* Simplified HUD Overlay */}
+                      <div className="absolute bottom-10 left-10 right-10">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className={`p-2 rounded-lg bg-linear-to-br ${currentMode.color}`}>
+                          <div className={`p-2 rounded-lg bg-linear-to-br ${currentMode.color}`}>
                             {currentMode.icon}
-                            </div>
-                            <h4 className="text-xl font-orbitron font-bold text-white uppercase tracking-wider">
+                          </div>
+                          <h4 className="text-xl font-orbitron font-bold text-white uppercase tracking-wider">
                             {currentMode.name}
-                            </h4>
+                          </h4>
                         </div>
                         <p className="text-sm text-nexus-silver/50">
-                            SISTEMA ACTIVO: PROTECCIÓN NIVEL GOD MODE
+                          SISTEMA ACTIVO: PROTECCIÓN NIVEL GOD MODE
                         </p>
-                        </div>
+                      </div>
                     </motion.div>
-                    </AnimatePresence>
+                  </AnimatePresence>
                 </div>
               </TiltCard>
 
@@ -139,8 +154,8 @@ export const NexusAndroid: React.FC = () => {
                 className="absolute -top-6 -right-6 p-4 premium-glass rounded-2xl border-nexus-cyan/30 flex items-center gap-3 z-20"
               >
                 <Lock className="w-5 h-5 text-nexus-cyan-glow" />
-                <span className="text-[10px] font-orbitron font-bold text-white uppercase tracking-widest">
-                  Encriptación 100% Local
+                <span className="text-[10px] font-orbitron font-bold text-white uppercase tracking-widest animate-pulse">
+                  ENCRIPTACIÓN CUÁNTICA ACTIVA
                 </span>
               </motion.div>
             </div>
@@ -148,7 +163,11 @@ export const NexusAndroid: React.FC = () => {
 
           {/* Interactive Information */}
           <div className="space-y-6 order-1 lg:order-2">
-            <GodModeText text="¿Qué obtienes con tu suscripción?" effect="neon" className="text-2xl font-orbitron font-bold text-white uppercase tracking-widest mb-8" />
+            <GodModeText
+              text="¿Qué obtienes con tu suscripción?"
+              effect="neon"
+              className="text-2xl font-orbitron font-bold text-white uppercase tracking-widest mb-8"
+            />
 
             <div className="space-y-4">
               {modes.map(mode => (

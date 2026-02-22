@@ -35,10 +35,13 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
             animate={{
               scale: glowScale,
               opacity: glowOpacity,
+              boxShadow: isSpeaking
+                ? '0 0 100px rgba(189, 0, 255, 0.4)'
+                : '0 0 60px rgba(0, 240, 255, 0.2)',
             }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-            className="absolute inset-x-0 top-0 bottom-0 bg-nexus-cyan-glow/30 rounded-full blur-[60px] z-0"
+            className={`absolute inset-x-0 top-0 bottom-0 rounded-full blur-[80px] z-0 ${isSpeaking ? 'bg-nexus-violet/30' : 'bg-nexus-cyan-glow/20'}`}
           />
         )}
       </AnimatePresence>
@@ -83,7 +86,7 @@ export const DanielaAvatar: React.FC<DanielaAvatarProps> = ({
           whileHover={{ opacity: 1, y: -12 }}
           className="absolute -top-12 left-1/2 -translate-x-1/2 premium-glass px-4 py-1.5 rounded-full text-[10px] font-orbitron text-nexus-cyan-glow tracking-[0.2em] uppercase border-white/5 pointer-events-none whitespace-nowrap overflow-visible"
         >
-          Canal de Voz en Espera
+          Canal de Voz Preparado
         </motion.div>
       )}
     </div>

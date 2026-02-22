@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Shield, Activity, Zap, ShieldAlert, Cpu, BarChart3 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 
@@ -6,36 +6,62 @@ export const NexusGuardianWidget: React.FC = () => {
   const [sanityScore, setSanityScore] = useState(98);
   const [cpuLoad, setCpuLoad] = useState(24);
   const [memoryLoad, setMemoryLoad] = useState(42);
-  const [status, setStatus] = useState<'HEALTHY' | 'DEGRADED' | 'CRITICAL'>('HEALTHY');
+  const [status, setStatus] = useState<'HEALTHY' | 'DEGRADED' | 'CRITICAL'>('HEALTHY'); // drives widget glow class
 
   // Fetch real-time monitoring
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    let backoffTime = 60000; // Base 60s
+    const controller = new AbortController();
+
     const fetchMetrics = async () => {
+      if (document.visibilityState !== 'visible') {
+        timeoutId = setTimeout(fetchMetrics, backoffTime);
+        return;
+      }
+
       try {
         const response = await fetch('/api/v1/system/metrics', {
+          signal: controller.signal,
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-          }
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         });
+
+        // 429 = rate limited — throttle backing off exponentially
+        if (response.status === 429) {
+          console.warn('[NexusGuardian] Rate limit reached. Backing off...');
+          backoffTime = Math.min(backoffTime * 2, 300000); // Max 5 mins
+          timeoutId = setTimeout(fetchMetrics, backoffTime);
+          return;
+        }
+
         if (response.ok) {
           const data = await response.json();
           setCpuLoad(Math.round(data.cpu));
           setMemoryLoad(Math.round(data.memory));
 
           // Dynamic sanity score based on real load
-          const sanity = 100 - (data.cpu / 4) - (data.memory / 8);
+          const sanity = 100 - data.cpu / 4 - data.memory / 8;
           setSanityScore(Math.floor(sanity));
           setStatus('HEALTHY');
+          backoffTime = 60000; // Reset backoff on success
         }
-      } catch (error) {
+      } catch (error: any) {
+        if (error.name === 'AbortError') return;
         console.error('Error fetching system metrics:', error);
         setStatus('DEGRADED');
       }
+
+      timeoutId = setTimeout(fetchMetrics, backoffTime);
     };
 
     fetchMetrics(); // Initial fetch
-    const interval = setInterval(fetchMetrics, 5000); // Poll every 5 seconds
-    return () => clearInterval(interval);
+    
+    return () => {
+      controller.abort();
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return (

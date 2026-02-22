@@ -17,37 +17,37 @@ interface Scene {
 
 const defaultScenes: Scene[] = [
   {
-    id: 'sovereign-nexus',
-    title: 'SOVEREIGN NEXUS',
-    subtitle: 'Infraestructura Descentralizada de Próxima Generación',
+    id: 'aigestion-platform',
+    title: 'AIGESTION.NET',
+    subtitle: 'Tu plataforma de inteligencia artificial para mejorar tu empresa y tu vida',
     video: '/videos/tutorial_onboarding.mp4',
-    duration: 6000,
+    duration: 7000,
   },
   {
-    id: 'daniela-ai',
-    title: 'DANIELA AI',
-    subtitle: 'Conciencia Artificial Soberana y Agentes Autónomos',
+    id: 'daniela-assistant',
+    title: 'DANIELA',
+    subtitle: 'Asistente personal: no necesitas tener conocimientos',
     video: '/videos/tutorial_features.mp4',
     duration: 7000,
   },
   {
-    id: 'nexus-android',
-    title: 'NEXUS ANDROID',
-    subtitle: 'Interconexión Humano-Máquina en Tiempo Real',
+    id: 'nexus-control',
+    title: 'NEXUS',
+    subtitle: 'En tu teléfono para todo el control en tu mano',
     video: '/videos/tutorial_onboarding.mp4',
-    duration: 5000,
+    duration: 6000,
   },
   {
     id: 'quantum-protocol',
-    title: 'QUANTUM PROTOCOL',
-    subtitle: 'Seguridad Criptográfica de Grado Militar',
+    title: 'PROTOCOLO QUANTUM',
+    subtitle: 'Seguridad grado militar',
     video: '/videos/tutorial_features.mp4',
     duration: 6000,
   },
   {
-    id: 'global-intelligence',
-    title: 'GLOBAL INTELLIGENCE',
-    subtitle: 'Red Mundial de Nodos Inteligentes Autogestionados',
+    id: 'ecosystem-demo',
+    title: 'DEMO WEB',
+    subtitle: 'Ecosistema AIGestion.net',
     video: '/videos/tutorial_onboarding.mp4',
     duration: 8000,
   },
@@ -179,7 +179,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
                 muted
                 loop
                 playsInline
-                className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-40"
+                className="absolute inset-0 w-full h-full object-cover mix-blend-screen opacity-20 filter grayscale contrast-125"
                 onLoadedData={handleVideoLoaded}
                 onError={handleVideoError}
               >
@@ -233,7 +233,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
               <div className="flex items-center gap-2">
                 <div className="h-[1px] w-12 bg-linear-to-r from-nexus-violet to-transparent" />
                 <p className="text-nexus-cyan/60 text-[8px] font-mono tracking-[0.5em] uppercase">
-                  Sovereign Intelligence Nexus
+                  SOVEREIGN INTELLIGENCE NEXUS
                 </p>
               </div>
             </div>
@@ -280,9 +280,9 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
               <div className="relative inline-block mb-4">
                 <div className="absolute -inset-4 bg-nexus-violet/20 blur-3xl rounded-full" />
                 <motion.h2
-                  className="relative text-7xl md:text-9xl font-orbitron font-black text-white leading-none glitch-text"
+                  className="relative text-responsive-h1 font-orbitron font-black text-white leading-none glitch-text tracking-tighter"
                   style={{
-                    textShadow: '0 0 30px rgba(138, 43, 226, 0.4)',
+                    textShadow: '0 0 40px rgba(0, 240, 255, 0.3)',
                   }}
                 >
                   {activeScenes[currentScene].title}
@@ -290,7 +290,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
               </div>
 
               <motion.p
-                className="text-2xl md:text-4xl text-nexus-cyan mb-8 font-light"
+                className="text-responsive-h2 text-nexus-cyan mb-8 font-light italic opacity-80"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
@@ -299,33 +299,41 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
               </motion.p>
 
               {/* Scene-specific content */}
-              {activeScenes[currentScene].id === 'daniela-ai' && (
+              {activeScenes[currentScene].id === 'daniela-assistant' && (
                 <motion.div
                   className="mt-8"
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <div className="w-64 h-64 mx-auto rounded-full overflow-hidden border-4 border-nexus-cyan shadow-2xl shadow-nexus-cyan/50">
+                  <div className="w-48 h-48 md:w-64 md:h-64 mx-auto rounded-full overflow-hidden border-2 border-nexus-violet-glow shadow-2xl shadow-nexus-violet/50 relative group">
+                    <div className="absolute inset-0 bg-nexus-violet/20 group-hover:bg-transparent transition-colors duration-500" />
                     <img
                       src="/images/daniela/daniela_lab_godmode.png"
                       alt="Daniela AI"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover filter brightness-110 contrast-110"
                     />
                   </div>
-                  <p className="text-white mt-4 text-lg">Conciencia Artificial Ultra-Realista 8K</p>
+                  <p className="text-nexus-violet-glow mt-6 text-sm font-orbitron tracking-widest uppercase animate-pulse">
+                    Tu aliada perfecta para el éxito
+                  </p>
                 </motion.div>
               )}
 
-              {activeScenes[currentScene].id === 'nexus-android' && (
+              {activeScenes[currentScene].id === 'nexus-control' && (
                 <motion.div
                   className="mt-8"
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <div className="text-6xl mb-4">🤖</div>
-                  <p className="text-nexus-violet text-xl">Guardián Cuántico de la Innovación</p>
+                  <div className="max-w-xs mx-auto">
+                     <img
+                      src="/images/nexus/nexus_guardian_godmode.png"
+                      alt="Nexus Control"
+                      className="w-full h-auto drop-shadow-[0_0_30px_rgba(0,240,255,0.3)]"
+                    />
+                  </div>
                 </motion.div>
               )}
             </motion.div>

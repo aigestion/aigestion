@@ -38,12 +38,22 @@ export const NeuralDashboard: React.FC = () => {
   const [inputText, setInputText] = useState('');
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchHealth = async () => {
       try {
-        const response = await fetch(`${apiConfig.baseUrl}/v1/health`);
+        const response = await fetch(`${apiConfig.baseUrl}/v1/health`, {
+          signal: controller.signal,
+        });
+        // 429 = rate limited — skip silently
+        if (response.status === 429) {
+          console.warn('[NeuralDashboard] Health check rate limited.');
+          return;
+        }
         const data = await response.json();
         setHealth(data);
-      } catch (error) {
+      } catch (error: any) {
+        if (error.name === 'AbortError') return;
         console.error('Failed to fetch health:', error);
       }
     };
@@ -52,8 +62,11 @@ export const NeuralDashboard: React.FC = () => {
     const interval = setInterval(() => {
       setPulseActive(prev => !prev);
       fetchHealth();
-    }, 10000);
-    return () => clearInterval(interval);
+    }, 60000); // Poll every 60s (rate-limit friendly)
+    return () => {
+      controller.abort();
+      clearInterval(interval);
+    };
   }, []);
 
   const runVisualAudit = async () => {

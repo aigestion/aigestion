@@ -61,7 +61,7 @@ const envSchema = baseEnvSchema.extend({
 
   RATE_LIMIT_MAX: z
     .string()
-    .default('1000')
+    .default('5000')
     .transform(val => Number.parseInt(val, 10))
     .pipe(z.number().positive())
     .describe('Maximum requests per window'),

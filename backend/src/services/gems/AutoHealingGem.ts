@@ -1,6 +1,6 @@
 import { injectable, inject } from 'inversify';
 import { BaseGem, GemOptions } from './BaseGem';
-import { Gemini2Service } from '../gemini2.service';
+import { Gemini2Service } from '../gemini-2.service';
 import { logger } from '../../utils/logger';
 
 @injectable()

@@ -49,5 +49,6 @@
     }
   ],
   "version": 2,
+  "regions": ["cdg1"],
   "installCommand": "echo 'Skipping install'"
 }

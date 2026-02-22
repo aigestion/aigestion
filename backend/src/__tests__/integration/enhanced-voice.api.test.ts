@@ -1,4 +1,14 @@
 import request from 'supertest';
+
+// Mock Supabase globally to prevent side effects in tests
+jest.mock('../../services/supabase.service', () => ({
+  SupabaseService: {
+    getInstance: jest.fn().mockReturnValue({
+      client: {},
+      initializeRealtimeSubscriptions: jest.fn(),
+    }),
+  },
+}));
 import { app } from '../../app';
 import { container } from '../../config/inversify.config';
 import { EnhancedVoiceService } from '../../services/enhanced-voice.service';

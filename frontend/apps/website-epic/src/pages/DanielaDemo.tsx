@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Brain, Cpu, Globe, Shield, Sparkles, Zap } from 'lucide-react';
 import React, { useState } from 'react';
 import { DanielaWebsite } from '../components/DanielaWebsite';
+import { DanielaConversationPanel } from '../components/DanielaConversationPanel';
 
 const Waveform: React.FC<{ isActive: boolean }> = ({ isActive }) => (
   <div className="flex items-end gap-1 h-8 px-4">
@@ -102,8 +103,9 @@ export const DanielaDemo: React.FC = () => {
             <h1 className="text-6xl font-orbitron font-black mb-4 bg-gradient-to-r from-nexus-cyan-glow to-nexus-violet-glow bg-clip-text text-transparent">
               DANIELA
             </h1>
-            <p className="text-xl text-nexus-silver/80 mb-8">
-              La experiencia futurista de conversación IA que transformará tu negocio
+            <p className="text-xl text-nexus-silver/80 mb-2">Asistente IA Futurista</p>
+            <p className="text-lg text-nexus-silver/60 mb-8">
+              La experiencia de conversación que transformará tu negocio
             </p>
             <div className="flex justify-center gap-4">
               <motion.button
@@ -232,7 +234,7 @@ export const DanielaDemo: React.FC = () => {
                   )}
                   {variant === 'assistant' && (
                     <div className="h-96">
-                      <DanielaWebsite variant="assistant" context={context} />
+                      <DanielaConversationPanel />
                     </div>
                   )}
                   {variant === 'advisor' && (

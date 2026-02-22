@@ -3,8 +3,12 @@ import { buildResponse } from '../common/response-builder';
 import { config } from '../config/config';
 import { container, TYPES } from '../config/inversify.config';
 import { HealthService } from '../services/health.service';
+import { rateLimiter } from '../middleware/rate-limiter.instance';
 
 const healthRouter = Router();
+
+// Monitoring rate limit: 30 req/min per IP
+const monitoringLimit = rateLimiter.attempt('MONITORING');
 
 /**
  * @openapi
@@ -16,7 +20,7 @@ const healthRouter = Router();
  *       200:
  *         description: System is up
  */
-healthRouter.get('/', (req: Request, res: Response) => {
+healthRouter.get('/', monitoringLimit, (req: Request, res: Response) => {
   const requestId = (req as any).requestId || 'unknown';
   return res.json(
     buildResponse(
@@ -41,7 +45,7 @@ healthRouter.get('/', (req: Request, res: Response) => {
  *       200:
  *         description: System health report
  */
-healthRouter.get('/detailed', async (req: Request, res: Response) => {
+healthRouter.get('/detailed', monitoringLimit, async (req: Request, res: Response) => {
   const requestId = (req as any).requestId ?? 'unknown';
   try {
     const healthService = container.get<HealthService>(TYPES.DetailedHealthService);

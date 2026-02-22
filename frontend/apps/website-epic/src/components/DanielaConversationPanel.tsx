@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Mic, StopCircle } from 'lucide-react';
 import { danielaApi } from '../services/daniela-api.service';
+import { useDanielaVoice } from '../hooks/useDanielaVoice';
 
 export const DanielaConversationPanel: React.FC = () => {
   const [messages, setMessages] = useState<{ role: 'ai' | 'user'; text: string }[]>([
@@ -104,7 +105,8 @@ export const DanielaConversationPanel: React.FC = () => {
                   ? 'bg-nexus-violet/20 text-white rounded-tr-sm border border-nexus-violet/30'
                   : 'bg-white/10 text-gray-200 rounded-tl-sm border border-white/5'
               }`}
-            >
+            data-testid="daniela-message"
+          >
               {msg.text}
             </div>
           </motion.div>
@@ -122,6 +124,7 @@ export const DanielaConversationPanel: React.FC = () => {
                 ? 'bg-red-500/20 text-red-400 animate-pulse border border-red-500/50'
                 : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10'
             }`}
+            data-testid="daniela-mic"
           >
             {isListening ? <StopCircle size={20} /> : <Mic size={20} />}
           </button>
@@ -130,12 +133,14 @@ export const DanielaConversationPanel: React.FC = () => {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSend()}
-            placeholder="Escribe un mensaje..."
+            placeholder="Escribe o habla con Daniela..."
             className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-3 text-white text-sm focus:outline-none focus:border-nexus-cyan/50 placeholder-gray-500"
+            data-testid="daniela-input"
           />
           <button
             onClick={handleSend}
             className="p-3 bg-nexus-cyan text-black rounded-full hover:bg-cyan-400 transition-colors"
+            data-testid="daniela-send"
           >
             <Send size={18} />
           </button>

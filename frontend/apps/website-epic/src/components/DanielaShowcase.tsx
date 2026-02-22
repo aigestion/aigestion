@@ -94,23 +94,30 @@ export const DanielaShowcase: React.FC = () => {
       >
         <div className="mb-8 flex flex-col items-center justify-center gap-2">
           <GodModeText
-            text="TU ASISTENTE INTELIGENTE:"
+            text="TU ASISTENTE PERSONAL:"
             effect="none"
             className="text-2xl md:text-3xl font-orbitron font-bold text-nexus-violet-glow tracking-widest"
           />
           <GodModeText
             text="DANIELA"
             effect="neon"
-            className="text-5xl md:text-7xl font-orbitron font-black text-white tracking-tighter"
+            className="text-5xl md:text-8xl font-orbitron font-black text-white tracking-tighter"
           />
         </div>
 
-        <p className="text-nexus-silver/60 max-w-2xl mx-auto mb-16 text-xl font-light tracking-wide italic">
-          "Daniela no es un robot frío, es alguien que te ayuda a que todo funcione mejor. <br />
-          Puedes hablar con ella como con un amigo que cuida de tus cosas."
+        <p className="text-nexus-silver/80 max-w-2xl mx-auto mb-16 text-xl font-light tracking-wide leading-relaxed">
+          "Daniela no es un robot frío. Es tu aliada estratégica que gestiona la complejidad por ti.{' '}
           <br />
-          <span className="text-xs font-mono text-nexus-cyan/40 mt-4 block uppercase tracking-[0.3em] not-italic">
-            <AITypingFlutter text="Conexión Segura • Ayuda Lista para tu Negocio" speed={50} />
+          <span className="text-nexus-violet-glow font-bold">
+            No necesitas tener conocimientos técnicos
+          </span>{' '}
+          para liderar la revolución de la IA."
+          <br />
+          <span className="text-xs font-mono text-nexus-cyan/40 mt-6 block uppercase tracking-[0.4em] font-bold">
+            <AITypingFlutter
+              text="Soberanía Digital • Potencia Sin Esfuerzo • Grado Militar"
+              speed={50}
+            />
           </span>
         </p>
 
@@ -170,29 +177,28 @@ export const DanielaShowcase: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   {
-                    title: 'Cuidar a tus clientes',
-                    desc: 'Anota y recuerda todo lo que tus contactos necesitan.',
+                    title: 'Gestión Inteligente',
+                    desc: 'Daniela organiza tu agenda y recuerda cada detalle por ti.',
                   },
                   {
-                    title: 'Hablar en tu idioma',
-                    desc: 'Puedes hablarle como a un amigo, ella te entiende perfectamente.',
+                    title: 'Lenguage Natural',
+                    desc: 'Háblale como a un compañero. Ella te entiende sin complicaciones.',
                   },
                   {
-                    title: 'Tu agenda al día',
-                    desc: 'Se acabó el olvidar citas o recados importantes.',
+                    title: 'Sincronización Total',
+                    desc: 'Toda tu empresa en la palma de tu mano, lista para actuar.',
                   },
                   {
-                    title: 'Saber cuánto ganas',
-                    desc: 'Informes sencillos para saber cómo va tu negocio hoy mismo.',
-                  },
-
-                  {
-                    title: 'Control total con tu voz',
-                    desc: 'Gestiona tus cosas simplemente hablando por el móvil.',
+                    title: 'Métricas de Éxito',
+                    desc: 'Informes claros y directos sobre el rendimiento de tu negocio.',
                   },
                   {
-                    title: 'Ayuda siempre lista',
-                    desc: 'Daniela está disponible para ti las 24 horas del día.',
+                    title: 'Control por Voz',
+                    desc: 'Gestiona operaciones complejas simplemente hablando.',
+                  },
+                  {
+                    title: 'Disponibilidad 24/7',
+                    desc: 'Tu asistente nunca descansa. Siempre lista, siempre eficiente.',
                   },
                 ].map((cap, i) => (
                   <motion.div
@@ -211,10 +217,10 @@ export const DanielaShowcase: React.FC = () => {
                 ))}
               </div>
 
-              <div className="p-8 rounded-3xl bg-linear-to-r from-nexus-violet/10 to-transparent border border-nexus-violet/20 backdrop-blur-sm">
-                <p className="text-sm text-nexus-silver italic font-light">
-                  "Daniela trabaja segundo a segundo para que tú puedas estar tranquilo mientras tu
-                  negocio prospera."
+              <div className="p-8 rounded-3xl bg-linear-to-r from-nexus-violet/20 to-transparent border border-nexus-violet/30 backdrop-blur-md shadow-2xl">
+                <p className="text-sm text-nexus-silver italic font-light leading-relaxed">
+                  "Daniela trabaja incansablemente para que tú puedas centrarte en lo que de verdad
+                  importa. Seguridad, eficiencia y soberanía en cada interacción."
                 </p>
               </div>
             </div>

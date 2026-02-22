@@ -16,6 +16,16 @@ jest.mock('../../utils/logger', () => ({
   },
 }));
 
+// Mock Supabase globally to prevent side effects in tests
+jest.mock('../../services/supabase.service', () => ({
+  SupabaseService: {
+    getInstance: jest.fn().mockReturnValue({
+      client: {},
+      initializeRealtimeSubscriptions: jest.fn(),
+    }),
+  },
+}));
+
 import { EnhancedVoiceService } from '../../services/enhanced-voice.service';
 import { AIService } from '../../services/ai.service';
 import { AnalyticsService } from '../../services/analytics.service';
