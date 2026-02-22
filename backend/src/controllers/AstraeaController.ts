@@ -6,9 +6,10 @@ import { buildResponse } from '../common/response-builder';
 import { logger } from '../utils/logger';
 
 interface AuthenticatedRequest extends Request {
-  user?: { id: string };
+  user?: { id: string; email: string; role: string };
   requestId?: string;
 }
+
 
 @injectable()
 export class AstraeaController {

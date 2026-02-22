@@ -8,7 +8,7 @@ import { logger } from '../utils/logger';
 export class SemanticCacheService {
   private genAI: any;
   private readonly SIMILARITY_THRESHOLD = 0.95;
-  private readonly EMBEDDING_MODEL = 'text-embedding-004';
+  private readonly EMBEDDING_MODEL = 'gemini-embedding-001';
 
   constructor() {
     this.genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY || '');

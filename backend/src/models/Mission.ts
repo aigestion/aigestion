@@ -21,6 +21,7 @@ export interface IMission extends Document {
   error?: string;
   startedAt: Date;
   completedAt?: Date;
+  metadata?: Record<string, any>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -68,13 +69,17 @@ const missionSchema = new Schema<IMission>(
     completedAt: {
       type: Date,
     },
+    metadata: {
+      type: Schema.Types.Mixed,
+      default: {},
+    },
   },
   {
     timestamps: true,
     toJSON: {
       virtuals: true,
     },
-  }
+  },
 );
 
 const Mission = mongoose.model<IMission>('Mission', missionSchema);

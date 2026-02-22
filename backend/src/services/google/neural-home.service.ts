@@ -3,6 +3,8 @@ import { TYPES } from '../../types';
 import { logger } from '../../utils/logger';
 import { FirebaseService } from './firebase.service';
 import { RagService } from '../rag.service';
+import { env } from '../../config/env.schema';
+import axios from 'axios';
 
 /**
  * NEURAL HOME BRIDGE
@@ -21,16 +23,38 @@ export class NeuralHomeBridge {
   async syncAmbientState(level: 'low' | 'medium' | 'critical') {
     logger.info(`[NeuralHome] Syncing ambient state to level: ${level}`);
 
-    // High-performance light/signal triggers via Home Assistant API (Simulated)
-    const color = level === 'critical' ? '#ff0000' : level === 'medium' ? '#4f46e5' : '#22c55e';
+    // High-performance light/signal triggers via Home Assistant API
+    const color =
+      level === 'critical' ? [255, 0, 0] : level === 'medium' ? [79, 70, 229] : [34, 197, 94];
+    const haUrl = env.HA_URL;
+    const haToken = env.HA_TOKEN;
 
-    logger.info(`[NeuralHome] Ambient Color Sync: ${color}`);
+    if (haToken) {
+      try {
+        // Trigger a scenes or direct light control in Home Assistant
+        // This is a "Proactive" sync - AI pushing state to the room
+        await axios.post(
+          `${haUrl}/api/services/light/turn_on`,
+          {
+            entity_id: 'light.office_ambient',
+            rgb_color: color,
+            brightness: level === 'critical' ? 255 : 150,
+          },
+          { headers: { Authorization: `Bearer ${haToken}`, 'Content-Type': 'application/json' } },
+        );
+        logger.info(`[NeuralHome] Physical Ambient Sync Successful: ${color}`);
+      } catch (error: any) {
+        logger.warn(`[NeuralHome] Physical sync failed (check HA_URL/TOKEN): ${error.message}`);
+      }
+    } else {
+      logger.info(`[NeuralHome] HA_TOKEN missing — Physical Ambient Sync Simulated: ${color}`);
+    }
 
-    // Log to Firebase so the UI dashboard matches the physical state
+    // Always log to Firebase so the UI dashboard matches the physical state
     await this.firebase.pushAlert('nexus_global', {
       type: 'AMBIENT_SYNC',
       level,
-      color,
+      color: level === 'critical' ? '#ff0000' : level === 'medium' ? '#4f46e5' : '#22c55e',
       source: 'NeuralHomeBridge',
     });
   }
@@ -55,8 +79,8 @@ export class NeuralHomeBridge {
   ): Promise<{ success: boolean; action: string; entity: string }> {
     logger.info(`[NeuralHome] 🔐 Lock control: ${action} on ${lockId}`);
 
-    const haUrl = process.env.HA_URL || 'http://homeassistant.local:8123';
-    const haToken = process.env.HA_TOKEN;
+    const haUrl = env.HA_URL;
+    const haToken = env.HA_TOKEN;
 
     if (!haToken) {
       logger.warn('[NeuralHome] HA_TOKEN not set — lock command simulated');
@@ -66,7 +90,6 @@ export class NeuralHomeBridge {
     }
 
     try {
-      const axios = require('axios');
       const service = action === 'unlock' ? 'lock/unlock' : 'lock/lock';
       await axios.post(
         `${haUrl}/api/services/${service}`,

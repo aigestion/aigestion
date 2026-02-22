@@ -3,6 +3,7 @@ import axios from 'axios';
 import { TYPES } from '../../types';
 import { logger } from '../../utils/logger';
 import { NexusPushService } from '../nexus-push.service';
+import { TelegramService } from '../telegram.service';
 
 export interface PixelCommand {
   action: string;
@@ -16,7 +17,8 @@ export class PixelBridgeService {
 
   constructor(
     @inject(TYPES.NexusPushService) private pushService: NexusPushService,
-    @inject(TYPES.Config) private config: any
+    @inject(TYPES.TelegramService) private telegramService: TelegramService,
+    @inject(TYPES.Config) private config: any,
   ) {
     this.taskerWebhookUrl = process.env.PIXEL_TASKER_WEBHOOK_URL;
     logger.info('[PixelBridge] 📱 Sovereign Pixel Bridge Service initialized');
@@ -36,7 +38,7 @@ export class PixelBridgeService {
       const response = await axios.post(this.taskerWebhookUrl, {
         source: 'nexus_god_mode',
         timestamp: Date.now(),
-        ...command
+        ...command,
       });
 
       return response.status === 200;
@@ -52,16 +54,27 @@ export class PixelBridgeService {
   private async fallbackToPush(command: PixelCommand): Promise<boolean> {
     // Assuming we send to the admin user (Alejandro)
     // In a real scenario, we'd look up the admin's userId
-    const adminId = 'admin'; 
-    return this.pushService.sendToUser(adminId, {
+    const adminId = 'admin';
+    const pushSuccess = await this.pushService.sendToUser(adminId, {
       title: '🌌 NEXUS COMMAND',
       body: `Action: ${command.action}`,
       data: {
         command: JSON.stringify(command),
-        source: 'pixel_bridge_fallback'
+        source: 'pixel_bridge_fallback',
       },
-      priority: command.priority || 'normal'
+      priority: command.priority || 'normal',
     });
+
+    // Ultimate Fallback: Sovereign Hive (Telegram) if it's a God Mode alert
+    if (!pushSuccess && command.action === 'god_mode_alert') {
+      logger.info('[PixelBridge] 🐝 Sovereign fallback: Dispatching to Telegram Hive');
+      await this.telegramService.sendMessage(
+        `🚨 *GOD MODE ALERT*\n\nAction: \`${command.action}\`\nPriority: \`${command.priority}\`\nMessage: ${command.params?.message || 'No additional data.'}`,
+      );
+      return true; // Consider success if delivered to Telegram
+    }
+
+    return pushSuccess;
   }
 
   /**
@@ -71,7 +84,7 @@ export class PixelBridgeService {
     return this.sendCommand({
       action: 'god_mode_alert',
       params: { message },
-      priority: 'high'
+      priority: 'high',
     });
   }
 }

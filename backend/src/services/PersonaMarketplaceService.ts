@@ -77,4 +77,16 @@ export class PersonaMarketplaceService {
       ]),
     };
   }
+
+  public async ratePersona(personaId: string, rating: number) {
+    logger.info(`[Marketplace] Rating persona ${personaId}: ${rating}`);
+    const persona = await Persona.findById(personaId);
+    if (!persona) throw new Error('Persona not found');
+
+    // Update reputation score (simplified rolling average logic)
+    persona.reputationScore = (persona.reputationScore + rating) / 2;
+    await persona.save();
+    return persona;
+  }
 }
+

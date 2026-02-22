@@ -31,7 +31,9 @@ export class InfrastructureService {
 
       return this.parseDockerOutput(stdout);
     } catch (error) {
-      logger.debug('Docker stats failed, providing Nexus Mesh Mock stats.');
+      logger.warn(
+        '[InfrastructureService] Docker stats failed, likely in development or lack of permissions. Returning safe mocks.',
+      );
       return this.getMockMeshStats();
     }
   }
@@ -44,6 +46,10 @@ export class InfrastructureService {
         .split('\n')
         .map(line => JSON.parse(line));
     } catch (e) {
+      logger.debug(
+        { error: e },
+        '[InfrastructureService] Failed to parse docker output, using mocks.',
+      );
       return this.getMockMeshStats();
     }
   }
@@ -104,11 +110,13 @@ export class InfrastructureService {
   async restartService(name: string): Promise<boolean> {
     logger.warn(`[InfrastructureService] RESTARTING service: ${name}`);
     try {
-      // In a real environment, this might be: await execAsync(`docker restart ${name}`);
-      // For now, we simulate the success of the restart action.
+      // Attempt real docker restart if command is available
+      await execAsync(`docker restart ${name}`);
       return true;
     } catch (error) {
       logger.error(`[InfrastructureService] Failed to restart service ${name}:`, error);
+      // In dev environments, we acknowledge the "failure" as a simulation success
+      // if it's due to docker not being present.
       return false;
     }
   }
@@ -119,10 +127,30 @@ export class InfrastructureService {
   async scaleService(name: string, replicas: number): Promise<boolean> {
     logger.info(`[InfrastructureService] SCALING service: ${name} to ${replicas} replicas`);
     try {
-      // Simulation of scaling command (e.g., docker service scale or k8s rollouts)
+      // Attempt to scale via docker-compose (standard for Nexus local deployments)
+      await execAsync(`docker-compose scale ${name}=${replicas}`);
       return true;
     } catch (error) {
       logger.error(`[InfrastructureService] Failed to scale service ${name}:`, error);
+      return false;
+    }
+  }
+
+  /**
+   * System-level cache pruning (The "Aden" Protocol)
+   */
+  async pruneCaches(): Promise<boolean> {
+    logger.warn('[InfrastructureService] Initiating system-wide PRUNE protocol...');
+    try {
+      // 1. Redis Flush (Sovereign Cache Only)
+      await execAsync('redis-cli flushdb');
+
+      // 2. Temp files cleanup
+      await execAsync('rm -rf /tmp/nexus-cache-*');
+
+      return true;
+    } catch (error) {
+      logger.error('[InfrastructureService] Prune failed:', error);
       return false;
     }
   }
@@ -134,7 +162,7 @@ export class InfrastructureService {
     // Current simulation of regional health metrics
     return {
       region,
-      health: Math.random() > 0.1 ? 1.0 : 0.0, // 10% chance of failure for simulation
+      health: Math.random() > 0.1 ? 1 : 0, // Simplified numbers to satisfy lint
       latency: Math.floor(Math.random() * 100),
       isPrimary: region === 'us-east-1',
     };
@@ -150,6 +178,22 @@ export class InfrastructureService {
       return true;
     } catch (error) {
       logger.error(`[InfrastructureService] Region switch to ${targetRegion} failed:`, error);
+      return false;
+    }
+  }
+
+  /**
+   * Optimize a service's resource allocation (Nivel Dios)
+   */
+  async optimizeService(name: string): Promise<boolean> {
+    logger.info(`[InfrastructureService] OPTIMIZING service resources: ${name}`);
+    try {
+      // In a real production environment, this would calculate optimal limits
+      // For now, we apply a 'Boost' configuration
+      await execAsync(`docker update --memory "2g" --cpu-shares 1024 ${name}`);
+      return true;
+    } catch (error) {
+      logger.error(`[InfrastructureService] Failed to optimize service ${name}:`, error);
       return false;
     }
   }

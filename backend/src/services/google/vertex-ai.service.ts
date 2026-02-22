@@ -105,7 +105,7 @@ export class VertexAIService {
       if (geminiApiKey && !isRedacted) {
         const { GoogleGenerativeAI } = await import('@google/generative-ai');
         const genAI = new GoogleGenerativeAI(geminiApiKey);
-        const model = genAI.getGenerativeModel({ model: 'text-embedding-004' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-embedding-001' });
 
         const result = await model.embedContent(text);
         embeddingValues = result.embedding.values;
@@ -118,7 +118,7 @@ export class VertexAIService {
           return new Array(768).fill(0);
         }
 
-        const modelName = 'text-embedding-004';
+        const modelName = 'gemini-embedding-001';
         const result = await this.vertexAI.getGenerativeModel({ model: modelName }).embedContent({
           content: { role: 'user', parts: [{ text }] },
         });
@@ -189,7 +189,7 @@ export class VertexAIService {
       if (geminiApiKey && !isRedacted) {
         const { GoogleGenerativeAI } = await import('@google/generative-ai');
         const genAI = new GoogleGenerativeAI(geminiApiKey);
-        const model = genAI.getGenerativeModel({ model: 'text-embedding-004' });
+        const model = genAI.getGenerativeModel({ model: 'gemini-embedding-001' });
 
         // Gemini SDK supports batch embed natively
         const batchResult = await model.batchEmbedContents({

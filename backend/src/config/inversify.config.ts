@@ -191,6 +191,10 @@ import { EnterpriseAuditService } from '../services/EnterpriseAuditService';
 import { PredictiveBIService } from '../services/PredictiveBIService';
 import { AstraeaController } from '../controllers/AstraeaController';
 import { AstraeaService } from '../services/AstraeaService';
+import { PixelBridgeService } from '../services/iot/PixelBridgeService';
+import { PixelSensorService } from '../services/iot/PixelSensorService';
+import { N8nBridgeService } from '../services/iot/N8nBridgeService';
+import { ProactiveVoiceService } from '../services/ProactiveVoiceService';
 import { VapiService } from '../services/VapiService';
 import { config } from './config';
 
@@ -463,6 +467,10 @@ bind<NavigatorGem>(TYPES.NavigatorGem, NavigatorGem);
 bind<AutoHealingGem>(TYPES.AutoHealingGem, AutoHealingGem);
 bind<VapiService>(TYPES.VapiService, VapiService);
 bind<AstraeaService>(TYPES.AstraeaService, AstraeaService);
+bind<PixelBridgeService>(TYPES.PixelBridgeService, PixelBridgeService);
+bind<PixelSensorService>(TYPES.PixelSensorService, PixelSensorService);
+bind<N8nBridgeService>(TYPES.N8nBridgeService, N8nBridgeService);
+bind<ProactiveVoiceService>(TYPES.ProactiveVoiceService, ProactiveVoiceService);
 
 // ========================================
 // CONTROLLERS
@@ -507,4 +515,5 @@ bind<AstraeaController>(TYPES.AstraeaController, AstraeaController);
 bind<DanielaCallAgent>(TYPES.DanielaCallAgent, DanielaCallAgent);
 bind<NexusPushService>(TYPES.NexusPushService, NexusPushService);
 
-export { container, TYPES };
+export { container, container as inversifyConfig, TYPES };
+

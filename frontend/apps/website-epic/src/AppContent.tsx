@@ -8,6 +8,7 @@ import { MeshGradientBG } from './components/MeshGradientBG';
 import { useNotification } from './contexts/NotificationContext';
 import { Login } from './pages/Login';
 import { Maintenance } from './pages/Maintenance';
+import { DanielaDemo } from './pages/DanielaDemo';
 import { SpotlightWrapper } from './components/design-system/SpotlightWrapper';
 import {
     RequireAuth,
@@ -126,9 +127,7 @@ const PaymentGateway = lazy(() =>
   import('./components/subscription/PaymentGateway').then(m => ({ default: m.PaymentGateway }))
 );
 const WeaponDashboard = lazy(() => import('./pages/WeaponDashboard'));
-const DanielaDemo = lazy(() =>
-  import('./pages/DanielaDemo').then(m => ({ default: m.DanielaDemo }))
-);
+
 const VirtualOfficePreview = lazy(() => import('./pages/VirtualOfficePreview'));
 const ClientDashboard = lazy(() =>
   import('./components/ClientDashboard').then(m => ({ default: m.ClientDashboard }))
@@ -256,7 +255,6 @@ export const AppContent = ({
                     />
                     <Route path="/billing" element={<BillingDashboard />} />
                     <Route path="/weapon" element={<WeaponDashboard />} />
-                    <Route path="/daniela/*" element={<DanielaDemo />} />
                     <Route path="/virtual-office/*" element={<VirtualOfficePreview />} />
                     <Route
                       path="/missions"

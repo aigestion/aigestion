@@ -1,4 +1,4 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { AppContent, LoadingFallback } from './AppContent';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { NexusProvider } from './contexts/NexusContext';
@@ -32,8 +32,12 @@ function MainApp() {
 
 function AppContentWithAuth() {
   const { loading, isAuthenticated, user, login, logout } = useAuth();
+  const location = useLocation();
 
-  if (loading) {
+  // Permite que la demo de Daniela cargue incluso si el estado de Auth está cargando
+  const isPublicRoute = location.pathname.startsWith('/daniela');
+
+  if (loading && !isPublicRoute) {
     return <LoadingFallback />;
   }
 

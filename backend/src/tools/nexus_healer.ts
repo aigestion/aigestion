@@ -13,7 +13,7 @@ import { SwarmGovernor } from './SwarmGovernor';
 
 function checkDatabase(): boolean {
   try {
-    if (mongoose.connection.readyState === 1) {
+    if (Number(mongoose.connection.readyState) === 1) {
       return true;
     }
     logger.warn(

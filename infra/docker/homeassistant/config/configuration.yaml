@@ -5,6 +5,110 @@ default_config:
 frontend:
   themes: !include_dir_merge_named themes
 
+# ========================================
+# 📱 MOBILE APP (HA Companion for Pixel 8)
+# ========================================
+mobile_app:
+
+# ========================================
+# 🔗 REST SENSORS (Pull from Nexus Backend)
+# ========================================
+rest:
+  - resource: http://aigestion-backend:5000/api/v1/iot/pixel-sensors
+    scan_interval: 60
+    sensor:
+      - name: "Nexus Pixel Context"
+        value_template: "{{ value_json.data.context_level | default('unknown') }}"
+        json_attributes_path: "$.data"
+        json_attributes:
+          - zone
+          - summary
+
+# ========================================
+# 🏗️ INPUT BOOLEANS (State Management)
+# ========================================
+input_boolean:
+  sovereign_mode:
+    name: "Sovereign Mode"
+    icon: mdi:crown
+  away_mode:
+    name: "Away Mode"
+    icon: mdi:home-export-outline
+  sleep_mode:
+    name: "Sleep Mode"
+    icon: mdi:sleep
+  office_mode:
+    name: "Office Mode"
+    icon: mdi:office-building
+  driving_mode:
+    name: "Driving Mode"
+    icon: mdi:car
+
+# ========================================
+# 📍 ZONES
+# ========================================
+zone:
+  - name: Casa
+    latitude: !secret home_latitude
+    longitude: !secret home_longitude
+    radius: 100
+    icon: mdi:home
+  - name: Oficina
+    latitude: !secret office_latitude
+    longitude: !secret office_longitude
+    radius: 50
+    icon: mdi:office-building
+
+# ========================================
+# 📊 TEMPLATE SENSORS (Composite from Pixel)
+# ========================================
+template:
+  - sensor:
+      - name: "Pixel Daily Steps"
+        unit_of_measurement: "steps"
+        icon: mdi:walk
+        state: >
+          {{ states('sensor.pixel_8_steps_sensor') | int(0) }}
+
+      - name: "Pixel Battery Health"
+        unit_of_measurement: "°C"
+        icon: mdi:thermometer
+        state: >
+          {{ states('sensor.pixel_8_battery_temperature') | float(0) }}
+        attributes:
+          level: "{{ states('sensor.pixel_8_battery_level') }}"
+          state: "{{ states('sensor.pixel_8_battery_state') }}"
+          warning: "{{ states('sensor.pixel_8_battery_temperature') | float(0) > 42 }}"
+
+      - name: "Pixel Context Summary"
+        icon: mdi:brain
+        state: >
+          {% set activity = states('sensor.pixel_8_detected_activity') %}
+          {% set zone = states('zone.casa') %}
+          {% set screen = states('binary_sensor.pixel_8_interactive') %}
+          {% if activity == 'in_vehicle' %}Conduciendo
+          {% elif activity == 'running' %}Corriendo
+          {% elif activity == 'walking' %}Caminando
+          {% elif screen == 'on' %}Usando teléfono
+          {% else %}Inactivo
+          {% endif %}
+
+  - binary_sensor:
+      - name: "Pixel At Home"
+        icon: mdi:home
+        state: >
+          {{ is_state('device_tracker.pixel_8', 'home') }}
+
+      - name: "Pixel Low Battery"
+        icon: mdi:battery-alert
+        state: >
+          {{ states('sensor.pixel_8_battery_level') | int(100) < 20 }}
+
+# ========================================
+# 🔄 AUTOMATIONS & SCRIPTS
+# ========================================
 automation: !include automations.yaml
+automation pixel: !include pixel-automations.yaml
+rest_command: !include rest_commands.yaml
 script: !include scripts.yaml
 scene: !include scenes.yaml

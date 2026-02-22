@@ -177,6 +177,12 @@ const envSchema = baseEnvSchema.extend({
     .default('europe-west1')
     .describe('Google Cloud location (region)'),
 
+  BACKEND_URL: z
+    .string()
+    .url()
+    .default('http://localhost:5000')
+    .describe('Backend application URL'),
+
   // AWS Configuration (for Multi-Cloud Failover)
   AWS_ACCESS_KEY_ID: z.string().optional().describe('AWS Access Key ID'),
   AWS_SECRET_ACCESS_KEY: z.string().optional().describe('AWS Secret Access Key'),
@@ -460,6 +466,20 @@ const envSchema = baseEnvSchema.extend({
   VAPI_API_KEY: z.string().optional().describe('Vapi.ai API Key'),
   VAPI_API_URL: z.string().url().default('https://api.vapi.ai').describe('Vapi.ai API Base URL'),
   VAPI_PHONE_NUMBER_ID: z.string().optional().describe('Vapi.ai Phone Number ID'),
+
+  // Admin Configuration
+  ADMIN_PHONE_NUMBER: z
+    .string()
+    .optional()
+    .describe('Admin phone number for proactive voice calls'),
+
+  // Home Assistant Configuration
+  HA_URL: z
+    .string()
+    .url()
+    .default('http://homeassistant.local:8123')
+    .describe('Home Assistant API URL'),
+  HA_TOKEN: z.string().optional().describe('Home Assistant Long-Lived Access Token'),
 });
 
 /**
@@ -496,7 +516,6 @@ function validateEnv(): Env {
 
       process.exit(1);
     }
-    // If logger is not defined, this line would cause a runtime error.
     // Assuming 'logger' is defined elsewhere or imported, this is syntactically correct.
     // If not, it would need to be replaced with console.error or similar.
     logger.error('Error in buildEnvFromSchema:', {
