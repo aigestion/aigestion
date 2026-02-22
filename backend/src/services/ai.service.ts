@@ -1,8 +1,7 @@
 import { inject, injectable } from 'inversify';
 import { Readable } from 'node:stream';
 import axios from 'axios';
-import { VertexAI } from '@google-cloud/vertexai';
-
+import { VertexAI, HarmCategory, HarmBlockThreshold } from '@google-cloud/vertexai';
 
 import { env } from '../config/env.schema';
 import { CircuitBreakerFactory } from '../infrastructure/resilience/CircuitBreakerFactory';
@@ -17,9 +16,6 @@ import { SemanticCacheService } from './semantic-cache.service';
 import { UsageService } from './usage.service';
 import { ArbitrationService } from './arbitration.service';
 import { Persona } from '../models/Persona';
-import { PineconeService } from './pinecone.service';
-import { NexusSwarmOrchestrator } from './gems/swarm-orchestrator.service';
-
 
 
 export interface AIStreamParams {
@@ -69,27 +65,27 @@ export class AIService {
     if (config.provider === 'gemini') {
       if (!this._vertexAI) {
         this._vertexAI = new VertexAI({
-          project: env.GOOGLE_CLOUD_PROJECT_ID || 'aigestion-sovereign-2026',
-          location: env.GOOGLE_CLOUD_LOCATION || 'europe-west1',
+          project: env.GOOGLE_PROJECT_ID || 'aigestion-sovereign-2026',
+          location: env.GOOGLE_LOCATION || 'us-central1',
         });
       }
 
       const safetySettings = [
         {
-          category: 'HARM_CATEGORY_HARASSMENT' as any,
-          threshold: 'BLOCK_MEDIUM_AND_ABOVE' as any,
+          category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
         },
         {
-          category: 'HARM_CATEGORY_HATE_SPEECH' as any,
-          threshold: 'BLOCK_MEDIUM_AND_ABOVE' as any,
+          category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
         },
         {
-          category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT' as any,
-          threshold: 'BLOCK_MEDIUM_AND_ABOVE' as any,
+          category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+          threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
         },
         {
-          category: 'HARM_CATEGORY_DANGEROUS_CONTENT' as any,
-          threshold: 'BLOCK_VERY_LOW_AND_ABOVE' as any,
+          category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+          threshold: HarmBlockThreshold.BLOCK_VERY_LOW_AND_ABOVE,
         },
       ];
 
@@ -412,20 +408,20 @@ export class AIService {
 
   /**
    * Generate Embeddings using Gemini API
-   * Uses 'gemini-embedding-001' model
+   * Uses 'text-embedding-004' model
    */
   public async getEmbeddings(text: string): Promise<number[]> {
     try {
       if (!this._vertexAI) {
         this._vertexAI = new VertexAI({
-          project: env.GOOGLE_CLOUD_PROJECT_ID || 'aigestion-sovereign-2026',
-          location: env.GOOGLE_CLOUD_LOCATION || 'europe-west1',
+          project: env.GOOGLE_PROJECT_ID || 'aigestion-sovereign-2026',
+          location: env.GOOGLE_LOCATION || 'us-central1',
         });
       }
 
       if (!this._embeddingModel) {
         this._embeddingModel = this._vertexAI.getGenerativeModel({
-          model: 'gemini-embedding-001',
+          model: 'text-embedding-004',
         });
       }
 
@@ -507,27 +503,4 @@ export class AIService {
 
     stream.push(`data: ${JSON.stringify({ type: 'text', content: toolResult })}\n\n`);
   }
-
-  /**
-   * [GOD MODE] Trigger Swarm Mission
-   * Bridge for scripts and high-level autonomous tasks.
-   */
-  public async triggerSwarmMission(
-    objective: string,
-  ): Promise<{ success: boolean; jobId?: string; error?: string }> {
-    try {
-      logger.info(`[AIService] Triggering Swarm Mission: ${objective}`);
-      // Using Jules (Coding) and Stitch (Integration) for repair/auto-repair missions
-      const result = await this.swarm.collaborate(objective, [this.jules, this.stitchGem]);
-      return {
-        success: true,
-        jobId: `swarm_${Date.now()}`,
-        // result: result.supremeVerdict
-      };
-    } catch (error: any) {
-      logger.error(error, '[AIService] Failed to trigger swarm mission');
-      return { success: false, error: error.message };
-    }
-  }
 }
-

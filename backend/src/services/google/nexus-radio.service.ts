@@ -3,7 +3,6 @@ import { TYPES } from '../../types';
 import { Gemini2Service } from '../gemini-2.service';
 import { VoiceService } from '../voice.service';
 import { SovereignKnowledgeService } from './sovereign-knowledge.service';
-import { ElevenLabsService } from '../elevenlabs.service';
 import { logger } from '../../utils/logger';
 
 /**
@@ -15,7 +14,6 @@ export class NexusRadioService {
   constructor(
     @inject(TYPES.Gemini2Service) private readonly gemini: Gemini2Service,
     @inject(TYPES.VoiceService) private readonly voice: VoiceService,
-    @inject(TYPES.ElevenLabsService) private readonly eleven: ElevenLabsService,
     @inject(TYPES.SovereignKnowledgeService) private readonly knowledge: SovereignKnowledgeService,
   ) {}
 

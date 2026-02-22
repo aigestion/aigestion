@@ -16,8 +16,6 @@ export const TYPES = {
   XService: Symbol.for('XService'),
   VertexAIService: Symbol.for('VertexAIService'),
   ElevenLabsService: Symbol.for('ElevenLabsService'),
-  TwilioService: Symbol.for('TwilioService'),
-
   VoiceService: Symbol.for('VoiceService'),
   PineconeService: Symbol.for('PineconeService'),
   RagService: Symbol.for('RagService'),
@@ -195,9 +193,4 @@ export const TYPES = {
   VapiService: Symbol.for('VapiService'),
   AstraeaService: Symbol.for('AstraeaService'),
   AstraeaController: Symbol.for('AstraeaController'),
-  PixelBridgeService: Symbol.for('PixelBridgeService'),
-  PixelSensorService: Symbol.for('PixelSensorService'),
-  N8nBridgeService: Symbol.for('N8nBridgeService'),
-  ProactiveVoiceService: Symbol.for('ProactiveVoiceService'),
-  SovereignCodeRepairService: Symbol.for('SovereignCodeRepairService'),
 };

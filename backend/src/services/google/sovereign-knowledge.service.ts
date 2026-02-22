@@ -55,7 +55,7 @@ export class SovereignKnowledgeService {
     logger.info(`[KnowledgeService] Grounding query in Source Set: ${sourceSet.name}`);
 
     // Filter sources by simple relevance (simulation of local grounding)
-    const relevantSources = sourceSet.sources.filter((s: Source) => 
+    const relevantSources = sourceSet.sources.filter(s => 
       s.content.toLowerCase().includes(query.toLowerCase()) || 
       s.name.toLowerCase().includes(query.toLowerCase())
     );
@@ -65,7 +65,7 @@ export class SovereignKnowledgeService {
     }
 
     return relevantSources
-      .map((s: Source) => `[Source: ${s.name} (${s.type})]\n${s.content}`)
+      .map(s => `[Source: ${s.name} (${s.type})]\n${s.content}`)
       .join('\n\n---\n\n');
   }
 
@@ -76,7 +76,7 @@ export class SovereignKnowledgeService {
     const sourceSet = await getCache<SourceSet>(`${this.CACHE_PREFIX}${sourceSetId}`);
     if (!sourceSet) throw new Error('Source Set not found');
 
-    const totalContent = sourceSet.sources.map((s: Source) => s.content).join('\n\n');
+    const totalContent = sourceSet.sources.map(s => s.content).join('\n\n');
     
     // This will be used by NexusRadioService to create the podcast
     return totalContent;

@@ -1,10 +1,9 @@
 import { injectable, inject } from 'inversify';
-import { BaseGem } from './BaseGem';
-import { Gemini2Service } from '../gemini-2.service';
-import { TYPES } from '../../types';
-import { SovereignStitchService } from '../google/stitch.service';
-import { logger } from '../../utils/logger';
-
+import { BaseGem } from '../BaseGem';
+import { Gemini2Service } from '../../gemini-2.service';
+import { TYPES } from '../../../types';
+import { SovereignStitchService } from '../../google/stitch.service';
+import { logger } from '../../../utils/logger';
 
 /**
  * NEXUS STITCH GEM (Super Gem)

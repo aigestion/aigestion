@@ -6,10 +6,9 @@ import { buildResponse } from '../common/response-builder';
 import { logger } from '../utils/logger';
 
 interface AuthenticatedRequest extends Request {
-  user?: { id: string; email: string; role: string };
+  user?: { id: string };
   requestId?: string;
 }
-
 
 @injectable()
 export class AstraeaController {
@@ -24,7 +23,7 @@ export class AstraeaController {
       const userId = authReq.user?.id || 'nexus_god';
 
       const session = await this.astraeaService.startSovereignSession(userId, location);
-      res.json(buildResponse(session, 200, authReq.requestId || ''));
+      res.json(buildResponse(session, 200, authReq.requestId));
     } catch (error) {
       logger.error('[AstraeaController] Failed to start session', error);
       next(error);
@@ -38,7 +37,7 @@ export class AstraeaController {
       const userId = authReq.user?.id || 'nexus_god';
 
       const result = await this.astraeaService.induceCall(userId, phoneNumber);
-      res.json(buildResponse(result, 200, authReq.requestId || ''));
+      res.json(buildResponse(result, 200, authReq.requestId));
     } catch (error) {
       logger.error('[AstraeaController] Failed to induce call', error);
       next(error);

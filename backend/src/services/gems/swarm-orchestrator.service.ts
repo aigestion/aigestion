@@ -61,7 +61,7 @@ export class NexusSwarmOrchestrator {
       FORMATO DE SALIDA: Markdown God Level.
     `;
 
-    const supremeVerdict = await this.gemini.generateText(synthesisPrompt, {
+    const supremeVerdict = await this.gemini.ask(synthesisPrompt, {
       model: 'gemini-2.5-pro', // High-order synthesis model
       temperature: 0.3,
     });

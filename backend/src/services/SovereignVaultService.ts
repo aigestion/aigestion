@@ -129,12 +129,12 @@ export class SovereignVaultService {
   }
 
   /**
-   * 📥 Multi-Vault Ingestion (Resilient)
+   * 📥 Multi-Vault Ingestion
    */
   async ingest(filename: string, content: string, tags: string[] = []): Promise<void> {
     logger.info({ filename }, '[SovereignVault] Synchronized ingestion started');
 
-    const results = await Promise.allSettled([
+    await Promise.all([
       pineconeService.upsertDocument(filename, content, { filename, tags }),
       supabaseService.upsertDocument({
         title: filename,
@@ -143,21 +143,5 @@ export class SovereignVaultService {
       }),
       // Local Chroma ingestion would go here
     ]);
-
-    const vaultNames = ['Pinecone', 'Supabase'];
-    results.forEach((result, idx) => {
-      if (result.status === 'rejected') {
-        logger.warn(
-          { vault: vaultNames[idx], error: (result as PromiseRejectedResult).reason?.message },
-          `[SovereignVault] ⚠️ ${vaultNames[idx]} ingestion failed (non-blocking)`,
-        );
-      }
-    });
-
-    const successCount = results.filter(r => r.status === 'fulfilled').length;
-    logger.info(
-      { filename, successCount, total: results.length },
-      '[SovereignVault] Ingestion completed',
-    );
   }
 }

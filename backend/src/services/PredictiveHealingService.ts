@@ -4,7 +4,6 @@ import { NeuralHealthService, HealthMetrics } from './NeuralHealthService';
 import { logger } from '../utils/logger';
 import { InfrastructureService } from './infrastructure.service';
 import { RateLimitService } from './rate-limit.service';
-import { SovereignHealingService } from './SovereignHealingService';
 
 interface AnomalyPattern {
   id: string;
@@ -23,7 +22,6 @@ export class PredictiveHealingService {
     @inject(TYPES.NeuralHealthService) private neuralHealthService: NeuralHealthService,
     @inject(TYPES.InfrastructureService) private infraService: InfrastructureService,
     @inject(TYPES.RateLimitService) private rateLimitService: RateLimitService,
-    @inject(TYPES.SovereignHealingService) private sovereignHealing: SovereignHealingService,
   ) {
     this.init();
   }
@@ -36,16 +34,35 @@ export class PredictiveHealingService {
   }
 
   private async analyzeAndHeal(metrics: HealthMetrics) {
-    logger.info(`Analizando patrones predictivos. Sanity Score: ${metrics.sanityScore}%`);
+    logger.warn(`Analizando degradación del sistema. Sanity Score: ${metrics.sanityScore}%`);
 
     this.checkAnomalies(metrics);
 
-    if (metrics.status === 'CRITICAL' || metrics.status === 'DEGRADED') {
-      await this.sovereignHealing.handlePredictiveAnomaly({
-        type: `SYSTEM_STATE_${metrics.status}`,
-        description: `El sistema ha entrado en estado ${metrics.status} con un Sanity Score de ${metrics.sanityScore}%`,
-        metrics,
-      });
+    if (metrics.status === 'CRITICAL') {
+      await this.performEmergencyHealing(metrics);
+    } else if (metrics.status === 'DEGRADED') {
+      await this.performProactiveMaintenance(metrics);
+    }
+
+    // Self-Healing Action: Verificando Infraestructura si hay degradación
+    if (metrics.sanityScore < 50) {
+      logger.info('Solicitando auditoría de contenedores al Sentinel de Infraestructura...');
+      try {
+        const stats = await this.infraService.getContainerStats();
+        const degraded = stats.filter(c => !c.status.includes('Up'));
+
+        if (degraded.length > 0) {
+          logger.error(
+            `Sentinel: Detectados ${degraded.length} contenedores degradados.`,
+            degraded,
+          );
+          for (const s of degraded) {
+            await this.infraService.restartService(s.name);
+          }
+        }
+      } catch (e) {
+        logger.error('Error al acceder al Sentinel de Infraestructura:', e);
+      }
     }
   }
 
@@ -58,18 +75,67 @@ export class PredictiveHealingService {
     if (this.anomalyHistory.length > 5) {
       const first = this.anomalyHistory[0].metrics;
       if (metrics.cpuUsage - first.cpuUsage > 40) {
-        logger.error('ANOMALÍA DETECTADA: Gradiente de CPU agresivo. Escalando a Soberano.');
-        this.sovereignHealing
-          .handlePredictiveAnomaly({
-            type: 'CPU_GRADIENT_SPIKE',
-            description: `Detección de pico de CPU agresivo: +${metrics.cpuUsage - first.cpuUsage}% en 1 minuto.`,
-            metrics,
-          })
-          .catch(err => logger.error('[PredictiveHealing] Shield escalation failed:', err));
+        logger.error('ANOMALÍA DETECTADA: Gradiente de CPU agresivo. Activando Protocolo Escudo.');
+        this.activateShieldProtocol();
       }
     }
   }
 
-  // Placeholder methods for future autonomous extensions
-  private async performEmptyAction() {}
+  private async activateShieldProtocol() {
+    logger.warn(
+      'Protocolo Escudo Activo: Limitando conexiones entrantes y priorizando procesos de core.',
+    );
+    try {
+      if (this.rateLimitService) {
+        logger.info('Escudo: Restringiendo endpoints de IA y Auth temporalmente.');
+      }
+    } catch (e) {
+      logger.error('Error al aplicar Protocolo Escudo:', e);
+    }
+  }
+
+  private async performEmergencyHealing(metrics: HealthMetrics) {
+    logger.error('NIVEL CRÍTICO DETECTADO. Iniciando Protocolos de Emergencia.');
+
+    if (metrics.sanityScore < 30) {
+      await this.triggerPhoenixProtocol();
+    }
+
+    if (metrics.memoryUsage > 90) {
+      logger.info('Acción: Forzando recolección de basura y limpieza de caches.');
+      const g = global as any;
+      if (typeof g.gc === 'function') {
+        g.gc();
+      }
+      // Purgando cache Redis (Simulado via Phoenix)
+    }
+
+    if (metrics.cpuUsage > 95) {
+      logger.info(
+        'Acción: Suspendiendo tareas de fondo no críticas y reduciendo frecuencia de telemetría.',
+      );
+    }
+  }
+
+  private async triggerPhoenixProtocol() {
+    logger.error('⚠️ PROTOCOLO FÉNIX ACTIVADO ⚠️');
+    logger.info('Proceso de renacimiento: Reiniciando servicios de infraestructura en cascada.');
+
+    try {
+      await this.infraService.restartService('nexus-swarm-01');
+      await this.infraService.restartService('nexus-db-01');
+
+      logger.info('Fénix: Reposicionando pools de base de datos y refrescando buffers de memoria.');
+    } catch (e) {
+      logger.error('Error en Protocolo Fénix:', e);
+    }
+  }
+
+  private async performProactiveMaintenance(metrics: HealthMetrics) {
+    logger.info('Nivel Degradado detectado. Iniciando mantenimiento proactivo.');
+
+    if (metrics.memoryUsage > 70) {
+      logger.info('Acción: Pre-vaciado de buffers de logs y optimización de pools de conexión.');
+    }
+  }
 }

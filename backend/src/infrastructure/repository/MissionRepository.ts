@@ -4,7 +4,7 @@ import { Mission, IMission } from '../../models/Mission';
 
 export interface IMissionRepository extends BaseRepository<IMission> {
   create(idOrItem: any, maybeItem?: any): Promise<IMission>;
-  findAll(query?: any, limit?: number, skip?: number): Promise<IMission[]>;
+  findAll(limit?: number, skip?: number): Promise<IMission[]>;
 }
 
 @injectable()
@@ -19,12 +19,8 @@ export class MissionRepository extends BaseRepository<IMission> implements IMiss
     return await Mission.findById(id).exec();
   }
 
-  override async findAll(
-    query: any = {},
-    limit: number = 20,
-    skip: number = 0,
-  ): Promise<IMission[]> {
-    return await Mission.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).exec();
+  override async findAll(limit: number = 20, skip: number = 0): Promise<IMission[]> {
+    return await Mission.find().sort({ createdAt: -1 }).skip(skip).limit(limit).exec();
   }
 
   override async update(id: string, data: Partial<IMission>): Promise<IMission | null> {

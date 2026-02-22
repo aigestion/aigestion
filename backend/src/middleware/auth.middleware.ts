@@ -198,5 +198,3 @@ export const authorize = (...roles: string[]) => {
   };
 };
 export const requireAuth = protect;
-export const authGuard = protect;
-

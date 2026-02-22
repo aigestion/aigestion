@@ -12,7 +12,7 @@ export interface GemOptions {
 export abstract class BaseGem {
   constructor(
     @inject(Gemini2Service) protected gemini: Gemini2Service,
-    public name: string,
+    protected name: string,
     protected systemInstruction: string
   ) {}
 

@@ -23,10 +23,6 @@ export class NotificationRepository
     return await Notification.findById(id).exec();
   }
 
-  override async findAll(limit: number = 50, offset: number = 0): Promise<INotification[]> {
-    return await Notification.find({}).sort({ createdAt: -1 }).skip(offset).limit(limit).exec();
-  }
-
   async findByUser(userId: string, limit: number = 50, skip: number = 0): Promise<INotification[]> {
     return await Notification.find({ userId })
       .sort({ createdAt: -1 })

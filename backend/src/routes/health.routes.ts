@@ -61,30 +61,4 @@ healthRouter.get('/detailed', monitoringLimit, async (req: Request, res: Respons
   }
 });
 
-/**
- * @openapi
- * /api/v1/health/healer:
- *   get:
- *     summary: Get Nexus Healer status and recent autonomous repairs
- *     tags: [System]
- *     responses:
- *       200:
- *         description: Healer status report
- */
-healthRouter.get('/healer', monitoringLimit, async (req: Request, res: Response) => {
-  const requestId = (req as any).requestId ?? 'unknown';
-  try {
-    const sovereignHealingService = container.get<any>(TYPES.SovereignHealingService);
-    const status = await sovereignHealingService.getHealerStatus();
-    return res.json(buildResponse(status, 200, requestId as string));
-  } catch (error: any) {
-    console.error('Healer Status Check Failed:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to retrieve healer status',
-      error: error.message ?? 'Unknown',
-    });
-  }
-});
-
 export default healthRouter;
