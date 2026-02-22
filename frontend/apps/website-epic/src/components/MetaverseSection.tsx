@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
   MapPin,
   Box,
@@ -16,6 +17,7 @@ type MetaverseMode = 'hq' | 'real-estate';
 export const MetaverseSection: React.FC = () => {
   const { setIsContactModalOpen } = useAppContext();
   const [activeTab, setActiveTab] = useState<MetaverseMode>('hq');
+  const navigate = useNavigate();
 
   return (
     <section className="py-40 smooth-mesh-bg text-white relative overflow-hidden" id="metaverse">
@@ -101,7 +103,7 @@ export const MetaverseSection: React.FC = () => {
                     <div className="z-20 p-8 border border-white/20 bg-black/40 backdrop-blur-xl rounded-2xl flex flex-col items-center gap-4">
                       <MapPin className="w-8 h-8 text-nexus-cyan" />
                       <span className="font-orbitron tracking-[0.2em] text-sm">
-                        COORD: -45, 102
+                        COORD: -51, 114
                       </span>
                     </div>
                   </div>
@@ -133,11 +135,11 @@ export const MetaverseSection: React.FC = () => {
                 </ul>
 
                 <button
-                  onClick={() => setIsContactModalOpen(true)}
+                  onClick={() => navigate('/virtual-office')}
                   className="group flex items-center gap-3 px-8 py-4 bg-nexus-cyan text-black font-bold font-orbitron tracking-widest hover:bg-nexus-cyan/80 hover:shadow-[0_0_30px_rgba(0,245,255,0.4)] transition-all rounded-sm"
                 >
-                  VISITAR OFICINA
-                  <ExternalLink className="w-4 h-4" />
+                  IR A LA OFICINA
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </motion.div>

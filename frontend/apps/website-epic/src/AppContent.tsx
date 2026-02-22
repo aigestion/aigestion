@@ -222,6 +222,9 @@ export const AppContent = ({
               element={!isAuthenticated ? <CinematicExperience /> : <Navigate to="/dashboard" />}
             />
 
+            {/* Public: Virtual Office Preview — no auth required */}
+            <Route path="/virtual-office" element={<VirtualOfficePreview />} />
+
             {/* PROTECTED ROUTES FLOW */}
             <Route element={<RequireAuth />}>
               {/* Level 1: Auth Required */}
@@ -255,7 +258,6 @@ export const AppContent = ({
                     />
                     <Route path="/billing" element={<BillingDashboard />} />
                     <Route path="/weapon" element={<WeaponDashboard />} />
-                    <Route path="/virtual-office/*" element={<VirtualOfficePreview />} />
                     <Route
                       path="/missions"
                       element={
