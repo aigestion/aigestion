@@ -28,6 +28,12 @@ export const DanielaOmniWidget: React.FC = () => {
     socketService.onPulseWarning(msg => {
       speak(`Advertencia de seguridad detectada: ${msg}`);
     });
+
+    socketService.onMetaPresence(data => {
+      if (data.event === 'meta_presence_enter') {
+        speak('Bienvenido a la oficina virtual, Alejandro. Los sistemas están sincronizados.');
+      }
+    });
   }, [speak, lastPulse]);
 
   const handleToggleExpand = () => {

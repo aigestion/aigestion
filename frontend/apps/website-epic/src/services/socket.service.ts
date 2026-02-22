@@ -37,6 +37,11 @@ class SocketService {
     this.socket?.on('sovereign:alert', callback);
   }
 
+  onMetaPresence(callback: (data: any) => void) {
+    if (!this.socket) this.connect();
+    this.socket?.on('meta_presence', callback);
+  }
+
   disconnect() {
     if (this.socket) {
       this.socket.disconnect();

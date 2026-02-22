@@ -8,6 +8,7 @@ import { buildResponse } from '../common/response-builder';
 import { logger } from '../utils/logger';
 
 import { TYPES } from '../types';
+import { SocketService } from '../services/socket.service';
 
 /**
  * 🏠 IoT Controller
@@ -21,6 +22,7 @@ export class IoTController {
     @inject(TYPES.PixelBridgeService) private pixelBridge: PixelBridgeService,
     @inject(TYPES.PixelSensorService) private pixelSensor: PixelSensorService,
     @inject(TYPES.N8nBridgeService) private n8nBridge: N8nBridgeService,
+    @inject(TYPES.SocketService) private socketService: SocketService,
   ) {
     this.handleWebhook = this.handleWebhook.bind(this);
     this.triggerPixelTest = this.triggerPixelTest.bind(this);
@@ -41,6 +43,16 @@ export class IoTController {
       const requestId = (req as any).requestId || 'unknown';
 
       logger.info({ event, source }, '[IoTController] Incoming event received');
+
+      // Bridge to Metaverse Presence if applicable
+      if (event === 'meta_presence_enter' || event === 'meta_presence_exit') {
+        this.socketService.emit('meta_presence', {
+          event,
+          source,
+          data,
+          timestamp: new Date().toISOString(),
+        });
+      }
 
       const result = await this.homeBridge.ingestIoTEvent(event, source, data);
 

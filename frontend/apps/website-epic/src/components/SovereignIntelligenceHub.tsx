@@ -72,6 +72,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
   const [pulseHistory, setPulseHistory] = useState<('nominal' | 'warning' | 'critical')[]>(
     new Array(20).fill('nominal')
   );
+  const [metaPresence, setMetaPresence] = useState<boolean>(false);
 
   useEffect(() => {
     setPulseHistory(prev => [...prev.slice(1), healerStatus.pulse]);
@@ -97,7 +98,14 @@ export const SovereignIntelligenceHub: React.FC = () => {
       setHealerStatus(prev => ({ ...prev, pulse, status: metrics.status.toLowerCase() }));
     });
 
-    return () => socketService.disconnect();
+    socketService.onMetaPresence(data => {
+      setMetaPresence(data.event === 'meta_presence_enter');
+      if (data.event === 'meta_presence_enter') {
+        notify('💠 METAVERSE PRESENCE', 'Se ha detectado actividad en la oficina virtual.', 'info');
+      }
+    });
+
+    return () => {}; // Removed disconnect to prevent global interruption
   }, []);
 
   // 🌌 Proactive AI Voice Alerts
@@ -526,6 +534,19 @@ export const SovereignIntelligenceHub: React.FC = () => {
                   </span>
                 </div>
               </div>
+            )}
+
+            {metaPresence && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="hidden md:flex items-center gap-2 px-4 py-1.5 bg-nexus-cyan/10 border border-nexus-cyan/30 rounded-2xl shadow-cyan-glow/20"
+              >
+                <Share2 size={14} className="text-nexus-cyan animate-spin-slow" />
+                <span className="text-[10px] font-orbitron font-bold text-nexus-cyan tracking-widest uppercase">
+                  Metaverse Live
+                </span>
+              </motion.div>
             )}
 
             <button
