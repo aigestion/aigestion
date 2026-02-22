@@ -15,6 +15,17 @@ let bodyTextEntity: Entity;
 let systemStatusEntity: Entity;
 let alertSystemEntity: Entity;
 
+// ── Security Terminal state ────────────────────────────────────────────────────
+let scanInProgress = false;
+let scanTimer = 0;
+let scanPhase = 0;
+const SCAN_PHASES = [
+  { delay: 0,    status: '🔍 INITIATING SECURITY SCAN…', alert: { msg: 'Scan started — standby', type: 'INFO' as const } },
+  { delay: 1.5,  status: '🔍 SCANNING PERIMETER LAYER…', alert: { msg: 'Layer 1/3 scanning', type: 'INFO' as const } },
+  { delay: 3.0,  status: '🔍 ANALYZING QUANTUM STREAM…', alert: { msg: 'Layer 2/3 deep analysis', type: 'WARNING' as const } },
+  { delay: 4.5,  status: '🔍 CROSS-CHECKING SIGNATURES…', alert: { msg: 'Layer 3/3 signature verify', type: 'INFO' as const } },
+];
+
 export function createEnhancedInteractables() {
   // --- Enhanced Main Dashboard ---
   const mainDashboard = engine.addEntity();
@@ -248,13 +259,45 @@ export function createEnhancedInteractables() {
   pointerEventsSystem.onPointerDown(
     {
       entity: securityTerminal,
-      opts: { button: InputAction.IA_POINTER, hoverText: '🛡️ Access Security Systems' },
+      opts: { button: InputAction.IA_POINTER, hoverText: '🛡️ Run Security Scan' },
     },
     () => {
-      console.log('🛡️ Security Systems Accessed');
-      updateSystemStatus('SECURITY_BREACH', false);
+      if (scanInProgress) {
+        console.log('🛡️ Scan already in progress…');
+        return;
+      }
+      console.log('🛡️ Security Scan Initiated');
+      soundSystem.playInteractionSound('click');
+      startSecurityScan();
     }
   );
+
+  // Wire the scan step-timer system
+  engine.addSystem((dt: number) => {
+    if (!scanInProgress) return;
+    scanTimer += dt;
+    // Advance phases
+    if (scanPhase < SCAN_PHASES.length && scanTimer >= SCAN_PHASES[scanPhase].delay) {
+      const phase = SCAN_PHASES[scanPhase];
+      updateSystemStatus(phase.status, true);
+      updateAlert(phase.alert.msg, phase.alert.type);
+      scanPhase++;
+    }
+    // Final resolution at t+6 s
+    if (scanTimer >= 6.0) {
+      scanInProgress = false;
+      scanTimer = 0;
+      scanPhase = 0;
+      const breach = Math.random() > 0.85;
+      if (breach) {
+        updateSystemStatus('🚨 SECURITY BREACH DETECTED', false);
+        updateAlert('BREACH: Anomaly in quantum stream!', 'CRITICAL');
+      } else {
+        updateSystemStatus('✅ SCAN COMPLETE — SECURE', true);
+        updateAlert('Security scan complete — NO threats found ✅', 'INFO');
+      }
+    }
+  });
 
   // --- Energy Crystals ---
   for (let i = 0; i < 3; i++) {
@@ -283,6 +326,16 @@ export function createEnhancedInteractables() {
       }
     );
   }
+}
+
+// ── Security Scan ─────────────────────────────────────────────────────────────
+
+function startSecurityScan() {
+  scanInProgress = true;
+  scanTimer = 0;
+  scanPhase = 0;
+  updateSystemStatus('🛡️ SCAN INITIALIZING…', true);
+  updateAlert('Security scan started…', 'INFO');
 }
 
 export function updateSystemStatus(system: string, active: boolean) {
