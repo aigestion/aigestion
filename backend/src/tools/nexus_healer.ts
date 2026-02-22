@@ -1,23 +1,24 @@
-import { container } from '../config/inversify.config';
-import { TYPES } from '../types';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { logger } from '../utils/logger';
 import mongoose from 'mongoose';
 import { Redis } from 'ioredis';
 import { env } from '../config/env.schema';
 import axios from 'axios';
+import { SwarmGovernor } from './SwarmGovernor';
 
 // Simple Healer Script
-// Intended to be run as a background cron or interval process
-// npm run healer
+// Intended to be run as a background cron or npm run healer
 
-const CHECK_INTERVAL = 60000; // 1 minute
-
-async function checkDatabase() {
+function checkDatabase(): boolean {
   try {
     if (mongoose.connection.readyState === 1) {
       return true;
     }
-    logger.warn('Healer: Database connection not ready. State: ' + mongoose.connection.readyState);
+    logger.warn(
+      'Healer: Database connection not ready. State: ' + mongoose.connection.readyState.toString(),
+    );
     return false;
   } catch (error) {
     logger.error('Healer: Database check failed', error);
@@ -25,8 +26,8 @@ async function checkDatabase() {
   }
 }
 
-async function checkRedis() {
-  const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
+async function checkRedis(): Promise<boolean> {
+  const redis = new Redis(env.REDIS_URL || 'redis://localhost:6379', {
     maxRetriesPerRequest: 1,
     retryStrategy: () => null, // Fail fast for check
   });
@@ -42,26 +43,23 @@ async function checkRedis() {
   }
 }
 
-async function checkHealthEndpoint() {
+async function checkHealthEndpoint(): Promise<boolean> {
   try {
-    // Assuming running on localhost/port from env or default 3000
-    const port = process.env.PORT || 3000;
+    const port = env.PORT || 3000;
     const url = `http://localhost:${port}/api/v1/health`;
     const res = await axios.get(url, { timeout: 2000 });
     return res.status === 200;
   } catch (error) {
-    // It's possible the server isn't running if we are just running this script standalone
-    // But in a real scenario, this would detect a down API.
     const message = error instanceof Error ? error.message : String(error);
     logger.warn('Healer: Health endpoint unreachable', message);
     return false;
   }
 }
 
-async function runHealer() {
+async function runHealer(): Promise<void> {
   logger.info('🏥 Nexus Healer: Starting Scan...');
 
-  const dbOk = await checkDatabase();
+  const dbOk = checkDatabase();
   const redisOk = await checkRedis();
   const apiOk = await checkHealthEndpoint();
 
@@ -69,24 +67,30 @@ async function runHealer() {
     logger.info('✅ Nexus Healer: System Healthy');
   } else {
     logger.error(
-      `❌ Nexus Healer: System Issues Detected. DB: ${dbOk}, Redis: ${redisOk}, API: ${apiOk}`
+      `❌ Nexus Healer: System Issues Detected. DB: ${String(dbOk)}, Redis: ${String(redisOk)}, API: ${String(apiOk)}`,
     );
-    // In a real V2, we would trigger self-healing actions here
-    // e.g., restart docker containers, flush redis, etc.
-    // For now, we just log critical alerts which would be picked up by external monitoring
+
+    logger.info('🛰️ Nexus Healer: Triggering Autonomous Swarm Governor...');
+    try {
+      const governor = new SwarmGovernor();
+      await governor.executeGovernanceCycle();
+    } catch (error) {
+      logger.error('💥 Nexus Healer: Failed to trigger Swarm Governor', error);
+    }
   }
 }
 
-if (require.main === module) {
-  // If run directly
+// Entry point for standalone execution
+const isMain =
+  process.argv[1] &&
+  (process.argv[1].endsWith('nexus_healer.ts') || process.argv[1].endsWith('nexus_healer.js'));
+
+if (isMain) {
   runHealer()
     .then(() => {
-      // If we want it to run once and exit:
       process.exit(0);
-      // If we want it to verify continuously:
-      // setInterval(runHealer, CHECK_INTERVAL);
     })
-    .catch(err => {
+    .catch((err: unknown) => {
       console.error(err);
       process.exit(1);
     });

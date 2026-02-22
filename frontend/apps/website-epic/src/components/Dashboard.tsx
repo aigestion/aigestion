@@ -19,6 +19,10 @@ import { useEnhancedVoiceAssistant } from '../hooks/useEnhancedVoiceAssistant';
 import { DanielaConversationPanel } from './DanielaConversationPanel';
 import { GodModeText } from './design-system/GodModeText';
 import { SpotlightWrapper } from './design-system/SpotlightWrapper';
+import { NexusCommandBar } from './design-system/NexusCommandBar';
+import { NexusMetricCard } from './design-system/NexusMetricCard';
+import { NexusStatusBadge } from './design-system/NexusStatusBadge';
+import { NexusCard } from './design-system/NexusCard';
 
 interface DashboardProps {
   user: {
@@ -227,54 +231,29 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
       <div className="lg:ml-72 min-h-screen relative">
          <SpotlightWrapper>
         {/* Header */}
-        <header className="bg-nexus-obsidian/80 backdrop-blur-md border-b border-white/5 px-8 py-6 sticky top-0 z-30">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-orbitron font-bold text-white tracking-widest uppercase">
-                <GodModeText text={menuItems.find(item => item.id === activeTab)?.label || 'DASHBOARD'} effect="glitch" />
-              </h1>
-              <p className="text-nexus-silver/50 text-xs mt-1 uppercase tracking-wider font-mono">
-                {activeTab === 'daniela' && '>> Initialization Sequence: Emotional AI'}
-                {activeTab === 'analytics' && '>> Loading Metrics: Real-time Flux'}
-                {activeTab === 'settings' && '>> System Configuration: User Protocol'}
-              </p>
-            </div>
-
-            <div className="hidden md:flex items-center gap-6">
-              {/* Status Indicator */}
-              <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-white/5 border border-white/5">
-                <div
-                  className={`w-2 h-2 rounded-full ${
-                    isProcessing
-                      ? 'bg-yellow-400 animate-ping'
-                      : status === 'active'
-                        ? 'bg-emerald-400 shadow-[0_0_10px_#34d399]'
-                        : status === 'error'
-                          ? 'bg-rose-400'
-                          : 'bg-nexus-silver'
-                  }`}
-                />
-                <span className="text-[10px] text-nexus-silver font-bold uppercase tracking-widest">
-                  {isProcessing
-                    ? 'Procesando...'
-                    : status === 'active'
-                      ? 'AI SYSTEM ONLINE'
-                      : status === 'error'
-                        ? 'SYSTEM ERROR'
-                        : 'SYSTEM IDLE'}
+        <NexusCommandBar
+          title={menuItems.find(item => item.id === activeTab)?.label || 'DASHBOARD'}
+          subtitle={
+            activeTab === 'daniela' ? 'Initialization Sequence: Emotional AI' :
+            activeTab === 'analytics' ? 'Loading Metrics: Real-time Flux' :
+            'System Configuration: User Protocol'
+          }
+          status={
+            <div className="flex items-center gap-6">
+              <NexusStatusBadge
+                status={isProcessing ? 'syncing' : status === 'active' ? 'online' : status === 'error' ? 'critical' : 'offline'}
+                label={isProcessing ? 'PROCESANDO' : status === 'active' ? 'AI SYSTEM ONLINE' : status === 'error' ? 'SYSTEM ERROR' : 'SYSTEM IDLE'}
+                size="md"
+              />
+              <div className="flex items-center gap-2">
+                <div className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-nexus-cyan shadow-[0_0_8px_rgba(0,245,255,0.5)]' : 'bg-rose-500'}`} />
+                <span className="text-[10px] text-white/40 font-mono">
+                   {connectionStatus === 'connected' ? 'WSS: CONNECTED' : 'WSS: DISCONNECTED'}
                 </span>
               </div>
-
-              {/* Server Status */}
-               <div className="flex items-center gap-2">
-                  <div className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-nexus-cyan' : 'bg-rose-500'}`} />
-                  <span className="text-[10px] text-white/40 font-mono">
-                     {connectionStatus === 'connected' ? 'WSS: CONNECTED' : 'WSS: DISCONNECTED'}
-                  </span>
-               </div>
             </div>
-          </div>
-        </header>
+          }
+        />
 
         {/* Content */}
         <main className="p-8">
@@ -301,69 +280,62 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                 className="space-y-6"
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {/* Stat Card 1 */}
-                  <div className="premium-glass p-6 rounded-2xl border border-white/5 hover:border-nexus-cyan/30 transition-all group">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xs font-bold text-nexus-silver/70 uppercase tracking-widest group-hover:text-white transition-colors">Conversaciones</h3>
-                      <MessageSquare className="w-5 h-5 text-nexus-cyan opacity-50 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <div className="text-4xl font-black text-white font-orbitron">{messages.length}</div>
-                    <p className="text-nexus-silver/40 text-[10px] mt-2 uppercase">Total este mes</p>
-                  </div>
+                  <NexusMetricCard
+                    label="Conversaciones"
+                    value={messages.length}
+                    icon={<MessageSquare className="w-5 h-5 text-nexus-cyan" />}
+                    variant="cyan"
+                    trend="neutral"
+                    trendValue="Total mes"
+                  />
 
-                  {/* Stat Card 2 */}
-                  <div className="premium-glass p-6 rounded-2xl border border-white/5 hover:border-green-400/30 transition-all group">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xs font-bold text-nexus-silver/70 uppercase tracking-widest group-hover:text-white transition-colors">Estado Emocional</h3>
-                      <TrendingUp className="w-5 h-5 text-green-400 opacity-50 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <div className="text-2xl font-bold text-white font-orbitron truncate">
-                      {emotionalAnalysis?.emotion?.toUpperCase() || 'NEUTRAL'}
-                    </div>
-                    <div className="w-full bg-white/10 h-1 rounded-full mt-2 overflow-hidden">
-                       <div className="h-full bg-green-400" style={{ width: `${(emotionalAnalysis?.confidence || 0) * 100}%` }} />
-                    </div>
-                    <p className="text-nexus-silver/40 text-[10px] mt-2 uppercase">
-                      Confianza de IA: {Math.round((emotionalAnalysis?.confidence || 0) * 100)}%
-                    </p>
-                  </div>
+                  <NexusMetricCard
+                    label="Estado Emocional"
+                    value={Math.round((emotionalAnalysis?.confidence || 0) * 100)}
+                    suffix="%"
+                    icon={<TrendingUp className="w-5 h-5 text-emerald-400" />}
+                    variant="green"
+                    trend={emotionalAnalysis?.confidence && emotionalAnalysis.confidence > 0.7 ? 'up' : 'neutral'}
+                    trendValue={emotionalAnalysis?.emotion?.toUpperCase() || 'NEUTRAL'}
+                  />
 
-                  {/* Stat Card 3 */}
-                  <div className="premium-glass p-6 rounded-2xl border border-white/5 hover:border-nexus-violet/30 transition-all group">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xs font-bold text-nexus-silver/70 uppercase tracking-widest group-hover:text-white transition-colors">Sugerencias</h3>
-                      <Brain className="w-5 h-5 text-nexus-violet opacity-50 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <div className="text-4xl font-black text-white font-orbitron">{suggestedActions.length}</div>
-                    <p className="text-nexus-silver/40 text-[10px] mt-2 uppercase">Acciones disponibles</p>
-                  </div>
+                  <NexusMetricCard
+                    label="Sugerencias"
+                    value={suggestedActions.length}
+                    icon={<Brain className="w-5 h-5 text-nexus-violet" />}
+                    variant="violet"
+                    trend="up"
+                    trendValue="Available"
+                  />
 
-                  {/* Stat Card 4 */}
-                  <div className="premium-glass p-6 rounded-2xl border border-white/5 hover:border-nexus-gold/30 transition-all group">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xs font-bold text-nexus-silver/70 uppercase tracking-widest group-hover:text-white transition-colors">Suscripción</h3>
-                      <Shield className="w-5 h-5 text-nexus-gold opacity-50 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <div className="text-2xl font-bold text-white font-orbitron uppercase">
-                      {user.subscription}
-                    </div>
-                    <p className="text-nexus-silver/40 text-[10px] mt-2 uppercase">Nivel de Acceso</p>
-                  </div>
+                  <NexusMetricCard
+                    label="Suscripción"
+                    value={user.subscription === 'enterprise' ? 100 : user.subscription === 'premium' ? 75 : 25}
+                    suffix="%"
+                    label={user.subscription.toUpperCase()}
+                    icon={<Shield className="w-5 h-5 text-nexus-gold" />}
+                    variant="gold"
+                    trend="neutral"
+                    trendValue="Access Level"
+                  />
                 </div>
 
                 {/* Charts Placeholder */}
-                <div className="premium-glass p-8 rounded-2xl border border-white/5 relative overflow-hidden">
+                <NexusCard variant="default" glow className="p-8 relative overflow-hidden">
                    <div className="absolute top-0 right-0 p-4 opacity-5">
                       <BarChart3 size={100} />
                    </div>
-                  <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-widest border-b border-white/5 pb-4">
+                  <h3 className="text-sm font-bold text-white mb-6 uppercase tracking-[0.2em] font-orbitron border-b border-white/5 pb-4">
                      Actividad Neural Reciente
                   </h3>
-                  <div className="h-64 flex flex-col items-center justify-center text-nexus-silver/30 gap-4">
-                    <Activity className="w-12 h-12 animate-pulse" />
-                    <p className="font-orbitron text-xs tracking-widest">RECOPILANDO TELEMETRÍA...</p>
+                  <div className="h-64 flex flex-col items-center justify-center text-nexus-silver/30 gap-6">
+                    <Activity className="w-12 h-12 animate-pulse text-nexus-cyan" />
+                    <div className="text-center">
+                      <p className="font-orbitron text-xs tracking-[0.3em] text-white/60">RECOPILANDO TELEMETRÍA...</p>
+                      <p className="text-[10px] text-white/20 font-mono mt-2 uppercase tracking-widest">Sincronizando con Global Sync Mesh</p>
+                    </div>
                   </div>
-                </div>
+                </NexusCard>
               </motion.div>
             )}
 

@@ -1,0 +1,2 @@
+const undefined_var = "fixed";
+return undefined_var;

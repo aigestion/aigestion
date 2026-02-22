@@ -206,6 +206,23 @@ class SovereignGodModeService {
     return (await api.get('/sovereign/sentinel/forecast')).data;
   }
 
+  // 📱 Pixel Sovereign Bridge
+  async testPixelSovereign(): Promise<any> {
+    return (await api.post('/v1/iot/pixel-test')).data;
+  }
+
+  async getPixelSensors(): Promise<any> {
+    return (await api.get('/v1/iot/pixel-sensors')).data;
+  }
+
+  async getPixelDailyStats(): Promise<any> {
+    return (await api.get('/v1/iot/pixel-sensors/daily-stats')).data;
+  }
+
+  async getHealerStatus(): Promise<any> {
+    return (await api.get('/health/healer')).data;
+  }
+
   private hexToUint8Array(hex: string): Uint8Array {
     const arr = new Uint8Array(hex.length / 2);
     for (let i = 0; i < arr.length; i++) {
