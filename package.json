@@ -60,7 +60,9 @@
     "clean:processes": "powershell \"Get-Process | Where-Object { $_.Name -match 'node|jest|mongod' } | Stop-Process -Force -ErrorAction SilentlyContinue\"",
     "git:sync": "git add . && git commit -m 'Auto-sync AIGestion.net' && git push origin main",
     "docker:build": "docker build -t aigestion-net .",
-    "docker:run": "docker run -p 3000:3000 aigestion-net"
+    "docker:run": "docker run -p 3000:3000 aigestion-net",
+    "knowledge:sync": "pnpm --prefix backend run sync:knowledge",
+    "dashboard:init": "pnpm --prefix backend run init:dashboard"
   },
   "devDependencies": {
     "@aigestion/eslint-config": "file:packages/eslint-config",

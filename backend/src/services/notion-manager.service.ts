@@ -160,4 +160,53 @@ export class NotionManagerService {
       throw error;
     }
   }
+
+  /**
+   * Specialized method to create knowledge entries in the brain database
+   */
+  async createNeuralBrainEntry(title: string, summary: string, tags: string[] = []) {
+    if (!this.contentDbId) throw new Error('NOTION_CONTENT_DB_ID not configured');
+
+    return notionRequest('/pages', 'POST', {
+      parent: { database_id: this.contentDbId },
+      properties: {
+        Name: { title: [{ text: { content: title } }] },
+        Category: { select: { name: 'Sovereign Knowledge' } },
+        Tags: { multi_select: tags.map(t => ({ name: t })) },
+        Date: { date: { start: new Date().toISOString() } },
+        Summary: { rich_text: [{ text: { content: summary.substring(0, 2000) } }] },
+      },
+    });
+  }
+
+  /**
+   * Appends blocks to a parent page
+   */
+  async appendBlocks(pageId: string, blocks: any[]) {
+    return notionRequest(`/blocks/${pageId}/children`, 'PATCH', {
+      children: blocks,
+    });
+  }
+
+  // --- Static Notion Block Builders ---
+
+  static createDivider() {
+    return { object: 'block', type: 'divider', divider: {} };
+  }
+
+  static createSovereignCallout(
+    text: string,
+    emoji: string = '🧠',
+    color: string = 'gray_background',
+  ) {
+    return {
+      object: 'block',
+      type: 'callout',
+      callout: {
+        rich_text: [{ type: 'text', text: { content: text } }],
+        icon: { type: 'emoji', emoji: emoji },
+        color: color,
+      },
+    };
+  }
 }

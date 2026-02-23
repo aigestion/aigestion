@@ -201,4 +201,5 @@ export const TYPES = {
   SovereignCodeRepairService: Symbol.for('SovereignCodeRepairService'),
   TwilioService: Symbol.for('TwilioService'),
   TwilioWebhookController: Symbol.for('TwilioWebhookController'),
+  SovereignNotionSync: Symbol.for('SovereignNotionSync'),
 };
