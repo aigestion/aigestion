@@ -204,4 +204,8 @@ export const TYPES = {
   SovereignNotionSync: Symbol.for('SovereignNotionSync'),
   Gemini2Service: Symbol.for('Gemini2Service'),
   GeminiController: Symbol.for('GeminiController'),
+  GoogleCalendarService: Symbol.for('GoogleCalendarService'),
+  GmailService: Symbol.for('GmailService'),
+  GoogleSheetsService: Symbol.for('GoogleSheetsService'),
+  ProductivityController: Symbol.for('ProductivityController'),
 };

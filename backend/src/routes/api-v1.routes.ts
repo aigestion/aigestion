@@ -106,6 +106,7 @@ apiV1Router.use('/voice-assets', lazy('./voice-assets.routes'));
 apiV1Router.use('/push', lazy('./push-notifications.routes'));
 apiV1Router.use('/rag', lazy('./rag.routes'));
 apiV1Router.use('/astraea', lazy('./astraea.routes'));
+apiV1Router.use('/productivity', rateLimiter.attempt('AI'), lazy('./productivity.routes'));
 
 // System Management (Lazy)
 apiV1Router.use('/system', lazy('./system.routes'));

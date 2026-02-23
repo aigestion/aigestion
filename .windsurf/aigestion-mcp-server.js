@@ -416,6 +416,99 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ['action'],
         },
       },
+
+      // ───────────── GOOGLE PRODUCTIVITY TOOLS ─────────────
+      {
+        name: 'google_calendar',
+        description:
+          'Google Calendar — Manage events, check availability, quick-create from text, get today agenda',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            action: {
+              type: 'string',
+              enum: [
+                'list',
+                'get',
+                'create',
+                'update',
+                'delete',
+                'quick-create',
+                'availability',
+                'today',
+                'calendars',
+              ],
+              description: 'Calendar action to perform',
+            },
+            eventId: { type: 'string', description: 'Event ID (for get/update/delete)' },
+            text: { type: 'string', description: 'Natural language text for quick-create' },
+            summary: { type: 'string', description: 'Event title' },
+            description: { type: 'string', description: 'Event description' },
+            location: { type: 'string', description: 'Event location' },
+            startDateTime: { type: 'string', description: 'Start time (ISO)' },
+            endDateTime: { type: 'string', description: 'End time (ISO)' },
+            attendees: { type: 'array', items: { type: 'string' }, description: 'Attendee emails' },
+            timeMin: { type: 'string', description: 'Start of time range (ISO)' },
+            timeMax: { type: 'string', description: 'End of time range (ISO)' },
+            query: { type: 'string', description: 'Search query for events' },
+          },
+          required: ['action'],
+        },
+      },
+      {
+        name: 'google_gmail',
+        description: 'Gmail — Read, search, send, draft emails. Get inbox summary, manage labels',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            action: {
+              type: 'string',
+              enum: ['list', 'get', 'search', 'send', 'draft', 'labels', 'inbox-summary'],
+              description: 'Gmail action to perform',
+            },
+            messageId: { type: 'string', description: 'Message ID (for get)' },
+            query: { type: 'string', description: 'Gmail search query' },
+            to: { type: 'string', description: 'Recipient email' },
+            subject: { type: 'string', description: 'Email subject' },
+            body: { type: 'string', description: 'Email body' },
+            cc: { type: 'string', description: 'CC recipient' },
+            isHtml: { type: 'boolean', description: 'Send as HTML' },
+            maxResults: { type: 'number', description: 'Max results to return' },
+          },
+          required: ['action'],
+        },
+      },
+      {
+        name: 'google_sheets',
+        description:
+          'Google Sheets — Read, write, append data. Create spreadsheets and generate reports',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            action: {
+              type: 'string',
+              enum: ['read', 'write', 'append', 'create', 'info', 'report'],
+              description: 'Sheets action to perform',
+            },
+            spreadsheetId: { type: 'string', description: 'Spreadsheet ID' },
+            range: { type: 'string', description: 'Cell range (e.g. Sheet1!A1:D10)' },
+            values: { type: 'array', description: '2D array of values' },
+            title: { type: 'string', description: 'Spreadsheet or report title' },
+            sheetNames: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Sheet names for creation',
+            },
+            headers: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Report column headers',
+            },
+            data: { type: 'array', description: 'Report data rows (2D array)' },
+          },
+          required: ['action'],
+        },
+      },
     ],
   };
 });
@@ -760,6 +853,199 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
         return {
           content: [{ type: 'text', text: JSON.stringify(response, null, 2) }],
         };
+      }
+
+      // ───────────── GOOGLE PRODUCTIVITY HANDLERS ─────────────
+      case 'google_calendar': {
+        const {
+          action,
+          eventId,
+          text,
+          summary,
+          description,
+          location,
+          startDateTime,
+          endDateTime,
+          attendees,
+          timeMin,
+          timeMax,
+          query,
+        } = args;
+        let response;
+        switch (action) {
+          case 'list':
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/calendar/events?${new URLSearchParams(Object.entries({ timeMin, timeMax, query, maxResults: '20' }).filter(([, v]) => v)).toString()}`,
+              'GET'
+            );
+            break;
+          case 'get':
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/calendar/events/${eventId}`,
+              'GET'
+            );
+            break;
+          case 'create':
+            response = await aigestion.makeApiRequest(
+              '/api/v1/productivity/calendar/events',
+              'POST',
+              {
+                summary,
+                description,
+                location,
+                start: { dateTime: startDateTime },
+                end: { dateTime: endDateTime },
+                attendees: attendees ? attendees.map(e => ({ email: e })) : undefined,
+              }
+            );
+            break;
+          case 'update':
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/calendar/events/${eventId}`,
+              'PATCH',
+              {
+                summary,
+                description,
+                location,
+                ...(startDateTime && { start: { dateTime: startDateTime } }),
+                ...(endDateTime && { end: { dateTime: endDateTime } }),
+              }
+            );
+            break;
+          case 'delete':
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/calendar/events/${eventId}`,
+              'DELETE'
+            );
+            break;
+          case 'quick-create':
+            response = await aigestion.makeApiRequest(
+              '/api/v1/productivity/calendar/quick-create',
+              'POST',
+              { text }
+            );
+            break;
+          case 'availability':
+            response = await aigestion.makeApiRequest(
+              '/api/v1/productivity/calendar/availability',
+              'POST',
+              { timeMin, timeMax }
+            );
+            break;
+          case 'today':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/calendar/today', 'GET');
+            break;
+          case 'calendars':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/calendar/list', 'GET');
+            break;
+          default:
+            throw new McpError(ErrorCode.InvalidParams, `Unknown calendar action: ${action}`);
+        }
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
+      }
+
+      case 'google_gmail': {
+        const { action, messageId, query, to, subject, body, cc, isHtml, maxResults } = args;
+        let response;
+        switch (action) {
+          case 'list':
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/gmail/messages?maxResults=${maxResults || 20}`,
+              'GET'
+            );
+            break;
+          case 'get':
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/gmail/messages/${messageId}`,
+              'GET'
+            );
+            break;
+          case 'search':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/gmail/search', 'POST', {
+              query,
+              maxResults,
+            });
+            break;
+          case 'send':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/gmail/send', 'POST', {
+              to,
+              subject,
+              body,
+              cc,
+              isHtml,
+            });
+            break;
+          case 'draft':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/gmail/draft', 'POST', {
+              to,
+              subject,
+              body,
+              isHtml,
+            });
+            break;
+          case 'labels':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/gmail/labels', 'GET');
+            break;
+          case 'inbox-summary':
+            response = await aigestion.makeApiRequest(
+              '/api/v1/productivity/gmail/inbox-summary',
+              'GET'
+            );
+            break;
+          default:
+            throw new McpError(ErrorCode.InvalidParams, `Unknown gmail action: ${action}`);
+        }
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
+      }
+
+      case 'google_sheets': {
+        const { action, spreadsheetId, range, values, title, sheetNames, headers, data } = args;
+        let response;
+        switch (action) {
+          case 'read':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/sheets/read', 'POST', {
+              spreadsheetId,
+              range,
+            });
+            break;
+          case 'write':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/sheets/write', 'POST', {
+              spreadsheetId,
+              range,
+              values,
+            });
+            break;
+          case 'append':
+            response = await aigestion.makeApiRequest(
+              '/api/v1/productivity/sheets/append',
+              'POST',
+              { spreadsheetId, range, values }
+            );
+            break;
+          case 'create':
+            response = await aigestion.makeApiRequest(
+              '/api/v1/productivity/sheets/create',
+              'POST',
+              { title, sheetNames }
+            );
+            break;
+          case 'info':
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/sheets/info/${spreadsheetId}`,
+              'GET'
+            );
+            break;
+          case 'report':
+            response = await aigestion.makeApiRequest(
+              '/api/v1/productivity/sheets/report',
+              'POST',
+              { title, headers, data }
+            );
+            break;
+          default:
+            throw new McpError(ErrorCode.InvalidParams, `Unknown sheets action: ${action}`);
+        }
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
       }
 
       default:
