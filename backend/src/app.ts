@@ -6,7 +6,6 @@ import type { Request, Response } from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import morgan from 'morgan';
-import xssClean from 'xss-clean';
 
 // Middleware to ensure every JSON response follows the standard API for
 import { config } from './config/config';
@@ -84,7 +83,6 @@ if (process.env.NODE_ENV !== 'test' && !process.env.JEST_WORKER_ID) {
 
 // Security middlewares
 app.use(hpp() as any);
-app.use(xssClean() as any);
 
 // app.use(responseTime());
 
