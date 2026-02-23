@@ -1,9 +1,7 @@
 import 'reflect-metadata';
-import { dynamicRateLimiter } from '../middleware/rate-limit.middleware';
+
 import { AIService } from '../services/ai.service';
 import { AIModelRouter, AIModelTier } from '../utils/aiRouter';
-import { Container } from 'inversify';
-import { TYPES } from '../types';
 
 // Mock dependencies
 const mockAnalyticsService = {};

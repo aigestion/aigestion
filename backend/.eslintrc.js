@@ -47,10 +47,30 @@ module.exports = {
     'jest.setup.js',
     '../_legacy_assets_build/**',
     'infra/keys/**',
-    // Test files are excluded from tsconfig.json — ESLint type-aware rules
-    // cannot run on them without a separate tsconfig.test.json
-    '**/__tests__/**',
-    '**/*.test.ts',
-    '**/*.spec.ts',
+  ],
+  overrides: [
+    {
+      // Test files: re-enable type-aware linting via tsconfig.test.json
+      files: ['**/__tests__/**/*.ts', '**/*.test.ts', '**/*.spec.ts', 'jest.setup.ts'],
+      parserOptions: {
+        project: ['./tsconfig.test.json'],
+        tsconfigRootDir: __dirname,
+      },
+      rules: {
+        // Mocks legitimately use `any`
+        '@typescript-eslint/no-explicit-any': 'off',
+        // Test helpers often return void implicitly
+        '@typescript-eslint/no-floating-promises': 'off',
+        // Unsafe calls are unavoidable with jest.fn() / mocks
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        // console.log is fine in tests
+        'no-console': 'off',
+      },
+    },
   ],
 };
+
