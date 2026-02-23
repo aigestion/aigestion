@@ -37,7 +37,7 @@ RUN pnpm --filter nexus-v1-dashboard-backend... build
 # Create optimized production deployment using pnpm deploy
 # This creates an isolated directory with only production dependencies
 # and the compiled output — no dev deps, no hoisted store bloat
-RUN pnpm --filter nexus-v1-dashboard-backend deploy --prod /app/deploy
+RUN pnpm --filter nexus-v1-dashboard-backend deploy --legacy --prod /app/deploy
 
 # Copy compiled artifacts into the deploy directory
 RUN cp -r /app/backend/dist /app/deploy/dist
