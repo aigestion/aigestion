@@ -1,6 +1,6 @@
 # [GOD MODE] AIGestion Backend Optimized Dockerfile (Monorepo Aware)
 # Optimized for: pnpm Workspaces & Cloud-Native Build
-# Multi-stage build for minimal production image
+# Multi-stage build with pnpm deploy --prod for minimal production image
 
 # ---------- Build Stage ----------
 FROM node:22-alpine AS builder
@@ -34,6 +34,14 @@ WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN pnpm --filter nexus-v1-dashboard-backend... build
 
+# Create optimized production deployment using pnpm deploy
+# This creates an isolated directory with only production dependencies
+# and the compiled output — no dev deps, no hoisted store bloat
+RUN pnpm --filter nexus-v1-dashboard-backend deploy --prod /app/deploy
+
+# Copy compiled artifacts into the deploy directory
+RUN cp -r /app/backend/dist /app/deploy/dist
+
 # ---------- Runtime Stage ----------
 FROM node:22-alpine AS runtime
 
@@ -47,21 +55,13 @@ WORKDIR /app/backend
 # Install security tools & useful utilities
 RUN apk add --no-cache curl tzdata dumb-init
 
-# Enable pnpm for runtime as well (to handle production-only install if needed,
-# though copying node_modules or using a standalone build is better)
-RUN npm install -g pnpm
-
-# Copy package.json from builder
-COPY --from=builder /app/backend/package.json ./
-
-# Copy compiled artifacts
-COPY --from=builder /app/backend/dist ./dist
-
-# Copy production node_modules and the hoisted store (pnpm)
-# We copy from root to preserve the symbolic link structure
-COPY --from=builder /app/node_modules /app/node_modules
-COPY --from=builder /app/backend/node_modules /app/backend/node_modules
-COPY --from=builder /app/packages /app/packages
+# Copy the self-contained production deployment
+# pnpm deploy --prod created a clean directory with:
+#   - package.json
+#   - node_modules/ (production-only, fully resolved)
+COPY --from=builder /app/deploy/package.json ./
+COPY --from=builder /app/deploy/node_modules ./node_modules
+COPY --from=builder /app/deploy/dist ./dist
 
 # Create non-root user and directories in one layer for optimization
 RUN addgroup -S nodejs && \
