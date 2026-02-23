@@ -304,6 +304,26 @@ export class GmailService {
     return summary;
   }
 
+  /**
+   * Convenience method to get unread emails.
+   */
+  async getUnreadEmails(maxResults = 10): Promise<any[]> {
+    return this.searchMessages('is:unread', maxResults);
+  }
+
+  /**
+   * Archives a message by removing the INBOX label.
+   */
+  async archiveMessage(messageId: string): Promise<void> {
+    const client = await this.getClient();
+    await client.users.messages.modify({
+      userId: 'me',
+      id: messageId,
+      requestBody: { removeLabelIds: ['INBOX'] },
+    });
+    logger.info(`[Gmail] 📥 Message archived: ${messageId}`);
+  }
+
   // ─────────────────────────────────────────────────────────────
   // INTERNAL UTILITIES
   // ─────────────────────────────────────────────────────────────

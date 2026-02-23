@@ -1,5 +1,7 @@
 import { google } from 'googleapis';
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
+import { TYPES } from '../../types';
+import { DanielaAIService } from '../daniela-ai.service';
 import { logger } from '../../utils/logger';
 import { getCache, setCache } from '../../cache/redis';
 
@@ -16,7 +18,7 @@ export class GoogleSheetsService {
   private readonly SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
   private initPromise: Promise<void> | null = null;
 
-  constructor() {
+  constructor(@inject(TYPES.DanielaAIService) private daniela: DanielaAIService) {
     this.initPromise = this.initializeClient();
   }
 
@@ -250,5 +252,74 @@ export class GoogleSheetsService {
       ...result,
       rows: data.length,
     };
+  }
+
+  /**
+   * Performs AI cognitive analysis on sheet data.
+   */
+  async analyzeSheet(spreadsheetId: string, range: string = 'Sheet1!A:Z'): Promise<any> {
+    try {
+      const data = await this.readRange(spreadsheetId, range);
+      if (data.length === 0) return { message: 'No data found' };
+
+      const headers = data[0];
+      const rows = data.slice(1);
+      const records = rows.map((row: any[]) =>
+        Object.fromEntries(headers.map((h: any, i: number) => [h, row[i]])),
+      );
+
+      logger.info(`[GoogleSheets] 🧠 Starting AI analysis for ${spreadsheetId}`);
+
+      const analysisResult = await this.daniela.processMessage(
+        0,
+        JSON.stringify(records),
+        'sheet-analysis',
+        'system',
+        'user',
+      );
+
+      return {
+        totalRows: rows.length,
+        totalColumns: headers.length,
+        insights: analysisResult,
+        summary: {
+          dataPoints: rows.length,
+          timestamp: new Date(),
+        },
+      };
+    } catch (error: any) {
+      logger.error(`[GoogleSheets] Analysis failed: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Adds a chart to a spreadsheet.
+   */
+  async addChart(spreadsheetId: string, chartData: any) {
+    const client = await this.getClient();
+    const request = {
+      spreadsheetId,
+      resource: {
+        requests: [
+          {
+            addChart: {
+              chart: {
+                spec: {
+                  title: chartData.title,
+                  basicChart: {
+                    chartType: chartData.type,
+                    series: chartData.series,
+                    axis: chartData.axis,
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    };
+
+    return await client.spreadsheets.batchUpdate(request);
   }
 }

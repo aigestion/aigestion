@@ -23,6 +23,23 @@ except ImportError as e:
     SWARM_AVAILABLE = False
 
 from app.services.job_service import job_service, JobType, JobStatus
+import asyncio
+
+
+class MissionControlAgent(BaseAgent):
+    """Bridge agent that dispatches sub-missions back to the SwarmService."""
+
+    def __init__(self, orchestrator, trigger_callback):
+        super().__init__("MissionControl", AgentType.MISSION_CONTROL, orchestrator)
+        self.trigger_callback = trigger_callback
+
+    def process_message(self, message: Message):
+        if message.msg_type == MessageType.SUB_MISSION_TRIGGER:
+            self.log("sub_mission_trigger_received", content=message.content)
+            description = message.content.get("description")
+            metadata = message.content.get("metadata", {})
+            # Trigger callback (which handles async bridging)
+            self.trigger_callback(description, metadata)
 
 
 class SwarmService:
@@ -53,6 +70,12 @@ class SwarmService:
         self.orchestrator.register_agent(builder)
         self.orchestrator.register_agent(critic)
         self.orchestrator.register_agent(mechanic)
+
+        # Mission Control (Recursive Bridge)
+        mission_control = MissionControlAgent(
+            self.orchestrator, self._handle_sub_mission
+        )
+        self.orchestrator.register_agent(mission_control)
 
     async def trigger_mission(self, mission_description: str, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         if not SWARM_AVAILABLE:
@@ -94,5 +117,22 @@ class SwarmService:
             "message": "Mission dispatched to Overlord",
             "job_id": job_id,
         }
+
+    def _handle_sub_mission(self, description: str, metadata: Dict[str, Any]):
+        """Bridges sync agent trigger to async service trigger."""
+        try:
+            # We must use the current event loop
+            try:
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
+                loop = asyncio.get_event_loop()
+
+            print(f"Propagating sub-mission: {description}")
+            asyncio.run_coroutine_threadsafe(
+                self.trigger_mission(description, metadata), loop
+            )
+        except Exception as e:
+            print(f"Failed to propagate sub-mission: {e}")
+
 
 swarm_service = SwarmService()

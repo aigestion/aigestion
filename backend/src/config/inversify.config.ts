@@ -117,8 +117,7 @@ import { SemanticRouterService } from '../services/ai-router.service';
 import { VisionService } from '../services/vision.service';
 import { NeuralHealthService } from '../services/NeuralHealthService';
 import { Gemini2Service } from '../services/gemini-2.service';
-import { GmailService } from '../services/gmail.service';
-import { SheetsService } from '../services/sheets.service';
+import { DanielaAIService } from '../services/daniela-ai.service';
 import { VoiceService } from '../services/voice.service';
 import { YouTubeChannelService } from '../services/google/youtube-channel.service';
 import { YoutubeWatcherService } from '../utils/youtube-watcher.service';
@@ -198,7 +197,7 @@ import { AstraeaService } from '../services/AstraeaService';
 import { VapiService } from '../services/VapiService';
 import { SovereignNotionSync } from '../services/SovereignNotionSync';
 import { GoogleCalendarService } from '../services/google/google-calendar.service';
-import { GmailService as GmailGodService } from '../services/google/gmail.service';
+import { GmailService } from '../services/google/gmail.service';
 import { GoogleSheetsService } from '../services/google/google-sheets.service';
 import { ProductivityController } from '../controllers/productivity.controller';
 import { GoogleVisionService } from '../services/google/google-vision.service';
@@ -308,9 +307,7 @@ bind<INotificationRepository>(TYPES.NotificationRepository, NotificationReposito
 // ========================================
 // BUSINESS SERVICES
 // ========================================
-import { DanielaEnhancedService } from '../services/daniela-enhanced.service';
-import { DanielaProactiveService } from '../services/DanielaProactiveService';
-
+bind<DanielaAIService>(TYPES.DanielaAIService, DanielaAIService);
 bind<DanielaEnhancedService>(TYPES.DanielaEnhancedService, DanielaEnhancedService);
 bind<DanielaProactiveService>(TYPES.DanielaProactiveService, DanielaProactiveService);
 
@@ -357,17 +354,17 @@ bind<PersonaMarketplaceService>(TYPES.PersonaMarketplaceService, PersonaMarketpl
 // ========================================
 bind<GoogleDriveService>(TYPES.GoogleDriveService, GoogleDriveService);
 bind<GmailService>(TYPES.GmailService, GmailService);
-bind<SheetsService>(TYPES.GoogleSheetsService, SheetsService);
-// Original binding for Gemini2Service removed as per instruction's implied change
+bind<GoogleSheetsService>(TYPES.GoogleSheetsService, GoogleSheetsService);
+// bind<MapsService>(TYPES.MapsService, MapsService); // Bound in Perception section
+// bind<JulesGem>(TYPES.JulesGem, JulesGem); // Bound in Gems section
+bind<AIService>(TYPES.AIService, AIService);
 bind<RunwayService>(TYPES.RunwayService, RunwayService);
 bind<PayPalService>(TYPES.PaypalService, PayPalService);
 bind<FacebookService>(TYPES.FacebookService, FacebookService);
-bind<AIService>(TYPES.AIService, AIService);
 bind<ColabService>(TYPES.ColabService, ColabService);
+bind<BigQueryService>(TYPES.BigQueryService, BigQueryService);
 if (!container.isBound(NotebookInsightService))
   container.bind<NotebookInsightService>(NotebookInsightService).toSelf().inSingletonScope();
-bind<MapsService>(TYPES.MapsService, MapsService);
-bind<BigQueryService>(TYPES.BigQueryService, BigQueryService);
 if (!container.isBound(CloudTasksService))
   container.bind<CloudTasksService>(CloudTasksService).toSelf().inSingletonScope();
 bind<VideoIntelligenceService>(TYPES.VideoIntelligenceService, VideoIntelligenceService);
@@ -520,8 +517,6 @@ bind<ForgeController>(TYPES.ForgeController, ForgeController);
 // GOOGLE PRODUCTIVITY SUITE
 // ========================================
 bind<GoogleCalendarService>(TYPES.GoogleCalendarService, GoogleCalendarService);
-bind<GmailGodService>(TYPES.GmailService, GmailGodService);
-bind<GoogleSheetsService>(TYPES.GoogleSheetsService, GoogleSheetsService);
 bind<ProductivityController>(TYPES.ProductivityController, ProductivityController);
 bind<CognitiveController>(TYPES.CognitiveController, CognitiveController);
 

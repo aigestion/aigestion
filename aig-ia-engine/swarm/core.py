@@ -20,6 +20,7 @@ class AgentType(Enum):
     CRITIC = "Critic"
     MECHANIC = "Mechanic"
     NAVIGATOR = "Navigator"
+    MISSION_CONTROL = "MissionControl"
 
 
 class Message:

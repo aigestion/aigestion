@@ -16,6 +16,7 @@ class MessageType(str, Enum):
     INFO = "INFO"
     BROWSE_REQUEST = "BROWSE_REQUEST"
     BROWSE_RESULT = "BROWSE_RESULT"
+    SUB_MISSION_TRIGGER = "SUB_MISSION_TRIGGER"
 
 class ScanIssue(BaseModel):
     category: str  # e.g., SIZE, TODO, AI_CANDIDATE
