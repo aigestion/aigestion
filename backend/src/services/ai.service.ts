@@ -557,29 +557,6 @@ export class AIService {
     }
   }
 
-  /**
-   * Retrieves the status of a previously triggered Swarm Mission.
-   */
-  public async getSwarmJobStatus(
-    jobId: string,
-  ): Promise<{ success: boolean; status: string; result?: any; error?: string }> {
-    try {
-      logger.info(`[AIService] Checking Swarm Job Status: ${jobId}`);
-
-      // Swarm missions in Python are registered under /jobs/{job_id}
-      const response = await this.swarmClient.get(`/jobs/${jobId}`);
-
-      return {
-        success: true,
-        status: response.status,
-        result: response.result,
-        error: response.error,
-      };
-    } catch (error: any) {
-      logger.error('[AIService] Swarm Status Check Failed', error);
-      return { success: false, status: 'ERROR', error: error.message };
-    }
-  }
 
   /**
    * Analyzes an image or screenshot using visual perception.

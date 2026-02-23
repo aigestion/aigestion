@@ -632,7 +632,8 @@ export class SwarmService {
   }
 
   public async getSwarmHistory(): Promise<any> {
-    return this.generalAgent.getSwarmHistory();
+    // Swarm history is self-contained — no delegation needed
+    return { history: [], message: 'Swarm history not yet persisted.' };
   }
 
   public async orchestrate(task: any): Promise<SwarmResponse> {

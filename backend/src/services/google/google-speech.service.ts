@@ -83,12 +83,12 @@ export class GoogleSpeechService {
     audioContent: Buffer | string,
     options: {
       languageCode?: string;
-      encoding?: 'LINEAR16' | 'FLAC' | 'MP3';
+      encoding?: 'LINEAR16' | 'FLAC' | 'OGG_OPUS' | 'MULAW';
       sampleRateHertz?: number;
     } = {},
   ): Promise<string> {
     const client = await this.getSttClient();
-    const [response] = await client.recognize({
+    const response = await client.recognize({
       config: {
         encoding: options.encoding || 'LINEAR16',
         sampleRateHertz: options.sampleRateHertz || 16000,
@@ -99,7 +99,8 @@ export class GoogleSpeechService {
       },
     });
 
-    return response.results?.map(result => result.alternatives?.[0].transcript).join('\n') || '';
+    const results = response[0]?.results;
+    return results?.map((result: any) => result.alternatives?.[0]?.transcript).join('\n') || '';
   }
 
   /**

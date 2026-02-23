@@ -26,12 +26,12 @@ const pinoLogger = pino({
 });
 
 export interface ILogger {
-  info: (msg: string | object, ...args: any[]) => void;
-  error: (msg: string | object, ...args: any[]) => void;
-  warn: (msg: string | object, ...args: any[]) => void;
-  debug: (msg: string | object, ...args: any[]) => void;
-  verbose?: (msg: string | object, ...args: any[]) => void;
-  silly?: (msg: string | object, ...args: any[]) => void;
+  info: (msg: unknown, ...args: any[]) => void;
+  error: (msg: unknown, ...args: any[]) => void;
+  warn: (msg: unknown, ...args: any[]) => void;
+  debug: (msg: unknown, ...args: any[]) => void;
+  verbose?: (msg: unknown, ...args: any[]) => void;
+  silly?: (msg: unknown, ...args: any[]) => void;
   [key: string]: any;
 }
 
@@ -39,7 +39,7 @@ export interface ILogger {
 // Compatible with Winston legacy usage
 function wrap(
   method: 'info' | 'error' | 'warn' | 'debug' | 'trace' | 'fatal',
-): (msg: string | object, ...args: any[]) => void {
+): (msg: unknown, ...args: any[]) => void {
   return (...args: any[]) => {
     const [arg1, arg2, ...rest] = args;
     const loggerInstance = pinoLogger as any;

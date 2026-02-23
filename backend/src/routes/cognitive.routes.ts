@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { container } from '../config/inversify.config';
 import { CognitiveController } from '../controllers/cognitive.controller';
-import { requireAuth } from '../middleware/auth';
+import { requireAuth } from '../middleware/auth.middleware';
 
 const router = Router();
 

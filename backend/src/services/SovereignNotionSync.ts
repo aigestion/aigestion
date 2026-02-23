@@ -70,7 +70,7 @@ export class SovereignNotionSync {
         },
       ];
 
-      await this.notionManager.appendBlocks(this.dashboardPageId, statusBlocks);
+      await this.notionManager.appendBlocks(this.dashboardPageId, statusBlocks as any);
 
       logger.info('[SovereignNotionSync] Dashboard Sync Complete.');
     } catch (error: unknown) {

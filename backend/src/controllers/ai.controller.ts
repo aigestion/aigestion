@@ -79,8 +79,8 @@ export const getLiveSession = async (req: Request, res: Response, next: NextFunc
   try {
     const userId = (req as any).user?.id || 'anonymous';
     const liveService = container.get<GeminiLiveService>(TYPES.GeminiLiveService);
-    
-    const session = await liveService.establishLiveSession(userId);
+
+    const session = await liveService.createSession(userId);
     res.json(buildResponse(session, 200, (req as any).requestId || 'unknown'));
   } catch (err) {
     next(err);
