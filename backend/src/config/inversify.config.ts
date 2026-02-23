@@ -187,6 +187,7 @@ import { SovereignKnowledgeEngine } from '../services/sovereign-knowledge-engine
 import { BrowserlessService } from '../services/browserless.service';
 import { NewsService } from '../services/news.service';
 import { JulesGem } from '../services/gems/JulesGem';
+import { NexusStitchGem } from '../services/gems/NexusStitchGem';
 import { CoinGeckoService } from '../services/coingecko.service';
 import { WalletWatchtowerService } from '../services/finance/wallet-watchtower.service';
 import { PriceAlertService } from '../services/finance/price-alert.service';
@@ -510,6 +511,7 @@ bind<ContactRegistryService>(TYPES.ContactRegistryService, ContactRegistryServic
 bind<AstraeaController>(TYPES.AstraeaController, AstraeaController);
 bind<DanielaCallAgent>(TYPES.DanielaCallAgent, DanielaCallAgent);
 bind<NexusPushService>(TYPES.NexusPushService, NexusPushService);
+bind<NexusStitchGem>(TYPES.NexusStitchGem, NexusStitchGem);
 bind<ForgeGem>(TYPES.ForgeGem, ForgeGem);
 bind<ForgeController>(TYPES.ForgeController, ForgeController);
 
