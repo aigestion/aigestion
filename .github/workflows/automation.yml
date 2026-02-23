@@ -81,7 +81,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🧪 Generate AI Summary
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const { data: pullRequest } = await github.rest.pulls.get({
@@ -133,7 +133,7 @@ jobs:
 
       - name: 🎓 Generate Release Notes
         id: release-notes
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const commits = await github.rest.repos.listCommits({
