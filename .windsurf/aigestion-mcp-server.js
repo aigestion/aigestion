@@ -815,14 +815,8 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
           topic,
           context,
         });
-
         return {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify(response, null, 2),
-            },
-          ],
+          content: [{ type: 'text', text: JSON.stringify(response, null, 2) }],
         };
       }
 
@@ -1097,15 +1091,23 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
 
       case 'google_vision': {
         const { action, image } = args;
-        const endpoint = action === 'analyze' ? '/api/v1/cognitive/vision/analyze' : '/api/v1/cognitive/vision/ocr';
+        const endpoint =
+          action === 'analyze'
+            ? '/api/v1/cognitive/vision/analyze'
+            : '/api/v1/cognitive/vision/ocr';
         const response = await aigestion.makeApiRequest(endpoint, 'POST', { image });
         return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
       }
 
       case 'google_speech': {
         const { action, text, audio, languageCode } = args;
-        const endpoint = action === 'tts' ? '/api/v1/cognitive/speech/tts' : '/api/v1/cognitive/speech/stt';
-        const response = await aigestion.makeApiRequest(endpoint, 'POST', { text, audio, languageCode });
+        const endpoint =
+          action === 'tts' ? '/api/v1/cognitive/speech/tts' : '/api/v1/cognitive/speech/stt';
+        const response = await aigestion.makeApiRequest(endpoint, 'POST', {
+          text,
+          audio,
+          languageCode,
+        });
         return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
       }
 
@@ -1114,20 +1116,70 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
         let response;
         switch (action) {
           case 'list':
-            response = await aigestion.makeApiRequest(`/api/v1/productivity/contacts?pageSize=${pageSize || 100}`, 'GET');
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/contacts?pageSize=${pageSize || 100}`,
+              'GET'
+            );
             break;
           case 'search':
-            response = await aigestion.makeApiRequest(`/api/v1/productivity/contacts/search?q=${q}`, 'GET');
+            response = await aigestion.makeApiRequest(
+              `/api/v1/productivity/contacts/search?q=${q}`,
+              'GET'
+            );
             break;
           case 'create':
-            response = await aigestion.makeApiRequest('/api/v1/productivity/contacts', 'POST', { givenName, familyName, email, phone });
+            response = await aigestion.makeApiRequest('/api/v1/productivity/contacts', 'POST', {
+              givenName,
+              familyName,
+              email,
+              phone,
+            });
             break;
           case 'delete':
-            response = await aigestion.makeApiRequest('/api/v1/productivity/contacts', 'DELETE', { resourceName });
+            response = await aigestion.makeApiRequest('/api/v1/productivity/contacts', 'DELETE', {
+              resourceName,
+            });
             break;
           default:
             throw new McpError(ErrorCode.InvalidParams, `Unknown contacts action: ${action}`);
         }
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
+      }
+
+      case 'perception_weather': {
+        const { location, lat, lon } = args;
+        const queryParams =
+          lat && lon ? `?lat=${lat}&lon=${lon}` : `?location=${encodeURIComponent(location)}`;
+        const response = await aigestion.makeApiRequest(
+          `/api/v1/perception/weather${queryParams}`,
+          'GET'
+        );
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
+      }
+
+      case 'perception_maps': {
+        const { action, address, lat, lng, query } = args;
+        let response;
+        if (action === 'geocode') {
+          response = await aigestion.makeApiRequest(
+            `/api/v1/perception/maps/geocode?address=${encodeURIComponent(address)}`,
+            'GET'
+          );
+        } else {
+          response = await aigestion.makeApiRequest(
+            `/api/v1/perception/maps/nearby?lat=${lat}&lng=${lng}&query=${encodeURIComponent(query || '')}`,
+            'GET'
+          );
+        }
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
+      }
+
+      case 'perception_navigate': {
+        const { url, extractContent } = args;
+        const response = await aigestion.makeApiRequest('/api/v1/perception/navigate', 'POST', {
+          url,
+          extractContent,
+        });
         return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
       }
 

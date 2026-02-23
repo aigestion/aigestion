@@ -34,7 +34,8 @@ import { SystemHealthWidget } from './SystemHealthWidget';
 import { SovereignPersonaModal, Persona } from './SovereignPersonaModal';
 import { PersonaMarketplace } from './PersonaMarketplace';
 import { SIMAOverlay } from './SIMAOverlay';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Eye } from 'lucide-react';
+import { PerceptionGrid } from './PerceptionGrid';
 
 // ──────────────────────────────────────────────────────
 // Hook: detect device layout (mobile + landscape)
@@ -86,6 +87,7 @@ const NAV_TABS = [
   { id: 'home', icon: Home, label: 'Inicio' },
   { id: 'portfolio', icon: Wallet, label: 'Cartera' },
   { id: 'marketplace', icon: ShoppingCart, label: 'Mercado' },
+  { id: 'perception', icon: Eye, label: 'Percepción' },
   { id: 'alerts', icon: Bell, label: 'Alertas' },
   { id: 'actions', icon: Zap, label: 'Acciones' },
 ];
@@ -258,6 +260,12 @@ const ClientDashboard = () => {
             activePersonaId={activePersona.id}
             onSelectPersona={p => setActivePersona(p)}
           />
+        );
+      case 'perception':
+        return (
+          <div className="h-[450px]">
+            <PerceptionGrid />
+          </div>
         );
       case 'alerts':
         return (
@@ -455,6 +463,9 @@ const ClientDashboard = () => {
               </div>
               <div style={{ height: chartHeight }}>
                 <AlertsWidget />
+              </div>
+              <div style={{ height: chartHeight }}>
+                <PerceptionGrid />
               </div>
               <div className="col-span-1 md:col-span-2">
                 <PersonaMarketplace

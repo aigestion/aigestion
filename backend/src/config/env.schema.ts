@@ -215,6 +215,12 @@ const envSchema = baseEnvSchema.extend({
   // Google Cloud Translation API
   GOOGLE_TRANSLATE_API_KEY: z.string().optional().describe('Google Cloud Translation API key'),
 
+  // OpenWeather API
+  OPENWEATHER_API_KEY: z
+    .string()
+    .optional()
+    .describe('OpenWeatherMap API key for sensory perception'),
+
   // Google Document AI
   INVOICE_PROCESSOR_ID: z.string().optional(),
   CONTRACT_PROCESSOR_ID: z.string().optional(),

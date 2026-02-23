@@ -41,6 +41,8 @@ import { GovernanceController } from '../controllers/GovernanceController';
 import { NeuralHealthController } from '../controllers/NeuralHealthController';
 import { MCPController } from '../controllers/MCPController';
 import { PersonaController } from '../controllers/PersonaController';
+import { CognitiveController } from '../controllers/cognitive.controller';
+import { PerceptionController } from '../controllers/perception.controller';
 import { FinanceController } from '../controllers/FinanceController';
 import { IoTController } from '../controllers/iot.controller';
 import { ForgeController } from '../controllers/ForgeController';
@@ -199,10 +201,10 @@ import { GoogleCalendarService } from '../services/google/google-calendar.servic
 import { GmailService as GmailGodService } from '../services/google/gmail.service';
 import { GoogleSheetsService } from '../services/google/google-sheets.service';
 import { ProductivityController } from '../controllers/productivity.controller';
-import { CognitiveController } from '../controllers/cognitive.controller';
 import { GoogleVisionService } from '../services/google/google-vision.service';
 import { GoogleSpeechService } from '../services/google/google-speech.service';
 import { GoogleContactsService } from '../services/google/google-contacts.service';
+import { WeatherService } from '../services/weather.service';
 import { config } from './config';
 
 import { TreasuryController } from '../controllers/treasury.controller';
@@ -533,5 +535,11 @@ bind<CognitiveController>(TYPES.CognitiveController, CognitiveController);
 bind<GoogleVisionService>(TYPES.GoogleVisionService, GoogleVisionService);
 bind<GoogleSpeechService>(TYPES.GoogleSpeechService, GoogleSpeechService);
 bind<GoogleContactsService>(TYPES.GoogleContactsService, GoogleContactsService);
+
+// PERCEPTION & NAVIGATION
+bind<WeatherService>(TYPES.WeatherService, WeatherService);
+bind<MapsService>(TYPES.MapsService, MapsService);
+bind<BrowserlessService>(TYPES.BrowserlessService, BrowserlessService);
+bind<PerceptionController>(TYPES.PerceptionController, PerceptionController);
 
 export { container, container as inversifyConfig, TYPES };

@@ -183,5 +183,40 @@ export const api = {
       console.error('Error inducing Astraea call:', error);
       throw error;
     }
+  analyzeVision: async (params: {
+    imageUri?: string;
+    imageBase64?: string;
+    instruction?: string;
+  }): Promise<{ success: boolean; analysis: string; error?: string }> => {
+    try {
+      const response = await fetch(`${API_URL}/swarm/vision`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error in vision analysis:', error);
+      throw error;
+    }
+  },
+  getSwarmHistory: async (): Promise<{ success: boolean; history: any[]; error?: string }> => {
+    try {
+      const response = await fetch(`${API_URL}/swarm/history`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.data; // Response builder wraps result in data property
+    } catch (error) {
+      console.error('Error fetching swarm history:', error);
+      throw error;
+    }
   },
 };
+

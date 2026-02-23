@@ -211,4 +211,6 @@ export const TYPES = {
   GoogleSpeechService: Symbol.for('GoogleSpeechService'),
   GoogleContactsService: Symbol.for('GoogleContactsService'),
   CognitiveController: Symbol.for('CognitiveController'),
+  WeatherService: Symbol.for('WeatherService'),
+  PerceptionController: Symbol.for('PerceptionController'),
 };
