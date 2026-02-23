@@ -32,7 +32,8 @@ archive/
 backups/
 n8n_data/
 quarantine/
-docs/
+# docs/ at root only (NOT backend/src/docs which has swagger.ts needed for build)
+/docs/
 audit-reports/
 logs/
 ops/
