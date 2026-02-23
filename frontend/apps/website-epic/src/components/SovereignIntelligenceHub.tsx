@@ -36,15 +36,17 @@ import { NexusGrid } from './design-system/NexusGrid';
 import { SovereignCard } from './design-system/SovereignCard';
 import { PulseHistory } from './design-system/PulseHistory';
 import { socketService } from '../services/socket.service';
+import { PerceptionGrid } from './design-system/PerceptionGrid';
 import { useDanielaVoice } from '../hooks/useDanielaVoice';
 
 export const SovereignIntelligenceHub: React.FC = () => {
   const { notify } = useNotification();
   const [objective, setObjective] = useState('');
   const [activeTab, setActiveTab] = useState<
-    'terminal' | 'missions' | 'memory' | 'sentinel' | 'swarm' | 'infra' | 'voice'
+    'terminal' | 'missions' | 'memory' | 'sentinel' | 'swarm' | 'infra' | 'voice' | 'perception'
   >('terminal');
   const [missions, setMissions] = useState<SwarmMission[]>([]);
+  const [pixelStats, setPixelStats] = useState<any>(null);
   const [isLaunching, setIsLaunching] = useState(false);
   const [isVaultLocked, setIsVaultLocked] = useState(true);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -129,12 +131,15 @@ export const SovereignIntelligenceHub: React.FC = () => {
     loadHealerStatus();
     loadPixelSensors();
     loadPixelSensors();
-    if (activeTab === 'sentinel') {
-      loadHealerStatus();
+    if (activeTab === 'perception') {
+      loadPixelStats();
     }
 
     const interval = setInterval(() => {
       loadPixelSensors();
+      if (activeTab === 'perception') {
+        loadPixelStats();
+      }
     }, 30000); // Poll every 30s
 
     return () => clearInterval(interval);
@@ -165,7 +170,6 @@ export const SovereignIntelligenceHub: React.FC = () => {
   };
 
   // 🌌 Forecast Data - Optimization Hub (Removed for stability)
-
 
   const loadHealerStatus = async () => {
     try {
@@ -1371,9 +1375,9 @@ export const SovereignIntelligenceHub: React.FC = () => {
                           color: 'text-emerald-400',
                           load: 5,
                         },
-                      ].map((agent, i) => (
+                      ].map((agent) => (
                         <TiltCard
-                          key={i}
+                          key={agent.name}
                           className="bg-white/5 border border-white/10 p-5 rounded-2xl group hover:border-nexus-cyan/40 transition-all"
                         >
                           <div className="flex justify-between items-start mb-4">
@@ -1455,9 +1459,9 @@ export const SovereignIntelligenceHub: React.FC = () => {
                             icon: Activity,
                           },
                           { label: 'Misiones IA', value: '47', subValue: 'Exitosas', icon: Zap },
-                        ].map((stat, i) => (
+                        ].map(stat => (
                           <div
-                            key={i}
+                            key={stat.label}
                             className="bg-white/5 border border-white/10 p-4 rounded-2xl relative overflow-hidden text-left"
                           >
                             <div className="absolute top-0 right-0 p-2 opacity-10">
@@ -1502,12 +1506,12 @@ export const SovereignIntelligenceHub: React.FC = () => {
                         </div>
                         <div className="flex-1 p-6 font-mono text-[11px] space-y-3 overflow-y-auto max-h-[400px]">
                           {healerStatus.recentRepairs.length > 0 ? (
-                            healerStatus.recentRepairs.map((log, i) => (
+                            healerStatus.recentRepairs.map((log) => (
                               <div
                                 key={log.id}
                                 className="p-3 bg-black/40 rounded-xl border border-white/5 flex gap-4 items-start group hover:border-nexus-cyan/20 transition-all"
                               >
-                                <div className="text-nexus-cyan/30 mt-1">{i + 1}.</div>
+                                <div className="text-nexus-cyan/30 mt-1"></div>
                                 <div className="flex-1 space-y-1">
                                   <div className="flex justify-between">
                                     <span className="text-white font-bold">AUTONOMOUS_REPAIR</span>
@@ -1533,6 +1537,131 @@ export const SovereignIntelligenceHub: React.FC = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Neural Navigation Controls */}
+                  <div className="pt-12 border-t border-white/5">
+                    <div className="flex items-center gap-4 mb-8">
+                      <Network size={24} className="text-nexus-cyan" />
+                      <div>
+                        <h3 className="text-xl font-orbitron font-black text-white uppercase tracking-tighter">
+                          NAVEGACIÓN NEURAL DEL ENJAMBRE
+                        </h3>
+                        <p className="text-[10px] text-nexus-silver/40 font-mono uppercase tracking-[0.2em]">
+                          Control Activo de Nodos y Re-Enfoque de Objetivos
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pb-12">
+                      {[
+                        {
+                          label: 'RE-ENFOCAR OBJETIVOS',
+                          desc: 'Priorizar misiones críticas de auto-reparación.',
+                          icon: Zap,
+                        },
+                        {
+                          label: 'EXPANDIR PERCEPCIÓN',
+                          desc: 'Aumentar la frecuencia de muestreo de nodos Pixel.',
+                          icon: Eye,
+                        },
+                        {
+                          label: 'SINCRO GLOBAL',
+                          desc: 'Forzar sincronización de estado entre todos los agentes.',
+                          icon: Share2,
+                        },
+                      ].map((ctrl) => (
+                        <button
+                          key={ctrl.label}
+                          className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-nexus-cyan/30 group/ctrl transition-all text-left relative overflow-hidden"
+                        >
+                          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/ctrl:opacity-20 transition-opacity">
+                            <ctrl.icon size={48} />
+                          </div>
+                          <ctrl.icon
+                            size={20}
+                            className="text-nexus-cyan/40 group-hover/ctrl:text-nexus-cyan mb-4 transition-colors"
+                          />
+                          <div className="text-[11px] font-black text-nexus-silver group-hover/ctrl:text-white transition-colors uppercase tracking-widest mb-1">
+                            {ctrl.label}
+                          </div>
+                          <p className="text-[9px] text-white/20 uppercase font-mono leading-relaxed">
+                            {ctrl.desc}
+                          </p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+              {activeTab === 'perception' && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  className="space-y-12"
+                >
+                  <div className="flex justify-between items-end border-b border-white/10 pb-4">
+                    <div>
+                      <GodModeText
+                        effect="hologram"
+                        text="RED DE PERCEPCIÓN SOBERANA"
+                        className="text-2xl font-black"
+                      />
+                      <p className="text-[10px] text-nexus-silver/40 font-orbitron tracking-[0.2em] mt-1 uppercase">
+                        Telemetría en tiempo real desde nodos Pixel y sensores neurales
+                      </p>
+                    </div>
+                  </div>
+
+                  <PerceptionGrid sensors={pixelSnapshot} />
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <TiltCard className="p-8 bg-black/40 border-white/5">
+                      <h4 className="text-xs font-orbitron font-bold text-nexus-cyan mb-6 tracking-[0.2em] uppercase flex items-center gap-2">
+                        <Activity size={14} /> Análisis de Contexto
+                      </h4>
+                      <div className="space-y-6">
+                        <div className="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/5">
+                          <span className="text-[10px] text-white/40 uppercase tracking-widest">
+                            Nivel de Ansiedad Sistema
+                          </span>
+                          <span
+                            className={cn(
+                              'text-xs font-mono font-bold',
+                              healerStatus.pulse === 'nominal' ? 'text-nexus-cyan' : 'text-red-400'
+                            )}
+                          >
+                            {healerStatus.pulse.toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/5">
+                          <span className="text-[10px] text-white/40 uppercase tracking-widest">
+                            Bridging Móvil
+                          </span>
+                          <span className="text-xs font-mono font-bold text-green-400">ACTIVO</span>
+                        </div>
+                      </div>
+                    </TiltCard>
+
+                    <TiltCard className="p-8 bg-black/40 border-white/5 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4">
+                        <Eye size={32} className="text-nexus-cyan/10 animate-pulse" />
+                      </div>
+                      <h4 className="text-xs font-orbitron font-bold text-nexus-cyan mb-6 tracking-[0.2em] uppercase flex items-center gap-2">
+                        <Terminal size={14} /> Diagnóstico Óptico
+                      </h4>
+                      <p className="text-[10px] text-nexus-silver/50 leading-relaxed uppercase tracking-wider">
+                        La red de píxeles está reportando una coherencia visual del 98.4%. Todos los
+                        sensores biométricos están operando dentro de los parámetros de soberanía.
+                      </p>
+                      <button
+                        onClick={handlePixelTest}
+                        className="mt-6 w-full py-3 rounded-xl bg-nexus-cyan/10 border border-nexus-cyan/30 text-nexus-cyan text-[10px] font-black hover:bg-nexus-cyan/20 transition-all uppercase tracking-widest"
+                      >
+                        TESTEAR VIBRACIÓN SENSORIAL
+                      </button>
+                    </TiltCard>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1550,9 +1679,9 @@ export const SovereignIntelligenceHub: React.FC = () => {
               'DANIEL_VOICE_ENCRYPTION_ON',
               'SINC_NEXUS_ESTABLE',
               'SISTEMA_DETERMINISTA_ACTIVO',
-            ].map((tag, i) => (
+            ].map((tag) => (
               <div
-                key={i}
+                key={tag}
                 className="flex items-center gap-3 text-[9px] font-orbitron tracking-[0.3em] text-nexus-cyan/40 hover:text-nexus-cyan transition-colors uppercase cursor-default"
               >
                 <div className="w-1.5 h-1.5 rounded-full bg-nexus-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
@@ -1570,7 +1699,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
               'SISTEMA_DETERMINISTA_ACTIVO',
             ].map((tag, i) => (
               <div
-                key={`repeat-${i}`}
+                key={`repeat-${tag}-${i}`}
                 className="flex items-center gap-3 text-[9px] font-orbitron tracking-[0.3em] text-nexus-cyan/40 hover:text-nexus-cyan transition-colors uppercase cursor-default"
               >
                 <div className="w-1.5 h-1.5 rounded-full bg-nexus-cyan shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
@@ -1593,4 +1722,4 @@ export const SovereignIntelligenceHub: React.FC = () => {
       </SpotlightWrapper>
     </SystemAnxietyEffect>
   );
-};;;
+};

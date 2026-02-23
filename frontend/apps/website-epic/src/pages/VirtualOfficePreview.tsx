@@ -17,6 +17,7 @@ import {
   Sparkles,
   Star,
   ArrowUpRight,
+  ArrowRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { socketService } from '../services/socket.service';

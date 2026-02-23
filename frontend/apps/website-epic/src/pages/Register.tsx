@@ -1,5 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Lock, User, AlertCircle, ArrowRight, Shield, Fingerprint, Activity, Cpu, Database } from 'lucide-react';
+import {
+  Mail,
+  Lock,
+  User,
+  AlertCircle,
+  ArrowRight,
+  Shield,
+  Fingerprint,
+  Activity,
+  Cpu,
+  Database,
+  Zap,
+} from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';

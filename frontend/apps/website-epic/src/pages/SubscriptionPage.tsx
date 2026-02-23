@@ -13,6 +13,7 @@ import {
   BarChart3,
   Rocket,
   Award,
+  Loader2,
 } from 'lucide-react';
 import {
   subscriptionService,
