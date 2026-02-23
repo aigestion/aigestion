@@ -117,7 +117,6 @@ import { SemanticRouterService } from '../services/ai-router.service';
 import { VisionService } from '../services/vision.service';
 import { NeuralHealthService } from '../services/NeuralHealthService';
 import { Gemini2Service } from '../services/gemini-2.service';
-import { DanielaAIService } from '../services/daniela-ai.service';
 import { VoiceService } from '../services/voice.service';
 import { YouTubeChannelService } from '../services/google/youtube-channel.service';
 import { YoutubeWatcherService } from '../utils/youtube-watcher.service';
@@ -159,6 +158,8 @@ import { McpBridgeService } from '../services/google/mcp-bridge.service';
 import { NeuralHomeBridge } from '../services/google/neural-home.service';
 import { ContactRegistryService } from '../services/contact-registry.service';
 import { DanielaCallAgent } from '../services/daniela-call-agent.service';
+import { DanielaEnhancedService } from '../services/daniela-enhanced.service';
+import { DanielaProactiveService } from '../services/DanielaProactiveService';
 import { NexusPushService } from '../services/nexus-push.service';
 import { ForgeGem } from '../services/gems/ForgeGem';
 import { DeviceStateStore } from '../services/device-state.store';
@@ -307,7 +308,6 @@ bind<INotificationRepository>(TYPES.NotificationRepository, NotificationReposito
 // ========================================
 // BUSINESS SERVICES
 // ========================================
-bind<DanielaAIService>(TYPES.DanielaAIService, DanielaAIService);
 bind<DanielaEnhancedService>(TYPES.DanielaEnhancedService, DanielaEnhancedService);
 bind<DanielaProactiveService>(TYPES.DanielaProactiveService, DanielaProactiveService);
 

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Backend for NEXUS V1 Dashboard",
   "main": "dist/server.js",
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "start": "node dist/bootstrap.js",
     "dev": "tsx watch --openssl-legacy-provider src/bootstrap.ts",
