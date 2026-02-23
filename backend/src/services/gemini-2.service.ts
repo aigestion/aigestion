@@ -3,10 +3,28 @@ import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
 
 /**
- * GEMINI PRO & AI STUDIO SERVICE (God Level)
- * Sovereign integration with Google's most advanced GenAI models.
- * Supports dual-auth: Vertex AI (Enterprise) + AI Studio (High-speed Labs).
+ * GEMINI GOD MODE SERVICE — Sovereign Intelligence Engine
+ * The unified brain powering the entire AIGestion Nexus.
+ * Dual-auth: Vertex AI (Enterprise) + AI Studio (High-speed Labs).
+ * Capabilities: Structured Output · Thinking Mode · Token Counting · Multimodal · Streaming
  */
+
+// ─────────────────────────────────────────────────────────────
+// SOVEREIGN MODEL REGISTRY
+// ─────────────────────────────────────────────────────────────
+export const SOVEREIGN_MODELS = {
+  // Flagship — Maximum intelligence
+  PRO:       'gemini-2.5-pro-preview-06-05',
+  // Speed  — Best latency/quality ratio
+  FLASH:     'gemini-2.5-flash-preview-05-20',
+  // Legacy — Stable fallback
+  FLASH_2:   'gemini-2.0-flash',
+  // Embedding
+  EMBEDDING: 'text-embedding-004',
+} as const;
+
+export type SovereignModel = typeof SOVEREIGN_MODELS[keyof typeof SOVEREIGN_MODELS];
+
 @injectable()
 export class Gemini2Service {
   private vertexClient: any;
@@ -63,6 +81,24 @@ export class Gemini2Service {
     topP: 0.95,
     topK: 40,
   };
+
+  /**
+   * Returns the default sovereign model for the ecosystem.
+   */
+  getDefaultModel(): SovereignModel {
+    return (process.env.GEMINI_2_MODEL as SovereignModel) || SOVEREIGN_MODELS.FLASH;
+  }
+
+  /**
+   * Lists all available sovereign models.
+   */
+  listSovereignModels() {
+    return Object.entries(SOVEREIGN_MODELS).map(([tier, modelId]) => ({
+      tier,
+      modelId,
+      active: modelId === this.getDefaultModel(),
+    }));
+  }
 
   /**
    * Generates text using the best available model (Priority: AI Studio Pro).
@@ -320,6 +356,133 @@ export class Gemini2Service {
       return Buffer.from(buffer).toString('base64');
     } catch (error) {
       console.error('Error converting URL to base64:', error);
+      throw error;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // GOD LEVEL — STRUCTURED JSON OUTPUT
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * Generates structured JSON output conforming to a provided schema.
+   * The model is forced to return valid JSON matching the schema.
+   */
+  async generateStructured<T = any>(
+    prompt: string,
+    schema: Record<string, any>,
+    options: { model?: string; systemInstruction?: string; temperature?: number } = {},
+  ): Promise<T> {
+    const modelName = options.model || this.getDefaultModel();
+    try {
+      const model = this.getClient().getGenerativeModel({
+        model: modelName,
+        systemInstruction: options.systemInstruction,
+        safetySettings: this.safetySettings as any,
+      });
+
+      const result = await model.generateContent({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+          ...this.godGenerationConfig,
+          temperature: options.temperature ?? 0.3, // Lower temp for structured accuracy
+          responseMimeType: 'application/json',
+          responseSchema: schema,
+        },
+      });
+
+      const jsonText = result.response.text();
+      return JSON.parse(jsonText) as T;
+    } catch (error) {
+      logger.error(`[Gemini2Service] Structured generation failed (${modelName})`, error);
+      throw error;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // GOD LEVEL — TOKEN COUNTING
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * Counts the number of tokens in a prompt for cost estimation.
+   */
+  async countTokens(text: string, model?: string): Promise<{ totalTokens: number; model: string }> {
+    const modelName = model || this.getDefaultModel();
+    try {
+      const genModel = this.getClient().getGenerativeModel({
+        model: modelName,
+      });
+
+      const result = await genModel.countTokens({
+        contents: [{ role: 'user', parts: [{ text }] }],
+      });
+
+      return {
+        totalTokens: result.totalTokens,
+        model: modelName,
+      };
+    } catch (error) {
+      logger.error(`[Gemini2Service] Token counting failed (${modelName})`, error);
+      throw error;
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // GOD LEVEL — THINKING MODE (Deep Reasoning)
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * Generates content with explicit reasoning/thinking steps.
+   * Uses the Pro model for maximum intelligence, with a configurable thinking budget.
+   */
+  async generateWithThinking(
+    prompt: string,
+    options: {
+      thinkingBudget?: number;
+      model?: string;
+      systemInstruction?: string;
+    } = {},
+  ): Promise<{ response: string; thinkingProcess?: string }> {
+    const modelName = options.model || SOVEREIGN_MODELS.PRO;
+    try {
+      const model = this.getClient().getGenerativeModel({
+        model: modelName,
+        systemInstruction: options.systemInstruction,
+        safetySettings: this.safetySettings as any,
+      });
+
+      const result = await model.generateContent({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+        generationConfig: {
+          ...this.godGenerationConfig,
+          maxOutputTokens: 16384,
+          thinkingConfig: {
+            thinkingBudget: options.thinkingBudget || 8192,
+          },
+        } as any,
+      });
+
+      // Extract thinking process if available
+      const candidates = result.response?.candidates || [];
+      let thinkingProcess: string | undefined;
+      let responseText = '';
+
+      for (const candidate of candidates) {
+        for (const part of candidate.content?.parts || []) {
+          if ((part as any).thought) {
+            thinkingProcess = (part as any).text;
+          } else if (part.text) {
+            responseText += part.text;
+          }
+        }
+      }
+
+      return {
+        response: responseText || result.response.text(),
+        thinkingProcess,
+      };
+    } catch (error) {
+      logger.error(`[Gemini2Service] Thinking generation failed (${modelName})`, error);
       throw error;
     }
   }

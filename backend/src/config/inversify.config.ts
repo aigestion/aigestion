@@ -194,6 +194,7 @@ import { PredictiveBIService } from '../services/PredictiveBIService';
 import { AstraeaController } from '../controllers/AstraeaController';
 import { AstraeaService } from '../services/AstraeaService';
 import { VapiService } from '../services/VapiService';
+import { SovereignNotionSync } from '../services/SovereignNotionSync';
 import { config } from './config';
 
 import { TreasuryController } from '../controllers/treasury.controller';
@@ -355,8 +356,7 @@ bind<RunwayService>(TYPES.RunwayService, RunwayService);
 bind<PayPalService>(TYPES.PaypalService, PayPalService);
 bind<FacebookService>(TYPES.FacebookService, FacebookService);
 bind<AIService>(TYPES.AIService, AIService);
-if (!container.isBound(ColabService))
-  container.bind<ColabService>(ColabService).toSelf().inSingletonScope();
+bind<ColabService>(TYPES.ColabService, ColabService);
 if (!container.isBound(NotebookInsightService))
   container.bind<NotebookInsightService>(NotebookInsightService).toSelf().inSingletonScope();
 bind<MapsService>(TYPES.MapsService, MapsService);
@@ -465,6 +465,7 @@ bind<NavigatorGem>(TYPES.NavigatorGem, NavigatorGem);
 bind<AutoHealingGem>(TYPES.AutoHealingGem, AutoHealingGem);
 bind<VapiService>(TYPES.VapiService, VapiService);
 bind<AstraeaService>(TYPES.AstraeaService, AstraeaService);
+bind<SovereignNotionSync>(TYPES.SovereignNotionSync, SovereignNotionSync);
 
 // ========================================
 // CONTROLLERS

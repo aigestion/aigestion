@@ -18,24 +18,24 @@ export class GoogleDriveService {
   }
 
   async uploadFileContent(content: Buffer, fileName: string, mimeType: string): Promise<string> {
-      if (!this.drive) {
-          // Attempt to init if not ready, though improper usage
-           await this.getDriveClient();
-      }
-      if (!this.drive) throw new Error('Drive client not initialized');
+    if (!this.drive) {
+      // Attempt to init if not ready, though improper usage
+      await this.getDriveClient();
+    }
+    if (!this.drive) throw new Error('Drive client not initialized');
 
-      const media = {
-          mimeType,
-          body: require('stream').Readable.from(content)
-      };
+    const media = {
+      mimeType,
+      body: require('stream').Readable.from(content),
+    };
 
-      const res = await this.drive.files.create({
-          requestBody: { name: fileName },
-          media: media,
-          fields: 'id'
-      });
-      logger.info(`Uploaded content ${fileName} (${res.data.id})`);
-      return res.data.id!;
+    const res = await this.drive.files.create({
+      requestBody: { name: fileName },
+      media: media,
+      fields: 'id',
+    });
+    logger.info(`Uploaded content ${fileName} (${res.data.id})`);
+    return res.data.id!;
   }
 
   private async initializeClient() {
@@ -320,5 +320,17 @@ export class GoogleDriveService {
         })
         .catch((err: Error) => reject(err));
     });
+  }
+
+  /**
+   * Retrieves file content as a Buffer.
+   */
+  async getFileContent(fileId: string): Promise<Buffer> {
+    const drive = await this.getDriveClient();
+    const response = await drive.files.get(
+      { fileId, alt: 'media' },
+      { responseType: 'arraybuffer' },
+    );
+    return Buffer.from(response.data);
   }
 }

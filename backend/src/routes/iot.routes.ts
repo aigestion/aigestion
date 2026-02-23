@@ -24,6 +24,8 @@ router.get('/pixel-sensors', (req, res, next) => getController().getPixelSensors
  * @route   GET /api/v1/iot/pixel-sensors/daily-stats
  * @desc    Get aggregated daily stats from Pixel sensor history
  */
-router.get('/pixel-sensors/daily-stats', (req, res, next) => getController().getPixelDailyStats(req, res, next));
+router.get('/pixel-sensors/daily-stats', (req, res, next) =>
+  getController().getPixelDailyStats(req, res, next),
+);
 
 export default router;

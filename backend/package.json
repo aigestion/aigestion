@@ -27,8 +27,8 @@
     "prepare": "npx husky install",
     "lint:staged": "lint-staged",
     "vercel-install": "npm install --legacy-peer-deps",
-    "sync:knowledge": "ts-node src/scripts/sync_knowledge_notion.ts",
-    "init:dashboard": "ts-node src/scripts/init_notion_dashboard.ts"
+    "sync:knowledge": "ts-node --transpile-only src/scripts/sync_knowledge_notion.ts",
+    "init:dashboard": "ts-node --transpile-only src/scripts/init_notion_dashboard.ts"
   },
   "dependencies": {
     "@aigestion/nexus-shared": "workspace:*",

@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import { Telegraf } from 'telegraf';
 
 // import { TYPES } from '../types';
-import { loadPremiumCredentials } from '@/premium_management';
+import { loadPremiumCredentials } from '../premium_management';
 import { logger } from '../utils/logger';
 
 export interface CredentialStatus {

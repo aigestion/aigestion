@@ -108,9 +108,9 @@ export const getRedisClient = (): RedisClientType => {
         try {
           await redisClient?.connect();
           logger.info(
-            clusterNodes ? 'Connected to Redis Cluster' : 'Connected to Redis Standalone'
+            clusterNodes ? 'Connected to Redis Cluster' : 'Connected to Redis Standalone',
           );
-        } catch (err) {
+        } catch (err: any) {
           logger.error(err, 'Failed to connect to Redis:');
         }
       })();

@@ -25,56 +25,68 @@ const pinoLogger = pino({
   },
 });
 
+export interface ILogger {
+  info: (msg: string | object, ...args: any[]) => void;
+  error: (msg: string | object, ...args: any[]) => void;
+  warn: (msg: string | object, ...args: any[]) => void;
+  debug: (msg: string | object, ...args: any[]) => void;
+  verbose?: (msg: string | object, ...args: any[]) => void;
+  silly?: (msg: string | object, ...args: any[]) => void;
+  [key: string]: any;
+}
+
 // Helper to support both (msg, meta) and (meta, msg) signatures
 // Compatible with Winston legacy usage
-function wrap(method: 'info' | 'error' | 'warn' | 'debug' | 'trace' | 'fatal'): any {
+function wrap(
+  method: 'info' | 'error' | 'warn' | 'debug' | 'trace' | 'fatal',
+): (msg: string | object, ...args: any[]) => void {
   return (...args: any[]) => {
     const [arg1, arg2, ...rest] = args;
+    const loggerInstance = pinoLogger as any;
     // Determine which argument is the message and which is the object
     if (typeof arg1 === 'string') {
       if (arg2 && typeof arg2 === 'object') {
         // (msg, meta) -> Pino (meta, msg)
-        (pinoLogger as any)[method](arg2, arg1, ...rest);
+        loggerInstance[method](arg2, arg1, ...rest);
       } else {
         // (msg)
-        (pinoLogger as any)[method](arg1, arg2, ...rest);
+        loggerInstance[method](arg1, arg2, ...rest);
       }
     } else if (typeof arg1 === 'object' && typeof arg2 === 'string') {
       // (meta, msg) -> Pino (meta, msg)
-      (pinoLogger as any)[method](arg1, arg2, ...rest);
+      loggerInstance[method](arg1, arg2, ...rest);
     } else {
       // Fallback
-      (pinoLogger as any)[method](arg1, arg2, ...rest);
+      loggerInstance[method](arg1, arg2, ...rest);
     }
   };
 }
 
-const internalLogger = {
+const internalLogger: ILogger = {
   info: wrap('info'),
   error: wrap('error'),
   warn: wrap('warn'),
   debug: wrap('debug'),
-  verbose: wrap('trace'), // Map verbose to trace
-  silly: wrap('trace'), // Map silly to trace
 };
 
 // Helper to ensure all methods exist and are bound correctly
-const wrapLogger = (pinoInstance: any) => {
-  const methods = ['info', 'error', 'warn', 'debug', 'http', 'verbose', 'silly'];
+const wrapLogger = (pinoInstance: any): ILogger => {
+  const methods = ['info', 'error', 'warn', 'debug'];
   const safeLogger: any = { ...pinoInstance };
 
   methods.forEach(method => {
-    // If the method doesn't exist on pino, or we want to ensure it works,
-    // we bridge it. Pino uses 'warn' as 'warn', but sometimes older implementations
-    // or mocks might lack it.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const original = pinoInstance[method];
-    safeLogger[method] = typeof original === 'function' 
-      ? original.bind(pinoInstance) 
-      : (...args: any[]) => pinoInstance.info(...args); // Fallback to info
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+    safeLogger[method] =
+      typeof original === 'function'
+        ? original.bind(pinoInstance)
+        : // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+          (...args: any[]) => pinoInstance.info(...args);
   });
 
-  return safeLogger;
+  return safeLogger as ILogger;
 };
 
-export const logger = wrapLogger(pinoLogger);
+export const logger: ILogger = wrapLogger(pinoLogger);
 export default internalLogger;

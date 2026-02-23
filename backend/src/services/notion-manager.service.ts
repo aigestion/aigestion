@@ -1,22 +1,23 @@
-import { injectable, inject } from 'inversify';
-import { env } from '../config/env.schema';
+import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
 import * as https from 'https'; // Use * as https for better compatibility
-import * as fs from 'fs';
-import * as path from 'path';
 
 // --- Inlined Notion Utility (Optimized) ---
 const apiKey = process.env.NOTION_API_KEY;
 const NOTION_VERSION = '2022-06-28';
 
-function notionRequest(endpoint: string, method: string, body: any = null): Promise<any> {
-    if (!apiKey) {
-      // Return a mock/empty promise if no key, to prevent crash but log warning
-       logger.warn('NOTION_API_KEY is missing. Notion operations will vary.');
-       return Promise.resolve({ results: [] });
-    }
+function notionRequest(
+  endpoint: string,
+  method: string,
+  body: Record<string, unknown> | null = null,
+): Promise<NotionResponse> {
+  if (!apiKey) {
+    // Return a mock/empty promise if no key, to prevent crash but log warning
+    logger.warn('NOTION_API_KEY is missing. Notion operations will vary.');
+    return Promise.resolve({ results: [] });
+  }
 
-  return new Promise((resolve, reject) => {
+  return new Promise<NotionResponse>(resolve => {
     const options = {
       hostname: 'api.notion.com',
       path: '/v1' + endpoint,
@@ -42,18 +43,18 @@ function notionRequest(endpoint: string, method: string, body: any = null): Prom
         if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) {
           resolve(parsedData);
         } else {
-             // Safe error handling
-          const errorMsg = (parsedData && parsedData.message) || data || 'Unknown Notion API Error';
+          // Safe error handling
+          const errorMsg = parsedData?.message || data || 'Unknown Notion API Error';
           // Don't reject, just return empty to keep service alive
-           logger.error(`Notion API Error [${res.statusCode}]: ${errorMsg}`);
-           resolve({ results: [] });
+          logger.error(`Notion API Error [${res.statusCode || '??'}]: ${errorMsg}`);
+          resolve({ results: [] });
         }
       });
     });
 
-    req.on('error', (err: any) => {
-       logger.error(`Notion Request Failed: ${err.message}`);
-       resolve({ results: [] });
+    req.on('error', (err: Error) => {
+      logger.error(`Notion Request Failed: ${err.message}`);
+      resolve({ results: [] });
     });
 
     if (body) {
@@ -64,10 +65,20 @@ function notionRequest(endpoint: string, method: string, body: any = null): Prom
 }
 // ------------------------------------------
 
-
 export interface NotionPage {
   id: string;
-  properties: any;
+  properties: Record<string, any>;
+}
+
+export interface NotionBlock {
+  object: 'block';
+  type: string;
+  [key: string]: any;
+}
+
+export interface NotionResponse {
+  results: any[];
+  [key: string]: any;
 }
 
 @injectable()
@@ -121,8 +132,9 @@ export class NotionManagerService {
         totalContent: content.results.length,
         timestamp: new Date().toISOString(),
       };
-    } catch (error: any) {
-      logger.error(`[NotionManager] Failed to fetch metrics: ${error.message}`);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      logger.error(`[NotionManager] Failed to fetch metrics: ${msg}`);
       throw error;
     }
   }
@@ -155,8 +167,9 @@ export class NotionManagerService {
           },
         ],
       });
-    } catch (error: any) {
-      logger.error(`[NotionManager] Failed to sync swarm plan: ${error.message}`);
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      logger.error(`[NotionManager] Failed to sync swarm plan: ${msg}`);
       throw error;
     }
   }
@@ -164,34 +177,58 @@ export class NotionManagerService {
   /**
    * Specialized method to create knowledge entries in the brain database
    */
-  async createNeuralBrainEntry(title: string, summary: string, tags: string[] = []) {
+  async createNeuralBrainEntry(
+    title: string,
+    content: string,
+    tags: string[] = [],
+  ): Promise<NotionResponse> {
     if (!this.contentDbId) throw new Error('NOTION_CONTENT_DB_ID not configured');
 
-    return notionRequest('/pages', 'POST', {
+    const multiselectTags = tags.map(t => ({ name: t }));
+
+    // Await the local call or return it as a promise properly cast
+    return await notionRequest('/pages', 'POST', {
       parent: { database_id: this.contentDbId },
       properties: {
         Name: { title: [{ text: { content: title } }] },
-        Category: { select: { name: 'Sovereign Knowledge' } },
-        Tags: { multi_select: tags.map(t => ({ name: t })) },
-        Date: { date: { start: new Date().toISOString() } },
-        Summary: { rich_text: [{ text: { content: summary.substring(0, 2000) } }] },
+        Tags: { multi_select: multiselectTags },
+        Type: { select: { name: 'Neural Brain Entry' } },
+        Status: { status: { name: 'Published' } },
       },
+      children: [
+        {
+          object: 'block',
+          type: 'callout',
+          callout: {
+            rich_text: [{ type: 'text', text: { content: 'Brain Item: ' + title } }],
+            icon: { emoji: '🧠' },
+            color: 'purple_background',
+          },
+        },
+        {
+          object: 'block',
+          type: 'paragraph',
+          paragraph: {
+            rich_text: [{ type: 'text', text: { content: content.substring(0, 2000) } }],
+          },
+        },
+      ],
     });
   }
 
   /**
    * Appends blocks to a parent page
    */
-  async appendBlocks(pageId: string, blocks: any[]) {
+  async appendBlocks(pageId: string, blocks: NotionBlock[]): Promise<NotionResponse> {
     return notionRequest(`/blocks/${pageId}/children`, 'PATCH', {
       children: blocks,
-    });
+    } as unknown as Record<string, unknown>) as unknown as Promise<NotionResponse>;
   }
 
   // --- Static Notion Block Builders ---
 
   static createDivider() {
-    return { object: 'block', type: 'divider', divider: {} };
+    return { object: 'block' as const, type: 'divider' as const, divider: {} };
   }
 
   static createSovereignCallout(
@@ -200,12 +237,12 @@ export class NotionManagerService {
     color: string = 'gray_background',
   ) {
     return {
-      object: 'block',
-      type: 'callout',
+      object: 'block' as const,
+      type: 'callout' as const,
       callout: {
-        rich_text: [{ type: 'text', text: { content: text } }],
-        icon: { type: 'emoji', emoji: emoji },
-        color: color,
+        rich_text: [{ type: 'text' as const, text: { content: text } }],
+        icon: { type: 'emoji' as const, emoji: emoji },
+        color,
       },
     };
   }

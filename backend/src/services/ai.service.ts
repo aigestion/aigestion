@@ -230,7 +230,7 @@ export class AIService {
         const chat = model.startChat({
           history: history.map(h => ({ role: h.role, parts: h.parts })),
           generationConfig: { maxOutputTokens: 2048 },
-          systemInstruction: { parts: [{ text: systemInstruction }] },
+          systemInstruction: { role: 'system', parts: [{ text: systemInstruction }] } as any,
           tools: [{ functionDeclarations: this.getTools() }],
         });
 
@@ -271,7 +271,7 @@ export class AIService {
           completion: fullResponse || 'Streamed response',
           arbitrationReason: reason,
         });
-      } catch (error) {
+      } catch (error: any) {
         logger.error(error, '[AIService] Error in streamChat');
         stream.emit('error', error);
         stream.push(null);
@@ -324,7 +324,7 @@ export class AIService {
       if (provider === 'gemini') {
         const model = await this.getProviderModel({ provider, modelId });
         const result = await model.generateContent(prompt);
-        const text = result.response.text();
+        const text = (result.response as any).candidates[0]?.content?.parts[0]?.text || '';
 
         // Track usage
         this.usageService.trackUsage({
@@ -356,15 +356,16 @@ export class AIService {
           modelId: 'gemini-2.0-flash',
         });
         const result = await model.generateContent(prompt);
-        return result.response.text();
+        const text = (result.response as any).candidates[0]?.content?.parts[0]?.text || '';
+        return text;
       }
 
       return 'Error: Unsupported provider in router.';
-    } catch (error) {
+    } catch (error: any) {
       logger.error(error, '[AIService] Error in generateContent - Attempting Ollama Fallback');
       try {
         return await this.generateOllamaContent(prompt, 'llama3:8b');
-      } catch (fallbackError) {
+      } catch (fallbackError: any) {
         logger.error(fallbackError, '[AIService] Ultimate Fail: Ollama also failed.');
         return 'Error generating content (Total Outage).';
       }
@@ -382,7 +383,7 @@ export class AIService {
         stream: false,
       });
       return response.data.response;
-    } catch (error) {
+    } catch (error: any) {
       logger.error(error, '[AIService] Ollama connection failed.');
       throw error;
     }
@@ -401,8 +402,8 @@ export class AIService {
         })),
       });
       const result = await chat.sendMessage(message);
-      return result.response.text();
-    } catch (error) {
+      return (result.response as any).candidates[0]?.content?.parts[0]?.text || '';
+    } catch (error: any) {
       logger.error(error, '[AIService] Error in chat');
       return 'Error in chat processing.';
     }
@@ -430,8 +431,8 @@ export class AIService {
       const result = await this._embeddingModel.embedContent({
         content: { parts: [{ text }] },
       });
-      return result.predictions[0].embeddings.values;
-    } catch (error) {
+      return (result as any).predictions[0].embeddings.values;
+    } catch (error: any) {
       logger.error(error, '[AIService] Failed to generate embeddings via Vertex AI API');
       return [];
     }

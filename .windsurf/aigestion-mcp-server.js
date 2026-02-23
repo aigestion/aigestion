@@ -312,14 +312,108 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         },
       },
       {
-        name: 'get_user_preferences',
-        description: 'Obtiene preferencias de usuario',
+        name: 'sync_notebooklm',
+        description: 'Genera paquetes de fuentes optimizados para NotebookLM',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+        },
+      },
+      {
+        name: 'ai_studio_generate',
+        description:
+          'God Mode AI Studio - Generate content with grounding, code execution, or standard mode',
         inputSchema: {
           type: 'object',
           properties: {
-            userId: { type: 'string', description: 'ID del usuario' },
+            prompt: { type: 'string', description: 'The prompt to generate from' },
+            mode: {
+              type: 'string',
+              description: 'Generation mode: standard | grounded | code_exec',
+              default: 'standard',
+            },
+            model: { type: 'string', description: 'Model to use (default: gemini-2.0-flash)' },
+            systemInstruction: { type: 'string', description: 'Optional system instruction' },
           },
-          required: ['userId'],
+          required: ['prompt'],
+        },
+      },
+      {
+        name: 'colab_deep_research',
+        description:
+          'Deep Research God Mode - Generates and executes a Colab notebook for autonomous investigation',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            topic: { type: 'string', description: 'The research topic' },
+            context: { type: 'object', description: 'Additional context for the research' },
+          },
+          required: ['topic'],
+        },
+      },
+
+      // ───────────── GEMINI GOD MODE TOOLS ─────────────
+      {
+        name: 'gemini_sovereign',
+        description:
+          'Gemini God Mode — Sovereign text generation with model selection, structured JSON output, or deep thinking mode',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            prompt: { type: 'string', description: 'The prompt to send to Gemini' },
+            mode: {
+              type: 'string',
+              enum: ['standard', 'structured', 'thinking'],
+              description:
+                'Generation mode: standard, structured (JSON), or thinking (deep reasoning)',
+              default: 'standard',
+            },
+            model: {
+              type: 'string',
+              description:
+                'Model ID (e.g. gemini-2.5-pro-preview-06-05, gemini-2.5-flash-preview-05-20)',
+            },
+            systemInstruction: { type: 'string', description: 'System instruction for the model' },
+            schema: { type: 'object', description: 'JSON schema for structured mode' },
+            thinkingBudget: {
+              type: 'number',
+              description: 'Token budget for thinking mode (default: 8192)',
+            },
+          },
+          required: ['prompt'],
+        },
+      },
+      {
+        name: 'gemini_multimodal',
+        description:
+          'Gemini Multimodal — Analyze images, audio, or combined inputs with vision and understanding',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            text: { type: 'string', description: 'Text prompt or question about the media' },
+            imageUrl: { type: 'string', description: 'URL of the image to analyze' },
+            audioUrl: { type: 'string', description: 'URL of the audio to analyze' },
+          },
+          required: ['text'],
+        },
+      },
+      {
+        name: 'gemini_live',
+        description:
+          'Gemini Live — Create, manage, or terminate real-time voice sessions with proactive speech',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            action: {
+              type: 'string',
+              enum: ['create', 'terminate', 'list', 'speak', 'voices', 'health'],
+              description: 'Action to perform on live sessions',
+            },
+            sessionId: { type: 'string', description: 'Session ID (for terminate/speak)' },
+            voice: { type: 'string', description: 'Voice ID for session creation' },
+            text: { type: 'string', description: 'Text for proactive speech injection' },
+          },
+          required: ['action'],
         },
       },
     ],
@@ -471,6 +565,200 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
               text: JSON.stringify(result, null, 2),
             },
           ],
+        };
+      }
+
+      case 'sync_notebooklm': {
+        const { exec } = require('child_process');
+        const scriptPath =
+          'C:\\Users\\Alejandro\\AIGestion\\backend\\src\\scripts\\generate_notebooklm_sources.ts';
+
+        return new Promise((resolve, reject) => {
+          exec(`npx tsx ${scriptPath}`, (error, stdout, stderr) => {
+            if (error) {
+              resolve({
+                content: [{ type: 'text', text: `Error: ${error.message}` }],
+                isError: true,
+              });
+              return;
+            }
+            resolve({
+              content: [
+                {
+                  type: 'text',
+                  text: `Sovereign Knowledge Sync Complete.\nSources generated in docs/notebooklm_sources/\n\nOutput:\n${stdout}`,
+                },
+              ],
+            });
+          });
+        });
+      }
+
+      case 'ai_studio_generate': {
+        const {
+          prompt: studioPrompt,
+          mode = 'standard',
+          model: studioModel,
+          systemInstruction: sysInst,
+        } = args;
+        const { GoogleGenerativeAI } = require('@google/generative-ai');
+        const studioKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
+
+        if (!studioKey) {
+          return {
+            content: [{ type: 'text', text: 'Error: GEMINI_API_KEY not configured' }],
+            isError: true,
+          };
+        }
+
+        const genAI = new GoogleGenerativeAI(studioKey);
+        const targetModel = studioModel || 'gemini-2.0-flash';
+
+        try {
+          let result;
+
+          if (mode === 'grounded') {
+            const model = genAI.getGenerativeModel({
+              model: targetModel,
+              systemInstruction: sysInst,
+              tools: [{ googleSearchRetrieval: {} }],
+            });
+            const response = await model.generateContent(studioPrompt);
+            const text = response.response.text();
+            const sources =
+              response.response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+            result = { mode: 'grounded', text, sources };
+          } else if (mode === 'code_exec') {
+            const model = genAI.getGenerativeModel({
+              model: targetModel,
+              tools: [{ codeExecution: {} }],
+            });
+            const response = await model.generateContent(studioPrompt);
+            const parts = response.response.candidates?.[0]?.content?.parts || [];
+            let text = '',
+              code = '',
+              output = '';
+            for (const part of parts) {
+              if (part.text) text += part.text;
+              if (part.executableCode) code += part.executableCode.code;
+              if (part.codeExecutionResult) output += part.codeExecutionResult.output;
+            }
+            result = { mode: 'code_exec', text, code, output };
+          } else {
+            const model = genAI.getGenerativeModel({
+              model: targetModel,
+              systemInstruction: sysInst,
+            });
+            const response = await model.generateContent(studioPrompt);
+            result = { mode: 'standard', text: response.response.text() };
+          }
+
+          return {
+            content: [
+              {
+                type: 'text',
+                text: JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        } catch (studioError) {
+          return {
+            content: [{ type: 'text', text: `AI Studio Error: ${studioError.message}` }],
+            isError: true,
+          };
+        }
+      }
+
+      case 'colab_deep_research': {
+        const { topic, context = {} } = args;
+        const response = await aigestion.makeApiRequest('/api/v1/wisdom/research', 'POST', {
+          topic,
+          context,
+        });
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: JSON.stringify(response, null, 2),
+            },
+          ],
+        };
+      }
+
+      // ───────────── GEMINI GOD MODE HANDLERS ─────────────
+
+      case 'gemini_sovereign': {
+        const {
+          prompt,
+          mode = 'standard',
+          model,
+          systemInstruction,
+          schema,
+          thinkingBudget,
+        } = args;
+        const response = await aigestion.makeApiRequest('/api/v1/gemini/sovereign', 'POST', {
+          prompt,
+          mode,
+          model,
+          systemInstruction,
+          schema,
+          thinkingBudget,
+        });
+        return {
+          content: [{ type: 'text', text: JSON.stringify(response, null, 2) }],
+        };
+      }
+
+      case 'gemini_multimodal': {
+        const { text, imageUrl, audioUrl } = args;
+        const response = await aigestion.makeApiRequest('/api/v1/gemini/multimodal', 'POST', {
+          text,
+          imageUrl,
+          audioUrl,
+        });
+        return {
+          content: [{ type: 'text', text: JSON.stringify(response, null, 2) }],
+        };
+      }
+
+      case 'gemini_live': {
+        const { action, sessionId, voice, text } = args;
+        let response;
+
+        switch (action) {
+          case 'create':
+            response = await aigestion.makeApiRequest('/api/v1/gemini/live/session', 'POST', {
+              voice,
+            });
+            break;
+          case 'terminate':
+            response = await aigestion.makeApiRequest(
+              `/api/v1/gemini/live/session/${sessionId}`,
+              'DELETE'
+            );
+            break;
+          case 'list':
+            response = await aigestion.makeApiRequest('/api/v1/gemini/live/sessions', 'GET');
+            break;
+          case 'speak':
+            response = await aigestion.makeApiRequest('/api/v1/gemini/live/speak', 'POST', {
+              sessionId,
+              text,
+            });
+            break;
+          case 'voices':
+            response = await aigestion.makeApiRequest('/api/v1/gemini/live/voices', 'GET');
+            break;
+          case 'health':
+            response = await aigestion.makeApiRequest('/api/v1/gemini/live/health', 'GET');
+            break;
+          default:
+            throw new McpError(ErrorCode.InvalidParams, `Unknown live action: ${action}`);
+        }
+
+        return {
+          content: [{ type: 'text', text: JSON.stringify(response, null, 2) }],
         };
       }
 

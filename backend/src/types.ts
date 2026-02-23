@@ -202,4 +202,6 @@ export const TYPES = {
   TwilioService: Symbol.for('TwilioService'),
   TwilioWebhookController: Symbol.for('TwilioWebhookController'),
   SovereignNotionSync: Symbol.for('SovereignNotionSync'),
+  Gemini2Service: Symbol.for('Gemini2Service'),
+  GeminiController: Symbol.for('GeminiController'),
 };
