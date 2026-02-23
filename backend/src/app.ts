@@ -9,7 +9,7 @@ import morgan from 'morgan';
 
 // Middleware to ensure every JSON response follows the standard API for
 import { config } from './config/config';
-import { setupSwagger } from './docs/swagger';
+// Swagger is loaded lazily to avoid TS resolution issues in monorepo builds
 import { createGraphQLRouter } from './graphql/router';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware';
 import { requestIdMiddleware } from './middleware/requestId.middleware';
@@ -117,8 +117,15 @@ app.use(
 );
 app.use(cookieParser());
 
-// Mount Routes
-setupSwagger(app);
+// Mount Swagger docs (lazy, non-blocking)
+void (async () => {
+  try {
+    const { setupSwagger } = await import('./docs/swagger');
+    setupSwagger(app);
+  } catch {
+    logger.warn('Swagger docs unavailable — skipping /api-docs setup');
+  }
+})();
 
 // Health checks are now handled in api-v1.routes.ts
 app.use('/api/v1', routes);
