@@ -75,8 +75,8 @@ USER nodejs
 # Expose the Cloud Run / Railway default port
 EXPOSE 8080
 
-# Optimized health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+# Optimized health check — extended start-period for heavy Node.js boot
+HEALTHCHECK --interval=30s --timeout=15s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:8080/api/v1/health || exit 1
 
 # Start application with dumb-init for proper signal handling

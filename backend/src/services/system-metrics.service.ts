@@ -27,16 +27,17 @@ export class SystemMetricsService {
   private lastNetworkStats: { rx: number; tx: number; time: number } | null = null;
 
   constructor(
-    @inject(TYPES.CredentialManagerService) private credentialManager: CredentialManagerService
+    @inject(TYPES.CredentialManagerService) private credentialManager: CredentialManagerService,
   ) {}
 
   /**
    * Get all system metrics aggregated
    */
   async getSystemMetrics(): Promise<SystemMetrics> {
-    const [cpu, memory, network, disk, dockerCount, proStatus] = await Promise.all([
-      this.getCPUUsage(),
-      this.getMemoryUsage(),
+    const cpu = this.getCPUUsage();
+    const memory = this.getMemoryUsage();
+
+    const [network, disk, dockerCount, proStatus] = await Promise.all([
       this.getNetworkUsage(),
       this.getDiskUsage(),
       this.getDockerContainerCount(),
@@ -62,7 +63,7 @@ export class SystemMetricsService {
   /**
    * Calculate CPU usage percentage
    */
-  async getCPUUsage(): Promise<number> {
+  getCPUUsage(): number {
     const cpus = os.cpus();
     const usage =
       cpus.reduce((acc, cpu) => {
@@ -77,7 +78,7 @@ export class SystemMetricsService {
   /**
    * Calculate Memory usage percentage
    */
-  async getMemoryUsage(): Promise<number> {
+  getMemoryUsage(): number {
     const totalMem = os.totalmem();
     const freeMem = os.freemem();
     const usedMem = totalMem - freeMem;
@@ -104,7 +105,12 @@ export class SystemMetricsService {
         }
         return total > 0 ? parseFloat((((total - free) / total) * 100).toFixed(2)) : 0;
       }
-      return 0; // Fallback for now or implement linux `df - h`
+      // Linux (Alpine / Cloud Run) — use df
+      const { stdout } = await execAsync('df / --output=used,size 2>/dev/null | tail -1');
+      const parts = stdout.trim().split(/\s+/);
+      const used = parseInt(parts[0]);
+      const size = parseInt(parts[1]);
+      return size > 0 ? parseFloat(((used / size) * 100).toFixed(2)) : 0;
     } catch (e) {
       logger.error('Error getting disk usage', e);
       return 0;
@@ -120,14 +126,17 @@ export class SystemMetricsService {
     try {
       if (os.platform() === 'win32') {
         const { stdout } = await execAsync(
-          'powershell -Command "Get-NetAdapterStatistics | Select-Object -ExpandProperty ReceivedBytes"'
+          'powershell -Command "Get-NetAdapterStatistics | Select-Object -ExpandProperty ReceivedBytes"',
         );
         totalBytes = stdout.split('\n').reduce((acc, val) => acc + (parseInt(val.trim()) || 0), 0);
       } else {
-        // Fallback or Linux implementation
-        return 0;
+        // Linux (Alpine / Cloud Run) — read from /proc/net/dev
+        const { stdout } = await execAsync(
+          "cat /proc/net/dev 2>/dev/null | awk 'NR>2 && $1 !~ /^lo:/ {sum += $2} END {print sum}'",
+        );
+        totalBytes = parseInt(stdout.trim()) || 0;
       }
-    } catch (e) {
+    } catch {
       return 0;
     }
 
@@ -148,20 +157,14 @@ export class SystemMetricsService {
    */
   async getDockerContainerCount(): Promise<number> {
     try {
-      const { stdout } = await execAsync(
-        'docker ps -q | Measure-Object | Select-Object -ExpandProperty Count'
-      );
-      return parseInt(stdout.trim()) || 0;
+      // Cross-platform: count non-empty lines from docker ps -q
+      const { stdout } = await execAsync('docker ps -q');
+      return stdout
+        .trim()
+        .split('\n')
+        .filter(line => line.trim()).length;
     } catch {
-      try {
-        const { stdout } = await execAsync('docker ps -q');
-        return stdout
-          .trim()
-          .split('\n')
-          .filter(line => line).length;
-      } catch {
-        return 0;
-      }
+      return 0;
     }
   }
 }
