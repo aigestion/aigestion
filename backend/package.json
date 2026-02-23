@@ -140,7 +140,9 @@
     "tweetnacl": "^1.0.3",
     "uuid": "^9.0.1",
     "youtube-transcript": "^1.2.1",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.14",
@@ -169,8 +171,6 @@
     "@types/sinon": "^20.0.0",
     "@types/socket.io": "^3.0.1",
     "@types/supertest": "^6.0.3",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.8",
     "@types/through": "^0.0.33",
     "@types/whatwg-url": "^13.0.0",
     "@types/ws": "^8.18.1",
