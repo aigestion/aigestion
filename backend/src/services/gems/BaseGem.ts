@@ -1,4 +1,4 @@
-import { injectable, inject } from 'inversify';
+import { injectable, inject, unmanaged } from 'inversify';
 import { Gemini2Service } from '../gemini-2.service';
 import { logger } from '../../utils/logger';
 
@@ -12,8 +12,8 @@ export interface GemOptions {
 export abstract class BaseGem {
   constructor(
     @inject(Gemini2Service) protected gemini: Gemini2Service,
-    public name: string,
-    protected systemInstruction: string,
+    @unmanaged() public name: string,
+    @unmanaged() protected systemInstruction: string,
   ) {}
 
   async ask(prompt: string, options: GemOptions = {}): Promise<string> {
