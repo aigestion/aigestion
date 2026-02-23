@@ -14,5 +14,6 @@ swarmRouter.post('/recursive-reasoning', (req, res, next) =>
 );
 swarmRouter.get('/missions/:id', (req, res, next) => controller.getMission(req, res, next));
 swarmRouter.post('/stress-test', (req, res, next) => controller.stressTest(req, res, next));
+swarmRouter.get('/history', (req, res, next) => controller.getHistory(req, res, next));
 
 export default swarmRouter;

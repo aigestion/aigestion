@@ -144,6 +144,8 @@ const Marketplace = lazy(() =>
   import('./pages/Marketplace').then(m => ({ default: m.Marketplace }))
 );
 const MissionControl = lazy(() => import('./pages/MissionControl'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfUse = lazy(() => import('./pages/TermsOfUse'));
 
 // ============================================
 // UI Components
@@ -280,6 +282,10 @@ export const AppContent = ({
                 </Route>
               </Route>
             </Route>
+
+            {/* Public Legal Pages */}
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfUse />} />
 
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

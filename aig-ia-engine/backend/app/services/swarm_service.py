@@ -58,10 +58,14 @@ class SwarmService:
         if not SWARM_AVAILABLE:
             return {"success": False, "message": "Swarm engine not available"}
 
-        # Register with Jab Service for tracking
+        # Extract parent_job_id if provided
+        parent_job_id = metadata.get("parent_job_id") if metadata else None
+
+        # Register with Job Service for tracking
         job = job_service.create_job(
             job_type=JobType.BATCH_INFERENCE,  # Or better, create a SWARM type in JobType if possible
             metadata={"mission": mission_description, **(metadata or {})},
+            parent_job_id=parent_job_id,
         )
         job_id = job.job_id
 

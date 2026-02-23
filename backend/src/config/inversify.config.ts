@@ -355,12 +355,9 @@ bind<PersonaMarketplaceService>(TYPES.PersonaMarketplaceService, PersonaMarketpl
 // ========================================
 // EXTERNAL INTEGRATIONS
 // ========================================
-if (!container.isBound(GoogleDriveService))
-  container.bind<GoogleDriveService>(GoogleDriveService).toSelf().inSingletonScope();
-if (!container.isBound(GmailService))
-  container.bind<GmailService>(GmailService).toSelf().inSingletonScope();
-if (!container.isBound(SheetsService))
-  container.bind<SheetsService>(SheetsService).toSelf().inSingletonScope();
+bind<GoogleDriveService>(TYPES.GoogleDriveService, GoogleDriveService);
+bind<GmailService>(TYPES.GmailService, GmailService);
+bind<SheetsService>(TYPES.GoogleSheetsService, SheetsService);
 // Original binding for Gemini2Service removed as per instruction's implied change
 bind<RunwayService>(TYPES.RunwayService, RunwayService);
 bind<PayPalService>(TYPES.PaypalService, PayPalService);
@@ -388,11 +385,8 @@ bind<EvolutionMetricsService>(TYPES.EvolutionMetricsService, EvolutionMetricsSer
 
 bind<BrowserlessService>(TYPES.BrowserlessService, BrowserlessService);
 bind<NewsService>(TYPES.NewsService, NewsService);
-if (!container.isBound(JulesGem)) container.bind<JulesGem>(JulesGem).toSelf().inSingletonScope();
-if (!container.isBound(Gemini2Service))
-  container.bind<Gemini2Service>(Gemini2Service).toSelf().inSingletonScope();
-if (!container.isBound(TYPES.Gemini2Service))
-  container.bind<Gemini2Service>(TYPES.Gemini2Service).to(Gemini2Service).inSingletonScope();
+bind<JulesGem>(TYPES.JulesGem, JulesGem);
+bind<Gemini2Service>(TYPES.Gemini2Service, Gemini2Service);
 
 // ========================================
 // SPECIALIZED SERVICES

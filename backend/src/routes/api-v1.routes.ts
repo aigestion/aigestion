@@ -33,6 +33,7 @@ const lazy = (path: string) => (req: any, res: any, next: any) => {
 
 // Mount Routes (Lazy)
 apiV1Router.use('/auth', lazy('./auth.routes'));
+apiV1Router.use('/auth/notion', lazy('./notion-oauth.routes'));
 apiV1Router.use('/docker', lazy('./docker.routes'));
 apiV1Router.use('/personas', lazy('./persona.routes'));
 apiV1Router.use('/swarm', lazy('./swarm.routes'));

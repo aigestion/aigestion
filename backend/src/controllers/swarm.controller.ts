@@ -102,4 +102,14 @@ export class SwarmController {
       next(error);
     }
   }
+
+  public async getHistory(req: Request, res: Response, next: any) {
+    const requestId = (req as any).requestId || 'unknown';
+    try {
+      const history = await this.swarmService.getSwarmHistory();
+      return res.json(buildResponse(history, 200, requestId));
+    } catch (error) {
+      next(error);
+    }
+  }
 }

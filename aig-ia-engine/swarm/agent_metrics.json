@@ -74,10 +74,17 @@
       "tokens": 2491,
       "cost": 0.000249,
       "timestamp": 1771259986.908334
+    },
+    {
+      "tier": "REASONING",
+      "latency": 12.27,
+      "tokens": 1359,
+      "cost": 0.001699,
+      "timestamp": 1771845871.5390308
     }
   ],
   "summary": {
-    "total_tokens": 17336,
-    "total_cost": 0.008887
+    "total_tokens": 18695,
+    "total_cost": 0.010586
   }
 }

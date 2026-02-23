@@ -45,6 +45,7 @@ class Job:
     message: str = ""
     result: Optional[Dict[str, Any]] = None
     error: Optional[str] = None
+    parent_job_id: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -55,12 +56,15 @@ class Job:
             "status": self.status.value,
             "created_at": self.created_at.isoformat(),
             "started_at": self.started_at.isoformat() if self.started_at else None,
-            "completed_at": self.completed_at.isoformat() if self.completed_at else None,
+            "completed_at": self.completed_at.isoformat()
+            if self.completed_at
+            else None,
             "progress": self.progress,
             "message": self.message,
             "result": self.result,
             "error": self.error,
-            "metadata": self.metadata
+            "parent_job_id": self.parent_job_id,
+            "metadata": self.metadata,
         }
 
 
@@ -84,7 +88,8 @@ class JobService:
     def create_job(
         self,
         job_type: JobType,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
+        parent_job_id: Optional[str] = None,
     ) -> Job:
         """Create a new job and return it."""
         job_id = str(uuid.uuid4())
@@ -94,7 +99,8 @@ class JobService:
             job_type=job_type,
             status=JobStatus.PENDING,
             created_at=datetime.utcnow(),
-            metadata=metadata or {}
+            parent_job_id=parent_job_id,
+            metadata=metadata or {},
         )
 
         # Add to jobs dict

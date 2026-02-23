@@ -36,6 +36,7 @@ import { PersonaMarketplace } from './PersonaMarketplace';
 import { SIMAOverlay } from './SIMAOverlay';
 import { ShoppingCart, Eye } from 'lucide-react';
 import { PerceptionGrid } from './PerceptionGrid';
+import { MissionTimeline } from './MissionTimeline';
 
 // ──────────────────────────────────────────────────────
 // Hook: detect device layout (mobile + landscape)
@@ -463,6 +464,10 @@ const ClientDashboard = () => {
               </div>
               <div style={{ height: chartHeight }}>
                 <AlertsWidget />
+              </div>
+              {/* Swarm Intelligence Timeline */}
+              <div className="lg:col-span-12 xl:col-span-4 h-[500px]">
+                <MissionTimeline />
               </div>
               <div style={{ height: chartHeight }}>
                 <PerceptionGrid />

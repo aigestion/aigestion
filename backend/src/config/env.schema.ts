@@ -471,6 +471,21 @@ const envSchema = baseEnvSchema.extend({
   GOOGLE_PROJECT_ID: z.string().optional().describe('Alias for GOOGLE_CLOUD_PROJECT_ID'),
   GOOGLE_LOCATION: z.string().optional().describe('Alias for GOOGLE_CLOUD_LOCATION'),
   BACKEND_URL: z.string().url().optional().describe('Base URL of the backend service'),
+
+  // Notion OAuth Integration
+  NOTION_OAUTH_CLIENT_ID: z
+    .string()
+    .optional()
+    .describe('Notion OAuth Client ID for public integration'),
+  NOTION_OAUTH_CLIENT_SECRET: z
+    .string()
+    .optional()
+    .describe('Notion OAuth Client Secret for public integration'),
+  NOTION_OAUTH_REDIRECT_URI: z
+    .string()
+    .url()
+    .default('https://aigestion.net/api/auth/notion/callback')
+    .describe('Notion OAuth Redirect URI'),
 });
 
 /**

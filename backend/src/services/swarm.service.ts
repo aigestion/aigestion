@@ -52,7 +52,7 @@ export class SwarmService {
     @inject(TYPES.NotionManagerService) private readonly notion: NotionManagerService,
     @inject(TYPES.NewsService) private readonly newsService: NewsService,
     @inject(TYPES.HealthService) private readonly health: HealthService,
-    @inject(JulesGem) private readonly julesGem: JulesGem,
+    @inject(TYPES.JulesGem) private readonly julesGem: JulesGem,
     @inject(TYPES.NavigatorGem) private readonly navigatorGem: NavigatorGem,
     @inject(TYPES.EventBus) private readonly eventBus: EventBus,
     @inject(TYPES.Gemini2Service) private readonly gemini: Gemini2Service,
@@ -629,6 +629,10 @@ export class SwarmService {
       result: `Mission ${id} details retrieved.`,
       confidence: 1,
     };
+  }
+
+  public async getSwarmHistory(): Promise<any> {
+    return this.generalAgent.getSwarmHistory();
   }
 
   public async orchestrate(task: any): Promise<SwarmResponse> {

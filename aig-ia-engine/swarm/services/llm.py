@@ -105,13 +105,74 @@ class LLMService:
                 logger.info(f"LLM Cache Hit ({tier.name})")
                 return cached
 
+        # Multimodal processing
+        processed_prompt = prompt
+        if isinstance(prompt, list):
+            processed_prompt = []
+            for item in prompt:
+                if isinstance(item, dict):
+                    if "image_uri" in item and item["image_uri"]:
+                        uri = item["image_uri"]
+                        if uri.startswith("http"):
+                            try:
+                                import requests
+
+                                resp = requests.get(uri, timeout=10)
+                                resp.raise_for_status()
+                                processed_prompt.append(
+                                    {
+                                        "inline_data": {
+                                            "mime_type": resp.headers.get(
+                                                "Content-Type", "image/png"
+                                            ),
+                                            "data": resp.content,
+                                        }
+                                    }
+                                )
+                            except Exception as e:
+                                logger.error(
+                                    f"Failed to fetch image from URI {uri}: {e}"
+                                )
+                        else:
+                            # Handle local path
+                            if os.path.exists(uri):
+                                with open(uri, "rb") as f:
+                                    data = f.read()
+                                processed_prompt.append(
+                                    {
+                                        "inline_data": {
+                                            "mime_type": "image/png",  # Defaulting
+                                            "data": data,
+                                        }
+                                    }
+                                )
+                    elif "image_base64" in item and item["image_base64"]:
+                        import base64
+
+                        img_data = base64.b64decode(item["image_base64"])
+                        processed_prompt.append(
+                            {
+                                "inline_data": {
+                                    "mime_type": item.get("mime_type", "image/png"),
+                                    "data": img_data,
+                                }
+                            }
+                        )
+                    else:
+                        processed_prompt.append(item)
+                else:
+                    processed_prompt.append(item)
+
+        logger.info(
+            f"LLM Processed Prompt structure confirmed. Parts: {len(processed_prompt) if isinstance(processed_prompt, list) else 1}"
+        )
 
         # Execute via Circuit Breaker
         try:
             start_t = time.time()
 
             def _call():
-                return model.generate_content(prompt)
+                return model.generate_content(processed_prompt)
 
             response = self.circuit_breaker.call(_call)
             result = response.text
