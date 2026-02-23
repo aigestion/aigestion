@@ -1,5 +1,6 @@
 import { injectable, inject, unmanaged } from 'inversify';
 import { Gemini2Service } from '../gemini-2.service';
+import { TYPES } from '../../types';
 import { logger } from '../../utils/logger';
 
 export interface GemOptions {
@@ -11,7 +12,7 @@ export interface GemOptions {
 @injectable()
 export abstract class BaseGem {
   constructor(
-    @inject(Gemini2Service) protected gemini: Gemini2Service,
+    @inject(TYPES.Gemini2Service) protected gemini: Gemini2Service,
     @unmanaged() public name: string,
     @unmanaged() protected systemInstruction: string,
   ) {}
