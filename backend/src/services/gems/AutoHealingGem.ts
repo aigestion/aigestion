@@ -1,4 +1,5 @@
 import { injectable, inject } from 'inversify';
+import { TYPES } from '../../types';
 import { BaseGem, GemOptions } from './BaseGem';
 import { Gemini2Service } from '../gemini-2.service';
 import { logger } from '../../utils/logger';
@@ -6,7 +7,7 @@ import { logger } from '../../utils/logger';
 @injectable()
 export class AutoHealingGem extends BaseGem {
   constructor(
-    @inject(Gemini2Service) gemini: Gemini2Service
+    @inject(TYPES.Gemini2Service) gemini: Gemini2Service
   ) {
     super(
       gemini,

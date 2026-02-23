@@ -11,7 +11,7 @@ import { logger } from '../utils/logger';
 @injectable()
 export class SelfHealingService {
   constructor(
-    @inject(Gemini2Service) private readonly gemini: Gemini2Service,
+    @inject(TYPES.Gemini2Service) private readonly gemini: Gemini2Service,
     @inject(TYPES.BigQueryService) private readonly bq: BigQueryService,
   ) {
     logger.info('🧬 Genetic Self-Healing active: Monitoring for system regressions');
@@ -27,7 +27,7 @@ export class SelfHealingService {
       Act as a Self-Healing Infrastructure Agent.
       Analyze this error log:
       ${errorLog}
-      
+
       Generate a concise solution in JSON format:
       {
           "reason": "description",

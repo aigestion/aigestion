@@ -1,10 +1,11 @@
 import { injectable, inject } from 'inversify';
+import { TYPES } from '../../types';
 import { BaseGem } from './BaseGem';
 import { Gemini2Service } from '../gemini-2.service';
 
 @injectable()
 export class SovereignGem extends BaseGem {
-  constructor(@inject(Gemini2Service) gemini: Gemini2Service) {
+  constructor(@inject(TYPES.Gemini2Service) gemini: Gemini2Service) {
     super(
       gemini,
       'SovereignGem',
