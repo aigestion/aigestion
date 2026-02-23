@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 
-import { BaseRepository, IEntity } from '../BaseRepository';
+import { InMemoryRepository, IEntity } from '../BaseRepository';
 
 interface TestEntity extends IEntity {
   name: string;
 }
 
-class TestRepository extends BaseRepository<TestEntity> {}
+class TestRepository extends InMemoryRepository<TestEntity> {}
 
 describe('BaseRepository', () => {
   let repository: TestRepository;

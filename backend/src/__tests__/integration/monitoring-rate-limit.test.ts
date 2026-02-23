@@ -39,13 +39,14 @@ describe('Monitoring Rate Limit Isolation Test', () => {
     });
   });
 
-  test('Should return 429 after 30 requests from the same IP', async () => {
+  test('Should return 429 after 100 requests from the same IP (MONITORING limit)', async () => {
     const endpoint = '/test-monitoring';
     const clientIp = '1.2.3.4';
+    const MONITORING_LIMIT = 100;
 
-    console.log(`Hammering ${endpoint} with IP ${clientIp}...`);
+    console.log(`Hammering ${endpoint} with IP ${clientIp} (limit=${MONITORING_LIMIT})...`);
 
-    for (let i = 1; i <= 30; i++) {
+    for (let i = 1; i <= MONITORING_LIMIT; i++) {
       const response = await request(app).get(endpoint).set('X-Forwarded-For', clientIp);
 
       if (response.status !== 200) {
@@ -55,13 +56,15 @@ describe('Monitoring Rate Limit Isolation Test', () => {
       }
     }
 
-    // 31st request
+    // 101st request — should be throttled
     const throttledResponse = await request(app).get(endpoint).set('X-Forwarded-For', clientIp);
 
     expect(throttledResponse.status).toBe(429);
-    expect(throttledResponse.body.message).toMatch(/Por favor, inténtalo de nuevo más tarde/i); // Spanish message from middleware
+    expect(throttledResponse.body.message).toMatch(/Por favor, inténtalo de nuevo más tarde/i);
 
-    expect(redisMock.incr).toHaveBeenCalledTimes(31);
-    console.log('✅ Rate limit isolation test passed: 429 received after 30 requests.');
+    expect(redisMock.incr).toHaveBeenCalledTimes(MONITORING_LIMIT + 1);
+    console.log(
+      `✅ Rate limit isolation test passed: 429 received after ${MONITORING_LIMIT} requests.`,
+    );
   });
 });

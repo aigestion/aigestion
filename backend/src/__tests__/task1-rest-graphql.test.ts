@@ -104,7 +104,8 @@ describe('Task 1.1 & 1.2: REST API v1 + GraphQL', () => {
         .set('Content-Type', 'application/json')
         .send({ query });
 
-      expect(response.status).toBe(400);
+      // GraphQL spec: errors return 200 with an errors array (not HTTP 400)
+      expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('errors');
       expect(response.body.errors[0]).toHaveProperty('message');
     });

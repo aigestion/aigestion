@@ -45,6 +45,7 @@ describe('UserRepository', () => {
     const email = 'bob@example.com';
     const mockFindOne = {
       select: jest.fn().mockReturnThis(),
+      cache: jest.fn().mockReturnThis(), // Custom Mongoose cache plugin
       lean: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue({ ...mockUser, email }),
     };
@@ -59,6 +60,7 @@ describe('UserRepository', () => {
 
   it('should find a user by id', async () => {
     const mockFindById = {
+      cache: jest.fn().mockReturnThis(), // Custom Mongoose cache plugin
       lean: jest.fn().mockReturnThis(),
       exec: jest.fn().mockResolvedValue(mockUser),
     };
@@ -107,7 +109,7 @@ describe('UserRepository', () => {
     expect(User.findByIdAndUpdate).toHaveBeenCalledWith(
       'custom-id',
       { name: 'Updated Name' },
-      { new: true }
+      { new: true },
     );
   });
 

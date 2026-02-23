@@ -47,5 +47,10 @@ module.exports = {
     'jest.setup.js',
     '../_legacy_assets_build/**',
     'infra/keys/**',
+    // Test files are excluded from tsconfig.json — ESLint type-aware rules
+    // cannot run on them without a separate tsconfig.test.json
+    '**/__tests__/**',
+    '**/*.test.ts',
+    '**/*.spec.ts',
   ],
 };

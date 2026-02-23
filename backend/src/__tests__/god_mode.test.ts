@@ -8,6 +8,11 @@ import { TYPES } from '../types';
 // Mock dependencies
 const mockAnalyticsService = {};
 const mockRagService = {};
+const mockPineconeService = { upsert: jest.fn(), query: jest.fn() };
+const mockSwarm = { orchestrate: jest.fn() };
+const mockJules = { chat: jest.fn() };
+const mockStitchGem = { stitch: jest.fn() };
+const mockSwarmClient = { send: jest.fn() };
 const mockUsageService = { trackUsage: jest.fn() };
 const mockSemanticCacheService = {
   getSemantic: jest.fn().mockResolvedValue(null),
@@ -40,13 +45,18 @@ describe('God Mode Verification', () => {
     let aiService: AIService;
 
     beforeEach(() => {
-      // Setup simple container or just instantiate
+      // Instantiate with all 10 required constructor params
       aiService = new AIService(
         mockAnalyticsService as any,
         mockRagService as any,
+        mockPineconeService as any,
+        mockSwarm as any,
+        mockJules as any,
+        mockStitchGem as any,
         mockUsageService as any,
         mockSemanticCacheService as any,
         mockArbitrationService as any,
+        mockSwarmClient as any,
       );
     });
 
