@@ -8,7 +8,22 @@ on:
         required: false
         default: 'full-suite'
         type: string
-    secrets: inherit
+    secrets:
+      RAILWAY_TOKEN:
+        required: false
+      GCP_WID_PROVIDER:
+        required: false
+      GCP_SERVICE_ACCOUNT:
+        required: false
+      DATABASE_URL:
+        required: false
+      REDIS_URL:
+        required: false
+      GEMINI_API_KEY:
+        required: false
+      JWT_SECRET:
+        required: false
+
   workflow_dispatch:
     inputs:
       action_type:
@@ -36,12 +51,11 @@ jobs:
 
       - name: 🚀 Deploy to Railway (Backend)
         if: inputs.action_type == 'full-suite' || inputs.action_type == 'railway-deploy'
-        uses: railwayapp/railway-action@master
+        run: |
+          npm install -g @railway/cli
+          railway up --service aigestion-backend --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        with:
-          service: 'aigestion-backend'
-          root: 'backend'
 
       - name: 🔑 Authenticate to GCP
         if: inputs.action_type == 'full-suite' || inputs.action_type == 'gcp-deploy'

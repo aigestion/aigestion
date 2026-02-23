@@ -12,7 +12,15 @@ on:
       deploy-approved:
         description: 'Whether deployment was approved'
         value: ${{ jobs.intelligence-gathering.outputs.deploy-approved }}
-    secrets: inherit
+    secrets:
+      VITE_API_BASE_URL:
+        required: false
+      VITE_SUPABASE_URL:
+        required: false
+      VITE_SUPABASE_ANON_KEY:
+        required: false
+      GITHUB_TOKEN:
+        required: false
 
   workflow_dispatch:
     inputs:

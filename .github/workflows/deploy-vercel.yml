@@ -7,7 +7,13 @@ on:
         description: 'Whether deployment was approved by CI'
         required: true
         type: string
-    secrets: inherit
+    secrets:
+      VERCEL_TOKEN:
+        required: true
+      VERCEL_ORG_ID:
+        required: true
+      VERCEL_PROJECT_ID:
+        required: true
   workflow_dispatch:
 
 permissions:

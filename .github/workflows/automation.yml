@@ -2,7 +2,11 @@ name: 🤖 Automation — PR Insights, Releases & Perf
 
 on:
   workflow_call:
-    secrets: inherit
+    secrets:
+      LHCI_GITHUB_APP_TOKEN:
+        required: false
+      GITHUB_TOKEN:
+        required: false
   workflow_dispatch:
 
 env:

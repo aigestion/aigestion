@@ -71,13 +71,19 @@ jobs:
     uses: ./.github/workflows/ci.yml
     with:
       force_deploy: ${{ inputs.force_deploy || false }}
-    secrets: inherit
+    secrets:
+      VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+      VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ─── 🔒 Security Scan Suite ────────────────────────────
   security:
     needs: ci
     uses: ./.github/workflows/security.yml
-    secrets: inherit
+    secrets:
+      GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ─── 🚀 Vercel Deploy (Canary → Production) ───────────
   deploy-vercel:
@@ -85,7 +91,10 @@ jobs:
     uses: ./.github/workflows/deploy-vercel.yml
     with:
       deploy-approved: ${{ needs.ci.outputs.deploy-approved }}
-    secrets: inherit
+    secrets:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
   # ─── 🏗️ Infrastructure Deploy (Railway / GCP) ─────────
   deploy-infra:
@@ -93,10 +102,19 @@ jobs:
     uses: ./.github/workflows/deploy-infra.yml
     with:
       action_type: ${{ inputs.action_type || 'full-suite' }}
-    secrets: inherit
+    secrets:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      GCP_WID_PROVIDER: ${{ secrets.GCP_WID_PROVIDER }}
+      GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
   # ─── 🤖 Automation (PR Insights, Releases, Perf) ──────
   automation:
     needs: ci
     uses: ./.github/workflows/automation.yml
-    secrets: inherit
+    secrets:
+      LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

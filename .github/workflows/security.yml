@@ -2,7 +2,11 @@ name: 🔒 Security — Scan Suite
 
 on:
   workflow_call:
-    secrets: inherit
+    secrets:
+      GITLEAKS_LICENSE:
+        required: false
+      GITHUB_TOKEN:
+        required: false
   workflow_dispatch:
 
 env:
