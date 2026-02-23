@@ -1,5 +1,5 @@
 import express from 'express';
-import { graphqlHTTP } from 'express-graphql';
+import { createHandler } from 'graphql-http/lib/use/express';
 
 import { createDataloaders } from './dataloaders';
 import { schema } from './schema';
@@ -7,30 +7,22 @@ import { schema } from './schema';
 /**
  * GraphQL Router
  * Endpoint: /graphql
+ *
+ * Uses graphql-http (official GraphQL-over-HTTP reference implementation)
+ * replacing the deprecated express-graphql package.
  */
 export function createGraphQLRouter() {
   const router = express.Router();
 
   router.all(
     '/',
-    graphqlHTTP(async (req: any) => ({
+    createHandler({
       schema,
-      rootValue: {},
-      context: {
-        req,
+      context: req => ({
+        req: req.raw,
         dataloaders: createDataloaders(),
-      },
-      graphiql: process.env.NODE_ENV === 'development',
-      pretty: process.env.NODE_ENV === 'development',
-      customFormatErrorFn: (error: any) => ({
-        message: error.message,
-        locations: error.locations,
-        path: error.path,
-        extensions: {
-          code: error.extensions?.code || 'INTERNAL_ERROR',
-        },
       }),
-    }))
+    }),
   );
 
   return router;
