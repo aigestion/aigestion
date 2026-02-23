@@ -1,0 +1,72 @@
+name: 🏗️ Deploy — Infrastructure (Railway / GCP)
+
+on:
+  workflow_call:
+    inputs:
+      action_type:
+        description: 'Deployment target'
+        required: false
+        default: 'full-suite'
+        type: string
+    secrets: inherit
+  workflow_dispatch:
+    inputs:
+      action_type:
+        description: 'Deployment target'
+        required: true
+        default: 'full-suite'
+        type: choice
+        options:
+          - full-suite
+          - railway-deploy
+          - gcp-deploy
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  infrastructure-deployment:
+    name: 🏗️ Infra Deploy (Railway/GCP)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🚀 Deploy to Railway (Backend)
+        if: inputs.action_type == 'full-suite' || inputs.action_type == 'railway-deploy'
+        uses: railwayapp/railway-action@master
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        with:
+          service: 'aigestion-backend'
+          root: 'backend'
+
+      - name: 🔑 Authenticate to GCP
+        if: inputs.action_type == 'full-suite' || inputs.action_type == 'gcp-deploy'
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: ${{ secrets.GCP_WID_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - name: 🏗️ GCP Build and Push
+        if: inputs.action_type == 'full-suite' || inputs.action_type == 'gcp-deploy'
+        run: |
+          docker build -t europe-southwest1-docker.pkg.dev/aigestion-sovereign-2026/aigestion-repo/aigestion-backend:${{ github.sha }} -f backend/Dockerfile .
+          docker push europe-southwest1-docker.pkg.dev/aigestion-sovereign-2026/aigestion-repo/aigestion-backend:${{ github.sha }}
+
+      - name: 🚀 Deploy to Cloud Run
+        if: inputs.action_type == 'full-suite' || inputs.action_type == 'gcp-deploy'
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: 'aigestion-backend'
+          region: 'europe-southwest1'
+          image: europe-southwest1-docker.pkg.dev/aigestion-sovereign-2026/aigestion-repo/aigestion-backend:${{ github.sha }}
+          env_vars: |
+            NODE_ENV=production
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            REDIS_URL=${{ secrets.REDIS_URL }}
+            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}

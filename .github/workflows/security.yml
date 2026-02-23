@@ -1,0 +1,120 @@
+name: 🔒 Security — Scan Suite
+
+on:
+  workflow_call:
+    secrets: inherit
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '22'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  ultimate-security:
+    name: 🔒 Security Scan (${{ matrix.scan-type }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scan-type: [secrets, dependencies, code, infrastructure, compliance]
+      fail-fast: false
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: 🔐 Advanced Secret Detection (TruffleHog)
+        if: matrix.scan-type == 'secrets'
+        uses: trufflesecurity/trufflehog@main
+        continue-on-error: true
+        with:
+          base: ${{ github.event_name == 'pull_request' && github.base_ref || github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --only-verified
+
+      - name: 🔍 Gitleaks Secret Scan
+        if: matrix.scan-type == 'secrets'
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+      - name: 📦 Dependency Security Scan
+        if: matrix.scan-type == 'dependencies'
+        run: pnpm audit --audit-level=critical --prod
+
+      - name: 🔍 CodeQL Initialization
+        if: matrix.scan-type == 'code'
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, typescript
+
+      - name: 🔍 CodeQL Analysis
+        if: matrix.scan-type == 'code'
+        uses: github/codeql-action/analyze@v3
+
+      - name: 🛡️ Semgrep Security Scan
+        if: matrix.scan-type == 'code'
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/owasp-top-ten
+            p/secrets
+            p/cwe-top-25
+
+      - name: 🛡️ Infrastructure Security
+        if: matrix.scan-type == 'infrastructure'
+        run: |
+          echo "🛡️ Scanning infrastructure security..."
+          # Validate Dockerfiles for best practices
+          for dockerfile in $(find . -name 'Dockerfile*' -not -path './archive/*' -not -path './node_modules/*'); do
+            echo "Checking $dockerfile"
+            # Verify non-root USER directive exists
+            if ! grep -q '^USER' "$dockerfile"; then
+              echo "⚠️ WARNING: $dockerfile missing USER directive (runs as root)"
+            fi
+            # Check for COPY --chown pattern
+            if grep -q 'COPY.*\.' "$dockerfile" && ! grep -q 'chown' "$dockerfile"; then
+              echo "⚠️ WARNING: $dockerfile copies files without chown"
+            fi
+          done
+          echo "✅ Infrastructure scan complete"
+
+      - name: 📋 Compliance Check
+        if: matrix.scan-type == 'compliance'
+        run: |
+          echo "📋 Checking compliance..."
+          # Verify no secrets in source code
+          FINDINGS=$(grep -rn --include='*.ts' --include='*.js' --include='*.json' \
+            -E '(password|secret|api_key|private_key)\s*[:=]\s*["'\'']((?!\$\{|process\.env|import\.meta).){8,}' \
+            --exclude-dir=node_modules --exclude-dir=dist --exclude-dir=archive . || true)
+          if [ -n "$FINDINGS" ]; then
+            echo "⚠️ Potential hardcoded secrets found:"
+            echo "$FINDINGS"
+          else
+            echo "✅ No hardcoded secrets detected"
+          fi
+          # Verify .env.example exists
+          if [ -f ".env.example" ]; then
+            echo "✅ .env.example present"
+          else
+            echo "⚠️ Missing .env.example"
+          fi
