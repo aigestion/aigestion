@@ -37,7 +37,7 @@ export class SwarmInternalClient {
           status: error.response?.status,
         });
         return Promise.reject(error);
-      }
+      },
     );
   }
 
@@ -54,6 +54,14 @@ export class SwarmInternalClient {
    */
   async getDanielaStatus(): Promise<any> {
     const response = await this.client.get('/daniela/status');
+    return response.data;
+  }
+
+  /**
+   * Generic Get
+   */
+  async get(path: string, params: any = {}): Promise<any> {
+    const response = await this.client.get(path, { params });
     return response.data;
   }
 
