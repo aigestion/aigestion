@@ -5,11 +5,14 @@ from services.rag_v2 import HybridRetriever
 from models import MessageType
 
 
+import google.generativeai as genai
+
+
 class Architect(BaseAgent):
     def __init__(self, swarm_bus):
         super().__init__("Architect", AgentType.ARCHITECT, swarm_bus)
         self.llm = LLMService()
-        self.memory = MemoryService()
+        self.memory = MemoryService(embedding_client=genai)
         self.retriever = HybridRetriever()
 
     def process_message(self, message: Message):

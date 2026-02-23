@@ -8,7 +8,7 @@ import {
   TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
-import { setTimeout, setInterval } from './utils/timers';
+import { setTimeout } from './utils/timers';
 import { Color4, Vector3 } from '@dcl/sdk/math';
 import { soundSystem } from './enhanced-sound';
 
@@ -273,7 +273,7 @@ export class VoiceCommandSystem {
               emissiveColor: Color4.create(0.2, 0.8, 0.2, 1),
             });
             break;
-          case 'listening':
+          case 'listening': {
             const pulse = Math.sin(time * 3) * 0.5 + 0.5;
             Material.setPbrMaterial(indicator, {
               albedoColor: Color4.create(1, 0.8, 0.2, 1),
@@ -281,6 +281,7 @@ export class VoiceCommandSystem {
               emissiveColor: Color4.create(1, 0.8, 0.2, 1),
             });
             break;
+          }
           case 'processing':
             Material.setPbrMaterial(indicator, {
               albedoColor: Color4.create(0.2, 0.2, 1, 1),
@@ -428,9 +429,9 @@ export class VoiceCommandSystem {
       speak: (text: string) => this.synthesizeSpeech(text),
       cancel: () => this.stopSpeech(),
       voice: this.voiceAssistant.voice,
-      rate: 1.0,
-      pitch: 1.0,
-      volume: 1.0,
+      rate: 1,
+      pitch: 1,
+      volume: 1,
     };
   }
 
@@ -768,7 +769,7 @@ export class VoiceCommandSystem {
       },
       emergency_stop: {
         text: 'Procedimientos de emergencia iniciados inmediatamente.',
-        confidence: 1.0,
+        confidence: 1,
         actions: ['emergency_shutdown'],
         emotion: 'urgent',
       },

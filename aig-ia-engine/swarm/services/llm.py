@@ -2,7 +2,7 @@ import logging
 import os
 import time
 from enum import Enum
-from typing import Optional
+from typing import Optional, Any, Dict, List
 
 import google.generativeai as genai
 from services.llm_cache import LLMCache
@@ -88,7 +88,7 @@ class LLMService:
             self.models = {}
 
     def generate_text(
-        self, prompt: str, use_cache: bool = True, tier: ModelTier = ModelTier.BALANCED
+        self, prompt: Any, use_cache: bool = True, tier: ModelTier = ModelTier.BALANCED
     ) -> str:
         model = self.models.get(tier) or self.models.get(ModelTier.FAST)
         if not model:
@@ -97,11 +97,14 @@ class LLMService:
 
         # Check Cache
         if use_cache:
-            cache_key = f"{tier.name}:{prompt}"
+            # Use string representation of prompt for cache key if it's not a string (e.g. List)
+            prompt_str = str(prompt) if not isinstance(prompt, str) else prompt
+            cache_key = f"{tier.name}:{prompt_str}"
             cached = self.cache.get(cache_key)
             if cached:
                 logger.info(f"LLM Cache Hit ({tier.name})")
                 return cached
+
 
         # Execute via Circuit Breaker
         try:

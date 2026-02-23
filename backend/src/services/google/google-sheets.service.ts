@@ -1,4 +1,4 @@
-import { google, sheets_v4 } from 'googleapis';
+import { google } from 'googleapis';
 import { injectable } from 'inversify';
 import { logger } from '../../utils/logger';
 import { getCache, setCache } from '../../cache/redis';
@@ -12,7 +12,7 @@ const CACHE_TTL = 300; // 5 minutes
  */
 @injectable()
 export class GoogleSheetsService {
-  private sheets: sheets_v4.Sheets | null = null;
+  private sheets: any | null = null;
   private readonly SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
   private initPromise: Promise<void> | null = null;
 
@@ -42,7 +42,7 @@ export class GoogleSheetsService {
     }
   }
 
-  private async getClient(): Promise<sheets_v4.Sheets> {
+  private async getClient(): Promise<any> {
     if (this.initPromise) await this.initPromise;
     if (!this.sheets) throw new Error('Google Sheets client not initialized');
     return this.sheets;
@@ -55,12 +55,9 @@ export class GoogleSheetsService {
   /**
    * Reads values from a spreadsheet range.
    */
-  async readRange(
-    spreadsheetId: string,
-    range: string,
-  ): Promise<any[][]> {
+  async readRange(spreadsheetId: string, range: string): Promise<any[][]> {
     const cacheKey = `sheets:${spreadsheetId}:${range}`;
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<string>(cacheKey);
     if (cached) return JSON.parse(cached);
 
     const client = await this.getClient();
@@ -112,7 +109,7 @@ export class GoogleSheetsService {
 
     return {
       title: response.data.properties?.title || '',
-      sheets: (response.data.sheets || []).map(s => ({
+      sheets: (response.data.sheets || []).map((s: any) => ({
         id: s.properties?.sheetId || 0,
         title: s.properties?.title || '',
         rowCount: s.properties?.gridProperties?.rowCount || 0,
@@ -194,7 +191,10 @@ export class GoogleSheetsService {
   /**
    * Creates a new spreadsheet.
    */
-  async createSpreadsheet(title: string, sheetNames: string[] = ['Sheet1']): Promise<{
+  async createSpreadsheet(
+    title: string,
+    sheetNames: string[] = ['Sheet1'],
+  ): Promise<{
     spreadsheetId: string;
     url: string;
   }> {

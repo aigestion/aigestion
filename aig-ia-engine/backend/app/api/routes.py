@@ -7,7 +7,7 @@ Defines all REST API endpoints for inference, training, and job management.
 import logging
 from typing import Optional
 
-from app.api import daniela_routes
+from app.api import daniela_routes, swarm_routes
 from app.config import get_settings
 from app.models.schemas import (
     BrowserRequest,
@@ -37,8 +37,9 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(dependencies=[Depends(verify_api_key)])
 
-# Include Daniela Routes
+# Include API Routes
 router.include_router(daniela_routes.router)
+router.include_router(swarm_routes.router)
 settings = get_settings()
 
 

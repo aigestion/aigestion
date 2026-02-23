@@ -41,7 +41,7 @@ export class ForgeGem extends BaseGem {
     `;
 
     const descriptivePrompt = await this.ask(forgePrompt);
-    const assetId = name.toLowerCase().replace(/\s+/g, '_');
+    const assetId = name.toLowerCase().replaceAll(/\s+/g, '_');
 
     // 2. Register the request in the filesystem via MetaverseService
     await this.metaverse.requestObjectForge(assetId, name, descriptivePrompt);

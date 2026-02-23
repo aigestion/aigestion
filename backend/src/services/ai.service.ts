@@ -18,6 +18,7 @@ import { ArbitrationService } from './arbitration.service';
 import { Persona } from '../models/Persona';
 import { PineconeService } from './pinecone.service';
 import { NexusSwarmOrchestrator } from './gems/swarm-orchestrator.service';
+import { SwarmInternalClient } from './swarm-internal.client';
 
 
 export interface AIStreamParams {
@@ -47,6 +48,7 @@ export class AIService {
     @inject(TYPES.UsageService) private readonly usageService: UsageService,
     @inject(TYPES.SemanticCacheService) private readonly semanticCache: SemanticCacheService,
     @inject(TYPES.ArbitrationService) private readonly arbitrationService: ArbitrationService,
+    @inject(TYPES.SwarmInternalClient) private readonly swarmClient: SwarmInternalClient,
   ) {
     // Breakers initialized with async lambdas that will call getModel() on execution
     this.generateContentBreaker = CircuitBreakerFactory.create(
@@ -516,15 +518,48 @@ export class AIService {
     try {
       logger.info(`[AIService] Triggering Swarm Mission: ${mission}`);
 
-      // Protocol: Dispatch to NexusSwarmOrchestrator for consensus
-      // In this specialized mode, we simulate the orchestration flow
-      const jobId = `swarm_${Date.now()}`;
+      const response = await this.swarmClient.post('/swarm/trigger', {
+        mission_description: mission,
+      });
 
-      // Simulate async dispatch
-      return { success: true, jobId };
+      return {
+        success: response.success,
+        jobId: response.job_id,
+        error: response.error,
+      };
     } catch (error: any) {
       logger.error('[AIService] Swarm Mission Trigger Failed', error);
       return { success: false, error: error.message };
     }
   }
+
+  /**
+
+   * Analyzes an image or screenshot using visual perception.
+   */
+  public async analyzeVision(params: {
+    imageUri?: string;
+    imageBase64?: string;
+    instruction?: string;
+  }): Promise<{ success: boolean; analysis: string; error?: string }> {
+    try {
+      logger.info(`[AIService] Analyzing Vision: ${params.instruction || 'Describe image'}`);
+
+      const response = await this.swarmClient.post('/swarm/vision', {
+        image_uri: params.imageUri,
+        image_base64: params.imageBase64,
+        instruction: params.instruction || 'Describe this image.',
+      });
+
+      return {
+        success: response.success,
+        analysis: response.analysis,
+        error: response.error,
+      };
+    } catch (error: any) {
+      logger.error('[AIService] Vision Analysis Failed', error);
+      return { success: false, analysis: '', error: error.message };
+    }
+  }
 }
+

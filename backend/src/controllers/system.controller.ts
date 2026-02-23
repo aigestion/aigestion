@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
 import type { Request, Response, NextFunction } from 'express';
-import os from 'os';
+import os from 'node:os';
 import { inject, injectable } from 'inversify';
 
 import { SystemMetricsService } from '../services/system-metrics.service';

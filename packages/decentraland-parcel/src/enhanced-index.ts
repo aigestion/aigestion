@@ -1,7 +1,7 @@
 import { engine, Material, MeshRenderer, Transform } from '@dcl/sdk/ecs';
 import { Color4, Vector3 } from '@dcl/sdk/math';
 
-import { setTimeout, setInterval, clearTimeout, clearInterval } from './utils/timers';
+import { setTimeout, setInterval, clearInterval } from './utils/timers';
 
 import { lightingSystem } from './advanced-lighting';
 import { npcManager } from './ai-npc-system';
@@ -240,7 +240,7 @@ function particleSystem(dt: number) {
       transform.position.y += dt * 1.5;
       if (transform.position.y > 10) transform.position.y = 2;
 
-      const radius = 1.0;
+      const radius = 1;
       transform.position.x += Math.cos(t * 2 + p.offset) * dt;
       transform.position.z += Math.sin(t * 2 + p.offset) * dt;
     }
@@ -256,7 +256,7 @@ function createParticle() {
   MeshRenderer.setBox(particle);
   Material.setPbrMaterial(particle, {
     albedoColor: Color4.create(0, 1, 0.8, 0.6),
-    roughness: 0.0,
+    roughness: 0,
     metallic: 0.5,
     emissiveColor: Color4.create(0, 1, 0.8, 1),
     emissiveIntensity: 3,

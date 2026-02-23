@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
-import * as https from 'https'; // Use * as https for better compatibility
+import * as https from 'node:https'; // Use * as https for better compatibility
 
 // --- Inlined Notion Utility (Optimized) ---
 const apiKey = process.env.NOTION_API_KEY;

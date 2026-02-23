@@ -1,4 +1,4 @@
-import { google, gmail_v1 } from 'googleapis';
+import { google } from 'googleapis';
 import { injectable } from 'inversify';
 import { logger } from '../../utils/logger';
 import { getCache, setCache } from '../../cache/redis';
@@ -12,7 +12,7 @@ const CACHE_TTL = 120; // 2 minutes
  */
 @injectable()
 export class GmailService {
-  private gmail: gmail_v1.Gmail | null = null;
+  private gmail: any | null = null;
   private readonly SCOPES = [
     'https://www.googleapis.com/auth/gmail.modify',
     'https://www.googleapis.com/auth/gmail.send',
@@ -45,7 +45,7 @@ export class GmailService {
     }
   }
 
-  private async getClient(): Promise<gmail_v1.Gmail> {
+  private async getClient(): Promise<any> {
     if (this.initPromise) await this.initPromise;
     if (!this.gmail) throw new Error('Gmail client not initialized');
     return this.gmail;
@@ -58,12 +58,14 @@ export class GmailService {
   /**
    * Lists messages from the inbox.
    */
-  async listMessages(options: {
-    query?: string;
-    maxResults?: number;
-    labelIds?: string[];
-    pageToken?: string;
-  } = {}): Promise<{
+  async listMessages(
+    options: {
+      query?: string;
+      maxResults?: number;
+      labelIds?: string[];
+      pageToken?: string;
+    } = {},
+  ): Promise<{
     messages: Array<{ id: string; threadId: string; snippet?: string }>;
     nextPageToken?: string;
     resultSizeEstimate: number;
@@ -79,7 +81,7 @@ export class GmailService {
 
     const messages = response.data.messages || [];
     return {
-      messages: messages.map(m => ({ id: m.id!, threadId: m.threadId! })),
+      messages: messages.map((m: any) => ({ id: m.id!, threadId: m.threadId! })),
       nextPageToken: response.data.nextPageToken || undefined,
       resultSizeEstimate: response.data.resultSizeEstimate || 0,
     };
@@ -108,7 +110,8 @@ export class GmailService {
 
     const msg = response.data;
     const headers = msg.payload?.headers || [];
-    const getHeader = (name: string) => headers.find(h => h.name?.toLowerCase() === name.toLowerCase())?.value || '';
+    const getHeader = (name: string) =>
+      headers.find((h: any) => h.name?.toLowerCase() === name.toLowerCase())?.value || '';
 
     return {
       id: msg.id!,
@@ -126,14 +129,19 @@ export class GmailService {
   /**
    * Searches messages with Gmail query syntax.
    */
-  async searchMessages(query: string, maxResults = 10): Promise<Array<{
-    id: string;
-    threadId: string;
-    from: string;
-    subject: string;
-    snippet: string;
-    date: string;
-  }>> {
+  async searchMessages(
+    query: string,
+    maxResults = 10,
+  ): Promise<
+    Array<{
+      id: string;
+      threadId: string;
+      from: string;
+      subject: string;
+      snippet: string;
+      date: string;
+    }>
+  > {
     const { messages } = await this.listMessages({ query, maxResults });
     const detailed = await Promise.all(
       messages.slice(0, maxResults).map(m => this.getMessage(m.id)),
@@ -180,9 +188,7 @@ export class GmailService {
       headers.push(`References: ${options.replyToMessageId}`);
     }
 
-    const raw = Buffer.from(
-      headers.join('\r\n') + '\r\n\r\n' + options.body,
-    ).toString('base64url');
+    const raw = Buffer.from(headers.join('\r\n') + '\r\n\r\n' + options.body).toString('base64url');
 
     const response = await client.users.messages.send({
       userId: 'me',
@@ -230,7 +236,7 @@ export class GmailService {
   async listLabels(): Promise<Array<{ id: string; name: string; type: string }>> {
     const client = await this.getClient();
     const response = await client.users.labels.list({ userId: 'me' });
-    return (response.data.labels || []).map(l => ({
+    return (response.data.labels || []).map((l: any) => ({
       id: l.id!,
       name: l.name!,
       type: l.type || 'user',
@@ -276,7 +282,7 @@ export class GmailService {
     important: number;
   }> {
     const cacheKey = 'gmail:inbox_summary';
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<string>(cacheKey);
     if (cached) return JSON.parse(cached);
 
     const client = await this.getClient();

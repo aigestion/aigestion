@@ -26,7 +26,7 @@
     "dev:backend": "cd backend && pnpm install && pnpm run dev",
     "dev:frontend": "cd frontend && pnpm install && pnpm run dev:all",
     "dev:ml": "cd ml-service && powershell ./start-service.ps1",
-    "dev:swarm": "cd aig-ia-engine/backend && uvicorn app.main:app --host 0.0.0.0 --port 8000",
+    "dev:swarm": "cd aig-ia-engine/backend && uvicorn app.main:app --host 0.0.0.0 --port 8005",
     "dev:docker": "docker-compose up -d --build",
     "dev": "concurrently \"pnpm run dev:backend\" \"pnpm run dev:frontend\" \"pnpm run dev:ml\" \"pnpm run dev:swarm\"",
     "test:full": "pnpm run test --workspaces && pnpm run test --prefix backend && pnpm run test --prefix frontend",

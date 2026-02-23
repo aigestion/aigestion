@@ -45,7 +45,12 @@ except ImportError as e:
         BROWSE_RESULT = "browse_result"
         ERROR = "error"
 
-from app.models.schemas import BrowserRequest, BrowserResponse
+from app.models.schemas import (
+    BrowserRequest,
+    BrowserResponse,
+    VisionRequest,
+    VisionResponse,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -149,4 +154,55 @@ class AgentService:
             timestamp=datetime.utcnow().isoformat()
         )
 
+    async def vision(self, request: VisionRequest) -> VisionResponse:
+        """
+        Invoke visual analysis via Navigator agent.
+        """
+        if not self._navigator:
+            self._init_agent()
+            if not self._navigator:
+                raise Exception("Navigator agent is not available")
+
+        msg = Message(
+            sender=AgentType.OVERLORD,
+            receiver=AgentType.NAVIGATOR,
+            msg_type="VISION_REQUEST",
+            content={
+                "image_uri": getattr(request, "image_uri", None),
+                "image_base64": getattr(request, "image_base64", None),
+                "instruction": request.instruction,
+            },
+        )
+
+        self.bus.captured_message = None
+        loop = asyncio.get_event_loop()
+        try:
+            await loop.run_in_executor(None, self._navigator.process_message, msg)
+        except Exception as e:
+            logger.error(f"Error during vision processing: {e}")
+            return {"success": False, "analysis": "", "error": str(e)}
+
+        response_msg = self.bus.captured_message
+        if not response_msg:
+            return {
+                "success": False,
+                "analysis": "",
+                "error": "No response from Navigator",
+            }
+
+        if response_msg.msg_type == MessageType.ERROR:
+            return {
+                "success": False,
+                "analysis": "",
+                "error": str(response_msg.content),
+            }
+
+        return {
+            "success": True,
+            "analysis": response_msg.content.get("analysis", ""),
+            "image_uri": response_msg.content.get("uri"),
+        }
+
+
 agent_service = AgentService()
+

@@ -33,6 +33,13 @@ class JobTypeEnum(str, Enum):
 
 
 # ============================================
+# CONSTANTS
+# ============================================
+
+STATUS_MESSAGE_DESCRIPTION = "Status message"
+
+
+# ============================================
 # INFERENCE SCHEMAS
 # ============================================
 
@@ -86,7 +93,7 @@ class FileInferenceResponse(BaseModel):
     model_version: Optional[str] = Field(None, description="Model version used")
     # For async processing
     job_id: Optional[str] = Field(None, description="Job ID for async processing")
-    message: Optional[str] = Field(None, description="Status message")
+    message: Optional[str] = Field(None, description=STATUS_MESSAGE_DESCRIPTION)
     status_url: Optional[str] = Field(None, description="URL to check job status")
     error: Optional[str] = Field(None, description="Error message if failed")
 
@@ -247,3 +254,44 @@ class BrowserResponse(BaseModel):
         None, description="Structured data extracted from the page"
     )
     timestamp: str = Field(..., description="Processing timestamp")
+# ============================================
+# SWARM SCHEMAS
+# ============================================
+
+
+class SwarmTriggerRequest(BaseModel):
+    """Request to trigger a Swarm mission."""
+
+    mission_description: str = Field(
+        ..., description="Description of the mission for the Swarm"
+    )
+    metadata: Optional[Dict[str, Any]] = Field(
+        None, description="Optional metadata for the mission"
+    )
+
+
+class SwarmTriggerResponse(BaseModel):
+    """Response from triggering a Swarm mission."""
+
+    success: bool = Field(..., description="Whether mission was dispatched")
+    message: str = Field(..., description="Status message")
+    job_id: Optional[str] = Field(None, description="Swarm internal job ID")
+
+
+class VisionRequest(BaseModel):
+    """Request for visual analysis."""
+
+    image_uri: Optional[str] = Field(None, description="URI of the image to analyze")
+    image_base64: Optional[str] = Field(None, description="Base64 encoded image data")
+    instruction: str = Field(
+        "Describe this image.", description="Instruction for analysis"
+    )
+
+
+class VisionResponse(BaseModel):
+    """Response from visual analysis."""
+
+    success: bool
+    analysis: str
+    image_uri: Optional[str] = None
+    error: Optional[str] = None

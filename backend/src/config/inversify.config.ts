@@ -195,6 +195,14 @@ import { AstraeaController } from '../controllers/AstraeaController';
 import { AstraeaService } from '../services/AstraeaService';
 import { VapiService } from '../services/VapiService';
 import { SovereignNotionSync } from '../services/SovereignNotionSync';
+import { GoogleCalendarService } from '../services/google/google-calendar.service';
+import { GmailService as GmailGodService } from '../services/google/gmail.service';
+import { GoogleSheetsService } from '../services/google/google-sheets.service';
+import { ProductivityController } from '../controllers/productivity.controller';
+import { CognitiveController } from '../controllers/cognitive.controller';
+import { GoogleVisionService } from '../services/google/google-vision.service';
+import { GoogleSpeechService } from '../services/google/google-speech.service';
+import { GoogleContactsService } from '../services/google/google-contacts.service';
 import { config } from './config';
 
 import { TreasuryController } from '../controllers/treasury.controller';
@@ -511,5 +519,19 @@ bind<DanielaCallAgent>(TYPES.DanielaCallAgent, DanielaCallAgent);
 bind<NexusPushService>(TYPES.NexusPushService, NexusPushService);
 bind<ForgeGem>(TYPES.ForgeGem, ForgeGem);
 bind<ForgeController>(TYPES.ForgeController, ForgeController);
+
+// ========================================
+// GOOGLE PRODUCTIVITY SUITE
+// ========================================
+bind<GoogleCalendarService>(TYPES.GoogleCalendarService, GoogleCalendarService);
+bind<GmailGodService>(TYPES.GmailService, GmailGodService);
+bind<GoogleSheetsService>(TYPES.GoogleSheetsService, GoogleSheetsService);
+bind<ProductivityController>(TYPES.ProductivityController, ProductivityController);
+bind<CognitiveController>(TYPES.CognitiveController, CognitiveController);
+
+// GOOGLE COGNITIVE & PEOPLE
+bind<GoogleVisionService>(TYPES.GoogleVisionService, GoogleVisionService);
+bind<GoogleSpeechService>(TYPES.GoogleSpeechService, GoogleSpeechService);
+bind<GoogleContactsService>(TYPES.GoogleContactsService, GoogleContactsService);
 
 export { container, container as inversifyConfig, TYPES };

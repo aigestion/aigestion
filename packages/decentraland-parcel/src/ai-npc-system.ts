@@ -8,15 +8,17 @@ import {
   TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
-import { setTimeout, setInterval } from './utils/timers';
+import { setTimeout } from './utils/timers';
 import { Color4, Vector3 } from '@dcl/sdk/math';
 import { soundSystem } from './enhanced-sound';
+
+type EmotionType = 'happy' | 'neutral' | 'concerned' | 'excited';
 
 interface NPCDialogue {
   id: string;
   text: string;
   responses: string[];
-  emotion: 'happy' | 'neutral' | 'concerned' | 'excited';
+  emotion: EmotionType;
   context?: string;
 }
 
@@ -35,7 +37,7 @@ export class NPCAssistant {
   private memory: Map<string, NPCMemory> = new Map();
   private currentDialogue: string = 'greeting';
   private isProcessing: boolean = false;
-  private emotionalState: 'happy' | 'neutral' | 'concerned' | 'excited' = 'neutral';
+  private emotionalState: EmotionType = 'neutral';
 
   constructor(name: string, role: string, position: Vector3) {
     this.name = name;
@@ -281,7 +283,7 @@ export class NPCAssistant {
     }, 1000);
   }
 
-  private updateEmotionalState(emotion: 'happy' | 'neutral' | 'concerned' | 'excited') {
+  private updateEmotionalState(emotion: EmotionType) {
     this.emotionalState = emotion;
 
     // Update NPC appearance based on emotion

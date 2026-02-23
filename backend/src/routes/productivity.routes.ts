@@ -46,4 +46,12 @@ router.post('/sheets/create', requireAuth, (req, res, next) => getCtrl().sheetsC
 router.get('/sheets/info/:id', requireAuth, (req, res, next) => getCtrl().sheetsInfo(req, res, next));
 router.post('/sheets/report', requireAuth, (req, res, next) => getCtrl().sheetsReport(req, res, next));
 
+// ─────────────────────────────────────────────────────────────
+// CONTACTS (PEOPLE API)
+// ─────────────────────────────────────────────────────────────
+router.get('/contacts', requireAuth, (req, res, next) => getCtrl().contactsList(req, res, next));
+router.get('/contacts/search', requireAuth, (req, res, next) => getCtrl().contactsSearch(req, res, next));
+router.post('/contacts', requireAuth, (req, res, next) => getCtrl().contactsCreate(req, res, next));
+router.delete('/contacts', requireAuth, (req, res, next) => getCtrl().contactsDelete(req, res, next));
+
 export default router;

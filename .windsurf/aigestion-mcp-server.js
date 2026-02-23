@@ -509,6 +509,53 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ['action'],
         },
       },
+      {
+        name: 'google_vision',
+        description: 'Google Vision AI — Analyze images (labels, OCR, landmarks, safe search)',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            action: { type: 'string', enum: ['analyze', 'ocr'], description: 'Vision action' },
+            image: { type: 'string', description: 'Base64 image content or path' },
+          },
+          required: ['action', 'image'],
+        },
+      },
+      {
+        name: 'google_speech',
+        description: 'Google Speech — TTS and STT capabilities',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            action: { type: 'string', enum: ['tts', 'stt'], description: 'Speech action' },
+            text: { type: 'string', description: 'Text for TTS' },
+            audio: { type: 'string', description: 'Base64 audio for STT' },
+            languageCode: { type: 'string', description: 'Language code' },
+          },
+          required: ['action'],
+        },
+      },
+      {
+        name: 'google_contacts',
+        description: 'Google Contacts — People API management',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            action: {
+              type: 'string',
+              enum: ['list', 'search', 'create', 'delete'],
+              description: 'Contact action',
+            },
+            q: { type: 'string', description: 'Search query' },
+            givenName: { type: 'string', description: 'First name' },
+            familyName: { type: 'string', description: 'Last name' },
+            email: { type: 'string', description: 'Email address' },
+            phone: { type: 'string', description: 'Phone number' },
+            resourceName: { type: 'string', description: 'Resource name for deletion' },
+          },
+          required: ['action'],
+        },
+      },
     ],
   };
 });
@@ -1044,6 +1091,42 @@ server.setRequestHandler(CallToolRequestSchema, async request => {
             break;
           default:
             throw new McpError(ErrorCode.InvalidParams, `Unknown sheets action: ${action}`);
+        }
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
+      }
+
+      case 'google_vision': {
+        const { action, image } = args;
+        const endpoint = action === 'analyze' ? '/api/v1/cognitive/vision/analyze' : '/api/v1/cognitive/vision/ocr';
+        const response = await aigestion.makeApiRequest(endpoint, 'POST', { image });
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
+      }
+
+      case 'google_speech': {
+        const { action, text, audio, languageCode } = args;
+        const endpoint = action === 'tts' ? '/api/v1/cognitive/speech/tts' : '/api/v1/cognitive/speech/stt';
+        const response = await aigestion.makeApiRequest(endpoint, 'POST', { text, audio, languageCode });
+        return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
+      }
+
+      case 'google_contacts': {
+        const { action, q, givenName, familyName, email, phone, resourceName, pageSize } = args;
+        let response;
+        switch (action) {
+          case 'list':
+            response = await aigestion.makeApiRequest(`/api/v1/productivity/contacts?pageSize=${pageSize || 100}`, 'GET');
+            break;
+          case 'search':
+            response = await aigestion.makeApiRequest(`/api/v1/productivity/contacts/search?q=${q}`, 'GET');
+            break;
+          case 'create':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/contacts', 'POST', { givenName, familyName, email, phone });
+            break;
+          case 'delete':
+            response = await aigestion.makeApiRequest('/api/v1/productivity/contacts', 'DELETE', { resourceName });
+            break;
+          default:
+            throw new McpError(ErrorCode.InvalidParams, `Unknown contacts action: ${action}`);
         }
         return { content: [{ type: 'text', text: JSON.stringify(response, null, 2) }] };
       }

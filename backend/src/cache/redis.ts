@@ -233,6 +233,7 @@ export const setCache = async (key: string, value: any, ttlSeconds = 3600): Prom
       return true;
     } catch (error) {
       logger.warn({ error, key }, 'Redis set error');
+      return false;
     }
   }
 

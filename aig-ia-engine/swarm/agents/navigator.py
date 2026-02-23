@@ -1,6 +1,4 @@
 import logging
-from typing import Any, Dict, Optional, List
-
 from core import AgentType, BaseAgent, Message, MessageType
 from services.browser import BrowserService
 from services.llm import LLMService, ModelTier
@@ -118,7 +116,7 @@ class Navigator(BaseAgent):
         try:
             # Multi-modal prompt
             content = [instruction, {"image_uri": image_uri}]
-            result = self.llm.generate_text(str(content), tier=ModelTier.REASONING)
+            result = self.llm.generate_text(content, tier=ModelTier.REASONING)
 
             self.send_message(
                 message.sender, {"analysis": result, "uri": image_uri}, "VISION_RESULT"

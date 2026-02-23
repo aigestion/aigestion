@@ -1,4 +1,4 @@
-import { google, calendar_v3 } from 'googleapis';
+import { google } from 'googleapis';
 import { injectable } from 'inversify';
 import { logger } from '../../utils/logger';
 import { getCache, setCache } from '../../cache/redis';
@@ -12,7 +12,7 @@ const CACHE_TTL = 300; // 5 minutes
  */
 @injectable()
 export class GoogleCalendarService {
-  private calendar: calendar_v3.Calendar | null = null;
+  private calendar: any | null = null;
   private readonly SCOPES = ['https://www.googleapis.com/auth/calendar'];
   private initPromise: Promise<void> | null = null;
 
@@ -31,7 +31,10 @@ export class GoogleCalendarService {
       }
 
       if (process.env.GOOGLE_CALENDAR_API_KEY) {
-        this.calendar = google.calendar({ version: 'v3', auth: process.env.GOOGLE_CALENDAR_API_KEY });
+        this.calendar = google.calendar({
+          version: 'v3',
+          auth: process.env.GOOGLE_CALENDAR_API_KEY,
+        });
         logger.info('[GoogleCalendar] ⚠️ Initialized via API Key (read-only)');
         return;
       }
@@ -42,7 +45,7 @@ export class GoogleCalendarService {
     }
   }
 
-  private async getClient(): Promise<calendar_v3.Calendar> {
+  private async getClient(): Promise<any> {
     if (this.initPromise) await this.initPromise;
     if (!this.calendar) throw new Error('Google Calendar client not initialized');
     return this.calendar;
@@ -55,15 +58,17 @@ export class GoogleCalendarService {
   /**
    * Lists upcoming events from the primary calendar.
    */
-  async listEvents(options: {
-    calendarId?: string;
-    maxResults?: number;
-    timeMin?: string;
-    timeMax?: string;
-    query?: string;
-  } = {}): Promise<calendar_v3.Schema$Event[]> {
+  async listEvents(
+    options: {
+      calendarId?: string;
+      maxResults?: number;
+      timeMin?: string;
+      timeMax?: string;
+      query?: string;
+    } = {},
+  ): Promise<any[]> {
     const cacheKey = `calendar:events:${JSON.stringify(options)}`;
-    const cached = await getCache(cacheKey);
+    const cached = await getCache<string>(cacheKey);
     if (cached) return JSON.parse(cached);
 
     const cal = await this.getClient();
@@ -85,7 +90,7 @@ export class GoogleCalendarService {
   /**
    * Gets a single event by ID.
    */
-  async getEvent(eventId: string, calendarId = 'primary'): Promise<calendar_v3.Schema$Event> {
+  async getEvent(eventId: string, calendarId = 'primary'): Promise<any> {
     const cal = await this.getClient();
     const response = await cal.events.get({ calendarId, eventId });
     return response.data;
@@ -94,16 +99,19 @@ export class GoogleCalendarService {
   /**
    * Creates a new calendar event.
    */
-  async createEvent(event: {
-    summary: string;
-    description?: string;
-    location?: string;
-    start: { dateTime: string; timeZone?: string };
-    end: { dateTime: string; timeZone?: string };
-    attendees?: Array<{ email: string }>;
-    reminders?: { useDefault: boolean; overrides?: Array<{ method: string; minutes: number }> };
-    colorId?: string;
-  }, calendarId = 'primary'): Promise<calendar_v3.Schema$Event> {
+  async createEvent(
+    event: {
+      summary: string;
+      description?: string;
+      location?: string;
+      start: { dateTime: string; timeZone?: string };
+      end: { dateTime: string; timeZone?: string };
+      attendees?: Array<{ email: string }>;
+      reminders?: { useDefault: boolean; overrides?: Array<{ method: string; minutes: number }> };
+      colorId?: string;
+    },
+    calendarId = 'primary',
+  ): Promise<any> {
     const cal = await this.getClient();
     const response = await cal.events.insert({
       calendarId,
@@ -122,9 +130,9 @@ export class GoogleCalendarService {
    */
   async updateEvent(
     eventId: string,
-    updates: Partial<calendar_v3.Schema$Event>,
+    updates: Partial<any>,
     calendarId = 'primary',
-  ): Promise<calendar_v3.Schema$Event> {
+  ): Promise<any> {
     const cal = await this.getClient();
     const response = await cal.events.patch({
       calendarId,
@@ -155,7 +163,10 @@ export class GoogleCalendarService {
     timeMin: string,
     timeMax: string,
     calendarIds: string[] = ['primary'],
-  ): Promise<{ busy: Array<{ start: string; end: string }>; free: Array<{ start: string; end: string }> }> {
+  ): Promise<{
+    busy: Array<{ start: string; end: string }>;
+    free: Array<{ start: string; end: string }>;
+  }> {
     const cal = await this.getClient();
     const response = await cal.freebusy.query({
       requestBody: {
@@ -179,7 +190,7 @@ export class GoogleCalendarService {
    * Quick-create an event from a text string (natural language).
    * e.g., "Meeting with Juan tomorrow 3pm to 4pm"
    */
-  async quickCreate(text: string, calendarId = 'primary'): Promise<calendar_v3.Schema$Event> {
+  async quickCreate(text: string, calendarId = 'primary'): Promise<any> {
     const cal = await this.getClient();
     const response = await cal.events.quickAdd({
       calendarId,
@@ -192,7 +203,7 @@ export class GoogleCalendarService {
   /**
    * Lists all available calendars.
    */
-  async listCalendars(): Promise<calendar_v3.Schema$CalendarListEntry[]> {
+  async listCalendars(): Promise<any[]> {
     const cal = await this.getClient();
     const response = await cal.calendarList.list();
     return response.data.items || [];
@@ -203,7 +214,7 @@ export class GoogleCalendarService {
    */
   async getTodayAgenda(calendarId = 'primary'): Promise<{
     date: string;
-    events: calendar_v3.Schema$Event[];
+    events: any[];
     count: number;
   }> {
     const now = new Date();
@@ -237,7 +248,9 @@ export class GoogleCalendarService {
     let current = new Date(start);
     const endDate = new Date(end);
 
-    const sorted = [...busy].sort((a, b) => new Date(a.start!).getTime() - new Date(b.start!).getTime());
+    const sorted = [...busy].sort(
+      (a, b) => new Date(a.start!).getTime() - new Date(b.start!).getTime(),
+    );
 
     for (const slot of sorted) {
       const busyStart = new Date(slot.start!);
@@ -254,3 +267,4 @@ export class GoogleCalendarService {
     return free;
   }
 }
+

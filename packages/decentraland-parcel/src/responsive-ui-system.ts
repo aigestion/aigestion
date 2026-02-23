@@ -8,7 +8,7 @@ import {
   TextShape,
   Transform,
 } from '@dcl/sdk/ecs';
-import { setTimeout, setInterval } from './utils/timers';
+import { setTimeout } from './utils/timers';
 import { Color4, Vector3 } from '@dcl/sdk/math';
 import { soundSystem } from './enhanced-sound';
 
@@ -292,7 +292,7 @@ export class ResponsiveUISystem {
       id: Date.now(),
       position: Vector3.create(event.hit.hitPoint.x, event.hit.hitPoint.y, event.hit.hitPoint.z),
       timestamp: Date.now(),
-      pressure: 1.0,
+      pressure: 1,
     };
 
     this.touchPoints.set(touchPoint.id, touchPoint);
@@ -445,7 +445,7 @@ export class ResponsiveUISystem {
   // Animate ripple effect
   private animateRipple(entity: any) {
     let scale = 0.1;
-    let opacity = 1.0;
+    let opacity = 1;
 
     const animate = () => {
       scale += 0.02;
