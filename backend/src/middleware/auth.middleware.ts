@@ -10,6 +10,7 @@ import { DevicePostureService } from '../services/device-posture.service';
 
 // Extender la interfaz Request para incluir la propiedad user
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user?: {
@@ -38,7 +39,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
       return next(new Error('Unauthorized Access Pattern'));
     }
 
-    (req as any).user = {
+    req.user = {
       id: 'god-mode-sovereign',
       email: 'god@nexus.sovereign',
       role: 'god',
@@ -48,7 +49,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
     return next();
   }
 
-  if ((req as any).user) {
+  if (req.user) {
     return next();
   }
 
@@ -60,12 +61,12 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
   }
   // Obtener el token de las cookies (opcional)
   else if (req.cookies?.token) {
-    token = req.cookies.token;
+    token = req.cookies.token as string;
   }
 
   // Verificar si existe el token
   if (!token) {
-    (res as any).status(401).json({
+    res.status(401).json({
       success: false,
       message: 'No autorizado. Por favor inicie sesión para continuar.',
     });
@@ -99,7 +100,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         logger.warn(
           `UA Mismatch: ${decoded.id}. Token: ${decoded.fingerprint.userAgent} vs Req: ${currentUserAgent}`,
         );
-        (res as any).status(401).json({ success: false, message: 'Sesión inválida.' });
+        res.status(401).json({ success: false, message: 'Sesión inválida.' });
         return;
       }
 
@@ -119,7 +120,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
             userId: decoded.id,
             reason: postureCheck.reason,
           });
-          (res as any).status(403).json({
+          res.status(403).json({
             success: false,
             message: `Acceso denegado: Dispositivo no cumple con las políticas de seguridad (${postureCheck.reason}).`,
           });
@@ -132,7 +133,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
     const user = await User.findById(decoded.id).select('+tokenVersion +lastPasswordChange');
 
     if (!user) {
-      (res as any).status(401).json({ success: false, message: 'El usuario ya no existe.' });
+      res.status(401).json({ success: false, message: 'El usuario ya no existe.' });
       return;
     }
 
@@ -140,7 +141,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
     // Si el usuario incrementó su versión (logout global), tokens viejos mueren.
     if (user.tokenVersion && decoded.tokenVersion !== undefined) {
       if (decoded.tokenVersion !== user.tokenVersion) {
-        (res as any)
+        res
           .status(401)
           .json({ success: false, message: 'Token revocado. Inicie sesión nuevamente.' });
         return;
@@ -152,7 +153,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
     if (user.lastPasswordChange) {
       const changedTimestamp = Math.floor(user.lastPasswordChange.getTime() / 1000);
       if (decoded.iat < changedTimestamp) {
-        (res as any).status(401).json({
+        res.status(401).json({
           success: false,
           message: 'Contraseña cambiada recientemente. Inicie sesión nuevamente.',
         });
@@ -161,7 +162,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
     }
 
     // Añadir usuario al objeto request
-    (req as any).user = {
+    req.user = {
       id: user._id.toString(),
       email: user.email,
       role: user.role,
@@ -171,7 +172,8 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
     setSentryUser({ id: user._id.toString(), email: user.email, role: user.role });
 
     next();
-  } catch (error: any) {
+  } catch (err: unknown) {
+    const error = err instanceof Error ? err : new Error(String(err));
     logger.error(
       {
         error: error.message,
@@ -179,9 +181,9 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         stack: error.stack,
         token: token?.substring(0, 10) + '...', // Log only start of token for security
       },
-      'Auth Middleware Error'
+      'Auth Middleware Error',
     );
-    (res as any).status(401).json({
+    res.status(401).json({
       success: false,
       message: 'Sesión inválida o expirada.',
     });
@@ -192,15 +194,13 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
 // Middleware para verificar roles de usuario
 export const authorize = (...roles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!(req as any).user || !roles.includes((req as any).user.role)) {
-      (res as any).status(403).json({
+    if (!req.user || !roles.includes(req.user.role)) {
+      res.status(403).json({
         success: false,
-        message: `El rol ${(req as any).user?.role} no tiene permiso para realizar esta acción.`,
+        message: `El rol ${req.user?.role} no tiene permiso para realizar esta acción.`,
       });
       return;
     }
     next();
   };
 };
-export const requireAuth = protect;
-export const authGuard = protect;

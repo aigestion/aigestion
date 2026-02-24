@@ -9,10 +9,10 @@ import { getCache, setCache, getCacheStats } from '../cache/redis';
 
 /** TTL tier presets (seconds) */
 export const TTL = {
-  SHORT: 60,        // 1 min  — volatile data
-  MEDIUM: 300,      // 5 min  — API responses
-  LONG: 3600,       // 1 hour — stable data
-  EXTENDED: 86400,  // 24 hrs — configuration / mostly static
+  SHORT: 60, // 1 min  — volatile data
+  MEDIUM: 300, // 5 min  — API responses
+  LONG: 3600, // 1 hour — stable data
+  EXTENDED: 86400, // 24 hrs — configuration / mostly static
 } as const;
 
 /**
@@ -44,10 +44,10 @@ export const redisCache = (ttlSeconds: number = TTL.MEDIUM, namespace?: string) 
 
       // Override res.json to capture the response and store it in cache
       const originalJson = res.json.bind(res);
-      res.json = (body: any) => {
+      res.json = (body: unknown): Response => {
         // Only cache successful responses
         if (res.statusCode >= 200 && res.statusCode < 300) {
-          setCache(key, body, ttlSeconds).catch(err =>
+          setCache(key, body as Record<string, unknown>, ttlSeconds).catch((err: unknown) =>
             logger.warn({ err, key }, 'Failed to set Redis cache'),
           );
         }

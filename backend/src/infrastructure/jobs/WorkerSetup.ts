@@ -23,6 +23,7 @@ export class WorkerSetup {
     // Example worker for EMAIL_SEND
     const emailWorker = new Worker(
       JobName.EMAIL_SEND,
+      // eslint-disable-next-line @typescript-eslint/require-await
       async (job: Job) => {
         logger.info(`Processing email job: ${job.id}`);
         // Logic to send email would go here
@@ -30,7 +31,7 @@ export class WorkerSetup {
         // await emailService.send(to, subject, body);
         logger.info(`Email job completed: ${job.id}`);
       },
-      { connection: redisOptions }
+      { connection: redisOptions },
     );
 
     emailWorker.on('failed', (job: Job | undefined, err: Error) => {
@@ -47,7 +48,7 @@ export class WorkerSetup {
         const { SwarmProcessor } = await import('./SwarmProcessor');
         await SwarmProcessor.process(job);
       },
-      { connection: redisOptions }
+      { connection: redisOptions },
     );
 
     swarmWorker.on('failed', (job: Job | undefined, err: Error) => {
@@ -66,7 +67,7 @@ export class WorkerSetup {
         await scannerService.cleanupQuarantine();
         logger.info(`Malware quarantine cleanup job completed: ${job.id}`);
       },
-      { connection: redisOptions }
+      { connection: redisOptions },
     );
 
     malwareWorker.on('failed', (job: Job | undefined, err: Error) => {
@@ -83,7 +84,7 @@ export class WorkerSetup {
         const { DocumentProcessor } = await import('./DocumentProcessor');
         await DocumentProcessor.process(job);
       },
-      { connection: redisOptions }
+      { connection: redisOptions },
     );
 
     dataWorker.on('failed', (job: Job | undefined, err: Error) => {

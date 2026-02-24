@@ -66,7 +66,11 @@ Sentry.init({
     if (event.request?.data) {
       const sensitiveKeys = ['password', 'token', 'secret', 'apiKey', 'creditCard'];
       for (const key of sensitiveKeys) {
-        if (typeof event.request.data === 'object' && event.request.data !== null && key in event.request.data) {
+        if (
+          typeof event.request.data === 'object' &&
+          event.request.data !== null &&
+          key in event.request.data
+        ) {
           (event.request.data as Record<string, unknown>)[key] = '[REDACTED]';
         }
       }
@@ -85,7 +89,10 @@ Sentry.init({
   // ── Breadcrumb filtering ─────────────────────────────────────
   beforeBreadcrumb(breadcrumb) {
     // Filter out noisy health-check breadcrumbs
-    if (breadcrumb.category === 'http' && breadcrumb.data?.url?.includes('/health')) {
+    if (
+      breadcrumb.category === 'http' &&
+      (breadcrumb.data?.url as string | undefined)?.includes('/health')
+    ) {
       return null;
     }
     // Filter out noisy Redis PING/PONG
@@ -131,10 +138,7 @@ export function sentryCheckIn(monitorSlug: string, callback: () => Promise<void>
  * Wrap a BullMQ worker processor with Sentry tracing.
  * Usage: new Worker('queueName', sentryWorker('my-queue', processor))
  */
-export function sentryWorker<T>(
-  queueName: string,
-  processor: (job: T) => Promise<void>,
-) {
+export function sentryWorker<T>(queueName: string, processor: (job: T) => Promise<void>) {
   return async (job: T) => {
     return Sentry.startSpan(
       {

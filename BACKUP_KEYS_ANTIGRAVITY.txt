@@ -1,31 +1,34 @@
 # 🔑 BACKUP CRÍTICO - ANTIGRAVITY API KEYS
-# Fecha: 16 de Febrero de 2026
+# Última Actualización: 24 de Febrero de 2026
 # Project: aigestion.net
 # Guardar en lugar seguro - NO PERDER
 
-## 🚨 ANTES DE ACTUALIZAR (KEY ANTIGUA)
-ANTYGRAVITY_MODEL_API_KEY=al-6TF8l1m1TSSUrUKRY6PnktTl5FxlroC7zdk0VcWoeNT
+## 🔑 KEY ACTUAL (Root .env — Línea 118)
+ANTIGRAVITY_MODEL_API_KEY=al-HaQC6tiUz5u8OfXy8arGo3gvwRg7AlkmtDHeMpz0vud
 
-## ✅ NUEVA KEY ACTUALIZADA (CORRECTA)
-ANTIGRAVITY_MODEL_API_KEY=al-G7_fXYvaFQrT_FhuamkLKC01Ts8ORKHfjVoUA-BoUkJ
+## 📜 HISTORIAL DE KEYS (por referencia)
+# Feb 16, 2026 (v2): al-G7_fXYvaFQrT_FhuamkLKC01Ts8ORKHfjVoUA-BoUkJ
+# Feb 16, 2026 (v1): al-6TF8l1m1TSSUrUKRY6PnktTl5FxlroC7zdk0VcWoeNT
 
 ## 📋 INFORMACIÓN DEL PROYECTO
 - **Name:** antigravity
 - **Project:** aigestion.net
-- **Model API Key:** al-G7_fXYvaFQrT_FhuamkLKC01Ts8ORKHfjVoUA-BoUkJ
-- **Fecha de actualización:** 16/02/2026
-- **Actualizado por:** Sistema AIGestion
+- **Model API Key:** al-HaQC6tiUz5u8OfXy8arGo3gvwRg7AlkmtDHeMpz0vud
+- **Fecha de actualización:** 24/02/2026
+- **Actualizado por:** Sistema AIGestion — Env Audit God Mode
 
 ## 🔒 SEGURIDAD
 - Guardar en gestor de contraseñas (Bitwarden/1Password)
 - No compartir en repositorios públicos
 - Rotar cada 90 días
 - Backup en lugar seguro offline
+- ⚠️ Este archivo está en .gitignore — NUNCA se sube a Git
 
 ## ✅ ESTADO DE CONFIGURACIÓN
-- [x] Key antigua respaldada
-- [x] Nueva key actualizada en .env
-- [x] Documentación creada
-- [x] Backup seguro generado
+- [x] Key anterior (v1 + v2) respaldada
+- [x] Key actual verificada contra root .env ✅
+- [x] Vault actualizado (infra/vault/.env.sovereign.vault) ✅
+- [x] Knowledge Base backup creado ✅
+- [x] .gitignore protege este archivo ✅
 
 **IMPORTANTE:** Esta key es crítica para el funcionamiento de Antigravity MCP server.

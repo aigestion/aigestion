@@ -17,19 +17,21 @@ export class BackupSchedulerService {
 
   constructor(
     @inject(TYPES.BackupService) private backupService: BackupService,
-    @inject(TYPES.TelegramService) private telegramService: TelegramService
+    @inject(TYPES.TelegramService) private telegramService: TelegramService,
   ) {}
 
   public start() {
     logger.info(
-      'BackupSchedulerService started. First backup will run immediately (async) and then daily.'
+      'BackupSchedulerService started. First backup will run immediately (async) and then daily.',
     );
 
     // Run initial backup after a short delay to let server startup finish
-    setTimeout(() => this.runBackupJob(), 10000);
+    setTimeout(() => {
+      void this.runBackupJob();
+    }, 10000);
 
     this.timer = setInterval(() => {
-      this.runBackupJob();
+      void this.runBackupJob();
     }, this.INTERVAL_MS);
   }
 
@@ -54,7 +56,8 @@ export class BackupSchedulerService {
       logger.info(msg);
 
       Sentry.captureCheckIn({ checkInId, monitorSlug: 'daily-backup', status: 'ok' });
-    } catch (error: any) {
+    } catch (err: unknown) {
+      const error = err instanceof Error ? err : new Error(String(err));
       const cloudMsg = `🚨 Cloud Backup FAILED: ${error.message}. Initiating Local Fallback...`;
       logger.error(cloudMsg, error);
       Sentry.captureException(error, { tags: { service: 'backup-scheduler' } });
@@ -70,7 +73,8 @@ export class BackupSchedulerService {
 
         // Mark as OK since fallback succeeded
         Sentry.captureCheckIn({ checkInId, monitorSlug: 'daily-backup', status: 'ok' });
-      } catch (localError: any) {
+      } catch (localErr: unknown) {
+        const localError = localErr instanceof Error ? localErr : new Error(String(localErr));
         const criticalMsg = `💀 CRITICAL: All Backup Systems FAILED. Local Error: ${localError.message}`;
         logger.error(criticalMsg);
         Sentry.captureException(localError, {
