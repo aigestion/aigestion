@@ -38,8 +38,10 @@
   },
   "dependencies": {
     "@aigestion/design-system-v2": "file:../../../packages/design-system-v2",
+    "@aigestion/sentry-config": "workspace:*",
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
+    "@sentry/react": "^10.39.0",
     "@simplewebauthn/browser": "^13.2.2",
     "@supabase/supabase-js": "^2.93.1",
     "@tanstack/react-query": "^5.90.20",

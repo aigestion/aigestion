@@ -1,0 +1,13 @@
+{
+  "name": "@aigestion/sentry-config",
+  "version": "1.0.0",
+  "description": "Shared Sentry configuration for all AIGestion frontend apps",
+  "type": "module",
+  "main": "index.ts",
+  "dependencies": {
+    "@sentry/react": "^10.39.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  }
+}

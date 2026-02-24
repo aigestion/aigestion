@@ -1,5 +1,9 @@
+// 🌌 Sentry MUST be first import
+import './lib/sentry';
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { SentryErrorBoundary } from '@aigestion/sentry-config';
 import MainApp from './MainApp';
 import { AppProvider } from './contexts/AppContext';
 import './index.css';
@@ -8,9 +12,11 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
     <React.StrictMode>
-      <AppProvider>
-        <MainApp />
-      </AppProvider>
+      <SentryErrorBoundary>
+        <AppProvider>
+          <MainApp />
+        </AppProvider>
+      </SentryErrorBoundary>
     </React.StrictMode>
   );
 }

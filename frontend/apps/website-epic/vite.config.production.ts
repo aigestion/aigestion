@@ -16,7 +16,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    sourcemap: false,
+    sourcemap: 'hidden', // 🌌 Sentry needs source maps, but 'hidden' prevents serving them to users
     minify: 'terser',
     target: 'es2020',
     cssCodeSplit: true,
