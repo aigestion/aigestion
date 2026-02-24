@@ -376,22 +376,15 @@ const envSchema = baseEnvSchema.extend({
   // WhatsApp Configuration
   WHATSAPP_PHONE_NUMBER: z.string().default('34618779308'),
   WHATSAPP_API_URL: z.string().url().default('https://graph.facebook.com/v17.0'),
-  WHATSAPP_TOKEN: z.string().optional(),
-  WHATSAPP_BUSINESS_PHONE_ID: z.string().optional(),
-  WHATSAPP_VERIFY_TOKEN: z.string().default('nexus_v1_secret_verify_token'),
+  // WHATSAPP_TOKEN, WHATSAPP_VERIFY_TOKEN, WHATSAPP_BUSINESS_PHONE_ID → defined in META PLATFORM section below
 
-  // Social Media - Instagram
-  INSTAGRAM_BUSINESS_ID: z.string().optional(),
-  INSTAGRAM_BUSINESS_ACCOUNT_ID: z.string().optional(),
-  INSTAGRAM_ACCESS_TOKEN: z.string().optional(),
+  // Social Media - Instagram (defined in META PLATFORM section below)
+
   // Social Media - X (Twitter)
   X_API_KEY: z.string().optional(),
   X_API_SECRET: z.string().optional(),
   X_ACCESS_TOKEN: z.string().optional(),
   X_ACCESS_SECRET: z.string().optional(),
-  META_ACCESS_TOKEN: z.string().optional(),
-  FACEBOOK_PAGE_ID: z.string().optional(),
-  FACEBOOK_PAGE_ACCESS_TOKEN: z.string().optional(),
 
   // Social Media - TikTok
   TIKTOK_API_KEY: z.string().optional(),
@@ -486,6 +479,33 @@ const envSchema = baseEnvSchema.extend({
     .url()
     .default('https://aigestion.net/api/auth/notion/callback')
     .describe('Notion OAuth Redirect URI'),
+
+  // ════════════════════════════════════════════════
+  // META PLATFORM (Facebook + Instagram + WhatsApp)
+  // ════════════════════════════════════════════════
+  META_APP_ID: z.string().optional().describe('Meta App ID from developers.facebook.com'),
+  META_APP_SECRET: z.string().optional().describe('Meta App Secret'),
+  META_ACCESS_TOKEN: z
+    .string()
+    .optional()
+    .describe('Meta User/System User access token (long-lived)'),
+  FACEBOOK_PAGE_ID: z.string().optional().describe('Facebook Page ID'),
+  FACEBOOK_PAGE_ACCESS_TOKEN: z
+    .string()
+    .optional()
+    .describe('Facebook Page Access Token (long-lived)'),
+  INSTAGRAM_ACCESS_TOKEN: z.string().optional().describe('Instagram Graph API access token'),
+  INSTAGRAM_BUSINESS_ID: z.string().optional().describe('Instagram Business ID (from Page)'),
+  INSTAGRAM_BUSINESS_ACCOUNT_ID: z
+    .string()
+    .optional()
+    .describe('Instagram Business Account ID for publishing'),
+  WHATSAPP_TOKEN: z.string().optional().describe('WhatsApp Cloud API access token'),
+  WHATSAPP_VERIFY_TOKEN: z
+    .string()
+    .default('nexus_v1_secret_verify_token')
+    .describe('WhatsApp webhook verify token'),
+  WHATSAPP_BUSINESS_PHONE_ID: z.string().optional().describe('WhatsApp Business Phone Number ID'),
 });
 
 /**

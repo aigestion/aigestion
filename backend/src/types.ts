@@ -101,6 +101,7 @@ export const TYPES = {
   RunwayService: Symbol.for('RunwayService'),
   PaypalService: Symbol.for('PaypalService'),
   FacebookService: Symbol.for('FacebookService'),
+  MetaService: Symbol.for('MetaService'),
   AgentService: Symbol.for('AgentService'),
   SocialController: Symbol.for('SocialController'),
   VectorService: Symbol.for('VectorService'),
