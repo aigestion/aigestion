@@ -3,6 +3,7 @@ import path from 'path';
 
 import { TYPES } from '../types';
 import { logger } from '../utils/logger';
+import { Sentry } from '../config/sentry';
 import { BackupService } from './backup.service';
 import { TelegramService } from './telegram.service';
 
@@ -40,16 +41,23 @@ export class BackupSchedulerService {
   }
 
   private async runBackupJob() {
+    // 🌌 Sentry CRON check-in: monitors daily backup health
+    const checkInId = Sentry.captureCheckIn({
+      monitorSlug: 'daily-backup',
+      status: 'in_progress',
+    });
+
     logger.info(`Starting scheduled backup for ${this.SOURCE_DIR}`);
     try {
       await this.backupService.backupDirectory(this.SOURCE_DIR);
       const msg = `✅ Backup Successful: ${this.SOURCE_DIR}`;
       logger.info(msg);
-      // Optional: don't spam success message to telegram every day unless requested
-      // await this.telegramService.sendMessage(msg);
+
+      Sentry.captureCheckIn({ checkInId, monitorSlug: 'daily-backup', status: 'ok' });
     } catch (error: any) {
       const cloudMsg = `🚨 Cloud Backup FAILED: ${error.message}. Initiating Local Fallback...`;
       logger.error(cloudMsg, error);
+      Sentry.captureException(error, { tags: { service: 'backup-scheduler' } });
 
       try {
         await this.telegramService.sendMessage(cloudMsg);
@@ -59,9 +67,16 @@ export class BackupSchedulerService {
         const localMsg = `✅ Local Fallback Successful: Saved to ${localDest}`;
         logger.info(localMsg);
         await this.telegramService.sendMessage(localMsg);
+
+        // Mark as OK since fallback succeeded
+        Sentry.captureCheckIn({ checkInId, monitorSlug: 'daily-backup', status: 'ok' });
       } catch (localError: any) {
         const criticalMsg = `💀 CRITICAL: All Backup Systems FAILED. Local Error: ${localError.message}`;
         logger.error(criticalMsg);
+        Sentry.captureException(localError, {
+          tags: { service: 'backup-scheduler', fallback: 'failed' },
+        });
+        Sentry.captureCheckIn({ checkInId, monitorSlug: 'daily-backup', status: 'error' });
         await this.telegramService.sendMessage(criticalMsg);
       }
     }

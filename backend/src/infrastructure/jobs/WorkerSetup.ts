@@ -1,6 +1,7 @@
 import { JobName } from './job-definitions';
 import { Worker, Job } from 'bullmq';
 import { logger } from '../../utils/logger';
+import { Sentry } from '../../config/sentry';
 import { container, TYPES } from '../../config/inversify.config';
 import { MalwareScannerService } from '../../services/malware-scanner.service';
 
@@ -34,6 +35,7 @@ export class WorkerSetup {
 
     emailWorker.on('failed', (job: Job | undefined, err: Error) => {
       logger.error({ err, jobId: job?.id }, 'Job failed');
+      Sentry.captureException(err, { tags: { queue: JobName.EMAIL_SEND, jobId: job?.id } });
     });
 
     this.workers.push(emailWorker);
@@ -50,6 +52,7 @@ export class WorkerSetup {
 
     swarmWorker.on('failed', (job: Job | undefined, err: Error) => {
       logger.error({ err, jobId: job?.id }, 'Swarm mission job failed');
+      Sentry.captureException(err, { tags: { queue: JobName.SWARM_MISSION, jobId: job?.id } });
     });
 
     this.workers.push(swarmWorker);
@@ -68,6 +71,7 @@ export class WorkerSetup {
 
     malwareWorker.on('failed', (job: Job | undefined, err: Error) => {
       logger.error({ err, jobId: job?.id }, 'Malware cleanup job failed');
+      Sentry.captureException(err, { tags: { queue: JobName.MALWARE_CLEANUP, jobId: job?.id } });
     });
 
     this.workers.push(malwareWorker);
@@ -84,6 +88,7 @@ export class WorkerSetup {
 
     dataWorker.on('failed', (job: Job | undefined, err: Error) => {
       logger.error({ err, jobId: job?.id }, 'Data processing job failed');
+      Sentry.captureException(err, { tags: { queue: JobName.DATA_PROCESSING, jobId: job?.id } });
     });
 
     this.workers.push(dataWorker);

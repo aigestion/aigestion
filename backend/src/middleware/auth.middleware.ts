@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config';
 import { User } from '../models/User';
 import { logger } from '../utils/logger';
+import { setSentryUser } from '../config/sentry';
 import { container } from '../config/inversify.config';
 import { TYPES } from '../types';
 import { DevicePostureService } from '../services/device-posture.service';
@@ -42,6 +43,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
       email: 'god@nexus.sovereign',
       role: 'god',
     };
+    setSentryUser({ id: 'god-mode-sovereign', email: 'god@nexus.sovereign', role: 'god' });
     logger.warn(`[Auth] God Mode access granted via X-Nexus-Authority from IP: ${clientIP}`);
     return next();
   }
@@ -95,7 +97,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         decoded.fingerprint.userAgent !== currentUserAgent
       ) {
         logger.warn(
-          `UA Mismatch: ${decoded.id}. Token: ${decoded.fingerprint.userAgent} vs Req: ${currentUserAgent}`
+          `UA Mismatch: ${decoded.id}. Token: ${decoded.fingerprint.userAgent} vs Req: ${currentUserAgent}`,
         );
         (res as any).status(401).json({ success: false, message: 'Sesión inválida.' });
         return;
@@ -104,7 +106,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
       // Device Posture Check
       if (decoded.fingerprint.deviceId) {
         const devicePostureService = container.get<DevicePostureService>(
-          TYPES.DevicePostureService
+          TYPES.DevicePostureService,
         );
         const postureCheck = await devicePostureService.verifyDevice(decoded.id, {
           deviceId: decoded.fingerprint.deviceId,
@@ -164,6 +166,9 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
       email: user.email,
       role: user.role,
     };
+
+    // 🌌 Sentry: tag user for error attribution
+    setSentryUser({ id: user._id.toString(), email: user.email, role: user.role });
 
     next();
   } catch (error: any) {
