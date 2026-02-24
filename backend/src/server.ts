@@ -128,27 +128,32 @@ setInterval(async () => {
   }
 }, 60000);
 
+// ──────────────────────────────────────────────────
+// Readiness flag — false until DB is connected
+// Used by /readyz to report 200 vs 503
+// ──────────────────────────────────────────────────
+export let isReady = false;
+
 // Start server
 export async function initializeAndStart() {
-  console.log('🚀 [DEBUG] initializeAndStart() entered');
+  console.log('🚀 [Bootstrap] Starting AIGestion Backend — Eager Listen Mode');
   try {
     console.log('🔵 [DEBUG] Loading configuration...');
     const { config } = await import('./config/config');
 
     console.log('🔵 [DEBUG] Importing app (routes & middleware)...');
     const { app: importedApp } = await import('./app');
-    app = importedApp; // Assign to global app for export
+    app = importedApp;
 
-    // Ensure GlobalServer is initialized
     (globalThis as any).GlobalServer = (globalThis as any).GlobalServer || {};
     (globalThis as any).GlobalServer.io = io;
 
     console.log('🟢 [DEBUG] app imported successfully');
 
-    // Create HTTP server with loaded app
+    // ── 1. Create HTTP server ──────────────────────
     httpServer = createServer(app);
 
-    // Initialize Socket.IO via SocketService
+    // ── 2. Socket.IO ──────────────────────────────
     const socketService = container.get<SocketService>(TYPES.SocketService);
     socketService.init(httpServer);
     io = socketService.getIO();
@@ -159,130 +164,103 @@ export async function initializeAndStart() {
     }
     console.log('🟢 [DEBUG] Socket.IO initialized');
 
-    // Socket.IO connection handling
     io.on(
       'connection',
       (
         socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>,
       ) => {
         logger.info('New WebSocket connection');
-
-        socket.on('joinRoom', (room: string) => {
-          socket.join(room);
-          logger.info(`User joined room: ${room}`);
-        });
-
-        socket.on('leaveRoom', (room: string) => {
-          socket.leave(room);
-          logger.info(`User left room: ${room}`);
-        });
-
-        socket.on('disconnect', () => {
-          logger.info('Client disconnected');
-        });
+        socket.on('joinRoom', (room: string) => { socket.join(room); logger.info(`User joined room: ${room}`); });
+        socket.on('leaveRoom', (room: string) => { socket.leave(room); logger.info(`User left room: ${room}`); });
+        socket.on('disconnect', () => { logger.info('Client disconnected'); });
       },
     );
 
-    // 1. Data Source (Optional for dev)
-    try {
-      const { connectToDatabase } = await import('./config/database');
-      await connectToDatabase();
-    } catch (error) {
-      logger.warn(
-        '⚠️ [Database] Failed to connect. Running in degraded mode: ' + (error as Error).message,
-      );
-    }
-
     const port = process.env.PORT || config.port || 5000;
 
-    // 2. Start HTTP Server
-    console.log(`🔵 [DEBUG] Attempting to listen on port ${port}...`);
-    server = httpServer.listen(port, async () => {
-      try {
-        console.log(`🟢 [DEBUG] server.listen callback triggered!`);
-        logger.info(`
+    // ── 3. LISTEN EAGERLY — port opens NOW ────────
+    server = httpServer.listen(port, () => {
+      console.log(`🟢 [DEBUG] server.listen callback triggered!`);
+      logger.info(`
       ################################################
       🛡️  Server listening on port: ${port} 🛡️
       ################################################
-        `);
+      `);
+    });
 
-        // Start Background Workers
+    // ── 4. DB connect in background ───────────────
+    setImmediate(async () => {
+      // a) MongoDB
+      try {
+        const { connectToDatabase } = await import('./config/database');
+        await connectToDatabase();
+        isReady = true;
+        logger.info('✅ [DB] MongoDB connected — server is READY');
+      } catch (error) {
+        logger.warn('⚠️ [DB] MongoDB failed — running in degraded mode: ' + (error as Error).message);
+        isReady = true; // still serve traffic — let individual routes handle DB errors
+      }
+
+      // b) Background Workers + Jobs
+      try {
         WorkerSetup.startWorkers();
 
-        // Schedule Recurring Jobs
-        try {
-          const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
-          await jobQueue.addJob(
-            JobName.MALWARE_CLEANUP,
-            {},
-            {
-              repeat: {
-                pattern: '0 0 * * *', // Every day at midnight
-              },
-            },
-          );
-        } catch (err) {
-          logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
-        }
-
-        // Final initialization tasks
-        try {
-          const credManager = container.get<CredentialManagerService>(
-            TYPES.CredentialManagerService,
-          );
-          const report = await credManager.verifyAll();
-          const criticalFailures = report.filter(
-            r => r.status === 'missing' || r.status === 'invalid',
-          ).length;
-          if (criticalFailures > 0) {
-            logger.error(
-              `⚠️ ${criticalFailures} Critical credentials issues detected. System may be unstable.`,
-            );
-          }
-        } catch (error) {
-          logger.error('Critical: Credential verification failed during startup:', error);
-        }
-
-        try {
-          const backupScheduler = container.get<BackupSchedulerService>(
-            TYPES.BackupSchedulerService,
-          );
-          backupScheduler.start();
-        } catch (err) {
-          logger.error('BackupSchedulerService failed to start:', err);
-        }
-
-        // Ensure Core Intelligence is active
-        try {
-          container.get<NeuralHealthService>(TYPES.NeuralHealthService);
-          container.get<PredictiveHealingService>(TYPES.PredictiveHealingService);
-        } catch (err) {
-          logger.error(
-            'Core Intelligence (NeuralHealth/PredictiveHealing) resolution failed:',
-            err,
-          );
-        }
-
-        // Start High-Frequency Operations
-        try {
-          const sniper = container.get<PriceAlertService>(TYPES.PriceAlertService);
-          sniper.startMonitoring();
-        } catch (err) {
-          logger.error('Sniper (PriceAlertService) failed to start:', err);
-        }
-
-        logger.info('✅ Background services initialization completed');
-      } catch (fatal) {
-        logger.error('CRITICAL: Fatal error in server startup sequence:', fatal);
-        console.error('🔴 [FATAL] Startup sequence failed!', fatal);
+        const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
+        await jobQueue.addJob(
+          JobName.MALWARE_CLEANUP,
+          {},
+          { repeat: { pattern: '0 0 * * *' } },
+        );
+      } catch (err) {
+        logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
       }
+
+      // c) Credential check
+      try {
+        const credManager = container.get<CredentialManagerService>(TYPES.CredentialManagerService);
+        const report = await credManager.verifyAll();
+        const criticalFailures = report.filter(r => r.status === 'missing' || r.status === 'invalid').length;
+        if (criticalFailures > 0) {
+          logger.error(`⚠️ ${criticalFailures} Critical credentials issues detected. System may be unstable.`);
+        }
+      } catch (error) {
+        logger.error('Critical: Credential verification failed during startup:', error);
+      }
+
+      // d) Backup scheduler
+      try {
+        const backupScheduler = container.get<BackupSchedulerService>(TYPES.BackupSchedulerService);
+        backupScheduler.start();
+      } catch (err) {
+        logger.error('BackupSchedulerService failed to start:', err);
+      }
+
+      // e) Core Intelligence
+      try {
+        container.get<NeuralHealthService>(TYPES.NeuralHealthService);
+        container.get<PredictiveHealingService>(TYPES.PredictiveHealingService);
+      } catch (err) {
+        logger.error('Core Intelligence resolution failed:', err);
+      }
+
+      // f) Price Alert Sniper
+      try {
+        const sniper = container.get<PriceAlertService>(TYPES.PriceAlertService);
+        sniper.startMonitoring();
+      } catch (err) {
+        logger.error('Sniper (PriceAlertService) failed to start:', err);
+      }
+
+      logger.info('✅ Background services initialization completed');
     });
+
   } catch (error: any) {
     console.error('❌ [DEBUG] Critical startup failure:', error);
     logger.error('Critical failure during startup:', error);
     process.exit(1);
   }
 }
+
 
 // 4. Graceful Shutdown
 const gracefullyShutdown = async (signal: string) => {

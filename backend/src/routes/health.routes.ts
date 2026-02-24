@@ -14,11 +14,11 @@ const monitoringLimit = rateLimiter.attempt('MONITORING');
  * @openapi
  * /api/v1/health:
  *   get:
- *     summary: Basic health check
+ *     summary: Basic health check (liveness)
  *     tags: [System]
  *     responses:
  *       200:
- *         description: System is up
+ *         description: Server is up (DB may still be connecting)
  */
 healthRouter.get('/', monitoringLimit, (req: Request, res: Response) => {
   const requestId = (req as any).requestId || 'unknown';
@@ -32,6 +32,27 @@ healthRouter.get('/', monitoringLimit, (req: Request, res: Response) => {
       200,
       requestId
     )
+  );
+});
+
+/**
+ * @openapi
+ * /api/v1/health/readyz:
+ *   get:
+ *     summary: Readiness check — 200 once DB is connected, 503 during boot
+ *     tags: [System]
+ */
+healthRouter.get('/readyz', (req: Request, res: Response) => {
+  // isReady is exported from server.ts — set true after MongoDB connects
+  const { isReady } = require('../server');
+  const requestId = (req as any).requestId || 'unknown';
+  if (!isReady) {
+    return res.status(503).json(
+      buildResponse({ status: 'starting', uptime: process.uptime() }, 503, requestId)
+    );
+  }
+  return res.json(
+    buildResponse({ status: 'ready', uptime: process.uptime() }, 200, requestId)
   );
 });
 
