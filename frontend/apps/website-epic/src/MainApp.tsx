@@ -8,6 +8,7 @@ import { useAuth } from './hooks/useAuth';
 import { QueryProvider } from './providers/QueryProvider';
 import { NetworkProvider } from './contexts/NetworkContext';
 import { NetworkToast } from './components/NetworkToast';
+import { AnalyticsProvider } from './components/AnalyticsProvider';
 
 function MainApp() {
   return (
@@ -18,8 +19,10 @@ function MainApp() {
             <NexusProvider>
               <NotificationProvider>
                 <NetworkProvider>
-                  <NetworkToast />
-                  <AppContentWithAuth />
+                  <AnalyticsProvider>
+                    <NetworkToast />
+                    <AppContentWithAuth />
+                  </AnalyticsProvider>
                 </NetworkProvider>
               </NotificationProvider>
             </NexusProvider>
