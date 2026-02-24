@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
+import { Sentry } from '../config/sentry';
 import { logger } from '../utils/logger';
 import { AppError, HttpStatusCode } from '../utils/errors';
 
@@ -69,6 +70,16 @@ export const errorHandler = (err: any, req: Request, res: Response, _next: NextF
   // Log non-operational (unexpected) errors
   if (!error.isOperational) {
     logger.error('ERROR 💥:', err);
+
+    // 🌌 Sentry: capture with full request context
+    Sentry.withScope(scope => {
+      scope.setTag('operational', 'false');
+      scope.setExtra('requestId', requestId);
+      scope.setExtra('url', req.originalUrl);
+      scope.setExtra('method', req.method);
+      scope.setExtra('statusCode', statusCode);
+      Sentry.captureException(err);
+    });
 
     // Phase 5: Report to Google Cloud in production
     try {

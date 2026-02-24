@@ -11,7 +11,7 @@ jest.mock('../../utils/logger', () => ({
   },
 }));
 
-describe.skip('Redis Configuration', () => {
+describe('Redis Configuration', () => {
   const mockCreateClient = jest.fn();
   const mockCreateCluster = jest.fn();
   const mockConnect = jest.fn();
@@ -52,7 +52,7 @@ describe.skip('Redis Configuration', () => {
     expect(mockCreateClient).toHaveBeenCalledWith(
       expect.objectContaining({
         url: 'redis://localhost:6379',
-      })
+      }),
     );
   });
 
@@ -66,7 +66,7 @@ describe.skip('Redis Configuration', () => {
     expect(mockCreateCluster).toHaveBeenCalledWith(
       expect.objectContaining({
         rootNodes: [{ url: 'redis://node1:6379' }, { url: 'redis://node2:6379' }],
-      })
+      }),
     );
   });
 });

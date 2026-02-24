@@ -1,3 +1,6 @@
+// 🌌 Sentry MUST be first import — patches Node internals before anything else
+import './config/sentry';
+
 import { register } from 'tsconfig-paths';
 import tsConfig from '../tsconfig.json';
 import path from 'path';

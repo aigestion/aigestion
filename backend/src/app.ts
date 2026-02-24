@@ -1,3 +1,4 @@
+import { Sentry } from './config/sentry';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -54,7 +55,7 @@ app.use(
   cors({
     origin: (
       origin: string | undefined,
-      callback: (err: Error | null, allow?: boolean) => void
+      callback: (err: Error | null, allow?: boolean) => void,
     ) => {
       const allowedOrigins = config.cors.origin;
       const isAllowed =
@@ -69,7 +70,7 @@ app.use(
       }
     },
     credentials: true,
-  })
+  }),
 );
 
 // Rate limiting middleware (Granular Redis-backed)
@@ -92,7 +93,7 @@ app.use(
   compression({
     level: 7, // Slightly higher compression
     threshold: 512, // Compress smaller payloads for mobile speed
-  }) as any
+  }) as any,
 );
 
 // Logging Middleware
@@ -102,7 +103,7 @@ app.use(
       write: (message: string) => logger.info(message.trim()),
     },
     skip: (req: Request) => req.url === '/api/v1/health',
-  })
+  }),
 );
 
 // Request Parsing
@@ -114,7 +115,7 @@ app.use(
         req.rawBody = buf;
       }
     },
-  })
+  }),
 );
 app.use(cookieParser());
 
@@ -128,6 +129,7 @@ app.use('/graphql', createGraphQLRouter());
 
 // Error handling
 app.use(notFoundHandler);
+Sentry.setupExpressErrorHandler(app);
 app.use(errorHandler);
 
 // Graceful shutdown

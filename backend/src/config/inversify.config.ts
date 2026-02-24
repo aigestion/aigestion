@@ -111,6 +111,7 @@ import { PQCCommService } from '../services/pqc-comm.service';
 import { RunwayService } from '../services/runway.service';
 import { PayPalService } from '../services/paypal.service';
 import { FacebookService } from '../services/facebook.service';
+import { MetaService } from '../services/meta.service';
 import { AgentService } from '../services/agent.service';
 import { VectorService } from '../services/vector.service';
 import { SemanticRouterService } from '../services/ai-router.service';
@@ -362,6 +363,7 @@ bind<AIService>(TYPES.AIService, AIService);
 bind<RunwayService>(TYPES.RunwayService, RunwayService);
 bind<PayPalService>(TYPES.PaypalService, PayPalService);
 bind<FacebookService>(TYPES.FacebookService, FacebookService);
+bind<MetaService>(TYPES.MetaService, MetaService);
 bind<ColabService>(TYPES.ColabService, ColabService);
 bind<BigQueryService>(TYPES.BigQueryService, BigQueryService);
 if (!container.isBound(NotebookInsightService))
