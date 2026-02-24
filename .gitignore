@@ -60,6 +60,7 @@ google-credentials.json
 *-credentials.json
 *-token.json
 **/secrets/**
+BACKUP_KEYS*.txt
 **/*.env
 **/*.env.*
 ! .env.example

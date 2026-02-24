@@ -17,9 +17,11 @@ services:
       - PORT=5000
       - DATABASE_URL=mongodb://mongodb:27017/aigestion_dashboard
       - RABBITMQ_URL=amqp://rabbitmq:5672
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379/0
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - ENABLE_REDIS=true
       - MONGO_HOST=mongodb
       - MONGO_PORT=27017
       - GEMINI_API_KEY=${GEMINI_API_KEY}
@@ -157,22 +159,22 @@ services:
           cpus: '0.5'
           memory: 512M
 
-  # Redis Cache
+  # Redis Cache — God Mode
   redis:
     image: redis:7-alpine
     container_name: aigestion-redis
-    command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
     shm_size: '512mb'
     ports:
       - '6379:6379'
     volumes:
       - aigestion-redis-data:/data
-      - ../../.docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ../../.docker/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
     networks:
       - aigestion-network
     restart: unless-stopped
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD}', 'ping']
       interval: 10s
       timeout: 5s
       retries: 5
