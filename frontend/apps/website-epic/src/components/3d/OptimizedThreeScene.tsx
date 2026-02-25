@@ -46,6 +46,18 @@ function InstancedObjects({
 }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
+  const { addGeometry, addMaterial } = useThreeDispose();
+
+  // Store geometry and material for disposal
+  useEffect(() => {
+    if (meshRef.current) {
+      const geometry = new THREE.SphereGeometry(0.1, 8, 6);
+      const material = new THREE.MeshBasicMaterial({ vertexColors: true });
+
+      addGeometry(geometry);
+      addMaterial(material);
+    }
+  }, [addGeometry, addMaterial]);
 
   useFrame(() => {
     if (!meshRef.current) return;

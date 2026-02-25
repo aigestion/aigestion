@@ -8,7 +8,7 @@ import { NeuralSignal } from './NeuralSignal';
 import { GodModeText } from './design-system/GodModeText';
 import { TiltCard } from './design-system/TiltCard';
 
-export const DanielaShowcase: React.FC = () => {
+export const DanielaShowcase: React.FC = React.memo(() => {
   const { play } = useAudio();
   const [isIntroPlaying, setIsIntroPlaying] = React.useState(false);
   const introAudioRef = React.useRef<HTMLAudioElement | null>(null);
@@ -282,4 +282,6 @@ export const DanielaShowcase: React.FC = () => {
       </div>
     </section>
   );
-};
+});
+
+DanielaShowcase.displayName = 'DanielaShowcase';

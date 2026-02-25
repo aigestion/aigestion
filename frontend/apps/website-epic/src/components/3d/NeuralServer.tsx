@@ -1,18 +1,20 @@
-import { Canvas, useFrame } from '@react-three/fiber';
 import {
+  Environment,
+  Float,
+  MeshDistortMaterial,
   OrbitControls,
   Sphere,
-  MeshDistortMaterial,
   Stars,
-  Float,
-  Environment,
 } from '@react-three/drei';
-import React, { useRef, useState, useMemo } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
+import { useThreeDispose } from '../../hooks/useThreeDispose';
 
 const ServerCore = () => {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
+  const { addMaterial } = useThreeDispose();
 
   useFrame(state => {
     if (meshRef.current) {
@@ -43,7 +45,7 @@ const ServerCore = () => {
   );
 };
 
-export const NeuralServer: React.FC = () => {
+export const NeuralServer: React.FC = React.memo(() => {
   return (
     <div className="w-full h-full relative" style={{ pointerEvents: 'auto' }}>
       <Canvas camera={{ position: [0, 0, 4] }}>
@@ -63,4 +65,6 @@ export const NeuralServer: React.FC = () => {
       </div>
     </div>
   );
-};
+});
+
+NeuralServer.displayName = 'NeuralServer';

@@ -44,7 +44,7 @@ const LoadingFallback = () => (
   </div>
 );
 
-export const CinematicExperience: React.FC = () => {
+export const CinematicExperience: React.FC = React.memo(() => {
   const [showMainContent, setShowMainContent] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
   const { playWuaw } = useSound();
@@ -158,4 +158,6 @@ export const CinematicExperience: React.FC = () => {
       </AnimatePresence>
     </div>
   );
-};
+});
+
+CinematicExperience.displayName = 'CinematicExperience';
