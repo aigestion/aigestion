@@ -204,3 +204,21 @@ export const authorize = (...roles: string[]) => {
     next();
   };
 };
+
+// Middleware wrapper para Express RequestHandler
+export const withAuth = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      res.status(403).json({
+        success: false,
+        message: `El rol ${req.user?.role} no tiene permiso para realizar esta acción.`,
+      });
+      return;
+    }
+    next();
+  };
+};
+
+// Alias para compatibilidad con código existente
+export const requireAuth = protect;
+export const authGuard = authorize;

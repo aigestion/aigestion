@@ -1,6 +1,7 @@
 # 🌌 Swarm Audit All
 # Aggregates system health, security, and quality audits.
 
+$ConfigRoot = Resolve-Path "$PSScriptRoot\.."
 $Issues = @()
 
 Write-Host "🔍 Starting Swarm Deep Audit..." -ForegroundColor Cyan
@@ -8,7 +9,7 @@ Write-Host "🔍 Starting Swarm Deep Audit..." -ForegroundColor Cyan
 # 1. Env Security Audit
 Write-Host "Checking Environment Security..." -ForegroundColor Cyan
 try {
-    node ops/audit_env.js
+    node "$ConfigRoot\ops\audit_env.js"
     if ($LASTEXITCODE -ne 0) { $Issues += "ENV_SECURITY_VULNERABILITY" }
 }
 catch {
@@ -18,7 +19,7 @@ catch {
 # 2. Docker Infrastructure
 Write-Host "Checking Docker Health..."
 try {
-    bash scripts/docker-health-check.sh dev
+    bash "$ConfigRoot\ops\docker-health-check.sh" dev
     if ($LASTEXITCODE -ne 0) { $Issues += "DOCKER_SERVICE_DOWN" }
 }
 catch {
@@ -28,6 +29,7 @@ catch {
 # 3. Code Quality (Lint)
 Write-Host "Checking Code Quality..."
 try {
+    Set-Location "$ConfigRoot"
     pnpm run lint -- --quiet
     if ($LASTEXITCODE -ne 0) { $Issues += "LINT_ERRORS_DETECTED" }
 }
@@ -38,6 +40,7 @@ catch {
 # 4. Critical Tests
 Write-Host "Running Critical Integration Tests..."
 try {
+    Set-Location "$ConfigRoot"
     pnpm test -- --bail 1
     if ($LASTEXITCODE -ne 0) { $Issues += "TEST_SUITE_BREAKAGE" }
 }
