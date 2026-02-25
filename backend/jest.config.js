@@ -28,4 +28,5 @@ module.exports = {
   // Ignore mock utils to prevent them being run as tests
   testPathIgnorePatterns: ['/node_modules/', '/dist/', '/src/__test_utils__/'],
   transformIgnorePatterns: ['node_modules/(?!(mastra|llamaindex|googleapis)/)'],
+  modulePathIgnorePatterns: ['<rootDir>/backups'],
 };

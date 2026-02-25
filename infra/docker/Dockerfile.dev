@@ -20,13 +20,17 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY backend/package.json ./backend/
 # Copy frontend specific config
 COPY frontend/package.json ./frontend/
+COPY frontend/apps/admin-dashboard/package.json ./frontend/apps/admin-dashboard/
+COPY frontend/apps/client-dashboard/package.json ./frontend/apps/client-dashboard/
+COPY frontend/apps/demo-dashboard/package.json ./frontend/apps/demo-dashboard/
+COPY frontend/apps/website-epic/package.json ./frontend/apps/website-epic/
 # Copy sub-packages manifests for pnpm workspace resolution
-COPY packages/dashboard-core/package.json ./packages/dashboard-core/
 COPY packages/decentraland-parcel/package.json ./packages/decentraland-parcel/
 COPY packages/design-system-v2/package.json ./packages/design-system-v2/
 COPY packages/eslint-config/package.json ./packages/eslint-config/
 COPY packages/nexus-core-nestjs/package.json ./packages/nexus-core-nestjs/
 COPY packages/nexus-shared/package.json ./packages/nexus-shared/
+COPY packages/sentry-config/package.json ./packages/sentry-config/
 
 # Install dependencies
 # Using --no-frozen-lockfile in dev to facilitate workspace resolution if manifests changed

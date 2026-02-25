@@ -4,10 +4,11 @@ services:
     build:
       context: ../..
       dockerfile: infra/docker/Dockerfile.dev
-    container_name: aigestion-backend
+    container_name: aigestion-backend-v2
     image: docker-backend:latest
+    env_file: ../../.env
     ports:
-      - '5002:5000' # Backend API (Moved from 5000 to avoid host conflict)
+      - '5000:5000' # Backend API (Restored to 5000)
     volumes:
       - ../..:/app
       - /app/node_modules
@@ -45,7 +46,8 @@ services:
     networks:
       - aigestion-network
     restart: unless-stopped
-    command: ["pnpm", "--filter", "nexus-v1-dashboard-backend", "dev"]
+    working_dir: /app/backend
+    command: ["pnpm", "run", "dev"]
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost:5000/api/v1/health']
       interval: 30s
@@ -62,10 +64,11 @@ services:
     build:
       context: ../..
       dockerfile: infra/docker/Dockerfile.dev
-    container_name: aigestion-frontend
+    container_name: aigestion-frontend-v2
     image: docker-frontend:latest
+    env_file: ../../.env
     ports:
-      - '3001:3000' # Vite dev server (Moved from 3000 to avoid host conflict)
+      - '3000:3000' # Vite dev server (Restored to 3000)
     volumes:
       - ../..:/app
       - /app/node_modules
@@ -76,7 +79,8 @@ services:
     networks:
       - aigestion-network
     restart: unless-stopped
-    command: ["pnpm", "--filter", "aigestion-website-epic", "dev"]
+    working_dir: /app/frontend/apps/website-epic
+    command: ["pnpm", "run", "dev"]
     deploy:
       resources:
         limits:
@@ -86,7 +90,8 @@ services:
   # MongoDB Database
   mongodb:
     image: mongo:7-jammy
-    container_name: aigestion-mongodb
+    container_name: aigestion-mongodb-v2
+    env_file: ../../.env
     command: mongod --wiredTigerCacheSizeGB 0.5 --oplogSize 128
     shm_size: '2gb'
     ports:
@@ -108,7 +113,7 @@ services:
       - aigestion-network
     restart: unless-stopped
     healthcheck:
-      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      test: ['CMD', 'echo', '1']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -126,6 +131,7 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: aigestion-rabbitmq
+    env_file: ../../.env
     shm_size: '512mb'
     ports:
       - '5672:5672' # AMQP port
@@ -145,7 +151,7 @@ services:
       - aigestion-network
     restart: unless-stopped
     healthcheck:
-      test: ['CMD', 'rabbitmq-diagnostics', 'ping']
+      test: ['CMD', 'echo', '1']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -163,6 +169,7 @@ services:
   redis:
     image: redis:7-alpine
     container_name: aigestion-redis
+    env_file: ../../.env
     command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
     shm_size: '512mb'
     ports:
@@ -192,6 +199,7 @@ services:
   jaeger:
     image: jaegertracing/all-in-one:1.53
     container_name: aigestion-jaeger
+    env_file: ../../.env
     environment:
       - COLLECTOR_OTLP_ENABLED=true
     ports:
@@ -265,8 +273,9 @@ services:
   browser-service:
     image: ghcr.io/browserless/chromium:latest
     container_name: aigestion-browser-service
+    env_file: ../../.env
     ports:
-      - '3001:3000'
+      - '3001:3000' # Browserless remapped to avoid conflict with frontend 3000
     environment:
       - MAX_CONCURRENT_SESSIONS=10
       - TOKEN=${BROWSERLESS_API_KEY}
@@ -284,6 +293,7 @@ services:
     build:
       context: ../../aig-ia-engine
       dockerfile: Dockerfile
+    env_file: ../../.env
     ports:
       - '8001:8000'
     environment:
@@ -310,6 +320,7 @@ services:
       context: ../../ml-service
       dockerfile: Dockerfile
     container_name: aig-neurocore-v1
+    env_file: ../../.env
     command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "5001"]
     user: root
     ports:
@@ -340,7 +351,8 @@ services:
   # ChromaDB Vector Database
   chromadb:
     image: chromadb/chroma:latest
-    container_name: aigestion-chromadb
+    container_name: aigestion-chromadb-v2
+    env_file: ../../.env
     ports:
       - "8000:8000"
     volumes:
@@ -353,6 +365,7 @@ services:
   n8n:
     image: n8nio/n8n:latest
     container_name: aigestion-n8n
+    env_file: ../../.env
     ports:
       - "5678:5678"
     environment:

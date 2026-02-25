@@ -19,7 +19,8 @@ catch {
 # 2. Docker Infrastructure
 Write-Host "Checking Docker Health..."
 try {
-    bash "$ConfigRoot\ops\docker-health-check.sh" dev
+    $env:COMPOSE_FILE = "infra/docker/docker-compose.yml"
+    bash "./ops/docker-health-check.sh" dev
     if ($LASTEXITCODE -ne 0) { $Issues += "DOCKER_SERVICE_DOWN" }
 }
 catch {

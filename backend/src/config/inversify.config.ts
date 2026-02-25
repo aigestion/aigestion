@@ -206,6 +206,8 @@ import { ProductivityController } from '../controllers/productivity.controller';
 import { GoogleVisionService } from '../services/google/google-vision.service';
 import { GoogleSpeechService } from '../services/google/google-speech.service';
 import { GoogleContactsService } from '../services/google/google-contacts.service';
+import { WorkspaceAdminService } from '../services/google/workspace-admin.service';
+import { GodModeWorkspaceOrchestrator } from '../services/google/god-mode-orchestrator.service';
 import { WeatherService } from '../services/weather.service';
 import { config } from './config';
 
@@ -321,6 +323,13 @@ bind<InfraOptimizerService>(TYPES.InfraOptimizerService, InfraOptimizerService);
 bind<SocketService>(TYPES.SocketService, SocketService);
 bind<GodNotificationService>(TYPES.GodNotificationService, GodNotificationService);
 bind<NotificationService>(TYPES.NotificationService, NotificationService);
+
+bind<HealthService>(TYPES.HealthService, HealthService);
+// DetailedHealthService maps to the same HealthService implementation for now
+if (!container.isBound(TYPES.DetailedHealthService)) {
+  container.bind<HealthService>(TYPES.DetailedHealthService).to(HealthService).inSingletonScope();
+}
+
 bind<SwarmService>(TYPES.SwarmService, SwarmService);
 bind<TwoFactorService>(TYPES.TwoFactorService, TwoFactorService);
 bind<EnhancedVoiceService>(TYPES.EnhancedVoiceService, EnhancedVoiceService);
@@ -394,11 +403,6 @@ bind<Gemini2Service>(TYPES.Gemini2Service, Gemini2Service);
 bind<MalwareScannerService>(TYPES.MalwareScannerService, MalwareScannerService);
 bind<DocumentProcessorService>(TYPES.DocumentProcessorService, DocumentProcessorService);
 bind<ErrorReportingService>(TYPES.ErrorReportingService, ErrorReportingService);
-bind<HealthService>(TYPES.HealthService, HealthService);
-// DetailedHealthService maps to the same HealthService implementation for now
-if (!container.isBound(TYPES.DetailedHealthService)) {
-  container.bind<HealthService>(TYPES.DetailedHealthService).to(HealthService).inSingletonScope();
-}
 bind<WAFService>(TYPES.WAFService, WAFService);
 bind<ThreatIntelligenceService>(TYPES.ThreatIntelligenceService, ThreatIntelligenceService);
 bind<MonitoringService>(TYPES.MonitoringService, MonitoringService);
@@ -528,6 +532,10 @@ bind<CognitiveController>(TYPES.CognitiveController, CognitiveController);
 bind<GoogleVisionService>(TYPES.GoogleVisionService, GoogleVisionService);
 bind<GoogleSpeechService>(TYPES.GoogleSpeechService, GoogleSpeechService);
 bind<GoogleContactsService>(TYPES.GoogleContactsService, GoogleContactsService);
+
+// WORKSPACE GOD LEVEL
+bind<WorkspaceAdminService>(TYPES.WorkspaceAdminService, WorkspaceAdminService);
+bind<GodModeWorkspaceOrchestrator>(TYPES.GodModeWorkspaceOrchestrator, GodModeWorkspaceOrchestrator);
 
 // PERCEPTION & NAVIGATION
 bind<WeatherService>(TYPES.WeatherService, WeatherService);

@@ -214,4 +214,6 @@ export const TYPES = {
   CognitiveController: Symbol.for('CognitiveController'),
   WeatherService: Symbol.for('WeatherService'),
   PerceptionController: Symbol.for('PerceptionController'),
+  WorkspaceAdminService: Symbol.for('WorkspaceAdminService'),
+  GodModeWorkspaceOrchestrator: Symbol.for('GodModeWorkspaceOrchestrator'),
 };

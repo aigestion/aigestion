@@ -39,4 +39,9 @@ module.exports = {
     },
   },
   moduleDirectories: ['node_modules', 'backend/node_modules', '<rootDir>'],
+  modulePathIgnorePatterns: [
+    '<rootDir>/../backend/backups',
+    '<rootDir>/../archive',
+    '<rootDir>/../frontend/dist',
+  ],
 };

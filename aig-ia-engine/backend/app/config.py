@@ -25,8 +25,14 @@ class Settings(BaseSettings):
 
     LOG_LEVEL: str = "INFO"
 
+    # SWARM ORCHESTRATION
+    SWARM_MAX_AGENTS: int = 10
+    SWARM_TIMEOUT: int = 300
+    SWARM_CONCURRENT_TASKS: int = 5
+
     class Config:
-        env_file = "../../.env"
+        env_file = "../../../.env"
+        env_prefix = "IA_ENGINE_"
         extra = "ignore"  # Allow extra fields in .env file
 
 

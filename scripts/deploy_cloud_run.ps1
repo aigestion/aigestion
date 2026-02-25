@@ -24,7 +24,9 @@ function New-Context {
   Write-Host "Creating $Type context (Inclusion-Only)..." -ForegroundColor Gray
 
   # 1. Copy Root Configs to CONTEXT ROOT
-  $rootPatterns = @("package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "turbo.json", "tsconfig*.json", ".npmrc")
+  $rootPatterns = @(".env", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "turbo.json", "tsconfig*.json", ".npmrc")
+
+  # ... (leaving exact logic untouched for context above)
   foreach ($pattern in $rootPatterns) {
     $files = Get-ChildItem -Path $pattern -ErrorAction SilentlyContinue
     foreach ($file in $files) {
@@ -111,60 +113,53 @@ gcloud config set project $PROJECT_ID
 
 # --- BACKEND ---
 if ($Target -eq "all" -or $Target -eq "backend") {
-    $backendStaging = New-Context "backend"
-    $cbBackend = @(
-      "steps:",
-      "  - name: 'gcr.io/cloud-builders/docker'",
-      "    args: ['build', '--network=cloudbuild', '-t', '$BACKEND_IMAGE', '-f', 'backend/Dockerfile', '.']",
-      "images:",
-      "  - '$BACKEND_IMAGE'",
-      "options:",
-      "  machineType: 'E2_HIGHCPU_8'"
-    )
-    $cbBackend | Set-Content (Join-Path $backendStaging "cloudbuild.yaml")
+  $backendStaging = New-Context "backend"
+  $cbBackend = @(
+    "steps:",
+    "  - name: 'gcr.io/cloud-builders/docker'",
+    "    args: ['build', '--network=cloudbuild', '-t', '$BACKEND_IMAGE', '-f', 'backend/Dockerfile', '.']",
+    "images:",
+    "  - '$BACKEND_IMAGE'",
+    "options:",
+    "  machineType: 'E2_HIGHCPU_8'"
+  )
+  $cbBackend | Set-Content (Join-Path $backendStaging "cloudbuild.yaml")
 
-    Write-Host "☁️ Submitting Backend to Cloud Build..." -ForegroundColor Cyan
-    gcloud builds submit $backendStaging --config (Join-Path $backendStaging "cloudbuild.yaml")
-    if ($LASTEXITCODE -ne 0) { Write-Error "Backend build failed"; exit 1 }
+  Write-Host "☁️ Submitting Backend to Cloud Build..." -ForegroundColor Cyan
+  gcloud builds submit $backendStaging --config (Join-Path $backendStaging "cloudbuild.yaml")
+  if ($LASTEXITCODE -ne 0) { Write-Error "Backend build failed"; exit 1 }
 }
 
 # --- FRONTEND ---
 if ($Target -eq "all" -or $Target -eq "frontend") {
-    $frontendStaging = New-Context "frontend"
-    $cbFrontend = @(
-      "steps:",
-      "  - name: 'gcr.io/cloud-builders/docker'",
-      "    args: ['build', '--network=cloudbuild', '-t', '$FRONTEND_IMAGE', '-f', 'frontend/apps/website-epic/Dockerfile', '--build-arg', 'VITE_API_URL=$BACKEND_URL', '.']",
-      "images:",
-      "  - '$FRONTEND_IMAGE'",
-      "options:",
-      "  machineType: 'E2_HIGHCPU_8'"
-    )
-    $cbFrontend | Set-Content (Join-Path $frontendStaging "cloudbuild.yaml")
+  $frontendStaging = New-Context "frontend"
+  $cbFrontend = @(
+    "steps:",
+    "  - name: 'gcr.io/cloud-builders/docker'",
+    "    args: ['build', '--network=cloudbuild', '-t', '$FRONTEND_IMAGE', '-f', 'frontend/apps/website-epic/Dockerfile', '--build-arg', 'VITE_API_URL=$BACKEND_URL', '.']",
+    "images:",
+    "  - '$FRONTEND_IMAGE'",
+    "options:",
+    "  machineType: 'E2_HIGHCPU_8'"
+  )
+  $cbFrontend | Set-Content (Join-Path $frontendStaging "cloudbuild.yaml")
 
-    Write-Host "☁️ Submitting Frontend to Cloud Build..." -ForegroundColor Cyan
-    gcloud builds submit $frontendStaging --config (Join-Path $frontendStaging "cloudbuild.yaml")
-    if ($LASTEXITCODE -ne 0) { Write-Error "Frontend build failed"; exit 1 }
+  Write-Host "☁️ Submitting Frontend to Cloud Build..." -ForegroundColor Cyan
+  gcloud builds submit $frontendStaging --config (Join-Path $frontendStaging "cloudbuild.yaml")
+  if ($LASTEXITCODE -ne 0) { Write-Error "Frontend build failed"; exit 1 }
 }
 
 # --- DEPLOY ---
 Write-Host "`n🚀 Deploying to Cloud Run..." -ForegroundColor Green
 
-$envVars = "NODE_ENV=production," +
-           "ENABLE_REDIS=false," +
-           "MONGODB_URI=mongodb+srv://admin_db_user:AIGestionGodMode2026!Atlas@cluster0.mpfnejh.mongodb.net/?appName=Cluster0," +
-           "JWT_SECRET=44810ed19aca3d4d642ec0f1f1f58ee744810ed19aca3d4d642ec0f1f1f58ee744810ed19aca3d4d642ec0f1f1f58ee744810ed19aca3d4d642ec0f1f1f58ee7"
+$envVars = "NODE_ENV=production"
 
 if ($Target -eq "all" -or $Target -eq "backend") {
-    gcloud run deploy backend-aigestion --image $BACKEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 8080 --memory 4Gi --set-env-vars $envVars
+  gcloud run deploy backend-aigestion --image $BACKEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 8080 --memory 4Gi --set-env-vars $envVars
 }
 
 if ($Target -eq "all" -or $Target -eq "frontend") {
-    gcloud run deploy nexus-frontend --image $FRONTEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 80 --memory 512Mi
-}
-
-Write-Host "`n✨ Sovereign Deployment Complete!" -ForegroundColor Green
-    gcloud run deploy nexus-frontend --image $FRONTEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 80 --memory 512Mi
+  gcloud run deploy nexus-frontend --image $FRONTEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 80 --memory 512Mi
 }
 
 Write-Host "`n✨ Sovereign Deployment Complete!" -ForegroundColor Green

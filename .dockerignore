@@ -1,22 +1,4 @@
-# Whitelist Approach: Ignore Everything First
-*
-
-# Unignore necessary source folders
-!backend/
-!frontend/
-!infra/
-!packages/
-
-# Unignore necessary root files
-!package.json
-!package-lock.json
-!pnpm-lock.yaml
-!pnpm-workspace.yaml
-!tsconfig.json
-!turbo.json
-!lerna.json
-
-# Re-ignore generated/large folders everywhere
+# Blacklist Approach (Safer for context inclusion)
 node_modules/
 **/node_modules/
 dist/
@@ -30,6 +12,17 @@ coverage/
 .tsc/
 **/.tsc/
 .terraform/
+.venv/
+**/.venv/
+.mongodb-binaries/
+.agent/
+.cache/
+.gemini/
+.turbo/
+.git/
+.github/
+.vscode/
+
 # Large/Non-Web assets
 android/
 **/android/
@@ -47,6 +40,3 @@ uploads/
 **/uploads/
 logs/
 **/logs/
-.git/
-.github/
-.vscode/

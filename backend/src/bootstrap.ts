@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 
 // Load environment variables via dotenv only if not already provided by host/dotenvx
 if (!process.env.PORT && !process.env.MONGODB_URI) {
-  dotenv.config({ path: path.join(process.cwd(), '../.env') });
+  dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 }
 
 // Register path aliases from tsconfig.json

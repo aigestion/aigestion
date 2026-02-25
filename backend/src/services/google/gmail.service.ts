@@ -325,6 +325,66 @@ export class GmailService {
   }
 
   // ─────────────────────────────────────────────────────────────
+  // GOD LEVEL — AUTOMATION & HYGIENE
+  // ─────────────────────────────────────────────────────────────
+
+  /**
+   * Applies "God Mode" filters: Auto-labeling based on predefined professional/security keywords.
+   */
+  async applyGodModeFilters() {
+    const client = await this.getClient();
+    const { messages } = await this.listMessages({ labelIds: ['INBOX'], maxResults: 50 });
+    
+    const CONFIG = {
+      labels: {
+        professional: '🔧 TRABAJO',
+        security: '🔐 SEGURIDAD',
+        ai: '🤖 AI_ALERTS',
+      },
+      professionalKeywords: ['invoice', 'factura', 'vertex', 'google cloud', 'docker', 'nexus', 'api key'],
+      securityKeywords: ['security alert', '2fa', 'verification', 'password reset'],
+    };
+
+    for (const msg of messages) {
+      const detailed = await this.getMessage(msg.id);
+      const text = `${detailed.subject} ${detailed.snippet}`.toLowerCase();
+      const labelsToAdd: string[] = [];
+
+      if (CONFIG.securityKeywords.some(k => text.includes(k))) {
+        labelsToAdd.push(CONFIG.labels.security);
+      } else if (CONFIG.professionalKeywords.some(k => text.includes(k))) {
+        labelsToAdd.push(CONFIG.labels.professional);
+        if (text.includes('vertex') || text.includes('ai')) {
+          labelsToAdd.push(CONFIG.labels.ai);
+        }
+      }
+
+      if (labelsToAdd.length > 0) {
+        // Ensure labels exist first (simplified for mapping)
+        await this.applyLabels(msg.id, labelsToAdd);
+      }
+    }
+    logger.info('[Gmail] ✅ God Mode Filters applied to latest 50 messages.');
+  }
+
+  /**
+   * Archives stale emails (Zero Inbox policy).
+   * Archives Read, Non-Starred emails older than X days.
+   */
+  async archiveStaleEmails() {
+    const days = parseInt(process.env.WORKSPACE_AUTO_CLEANUP_DAYS || '7');
+    const query = `label:inbox -is:starred -is:important older_than:${days}d`;
+    const { messages } = await this.listMessages({ query, maxResults: 100 });
+
+    if (messages.length === 0) return;
+
+    for (const msg of messages) {
+      await this.archiveMessage(msg.id);
+    }
+    logger.info(`[Gmail] 🧹 Archived ${messages.length} stale emails (Older than ${days} days).`);
+  }
+
+  // ─────────────────────────────────────────────────────────────
   // INTERNAL UTILITIES
   // ─────────────────────────────────────────────────────────────
 

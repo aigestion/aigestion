@@ -9,8 +9,9 @@ WORKDIR /app
 # Enable pnpm
 RUN npm install -g pnpm
 
-# Copy workspace configuration
+# Copy workspace configuration and master environment
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY .env ./.env
 
 # Copy all package manifests for correct workspace resolution
 # This is crucial for pnpm to understand the dependency graph
@@ -40,7 +41,7 @@ RUN pnpm --filter nexus-v1-dashboard-backend... build
 RUN pnpm --filter nexus-v1-dashboard-backend deploy --legacy --prod /app/deploy
 
 # Copy compiled artifacts into the deploy directory
-RUN cp -r /app/backend/dist /app/deploy/dist
+RUN cp -r /app/backend/dist /app/deploy/dist && cp /app/.env /app/deploy/.env
 
 # ---------- Runtime Stage ----------
 FROM node:22-alpine AS runtime
@@ -62,6 +63,7 @@ RUN apk add --no-cache curl tzdata dumb-init
 COPY --from=builder /app/deploy/package.json ./
 COPY --from=builder /app/deploy/node_modules ./node_modules
 COPY --from=builder /app/deploy/dist ./dist
+COPY --from=builder /app/deploy/.env ./
 
 # Create non-root user and directories in one layer for optimization
 RUN addgroup -S nodejs && \

@@ -5,10 +5,10 @@
 set -e
 
 ENV=${1:-dev}
-COMPOSE_FILE="docker-compose.yml"
+COMPOSE_FILE=${COMPOSE_FILE:-"docker-compose.yml"}
 
 if [ "$ENV" = "prod" ]; then
-    COMPOSE_FILE="docker-compose.prod.yml"
+    COMPOSE_FILE=${COMPOSE_FILE:-"docker-compose.prod.yml"}
 fi
 
 echo "🔍 Checking Docker service health for $ENV environment..."

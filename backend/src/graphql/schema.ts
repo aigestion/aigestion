@@ -1,5 +1,6 @@
 import { exec } from 'child_process';
-import {
+import * as graphql from 'graphql';
+const {
   GraphQLFloat,
   GraphQLID,
   GraphQLInt,
@@ -8,7 +9,8 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLString,
-} from 'graphql';
+} = graphql;
+
 import os from 'os';
 import { promisify } from 'util';
 
