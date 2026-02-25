@@ -1,0 +1,58 @@
+VARIABLES DE ENTORNO PARA CONFIGURAR EN VERCEL DASHBOARD
+
+1. Ve a: https://vercel.com/dashboard
+2. Busca el proyecto: aigestions-projects/website-epic
+3. Ve a Settings → Environment Variables
+4. Agrega las siguientes variables una por una:
+
+VARIABLES CRÍTICAS:
+
+VITE_SUPABASE_URL
+Valor: https://nbymcxvlcfyhebzjurml.supabase.co
+Environments: Production, Preview, Development
+
+VITE_SUPABASE_ANON_KEY
+Valor: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ieW1jeHZsY2Z5aGViemp1cm1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1NzU1MDAsImV4cCI6MjA4NTE1MTUwMH0.naLyb4Fc2o0-c4K2S_D7rEXasUN-xu7zcBtX-nVHldA
+Environments: Production, Preview, Development
+
+VITE_GOOGLE_ANALYTICS_ID
+Valor: G-XXXXXXXXXX
+Environments: Production, Preview, Development
+
+VITE_GOOGLE_ANALYTICS_MEASUREMENT_ID
+Valor: G-XXXXXXXXXX
+Environments: Production, Preview, Development
+
+VITE_GOOGLE_ANALYTICS_DEBUG
+Valor: false
+Environments: Production, Preview, Development
+
+VITE_GOOGLE_ANALYTICS_TRACKING
+Valor: true
+Environments: Production, Preview, Development
+
+VITE_APP_NAME
+Valor: AIGestion Nexus
+Environments: Production, Preview, Development
+
+VITE_APP_VERSION
+Valor: 2.0.0
+Environments: Production, Preview, Development
+
+VITE_APP_URL
+Valor: https://aigestion.net
+Environments: Production, Preview, Development
+
+VITE_API_BASE_URL
+Valor: /api
+Environments: Production, Preview, Development
+
+VITE_MAINTENANCE_MODE
+Valor: false
+Environments: Production, Preview, Development
+
+Una vez configuradas todas las variables:
+1. Haz clic en Save
+2. Espera a que se guarden
+3. Ejecuta: npx vercel --prod --force
+4. Verifica el deploy con: curl -I https://aigestion.net

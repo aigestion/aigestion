@@ -492,7 +492,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
             spreadsheetId: { type: 'string', description: 'Spreadsheet ID' },
             range: { type: 'string', description: 'Cell range (e.g. Sheet1!A1:D10)' },
-            values: { type: 'array', description: '2D array of values' },
+            values: {
+              type: 'array',
+              description: '2D array of values',
+              items: {
+                type: 'array',
+                items: { type: 'any' },
+              },
+            },
             title: { type: 'string', description: 'Spreadsheet or report title' },
             sheetNames: {
               type: 'array',
@@ -504,7 +511,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               items: { type: 'string' },
               description: 'Report column headers',
             },
-            data: { type: 'array', description: 'Report data rows (2D array)' },
+            data: {
+              type: 'array',
+              description: 'Report data rows (2D array)',
+              items: {
+                type: 'array',
+                items: { type: 'any' },
+              },
+            },
           },
           required: ['action'],
         },
