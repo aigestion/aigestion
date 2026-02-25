@@ -497,7 +497,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: '2D array of values',
               items: {
                 type: 'array',
-                items: { type: 'any' },
+                items: { type: 'string' },
               },
             },
             title: { type: 'string', description: 'Spreadsheet or report title' },
@@ -516,7 +516,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: 'Report data rows (2D array)',
               items: {
                 type: 'array',
-                items: { type: 'any' },
+                items: { type: 'string' },
               },
             },
           },

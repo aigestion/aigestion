@@ -4,12 +4,21 @@ import threading
 from typing import Any, Dict, Optional
 
 # Add swarm directory to sys.path
-SWARM_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../swarm"))
+# Try repo structure first, then docker structure
+PARENT_DIR = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
+SWARM_PATH = os.path.join(PARENT_DIR, "swarm")
+
+if not os.path.exists(SWARM_PATH):
+    # Fallback for Docker layout where swarm might be at /app/swarm
+    SWARM_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../swarm"))
+
 if SWARM_PATH not in sys.path:
     sys.path.append(SWARM_PATH)
 
 try:
-    from core import SwarmOrchestrator, AgentType, Message
+    from core import SwarmOrchestrator, AgentType, Message, BaseAgent
     from agents.overlord import Overlord
     from agents.detective import Detective
     from agents.architect import Architect

@@ -16,6 +16,7 @@ RUN playwright install chromium
 
 # Copy application code
 COPY backend/app ./app
+COPY swarm ./swarm
 # Simplified entrypoint is legacy. Using full main.py for metrics/health.
 # Entrypoint is uvicorn app.main:app
 # Ensure PYTHONPATH includes current directory to resolve 'app' module
