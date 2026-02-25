@@ -1,29 +1,47 @@
 import { AnimatePresence } from 'framer-motion';
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { Navigation } from './components/Navigation';
 import { Footer } from './components/Footer';
-import { ScrollProgress } from './components/ScrollProgress';
 import { MeshGradientBG } from './components/MeshGradientBG';
-import { useNotification } from './contexts/NotificationContext';
-import { Login } from './pages/Login';
-import { Maintenance } from './pages/Maintenance';
-import { DanielaDemo } from './pages/DanielaDemo';
-import { SpotlightWrapper } from './components/design-system/SpotlightWrapper';
+import { Navigation } from './components/Navigation';
 import {
-    RequireAuth,
-    RequireEmailVerification,
-    RequirePhoneVerification,
-    RequireSubscription,
-    PublicRoute
-} from './components/RouteProtection'; // Updated Guards
+  PublicRoute,
+  RequireAuth,
+  RequireEmailVerification,
+  RequirePhoneVerification,
+  RequireSubscription,
+} from './components/RouteProtection';
+import { ScrollProgress } from './components/ScrollProgress';
 import SubscriptionGuard from './components/guards/SubscriptionGuard';
+import { SkeletonLoader } from './components/ui/SkeletonLoader';
+import { useNotification } from './contexts/NotificationContext';
+import { useIntersectionObserver } from './hooks/useIntersectionObserver';
+import {
+  BillingDashboard,
+  ClientDashboard,
+  DemoDashboard,
+  EmailVerification,
+  Login,
+  Maintenance,
+  Marketplace,
+  MissionControl,
+  PaymentGateway,
+  PhoneVerification,
+  PrivacyPolicy,
+  Register,
+  SovereignIntelligenceHub,
+  SubscriptionPage,
+  TermsOfUse,
+  VirtualOfficePreview,
+  WeaponDashboard,
+} from './utils/routeLoader';
 
 // ============================================
 // CRITICAL: Static Load for Hero Section
 // Prevents "Black Screen" if chunk loading fails
 // ============================================
 import { CinematicExperience } from './components/CinematicExperience';
+import { ContactModal } from './components/ContactModal';
 
 // ============================================
 // LAZY LOAD: Below-the-fold content sections
@@ -67,7 +85,6 @@ const FAQSection = lazy(() =>
 const DemoDashboard = lazy(() =>
   import('./components/DemoDashboard').then(m => ({ default: m.DemoDashboard }))
 );
-import { ContactModal } from './components/ContactModal';
 
 // ============================================
 // LAZY LOAD: Non-critical widgets & overlays
@@ -110,7 +127,9 @@ const Register = lazy(() =>
 // In AppContent.tsx I see: 92: const VerifyEmail = lazy(() => import('./pages/VerifyEmail').then(m => ({ default: m.VerifyEmail })));
 // I will replace it with the new one.
 
-const EmailVerification = lazy(() => import('./components/auth/EmailVerification').then(m => ({ default: m.EmailVerification })));
+const EmailVerification = lazy(() =>
+  import('./components/auth/EmailVerification').then(m => ({ default: m.EmailVerification }))
+);
 
 const WorkbenchLayout = lazy(() =>
   import('./components/workbench/WorkbenchLayout').then(m => ({ default: m.WorkbenchLayout }))
@@ -144,6 +163,8 @@ const Marketplace = lazy(() =>
   import('./pages/Marketplace').then(m => ({ default: m.Marketplace }))
 );
 const MissionControl = lazy(() => import('./pages/MissionControl'));
+const SelectRole = lazy(() => import('./pages/onboarding/SelectRole').then(m => ({ default: m.default })));
+const SelectPlan = lazy(() => import('./pages/onboarding/SelectPlan').then(m => ({ default: m.default })));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfUse = lazy(() => import('./pages/TermsOfUse'));
 
@@ -161,6 +182,26 @@ export const LoadingFallback = () => (
   </div>
 );
 
+// Enhanced loading component with skeleton
+const SectionSkeleton = () => (
+  <div className="min-h-screen bg-nexus-obsidian">
+    <div className="container mx-auto px-4 py-8">
+      <div className="space-y-8">
+        <SkeletonLoader variant="text" width="60%" height={40} />
+        <SkeletonLoader variant="text" lines={3} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="bg-nexus-dark rounded-lg p-6">
+              <SkeletonLoader variant="circular" width={64} height={64} className="mb-4" />
+              <SkeletonLoader variant="text" lines={2} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 // Footer removed - using imported version from ./components/Footer
 
 export const AppContent = ({
@@ -172,6 +213,28 @@ export const AppContent = ({
 }: any) => {
   const { notify } = useNotification();
   const location = useLocation();
+
+  // Route prediction and preloading
+  const routePredictor = RoutePredictor.getInstance();
+
+  useEffect(() => {
+    // Record current route for prediction
+    routePredictor.recordRoute(location.pathname);
+
+    // Preload routes based on auth state
+    if (isAuthenticated) {
+      preloadDashboardRoutes();
+    } else {
+      preloadAuthRoutes();
+    }
+  }, [location.pathname, isAuthenticated]);
+
+  // Intersection Observer for lazy sections
+  const { ref: heroRef, isIntersecting: heroVisible } = useIntersectionObserver({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
   // 🚧 Maintenance Mode Logic with God Mode Bypass
   // Access via: https://aigestion.net/?mode=god
   const searchParams = new URLSearchParams(location.search);
@@ -206,9 +269,13 @@ export const AppContent = ({
 
       {!isAuthenticated && <Navigation />}
 
+      {isAuthenticated && currentUser?.role === 'client' && location.pathname !== '/onboarding/role' && location.pathname !== '/onboarding/plan' && (
+        <Navigate to="/onboarding/role" replace />
+      )}
+
       <AnimatePresence mode="wait">
-        <Suspense fallback={<LoadingFallback />}>
-          <Routes location={location} key={location.pathname}>
+        <Suspense fallback={<SectionSkeleton />}>
+          <Routes>
             {/* Public Routes restricted if logged in */}
             <Route element={<PublicRoute />}>
               <Route
@@ -221,7 +288,11 @@ export const AppContent = ({
             {/* Landing Page */}
             <Route
               path="/"
-              element={!isAuthenticated ? <CinematicExperience /> : <Navigate to="/dashboard" />}
+              element={
+                <div ref={heroRef}>
+                  {!isAuthenticated ? <CinematicExperience /> : <Navigate to="/dashboard" />}
+                </div>
+              }
             />
 
             {/* Public: Virtual Office Preview — no auth required */}
@@ -234,6 +305,8 @@ export const AppContent = ({
 
               {/* Level 2: Email Verified Required */}
               <Route element={<RequireEmailVerification />}>
+                <Route path="/onboarding/role" element={<SelectRole />} />
+                <Route path="/onboarding/plan" element={<SelectPlan />} />
                 <Route path="/verify-phone" element={<PhoneVerification />} />
 
                 {/* Level 3: Phone Verified Required */}

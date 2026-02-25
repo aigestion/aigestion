@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { SpotlightWrapper } from './design-system/SpotlightWrapper';
 import { GodModeText } from './design-system/GodModeText';
 import { TiltCard } from './design-system/TiltCard';
-import { cn } from '../utils/cn';
+import { useAuth } from '../hooks/useAuth';
 
 interface LoginProps {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -13,6 +13,7 @@ interface LoginProps {
 }
 
 export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
+  const { loginWithGoogle } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -213,6 +214,7 @@ export const Login: React.FC<LoginProps> = ({ onLogin, loading, error }) => {
              <div className="mt-12 space-y-6 pt-6 border-t border-white/5 text-center">
                 <button
                   type="button"
+                  onClick={loginWithGoogle}
                   className="w-full py-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-4 text-xs font-orbitron tracking-widest text-white group"
                 >
                   <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-all" />

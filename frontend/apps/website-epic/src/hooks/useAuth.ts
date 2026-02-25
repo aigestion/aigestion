@@ -38,6 +38,7 @@ export interface UseAuthReturn extends AuthState {
   verifyEmail: (userId: string, code: string) => Promise<void>; // New
   updateRole: (userId: string, role: 'family' | 'professional') => Promise<void>; // New
   updatePlan: (userId: string, plan: string) => Promise<void>; // New
+  loginWithGoogle: () => Promise<void>; // Added
   sendPhoneVerificationCode: (phone: string) => Promise<void>;
   checkPhoneVerification: () => boolean;
 }
@@ -182,6 +183,18 @@ export function useAuth(): UseAuthReturn {
     },
     [handleSessionChange]
   );
+
+  const loginWithGoogle = useCallback(async () => {
+    setState(prev => ({ ...prev, loading: true }));
+    try {
+      const { signInWithGoogle } = await import('../services/supabase');
+      const { error } = await signInWithGoogle();
+      if (error) throw error;
+    } catch (error) {
+      setState(prev => ({ ...prev, loading: false }));
+      throw error;
+    }
+  }, []);
 
   const logout = useCallback(async () => {
     setState(prev => ({ ...prev, loading: true }));
@@ -445,6 +458,7 @@ export function useAuth(): UseAuthReturn {
     verifyEmail,
     updateRole,
     updatePlan,
+    loginWithGoogle,
     sendPhoneVerificationCode,
     checkPhoneVerification,
   };

@@ -8,8 +8,8 @@ import { useAuth } from '../../hooks/useAuth';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { register, loading } = useAuth(); // Assuming register function exists in useAuth
-  const [accountType, setAccountType] = useState<'family' | 'enterprise'>('family');
+  const { register, loginWithGoogle, loading } = useAuth(); // Assuming register function exists in useAuth
+  const [accountType, setAccountType] = useState<'family' | 'professional'>('family');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -86,9 +86,9 @@ export const Register: React.FC = () => {
                 </button>
                 <button
                     type="button"
-                    onClick={() => setAccountType('enterprise')}
+                    onClick={() => setAccountType('professional')}
                     className={`p-4 rounded-xl border transition-all flex flex-col items-center gap-2 ${
-                        accountType === 'enterprise'
+                        accountType === 'professional'
                         ? 'bg-nexus-violet/10 border-nexus-violet/50 text-nexus-violet'
                         : 'bg-black/20 border-white/5 text-nexus-silver/40 hover:bg-white/5'
                     }`}
@@ -188,6 +188,7 @@ export const Register: React.FC = () => {
                 <p className="text-nexus-silver/40 text-xs font-mono mb-4">O AUTENTICARSE CON</p>
                 <button
                     type="button"
+                    onClick={loginWithGoogle}
                     className="w-full py-3 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all flex items-center justify-center gap-3 group"
                 >
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5 grayscale group-hover:grayscale-0 transition-all" />
