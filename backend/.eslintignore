@@ -1,0 +1,12 @@
+backups/
+quarantine/
+uploads/
+logs/
+infra/keys/
+dist/
+node_modules/
+coverage/
+*.js
+*.config.ts
+*.setup.ts
+jest.setup.js

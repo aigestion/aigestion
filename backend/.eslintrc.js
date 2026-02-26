@@ -47,6 +47,10 @@ module.exports = {
     'jest.setup.js',
     '../_legacy_assets_build/**',
     'infra/keys/**',
+    'backups/**',
+    'quarantine/**',
+    'uploads/**',
+    'logs/**',
   ],
   overrides: [
     {

@@ -13,6 +13,7 @@ import { UserService } from './user.service';
 import { SwarmInternalClient } from './swarm-internal.client';
 import { NeuralHomeBridge } from './google/neural-home.service';
 import { NavigatorGem } from './gems/NavigatorGem';
+import { VisualPerceptionService } from './google/visual-perception.service';
 import { TYPES } from '../types';
 
 interface DanielaContext {
@@ -46,6 +47,7 @@ export class DanielaAIService {
     @inject(TYPES.DeviceStateStore) private deviceState: DeviceStateStore,
     @inject(TYPES.NeuralHomeBridge) private homeBridge: NeuralHomeBridge,
     @inject(TYPES.NavigatorGem) private navigator: NavigatorGem,
+    @inject(TYPES.VisualPerceptionService) private visualPerception: VisualPerceptionService,
   ) {
     this.initialize();
   }
@@ -91,6 +93,7 @@ export class DanielaAIService {
     userName: string,
     userId: string,
     userRole: string = 'user',
+    imageUrl?: string,
   ): Promise<string> {
     try {
       const context = this.getOrCreateContext(chatId, userName, userId, userRole);
@@ -99,7 +102,7 @@ export class DanielaAIService {
       // Agregar mensaje a historial
       context.conversationHistory.push({
         role: 'user',
-        content: message,
+        content: message + (imageUrl ? ` [🖼️ Imagen adjunta: ${imageUrl}]` : ''),
       });
 
       // Determinar el mood basado en el contenido
@@ -109,7 +112,7 @@ export class DanielaAIService {
       const userContext = await this.getUserContext(userId);
 
       // Generar respuesta con IA
-      const response = await this.generateResponse(context, message, userContext);
+      const response = await this.generateResponse(context, message, userContext, imageUrl);
 
       // Agregar respuesta al historial
       context.conversationHistory.push({
@@ -139,14 +142,17 @@ export class DanielaAIService {
     context: DanielaContext,
     message: string,
     userContext: any,
+    imageUrl?: string,
   ): Promise<string> {
     const systemPrompt = this.buildSystemPrompt(context, userContext);
     const conversationContext = this.buildConversationContext(context);
 
     // Detectar intención del usuario
-    const intent = this.detectIntent(message);
+    const intent = this.detectIntent(message, imageUrl);
 
     switch (intent) {
+      case 'vision':
+        return await this.handleVisionRequest(context, message, imageUrl!);
       case 'call':
         return await this.handleCallRequest(context, message);
       case 'sms':
@@ -170,7 +176,7 @@ export class DanielaAIService {
       case 'research':
         return await this.handleMarketResearchRequest(context, message);
       case 'navigation':
-        return await this.handleNavigationRequest(context, message);
+        return await this.handleNavigationRequest(context, message, imageUrl);
       case 'greeting':
         return this.generateGreeting(context);
       default:
@@ -231,8 +237,19 @@ Responde en ${
   /**
    * Detectar intención del usuario
    */
-  private detectIntent(message: string): string {
+  private detectIntent(message: string, imageUrl?: string): string {
     const lowerMessage = message.toLowerCase();
+
+    // 🖼️ High priority for vision if image is present
+    if (
+      imageUrl ||
+      lowerMessage.includes('qué ves') ||
+      lowerMessage.includes('analiza esta imagen') ||
+      lowerMessage.includes('mirar pantalla') ||
+      lowerMessage.includes('screenshot')
+    ) {
+      return imageUrl ? 'vision' : 'general'; // Only switch to 'vision' if we actually have an image
+    }
 
     // 🌌 [GOD MODE] Lock intent — highest priority (before call to avoid 'abre' collision)
     if (
@@ -732,7 +749,11 @@ Responde en ${
   /**
    * 🗺️ [PHASE 57] Handle navigation/spatial request via NavigatorGem
    */
-  private async handleNavigationRequest(context: DanielaContext, message: string): Promise<string> {
+  private async handleNavigationRequest(
+    context: DanielaContext,
+    message: string,
+    imageUrl?: string,
+  ): Promise<string> {
     try {
       const state = this.deviceState?.getDeviceState();
       const location = state?.coords;
@@ -742,8 +763,16 @@ Responde en ${
       }
 
       logger.info(
-        `[DANIELA] 🗺️ Navigation request from ${context.userName} at ${location.lat}, ${location.lng}`,
+        `[DANIELA] 🗺️ Navigation request from ${context.userName} at ${location.lat}, ${location.lng}${imageUrl ? ' with visual frame' : ''}`,
       );
+
+      let visualAnalysis = '';
+      if (imageUrl) {
+        visualAnalysis = await this.visualPerception.analyzeVisualContext(
+          imageUrl,
+          'Identifica cualquier punto de referencia, calle o señal visible en este frame para ayudar con la navegación táctica.',
+        );
+      }
 
       let response = '';
       const lowerMsg = message.toLowerCase();
@@ -768,7 +797,8 @@ Responde en ${
       const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&zoom=15&size=600x300&markers=color:purple%7C${location.lat},${location.lng}&key=${process.env.GOOGLE_MAPS_API_KEY}`;
 
       return (
-        `🗺️ *Asistente de Navegación*\n\n` +
+        `🗺️ *Asistente de Navegación*${imageUrl ? ' (Multimodal)' : ''}\n\n` +
+        (visualAnalysis ? `👁️ *Percepción Visual:* ${visualAnalysis}\n\n` : '') +
         `${response}\n\n` +
         `📍 *Posición Actual:* ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}\n` +
         `Sector: ${state.sector || 'Desconocido'}\n\n` +
@@ -952,6 +982,33 @@ Responde en ${
         bg: 'bg-purple-500/10',
       },
     ];
+  }
+
+  /**
+   * 🖼️ [PHASE 57] Handle vision/multimodal request via VisualPerceptionService
+   */
+  private async handleVisionRequest(
+    context: DanielaContext,
+    message: string,
+    imageUrl: string,
+  ): Promise<string> {
+    try {
+      logger.info(`[DANIELA] 🖼️ Vision request: Analyzing ${imageUrl}`);
+
+      const prompt = `Como Daniela, analiza esta imagen basada en el mensaje del usuario: "${message}". 
+      Proporciona un insight estratégico, detecta anomalías si es un dashboard, o simplemente describe lo que ves con tu estilo profesional y cálido.`;
+
+      const analysis = await this.visualPerception.analyzeVisualContext(imageUrl, prompt);
+
+      return (
+        `🖼️ *Análisis Visual de Daniela*\n\n` +
+        `${analysis}\n\n` +
+        `💡 *Insight:* He procesado el frame visual para integrarlo en nuestro análisis estratégico.`
+      );
+    } catch (error) {
+      logger.error('Error in handleVisionRequest:', error);
+      return '🖼️ Lo siento, tuve un problema al procesar la imagen. ¿Puedes verificar el formato?';
+    }
   }
 
   /**

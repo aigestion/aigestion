@@ -42,11 +42,22 @@ export class SwarmInternalClient {
   }
 
   /**
-   * Status check
+   * Status check with basic retry
    */
   async getStatus(): Promise<any> {
-    const response = await this.client.get('/health');
-    return response.data;
+    const maxRetries = 2;
+    for (let i = 0; i <= maxRetries; i++) {
+      try {
+        const response = await this.client.get('/health');
+        return response.data;
+      } catch (error: any) {
+        if (i === maxRetries) throw error;
+        logger.warn(
+          `[SwarmInternalClient] Health check failed, retrying (${i + 1}/${maxRetries})...`,
+        );
+        await new Promise(resolve => setTimeout(resolve, i === 0 ? 2000 : 5000));
+      }
+    }
   }
 
   /**

@@ -1,8 +1,7 @@
-import { Schema, Document, Query } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { getCache, setCache } from '../../cache/redis';
 import { logger } from '../../utils/logger';
-import crypto from 'crypto';
-import mongoose from 'mongoose'; // Added for QueryPrototype
+import crypto from 'node:crypto';
 
 interface CacheOptions {
   ttl?: number;
@@ -19,30 +18,30 @@ declare module 'mongoose' {
   }
 }
 
+// Auto-apply to Query prototype immediately on module load
+if (!(mongoose.Query.prototype as any).cache) {
+  (mongoose.Query.prototype as any).cache = function (this: any, options: CacheOptions = {}) {
+    this.useCache = true;
+    this.cacheOptions = options;
+    return this;
+  };
+}
+
 /**
  * [GOD LEVEL] Mongoose Redis Cache Plugin
  * Automatically integrates Redis L2 caching into Mongoose queries.
  */
 export function mongooseCachePlugin(schema: Schema) {
+  // Add cache method to schema query for chainability
   (schema.query as any).cache = function (this: any, options: CacheOptions = {}) {
     this.useCache = true;
     this.cacheOptions = options;
     return this;
   };
 
-  // Also extend the Query prototype directly to be safe
-  const QueryPrototype = (mongoose as any).Query.prototype;
-  if (!QueryPrototype.cache) {
-    QueryPrototype.cache = function (this: any, options: CacheOptions = {}) {
-      this.useCache = true;
-      this.cacheOptions = options;
-      return this;
-    };
-  }
+  const exec = mongoose.Query.prototype.exec;
 
-  const exec = Query.prototype.exec;
-
-  Query.prototype.exec = async function () {
+  mongoose.Query.prototype.exec = async function (this: any) {
     if (!this.useCache) {
       return exec.apply(this, arguments as any);
     }
@@ -64,6 +63,12 @@ export function mongooseCachePlugin(schema: Schema) {
         const cachedValue = await getCache(cacheKey);
         if (cachedValue) {
           logger.debug(`[MongooseCache] Cache HIT for key: ${cacheKey}`);
+
+          // If query is lean, return plain objects from cache
+          if (this._mongooseOptions.lean) {
+            return cachedValue;
+          }
+
           // Rehydrate the results into Mongoose documents
           const model = this.model;
           return Array.isArray(cachedValue)

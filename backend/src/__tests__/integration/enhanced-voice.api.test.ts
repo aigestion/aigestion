@@ -30,16 +30,21 @@ const SKIP_INTEGRATION = process.env.NODE_ENV === 'test' && !process.env.RUN_INT
   let authToken: string;
 
   beforeAll(async () => {
-    // Generate valid JWT token for testing
-    const testUser = {
-      _id: '65c2a1b1e4b0a1b1e4b0a1b1',
-      id: '65c2a1b1e4b0a1b1e4b0a1b1',
-      email: 'test@example.com',
-      role: 'user',
-      tokenVersion: 0,
-      lastPasswordChange: new Date(Date.now() - 1000000), // In the past
-    };
+    // Ensure DB is connected
+    const { connectToDatabase } = require('../../config/database');
+    await connectToDatabase();
 
+    // Cleanup and create real test user
+    await User.deleteMany({ email: 'test@example.com' });
+    const testUser = await User.create({
+      name: 'Test Voice User',
+      email: 'test@example.com',
+      password: 'testPassword123!',
+      role: 'user',
+      isEmailVerified: true,
+    });
+
+    // Generate valid JWT token for testing
     authToken = `Bearer ${jwt.sign(
       {
         id: testUser.id,
@@ -47,14 +52,9 @@ const SKIP_INTEGRATION = process.env.NODE_ENV === 'test' && !process.env.RUN_INT
         role: testUser.role,
         tokenVersion: testUser.tokenVersion,
       },
-      config.jwt.secret,
-      { expiresIn: '1h' }
+      process.env.JWT_SECRET || 'test-jwt-secret-at-least-32-chars-long-for-security-check',
+      { expiresIn: '1h' },
     )}`;
-
-    // Mock User.findById for middleware
-    jest.spyOn(User, 'findById').mockReturnValue({
-      select: jest.fn().mockResolvedValue(testUser as any),
-    } as any);
 
     // Get mock services
     mockEnhancedVoiceService = {
@@ -71,7 +71,7 @@ const SKIP_INTEGRATION = process.env.NODE_ENV === 'test' && !process.env.RUN_INT
     // Replace services in container
     container.rebind(TYPES.EnhancedVoiceService).toConstantValue(mockEnhancedVoiceService);
     container.rebind(TYPES.RateLimitService).toConstantValue(mockRateLimitService);
-  });
+  };);
 
   beforeEach(() => {
     jest.clearAllMocks();

@@ -1,10 +1,10 @@
-# 🌌 Swarm Audit All
+# Swarm Audit All
 # Aggregates system health, security, and quality audits.
 
 $ConfigRoot = Resolve-Path "$PSScriptRoot\.."
 $Issues = @()
 
-Write-Host "🔍 Starting Swarm Deep Audit..." -ForegroundColor Cyan
+Write-Host "Starting Swarm Deep Audit..." -ForegroundColor Cyan
 
 # 1. Env Security Audit
 Write-Host "Checking Environment Security..." -ForegroundColor Cyan
@@ -50,11 +50,11 @@ catch {
 }
 
 if ($Issues.Count -gt 0) {
-    Write-Host "❌ Audit Failed with $($Issues.Count) issues." -ForegroundColor Red
+    Write-Host "[X] Audit Failed with $($Issues.Count) issues." -ForegroundColor Red
     $Issues | ForEach-Object { Write-Host "  - $_" }
     exit 1
 }
 else {
-    Write-Host "✅ Audit Clean. System at God-Level stability." -ForegroundColor Green
+    Write-Host "[OK] Audit Clean. System at God-Level stability." -ForegroundColor Green
     exit 0
 }

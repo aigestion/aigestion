@@ -1,0 +1,25 @@
+# Root ESLint Ignore
+node_modules/
+dist/
+build/
+coverage/
+backups/
+quarantine/
+archive/
+logs/
+uploads/
+tmp/
+.gcloud_tmp/
+.vscode/
+.gemini/
+aigestion-deploy/
+legacy-python-core/
+android/
+ios/
+mobile/
+public/
+assets/
+**/.eslintrc.js
+**/node_modules/**
+**/dist/**
+**/build/**

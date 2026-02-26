@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field
 
 class MessageType(str, Enum):
     START_SCAN = "START_SCAN"
+    TASK_START = "TASK_START"
     SCAN_RESULT = "SCAN_RESULT"
     DESIGN_SOLUTION = "DESIGN_SOLUTION"
     BUILD_CODE = "BUILD_CODE"

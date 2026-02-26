@@ -6,8 +6,9 @@
   },
   "antigravity": {
     "professional_mode": true,
+    "god_mode": true,
     "account": "admin@aigestion.net",
     "location": "europe-west1",
-    "optimization": "minimal"
+    "optimization": "maximum"
   }
 }

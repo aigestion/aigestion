@@ -1,6 +1,9 @@
 // 🌌 Sentry MUST be first import — patches Node internals before anything else
+console.log('🔵 [DEBUG] Bootstrap: Sentry import starting...');
 import './config/sentry';
+console.log('🟢 [DEBUG] Bootstrap: Sentry imported');
 
+console.log('🔵 [DEBUG] Bootstrap: Registering tsconfig-paths...');
 import { register } from 'tsconfig-paths';
 import tsConfig from '../tsconfig.json';
 import path from 'path';

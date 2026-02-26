@@ -14,10 +14,12 @@
  *  - CRON & queue monitoring helpers
  *  - User context injection
  */
+console.log('🔵 [DEBUG] Sentry: Module starting initialization...');
 import * as Sentry from '@sentry/node';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+console.log('🔵 [DEBUG] Sentry: Calling Sentry.init()...');
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.NODE_ENV || 'development',
@@ -102,82 +104,7 @@ Sentry.init({
     return breadcrumb;
   },
 });
-
-// ── CRON Monitoring Helper ──────────────────────────────────────
-/**
- * Wrap a CRON job callback with Sentry CRON monitoring.
- * Usage: cronJob.schedule(sentryCheckIn('daily-backup', myCallback))
- */
-export function sentryCheckIn(monitorSlug: string, callback: () => Promise<void> | void) {
-  return async () => {
-    const checkInId = Sentry.captureCheckIn({
-      monitorSlug,
-      status: 'in_progress',
-    });
-    try {
-      await callback();
-      Sentry.captureCheckIn({
-        checkInId,
-        monitorSlug,
-        status: 'ok',
-      });
-    } catch (err) {
-      Sentry.captureCheckIn({
-        checkInId,
-        monitorSlug,
-        status: 'error',
-      });
-      Sentry.captureException(err);
-      throw err;
-    }
-  };
-}
-
-// ── Queue Job Monitoring Helper ─────────────────────────────────
-/**
- * Wrap a BullMQ worker processor with Sentry tracing.
- * Usage: new Worker('queueName', sentryWorker('my-queue', processor))
- */
-export function sentryWorker<T>(queueName: string, processor: (job: T) => Promise<void>) {
-  return async (job: T) => {
-    return Sentry.startSpan(
-      {
-        op: 'queue.process',
-        name: `bullmq.${queueName}`,
-      },
-      async () => {
-        try {
-          await processor(job);
-        } catch (err) {
-          Sentry.captureException(err, {
-            tags: { queue: queueName },
-          });
-          throw err;
-        }
-      },
-    );
-  };
-}
-
-// ── User Context Setter ─────────────────────────────────────────
-/**
- * Call from auth middleware after JWT verification to attach user
- * context to all Sentry events for the current request.
- */
-export function setSentryUser(user: { id: string; email?: string; role?: string }) {
-  Sentry.setUser({
-    id: user.id,
-    email: user.email,
-    ...(user.role ? { role: user.role } : {}),
-  } as Sentry.User);
-}
-
-/**
- * Clear user context (e.g., on logout or request end).
- */
-export function clearSentryUser() {
-  Sentry.setUser(null);
-}
+console.log('🟢 [DEBUG] Sentry: Sentry.init() complete');
 
 // ── Boot Log ────────────────────────────────────────────────────
 if (process.env.SENTRY_DSN) {

@@ -42,7 +42,6 @@ apiV1Router.use('/sovereign', lazy('./sovereign-handshake.routes'));
 apiV1Router.use('/users', lazy('./users.routes'));
 apiV1Router.use('/health', lazy('./health.routes'));
 apiV1Router.use('/stripe', lazy('./stripe.routes'));
-apiV1Router.use('/youtube', lazy('./youtube.routes'));
 apiV1Router.use('/contact', lazy('./contact.routes'));
 apiV1Router.use('/perception', lazy('./perception.routes'));
 apiV1Router.use('/exit-templates', lazy('./exit-templates.routes'));

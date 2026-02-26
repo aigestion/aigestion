@@ -7,9 +7,9 @@
       "total_tokens": 0
     },
     "Architect": {
-      "total_calls": 16,
-      "success_rate": 0.9375,
-      "avg_duration": 6.282329112291336,
+      "total_calls": 17,
+      "success_rate": 0.9411764705882353,
+      "avg_duration": 5.928850861156688,
       "total_tokens": 0
     },
     "Builder": {
@@ -29,9 +29,21 @@
       "success_rate": 1.0,
       "avg_duration": 0.009311437606811523,
       "total_tokens": 0
+    },
+    "Overlord": {
+      "total_calls": 1,
+      "success_rate": 1.0,
+      "avg_duration": 0.30553293228149414,
+      "total_tokens": 0
+    },
+    "Detective": {
+      "total_calls": 1,
+      "success_rate": 1.0,
+      "avg_duration": 4.592536926269531,
+      "total_tokens": 0
     }
   },
-  "last_updated": "2026-02-16T17:41:31.559391",
+  "last_updated": "2026-02-25T20:51:21.436002",
   "missions": [
     {
       "tier": "FAST",

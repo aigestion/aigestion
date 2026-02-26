@@ -4,19 +4,29 @@ import threading
 from typing import Any, Dict, Optional
 
 # Add swarm directory to sys.path
-# Try repo structure first, then docker structure
-PARENT_DIR = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-)
-SWARM_PATH = os.path.join(PARENT_DIR, "swarm")
+# Add swarm directory to sys.path
+# Deterministic discovery for Docker/Dev environments
+possible_paths = [
+    os.path.join(
+        os.path.dirname(__file__), "../../../swarm"
+    ),  # /app/app/services/../../../swarm -> /app/swarm
+    os.path.join(
+        os.path.dirname(__file__), "../../swarm"
+    ),  # /app/services/../../swarm -> /app/swarm (from host structure)
+    "/app/swarm",  # Absolute container path
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "swarm")),
+]
 
-if not os.path.exists(SWARM_PATH):
-    # Fallback for Docker layout where swarm might be at /app/swarm
-    SWARM_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../swarm"))
+SWARM_PATH = None
+for p in possible_paths:
+    if os.path.exists(p):
+        SWARM_PATH = os.path.abspath(p)
+        break
 
-if SWARM_PATH not in sys.path:
+if SWARM_PATH and SWARM_PATH not in sys.path:
     sys.path.append(SWARM_PATH)
 
+SWARM_AVAILABLE = False
 try:
     from core import SwarmOrchestrator, AgentType, Message, BaseAgent
     from agents.overlord import Overlord
@@ -27,9 +37,33 @@ try:
     from agents.mechanic import Mechanic
     from models import MessageType
     SWARM_AVAILABLE = True
-except ImportError as e:
+except Exception as e:
     print(f"Warning: Swarm engine not available: {e}")
-    SWARM_AVAILABLE = False
+
+    # Fallback classes to prevent NameError
+    class BaseAgent:
+        def __init__(self, name, agent_type, orchestrator):
+            self.name = name
+            self.agent_type = agent_type
+            self.orchestrator = orchestrator
+
+        def log(self, event, content=None):
+            pass
+
+    class AgentType:
+        MISSION_CONTROL = "mission_control"
+        DETECTIVE = "detective"
+
+    class Message:
+        def __init__(self, sender, receiver, content, msg_type):
+            self.sender = sender
+            self.receiver = receiver
+            self.content = content
+            self.msg_type = msg_type
+
+    class MessageType:
+        SUB_MISSION_TRIGGER = "sub_mission_trigger"
+        TASK_START = "task_start"
 
 from app.services.job_service import job_service, JobType, JobStatus
 import asyncio

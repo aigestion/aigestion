@@ -9,9 +9,12 @@ import { mongooseCachePlugin } from '../infrastructure/database/mongoose-cache.p
 // Apply God Level Supreme Global Cache Plugin
 mongoose.plugin(mongooseCachePlugin);
 
+// Increase buffer timeout for resilience on slow disk/Windows
+mongoose.set('bufferTimeoutMS', 30000);
+
 const connectOptions: ConnectOptions = {
-  serverSelectionTimeoutMS: 5000,
-  maxPoolSize: parseInt(process.env.MONGODB_MAX_POOL_SIZE || '200'), // Increased for Supreme concurrency
+  serverSelectionTimeoutMS: 15000, // Increased for stability
+  maxPoolSize: parseInt(process.env.MONGODB_MAX_POOL_SIZE || '200'),
   minPoolSize: parseInt(process.env.MONGODB_MIN_POOL_SIZE || '50'), // Increased warm pool
   connectTimeoutMS: 15000,
   socketTimeoutMS: 60000,
@@ -24,7 +27,7 @@ const connectOptions: ConnectOptions = {
 let isConnected = false;
 
 export const connectToDatabase = async (): Promise<void> => {
-  if (isConnected) {
+  if (isConnected && mongoose.connection.readyState === 1) {
     logger.info('Using existing database connection');
     return;
   }

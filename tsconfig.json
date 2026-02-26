@@ -4,5 +4,18 @@
     "module": "ESNext",
     "moduleResolution": "bundler"
   },
-  "include": ["backend/**/*", "frontend/**/*", "packages/**/*", "tests/**/*", "scripts/**/*"]
+  "include": [
+    "backend/**/*",
+    "frontend/**/*",
+    "packages/**/*",
+    "tests/**/*",
+    "scripts/**/*"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/dist",
+    "**/backups",
+    "**/tmp",
+    "archive"
+  ]
 }

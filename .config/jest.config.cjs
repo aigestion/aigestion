@@ -39,9 +39,7 @@ module.exports = {
     },
   },
   moduleDirectories: ['node_modules', 'backend/node_modules', '<rootDir>'],
-  modulePathIgnorePatterns: [
-    '<rootDir>/../backend/backups',
-    '<rootDir>/../archive',
-    '<rootDir>/../frontend/dist',
-  ],
+  modulePathIgnorePatterns: ['.*backups.*', '.*dist.*', '.*archive.*'],
+  testPathIgnorePatterns: ['.*backups.*', '.*dist.*', '.*archive.*'],
+  watchPathIgnorePatterns: ['.*backups.*', '.*dist.*', '.*archive.*'],
 };

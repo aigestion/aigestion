@@ -4,7 +4,7 @@ services:
     build:
       context: ../..
       dockerfile: infra/docker/Dockerfile.dev
-    container_name: aigestion-backend-v2
+    container_name: aigestion-backend-v2-fix
     image: docker-backend:latest
     env_file: ../../.env
     ports:
@@ -64,7 +64,7 @@ services:
     build:
       context: ../..
       dockerfile: infra/docker/Dockerfile.dev
-    container_name: aigestion-frontend-v2
+    container_name: aigestion-frontend-v2-fix
     image: docker-frontend:latest
     env_file: ../../.env
     ports:
@@ -170,7 +170,14 @@ services:
     image: redis:7-alpine
     container_name: aigestion-redis
     env_file: ../../.env
-    command: redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD}
+    command: >
+      sh -c "
+      if [ -z \"$REDIS_PASSWORD\" ]; then
+        redis-server /usr/local/etc/redis/redis.conf
+      else
+        redis-server /usr/local/etc/redis/redis.conf --requirepass \"$REDIS_PASSWORD\"
+      fi
+      "
     shm_size: '512mb'
     ports:
       - '6379:6379'
@@ -296,6 +303,9 @@ services:
     env_file: ../../.env
     ports:
       - '8001:8000'
+    volumes:
+      - ../../aig-ia-engine/backend/app:/app/app
+      - ../../aig-ia-engine/swarm:/app/swarm
     environment:
       - APP_ENV=development
       - APP_HOST=0.0.0.0

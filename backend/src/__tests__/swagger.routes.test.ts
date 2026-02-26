@@ -11,7 +11,6 @@ describe('Swagger routes presence', () => {
 
     // Check for existence checks
     // expect(pathKeys).toContain('/api/v1/stripe/checkout'); // Lazy loaded, might not appear in static swagger gen
-    expect(pathKeys).toContain('/api/v1/youtube/transcribe');
     expect(pathKeys).toContain('/api/v1/users');
     expect(pathKeys).toContain('/api/v1/ai/prompt');
 

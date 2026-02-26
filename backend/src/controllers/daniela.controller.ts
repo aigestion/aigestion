@@ -25,7 +25,7 @@ export class DanielaController {
    */
   public async chat(req: Request, res: Response, next: NextFunction) {
     try {
-      const { message, sessionId } = req.body;
+      const { message, sessionId, imageUrl } = req.body;
       const userId = (req as any).user?.id || 'anonymous';
       const userName = (req as any).user?.name || 'User';
       const userRole = (req as any).user?.role || 'user';
@@ -38,7 +38,8 @@ export class DanielaController {
         message,
         userName,
         userId,
-        userRole
+        userRole,
+        imageUrl,
       );
 
       res.json(buildResponse({ response }, 200, (req as any).requestId));

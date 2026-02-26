@@ -515,22 +515,39 @@ export class AIService {
   public async triggerSwarmMission(
     mission: string,
   ): Promise<{ success: boolean; jobId?: string; error?: string }> {
-    try {
-      logger.info(`[AIService] Triggering Swarm Mission: ${mission}`);
+    const maxRetries = 3;
+    const retryDelays = [2000, 5000, 10000];
 
-      const response = await this.swarmClient.post('/swarm/trigger', {
-        mission_description: mission,
-      });
+    for (let i = 0; i <= maxRetries; i++) {
+      try {
+        logger.info(
+          `[AIService] Triggering Swarm Mission (Attempt ${i + 1}/${maxRetries + 1}): ${mission}`,
+        );
 
-      return {
-        success: response.success,
-        jobId: response.job_id,
-        error: response.error,
-      };
-    } catch (error: any) {
-      logger.error('[AIService] Swarm Mission Trigger Failed', error);
-      return { success: false, error: error.message };
+        const response = await this.swarmClient.post('/swarm/trigger', {
+          mission_description: mission,
+        });
+
+        return {
+          success: response.success,
+          jobId: response.job_id,
+          error: response.error,
+        };
+      } catch (error: any) {
+        if (i < maxRetries) {
+          logger.warn(
+            `[AIService] Swarm Mission trigger failed, retrying in ${retryDelays[i] / 1000}s...`,
+            error.message,
+          );
+          await new Promise(resolve => setTimeout(resolve, retryDelays[i]));
+        } else {
+          logger.error('[AIService] Swarm Mission Trigger Failed after maximum retries', error);
+          return { success: false, error: error.message };
+        }
+      }
     }
+
+    return { success: false, error: 'Unknown trigger failure' };
   }
 
   /**

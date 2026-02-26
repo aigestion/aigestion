@@ -69,6 +69,10 @@ export const errorHandler = (err: any, req: Request, res: Response, _next: NextF
 
   // Log non-operational (unexpected) errors
   if (!error.isOperational) {
+    if (process.env.NODE_ENV === 'test') {
+      console.error('CRITICAL ERROR 💥:', err.message);
+      console.error(err.stack);
+    }
     logger.error('ERROR 💥:', err);
 
     // 🌌 Sentry: capture with full request context

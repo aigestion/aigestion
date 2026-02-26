@@ -12,7 +12,7 @@ class Detective(BaseAgent):
         self.llm = LLMService()
 
     def process_message(self, message: Message):
-        if message.msg_type == MessageType.START_SCAN:
+        if message.msg_type in [MessageType.START_SCAN, MessageType.TASK_START]:
             self.log("starting_intelligent_scan")
             report = self.scan_codebase()
 

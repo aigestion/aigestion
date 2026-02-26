@@ -98,7 +98,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         decoded.fingerprint.userAgent !== currentUserAgent
       ) {
         logger.warn(
-          `UA Mismatch: ${decoded.id}. Token: ${decoded.fingerprint.userAgent} vs Req: ${currentUserAgent}`,
+          `[AuthMiddleware] UA Mismatch: ${decoded.id}. Token: ${decoded.fingerprint.userAgent} vs Req: ${currentUserAgent}`,
         );
         res.status(401).json({ success: false, message: 'Sesión inválida.' });
         return;
@@ -116,10 +116,13 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         });
 
         if (!postureCheck.isCompliant && (decoded.role === 'god' || decoded.role === 'admin')) {
-          logger.warn(`Security Breach attempt: Non-compliant device for role ${decoded.role}`, {
-            userId: decoded.id,
-            reason: postureCheck.reason,
-          });
+          logger.warn(
+            `[AuthMiddleware] Security Breach attempt: Non-compliant device for role ${decoded.role}`,
+            {
+              userId: decoded.id,
+              reason: postureCheck.reason,
+            },
+          );
           res.status(403).json({
             success: false,
             message: `Acceso denegado: Dispositivo no cumple con las políticas de seguridad (${postureCheck.reason}).`,
@@ -181,7 +184,7 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
         stack: error.stack,
         token: token?.substring(0, 10) + '...', // Log only start of token for security
       },
-      'Auth Middleware Error',
+      '[AuthMiddleware] Verification Error',
     );
     res.status(401).json({
       success: false,
