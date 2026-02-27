@@ -36,7 +36,8 @@ COPY packages/nexus-shared ./packages/nexus-shared
 # Compile TypeScript for the backend and its dependencies
 WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN pnpm --filter nexus-v1-dashboard-backend... build || (cd backend && npx tsc --noEmit false || true && npx tsc-alias)
+RUN pnpm --filter nexus-v1-dashboard-backend... build || (cd backend && npx tsc --outDir dist --noEmit false || true)
+RUN cd backend && npx tsc-alias -p tsconfig.json || true
 
 # Create optimized production deployment using pnpm deploy
 # This creates an isolated directory with only production dependencies
@@ -44,7 +45,8 @@ RUN pnpm --filter nexus-v1-dashboard-backend... build || (cd backend && npx tsc 
 RUN pnpm --filter nexus-v1-dashboard-backend deploy --legacy --prod /app/deploy
 
 # Copy compiled artifacts into the deploy directory
-RUN cp -r /app/backend/dist /app/deploy/dist && cp /app/.env /app/deploy/.env
+RUN mkdir -p /app/deploy/dist && cp -r /app/backend/dist/* /app/deploy/dist/ || true
+RUN cp /app/.env /app/deploy/.env
 
 # ---------- Runtime Stage ----------
 FROM node:22-alpine AS runtime
