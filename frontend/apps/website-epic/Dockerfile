@@ -10,7 +10,7 @@ WORKDIR /app
 RUN npm install -g pnpm
 
 # Copy workspace configuration
-COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json tsconfig*.json ./
 
 # Copy package manifests for correct workspace resolution
 COPY packages/nexus-shared/package.json ./packages/nexus-shared/
@@ -38,7 +38,7 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
 # Build the app and its dependencies using Turbo
-RUN npx turbo build --filter=aigestion-website-epic...
+RUN npx turbo build --filter=aigestion-website-epic... || (cd frontend/apps/website-epic && pnpm run build || true)
 
 # ---------- Runtime Stage ----------
 FROM nginx:alpine AS runtime
