@@ -4,7 +4,7 @@ param(
 )
 
 # Configuración
-$AccountSid = "REDACTED_TWILIO_SID"
+$AccountSid = $env:TWILIO_ACCOUNT_SID
 $AuthToken = "REDACTED_TWILIO_TOKEN"
 
 # Headers
