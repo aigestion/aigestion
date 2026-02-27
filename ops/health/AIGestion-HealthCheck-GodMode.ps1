@@ -306,7 +306,11 @@ Write-Host "❌ Errores: $errorCount" -ForegroundColor Red
 if ($healthReport.issues.Count -gt 0) {
     Write-Host "`n🔍 Issues encontrados:" -ForegroundColor Yellow
     foreach ($issue in $healthReport.issues) {
-        $color = if ($issue.level -eq 'ERROR') { 'Red' } elseif ($issue.level -eq 'WARNING') { 'Yellow' } else { 'Gray' }
+        switch ($issue.level) {
+            'ERROR'   { $color = 'Red' }
+            'WARNING' { $color = 'Yellow' }
+            default   { $color = 'Gray' }
+        }
         Write-Host "  [$($issue.level)] $($issue.component): $($issue.message)" -ForegroundColor $color
     }
 }
