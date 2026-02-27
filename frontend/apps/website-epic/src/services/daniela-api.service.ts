@@ -63,6 +63,10 @@ class DanielaApiService {
       body: JSON.stringify({ message, sessionId }),
     });
   }
+
+  async getHistory(chatId: string): Promise<any> {
+    return this.fetchApi(`/history/${chatId}`);
+  }
 }
 
 export const danielaApi = new DanielaApiService();

@@ -24,6 +24,7 @@ import { EventBus } from '../infrastructure/eventbus/EventBus';
 import { HealthIncidentEvent } from '../domain/events/HealthIncidentEvent';
 import { Gemini2Service } from './gemini-2.service';
 import { RagService } from './rag.service';
+import { Mission, MissionStatus } from '../models/Mission';
 
 interface SwarmResponse {
   agentName: string;
@@ -363,7 +364,16 @@ export class SwarmService {
   public async createMission(objective: string, userId: string): Promise<SwarmResponse> {
     logger.info(`[SwarmService] Received mission request from ${userId}: ${objective}`);
 
+    // Persist mission in DB
+    const mission = await Mission.create({
+      objective,
+      userId,
+      status: MissionStatus.PENDING,
+      startedAt: new Date(),
+    });
+
     const lowerObj = objective.toLowerCase();
+    let response: SwarmResponse;
 
     // Simple keyword-based routing (God Mode Logic)
     if (
@@ -371,50 +381,72 @@ export class SwarmService {
       lowerObj.includes('automation') ||
       lowerObj.includes('sync')
     ) {
-      const missionId = `mission_${Date.now()}`;
-      await setCache(`swarm:mission:${missionId}`, { status: 'PENDING', objective }, 3600);
-      const res = await this.n8nOrchestrationMission(objective, missionId);
-      await setCache(
-        `swarm:mission:${missionId}`,
-        { status: 'COMPLETED', result: res.result },
-        3600,
-      );
-      return res;
-    }
-    if (lowerObj.includes('audit') || lowerObj.includes('health') || lowerObj.includes('status')) {
-      return this.healthAuditMission(objective);
-    }
-
-    if (lowerObj.includes('code') || lowerObj.includes('refactor') || lowerObj.includes('fix')) {
-      return this.julesCodingMission(objective);
-    }
-    if (lowerObj.includes('invest') || lowerObj.includes('yield') || lowerObj.includes('price')) {
-      return this.assetMission(objective);
-    }
-    if (lowerObj.includes('research') || lowerObj.includes('find') || lowerObj.includes('search')) {
-      return this.researchMission(objective);
-    }
-    if (
+      await setCache(`swarm:mission:${mission._id}`, { status: 'PENDING', objective }, 3600);
+      response = await this.n8nOrchestrationMission(objective, mission._id as string);
+    } else if (
+      lowerObj.includes('audit') ||
+      lowerObj.includes('health') ||
+      lowerObj.includes('status')
+    ) {
+      response = await this.healthAuditMission(objective);
+    } else if (
+      lowerObj.includes('code') ||
+      lowerObj.includes('refactor') ||
+      lowerObj.includes('fix')
+    ) {
+      response = await this.julesCodingMission(objective);
+    } else if (
+      lowerObj.includes('invest') ||
+      lowerObj.includes('yield') ||
+      lowerObj.includes('price')
+    ) {
+      response = await this.assetMission(objective);
+    } else if (
+      lowerObj.includes('research') ||
+      lowerObj.includes('find') ||
+      lowerObj.includes('search')
+    ) {
+      response = await this.researchMission(objective);
+    } else if (
       lowerObj.includes('map') ||
       lowerObj.includes('location') ||
       lowerObj.includes('cerca') ||
       lowerObj.includes('donde estoy') ||
       lowerObj.includes('ruta')
     ) {
-      return this.navigationMission(objective);
-    }
-    if (lowerObj.includes('evolve') || lowerObj.includes('upgrade') || lowerObj.includes('tech')) {
-      return this.evolutionMission(objective);
-    }
-    if (
+      response = await this.navigationMission(objective);
+    } else if (
+      lowerObj.includes('evolve') ||
+      lowerObj.includes('upgrade') ||
+      lowerObj.includes('tech')
+    ) {
+      response = await this.evolutionMission(objective);
+    } else if (
       lowerObj.includes('strategy') ||
       lowerObj.includes('plan') ||
       lowerObj.includes('insight')
     ) {
-      return this.wisdomMission(objective);
+      response = await this.wisdomMission(objective);
+    } else {
+      response = await this.generalMission(objective);
     }
 
-    return this.generalMission(objective);
+    // Update mission in DB
+    mission.status = MissionStatus.COMPLETED;
+    mission.result = JSON.stringify(response.result);
+    mission.completedAt = new Date();
+    await mission.save();
+
+    // Sync cache if needed
+    if (lowerObj.includes('workflow')) {
+      await setCache(
+        `swarm:mission:${mission._id}`,
+        { status: 'COMPLETED', result: response.result },
+        3600,
+      );
+    }
+
+    return response;
   }
 
   /**
@@ -642,17 +674,33 @@ export class SwarmService {
     };
   }
 
-  public async getMission(id: string): Promise<SwarmResponse> {
+  public async getMission(id: string): Promise<any> {
+    const mission = await Mission.findById(id);
+    if (!mission) {
+      return { status: 'NOT_FOUND', message: `Mission ${id} not found.` };
+    }
     return {
       agentName: 'System',
-      result: `Mission ${id} details retrieved.`,
+      result: mission.result,
+      status: mission.status,
+      objective: mission.objective,
       confidence: 1,
     };
   }
 
   public async getSwarmHistory(): Promise<any> {
-    // Swarm history is self-contained — no delegation needed
-    return { history: [], message: 'Swarm history not yet persisted.' };
+    const history = await Mission.find({}).sort({ createdAt: -1 }).limit(50).lean();
+
+    return {
+      history: history.map(m => ({
+        id: m._id,
+        objective: m.objective,
+        status: m.status,
+        result: m.result,
+        createdAt: m.createdAt,
+      })),
+      count: history.length,
+    };
   }
 
   public async orchestrate(task: any): Promise<SwarmResponse> {

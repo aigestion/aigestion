@@ -38,9 +38,11 @@
 
     <!-- 🛡️ God Level Security Headers -->
     <meta http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://vapi.ai; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vapi.ai wss://*.vapi.ai https://www.google-analytics.com; frame-src 'self' https://vapi.ai;" />
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.googletagmanager.com https://vapi.ai; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: https://raw.githack.com https://raw.githubusercontent.com *.google-analytics.com; connect-src 'self' https://vapi.ai wss://*.vapi.ai https://*.sentry.io https://*.amplitude.com https://*.google-analytics.com https://raw.githack.com https://raw.githubusercontent.com https://api-js.mixpanel.com; frame-src 'self' https://vapi.ai;" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(self), geolocation=()" />
+<!-- 🔍 Analytics Mock (Prevent ReferenceError) -->
+<script>window.gtag = window.gtag || function () { (window.dataLayer = window.dataLayer || []).push(arguments); };</script>
     
     <!-- 🔍 Structured Data (SEO) -->
     <script type="application/ld+json">

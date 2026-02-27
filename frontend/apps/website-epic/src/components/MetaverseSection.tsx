@@ -28,14 +28,14 @@ export const MetaverseSection: React.FC = () => {
     users: 3,
     latency: 18,
     aiLoad: 72,
-    health: 'OPTIMAL' as 'OPTIMAL' | 'WARNING' | 'CRITICAL',
+    health: 'ÓPTIMO' as 'ÓPTIMO' | 'WARNING' | 'CRITICAL',
   });
   useEffect(() => {
     const interval = setInterval(() => {
       const users = Math.floor(1 + Math.abs(Math.sin(Date.now() * 0.0001)) * 6);
       const latency = Math.floor(12 + Math.abs(Math.sin(Date.now() * 0.00015)) * 40);
       const aiLoad = Math.floor(55 + Math.sin(Date.now() * 0.00008) * 35);
-      const health = aiLoad > 88 ? 'CRITICAL' : aiLoad > 75 ? 'WARNING' : 'OPTIMAL';
+      const health = aiLoad > 88 ? 'CRITICAL' : aiLoad > 75 ? 'WARNING' : 'ÓPTIMO';
       setBridgeStats({ users, latency, aiLoad, health });
     }, 4500);
     return () => clearInterval(interval);
@@ -209,8 +209,8 @@ export const MetaverseSection: React.FC = () => {
 
                   <div className="grid grid-cols-1 gap-4">
                     {[
-                      { label: 'Auditorio Neural', status: '500 CAPACITY' },
-                      { label: 'Salas de Juntas', status: 'E2E ENCRYPTED' },
+                      { label: 'Auditorio Neural', status: 'CAPACIDAD 500' },
+                      { label: 'Salas de Juntas', status: 'CIFRADO E2E' },
                       { label: 'Galería de Activos', status: 'NFT COMPLIANT' },
                     ].map((item, i) => (
                       <div
@@ -239,25 +239,25 @@ export const MetaverseSection: React.FC = () => {
                   >
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-[10px] font-orbitron tracking-[0.25em] text-nexus-cyan/70 uppercase">
-                        Live Bridge Status
+                        Estado del Puente en Vivo
                       </span>
                       <NexusStatusBadge
                         status={
-                          bridgeStats.health === 'OPTIMAL'
+                          bridgeStats.health === 'ÓPTIMO'
                             ? 'online'
                             : bridgeStats.health === 'WARNING'
                               ? 'warning'
                               : 'critical'
                         }
-                        label={bridgeStats.health}
+                        label={bridgeStats.health === 'ÓPTIMO' ? 'ÓPTIMO' : bridgeStats.health}
                         size="sm"
                       />
                     </div>
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { label: 'SESSIONS', value: bridgeStats.users, unit: '' },
-                        { label: 'LATENCY', value: bridgeStats.latency, unit: 'ms' },
-                        { label: 'AI LOAD', value: bridgeStats.aiLoad, unit: '%' },
+                        { label: 'SESIONES', value: bridgeStats.users, unit: '' },
+                        { label: 'LATENCIA', value: bridgeStats.latency, unit: 'ms' },
+                        { label: 'CARGA IA', value: bridgeStats.aiLoad, unit: '%' },
                       ].map(stat => (
                         <div key={stat.label} className="text-center">
                           <div className="text-lg font-orbitron font-black text-white tabular-nums">
@@ -332,7 +332,7 @@ export const MetaverseSection: React.FC = () => {
                       <div className="p-4 bg-white/5 rounded-2xl border border-white/5 group-hover:border-nexus-violet/40 transition-colors">
                         <Layers className="w-8 h-8 text-nexus-violet animate-float" />
                       </div>
-                      <NexusStatusBadge status="online" label="LEASING ACTIVE" size="sm" />
+                      <NexusStatusBadge status="online" label="ALQUILER ACTIVO" size="sm" />
                     </div>
 
                     <h4 className="text-2xl font-orbitron font-black mb-2 tracking-tight group-hover:text-nexus-violet-glow transition-colors">
@@ -379,7 +379,7 @@ export const MetaverseSection: React.FC = () => {
                       <div className="p-4 bg-white/5 rounded-2xl border border-white/5 group-hover:border-nexus-cyan/40 transition-colors">
                         <DraftingCompass className="w-8 h-8 text-nexus-cyan" />
                       </div>
-                      <NexusStatusBadge status="online" label="BUILD OPS READY" size="sm" />
+                      <NexusStatusBadge status="online" label="OPERACIONES LISTAS" size="sm" />
                     </div>
 
                     <h4 className="text-2xl font-orbitron font-black mb-2 tracking-tight group-hover:text-nexus-cyan-glow transition-colors">
@@ -398,7 +398,7 @@ export const MetaverseSection: React.FC = () => {
                       <div className="flex justify-between items-baseline border-b border-white/5 pb-4 group-hover:border-nexus-cyan/20 transition-colors">
                         <span className="text-sm text-nexus-silver/80">Flagship Experience</span>
                         <span className="text-[10px] font-mono text-nexus-cyan/60 tracking-[0.2em] uppercase">
-                          CUSTOM QUOTE
+                          PRESUPUESTO A MEDIDA
                         </span>
                       </div>
                     </div>

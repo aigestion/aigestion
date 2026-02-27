@@ -1,8 +1,8 @@
 {
   "mcp": {
-    "priorityMode": "low",
+    "priorityMode": "high",
     "servers": {},
-    "enableRealTime": false
+    "enableRealTime": true
   },
   "antigravity": {
     "professional_mode": true,

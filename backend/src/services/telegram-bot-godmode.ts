@@ -129,7 +129,7 @@ export class TelegramBotHandlerGodMode {
 
         await ctx.reply('⏳ Accediendo a la red neuronal...');
         const response = await this.daniela.processMessage(
-          ctx.chat!.id,
+          String(ctx.chat!.id),
           message,
           ctx.from?.first_name || 'User',
           ctx.from?.id.toString() || 'unknown',

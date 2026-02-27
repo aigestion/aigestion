@@ -96,7 +96,7 @@ export const DanielaShowcase: React.FC = React.memo(() => {
           <GodModeText
             text="TU ASISTENTE PERSONAL:"
             effect="none"
-            className="text-2xl md:text-3xl font-orbitron font-bold text-nexus-violet-glow tracking-widest"
+            className="text-white/40 font-orbitron tracking-[0.5em] text-[10px] uppercase mb-4"
           />
           <GodModeText
             text="DANIELA"
@@ -182,8 +182,9 @@ export const DanielaShowcase: React.FC = React.memo(() => {
                     size: 'small',
                   },
                   {
-                    title: 'Lenguage Natural',
-                    desc: 'Háblale como a un compañero. Ella te entiende sin complicaciones.',
+                    title: 'Lenguaje Natural',
+                    description:
+                      'Interacción fluida con conciencia emocional. Daniela entiende matices, jerga técnica y responde con precisión humana.',
                     size: 'small',
                   },
                   {

@@ -120,11 +120,11 @@ export class TelegramBotHandler {
       await ctx.reply('⏳ Daniela está pensando...');
 
       const response = await daniela.processMessage(
-        ctx.chat!.id,
+        String(ctx.chat!.id),
         message,
         ctx.from?.first_name || 'User',
         ctx.from?.id.toString() || 'unknown',
-        'public'
+        'public',
       );
 
       await ctx.reply(response, { parse_mode: 'Markdown' });

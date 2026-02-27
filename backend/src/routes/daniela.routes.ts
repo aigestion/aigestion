@@ -24,5 +24,8 @@ router.get('/system-status', protect, (req, res, next) =>
 router.get('/insights', protect, (req, res, next) =>
   container.get<DanielaController>(TYPES.DanielaController).getInsights(req, res, next)
 );
+router.get('/history/:chatId', protect, (req, res, next) =>
+  container.get<DanielaController>(TYPES.DanielaController).getChatHistory(req, res, next),
+);
 
 export default router;

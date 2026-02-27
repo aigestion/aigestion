@@ -6,10 +6,10 @@ export const ActivityBar = () => {
 
   const activities = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { id: 'intelligence', icon: Shield, label: 'Sovereign Intelligence' },
-    { id: 'search', icon: Search, label: 'Search' },
+    { id: 'intelligence', icon: Shield, label: 'Inteligencia Soberana' },
+    { id: 'search', icon: Search, label: 'Buscar' },
     { id: 'ai', icon: Bot, label: 'Daniela AI' },
-    { id: 'files', icon: FolderGit2, label: 'Projects' },
+    { id: 'files', icon: FolderGit2, label: 'Proyectos' },
   ];
 
   return (
@@ -46,7 +46,7 @@ export const ActivityBar = () => {
       <div className="flex flex-col items-center gap-6 w-full pb-4">
         <button
           onClick={() => setActiveActivity('settings')}
-          title="Settings"
+          title="Configuración"
           className={`p-2 transition-colors relative ${activeActivity === 'settings' ? 'text-purple-400' : 'text-gray-500 hover:text-white hover:rotate-90 duration-500'}`}
         >
           {activeActivity === 'settings' && (

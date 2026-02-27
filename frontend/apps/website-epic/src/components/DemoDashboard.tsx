@@ -99,7 +99,7 @@ const DemoDashboard = () => {
               Ecosistema Visionario AIGestion.net
             </span>
             <h2 className="text-responsive-h1 font-black text-white mb-6 uppercase tracking-tight">
-              Sovereign <span className="text-nexus-cyan">Workspace</span>
+              Espacio de <span className="text-nexus-cyan">Trabajo Soberano</span>
             </h2>
             <p className="text-nexus-silver/80 max-w-xl text-lg font-light leading-relaxed">
               Experimente el centro neurálgico del ecosistema AIGestion.net. Una arquitectura de orquestación diseñada para la soberanía absoluta y el control total de su infraestructura.

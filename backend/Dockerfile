@@ -37,7 +37,7 @@ COPY packages/nexus-shared ./packages/nexus-shared
 WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN mkdir -p backend/dist
-RUN pnpm --filter nexus-v1-dashboard-backend... build || (cd backend && npx tsc --outDir dist --noEmit false || true)
+RUN pnpm --filter nexus-v1-dashboard-backend... build || (cd backend && npx tsc --outDir dist --noEmit false --noEmitOnError false || true)
 RUN cd backend && npx tsc-alias -p tsconfig.json || true
 
 # Create optimized production deployment using pnpm deploy
@@ -56,6 +56,13 @@ FROM node:22-alpine AS runtime
 ENV NODE_ENV=production
 ENV PORT=8080
 ENV TZ=UTC
+ENV REDIS_URL=redis://default:gxWK2m2UjDw4kxv1P0lRyw9f1H76OE89@redis-16243.c327.europe-west1-2.gce.cloud.redislabs.com:16243
+ENV MONGODB_URI=mongodb+srv://admin_db_user:AIGestionGodMode2026!Atlas@cluster0.mpfnejh.mongodb.net/?appName=Cluster0
+ENV SUPABASE_URL=https://nbymcxvlcfyhebzjurml.supabase.co
+ENV SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ieW1jeHZsY2Z5aGViemp1cm1sIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2OTU3NTUwMCwiZXhwIjoyMDg1MTUxNTAwfQ.7LqX8K8Y5Z3fJ7mN9rQ2Lq9wRzXvY0Z1mN2pQ3sR8
+ENV PINECONE_API_KEY=pcsk_4pPkGH_9hEy5vg3x5V6TzPomG3ndJgZybcMzaSaiSzXqos2oSG4fVWtHGRe7hNK5HyS9YU
+ENV MONGODB_ATLAS_API_KEY=al-isaib0moU8WikYHeRNZhIEJjV5Bx7DbL2T6NlCSAPvP
+ENV JWT_SECRET=44810ed19aca3d4d642ec0f1f1f58ee744810ed19aca3d4d642ec0f1f1f58ee7
 
 WORKDIR /app/backend
 

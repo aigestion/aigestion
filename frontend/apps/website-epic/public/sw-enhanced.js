@@ -114,14 +114,16 @@ async function cacheFirst(request, cacheName) {
     
     if (cachedResponse) {
       // Update cache in background
-      fetch(request).then((response) => {
-        if (response.ok) {
-          const cache = await caches.open(cacheName);
-          cache.put(request, response.clone());
-        }
-      }).catch(() => {
-        // Ignore network errors for cache-first strategy
-      });
+      fetch(request)
+        .then(async response => {
+          if (response.status === 200) {
+            const cache = await caches.open(cacheName);
+            await cache.put(request, response.clone());
+          }
+        })
+        .catch(() => {
+          // Ignore network errors for cache-first strategy
+        });
       
       return cachedResponse;
     }
@@ -129,9 +131,9 @@ async function cacheFirst(request, cacheName) {
     // If not in cache, fetch from network
     const networkResponse = await fetch(request);
     
-    if (networkResponse.ok) {
+    if (networkResponse.status === 200) {
       const cache = await caches.open(cacheName);
-      cache.put(request, networkResponse.clone());
+      await cache.put(request, networkResponse.clone());
     }
     
     return networkResponse;
@@ -300,29 +302,5 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// Performance monitoring
-self.addEventListener('fetch', (event) => {
-  const start = performance.now();
-  
-  event.respondWith(
-    (async () => {
-      try {
-        const response = await fetch(event.request);
-        const duration = performance.now() - start;
-        
-        // Log slow requests
-        if (duration > 1000) {
-          console.warn(`Slow request detected: ${event.request.url} took ${duration}ms`);
-        }
-        
-        return response;
-      } catch (error) {
-        const duration = performance.now() - start;
-        console.error(`Request failed: ${event.request.url} after ${duration}ms`, error);
-        throw error;
-      }
-    })()
-  );
-});
-
+// Periodic background sync (for cache updates)
 console.log('🚀 Enhanced Service Worker loaded successfully');

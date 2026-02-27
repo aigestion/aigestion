@@ -18,6 +18,7 @@ export class DanielaController {
     this.getStatus = this.getStatus.bind(this);
     this.getInsights = this.getInsights.bind(this);
     this.getSystemStatus = this.getSystemStatus.bind(this);
+    this.getChatHistory = this.getChatHistory.bind(this);
   }
 
   /**
@@ -31,7 +32,7 @@ export class DanielaController {
       const userRole = (req as any).user?.role || 'user';
 
       // We use the sessionId (from frontend) as the chatId for the service
-      const chatId = parseInt(sessionId, 10) || 0;
+      const chatId = String(sessionId || 'default-session');
 
       const response = await this.danielaService.processMessage(
         chatId,
@@ -63,8 +64,8 @@ export class DanielaController {
             version: '1.0.0-PRO',
           },
           200,
-          (req as any).requestId
-        )
+          (req as any).requestId,
+        ),
       );
     } catch (error) {
       next(error);
@@ -103,10 +104,24 @@ export class DanielaController {
             },
           },
           200,
-          (req as any).requestId
-        )
+          (req as any).requestId,
+        ),
       );
     } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * Get Chat History for a session
+   */
+  public async getChatHistory(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { chatId } = req.params;
+      const history = await this.danielaService.getHistory(chatId);
+      res.json(buildResponse({ history }, 200, (req as any).requestId));
+    } catch (error) {
+      logger.error('Error in DanielaController.getChatHistory:', error);
       next(error);
     }
   }

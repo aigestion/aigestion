@@ -5,12 +5,35 @@ import { danielaApi } from '../services/daniela-api.service';
 import { useDanielaVoice } from '../hooks/useDanielaVoice';
 
 export const DanielaConversationPanel: React.FC = () => {
-  const [messages, setMessages] = useState<{ role: 'ai' | 'user'; text: string }[]>([
-    { role: 'ai', text: 'Hola, soy Daniela. ¿En qué puedo ayudarte hoy?' },
-  ]);
+  const [messages, setMessages] = useState<{ role: 'ai' | 'user'; text: string }[]>([]);
   const [input, setInput] = useState('');
+  const [sessionId] = useState(() => {
+    const saved = localStorage.getItem('daniela_session_id');
+    if (saved) return saved;
+    const newId = `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem('daniela_session_id', newId);
+    return newId;
+  });
+
   const { isListening, transcript, isSpeaking, toggleListening, speak } = useDanielaVoice();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const data = await danielaApi.getHistory(sessionId);
+        if (data.history && data.history.length > 0) {
+          setMessages(data.history);
+        } else {
+          setMessages([{ role: 'ai', text: 'Hola, soy Daniela. ¿En qué puedo ayudarte hoy?' }]);
+        }
+      } catch (error) {
+        console.error('Error fetching Daniela history:', error);
+        setMessages([{ role: 'ai', text: 'Hola, soy Daniela. ¿En qué puedo ayudarte hoy?' }]);
+      }
+    };
+    fetchHistory();
+  }, [sessionId]);
 
   useEffect(() => {
     if (transcript) {
@@ -30,7 +53,7 @@ export const DanielaConversationPanel: React.FC = () => {
     setInput('');
 
     try {
-      const response = await danielaApi.chat(userText, 'website-user', `session-${Date.now()}`);
+      const response = await danielaApi.chat(userText, 'website-user', sessionId);
       const aiText = response.response;
       setMessages(prev => [...prev, { role: 'ai', text: aiText }]);
       speak(aiText);

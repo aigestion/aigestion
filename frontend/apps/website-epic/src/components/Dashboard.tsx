@@ -225,7 +225,7 @@ const AnalyticsTab: React.FC<{
           icon={<Brain className="w-5 h-5 text-nexus-violet" />}
           variant="violet"
           trend="up"
-          trendValue="Available"
+          trendValue="Disponible"
         />
 
         <NexusMetricCard
@@ -241,7 +241,7 @@ const AnalyticsTab: React.FC<{
           icon={<Shield className="w-5 h-5 text-nexus-gold" />}
           variant="gold"
           trend="neutral"
-          trendValue="Access Level"
+          trendValue="Nivel de Acceso"
         />
       </div>
 
@@ -511,10 +511,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
             title={menuItems.find(item => item.id === activeTab)?.label || 'DASHBOARD'}
             subtitle={
               activeTab === 'daniela'
-                ? 'Initialization Sequence: Emotional AI'
+                ? 'Secuencia de Inicialización: IA Emocional'
                 : activeTab === 'analytics'
-                  ? 'Loading Metrics: Real-time Flux'
-                  : 'System Configuration: User Protocol'
+                  ? 'Cargando Métricas: Flujo en Tiempo Real'
+                  : 'Configuración del Sistema: Protocolo de Usuario'
             }
             status={
               <div className="flex items-center gap-6">
@@ -532,10 +532,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                     isProcessing
                       ? 'PROCESANDO'
                       : status === 'active'
-                        ? 'AI SYSTEM ONLINE'
+                        ? 'SISTEMA IA ONLINE'
                         : status === 'error'
-                          ? 'SYSTEM ERROR'
-                          : 'SYSTEM IDLE'
+                          ? 'ERROR DEL SISTEMA'
+                          : 'SISTEMA EN ESPERA'
                   }
                   size="md"
                 />
@@ -544,7 +544,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ user, onLogout }) => {
                     className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-nexus-cyan shadow-[0_0_8px_rgba(0,245,255,0.5)]' : 'bg-rose-500'}`}
                   />
                   <span className="text-[10px] text-white/40 font-mono">
-                    {connectionStatus === 'connected' ? 'WSS: CONNECTED' : 'WSS: DISCONNECTED'}
+                    {connectionStatus === 'connected' ? 'WSS: CONECTADO' : 'WSS: DESCONECTADO'}
                   </span>
                 </div>
               </div>

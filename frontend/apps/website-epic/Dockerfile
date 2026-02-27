@@ -43,6 +43,7 @@ RUN mkdir -p dist && (pnpm install && pnpm run build || true)
 
 # ---------- Runtime Stage ----------
 FROM nginx:alpine AS runtime
+RUN rm -rf /usr/share/nginx/html/*
 
 # Copy build artifacts
 COPY --from=builder /app/frontend/apps/website-epic/dist /usr/share/nginx/html

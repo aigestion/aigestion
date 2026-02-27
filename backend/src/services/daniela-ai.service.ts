@@ -16,9 +16,11 @@ import { NavigatorGem } from './gems/NavigatorGem';
 import { VisualPerceptionService } from './google/visual-perception.service';
 import { TYPES } from '../types';
 
+import { Conversation } from '../models/Conversation';
+
 interface DanielaContext {
   userId: string;
-  chatId: number;
+  chatId: string;
   userName: string;
   userRole: string;
   conversationHistory: Array<{ role: string; content: string }>;
@@ -32,22 +34,21 @@ interface DanielaContext {
  */
 @injectable()
 export class DanielaAIService {
-  private readonly contexts = new Map<number, DanielaContext>();
   private readonly behaviorService: UserBehaviorService | null = null;
 
   constructor(
-    @inject(TYPES.SwarmInternalClient) private swarmClient: SwarmInternalClient,
-    @inject(TYPES.AIService) private aiService: AIService,
-    @inject(TYPES.AnalyticsService) private analyticsService: AnalyticsService,
-    @inject(TYPES.RagService) private ragService: RagService,
-    @inject(TYPES.UserService) private userService: UserService,
-    @inject(TYPES.EconomyService) private economyService: EconomyService,
-    @inject(TYPES.ContactRegistryService) private contactRegistry: ContactRegistryService,
-    @inject(TYPES.DanielaCallAgent) private callAgent: DanielaCallAgent,
-    @inject(TYPES.DeviceStateStore) private deviceState: DeviceStateStore,
-    @inject(TYPES.NeuralHomeBridge) private homeBridge: NeuralHomeBridge,
-    @inject(TYPES.NavigatorGem) private navigator: NavigatorGem,
-    @inject(TYPES.VisualPerceptionService) private visualPerception: VisualPerceptionService,
+    @inject(TYPES.SwarmInternalClient) private readonly swarmClient: SwarmInternalClient,
+    @inject(TYPES.AIService) private readonly aiService: AIService,
+    @inject(TYPES.AnalyticsService) private readonly analyticsService: AnalyticsService,
+    @inject(TYPES.RagService) private readonly ragService: RagService,
+    @inject(TYPES.UserService) private readonly userService: UserService,
+    @inject(TYPES.EconomyService) private readonly economyService: EconomyService,
+    @inject(TYPES.ContactRegistryService) private readonly contactRegistry: ContactRegistryService,
+    @inject(TYPES.DanielaCallAgent) private readonly callAgent: DanielaCallAgent,
+    @inject(TYPES.DeviceStateStore) private readonly deviceState: DeviceStateStore,
+    @inject(TYPES.NeuralHomeBridge) private readonly homeBridge: NeuralHomeBridge,
+    @inject(TYPES.NavigatorGem) private readonly navigator: NavigatorGem,
+    @inject(TYPES.VisualPerceptionService) private readonly visualPerception: VisualPerceptionService,
   ) {
     this.initialize();
   }
@@ -62,33 +63,47 @@ export class DanielaAIService {
   }
 
   /**
-   * Obtener contexto del usuario
+   * Obtener contexto del usuario de la base de datos
    */
-  private getOrCreateContext(
-    chatId: number,
+  private async getOrCreateContext(
+    chatId: string,
     userName: string,
     userId: string,
     userRole: string,
-  ): DanielaContext {
-    if (!this.contexts.has(chatId)) {
-      this.contexts.set(chatId, {
-        userId,
+  ): Promise<DanielaContext> {
+    let conversation = await Conversation.findOne({ chatId });
+
+    if (!conversation) {
+      conversation = await Conversation.create({
         chatId,
+        userId,
         userName,
         userRole,
-        conversationHistory: [],
-        lastUpdate: new Date(),
+        messages: [],
         mood: 'strategic',
+        lastUpdate: new Date(),
       });
     }
-    return this.contexts.get(chatId)!;
+
+    return {
+      userId: conversation.userId,
+      chatId: conversation.chatId,
+      userName: conversation.userName,
+      userRole: conversation.userRole,
+      conversationHistory: conversation.messages.map(m => ({
+        role: m.role,
+        content: m.content,
+      })),
+      lastUpdate: conversation.lastUpdate,
+      mood: conversation.mood,
+    };
   }
 
   /**
    * Procesar mensaje con Daniela
    */
   async processMessage(
-    chatId: number,
+    chatId: string,
     message: string,
     userName: string,
     userId: string,
@@ -96,7 +111,7 @@ export class DanielaAIService {
     imageUrl?: string,
   ): Promise<string> {
     try {
-      const context = this.getOrCreateContext(chatId, userName, userId, userRole);
+      const context = await this.getOrCreateContext(chatId, userName, userId, userRole);
       context.lastUpdate = new Date();
 
       // Agregar mensaje a historial
@@ -125,6 +140,21 @@ export class DanielaAIService {
         context.conversationHistory = context.conversationHistory.slice(-20);
       }
 
+      // Persistir en base de datos
+      await Conversation.findOneAndUpdate(
+        { chatId },
+        {
+          messages: context.conversationHistory.map(m => ({
+            role: m.role,
+            content: m.content,
+            timestamp: new Date(),
+          })),
+          mood: context.mood,
+          lastUpdate: new Date(),
+        },
+        { upsert: true },
+      );
+
       // Registrar interacción
       await this.logInteraction(userId, message, response);
 
@@ -133,6 +163,19 @@ export class DanielaAIService {
       logger.error('Error processing message in Daniela:', error);
       return '💜 Disculpa, tuve un pequeño inconveniente. ¿Puedes reformular tu pregunta?';
     }
+  }
+
+  /**
+   * Obtener historial de conversación
+   */
+  async getHistory(chatId: string): Promise<Array<{ role: string; text: string }>> {
+    const conversation = await Conversation.findOne({ chatId });
+    if (!conversation) return [];
+
+    return conversation.messages.map(m => ({
+      role: m.role === 'daniela' ? 'ai' : 'user',
+      text: m.content,
+    }));
   }
 
   /**

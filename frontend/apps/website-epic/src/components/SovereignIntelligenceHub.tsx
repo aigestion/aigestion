@@ -503,7 +503,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
             {!isVaultLocked && pixelSnapshot && (
               <div className="hidden lg:flex flex-col items-center px-4 py-1.5 bg-white/5 border border-white/10 rounded-2xl">
                 <span className="text-[8px] text-white/30 font-orbitron uppercase tracking-widest mb-0.5">
-                  Physical Context
+                  Contexto Físico
                 </span>
                 <div className="flex items-center gap-2">
                   <div
@@ -540,7 +540,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
               >
                 <Share2 size={14} className="text-nexus-cyan animate-spin-slow" />
                 <span className="text-[10px] font-orbitron font-bold text-nexus-cyan tracking-widest uppercase">
-                  Metaverse Live
+                  Metaverse en Vivo
                 </span>
               </motion.div>
             )}
@@ -701,9 +701,11 @@ export const SovereignIntelligenceHub: React.FC = () => {
                       <h2 className="text-2xl font-orbitron font-black text-white tracking-widest uppercase">
                         Daniela Voice Agent
                       </h2>
-                      <p className="text-nexus-silver/40 text-[10px] font-orbitron tracking-[0.2em] mt-1">
-                        Sovereign Vocal Intelligence & Biometric Link
-                      </p>
+                      <GodModeText
+                      text="Inteligencia Vocal Soberana y Vínculo Biométrico"
+                      effect="none"
+                      className="text-nexus-silver/40 text-[10px] font-orbitron tracking-[0.2em] mt-1"
+                    />
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="px-4 py-2 bg-nexus-cyan/5 border border-nexus-cyan/20 rounded-xl flex items-center gap-3">
@@ -718,7 +720,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Voice Status & Visualizer */}
                     <SovereignCard
-                      title="Audio Processing"
+                      title="Procesamiento de Audio"
                       icon={<Mic size={14} />}
                       pulse={healerStatus.pulse}
                     >
@@ -741,7 +743,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
 
                         <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
                           <div>
-                            <span className="text-[10px] text-white/40 block mb-1">MIC STATE</span>
+                            <span className="text-[10px] text-white/40 block mb-1">ESTADO MIC</span>
                             <span className="text-xs font-bold text-white uppercase">
                               {isRecordingVoice ? 'Capturing...' : 'Idle'}
                             </span>
@@ -758,7 +760,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
 
                     {/* Personality Configuration */}
                     <SovereignCard
-                      title="Personality Matrix"
+                      title="Matriz de Personalidad"
                       icon={<Cpu size={14} />}
                       pulse={healerStatus.pulse}
                     >
@@ -818,7 +820,8 @@ export const SovereignIntelligenceHub: React.FC = () => {
 
                     {/* Biometric Linkage */}
                     <SovereignCard
-                      title="Biometric Security"
+                      title="Seguridad Biométrica"
+                      subtitle="Vínculo Vocal & Red Quantum"
                       icon={<Lock size={14} />}
                       pulse={healerStatus.pulse}
                       className="md:col-span-2"
@@ -830,7 +833,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
                           </h4>
                           <p className="text-[10px] text-white/50 leading-relaxed mb-4">
                             Tu voz está vinculada mediante hashing cuántico a la bóveda. Cualquier
-                            intento de acceso no autorizado activará el protocolo Shiled
+                            intento de acceso no autorizado activará el protocolo Shield
                             automáticamente.
                           </p>
                           <div className="flex gap-4">
@@ -1370,7 +1373,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
                         {
                           icon: Cpu,
                           name: 'Gems Auto-Healing',
-                          state: 'STANDBY',
+                          state: 'EN ESPERA',
                           value: '0 Fallos',
                           color: 'text-emerald-400',
                           load: 5,
@@ -1497,7 +1500,7 @@ export const SovereignIntelligenceHub: React.FC = () => {
                           <div className="flex items-center gap-3">
                             <History size={16} className="text-nexus-cyan" />
                             <span className="text-xs font-orbitron font-bold text-white uppercase tracking-widest">
-                              LOG DE INTERVENCIONES DEL HEALER
+                              LOG DE INTERVENCIONES DEL SANADOR
                             </span>
                           </div>
                           <span className="text-[10px] font-mono text-nexus-cyan/40">

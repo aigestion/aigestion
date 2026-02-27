@@ -20,7 +20,7 @@ const videos: Video[] = [
       'Descubre la arquitectura que impulsa AIGestion: InversifyJS, Swarm Engine, RAG con ChromaDB, y los patrones soberanos de alto rendimiento.',
     url: '/videos/notebooklm_sovereign_brain.mp4',
     icon: '🧠',
-    badge: 'ARCHITECTURE',
+    badge: 'ARQUITECTURA',
     badgeColor: 'from-cyan-400 to-blue-500',
   },
   {
@@ -30,7 +30,7 @@ const videos: Video[] = [
       'Conoce a Daniela: agente de voz soberano con ElevenLabs, Twilio/Vapi y Gemini Pro. Identidad, lógica operativa e integración con Pixel 8.',
     url: '/videos/notebooklm_daniela_persona.mp4',
     icon: '🎙️',
-    badge: 'AI AGENT',
+    badge: 'AGENTE IA',
     badgeColor: 'from-purple-400 to-pink-500',
   },
   {
@@ -50,7 +50,7 @@ const videos: Video[] = [
       'Exploración profunda de las herramientas de percepción, navegación autónoma y el Sovereign Bridge.',
     url: '/videos/tutorial_features.mp4',
     icon: '✨',
-    badge: 'FEATURES',
+    badge: 'FUNCIONALIDADES',
     badgeColor: 'from-blue-400 to-indigo-500',
   },
   {
@@ -60,7 +60,7 @@ const videos: Video[] = [
       'Pipelines de deploy, protocolos de mantenimiento y guías operativas del ecosistema AIGestion en modo soberano.',
     url: '/videos/notebooklm_sovereign_brain.mp4', // Fallback for now or placeholder
     icon: '🛰️',
-    badge: 'OPS',
+    badge: 'OPERACIONES',
     badgeColor: 'from-amber-400 to-orange-500',
     comingSoon: true,
   },
@@ -128,8 +128,8 @@ export const VideoTutorials: React.FC = () => (
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-amber-400/60 animate-pulse" />
-                    <span className="text-xs font-mono text-white/40 tracking-wider uppercase">
-                      Coming Soon
+                    <span className="text-[10px] font-black tracking-[0.2em] text-nexus-cyan uppercase group-hover:text-white transition-colors">
+                      MUY PRONTO
                     </span>
                   </div>
                 </div>
@@ -171,9 +171,7 @@ export const VideoTutorials: React.FC = () => (
                 </span>
               </div>
 
-              <p className="text-sm text-nexus-silver/60 leading-relaxed">
-                {video.description}
-              </p>
+              <p className="text-sm text-nexus-silver/60 leading-relaxed">{video.description}</p>
 
               {/* Bottom accent line */}
               <div className="mt-6 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:via-nexus-cyan/30 transition-all duration-500" />
@@ -190,8 +188,12 @@ export const VideoTutorials: React.FC = () => (
           rel="noreferrer"
           className="inline-flex items-center gap-3 px-8 py-3 rounded-full bg-nexus-cyan/10 border border-nexus-cyan/30 text-nexus-cyan hover:bg-nexus-cyan/20 transition-all duration-300 font-orbitron text-[10px] tracking-[0.2em] uppercase group"
         >
-          <svg className="w-4 h-4 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          <svg
+            className="w-4 h-4 group-hover:scale-110 transition-transform"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+          >
+            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
           </svg>
           Canal AIGestion.net
         </a>

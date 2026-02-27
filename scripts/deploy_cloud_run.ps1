@@ -24,7 +24,7 @@ function New-Context {
   Write-Host "Creating $Type context (Inclusion-Only)..." -ForegroundColor Gray
 
   # 1. Copy Root Configs to CONTEXT ROOT
-  $rootPatterns = @(".env", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "turbo.json", "tsconfig*.json", ".npmrc")
+  $rootPatterns = @(".env", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "turbo.json", "tsconfig*.json", ".npmrc", "tsconfig.base.json")
 
   # ... (leaving exact logic untouched for context above)
   foreach ($pattern in $rootPatterns) {
@@ -152,14 +152,18 @@ if ($Target -eq "all" -or $Target -eq "frontend") {
 # --- DEPLOY ---
 Write-Host "`n🚀 Deploying to Cloud Run..." -ForegroundColor Green
 
-$envVars = "NODE_ENV=production"
+# Extract critical production envs from .env if possible, or use hardcoded master ones for this rollout
+$REDIS_PROD_URL = "redis://default:gxWK2m2UjDw4kxv1P0lRyw9f1H76OE89@redis-16243.c327.europe-west1-2.gce.cloud.redislabs.com:16243"
+$MONGO_PROD_URI = "mongodb+srv://admin_db_user:AIGestionGodMode2026!Atlas@cluster0.mpfnejh.mongodb.net/?appName=Cluster0"
+
+$envVars = "NODE_ENV=production,REDIS_URL=$REDIS_PROD_URL,MONGODB_URI=$MONGO_PROD_URI,JWT_SECRET=44810ed19aca3d4d642ec0f1f1f58ee744810ed19aca3d4d642ec0f1f1f58ee744810ed19aca3d4d642ec0f1f1f58ee7"
 
 if ($Target -eq "all" -or $Target -eq "backend") {
-  gcloud run deploy backend-aigestion --image $BACKEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 8080 --memory 4Gi --set-env-vars $envVars
+  gcloud run deploy backend-aigestion --image $BACKEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 8080 --memory 4Gi --cpu 2 --timeout 300 --set-env-vars $envVars
 }
 
 if ($Target -eq "all" -or $Target -eq "frontend") {
-  gcloud run deploy nexus-frontend --image $FRONTEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 80 --memory 512Mi
+  gcloud run deploy nexus-frontend --image $FRONTEND_IMAGE --platform managed --region $REGION --allow-unauthenticated --port 80 --memory 512Mi --set-env-vars "VITE_API_URL=$BACKEND_URL"
 }
 
 Write-Host "`n✨ Sovereign Deployment Complete!" -ForegroundColor Green
