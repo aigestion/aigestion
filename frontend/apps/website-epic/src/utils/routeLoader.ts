@@ -125,6 +125,19 @@ export const Maintenance = lazy(() =>
   }))
 );
 
+// Onboarding & Layout
+export const WorkbenchLayout = lazy(() =>
+  import('../components/workbench/WorkbenchLayout').then(m => ({ default: m.WorkbenchLayout }))
+);
+
+export const SelectRole = lazy(() => 
+  import('../pages/onboarding/SelectRole').then(m => ({ default: m.default }))
+);
+
+export const SelectPlan = lazy(() => 
+  import('../pages/onboarding/SelectPlan').then(m => ({ default: m.default }))
+);
+
 // ============================================
 // PRELOAD FUNCTIONS
 // Para precarga inteligente de componentes

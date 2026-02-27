@@ -227,9 +227,9 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
               </div>
             </div>
             <div>
-              <h1 className="text-white font-orbitron text-4xl font-black tracking-tighter">
+              <span className="text-white font-orbitron text-4xl font-black tracking-tighter block">
                 AIGESTION<span className="text-nexus-cyan font-light">.NET</span>
-              </h1>
+              </span>
               <div className="flex items-center gap-2">
                 <div className="h-[1px] w-12 bg-linear-to-r from-nexus-violet to-transparent" />
                 <p className="text-nexus-cyan/60 text-[8px] font-mono tracking-[0.5em] uppercase">
@@ -247,19 +247,22 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
           >
             <button
               onClick={handlePlayPause}
-              className="premium-glass px-6 py-3 rounded-full text-white text-xs font-bold tracking-widest uppercase hover:text-nexus-cyan transition-colors"
+              className="premium-glass px-6 py-3 rounded-full text-white text-xs font-bold tracking-widest uppercase hover:text-nexus-cyan transition-colors tappable"
+              aria-label={isPlaying ? 'Pausar intro' : 'Reproducir intro'}
             >
               {isPlaying ? '⏸ PAUSA' : '▶ PLAY'}
             </button>
             <button
               onClick={handleSkip}
-              className="premium-glass px-6 py-3 rounded-full text-nexus-cyan text-xs font-bold tracking-widest uppercase hover:bg-nexus-cyan/20 transition-all border border-nexus-cyan/30"
+              className="premium-glass px-6 py-3 rounded-full text-nexus-cyan text-xs font-bold tracking-widest uppercase hover:bg-nexus-cyan/20 transition-all border border-nexus-cyan/30 tappable"
+              aria-label="Saltar introducción"
             >
               SALTAR INTRO
             </button>
             <button
               onClick={() => setIsContactModalOpen(true)}
-              className="btn-enterprise px-8 py-3 rounded-full text-xs"
+              className="btn-enterprise px-8 py-3 rounded-full text-xs tappable"
+              aria-label="Ingresar al sistema Nexus"
             >
               INGRESAR AL NEXUS
             </button>
@@ -279,14 +282,14 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
             >
               <div className="relative inline-block mb-4">
                 <div className="absolute -inset-4 bg-nexus-violet/20 blur-3xl rounded-full" />
-                <motion.h2
+                <motion.h1
                   className="relative text-responsive-h1 font-orbitron font-black text-white leading-none glitch-text tracking-tighter"
                   style={{
                     textShadow: '0 0 40px rgba(0, 240, 255, 0.3)',
                   }}
                 >
                   {activeScenes[currentScene].title}
-                </motion.h2>
+                </motion.h1>
               </div>
 
               <motion.p

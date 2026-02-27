@@ -17,6 +17,7 @@ import { BackupSchedulerService } from './services/backup-scheduler.service';
 import { CredentialManagerService } from './services/credential-manager.service';
 import { HistoryService } from './services/history.service';
 import { SocketService } from './services/socket.service';
+import { MissionWatcherService } from './services/mission-watcher.service';
 import { SystemMetricsService } from './services/system-metrics.service';
 import { TYPES } from './types';
 import { logger } from './utils/logger';
@@ -46,7 +47,7 @@ setInterval(() => {
   stats.requestsPerSecond = 0;
 }, 1000);
 
-// Broadcast analytics every 5s
+// Broadcast analytics every 30s (Optimized from 5s to reduce CPU load)
 setInterval(async () => {
   const currentRPS = stats.requestsPerSecond;
 
@@ -81,7 +82,7 @@ setInterval(async () => {
   } catch (err) {
     logger.error('Error fetching metrics for broadcast:', err);
   }
-}, 5000);
+}, 30000);
 
 // Metric History Snapshots (every 1 minute)
 setInterval(async () => {
@@ -249,6 +250,14 @@ export async function initializeAndStart() {
         sniper.startMonitoring();
       } catch (err) {
         logger.error('Sniper (PriceAlertService) failed to start:', err);
+      }
+
+      // g) Mission Watcher (Real-time Governance)
+      try {
+        const missionWatcher = container.get<MissionWatcherService>(TYPES.MissionWatcherService);
+        missionWatcher.initWatcher();
+      } catch (err) {
+        logger.error('MissionWatcherService failed to start:', err);
       }
 
       logger.info('✅ Background services initialization completed');

@@ -18,7 +18,8 @@ import { User } from '../models/User';
 import { Project } from '../models/Project';
 import { Mission } from '../models/Mission';
 import { getCache, setCache } from '../utils/redis';
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { AuthService } from '../services/auth.service';
 
 const execAsync = promisify(exec);

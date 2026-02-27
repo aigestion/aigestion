@@ -216,4 +216,13 @@ export const TYPES = {
   PerceptionController: Symbol.for('PerceptionController'),
   WorkspaceAdminService: Symbol.for('WorkspaceAdminService'),
   GodModeWorkspaceOrchestrator: Symbol.for('GodModeWorkspaceOrchestrator'),
+  MistralService: Symbol.for('MistralService'),
+  AIProviderFactory: Symbol.for('AIProviderFactory'),
+  AIToolExecutor: Symbol.for('AIToolExecutor'),
+  GeminiProvider: Symbol.for('GeminiProvider'),
+  MistralProvider: Symbol.for('MistralProvider'),
+  ComplianceService: Symbol.for('ComplianceService'),
+  MissionWatcherService: Symbol.for('MissionWatcherService'),
+  PromptService: Symbol.for('PromptService'),
+  PromptController: Symbol.for('PromptController'),
 };

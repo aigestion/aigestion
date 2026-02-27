@@ -1,12 +1,15 @@
 import type { NextFunction, Request, Response } from 'express';
 import { buildResponse } from '../common/response-builder';
-import { TYPES, container } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { UserService } from '../services/user.service';
 import { AppError } from '../utils/errors';
 
+// [NOTE] Validation is handled by validation.middleware.ts in the routes layer.
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userService = container.get<UserService>(TYPES.UserService);
+    // Explicit call to ensure validation happened or re-validate if needed
     const user = await userService.create(req.body);
     res.status(201).json(buildResponse(user, 201, (req as any).requestId));
   } catch (err) {

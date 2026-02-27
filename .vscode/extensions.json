@@ -17,7 +17,12 @@
     "ms-python.vscode-pylance",
     "ms-vscode.vscode-json",
     "humao.rest-client",
-    "christian-kohler.path-intellisense"
+    "christian-kohler.path-intellisense",
+    "zhuangtongfa.Material-theme",
+    "PKief.material-icon-theme",
+    "stkb.rewrap",
+    "oderwat.indent-rainbow",
+    "meganrogge.template-string-converter"
   ],
   "unwantedRecommendations": [
     "googlecloudtools.cloudcode",

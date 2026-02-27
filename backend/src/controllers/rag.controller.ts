@@ -1,8 +1,16 @@
 import { Request, Response } from 'express';
-import { controller, httpPost, interfaces, request, response } from 'inversify-express-utils';
+import {
+  controller,
+  httpGet,
+  httpPost,
+  interfaces,
+  request,
+  response,
+} from 'inversify-express-utils';
 import { inject } from 'inversify';
 import { TYPES } from '../types';
 import { RagService } from '../services/rag.service';
+import { SovereignOrchestratorService } from '../services/SovereignOrchestratorService';
 import { logger } from '../utils/logger';
 import multer from 'multer';
 
@@ -12,7 +20,21 @@ import { malwareScanner } from '../middleware/malware-scanner.middleware';
 
 @controller('/rag')
 export class RagController implements interfaces.Controller {
-  constructor(@inject(TYPES.RagService) private ragService: RagService) {}
+  constructor(
+    @inject(TYPES.RagService) private ragService: RagService,
+    @inject(TYPES.SovereignOrchestratorService) private orchestrator: SovereignOrchestratorService,
+  ) {}
+
+  @httpGet('/workspace-status')
+  async getWorkspaceStatus(@request() req: Request, @response() res: Response) {
+    try {
+      const status = await this.orchestrator.getWorkspaceStatus();
+      return res.json({ status: 'success', data: status });
+    } catch (error) {
+      logger.error('[RagController] Failed to get workspace status:', error);
+      return res.status(500).json({ error: 'Failed to get workspace status' });
+    }
+  }
 
   @httpPost('/ingest', malwareScanner.uploadSingle('file'))
   async ingestDocument(@request() req: Request, @response() res: Response) {

@@ -119,7 +119,18 @@ export class SovereignHealingService {
       },
     });
 
-    logger.warn({ proposalId }, '[SovereignHealing] Repair proposal stored. Awaiting approval.');
+    logger.warn({ proposalId }, '[SovereignHealing] Repair proposal stored.');
+
+    // AUTO-EXECUTION for LOW IMPACT repairs
+    if (impact === 'low') {
+      logger.info({ proposalId }, '[SovereignHealing] Auto-executing low impact repair...');
+      await this.executeRepair(proposalId, true);
+    } else {
+      logger.warn(
+        { proposalId },
+        '[SovereignHealing] Awaiting approval for non-low impact repair.',
+      );
+    }
   }
 
   public async executeRepair(proposalId: string, approved: boolean) {

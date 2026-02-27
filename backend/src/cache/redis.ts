@@ -261,12 +261,12 @@ const MAX_L1_SIZE = 1000;
 setInterval(() => {
   const now = Date.now();
   let swept = 0;
-  for (const [k, v] of l1Cache) {
+  l1Cache.forEach((v, k) => {
     if (v.expiry < now) {
       l1Cache.delete(k);
       swept++;
     }
-  }
+  });
   if (swept > 0) {
     logger.debug({ swept, remaining: l1Cache.size }, 'L1 Cache GC');
   }
@@ -319,16 +319,14 @@ export const getCache = async <T>(key: string): Promise<T | null> => {
         const compressed = Buffer.from(data.substring(3), 'base64');
         const decompressed = await inflateAsync(compressed);
         value = JSON.parse(decompressed.toString());
-        logger.debug({ key: prefixed }, 'L2 Cache Hit (Decompressed)');
       } else {
         value = JSON.parse(data);
-        logger.debug({ key: prefixed }, 'L2 Cache Hit');
       }
 
-      // Promote to L1
+      // Promote to L1 with smart TTL
       l1Cache.set(prefixed, {
         value,
-        expiry: Date.now() + 5 * 60 * 1000,
+        expiry: Date.now() + 2 * 60 * 1000, // 2 min L1 retention
       });
 
       metrics.l2Hits++;
@@ -359,12 +357,12 @@ export const setCache = async (key: string, value: any, ttlSeconds = 3600): Prom
   // L1 eviction
   if (l1Cache.size > MAX_L1_SIZE) {
     const now = Date.now();
-    for (const [k, v] of l1Cache) {
+    l1Cache.forEach((v, k) => {
       if (v.expiry < now) l1Cache.delete(k);
-    }
+    });
     // If still over, evict oldest entries
     if (l1Cache.size > MAX_L1_SIZE) {
-      const entries = [...l1Cache.entries()];
+      const entries = Array.from(l1Cache.entries());
       entries
         .sort((a, b) => a[1].expiry - b[1].expiry)
         .slice(0, Math.floor(MAX_L1_SIZE * 0.2))

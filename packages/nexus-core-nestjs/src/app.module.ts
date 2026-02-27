@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SystemModule } from './system/system.module';
 import { UsersModule } from './users/users.module';
+import { SystemModule } from './system/system.module';
+import { AnalyticsModule } from './system/analytics/analytics.module';
+import { AnalyticsInterceptor } from './system/analytics/analytics.interceptor';
 
 @Module({
   imports: [
@@ -19,10 +22,17 @@ import { UsersModule } from './users/users.module';
       }),
       inject: [ConfigService],
     }),
-    SystemModule,
     UsersModule,
+    SystemModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AnalyticsInterceptor,
+    },
+  ],
 })
 export class AppModule {}

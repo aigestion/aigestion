@@ -36,6 +36,40 @@
     />
     <meta name="twitter:image" content="/og-image.png" />
 
+    <!-- 🛡️ God Level Security Headers -->
+    <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://vapi.ai; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://vapi.ai wss://*.vapi.ai https://www.google-analytics.com; frame-src 'self' https://vapi.ai;" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(self), geolocation=()" />
+    
+    <!-- 🔍 Structured Data (SEO) -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "AIGestion Nexus",
+          "url": "https://aigestion.net/",
+          "logo": "https://aigestion.net/og-image.png",
+          "description": "Plataforma de Inteligencia Soberana y Agentes de Voz AI",
+          "sameAs": [
+            "https://github.com/aigestion",
+            "https://twitter.com/aigestion"
+          ]
+        }
+        </script>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "url": "https://aigestion.net/",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://aigestion.net/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        }
+        </script>
+
     <!-- Theme & PWA -->
     <meta name="theme-color" content="#0a0a0a" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

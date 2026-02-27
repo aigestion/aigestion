@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronRight, Menu, X, User } from 'lucide-react';
+import { ChevronRight, Menu, User, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useSoundEffects } from '../hooks/useSoundEffects';
 import { useAppContext } from '../contexts/AppContext';
+import { useSoundEffects } from '../hooks/useSoundEffects';
 
 export const Navigation: React.FC = () => {
   const { playHover, playClick } = useSoundEffects();
@@ -71,9 +71,9 @@ export const Navigation: React.FC = () => {
           </div>
 
           <div className="flex flex-col justify-center">
-            <h1 className="font-orbitron font-black text-2xl tracking-tighter text-white transition-all duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+            <span className="font-orbitron font-black text-2xl tracking-tighter text-white transition-all duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
               AIGESTION.NET
-            </h1>
+            </span>
             <span className="text-[10px] text-nexus-cyan tracking-[0.3em] font-orbitron opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-2 left-14 drop-shadow-[0_0_8px_rgba(0,245,255,0.8)]">
               NEXUS
             </span>
@@ -86,29 +86,32 @@ export const Navigation: React.FC = () => {
             const commonProps = {
               key: item.label,
               onMouseEnter: playHover,
-              className: "text-sm font-medium text-gray-300 hover:text-white transition-all relative group px-4 py-2 font-orbitron tracking-wide rounded-lg hover:bg-white/5"
+              className:
+                'text-sm font-medium text-gray-300 hover:text-white transition-all relative group px-4 py-2 font-orbitron tracking-wide rounded-lg hover:bg-white/5',
             };
 
             const content = (
               <>
-                <span className="relative z-10 group-hover:text-nexus-cyan transition-colors duration-300">{item.label}</span>
+                <span className="relative z-10 group-hover:text-nexus-cyan transition-colors duration-300">
+                  {item.label}
+                </span>
                 <span className="absolute bottom-1 left-4 w-0 h-[1px] bg-nexus-cyan transition-all duration-300 group-hover:w-[calc(100%-2rem)] shadow-[0_0_8px_#22d3ee]" />
               </>
             );
 
             if (item.isHash) {
-               return (
-                 <a
-                   {...commonProps}
-                   href={item.path}
-                   onClick={e => {
-                     e.preventDefault();
-                     handleLinkClick(item.path, item.isHash, item.isModal);
-                   }}
-                 >
-                   {content}
-                 </a>
-               );
+              return (
+                <a
+                  {...commonProps}
+                  href={item.path}
+                  onClick={e => {
+                    e.preventDefault();
+                    handleLinkClick(item.path, item.isHash, item.isModal);
+                  }}
+                >
+                  {content}
+                </a>
+              );
             }
 
             return (
@@ -125,6 +128,15 @@ export const Navigation: React.FC = () => {
 
         {/* CTAs */}
         <div className="hidden md:flex items-center space-x-6">
+          <a
+            href="tel:+16185381369"
+            onMouseEnter={playHover}
+            onClick={playClick}
+            className="text-xs font-black font-orbitron text-nexus-cyan/50 hover:text-nexus-cyan transition-all hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.5)] tracking-[0.3em] uppercase flex items-center gap-2"
+          >
+            <span className="text-lg">🤖</span>
+            Llama a Daniela IA
+          </a>
           <Link
             to="/login"
             onMouseEnter={playHover}
@@ -141,7 +153,7 @@ export const Navigation: React.FC = () => {
           >
             {/* Animated Border Gradient */}
             <div className="absolute inset-0 p-[2px] rounded-xl bg-gradient-to-r from-nexus-cyan via-nexus-violet to-nexus-cyan bg-[length:200%_auto] animate-gradient-x opacity-30 group-hover:opacity-100 transition-opacity">
-               <div className="absolute inset-0 bg-black rounded-[10px]" />
+              <div className="absolute inset-0 bg-black rounded-[10px]" />
             </div>
 
             <div className="absolute inset-0 bg-nexus-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -158,7 +170,8 @@ export const Navigation: React.FC = () => {
             playClick();
             setIsMobileMenuOpen(true);
           }}
-          className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+          className="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors tappable"
+          aria-label="Abrir menú"
         >
           <Menu className="w-6 h-6" />
         </button>
@@ -186,7 +199,8 @@ export const Navigation: React.FC = () => {
                 <span className="text-xl font-bold font-orbitron text-white glitch-text">MENÚ</span>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 text-gray-400 hover:text-nexus-cyan hover:bg-white/5 rounded-lg transition-colors"
+                  className="p-3 text-gray-400 hover:text-nexus-cyan hover:bg-white/5 rounded-lg transition-colors tappable"
+                  aria-label="Cerrar menú"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -207,7 +221,8 @@ export const Navigation: React.FC = () => {
 
                   const commonProps = {
                     key: item.label,
-                    className: "flex items-center space-x-4 text-gray-300 hover:text-white group p-2 hover:bg-white/5 rounded-xl transition-all"
+                    className:
+                      'flex items-center space-x-4 text-gray-300 hover:text-white group p-3 hover:bg-white/5 rounded-xl transition-all tappable',
                   };
 
                   if (item.isHash) {
@@ -237,6 +252,22 @@ export const Navigation: React.FC = () => {
                 })}
 
                 <div className="h-px bg-white/10 my-6" />
+
+                <a
+                  href="tel:+16185381369"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center space-x-4 text-nexus-cyan hover:text-white p-2 hover:bg-white/5 rounded-xl transition-all"
+                >
+                  <div className="p-2 bg-nexus-cyan/10 rounded-lg border border-nexus-cyan/30">
+                    <span className="text-lg">🤖</span>
+                  </div>
+                  <div>
+                    <span className="text-lg font-medium font-orbitron tracking-wide">
+                      Llamar a Daniela IA
+                    </span>
+                    <div className="text-sm text-nexus-cyan/70">Asistente Virtual</div>
+                  </div>
+                </a>
 
                 <Link
                   to="/login"

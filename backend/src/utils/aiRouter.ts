@@ -6,7 +6,7 @@ export enum AIModelTier {
 }
 
 export interface ModelConfig {
-  provider: 'gemini' | 'openai' | 'anthropic' | 'ollama';
+  provider: 'gemini' | 'openai' | 'anthropic' | 'ollama' | 'mistral';
   modelId: string;
 }
 
@@ -53,8 +53,8 @@ export class AIModelRouter {
   static getModelConfig(tier: AIModelTier): ModelConfig {
     switch (tier) {
       case AIModelTier.PREMIUM:
-        // Use Claude 3.5 Sonnet for premium (Smartest)
-        return { provider: 'anthropic', modelId: 'claude-3-5-sonnet-20241022' };
+        // Use Mistral Large for premium (High reasoning, cheaper than Sonnet)
+        return { provider: 'mistral', modelId: 'mistral-large-latest' };
       case AIModelTier.ECONOMY:
         // Use Gemini 1.5 Flash for economy (Cheapest)
         return { provider: 'gemini', modelId: 'gemini-2.0-flash-lite' };
@@ -63,8 +63,8 @@ export class AIModelRouter {
         return { provider: 'ollama', modelId: 'llama3:8b' };
       case AIModelTier.STANDARD:
       default:
-        // Use Gemini 2.0 Flash for standard (Fastest/Balanced)
-        return { provider: 'gemini', modelId: 'gemini-2.0-flash' };
+        // Use Mistral Small for standard (Fast/Balanced)
+        return { provider: 'mistral', modelId: 'mistral-small-latest' };
     }
   }
 }

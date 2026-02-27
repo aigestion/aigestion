@@ -14,6 +14,17 @@ jest.mock('../../cache/redis', () => ({
     ping: jest.fn().mockResolvedValue('PONG'),
     isOpen: true,
   }),
+  getCacheStats: jest.fn().mockReturnValue({
+    l1Hits: 0,
+    l1Misses: 0,
+    l2Hits: 0,
+    l2Misses: 0,
+    l2Errors: 0,
+    l1HitRate: '0%',
+    l2HitRate: '0%',
+    l1Size: 0,
+    l1MaxSize: 1000,
+  }),
 }));
 
 jest.mock('../../queue/rabbitmq', () => ({

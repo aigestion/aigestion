@@ -91,7 +91,8 @@ export const cspReportHandler = (req: Request, res: Response, next: NextFunction
     // In production, send to monitoring service
     if (config.nodeEnv === 'production') {
       try {
-        const { container, TYPES } = require('../config/inversify.config');
+        const { container } = require('../config/inversify.config');
+        const { TYPES } = require('../types');
         const errorReporting = container.get(TYPES.ErrorReportingService);
         errorReporting.reportViolation('CSP_POLICY', report);
       } catch (err) {

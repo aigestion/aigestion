@@ -29,6 +29,9 @@ export async function loadSecrets(): Promise<void> {
     'GOOGLE_GENAI_API_KEY',
     'MONGO_ROOT_PASSWORD',
     'JWT_SECRET',
+    'COOKIE_SECRET',
+    'SESSION_SECRET',
+    'ENCRYPTION_KEY',
     'STRIPE_SECRET_KEY',
     'STRIPE_WEBHOOK_SECRET',
     'ML_SERVICE_API_KEY',
@@ -40,6 +43,17 @@ export async function loadSecrets(): Promise<void> {
     'WHATSAPP_TOKEN',
     'META_ACCESS_TOKEN',
     'REDIS_PASSWORD',
+    'OPENAI_API_KEY',
+    'DEEPSEEK_API_KEY',
+    'PINECONE_API_KEY',
+    'VAPI_PRIVATE_KEY',
+    'SUPABASE_KEY',
+    'FIGMA_ACCESS_TOKEN',
+    'NOTION_API_KEY',
+    'GOOGLE_MAPS_API_KEY',
+    'DATADOG_API_KEY',
+    'SENTRY_AUTH_TOKEN',
+    'GITHUB_API_TOKEN',
   ];
 
   logger.info(`Fetching ${secretNames.length} secrets from GCP Secret Manager...`);

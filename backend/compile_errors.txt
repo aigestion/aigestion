@@ -1,0 +1,245 @@
+src/app.ts(2,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+compression@1.8.1/node_modules/@types/compression/index"' can only be default-imported using the 'esModuleInterop' flag
+src/app.ts(3,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+cookie-parser@1.4.10_@types+express@4.17.25/node_modules/@types/cookie-parser/index"' can only be default-imported using the 'esModuleInterop' flag
+src/app.ts(4,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+cors@2.8.19/node_modules/@types/cors/index"' can only be default-imported using the 'esModuleInterop' flag
+src/app.ts(5,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+express@4.17.25/node_modules/@types/express/index"' can only be default-imported using the 'esModuleInterop' flag
+src/app.ts(8,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+hpp@0.2.7/node_modules/@types/hpp/index"' can only be default-imported using the 'esModuleInterop' flag
+src/app.ts(9,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+morgan@1.9.10/node_modules/@types/morgan/index"' can only be default-imported using the 'esModuleInterop' flag
+src/application/usecases/LoginUserUseCase.ts(2,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+bcryptjs@2.4.6/node_modules/@types/bcryptjs/index"' has no default export.
+src/application/usecases/LoginUserUseCase.ts(3,8): error TS1192: Module '"crypto"' has no default export.
+src/application/usecases/LoginUserUseCase.ts(4,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+jsonwebtoken@9.0.10/node_modules/@types/jsonwebtoken/index"' has no default export.
+src/application/usecases/RegisterUserUseCase.ts(2,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+bcryptjs@2.4.6/node_modules/@types/bcryptjs/index"' has no default export.
+src/application/usecases/RegisterUserUseCase.ts(3,8): error TS1192: Module '"crypto"' has no default export.
+src/application/usecases/RegisterUserUseCase.ts(4,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+jsonwebtoken@9.0.10/node_modules/@types/jsonwebtoken/index"' has no default export.
+src/application/usecases/Verify2FALoginUseCase.ts(2,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+jsonwebtoken@9.0.10/node_modules/@types/jsonwebtoken/index"' has no default export.
+src/application/usecases/Verify2FALoginUseCase.ts(3,8): error TS1192: Module '"crypto"' has no default export.
+src/bootstrap.ts(8,22): error TS2732: Cannot find module '../tsconfig.json'. Consider using '--resolveJsonModule' to import module with '.json' extension.
+src/bootstrap.ts(9,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/bootstrap.ts(10,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/dotenv@17.2.3/node_modules/dotenv/lib/main"' has no default export.
+src/cache/redis.ts(264,24): error TS2802: Type 'Map<string, { value: any; expiry: number; }>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/cache/redis.ts(362,26): error TS2802: Type 'Map<string, { value: any; expiry: number; }>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/cache/redis.ts(367,27): error TS2802: Type 'MapIterator<[string, { value: any; expiry: number; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/config/malware-scanner.config.ts(1,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/controllers/analytics.controller.ts(3,8): error TS1192: Module '"node:os"' has no default export.
+src/controllers/auth.controller.ts(1,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+bcryptjs@2.4.6/node_modules/@types/bcryptjs/index"' has no default export.
+src/controllers/auth.controller.ts(3,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+jsonwebtoken@9.0.10/node_modules/@types/jsonwebtoken/index"' has no default export.
+src/controllers/health.controller.ts(3,8): error TS1192: Module '"os"' has no default export.
+src/controllers/NexusCommandController.ts(9,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/controllers/NexusCommandController.ts(10,8): error TS1192: Module '"fs"' has no default export.
+src/controllers/NexusCommandController.ts(102,53): error TS2339: Property 'indexedFiles' does not exist on type 'string'.
+src/controllers/NexusCommandController.ts(137,39): error TS2554: Expected 4 arguments, but got 2.
+src/controllers/rag.controller.ts(15,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+multer@2.0.0/node_modules/@types/multer/index"' can only be default-imported using the 'esModuleInterop' flag
+src/controllers/SovereignHandshakeController.ts(9,8): error TS1192: Module '"node:crypto"' has no default export.
+src/controllers/system.controller.ts(3,8): error TS1192: Module '"node:os"' has no default export.
+src/controllers/system.controller.ts(95,27): error TS2339: Property 'map' does not exist on type 'unknown'.
+src/controllers/task.controller.ts(3,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/controllers/VoiceController.ts(9,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/controllers/VoiceController.ts(10,8): error TS1192: Module '"fs"' has no default export.
+src/controllers/webauthn.controller.ts(11,8): error TS1192: Module '"crypto"' has no default export.
+src/features/remote-access/services/session-manager.service.ts(161,29): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/features/remote-access/services/signaling.service.ts(152,42): error TS2802: Type 'MapIterator<[string, string]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/graphql/dataloaders.ts(1,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/dataloader@2.2.3/node_modules/dataloader/index"' can only be default-imported using the 'esModuleInterop' flag
+src/graphql/router.ts(1,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+express@4.17.25/node_modules/@types/express/index"' can only be default-imported using the 'esModuleInterop' flag
+src/graphql/schema.ts(14,8): error TS1192: Module '"os"' has no default export.
+src/graphql/schema.ts(243,71): error TS2365: Operator '+' cannot be applied to types 'unknown' and 'unknown'.
+src/graphql/schema.ts(245,30): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/graphql/schema.ts(245,46): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/infrastructure/ai/GeminiProvider.ts(64,24): error TS2339: Property 'startChat' does not exist on type 'GenerativeModel'.
+src/infrastructure/ai/MistralProvider.ts(14,5): error TS2322: Type 'string | ContentChunk[]' is not assignable to type 'string'.
+  Type 'ContentChunk[]' is not assignable to type 'string'.
+src/infrastructure/database/mongoose-cache.plugin.ts(4,8): error TS1192: Module '"node:crypto"' has no default export.
+src/infrastructure/database/mongoose-cache.plugin.ts(46,31): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
+src/infrastructure/database/mongoose-cache.plugin.ts(84,43): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
+src/infrastructure/jobs/DocumentProcessor.ts(7,8): error TS1192: Module '"fs/promises"' has no default export.
+src/infrastructure/jobs/JobQueue.ts(53,25): error TS2802: Type 'MapIterator<Queue<any, any, string, any, any, string>>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/middleware/auth.middleware.ts(2,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+jsonwebtoken@9.0.10/node_modules/@types/jsonwebtoken/index"' has no default export.
+src/middleware/malware-scanner.middleware.ts(2,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+multer@2.0.0/node_modules/@types/multer/index"' can only be default-imported using the 'esModuleInterop' flag
+src/middleware/malware-scanner.middleware.ts(3,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/middleware/malware-scanner.middleware.ts(8,8): error TS1192: Module '"fs/promises"' has no default export.
+src/premium_management/index.ts(2,8): error TS1192: Module '"fs"' has no default export.
+src/premium_management/index.ts(3,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/queue/youtube-transcription.queue.ts(2,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+amqplib@0.10.8/node_modules/@types/amqplib/index"' has no default export.
+src/routes/document.routes.ts(2,8): error TS1192: Module '"fs/promises"' has no default export.
+src/routes/rag.routes.ts(2,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+multer@2.0.0/node_modules/@types/multer/index"' can only be default-imported using the 'esModuleInterop' flag
+src/routes/voice-assets.routes.ts(1,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+express@4.17.25/node_modules/@types/express/index"' can only be default-imported using the 'esModuleInterop' flag
+src/routes/voice-assets.routes.ts(2,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/routes/voice-assets.routes.ts(3,8): error TS1192: Module '"fs/promises"' has no default export.
+src/sanity-db.ts(2,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/dotenv@17.2.3/node_modules/dotenv/lib/main"' has no default export.
+src/sanity-db.ts(3,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/scripts/check-credentials-debug.ts(5,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/dotenv@17.2.3/node_modules/dotenv/lib/main"' has no default export.
+src/scripts/check-credentials-debug.ts(6,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/scripts/fetch_billing.ts(2,8): error TS1192: Module '"fs"' has no default export.
+src/scripts/fetch_billing.ts(3,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/scripts/run-backup.ts(3,8): error TS1192: Module '"fs"' has no default export.
+src/scripts/run-backup.ts(4,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/scripts/setupOptimizations.ts(6,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/chalk@4.1.2/node_modules/chalk/index"' can only be default-imported using the 'esModuleInterop' flag
+src/scripts/test-telegram.ts(1,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/dotenv@17.2.3/node_modules/dotenv/lib/main"' has no default export.
+src/scripts/test-telegram.ts(2,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/scripts/test_key.ts(2,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/dotenv@17.2.3/node_modules/dotenv/lib/main"' has no default export.
+src/scripts/test_swarm_mission.ts(47,42): error TS2339: Property 'getSwarmJobStatus' does not exist on type 'AIService'.
+src/scripts/verify_unified_sheets.ts(7,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/server.ts(1,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/dotenv@17.2.3/node_modules/dotenv/lib/main"' has no default export.
+src/server.ts(3,8): error TS1259: Module '"node:path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/analytics.service.ts(2,8): error TS1192: Module '"node:os"' has no default export.
+src/services/auth.service.ts(2,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+jsonwebtoken@9.0.10/node_modules/@types/jsonwebtoken/index"' has no default export.
+src/services/auth.service.ts(3,8): error TS1192: Module '"crypto"' has no default export.
+src/services/auto-documentation.service.ts(1,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/auto-documentation.service.ts(3,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/auto-patch.service.ts(2,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/auto-patch.service.ts(4,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/backup-restore.service.ts(2,8): error TS1192: Module '"crypto"' has no default export.
+src/services/backup-restore.service.ts(3,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/backup-restore.service.ts(5,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/backup-scheduler.service.ts(2,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/backup.service.ts(1,8): error TS1192: Module '"crypto"' has no default export.
+src/services/backup.service.ts(2,8): error TS1192: Module '"fs"' has no default export.
+src/services/backup.service.ts(4,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/centralized-logging.service.ts(1,8): error TS1192: Module '"crypto"' has no default export.
+src/services/centralized-logging.service.ts(2,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/centralized-logging.service.ts(5,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/content-factory.service.ts(6,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/daniela-ai.service.ts(939,37): error TS2802: Type 'MapIterator<[number, DanielaContext]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/daniela-call-agent.service.ts(2,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/daniela-call-agent.service.ts(3,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/daniela-call-agent.service.ts(246,35): error TS2802: Type 'MapIterator<[string, CallContext]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(2,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/elevenlabs.service.ts(4,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/elevenlabs.service.ts(110,36): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(130,32): error TS2802: Type 'MapIterator<[string, ElevenLabsCache]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(442,39): error TS2802: Type 'ArrayIterator<[number, string]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(485,33): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(515,25): error TS2802: Type 'MapIterator<ElevenLabsCache>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/email.service.ts(1,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+nodemailer@7.0.5/node_modules/@types/nodemailer/index"' has no default export.
+src/services/enhanced-voice.service.ts(1,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/enhanced-voice.service.ts(3,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/exit-email.service.ts(1,8): error TS1192: Module '"fs"' has no default export.
+src/services/exit-email.service.ts(2,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/file-cache.helper.ts(4,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/file-cache.helper.ts(5,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/gems/ForgeGem.ts(44,40): error TS2550: Property 'replaceAll' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
+src/services/google/nexus-radio.service.ts(50,28): error TS2550: Property 'replaceAll' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
+src/services/google/secret-manager.service.ts(1,8): error TS1192: Module '"fs"' has no default export.
+src/services/google/secret-manager.service.ts(3,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/health/system-health.service.ts(2,8): error TS1192: Module '"os"' has no default export.
+src/services/malware-scanner.service.ts(3,8): error TS1192: Module '"crypto"' has no default export.
+src/services/malware-scanner.service.ts(4,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/malware-scanner.service.ts(6,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/malware-scanner.service.ts(124,22): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/malware-scanner.service.ts(498,24): error TS2802: Type 'Buffer<ArrayBufferLike>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/malware-scanner.service.ts(506,25): error TS2802: Type 'MapIterator<number>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/monitoring.service.ts(673,37): error TS2802: Type 'MapIterator<[string, Metric[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/monitoring.service.ts(751,37): error TS2802: Type 'MapIterator<[string, Metric[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/NeuralHealthService.ts(1,8): error TS1192: Module '"os"' has no default export.
+src/services/pinecone.service.ts(8,8): error TS1192: Module '"crypto"' has no default export.
+src/services/pqc-comm.service.ts(4,8): error TS1192: Module '"node:crypto"' has no default export.
+src/services/qwen-tts.service.ts(5,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/qwen-tts.service.ts(6,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/rag.service.ts(3,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/rag.service.ts(4,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/SovereignCodeRepairService.ts(6,8): error TS1192: Module '"fs/promises"' has no default export.
+src/services/SovereignCodeRepairService.ts(9,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/services/SovereignHealingService.ts(11,8): error TS1192: Module '"node:crypto"' has no default export.
+src/services/supabase.service.ts(5,10): error TS2305: Module '"pg"' has no exported member 'Pool'.
+src/services/supabase.service.ts(5,16): error TS2305: Module '"pg"' has no exported member 'PoolClient'.
+src/services/supabase.service.ts(7,8): error TS1192: Module '"crypto"' has no default export.
+src/services/supabase.service.ts(212,32): error TS2802: Type 'MapIterator<[string, { data: any; timestamp: number; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/supabase.service.ts(256,32): error TS2802: Type 'MapIterator<[string, { data: any; timestamp: number; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/supabase.service.ts(490,33): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/twilio.service.ts(125,36): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/twilio.service.ts(145,32): error TS2802: Type 'MapIterator<[string, TwilioCache]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/twilio.service.ts(509,33): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/twilio.service.ts(540,25): error TS2802: Type 'MapIterator<TwilioCache>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/two-factor.service.ts(1,8): error TS1192: Module '"crypto"' has no default export.
+src/services/two-factor.service.ts(4,8): error TS1192: Module '"qrcode"' has no default export.
+src/services/user-behavior.service.ts(644,39): error TS2802: Type 'MapIterator<[string, UserBehaviorProfile]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/vault.service.ts(2,8): error TS1192: Module '"node:crypto"' has no default export.
+src/services/VoiceBiometricsService.ts(2,8): error TS1192: Module '"node:crypto"' has no default export.
+src/services/waf.service.ts(174,31): error TS2802: Type 'MapIterator<[string, { count: number; blocked: boolean; lastSeen: Date; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/waf.service.ts(280,32): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/tools/auto-doc.ts(1,8): error TS1192: Module '"fs/promises"' has no default export.
+src/tools/auto-doc.ts(2,8): error TS1259: Module '"path"' can only be default-imported using the 'esModuleInterop' flag
+src/tools/stripe.tool.ts(12,3): error TS2416: Property 'schema' in type 'StripeTool' is not assignable to the same property in base type 'BaseTool<{ action: string; userId: string; priceId?: string; }>'.
+  Type 'ZodObject<{ action: ZodEnum<["get_status", "create_checkout", "create_portal"]>; userId: ZodString; priceId: ZodOptional<ZodString>; }, "strip", ZodTypeAny, { ...; }, { ...; }>' is not assignable to type 'ZodType<{ action: string; userId: string; priceId?: string; }, ZodTypeDef, { action: string; userId: string; priceId?: string; }>'.
+    Types of property '_type' are incompatible.
+      Type '{ action?: "get_status" | "create_checkout" | "create_portal"; userId?: string; priceId?: string; }' is not assignable to type '{ action: string; userId: string; priceId?: string; }'.
+        Property 'action' is optional in type '{ action?: "get_status" | "create_checkout" | "create_portal"; userId?: string; priceId?: string; }' but required in type '{ action: string; userId: string; priceId?: string; }'.
+src/tools/web-search.tool.ts(20,3): error TS2416: Property 'schema' in type 'SearchWebTool' is not assignable to the same property in base type 'BaseTool<{ query: string; }>'.
+  Type 'ZodObject<{ query: ZodString; }, "strip", ZodTypeAny, { query?: string; }, { query?: string; }>' is not assignable to type 'ZodType<{ query: string; }, ZodTypeDef, { query: string; }>'.
+    Types of property '_type' are incompatible.
+      Type '{ query?: string; }' is not assignable to type '{ query: string; }'.
+        Property 'query' is optional in type '{ query?: string; }' but required in type '{ query: string; }'.
+src/types/express.d.ts(10,7): error TS2717: Subsequent property declarations must have the same type.  Property 'user' must be of type '{ id: string; email: string; role: string; }', but here has type '{ id: string; role?: string; }'.
+src/types/globals.d.ts(9,8): error TS2300: Duplicate identifier 'MediaStream'.
+src/utils/email.service.ts(1,8): error TS1192: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+nodemailer@7.0.5/node_modules/@types/nodemailer/index"' has no default export.
+src/utils/logger.ts(2,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/pino@10.2.0/node_modules/pino/pino"' can only be default-imported using the 'esModuleInterop' flag
+src/verify-ai-refactor.ts(4,24): error TS2307: Cannot find module '../../utils/logger' or its corresponding type declarations.
+../node_modules/.pnpm/@google-cloud+storage@7.18.0/node_modules/@google-cloud/storage/build/cjs/src/crc32c.d.ts(66,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@google-cloud+storage@7.18.0/node_modules/@google-cloud/storage/build/cjs/src/file.d.ts(327,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@google-cloud+storage@7.18.0/node_modules/@google-cloud/storage/build/cjs/src/hash-stream-validator.d.ts(20,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@google-cloud+storage@7.18.0/node_modules/@google-cloud/storage/build/cjs/src/resumable-upload.d.ts(204,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@inversifyjs+common@1.4.0/node_modules/@inversifyjs/common/lib/cjs/services/models/LazyServiceIdentifier.d.ts(4,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@inversifyjs+core@1.3.5_reflect-metadata@0.2.2/node_modules/@inversifyjs/core/lib/cjs/legacyTarget/models/LegacyTargetImpl.d.ts(10,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@mistralai+mistralai@1.14.1/node_modules/@mistralai/mistralai/lib/sdks.d.ts(48,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@opentelemetry+instrumentat_ce1ff170be883022240bbcddfb52c55e/node_modules/@opentelemetry/instrumentation-pg/build/src/types.d.ts(5,19): error TS2694: Namespace '"pg"' has no exported member 'QueryResult'.
+../node_modules/.pnpm/@opentelemetry+instrumentat_ce1ff170be883022240bbcddfb52c55e/node_modules/@opentelemetry/instrumentation-pg/build/src/types.d.ts(5,41): error TS2694: Namespace '"pg"' has no exported member 'QueryArrayResult'.
+../node_modules/.pnpm/@opentelemetry+instrumentat_e90c2b6e621bfc274559c4b4d2d8573e/node_modules/@opentelemetry/instrumentation-pg/build/src/types.d.ts(5,19): error TS2694: Namespace '"pg"' has no exported member 'QueryResult'.
+../node_modules/.pnpm/@opentelemetry+instrumentat_e90c2b6e621bfc274559c4b4d2d8573e/node_modules/@opentelemetry/instrumentation-pg/build/src/types.d.ts(5,41): error TS2694: Namespace '"pg"' has no exported member 'QueryArrayResult'.
+../node_modules/.pnpm/@redis+client@1.6.1/node_modules/@redis/client/dist/lib/client/commands-queue.d.ts(27,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@redis+client@1.6.1/node_modules/@redis/client/dist/lib/client/index.d.ts(92,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@redis+client@1.6.1/node_modules/@redis/client/dist/lib/client/multi-command.d.ts(25,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@redis+client@1.6.1/node_modules/@redis/client/dist/lib/client/pub-sub.d.ts(17,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@redis+client@1.6.1/node_modules/@redis/client/dist/lib/client/socket.d.ts(39,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@redis+client@1.6.1/node_modules/@redis/client/dist/lib/cluster/cluster-slots.d.ts(37,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@redis+client@1.6.1/node_modules/@redis/client/dist/lib/cluster/index.d.ts(46,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@redis+client@1.6.1/node_modules/@redis/client/dist/lib/cluster/multi-command.d.ts(25,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@redis+graph@1.1.1_@redis+client@1.6.1/node_modules/@redis/graph/dist/graph.d.ts(15,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/@types+pg-pool@2.0.7/node_modules/@types/pg-pool/index.d.ts(3,52): error TS2339: Property 'Pool' does not exist on type 'typeof import("pg")'.
+../node_modules/.pnpm/@types+pg-pool@2.0.7/node_modules/@types/pg-pool/index.d.ts(8,31): error TS2694: Namespace '"pg"' has no exported member 'PoolClient'.
+../node_modules/.pnpm/@types+pg-pool@2.0.7/node_modules/@types/pg-pool/index.d.ts(9,53): error TS2694: Namespace '"pg"' has no exported member 'PoolClient'.
+../node_modules/.pnpm/@types+pg-pool@2.0.7/node_modules/@types/pg-pool/index.d.ts(13,79): error TS2694: Namespace '"pg"' has no exported member 'PoolClient'.
+../node_modules/.pnpm/@types+pg-pool@2.0.7/node_modules/@types/pg-pool/index.d.ts(14,31): error TS2694: Namespace '"pg"' has no exported member 'PoolClient'.
+../node_modules/.pnpm/@types+pg-pool@2.0.7/node_modules/@types/pg-pool/index.d.ts(21,54): error TS2694: Namespace '"pg"' has no exported member 'PoolConfig'.
+../node_modules/.pnpm/gaxios@6.7.1/node_modules/gaxios/build/src/gaxios.d.ts(6,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/gaxios@7.1.3/node_modules/gaxios/build/cjs/src/gaxios.d.ts(16,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@10.5.0/node_modules/google-auth-library/build/src/auth/awsclient.d.ts(83,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@10.5.0/node_modules/google-auth-library/build/src/auth/baseexternalclient.d.ts(173,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@10.5.0/node_modules/google-auth-library/build/src/auth/googleauth.d.ts(159,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@10.5.0/node_modules/google-auth-library/build/src/auth/oauth2common.d.ts(50,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@10.5.0/node_modules/google-auth-library/build/src/auth/stscredentials.d.ts(99,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@10.5.0/node_modules/google-auth-library/build/src/util.d.ts(125,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@9.15.1/node_modules/google-auth-library/build/src/auth/awsclient.d.ts(84,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@9.15.1/node_modules/google-auth-library/build/src/auth/baseexternalclient.d.ts(176,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@9.15.1/node_modules/google-auth-library/build/src/auth/googleauth.d.ts(90,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/google-auth-library@9.15.1/node_modules/google-auth-library/build/src/util.d.ts(134,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/gtoken@7.1.0/node_modules/gtoken/build/src/index.d.ts(38,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/gtoken@8.0.0/node_modules/gtoken/build/cjs/src/index.d.ts(38,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/inversify-express-utils@6.5_5172f29efcf8092937392f574c793e4c/node_modules/inversify-express-utils/lib/cjs/server.d.ts(2,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/@types+express@4.17.25/node_modules/@types/express/index"' can only be default-imported using the 'esModuleInterop' flag
+../node_modules/.pnpm/mongoose@8.21.0_gcp-metadata@5.3.0_socks@2.8.7/node_modules/mongoose/types/query.d.ts(242,9): error TS2428: All declarations of 'Query' must have identical type parameters.
+../node_modules/.pnpm/pino@10.2.0/node_modules/pino/pino.d.ts(21,8): error TS1259: Module '"C:/Users/Alejandro/AIGestion/node_modules/.pnpm/thread-stream@4.0.0/node_modules/thread-stream/index"' can only be default-imported using the 'esModuleInterop' flag
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(33,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(423,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(658,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(945,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(1060,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(1410,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(1487,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(1530,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(1634,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(1696,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(1797,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(2295,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(2391,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(2423,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(2545,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(3190,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(3564,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(4054,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(4589,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(6734,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(7089,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(7297,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(7384,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(7712,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/puppeteer-core@23.11.1/node_modules/puppeteer-core/lib/types.d.ts(7949,5): error TS18028: Private identifiers are only available when targeting ECMAScript 2015 and higher.
+../node_modules/.pnpm/socket.io@4.8.3/node_modules/socket.io/dist/index.d.ts(1,8): error TS1192: Module '"http"' has no default export.
+../node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/lib/lib.dom.d.ts(20504,11): error TS2300: Duplicate identifier 'MediaStream'.
+../node_modules/.pnpm/typescript@5.9.3/node_modules/typescript/lib/lib.dom.d.ts(20569,13): error TS2300: Duplicate identifier 'MediaStream'.

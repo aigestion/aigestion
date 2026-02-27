@@ -1,6 +1,7 @@
 import { injectable } from 'inversify';
 import { logger } from '../utils/logger';
 import { pineconeService } from './pinecone.service';
+import { env } from '../config/env.schema';
 
 export interface VectorDocument {
   id: string;
@@ -20,7 +21,7 @@ export class VectorService {
    */
   async upsert(doc: VectorDocument): Promise<boolean> {
     try {
-      const namespace = doc.namespace || 'documentation';
+      const namespace = doc.namespace || env.PINECONE_NAMESPACE_DEFAULT;
       logger.info({ docId: doc.id, namespace }, '[VectorService] Indexing to Semantic Memory');
 
       await pineconeService.upsertDocument(
@@ -30,7 +31,7 @@ export class VectorService {
           ...doc.metadata,
           source: 'vector-service-upload',
         },
-        namespace
+        namespace,
       );
 
       return true;
@@ -43,7 +44,11 @@ export class VectorService {
   /**
    * Execute semantic interaction (Search)
    */
-  async search(query: string, limit: number = 5, namespace: string = 'documentation') {
+  async search(
+    query: string,
+    limit: number = 5,
+    namespace: string = env.PINECONE_NAMESPACE_DEFAULT,
+  ) {
     try {
       logger.info({ query, limit, namespace }, '[VectorService] Querying Quantum Registry');
 

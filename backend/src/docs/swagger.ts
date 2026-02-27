@@ -14,36 +14,49 @@
 export function setupSwagger(app: any): void {
   try {
     /* eslint-disable @typescript-eslint/no-var-requires */
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const swaggerJsdoc = require('swagger-jsdoc') as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const swaggerUi = require('swagger-ui-express') as any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const nodePath = require('path') as any;
+    const swaggerJsdoc = require('swagger-jsdoc');
+    const swaggerUi = require('swagger-ui-express');
+    const nodePath = require('node:path');
     /* eslint-enable @typescript-eslint/no-var-requires */
 
-    const swaggerDefinition = {
-      openapi: '3.0.0',
-      info: {
-        title: 'AIGestion API',
-        version: '1.0.0',
-        description: 'Auto-generated API documentation for AIGestion backend',
-      },
-      servers: [{ url: process.env.API_BASE_URL || 'http://localhost:3000' }],
-    };
+    const { swaggerDefinition: manualDefinition } = require('./api-v1.swagger.ts');
 
     const options = {
-      swaggerDefinition,
+      swaggerDefinition: {
+        ...manualDefinition,
+        servers: [{ url: process.env.API_BASE_URL || 'http://localhost:3000' }],
+      },
       apis: [
-        nodePath.join(process.cwd(), 'src/routes/**/*.ts'),
-        nodePath.join(process.cwd(), 'src/controllers/**/*.ts'),
-        nodePath.join(process.cwd(), 'src/models/**/*.ts'),
+        nodePath.join(__dirname, '../routes/**/*.ts'),
+        nodePath.join(__dirname, '../controllers/**/*.ts'),
+        nodePath.join(__dirname, '../models/**/*.ts'),
       ],
     };
 
     const specs = swaggerJsdoc(options);
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
+
+    // ✨ SOVEREIGN SCALAR UI (Premium API Docs)
+    app.get('/docs', (_req: any, res: any) => {
+      res.send(`
+        <!doctype html>
+        <html>
+          <head>
+            <title>AIGestion Nexus API Docs</title>
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+          </head>
+          <body>
+            <script
+              id="api-reference"
+              data-url="/api-docs.json"
+              src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"
+            ></script>
+          </body>
+        </html>
+      `);
+    });
 
     app.get('/api-docs.json', (_req: unknown, res: unknown) => {
       const r = res as { setHeader: (k: string, v: string) => void; send: (d: unknown) => void };

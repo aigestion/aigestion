@@ -1,4 +1,14 @@
-// Google Analytics 4 Service - AIGestion
+import { mixpanelService } from './mixpanel.service';
+import { amplitudeService } from './amplitude.service';
+
+export interface AnalyticsUser {
+  id: string;
+  email: string;
+  name?: string;
+  role?: string;
+  subscription?: string;
+}
+
 export class AnalyticsService {
   private static instance: AnalyticsService;
   private initialized = false;
@@ -15,30 +25,67 @@ export class AnalyticsService {
     if (this.initialized) return;
 
     try {
-      // Load gtag script
-      await this.loadGtag();
-      
       // Initialize GA4
+      await this.loadGtag();
       gtag('js', new Date());
       gtag('config', this.measurementId, {
         debug_mode: import.meta.env.VITE_GOOGLE_ANALYTICS_DEBUG === 'true',
         send_page_view: false
       });
 
+      // Initialize Mixpanel
+      mixpanelService.initialize();
+
+      // Initialize Amplitude
+      amplitudeService.initialize();
+
       this.initialized = true;
-      console.log('📊 Google Analytics 4 initialized');
+      console.log('📊 Analytics System initialized (GA4 + Mixpanel + Amplitude)');
       
-      // Track initial page view
       this.trackPageView();
       
     } catch (error) {
-      console.error('❌ Failed to initialize Google Analytics:', error);
+      console.error('❌ Failed to initialize Analytics:', error);
     }
   }
 
+  setUser(user: AnalyticsUser): void {
+    if (!this.initialized) return;
+
+    // Identify in Mixpanel
+    mixpanelService.identify(user.id, {
+      $email: user.email,
+      $name: user.name,
+      role: user.role,
+      subscription: user.subscription,
+    });
+
+    // Identify in Amplitude
+    amplitudeService.setUserId(user.id);
+    amplitudeService.setUserProperties({
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      subscription: user.subscription,
+    });
+
+    // Set user properties in GA4
+    gtag('set', 'user_properties', {
+      user_id: user.id,
+      user_role: user.role,
+      subscription_plan: user.subscription
+    });
+  }
+
   private async loadGtag(): Promise<void> {
+    if (typeof window === 'undefined') return;
     return new Promise((resolve, reject) => {
+      if (document.getElementById('gtag-js')) {
+        resolve();
+        return;
+      }
       const script = document.createElement('script');
+      script.id = 'gtag-js';
       script.async = true;
       script.src = `https://www.googletagmanager.com/gtag/js?id=${this.measurementId}`;
       script.onload = resolve;
@@ -51,16 +98,38 @@ export class AnalyticsService {
     if (!this.initialized) return;
     
     const pagePath = path || window.location.pathname;
+    const pageTitle = document.title;
+
+    // GA4
     gtag('event', 'page_view', {
       page_location: pagePath,
-      page_title: document.title
+      page_title: pageTitle
+    });
+
+    // Mixpanel
+    mixpanelService.track('Page View', {
+      path: pagePath,
+      title: pageTitle
+    });
+
+    // Amplitude
+    amplitudeService.track('Page View', {
+      path: pagePath,
+      title: pageTitle
     });
   }
 
   trackEvent(eventName: string, parameters?: Record<string, any>): void {
     if (!this.initialized) return;
     
+    // GA4
     gtag('event', eventName, parameters);
+
+    // Mixpanel
+    mixpanelService.track(eventName, parameters);
+
+    // Amplitude
+    amplitudeService.track(eventName, parameters);
   }
 
   trackFeatureUsed(featureName: string, category: string): void {
@@ -99,6 +168,11 @@ export class AnalyticsService {
       value,
       unit
     });
+  }
+
+  reset(): void {
+    mixpanelService.reset();
+    amplitudeService.reset();
   }
 }
 

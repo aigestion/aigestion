@@ -174,31 +174,37 @@ export const DanielaShowcase: React.FC = React.memo(() => {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bento-grid !grid-cols-1 md:!grid-cols-2 lg:!grid-cols-3">
                 {[
                   {
                     title: 'Gestión Inteligente',
                     desc: 'Daniela organiza tu agenda y recuerda cada detalle por ti.',
+                    size: 'small',
                   },
                   {
                     title: 'Lenguage Natural',
                     desc: 'Háblale como a un compañero. Ella te entiende sin complicaciones.',
+                    size: 'small',
                   },
                   {
                     title: 'Sincronización Total',
                     desc: 'Toda tu empresa en la palma de tu mano, lista para actuar.',
+                    size: 'small',
                   },
                   {
                     title: 'Métricas de Éxito',
                     desc: 'Informes claros y directos sobre el rendimiento de tu negocio.',
+                    size: 'small',
                   },
                   {
                     title: 'Control por Voz',
                     desc: 'Gestiona operaciones complejas simplemente hablando.',
+                    size: 'small',
                   },
                   {
                     title: 'Disponibilidad 24/7',
                     desc: 'Tu asistente nunca descansa. Siempre lista, siempre eficiente.',
+                    size: 'small',
                   },
                 ].map((cap, i) => (
                   <motion.div
@@ -206,12 +212,18 @@ export const DanielaShowcase: React.FC = React.memo(() => {
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
+                    className="bento-item !p-0 overflow-hidden"
                   >
-                    <TiltCard className="p-6 premium-glass rounded-2xl border-white/5 hover:border-nexus-violet/30 transition-colors h-full">
-                      <h4 className="text-nexus-violet-glow font-orbitron text-xs tracking-widest mb-2 uppercase">
+                    <TiltCard className="p-8 h-full bg-transparent border-none">
+                      <div className="mb-4 w-10 h-10 rounded-full bg-nexus-violet/20 flex items-center justify-center border border-nexus-violet/30">
+                        <div className="w-2 h-2 rounded-full bg-nexus-violet-glow animate-pulse" />
+                      </div>
+                      <h4 className="text-nexus-violet-glow font-orbitron text-sm tracking-widest mb-3 uppercase font-bold">
                         {cap.title}
                       </h4>
-                      <p className="text-nexus-silver/70 text-sm leading-relaxed">{cap.desc}</p>
+                      <p className="text-nexus-silver/70 text-sm leading-relaxed font-light">
+                        {cap.desc}
+                      </p>
                     </TiltCard>
                   </motion.div>
                 ))}

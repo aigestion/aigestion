@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import fs from 'fs/promises';
 import { buildError, buildResponse } from '../common/response-builder';
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { JobQueue } from '../infrastructure/jobs/JobQueue';
 import { JobName } from '../infrastructure/jobs/job-definitions';
 import { malwareScanner } from '../middleware/malware-scanner.middleware';

@@ -26,6 +26,10 @@ describe('Redis Configuration', () => {
     delete process.env.REDIS_HOST;
     delete process.env.REDIS_PORT;
     delete process.env.REDIS_PASSWORD;
+    delete process.env.ENABLE_REDIS;
+
+    // Enable Redis for testing
+    process.env.ENABLE_REDIS = 'true';
 
     // Setup mocks
     (redis.createClient as jest.Mock) = mockCreateClient;
@@ -34,6 +38,7 @@ describe('Redis Configuration', () => {
     const mockClient = {
       connect: mockConnect,
       on: mockOn,
+      quit: jest.fn().mockResolvedValue(undefined),
       isOpen: true,
     };
 

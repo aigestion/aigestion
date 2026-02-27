@@ -25,22 +25,37 @@ const ServerCore = () => {
 
   return (
     <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-      <Sphere
-        ref={meshRef}
-        args={[1, 64, 64]}
-        onPointerOver={() => setHovered(true)}
-        onPointerOut={() => setHovered(false)}
-        scale={hovered ? 1.2 : 1}
-      >
-        <MeshDistortMaterial
-          color={hovered ? '#8a2be2' : '#00f5ff'}
-          attach="material"
-          distort={0.6}
-          speed={2}
-          roughness={0.2}
-          metalness={0.8}
-        />
-      </Sphere>
+      <group>
+        <Sphere
+          ref={meshRef}
+          args={[1, 64, 64]}
+          onPointerOver={() => setHovered(true)}
+          onPointerOut={() => setHovered(false)}
+          scale={hovered ? 1.2 : 1}
+        >
+          <MeshDistortMaterial
+            color={hovered ? '#BD00FF' : '#00f5ff'}
+            attach="material"
+            distort={0.6}
+            speed={2}
+            roughness={0.1}
+            metalness={0.9}
+            emissive={hovered ? '#BD00FF' : '#00f0ff'}
+            emissiveIntensity={0.5}
+          />
+        </Sphere>
+
+        {/* Glowing Neural Cage */}
+        <Sphere args={[1.05, 32, 32]}>
+          <meshBasicMaterial color="#00f5ff" wireframe transparent opacity={0.1} />
+        </Sphere>
+
+        {/* Outer Pulse Ring */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[1.5, 0.01, 16, 100]} />
+          <meshBasicMaterial color="#BD00FF" transparent opacity={0.2} />
+        </mesh>
+      </group>
     </Float>
   );
 };

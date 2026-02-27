@@ -152,6 +152,28 @@ class WebApplicationFirewall {
         severity: 'medium',
       },
 
+      // 🪤 Honeypot Detection (Traps for bots/attackers)
+      {
+        name: 'HONEYPOT_ACCESS',
+        enabled: true,
+        pattern:
+          /^(\/wp-admin|\/wp-login|\/.env|\/config\.php|\/admin\.php|\/xmlrpc\.php|\/\.git|\/id_rsa|\/shadow)$/i,
+        action: 'block',
+        description: 'Detects access to forbidden honeypot paths',
+        severity: 'critical',
+      },
+
+      // 🧠 Prompt Injection Detection (AI Safety)
+      {
+        name: 'PROMPT_INJECTION',
+        enabled: true,
+        pattern:
+          /(ignore (all )?previous instructions|as a system (administrator|admin)|you are now a|forget everything|new (rule|instruction)|system prompt)/i,
+        action: 'block',
+        description: 'Detects attempts to hijack AI logic',
+        severity: 'critical',
+      },
+
       // HTTP Parameter Pollution
       {
         name: 'PARAMETER_POLLUTION',
@@ -320,47 +342,77 @@ const wafInstance = new WebApplicationFirewall();
 /**
  * WAF Middleware
  */
-export const wafMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  // Update total requests
-  (wafInstance as any).stats.totalRequests++;
+export const wafMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // Update total requests
+    (wafInstance as any).stats.totalRequests++;
 
-  // Analyze request
-  const analysis = wafInstance.analyzeRequest(req);
+    const ip = req.ip || req.get('x-forwarded-for') || 'unknown';
 
-  // Add WAF headers
-  res.setHeader('X-WAF-Status', analysis.blocked ? 'blocked' : 'allowed');
-  if (analysis.matchedRules.length > 0) {
-    res.setHeader('X-WAF-Rules', analysis.matchedRules.join(','));
+    // 🛡️ Redis Ban Check (Early Exit)
+    const redis = require('../cache/redis').getRedisClient();
+    if (redis?.isOpen) {
+      const isBanned = await redis.get(`ban:${ip}`);
+      if (isBanned) {
+        return res.status(403).json({
+          error: 'Forbidden',
+          message: 'Your IP has been temporarily banned due to suspicious activity.',
+          code: 'SOVEREIGN_BAN',
+          timestamp: new Date().toISOString(),
+        });
+      }
+    }
+
+    // Analyze request
+    const analysis = wafInstance.analyzeRequest(req);
+
+    // 🪤 Honeypot/Critical Ban Trigger
+    if (analysis.matchedRules.includes('HONEYPOT_ACCESS')) {
+      if (redis?.isOpen) {
+        await redis.set(`ban:${ip}`, '💀 Honeypot Access Attempt', { EX: 86400 }); // 24h ban
+        logger.error({ ip, path: req.path }, '💀 Honeypot hit - IP Banned for 24h');
+      }
+    }
+
+    // Add WAF headers
+    res.setHeader('X-WAF-Status', analysis.blocked ? 'blocked' : 'allowed');
+    if (analysis.matchedRules.length > 0) {
+      res.setHeader('X-WAF-Rules', analysis.matchedRules.join(','));
+    }
+
+    // Block request if needed
+    if (analysis.blocked) {
+      (wafInstance as any).stats.blockedRequests++;
+
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'Request blocked by Web Application Firewall',
+        code: 'WAF_BLOCKED',
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    // Add warnings to response headers if any
+    if (analysis.warnings.length > 0) {
+      (wafInstance as any).stats.warnings++;
+      res.setHeader('X-WAF-Warnings', analysis.warnings.length);
+
+      // Log warnings for monitoring
+      logger.warn('WAF: Request allowed with warnings', {
+        warnings: analysis.warnings,
+        ip: req.ip,
+        path: req.path,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
+    next();
+  } catch (err) {
+    logger.error(err, 'WAF Middleware Error - Failing Open for safety');
+    next();
   }
-
-  // Block request if needed
-  if (analysis.blocked) {
-    (wafInstance as any).stats.blockedRequests++;
-
-    return res.status(403).json({
-      error: 'Forbidden',
-      message: 'Request blocked by Web Application Firewall',
-      code: 'WAF_BLOCKED',
-      timestamp: new Date().toISOString(),
-    });
-  }
-
-  // Add warnings to response headers if any
-  if (analysis.warnings.length > 0) {
-    (wafInstance as any).stats.warnings++;
-    res.setHeader('X-WAF-Warnings', analysis.warnings.length);
-
-    // Log warnings for monitoring
-    logger.warn('WAF: Request allowed with warnings', {
-      warnings: analysis.warnings,
-      ip: req.ip,
-      path: req.path,
-      timestamp: new Date().toISOString(),
-    });
-  }
-
-  next();
 };
+;
 
 /**
  * WAF Management API

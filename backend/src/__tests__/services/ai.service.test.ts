@@ -2,10 +2,10 @@
 import { Container } from 'inversify';
 import { Readable } from 'stream';
 import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import type { AnalyticsService } from '@/services/analytics.service';
-import type { RagService } from '@/services/rag.service';
-import type { UsageService } from '@/services/usage.service';
-import type { ArbitrationService } from '@/services/arbitration.service';
+import type { AnalyticsService } from '../../services/analytics.service';
+import type { RagService } from '../../services/rag.service';
+import type { UsageService } from '../../services/usage.service';
+import type { ArbitrationService } from '../../services/arbitration.service';
 
 describe('AIService', () => {
   let container: Container;
@@ -31,18 +31,22 @@ describe('AIService', () => {
     mockSendMessageStream = jest.fn();
 
     // Re-register amqplib mock after resetModules()
-    jest.mock('amqplib', () => ({
-      connect: jest.fn().mockResolvedValue({
-        createChannel: jest.fn().mockResolvedValue({
-          prefetch: jest.fn().mockResolvedValue(undefined),
-          assertQueue: jest.fn().mockResolvedValue({}),
-          on: jest.fn().mockReturnThis(),
-          close: jest.fn().mockResolvedValue(undefined),
-        }),
-        close: jest.fn().mockResolvedValue(undefined),
-        on: jest.fn().mockReturnThis(),
-      }),
-    }));
+    jest.mock(
+      'amqplib',
+      () =>
+        ({
+          connect: jest.fn().mockResolvedValue({
+            createChannel: jest.fn().mockResolvedValue({
+              prefetch: jest.fn().mockResolvedValue(undefined),
+              assertQueue: jest.fn().mockResolvedValue({}),
+              on: jest.fn().mockReturnThis(),
+              close: jest.fn().mockResolvedValue(undefined),
+            }),
+            close: jest.fn().mockResolvedValue(undefined),
+            on: jest.fn().mockReturnThis(),
+          }),
+        }) as any,
+    );
 
     // Must be set BEFORE requiring the service — captures closure over mockSendMessageStream
     const getMockSMS = () => mockSendMessageStream;
@@ -86,28 +90,47 @@ describe('AIService', () => {
       modelId: 'gemini-1.5-flash',
     });
 
-    const { AIService } = require('@/services/ai.service');
-    const { TYPES } = require('@/types');
+    const { AIService } = require('../../services/ai.service');
+    const { TYPES } = require('../../types');
+
+    const mockProviderFactory = {
+      getProvider: jest.fn().mockReturnValue({
+        streamChat: jest.fn().mockImplementation(() => {
+          const s = new Readable({ read() {} });
+          s.push(JSON.stringify({ text: 'mock vertex' }));
+          s.push(null);
+          return Promise.resolve(s);
+        }),
+        generateContent: jest.fn().mockResolvedValue('mock response'),
+      }),
+    };
+    const mockToolExecutor = {
+      getStaticToolDefinitions: jest.fn().mockReturnValue([]),
+      handleToolCall: jest.fn().mockResolvedValue('tool result'),
+    };
+
+    // Prevent SupabaseService from starting health check intervals in tests
+    jest.mock('../../services/supabase.service', () => ({
+      SupabaseService: jest.fn().mockImplementation(() => ({
+        onModuleInit: jest.fn(),
+        onModuleDestroy: jest.fn(),
+      })),
+    }));
 
     container = new Container();
-    container
-      .bind<AnalyticsService>(TYPES.AnalyticsService)
-      .toConstantValue(mockAnalyticsService as any);
-    container.bind<RagService>(TYPES.RagService).toConstantValue(mockRagService as any);
-    container.bind<UsageService>(TYPES.UsageService).toConstantValue(mockUsageService as any);
-    container.bind<any>(TYPES.SemanticCacheService).toConstantValue(mockSemanticCache as any);
+    container.bind<any>(TYPES.AIProviderFactory).toConstantValue(mockProviderFactory as any);
+    container.bind<any>(TYPES.AIToolExecutor).toConstantValue(mockToolExecutor as any);
     container
       .bind<ArbitrationService>(TYPES.ArbitrationService)
       .toConstantValue(mockArbitrationService as any);
-    container
-      .bind<any>(TYPES.PineconeService)
-      .toConstantValue({ upsert: jest.fn(), query: jest.fn() } as any);
+    container.bind<any>(TYPES.SemanticCacheService).toConstantValue(mockSemanticCache as any);
+    container.bind<UsageService>(TYPES.UsageService).toConstantValue(mockUsageService as any);
     container
       .bind<any>(TYPES.NexusSwarmOrchestrator)
       .toConstantValue({ orchestrate: jest.fn() } as any);
+    container.bind<any>(TYPES.SwarmInternalClient).toConstantValue({ send: jest.fn() } as any);
     container.bind<any>(TYPES.JulesGem).toConstantValue({ chat: jest.fn() } as any);
     container.bind<any>(TYPES.NexusStitchGem).toConstantValue({ stitch: jest.fn() } as any);
-    container.bind<any>(TYPES.SwarmInternalClient).toConstantValue({ send: jest.fn() } as any);
     container.bind<any>(AIService).toSelf();
 
     aiService = container.get<any>(AIService);

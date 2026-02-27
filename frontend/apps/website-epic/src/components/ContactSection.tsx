@@ -1,5 +1,5 @@
-import { useSoundEffects } from '../hooks/useSoundEffects';
 import { motion } from 'framer-motion';
+import { useSoundEffects } from '../hooks/useSoundEffects';
 import { ContactForm } from './ContactForm';
 import { GlitchText } from './GlitchText';
 
@@ -74,14 +74,17 @@ export const ContactSection: React.FC = () => {
               onSubmit={async data => {
                 console.log('Establishing connection...', data);
                 try {
-                  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/contact`, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'x-api-key': import.meta.env.VITE_API_KEY || '',
-                    },
-                    body: JSON.stringify(data),
-                  });
+                  const response = await fetch(
+                    `${import.meta.env.VITE_API_BASE_URL || '/api/v1'}/contact`,
+                    {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': import.meta.env.VITE_API_KEY || '',
+                      },
+                      body: JSON.stringify(data),
+                    }
+                  );
                   if (!response.ok) throw new Error('Transmission failed');
                   playSuccess();
                 } catch (error) {
@@ -129,7 +132,21 @@ export const ContactSection: React.FC = () => {
                   </div>
                   <div>
                     <div className="text-white font-medium">WhatsApp</div>
-                    <div className="text-nexus-cyan">+34 600 000 000</div>
+                    <div className="text-nexus-cyan">+1 618 538 1369</div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  className="flex items-center gap-4"
+                  whileHover={{ x: 5 }}
+                  onMouseEnter={playHover}
+                >
+                  <div className="w-12 h-12 bg-gradient-to-br from-nexus-violet to-nexus-cyan rounded-lg flex items-center justify-center">
+                    <span className="text-xl">🤖</span>
+                  </div>
+                  <div>
+                    <div className="text-white font-medium">Daniela IA</div>
+                    <div className="text-nexus-cyan">+1 618 538 1369</div>
                   </div>
                 </motion.div>
 

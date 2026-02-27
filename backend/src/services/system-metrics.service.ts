@@ -159,10 +159,14 @@ export class SystemMetricsService {
     try {
       // Cross-platform: count non-empty lines from docker ps -q
       const { stdout } = await execAsync('docker ps -q');
-      return stdout
-        .trim()
-        .split('\n')
-        .filter(line => line.trim()).length;
+      const trimmed = stdout.trim();
+      if (!trimmed) return 0;
+      const lines = trimmed.split('\n').filter(line => line.trim());
+      // If the output is a single numeric value, treat it as the count directly
+      if (lines.length === 1 && /^\d+$/.test(lines[0])) {
+        return parseInt(lines[0], 10);
+      }
+      return lines.length;
     } catch {
       return 0;
     }

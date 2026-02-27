@@ -39,7 +39,9 @@ export class PineconeService {
         logger.error('[PineconeService] Resilience fault during initialization', error);
       }
     } else {
-      logger.warn('[PineconeService] PINECONE_API_KEY missing. Vector capabilities restricted.');
+      logger.warn(
+        '[PineconeService] PINECONE_API_KEY missing in environment. Vector capabilities restricted.',
+      );
     }
   }
 
@@ -163,7 +165,7 @@ export class PineconeService {
     id: string,
     text: string,
     metadata: any,
-    namespace: string = 'default',
+    namespace: string = env.PINECONE_NAMESPACE_DEFAULT,
   ): Promise<void> {
     await this.upsertDocBatch([{ id, text, metadata }], namespace);
   }
@@ -173,7 +175,7 @@ export class PineconeService {
    */
   async upsertDocBatch(
     documents: { id: string; text: string; metadata: Record<string, any> }[],
-    namespace: string = 'documentation',
+    namespace: string = env.PINECONE_NAMESPACE_DEFAULT,
   ): Promise<void> {
     if (!this.client) return;
 
@@ -251,7 +253,7 @@ export class PineconeService {
   ): Promise<any[]> {
     if (!this.client) return [];
 
-    const { topK = 5, namespace = 'documentation', filter } = params;
+    const { topK = 5, namespace = env.PINECONE_NAMESPACE_DEFAULT, filter } = params;
 
     // [SUPREME CACHE] Check if search result is cached
     const searchHash = crypto

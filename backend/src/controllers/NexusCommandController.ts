@@ -4,6 +4,10 @@ import { NeuralHealthService } from '../services/NeuralHealthService';
 import { PredictiveHealingService } from '../services/PredictiveHealingService';
 import { TYPES } from '../types';
 import { logger } from '../utils/logger';
+import { ElevenLabsService } from '../services/elevenlabs.service';
+import { SovereignOrchestratorService } from '../services/SovereignOrchestratorService';
+import path from 'path';
+import fs from 'fs';
 
 /**
  * Nexus Command Controller: The unified brain for processing high-level commands.
@@ -14,6 +18,8 @@ export class NexusCommandController {
     @inject(TYPES.NeuralHealthService) private neuralHealthService: NeuralHealthService,
     @inject(TYPES.PredictiveHealingService)
     private predictiveHealingService: PredictiveHealingService,
+    @inject(TYPES.ElevenLabsService) private elevenLabs: ElevenLabsService,
+    @inject(TYPES.SovereignOrchestratorService) private orchestrator: SovereignOrchestratorService,
   ) {}
 
   /**
@@ -35,6 +41,9 @@ export class NexusCommandController {
           break;
         case 'OVERRIDE_HEALTH':
           await this.handleHealthOverride(params, res);
+          break;
+        case 'SYSTEM_STATUS_VOICE':
+          await this.handleSystemStatusVoice(res);
           break;
         default:
           res.status(400).json({
@@ -83,6 +92,36 @@ export class NexusCommandController {
     logger.warn({ targetStatus }, 'Sobrescribiendo estado de salud del núcleo neural');
     // Esto es una función de "God Mode" puro
     res.json({ success: true, message: `Estado del sistema forzado a: ${targetStatus}` });
+  }
+
+  private async handleSystemStatusVoice(res: Response) {
+    try {
+      logger.info('[NexusCommandController] Generating Sovereign Status Voice Report');
+      const status = await this.orchestrator.getWorkspaceStatus();
+      const report = `Hola Alejandro. El sistema está operando a nivel óptimo. 
+      La red neural ha indexado ${status.neuralSync.indexedFiles} archivos. 
+      Los agentes guardianes están activos en los niveles de ${status.tiers.map(t => t.name).join(', ')}. 
+      Sovereign Intelligence está en línea y lista para tus instrucciones.`;
+
+      const tempFileName = `status_${Date.now()}.mp3`;
+      const tempPath = path.join(process.cwd(), 'uploads', 'voice', tempFileName);
+
+      await this.elevenLabs.textToSpeech(
+        report,
+        process.env.ELEVENLABS_VOICE_ID || 'eleven_monica',
+        tempPath,
+      );
+
+      res.json({
+        success: true,
+        message: 'Status report synthesized.',
+        audioUrl: `/uploads/voice/${tempFileName}`,
+        text: report,
+      });
+    } catch (error) {
+      logger.error(error, '[NexusCommandController] Voice report generation failed');
+      res.status(500).json({ success: false, error: 'Failed to generate voice report' });
+    }
   }
 
   /**

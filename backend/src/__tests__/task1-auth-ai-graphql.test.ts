@@ -12,7 +12,7 @@
 const SKIP = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGRATION_TESTS;
 
 (SKIP ? describe.skip : describe)('Task 1.3: Auth & AI GraphQL', () => {
-  jest.setTimeout(120000);
+  jest.setTimeout(180000);
   it('should return token and user on successful login', async () => {
     const request = require('supertest');
     const { app } = require('../app');

@@ -7,6 +7,36 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const pinoLogger = pino({
   level: process.env.LOG_LEVEL || 'info',
+  redact: {
+    paths: [
+      'email',
+      'password',
+      'token',
+      'key',
+      'secret',
+      'authorization',
+      'cookie',
+      'payload.password',
+      '*.token',
+      '*.apiKey',
+      '*.secret',
+    ],
+    remove: true,
+  },
+  hooks: {
+    logMethod(inputArgs: any[], method: any) {
+      if (inputArgs.length >= 2 && typeof inputArgs[1] === 'string') {
+        const msg = inputArgs[1];
+        // 🩺 DX God Mode: Auto-healing suggestions
+        if (msg.includes('MongooseServerSelectionError') || msg.includes('buffering timed out')) {
+          inputArgs[1] = `${msg} [GOD SUGGESTION]: Revisa si MongoDB está corriendo o ejecuta ./scripts/docker-reset.ps1`;
+        } else if (msg.includes('Redis connection lost') || msg.includes('ECONNREFUSED')) {
+          inputArgs[1] = `${msg} [GOD SUGGESTION]: Verifica el puerto 6379 o tus credenciales en el .env`;
+        }
+      }
+      return method.apply(this, inputArgs);
+    },
+  },
   // In production, log JSON to stdout (best for Cloud Run/K8s).
   // In dev, use pino-pretty for readability.
   transport: isDev

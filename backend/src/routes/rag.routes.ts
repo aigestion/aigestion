@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { RagService } from '../services/rag.service';
 import { logger } from '../utils/logger';
 

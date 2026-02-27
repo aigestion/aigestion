@@ -11,18 +11,13 @@ const STATIC_CACHE = 'aigestion-static-v2.0.0';
 const DYNAMIC_CACHE = 'aigestion-dynamic-v2.0.0';
 const API_CACHE = 'aigestion-api-v2.0.0';
 
-// Assets críticos que deben cachearse
+// Assets críticos que deben cachearse (se actualizarán vía build)
 const CRITICAL_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/assets/index-DYEYyyjA.js',
-  '/assets/index-_kIjjvHf.css',
-  '/assets/vendor-BIF_SMrh.js',
-  '/assets/ui-B9xyW_2r.js',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
   '/apple-touch-icon.png',
+  '/favicon.ico',
 ];
 
 // API endpoints para cachear
@@ -30,13 +25,19 @@ const API_ENDPOINTS = ['/api/user/profile', '/api/dashboard/stats', '/api/conten
 
 // Estrategias de caché
 const CACHE_STRATEGIES = {
-  // Cache First para assets estáticos
+  // Cache First con refresco en background para assets estáticos e imágenes 3D
   CACHE_FIRST: async (request: Request): Promise<Response> => {
     const cache = await caches.open(STATIC_CACHE);
     const cached = await cache.match(request);
 
     if (cached) {
-      // Actualizar en background
+      // Si es una imagen o modelo 3D, devolver de caché inmediatamente
+      const url = new URL(request.url);
+      if (url.pathname.match(/\.(png|jpg|jpeg|gif|svg|webp|glb|gltf)$/)) {
+        return cached;
+      }
+
+      // Para scripts y estilos, actualizar en background
       updateCacheInBackground(request, cache);
       return cached;
     }
@@ -48,7 +49,6 @@ const CACHE_STRATEGIES = {
       }
       return response;
     } catch (error) {
-      // Fallback para offline
       return getOfflineFallback(request);
     }
   },

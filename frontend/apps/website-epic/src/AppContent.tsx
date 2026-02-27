@@ -12,6 +12,7 @@ import {
   RequireSubscription,
 } from './components/RouteProtection';
 import { ScrollProgress } from './components/ScrollProgress';
+import { SpotlightWrapper } from './components/design-system/SpotlightWrapper';
 import SubscriptionGuard from './components/guards/SubscriptionGuard';
 import { SkeletonLoader } from './components/ui/SkeletonLoader';
 import { useNotification } from './contexts/NotificationContext';
@@ -29,11 +30,17 @@ import {
   PhoneVerification,
   PrivacyPolicy,
   Register,
+  RoutePredictor,
+  SelectPlan,
+  SelectRole,
   SovereignIntelligenceHub,
   SubscriptionPage,
   TermsOfUse,
   VirtualOfficePreview,
   WeaponDashboard,
+  WorkbenchLayout,
+  preloadAuthRoutes,
+  preloadDashboardRoutes,
 } from './utils/routeLoader';
 
 // ============================================
@@ -110,63 +117,6 @@ const NeuralParticles = lazy(() =>
 const NexusGuardianWidget = lazy(() =>
   import('./components/NexusGuardianWidget').then(m => ({ default: m.NexusGuardianWidget }))
 );
-
-// ============================================
-// LAZY LOAD: Route-level pages
-// ============================================
-const Register = lazy(() =>
-  import('./components/auth/Register').then(m => ({ default: m.Register }))
-);
-// Note: VerifyEmail was previously imported from pages/VerifyEmail, but we created components/auth/EmailVerification.tsx
-// I will point to the new one, but I need to make sure I don't break existing references if VerifyEmail page existed.
-// The previous file content showed: const VerifyEmail = lazy(() => import('./pages/VerifyEmail').then(m => ({ default: m.VerifyEmail })));
-// I should probably keep using the new component I created.
-// Wait, I created `components/auth/EmailVerification.tsx`.
-// Let's adjust the import for VerifyEmail to use the new component if that was the intention, OR keep the old one if it was different.
-// The task was "Create components/auth/EmailVerification.tsx".
-// In AppContent.tsx I see: 92: const VerifyEmail = lazy(() => import('./pages/VerifyEmail').then(m => ({ default: m.VerifyEmail })));
-// I will replace it with the new one.
-
-const EmailVerification = lazy(() =>
-  import('./components/auth/EmailVerification').then(m => ({ default: m.EmailVerification }))
-);
-
-const WorkbenchLayout = lazy(() =>
-  import('./components/workbench/WorkbenchLayout').then(m => ({ default: m.WorkbenchLayout }))
-);
-const PhoneVerification = lazy(() =>
-  import('./components/auth/PhoneVerification').then(m => ({ default: m.PhoneVerification }))
-);
-const SubscriptionPage = lazy(() =>
-  import('./pages/SubscriptionPage').then(m => ({
-    default: m.default,
-  }))
-);
-const PaymentGateway = lazy(() =>
-  import('./components/subscription/PaymentGateway').then(m => ({ default: m.PaymentGateway }))
-);
-const WeaponDashboard = lazy(() => import('./pages/WeaponDashboard'));
-
-const VirtualOfficePreview = lazy(() => import('./pages/VirtualOfficePreview'));
-const ClientDashboard = lazy(() =>
-  import('./components/ClientDashboard').then(m => ({ default: m.ClientDashboard }))
-);
-const SovereignIntelligenceHub = lazy(() =>
-  import('./components/SovereignIntelligenceHub').then(m => ({
-    default: m.SovereignIntelligenceHub,
-  }))
-);
-const BillingDashboard = lazy(() =>
-  import('./pages/BillingDashboard').then(m => ({ default: m.BillingDashboard }))
-);
-const Marketplace = lazy(() =>
-  import('./pages/Marketplace').then(m => ({ default: m.Marketplace }))
-);
-const MissionControl = lazy(() => import('./pages/MissionControl'));
-const SelectRole = lazy(() => import('./pages/onboarding/SelectRole').then(m => ({ default: m.default })));
-const SelectPlan = lazy(() => import('./pages/onboarding/SelectPlan').then(m => ({ default: m.default })));
-const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
-const TermsOfUse = lazy(() => import('./pages/TermsOfUse'));
 
 // ============================================
 // UI Components

@@ -64,6 +64,9 @@ export class RagService {
     '.trunk',
     '.vscode',
     '.idea',
+    '.venv',
+    '.next',
+    '.cache',
   ]);
 
   private readonly ignoredExtensions = new Set([
@@ -79,6 +82,8 @@ export class RagService {
     '.map',
     '.mp4',
     '.mp3',
+    '.exe',
+    '.bin',
   ]);
 
   constructor(@inject(TYPES.SovereignVaultService) private readonly vault: SovereignVaultService) {
@@ -129,6 +134,9 @@ export class RagService {
           logger.warn(`[RagService] Rust RagCore failed, falling back to JS ranking: ${err}`);
           sortedFiles = this.rankFiles(files, query!);
         }
+
+        // 🧠 Re-ranking Phase: Pick the absolute best candidates
+        sortedFiles = this.reRankResults(sortedFiles, query!);
 
         // Append Sovereign Vault Context (Unified Memory)
         if (vaultResults && vaultResults.length > 0) {
@@ -295,7 +303,7 @@ export class RagService {
     }
   }
 
-  private async getAllFiles(): Promise<FileContext[]> {
+  public async getAllFiles(): Promise<FileContext[]> {
     if (this.fileCache && Date.now() - this.fileCache.timestamp < this.cacheTTL) {
       return this.fileCache.files;
     }
@@ -360,6 +368,42 @@ export class RagService {
 
     const otherFiles = files.filter(f => !relevantFiles.includes(f));
     return [...relevantFiles, ...otherFiles];
+  }
+
+  /**
+   * 🧠 Sovereign Re-ranking
+   * Refines results by performing a deeper semantic analysis on the top candidates.
+   */
+  private reRankResults(files: FileContext[], query: string): FileContext[] {
+    if (files.length <= 5) return files;
+
+    // Take top 20 and re-rank them with higher precision
+    const candidates = files.slice(0, 20);
+    const rest = files.slice(20);
+
+    const reRanked = candidates.map(file => {
+      let score = 0;
+      const q = query.toLowerCase();
+      const p = file.path.toLowerCase();
+      const c = file.content.toLowerCase().substring(0, 2000); // Only look at the start for speed
+
+      // Pattern 1: Exact class/function name match (Highest signal)
+      if (p.includes(q)) score += 50;
+
+      // Pattern 2: Structural importance (controllers, services, main files)
+      if (p.includes('controller') || p.includes('service') || p.includes('model')) score += 10;
+
+      // Pattern 3: Semantic proximity (Keyword clustering)
+      const terms = q.split(/\s+/).filter(t => t.length > 3);
+      terms.forEach(term => {
+        if (c.includes(term)) score += 5;
+        if (p.includes(term)) score += 15;
+      });
+
+      return { file, score };
+    });
+
+    return [...reRanked.sort((a, b) => b.score - a.score).map(r => r.file), ...rest];
   }
 
   private escapeRegExp(string: string) {

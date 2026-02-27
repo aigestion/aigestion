@@ -63,6 +63,14 @@ export class RateLimitMiddleware {
 
         if (current > limit) {
           this._logger.warn(`Rate limit exceeded for IP ${ip} on ${type} route`);
+
+          // 🛡️ Escalation: If user exceeds limit too much, ban them
+          if (current > limit * 3) {
+            const redis = this.redis;
+            await redis.set(`ban:${ip}`, 'Excessive Rate Limit Abuse', { EX: 3600 * 2 }); // 2h ban
+            this._logger.error(`💀 IP ${ip} auto-banned for 2h due to excessive abuse (${type})`);
+          }
+
           res.status(429).json({
             error: 'Demasiadas Peticiones',
             message: 'Por favor, inténtalo de nuevo más tarde.',

@@ -2,6 +2,7 @@ import { injectable } from 'inversify';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
+import { Pool, PoolClient } from 'pg';
 import { getCache, setCache } from '../cache/redis';
 import crypto from 'crypto';
 
@@ -24,11 +25,13 @@ export class SupabaseService {
     this.validateConfig();
     this.initializeClient();
     this.setupPerformanceMonitoring();
+    this.initializePostgresPool();
   }
 
   private initializeClient() {
     const url = env.SUPABASE_URL;
     const key = env.SUPABASE_KEY;
+    const dbUrl = env.SUPABASE_DB_URL;
 
     if (url && key) {
       this.client = createClient(url, key, {
@@ -66,6 +69,9 @@ export class SupabaseService {
         '[SupabaseService] Supabase credentials missing. Client is running in DISABLED mode.',
       );
       this.client = null as any;
+      if (env.SUPABASE_DB_URL) {
+        logger.warn('[SupabaseService] SUPABASE_DB_URL provided but Supabase client disabled.');
+      }
     }
   }
 
@@ -258,7 +264,7 @@ export class SupabaseService {
    * Setup connection pooling
    */
   private setupConnectionPooling() {
-    // This would integrate with Supabase's connection pooling
+    // Supabase client handles its own pooling; we log for visibility
     logger.info('[SupabaseService] Connection pooling configured');
   }
 
@@ -311,6 +317,9 @@ export class SupabaseService {
         '[SupabaseService] Running without valid credentials. Some features will be disabled.',
       );
     }
+    if (env.SUPABASE_DB_URL) {
+      logger.info('[SupabaseService] SUPABASE_DB_URL detected, initializing Postgres pool.');
+    }
   }
 
   public static getInstance(): SupabaseService {
@@ -322,6 +331,32 @@ export class SupabaseService {
 
   public getClient(): SupabaseClient {
     return this.client;
+  }
+
+  // New method to get a Postgres client from SUPABASE_DB_URL
+  private pgPool: Pool | null = null;
+
+  private initializePostgresPool() {
+    const dbUrl = env.SUPABASE_DB_URL;
+    if (dbUrl) {
+      this.pgPool = new Pool({
+        connectionString: dbUrl,
+        max: 20,
+        idleTimeoutMillis: 30000,
+        connectionTimeoutMillis: 2000,
+      });
+      logger.info('[SupabaseService] Postgres pool initialized (God Mode).');
+    }
+  }
+
+  /**
+   * Obtain a Postgres client from the pool. Caller must release the client.
+   */
+  public async getPostgresClient(): Promise<PoolClient> {
+    if (!this.pgPool) {
+      throw new Error('Postgres pool not initialized. Ensure SUPABASE_DB_URL is set.');
+    }
+    return this.pgPool.connect();
   }
 
   /**

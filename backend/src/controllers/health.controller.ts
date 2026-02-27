@@ -109,6 +109,7 @@ export const checkRedisHealth = async () => {
       usedMemory: redisInfo.used_memory_human,
       connectedClients: parseInt(redisInfo.connected_clients || '0', 10),
       blockedClients: parseInt(redisInfo.blocked_clients || '0', 10),
+      stats: require('../cache/redis').getCacheStats(),
       message: 'Redis is healthy',
     };
   } catch (error) {

@@ -118,6 +118,11 @@ const envSchema = baseEnvSchema.extend({
     .or(z.string().regex(/^mongodb(\+srv)?:\/\/.+/))
     .describe('MongoDB connection URI'),
 
+  MONGODB_ATLAS_API_KEY: z
+    .string()
+    .min(1)
+    .describe('MongoDB Atlas API key for privileged operations'),
+
   // Logging
   LOG_LEVEL: z
     .enum(['error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly'])
@@ -127,7 +132,8 @@ const envSchema = baseEnvSchema.extend({
   // AI Services
   GEMINI_API_KEY: z.string().optional().describe('Google Gemini API key (Standard)'),
   GOOGLE_GENAI_API_KEY: z.string().optional().describe('Google Generative AI API key (Alias)'),
-  PINECONE_API_KEY: z.string().optional().describe('Pinecone API key for vector database'),
+  MISTRAL_API_KEY: z.string().optional().describe('Mistral AI API key'),
+  PINECONE_API_KEY: z.string().min(1).describe('Pinecone API key for vector database'),
   PINECONE_INDEX_NAME: z.string().default('aigestion-docs').describe('Pinecone index name'),
   PINECONE_NAMESPACE_DEFAULT: z
     .string()
@@ -145,9 +151,10 @@ const envSchema = baseEnvSchema.extend({
     .default('ws://localhost:3000')
     .describe('WebSocket endpoint for Browserless'),
 
-  // Supabase Configuration
-  SUPABASE_URL: z.string().url().optional().describe('Supabase project URL'),
-  SUPABASE_KEY: z.string().optional().describe('Supabase API key (Anon or Service Role)'),
+  // Supabase Configuration (required for production)
+  SUPABASE_URL: z.string().url().describe('Supabase project URL'),
+  SUPABASE_KEY: z.string().describe('Supabase API key (Anon or Service Role)'),
+  SUPABASE_DB_URL: z.string().url().optional().describe('Supabase Postgres connection string'),
   ML_SERVICE_URL: z
     .string()
     .url()

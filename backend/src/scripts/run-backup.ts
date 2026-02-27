@@ -3,7 +3,8 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { BackupService } from '../services/backup.service';
 import { logger } from '../utils/logger';
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say language="es-ES" voice="Polly.Lucia-Neural">
+        Hola soy Daniela IA de AIGestion.
+        Espero un momento por favor.
+    </Say>
+    <Pause length="1"/>
+    <Dial>+34618779308</Dial>
+</Response>

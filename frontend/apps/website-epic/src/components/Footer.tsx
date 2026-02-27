@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Twitter, Linkedin, Youtube,  } from 'lucide-react';
+import { Linkedin, Twitter, Youtube } from 'lucide-react';
 import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
 
@@ -69,6 +69,30 @@ export const Footer: React.FC = () => {
               "Organizar tu vida no debería ser un trabajo. Deja que nosotros nos ocupemos de la
               tecnología para que tú te ocupes de lo que importa."
             </p>
+
+            {/* Contact Info */}
+            <div className="space-y-3">
+              <a
+                href="tel:+16185381369"
+                className="flex items-center gap-3 text-nexus-cyan hover:text-white transition-colors group"
+              >
+                <span className="text-xl">🤖</span>
+                <div>
+                  <div className="text-sm font-medium">Llamar a Daniela IA</div>
+                  <div className="text-xs text-nexus-cyan/70">Asistente Virtual 24/7</div>
+                </div>
+              </a>
+              <a
+                href="mailto:contact@aigestion.net"
+                className="flex items-center gap-3 text-nexus-cyan hover:text-white transition-colors group"
+              >
+                <span className="text-xl">📧</span>
+                <div>
+                  <div className="text-sm font-medium">Email</div>
+                  <div className="text-xs text-nexus-cyan/70">contact@aigestion.net</div>
+                </div>
+              </a>
+            </div>
 
             {/* Newsletter / CTA */}
             <div className="premium-glass p-2 rounded-2xl border-white/5 bg-white/2 max-w-sm flex items-center group focus-within:ring-1 ring-nexus-cyan/50 transition-all shadow-xl">

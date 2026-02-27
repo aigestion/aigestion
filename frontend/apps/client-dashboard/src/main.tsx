@@ -11,11 +11,37 @@ import './index.css';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 1,
+      retry: 2,
       refetchOnWindowFocus: false,
+      staleTime: 1000 * 60 * 5, // 5 minutes of god-tier stability
+      gcTime: 1000 * 60 * 60 * 24, // 24h cache retention
     },
   },
 });
+
+// ⚡ Sovereign Persistence: Hydrate cache from localStorage
+try {
+  const localStoragePersister = {
+    persistClient: async (client: any) => {
+      localStorage.setItem('AIG_DASHBOARD_CACHE', JSON.stringify(client));
+    },
+    restoreClient: async () => {
+      const cache = localStorage.getItem('AIG_DASHBOARD_CACHE');
+      return cache ? JSON.parse(cache) : undefined;
+    },
+    removeClient: async () => {
+      localStorage.removeItem('AIG_DASHBOARD_CACHE');
+    },
+  };
+  
+  // Note: Simplified persistence for god-mode speed
+  const savedState = localStorage.getItem('AIG_DASHBOARD_CACHE');
+  if (savedState) {
+    queryClient.setQueryData([], JSON.parse(savedState));
+  }
+} catch (e) {
+  console.warn('[SovereignCache] Hydration skipped');
+}
 
 createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

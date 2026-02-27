@@ -10,7 +10,7 @@ import { mongooseCachePlugin } from '../infrastructure/database/mongoose-cache.p
 mongoose.plugin(mongooseCachePlugin);
 
 // Increase buffer timeout for resilience on slow disk/Windows
-mongoose.set('bufferTimeoutMS', 30000);
+mongoose.set('bufferTimeoutMS', 60000);
 
 const connectOptions: ConnectOptions = {
   serverSelectionTimeoutMS: 15000, // Increased for stability
@@ -41,12 +41,12 @@ export const connectToDatabase = async (): Promise<void> => {
         throw new Error('CRITICAL_DB_URI_MISSING_PROD');
       }
       logger.warn(
-        '⚠️ No MongoDB URI provided. Using local development default if available or failing.'
+        '⚠️ No MongoDB URI provided. Using local development default if available or failing.',
       );
     }
 
     console.error(
-      `[DEBUG_DB] Attempting connection with URI: ${uri?.replace(/:([^@]+)@/, ':****@') || 'UNDEFINED'}`
+      `[DEBUG_DB] Attempting connection with URI: ${uri?.replace(/:([^@]+)@/, ':****@') || 'UNDEFINED'}`,
     );
 
     if (!uri) {
@@ -81,6 +81,15 @@ export const connectToDatabase = async (): Promise<void> => {
   } catch (error) {
     const err = error as Error;
     logger.error(err, 'MongoDB connection error (Resilient Mode Active):');
+
+    // In test environment, we WANT to fail fast
+    if (process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID) {
+      console.error(
+        '❌ CRITICAL: Database connection failed in TEST mode. Terminating test suite.',
+      );
+      throw err;
+    }
+
     logger.warn('⚠️ SERVER STARTING WITHOUT DATABASE. SOME FEATURES WILL FAIL. ⚠️');
     // Do NOT exit process. Allow server to start for health check.
   }

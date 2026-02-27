@@ -117,4 +117,15 @@ if (process.env.SENTRY_DSN) {
   console.log('⚠️ [Sentry] DSN not set — running without error tracking');
 }
 
+/**
+ * Helper to set User context for Sentry
+ */
+export const setSentryUser = (user: { id: string; email?: string; role?: string }) => {
+  Sentry.setUser({
+    id: user.id,
+    email: user.email,
+    username: user.role, // Mapping role to username for distinct sorting in Sentry
+  });
+};
+
 export { Sentry };

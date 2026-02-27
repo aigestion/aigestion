@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { AppContent, LoadingFallback } from './AppContent';
 import { AnalyticsProvider } from './components/AnalyticsProvider';
+import { ErrorBoundaryEnhanced } from './components/ErrorBoundaryEnhanced';
 import { NetworkToast } from './components/NetworkToast';
 import { NetworkProvider } from './contexts/NetworkContext';
 import { NexusProvider } from './contexts/NexusContext';

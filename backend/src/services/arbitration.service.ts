@@ -30,6 +30,10 @@ export class ArbitrationService {
       'claude-3-5-sonnet': { prompt: 3.0, completion: 15.0 },
       'claude-3-haiku': { prompt: 0.25, completion: 1.25 },
     },
+    mistral: {
+      'mistral-large-latest': { prompt: 2.0, completion: 6.0 },
+      'mistral-small-latest': { prompt: 0.2, completion: 0.6 },
+    },
   };
 
   /**
@@ -53,13 +57,13 @@ export class ArbitrationService {
 
     // 2. If Tier is PREMIUM, we balance SOTA performance with margin protection.
     if (tier === AIModelTier.PREMIUM) {
-      // Arbitrage: If prompt is coding, Sonnet is worth it. Otherwise, maybe gpt-4o-mini is enough?
-      const isCode = prompt.includes('```') || prompt.toLowerCase().includes('código');
-      if (isCode) {
+      // Arbitrage: Mistral Large is very competitive in Spanish and cheaper than Sonnet
+      const isSpanish = prompt.toLowerCase().match(/[áéíóúñ]/);
+      if (isSpanish) {
         return {
-          provider: 'anthropic',
-          modelId: 'claude-3-5-sonnet',
-          reason: 'Expert Performance (Premium Value)',
+          provider: 'mistral',
+          modelId: 'mistral-large-latest',
+          reason: 'Native Reasoning (Mistral Premium)',
         };
       }
       return {
@@ -80,9 +84,9 @@ export class ArbitrationService {
 
     // 4. STANDARD Tier: Dynamic selection
     return {
-      provider: 'gemini',
-      modelId: 'gemini-2.0-flash',
-      reason: 'Standard Balance',
+      provider: 'mistral',
+      modelId: 'mistral-small-latest',
+      reason: 'Cost/Performance Balance (Mistral Standard)',
     };
   }
 

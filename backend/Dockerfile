@@ -4,6 +4,7 @@
 
 # ---------- Build Stage ----------
 FROM node:22-alpine AS builder
+LABEL version="2.0.0"
 WORKDIR /app
 
 # Enable pnpm

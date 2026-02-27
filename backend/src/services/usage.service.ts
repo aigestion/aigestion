@@ -118,8 +118,10 @@ export class UsageService {
     const rates: Record<string, { prompt: number; completion: number }> = {
       'gemini-2.0-flash': { prompt: 0.1 / 1_000_000, completion: 0.3 / 1_000_000 },
       'gemini-2.0-flash-lite': { prompt: 0.03 / 1_000_000, completion: 0.09 / 1_000_000 },
+      'gemini-2.0-pro-exp': { prompt: 1.25 / 1_000_000, completion: 3.75 / 1_000_000 },
       'claude-3-5-sonnet-20241022': { prompt: 3 / 1_000_000, completion: 15 / 1_000_000 },
       'claude-3-5-sonnet': { prompt: 3 / 1_000_000, completion: 15 / 1_000_000 },
+      'gpt-4o': { prompt: 5 / 1_000_000, completion: 15 / 1_000_000 },
     };
 
     const rate = rates[modelId] || rates['gemini-2.0-flash'];

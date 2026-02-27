@@ -1,5 +1,6 @@
 import 'reflect-metadata';
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { CredentialManagerService } from '../services/credential-manager.service';
 import { logger } from '../utils/logger';
 import dotenv from 'dotenv';

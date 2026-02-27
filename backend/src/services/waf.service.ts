@@ -143,7 +143,7 @@ export class WAFService {
 
     // Find or create current hour entry
     let currentData = this.timeSeriesData.find(
-      d => d.timestamp.getTime() === currentHour.getTime()
+      d => d.timestamp.getTime() === currentHour.getTime(),
     );
 
     if (!currentData) {
@@ -157,7 +157,7 @@ export class WAFService {
 
       // Keep only last 24 hours
       this.timeSeriesData = this.timeSeriesData.filter(
-        d => d.timestamp.getTime() > now.getTime() - 24 * 60 * 60 * 1000
+        d => d.timestamp.getTime() > now.getTime() - 24 * 60 * 60 * 1000,
       );
     }
 
@@ -167,15 +167,15 @@ export class WAFService {
   }
 
   private cleanupOldData(): void {
-    const now = new Date();
-    const cutoff = now.getTime() - 24 * 60 * 60 * 1000; // 24 hours ago
+    const now = Date.now();
+    const cutoff = now - 24 * 60 * 60 * 1000; // 24 hours ago
 
-    // Clean up old IP stats
-    for (const [ip, stats] of this.ipStats.entries()) {
+    // Clean up old IP stats with compatible iteration
+    this.ipStats.forEach((stats, ip) => {
       if (stats.lastSeen.getTime() < cutoff) {
         this.ipStats.delete(ip);
       }
-    }
+    });
   }
 
   public getMetrics(): WAFMetrics {
@@ -277,7 +277,7 @@ export class WAFService {
 
     const ipEvents = this.events.filter(e => e.ip === ip);
     const blockedRequests = ipEvents.filter(e => e.type === 'block').length;
-    const rulesTriggered = [...new Set(ipEvents.map(e => e.rule))];
+    const rulesTriggered = Array.from(new Set(ipEvents.map(e => e.rule as string)));
 
     // Calculate reputation score (0-100)
     let score = 100;
@@ -300,6 +300,28 @@ export class WAFService {
         rulesTriggered,
       },
     };
+  }
+
+  /**
+   * 💀 Sovereign Ban
+   * Bans an IP in Redis for a specific duration.
+   */
+  public async banIP(ip: string, reason: string, durationSeconds: number = 86400): Promise<void> {
+    const client = require('../cache/redis').getRedisClient();
+    if (client?.isOpen) {
+      await client.set(`ban:${ip}`, reason, { EX: durationSeconds });
+      logger.info({ ip, reason, durationSeconds }, 'IP Banned via WAF Service');
+    }
+
+    this.logEvent({
+      type: 'block',
+      rule: 'SOVEREIGN_BAN',
+      severity: 'critical',
+      ip,
+      context: `Security Ban: ${reason}`,
+      path: 'N/A',
+      method: 'BAN',
+    });
   }
 
   public blockIP(ip: string, reason: string, duration: number = 24 * 60 * 60 * 1000): void {
@@ -408,7 +430,7 @@ export class WAFService {
           }
           return acc;
         },
-        [] as Array<{ country: string; count: number }>
+        [] as Array<{ country: string; count: number }>,
       )
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);

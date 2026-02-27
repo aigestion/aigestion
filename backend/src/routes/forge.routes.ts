@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { ForgeController } from '../controllers/ForgeController';
 
 const router = Router();

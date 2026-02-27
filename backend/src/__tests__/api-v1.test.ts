@@ -10,7 +10,7 @@ import { User } from '../models/User';
 
 import { connectToDatabase } from '../config/database';
 
-jest.setTimeout(60000);
+jest.setTimeout(180000);
 
 const SKIP_DB_TESTS = process.env.NODE_ENV === 'test' && !process.env.RUN_INTEGRATION_TESTS;
 

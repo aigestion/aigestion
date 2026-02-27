@@ -131,6 +131,15 @@ El proyecto utiliza el estándar **Sovereign de 20 bloques** para archivos `.env
 
 ## 🌌 God Level Sovereign Ecosystem
 
+```mermaid
+graph TD
+  Backend -->|API| Frontend
+  Backend -->|RAG| NeuroCore
+  Backend -->|Voice| DanielaIA
+  Frontend -->|Calls| Backend
+```
+
+
 The AIGestion system is now powered by **God Mode v2.0**, featuring:
 
 - **Sovereign RAG Architecture**: Triple-layered memory combining Pinecone (Cloud), NeuroCore (Local), and Supabase (Hybrid Vector Search).

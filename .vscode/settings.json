@@ -1,4 +1,28 @@
 {
+  "workbench.colorTheme": "One Dark Pro",
+  "workbench.iconTheme": "material-icon-theme",
+  "editor.fontFamily": "JetBrains Mono, 'Fira Code', Consolas, 'Courier New', monospace",
+  "editor.fontLigatures": true,
+  "editor.fontSize": 14,
+  "editor.lineHeight": 1.6,
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.cursorBlinking": "smooth",
+  "editor.smoothScrolling": true,
+  "workbench.list.smoothScrolling": true,
+  "terminal.integrated.smoothScrolling": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.renderLineHighlight": "all",
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
   "mcp.serverTimeout": 30000,
   "mcp.autoRestart": true,
   "mcp.logLevel": "info",
@@ -8,83 +32,97 @@
   "java.gradle.buildServer.enabled": "off",
   "java.autobuild.enabled": false,
   "java.import.gradle.offline.enabled": false,
-  "java.import.gradle.arguments": ["--no-daemon", "--parallel"],
+  "java.import.gradle.arguments": [
+    "--no-daemon",
+    "--parallel"
+  ],
   "gradle.allowParallelRun": true,
   "mcp.servers": {
     "aigestion_core": {
       "command": "node",
-      "args": ["./.windsurf/aigestion-mcp-server.js"],
+      "args": [
+        "./.windsurf/aigestion-mcp-server.js"
+      ],
       "env": {
         "NODE_ENV": "production",
         "AIGESTION_API_URL": "https://api.aigestion.net",
         "GOOGLE_CLOUD_PROJECT_ID": "aigestion-pro-2026",
         "GOOGLE_CLOUD_LOCATION": "europe-west1"
       },
-      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "cwd": "${workspaceFolder}",
       "timeout": 30000,
       "restart": true
     },
     "workflow_automation": {
       "command": "node",
-      "args": ["./.windsurf/workflow-server.js"],
+      "args": [
+        "./.windsurf/workflow-server.js"
+      ],
       "env": {
         "NODE_ENV": "production",
         "N8N_JWT_TOKEN": "${N8N_JWT_TOKEN}",
         "WEBHOOK_URL": "${WEBHOOK_URL}"
       },
-      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "cwd": "${workspaceFolder}",
       "timeout": 30000,
       "restart": true
     },
     "custom_rules_engine": {
       "command": "node",
-      "args": ["./.windsurf/custom-rules-server.js"],
+      "args": [
+        "./.windsurf/custom-rules-server.js"
+      ],
       "env": {
         "NODE_ENV": "production",
         "RULES_CONFIG_PATH": "./config/rules.json"
       },
-      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "cwd": "${workspaceFolder}",
       "timeout": 30000,
       "restart": true
     },
     "ai_services_hub": {
       "command": "node",
-      "args": ["./scripts/ai-hub-server.js"],
+      "args": [
+        "./scripts/ai-hub-server.js"
+      ],
       "env": {
         "NODE_ENV": "production",
         "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
         "OPENAI_API_KEY": "${OPENAI_API_KEY}",
         "GOOGLE_AI_API_KEY": "${GOOGLE_AI_API_KEY}"
       },
-      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "cwd": "${workspaceFolder}",
       "timeout": 30000,
       "restart": true
     },
     "security_center": {
       "command": "node",
-      "args": ["./scripts/security-server.js"],
+      "args": [
+        "./scripts/security-server.js"
+      ],
       "env": {
         "NODE_ENV": "production",
         "SECURITY_API_KEY": "${SECURITY_API_KEY}"
       },
-      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "cwd": "${workspaceFolder}",
       "timeout": 30000,
       "restart": true
     },
     "infrastructure_monitor": {
       "command": "node",
-      "args": ["./.windsurf/monitor-dns.js"],
+      "args": [
+        "./.windsurf/monitor-dns.js"
+      ],
       "env": {
         "NODE_ENV": "production",
         "DOMAIN": "aigestion.net",
         "GOOGLE_PROJECT_ID": "aigestion-pro-2026"
       },
-      "cwd": "c:\\Users\\Alejandro\\AIGestion\\aigestion",
+      "cwd": "${workspaceFolder}",
       "timeout": 30000,
       "restart": true
     }
   },
-  "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "typescript.tsserver.maxTsServerMemory": 8192,
   "github.copilot.enable": {
@@ -96,6 +134,16 @@
   "github.copilot.chat.enable": true,
   "google.geminicodeassist.enable": true,
   "ms-azuretools.vscode-azure-mcp-server.enable": true,
+  "errorLens.enabledDiagnosticLevels": [
+    "error",
+    "warning"
+  ],
+  "errorLens.fontStyleItalic": true,
+  "errorLens.fontWeight": "600",
+  "security.workspace.trust.enabled": false,
+  "explorer.compactFolders": false,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
   "[css]": {
     "editor.defaultFormatter": "vscode.css-language-features"
   },
@@ -107,5 +155,10 @@
   },
   "[python]": {
     "editor.defaultFormatter": "charliermarsh.ruff"
-  }
+  },
+  "cSpell.words": [
+    "vertexai",
+    "Supabase",
+    "supabase"
+  ]
 }

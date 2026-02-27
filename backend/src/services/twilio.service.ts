@@ -609,7 +609,7 @@ export class TwilioService {
    * 🔧 Build TwiML for Daniela AI
    */
   private buildDanielaTwiml(context?: string): string {
-    const baseUrl = 'https://aigestion.net/api/twilio';
+    const baseUrl = 'https://aigestion.net/api/v1/twilio';
 
     switch (context) {
       case 'support':
@@ -620,6 +620,73 @@ export class TwilioService {
       default:
         return `${baseUrl}/daniela-handler`;
     }
+  }
+
+  /**
+   * 🌌 [GOD LEVEL] Generate Sovereign TwiML in Spanish
+   * Ensures the voice assistant speaks correctly and follow-up logic is local.
+   */
+  public generateSovereignTwiML(message: string, options: { voice?: string; language?: string; pause?: number } = {}): string {
+    const voice = options.voice || 'Polly.Lucia'; // Premium Spanish Voice
+    const language = options.language || 'es-ES';
+    const pause = options.pause || 1;
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Pause length="${pause}"/>
+    <Say voice="${voice}" language="${language}">${message}</Say>
+    <Record 
+        action="https://aigestion.net/api/v1/twilio/handle-recording" 
+        method="POST" 
+        maxLength="30" 
+        playBeep="true"
+    />
+</Response>`.trim();
+  }
+
+  /**
+   * 🚀 [GOD LEVEL] Programmatic Phone Number Configuration
+   * Updates Twilio Webhooks to point to the Sovereign Backend.
+   */
+  async updateWebhookConfig(phoneNumberSid: string): Promise<any> {
+    const baseUrl = 'https://aigestion.net/api/v1/twilio';
+    
+    return this.withRetry(async () => {
+      logger.info(`[TwilioService] 🌌 Synchronizing Webhooks for SID: ${phoneNumberSid}`);
+
+      const params = new URLSearchParams();
+      params.append('VoiceUrl', `${baseUrl}/call-handler`);
+      params.append('VoiceMethod', 'POST');
+      params.append('VoiceFallbackUrl', `${baseUrl}/failover-handler`);
+      params.append('VoiceFallbackMethod', 'POST');
+      params.append('StatusCallback', `${baseUrl}/status-callback`);
+      params.append('StatusCallbackMethod', 'POST');
+
+      const response = await axios.post(
+        `${this.baseUrl}/IncomingPhoneNumbers/${phoneNumberSid}.json`,
+        params.toString(),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: `Basic ${Buffer.from(`${this.accountSid}:${this.authToken}`).toString('base64')}`,
+          },
+          timeout: 15000,
+        }
+      );
+
+      logger.info(`[TwilioService] ✅ Webhooks synchronized to God Level Node`);
+      return response.data;
+    }, 'updateWebhookConfig');
+  }
+
+  /**
+   * 🏠 [GOD LEVEL] Emergency Address Configuration
+   * Note: This is an administrative task that should be verified in the console.
+   */
+  async configureEmergencyAddress(addressDetails: any): Promise<void> {
+    logger.info('[TwilioService] 🏠 Emergency Address protocol initiated');
+    // Implement address creation and validation here if needed
+    // Usually: Create Address -> Validate -> Set as Emergency Address for Phone Number
   }
 }
 

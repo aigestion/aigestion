@@ -285,32 +285,51 @@ export class SwarmService {
   }
 
   /**
-   * LAYER 2: MULTI-AGENT COLLABORATION (Debate Mode)
+   * LAYER 2: MULTI-AGENT COLLABORATION (Cognitive Debate Mode)
    * High-tier strategic decisions require consensus from multiple expert agents.
+   * This implements the "Sovereign Debate" where experts provide conflicting perspectives.
    */
-  private async collaborate(task: SwarmTask): Promise<SwarmResponse> {
-    logger.info(`[SwarmService] Initiating Cognitive Debate for task: ${task.id}`);
+  public async collaborate(objective: string, specialistAgents: any[] = []): Promise<any> {
+    logger.info(`[SwarmService] Initiating Cognitive Debate: "${objective.substring(0, 50)}..."`);
 
-    // 1. Parallel execution across specialist agents (e.g., General Intelligence + Coding/Architecture)
-    const [agentA, agentB] = await Promise.all([
-      this.generalMission(task.payload),
-      this.julesCodingMission(task.payload),
-    ]);
+    // 1. Dynamic expert selection if none provided
+    const agents =
+      specialistAgents.length > 0
+        ? specialistAgents
+        : [this.generalAgent, this.julesCodingMission.bind(this)];
 
-    const perspectives = [
-      { agentName: agentA.agentName, recommendation: agentA.result },
-      { agentName: agentB.agentName, recommendation: agentB.result },
-    ];
+    // 2. Parallel execution of experts
+    const prompt = `Objective: ${objective}\nProvide your best expert recommendation and justification.`;
 
-    // 2. Sovereign Arbitration (The Judge)
+    const perspectives = await Promise.all(
+      agents.map(async agent => {
+        try {
+          if (typeof agent === 'function') {
+            const res = await agent(objective);
+            return { agentName: res.agentName, recommendation: res.result };
+          } else if (agent.generateContent) {
+            const res = await agent.generateContent(prompt, 'swarm-judge', 'god');
+            return { agentName: 'Specialist-AI', recommendation: res };
+          }
+          return { agentName: 'Unknown', recommendation: 'No response' };
+        } catch (err) {
+          logger.error(err, `[SwarmService] Agent debate failure`);
+          return { agentName: 'Failed-Agent', recommendation: 'Execution error' };
+        }
+      }),
+    );
+
+    // 3. Sovereign Arbitration (The Supreme Judge)
+    // We use the ArbitrationService to decide the final truth
     const { decision, justification } = await this.arbitration.resolveConflict(perspectives);
 
-    logger.info(`[SwarmService] Sovereign Judge Resolution: ${justification.substring(0, 50)}...`);
+    logger.info(`[SwarmService] Sovereign Judge Resolution reached.`);
 
     return {
-      agentName: 'Sovereign-Judge',
-      result: `[DECISIÓN]: ${decision}\n\n[JUSTIFICACIÓN]: ${justification}`,
-      confidence: 1,
+      supremeVerdict: decision,
+      justification,
+      confidence: 1.0,
+      protocol: 'GOD_MODE_CONSENSUS',
     };
   }
 

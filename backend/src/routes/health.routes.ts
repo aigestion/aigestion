@@ -1,7 +1,8 @@
 import { Request, Response, Router } from 'express';
 import { buildResponse } from '../common/response-builder';
 import { config } from '../config/config';
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { HealthService } from '../services/health.service';
 import { rateLimiter } from '../middleware/rate-limiter.instance';
 

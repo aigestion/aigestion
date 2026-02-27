@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { DanielaOrb } from './3d/DanielaOrb';
 import { useDanielaVoice } from '../hooks/useDanielaVoice';
 import { useSound } from '../services/audio-service';
 import { socketService } from '../services/socket.service';
@@ -122,15 +124,34 @@ export const DanielaOmniWidget: React.FC = () => {
           whileHover={{ scale: 1.1 }}
           onMouseEnter={playHover}
           whileTap={{ scale: 0.95 }}
-          className="relative w-16 h-16 rounded-full flex items-center justify-center group"
+          className="relative w-16 h-16 rounded-full flex items-center justify-center group tappable"
+          aria-label="Abrir asistente Daniela"
         >
           <div className="absolute inset-0 bg-linear-to-br from-nexus-violet to-nexus-blue-600 rounded-full blur-md opacity-70 group-hover:opacity-100 transition-opacity animate-pulse" />
           <div className="relative w-full h-full bg-black/40 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center overflow-hidden group-hover:border-nexus-violet/50 transition-colors">
+            {/* 🌌 [GOD LEVEL] Sovereign 3D representation */}
+            <div className="absolute inset-0 z-0">
+               <Canvas camera={{ position: [0, 0, 3], fov: 45 }}>
+                <ambientLight intensity={0.5} />
+                <pointLight position={[10, 10, 10]} />
+                <Suspense fallback={null}>
+                  <DanielaOrb
+                    size={0.8}
+                    speed={isListening ? 2.5 : 1}
+                    distort={isListening ? 0.6 : 0.4}
+                    color={isListening ? "#BD00FF" : "#00F0FF"}
+                  />
+                </Suspense>
+              </Canvas>
+            </div>
+
+            {/* Legacy Fallback if 3D fails or is loading */}
             <img
               src="/images/daniela/lobby.png"
               alt="Daniela AI"
-              className="w-full h-full object-cover rounded-full group-hover:scale-110 transition-transform duration-500"
+              className="w-full h-full object-cover rounded-full opacity-20 pointer-events-none group-hover:scale-110 transition-transform duration-500"
             />
+
             {/* HUD Orbit Ring */}
             <div className="absolute inset-0 border border-nexus-cyan/20 rounded-full scale-90" />
             <motion.div

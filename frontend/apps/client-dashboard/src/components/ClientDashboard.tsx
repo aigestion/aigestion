@@ -37,6 +37,12 @@ import { SIMAOverlay } from './SIMAOverlay';
 import { ShoppingCart, Eye } from 'lucide-react';
 import { PerceptionGrid } from './PerceptionGrid';
 import { MissionTimeline } from './MissionTimeline';
+import { CustomCursor } from './CustomCursor';
+import { BentoGrid, BentoCard } from './BentoGrid';
+import { CommandPalette } from './CommandPalette';
+import { SovereignChat } from './SovereignChat';
+import { OfflineGuard } from './OfflineGuard';
+import { DevOverlay } from './dev/DevOverlay';
 
 // ──────────────────────────────────────────────────────
 // Hook: detect device layout (mobile + landscape)
@@ -180,7 +186,7 @@ const StatCard = ({
     initial={{ y: 20, opacity: 0 }}
     animate={{ y: 0, opacity: 1 }}
     transition={{ delay: index * 0.08 }}
-    className="bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20 active:scale-95 transition-transform"
+    className="glass-card rounded-2xl p-4 active:scale-95 transition-transform"
   >
     <div className="flex items-center justify-between">
       <div>
@@ -206,6 +212,7 @@ const ClientDashboard = () => {
   >('checking');
   const [activeTab, setActiveTab] = React.useState('home');
   const [voiceModalOpen, setVoiceModalOpen] = React.useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = React.useState(false);
   const [activePersona, setActivePersona] = React.useState<Persona>({
     id: 'daniela',
     name: 'Daniela Nexus',
@@ -225,7 +232,19 @@ const ClientDashboard = () => {
     };
     checkConnection();
     const interval = setInterval(checkConnection, 30000);
-    return () => clearInterval(interval);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setCommandPaletteOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const stats = [
@@ -333,9 +352,9 @@ const ClientDashboard = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white/10 backdrop-blur-lg rounded-xl p-4 border border-white/20"
+              className="glass-card rounded-2xl p-4"
             >
-              <p className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-3">
+              <p className="text-white/40 text-[10px] font-bold uppercase tracking-[0.2em] mb-3">
                 📈 Progreso vs Objetivo
               </p>
               <ResponsiveContainer width="100%" height={chartHeight * 0.6}>
@@ -388,13 +407,28 @@ const ClientDashboard = () => {
 
   return (
     <div
-      className={`relative ${isMobile ? (mobileLandscape ? 'pl-16 pb-2' : 'pb-20') : ''}`}
+      className={`relative min-h-screen ${isMobile ? (mobileLandscape ? 'pl-16 pb-2' : 'pb-20') : ''}`}
       style={{
         paddingTop: isMobile ? 'env(safe-area-inset-top)' : undefined,
         paddingLeft: mobileLandscape ? 'calc(3.5rem + env(safe-area-inset-left))' : undefined,
       }}
     >
-      <div className="p-4 md:p-6 space-y-4 md:space-y-6">
+      {/* 🌌 Sovereign Aurora Background */}
+      <div className="aurora-bg">
+        <div className="aurora-blob bg-emerald-500/20 w-[600px] h-[600px] -top-20 -left-20" />
+        <div
+          className="aurora-blob bg-purple-500/20 w-[500px] h-[500px] top-1/2 left-1/2"
+          style={{ animationDelay: '-5s' }}
+        />
+        <div
+          className="aurora-blob bg-cyan-500/20 w-[700px] h-[700px] bottom-0 right-0"
+          style={{ animationDelay: '-10s' }}
+        />
+      </div>
+
+      {!isMobile && <CustomCursor />}
+
+      <div className="p-4 md:p-6 space-y-4 md:space-y-6 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ y: -20, opacity: 0 }}
@@ -402,8 +436,8 @@ const ClientDashboard = () => {
           className="flex items-center justify-between"
         >
           <div>
-            <h1 className={`font-bold text-white ${isMobile ? 'text-2xl' : 'text-4xl'}`}>
-              💎 {isMobile ? 'NEXUS' : 'Base Personal'}
+            <h1 className={`gradient-text tracking-tighter ${isMobile ? 'text-3xl' : 'text-5xl'}`}>
+              {isMobile ? 'NEXUS' : 'Base Personal'}
             </h1>
             {/* Connection status pill */}
             <div
@@ -443,46 +477,52 @@ const ClientDashboard = () => {
         {isMobile ? (
           renderMobileTab()
         ) : (
-          <>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {stats.map(stat => (
-                <StatCard key={stat.title} {...stat} index={stats.indexOf(stat)} />
+          <div className="space-y-6">
+            <BentoGrid>
+              {stats.map((stat, i) => (
+                <StatCard key={stat.title} {...stat} index={i} />
               ))}
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div style={{ height: chartHeight }}>
+
+              <BentoCard className="md:col-span-2 md:row-span-2 h-[450px]" delay={0.2}>
                 <PortfolioWidget />
-              </div>
-              <div style={{ height: chartHeight }}>
-                <StrategyWidget />
-              </div>
-              <div style={{ height: chartHeight }}>
-                <SovereignTreasury />
-              </div>
-              <div style={{ height: chartHeight }}>
+              </BentoCard>
+
+              <BentoCard className="md:col-span-2 h-[220px]" delay={0.3}>
                 <SovereignMap />
-              </div>
-              <div style={{ height: chartHeight }}>
+              </BentoCard>
+
+              <BentoCard className="md:col-span-1 h-[210px]" delay={0.4}>
+                <StrategyWidget />
+              </BentoCard>
+
+              <BentoCard className="md:col-span-1 h-[210px]" delay={0.5}>
                 <AlertsWidget />
-              </div>
-              {/* Swarm Intelligence Timeline */}
-              <div className="lg:col-span-12 xl:col-span-4 h-[500px]">
+              </BentoCard>
+
+              <BentoCard className="md:col-span-4 h-[400px]" delay={0.6}>
                 <MissionTimeline />
-              </div>
-              <div style={{ height: chartHeight }}>
+              </BentoCard>
+
+              <BentoCard className="md:col-span-2 h-[350px]" delay={0.7}>
+                <SovereignTreasury />
+              </BentoCard>
+
+              <BentoCard className="md:col-span-1 h-[350px]" delay={0.8}>
+                <SystemHealthWidget />
+              </BentoCard>
+
+              <BentoCard className="md:col-span-1 h-[350px]" delay={0.9}>
                 <PerceptionGrid />
-              </div>
-              <div className="col-span-1 md:col-span-2">
+              </BentoCard>
+
+              <div className="md:col-span-4">
                 <PersonaMarketplace
                   activePersonaId={activePersona.id}
                   onSelectPersona={p => setActivePersona(p)}
                 />
               </div>
-              <div style={{ height: chartHeight }}>
-                <SystemHealthWidget />
-              </div>
-            </div>
-          </>
+            </BentoGrid>
+          </div>
         )}
       </div>
 
@@ -516,6 +556,12 @@ const ClientDashboard = () => {
         onClose={() => setVoiceModalOpen(false)}
         activePersona={activePersona}
       />
+
+      {/* 🧠 Sovereign AI UI Extras */}
+      <CommandPalette isOpen={commandPaletteOpen} onClose={() => setCommandPaletteOpen(false)} />
+      <SovereignChat />
+      <OfflineGuard />
+      <DevOverlay />
     </div>
   );
 };

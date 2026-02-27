@@ -87,7 +87,8 @@ export const errorHandler = (err: any, req: Request, res: Response, _next: NextF
 
     // Phase 5: Report to Google Cloud in production
     try {
-      const { container, TYPES } = require('../config/inversify.config');
+      const { container } = require('../config/inversify.config');
+      const { TYPES } = require('../types');
       const { ErrorReportingService } = require('../services/google/error-reporting.service');
       const errorReporting = container.get(TYPES.ErrorReportingService);
       errorReporting.report(err, req);

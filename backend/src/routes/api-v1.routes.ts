@@ -102,13 +102,14 @@ apiV1Router.use('/ai', rateLimiter.attempt('AI'), lazy('./ai.routes'));
 apiV1Router.use('/ai-studio', rateLimiter.attempt('AI'), lazy('./ai-studio.routes'));
 apiV1Router.use('/wisdom', lazy('./wisdom.routes'));
 apiV1Router.use('/gemini', rateLimiter.attempt('AI'), lazy('./gemini.routes'));
-apiV1Router.use('/ai', requireAuth, lazy('./phone-action.routes'));
+apiV1Router.use('/phone-system', requireAuth, lazy('./phone-action.routes'));
 apiV1Router.use('/voice-assets', lazy('./voice-assets.routes'));
 apiV1Router.use('/push', lazy('./push-notifications.routes'));
 apiV1Router.use('/rag', lazy('./rag.routes'));
 apiV1Router.use('/astraea', lazy('./astraea.routes'));
 apiV1Router.use('/productivity', rateLimiter.attempt('AI'), lazy('./productivity.routes'));
 apiV1Router.use('/cognitive', rateLimiter.attempt('AI'), lazy('./cognitive.routes'));
+apiV1Router.use('/twilio', lazy('./twilio.routes'));
 
 // System Management (Lazy)
 apiV1Router.use('/system', lazy('./system.routes'));

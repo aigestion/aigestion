@@ -1,5 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
+import React from 'react';
 import { PlasmaButton } from './PlasmaButton';
 import { TextReveal } from './TextReveal';
 
@@ -78,6 +78,14 @@ export const Hero: React.FC = () => {
           >
             <PlasmaButton label="Iniciar Expansión" variant="primary" />
             <PlasmaButton label="Ver Ecosistema" variant="secondary" />
+            <a
+              href="tel:+16185381369"
+              className="group relative px-8 py-4 bg-nexus-cyan/10 border border-nexus-cyan/30 text-nexus-cyan rounded-xl font-bold flex items-center gap-3 hover:bg-nexus-cyan hover:text-black transition-all duration-300 shadow-[0_0_20px_rgba(34,211,238,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.5)]"
+            >
+              <span className="text-xl">🤖</span>
+              <span className="font-orbitron tracking-wide">Habla con Daniela IA</span>
+              <span className="text-xs opacity-70">Asistente Virtual</span>
+            </a>
           </motion.div>
         </motion.div>
       </div>

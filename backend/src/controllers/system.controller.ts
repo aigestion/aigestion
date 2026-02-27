@@ -105,4 +105,43 @@ export class SystemController {
       next(error);
     }
   }
+
+  /**
+   * 🛠️ DX Terminal Gateway: Execute maintenance scripts
+   * WARNING: Strictly restricted to allowed scripts
+   */
+  async executeCommand(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { command } = req.body;
+      const allowedCommands = ['project_clean', 'db_backup_redis', 'verify_system_health'];
+
+      if (!allowedCommands.includes(command)) {
+        res.status(403).json({ error: 'Command not allowed for remote execution' });
+        return;
+      }
+
+      const { exec } = await import('node:child_process');
+      const { promisify } = await import('node:util');
+      const execAsync = promisify(exec);
+
+      logger.info({ command }, '[DX Gateway] Executing maintenance command');
+
+      // Map friendly names to actual scripts
+      const scriptMap: Record<string, string> = {
+        project_clean: 'npm run clean',
+        db_backup_redis: 'npm run db:backup:redis',
+        verify_system_health: 'npm run health:check',
+      };
+
+      const { stdout, stderr } = await execAsync(scriptMap[command]);
+
+      res.json({
+        message: `Command ${command} executed`,
+        output: stdout,
+        error: stderr,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -8,7 +8,8 @@ import {
   CentralizedLoggingService,
 } from './centralized-logging.service';
 import { MalwareScannerService } from './malware-scanner.service';
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { HealthService } from './health.service';
 import { MonitoringService } from './monitoring.service';
 import { ThreatIntelligenceService } from './threat-intelligence.service';

@@ -1,0 +1,50 @@
+src/cache/redis.ts(264,24): error TS2802: Type 'Map<string, { value: any; expiry: number; }>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/cache/redis.ts(362,26): error TS2802: Type 'Map<string, { value: any; expiry: number; }>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/cache/redis.ts(367,27): error TS2802: Type 'MapIterator<[string, { value: any; expiry: number; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/config/inversify.config.ts(56,32): error TS2307: Cannot find module '../infrastructure/ai/GeminiProvider' or its corresponding type declarations.
+src/controllers/NexusCommandController.ts(102,53): error TS2339: Property 'indexedFiles' does not exist on type 'string'.
+src/controllers/NexusCommandController.ts(137,39): error TS2554: Expected 4 arguments, but got 2.
+src/features/remote-access/services/session-manager.service.ts(161,29): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/features/remote-access/services/signaling.service.ts(152,42): error TS2802: Type 'MapIterator<[string, string]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/infrastructure/ai/AIProviderFactory.ts(4,32): error TS2307: Cannot find module './GeminiProvider' or its corresponding type declarations.
+src/infrastructure/database/mongoose-cache.plugin.ts(46,31): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
+src/infrastructure/database/mongoose-cache.plugin.ts(84,43): error TS2522: The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.
+src/infrastructure/jobs/JobQueue.ts(53,25): error TS2802: Type 'MapIterator<Queue<any, any, string, any, any, string>>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/scripts/test_swarm_mission.ts(47,42): error TS2339: Property 'getSwarmJobStatus' does not exist on type 'AIService'.
+src/services/daniela-ai.service.ts(939,37): error TS2802: Type 'MapIterator<[number, DanielaContext]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/daniela-call-agent.service.ts(246,35): error TS2802: Type 'MapIterator<[string, CallContext]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(110,36): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(130,32): error TS2802: Type 'MapIterator<[string, ElevenLabsCache]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(442,39): error TS2802: Type 'ArrayIterator<[number, string]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(485,33): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/elevenlabs.service.ts(515,25): error TS2802: Type 'MapIterator<ElevenLabsCache>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/gems/ForgeGem.ts(44,40): error TS2550: Property 'replaceAll' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
+src/services/google/nexus-radio.service.ts(50,28): error TS2550: Property 'replaceAll' does not exist on type 'string'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
+src/services/malware-scanner.service.ts(124,22): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/malware-scanner.service.ts(498,24): error TS2802: Type 'Buffer<ArrayBufferLike>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/malware-scanner.service.ts(506,25): error TS2802: Type 'MapIterator<number>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/monitoring.service.ts(673,37): error TS2802: Type 'MapIterator<[string, Metric[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/monitoring.service.ts(751,37): error TS2802: Type 'MapIterator<[string, Metric[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/supabase.service.ts(5,10): error TS2305: Module '"pg"' has no exported member 'Pool'.
+src/services/supabase.service.ts(5,16): error TS2305: Module '"pg"' has no exported member 'PoolClient'.
+src/services/supabase.service.ts(212,32): error TS2802: Type 'MapIterator<[string, { data: any; timestamp: number; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/supabase.service.ts(256,32): error TS2802: Type 'MapIterator<[string, { data: any; timestamp: number; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/supabase.service.ts(490,33): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/twilio.service.ts(125,36): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/twilio.service.ts(145,32): error TS2802: Type 'MapIterator<[string, TwilioCache]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/twilio.service.ts(509,33): error TS2802: Type 'MapIterator<[string, number[]]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/twilio.service.ts(540,25): error TS2802: Type 'MapIterator<TwilioCache>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/user-behavior.service.ts(644,39): error TS2802: Type 'MapIterator<[string, UserBehaviorProfile]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/waf.service.ts(174,31): error TS2802: Type 'MapIterator<[string, { count: number; blocked: boolean; lastSeen: Date; }]>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/services/waf.service.ts(280,32): error TS2802: Type 'Set<string>' can only be iterated through when using the '--downlevelIteration' flag or with a '--target' of 'es2015' or higher.
+src/tools/stripe.tool.ts(12,3): error TS2416: Property 'schema' in type 'StripeTool' is not assignable to the same property in base type 'BaseTool<{ action: string; userId: string; priceId?: string; }>'.
+  Type 'ZodObject<{ action: ZodEnum<["get_status", "create_checkout", "create_portal"]>; userId: ZodString; priceId: ZodOptional<ZodString>; }, "strip", ZodTypeAny, { ...; }, { ...; }>' is not assignable to type 'ZodType<{ action: string; userId: string; priceId?: string; }, ZodTypeDef, { action: string; userId: string; priceId?: string; }>'.
+    Types of property '_type' are incompatible.
+      Type '{ userId?: string; priceId?: string; action?: "get_status" | "create_checkout" | "create_portal"; }' is not assignable to type '{ action: string; userId: string; priceId?: string; }'.
+        Property 'action' is optional in type '{ userId?: string; priceId?: string; action?: "get_status" | "create_checkout" | "create_portal"; }' but required in type '{ action: string; userId: string; priceId?: string; }'.
+src/tools/web-search.tool.ts(20,3): error TS2416: Property 'schema' in type 'SearchWebTool' is not assignable to the same property in base type 'BaseTool<{ query: string; }>'.
+  Type 'ZodObject<{ query: ZodString; }, "strip", ZodTypeAny, { query?: string; }, { query?: string; }>' is not assignable to type 'ZodType<{ query: string; }, ZodTypeDef, { query: string; }>'.
+    Types of property '_type' are incompatible.
+      Type '{ query?: string; }' is not assignable to type '{ query: string; }'.
+        Property 'query' is optional in type '{ query?: string; }' but required in type '{ query: string; }'.
+src/verify-ai-refactor.ts(4,24): error TS2307: Cannot find module '../../utils/logger' or its corresponding type declarations.

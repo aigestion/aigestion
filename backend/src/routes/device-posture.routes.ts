@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { container, TYPES } from '../config/inversify.config';
+import { container } from '../config/inversify.config';
+import { TYPES } from '../types';
 import { DevicePostureController } from '../controllers/DevicePostureController';
 import { protect } from '../middleware/auth.middleware';
 

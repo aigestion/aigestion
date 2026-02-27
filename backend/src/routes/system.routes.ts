@@ -15,6 +15,7 @@ router.get('/cpu',     monitoringLimit, (req, res, next) => controller.getCPUUsa
 router.get('/memory',  monitoringLimit, (req, res, next) => controller.getMemoryUsage(req, res, next));
 router.get('/disk',    monitoringLimit, (req, res, next) => controller.getDiskUsage(req, res, next));
 router.get('/network', monitoringLimit, (req, res, next) => controller.getNetworkStats(req, res, next));
+router.post('/command', (req, res, next) => controller.executeCommand(req, res, next));
 
 export default router;
 

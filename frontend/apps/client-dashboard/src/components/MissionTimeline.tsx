@@ -1,44 +1,16 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Terminal, 
-  Cpu, 
-  MessageSquare, 
-  Activity, 
-  Zap, 
-  History,
-  RefreshCcw,
-  ArrowRight
-} from 'lucide-react';
-import { api } from '../services/api';
+import { Zap, History, RefreshCcw, ArrowRight, Activity, Terminal } from 'lucide-react';
+import { useSwarmHistory } from '../hooks/useSwarm';
 
 /**
  * 🛰️ MISSION TIMELINE WIDGET
  * Real-time visualization of Swarm Intelligence mission events and agent interactions.
  */
 export const MissionTimeline = () => {
-  const [history, setHistory] = React.useState<any[]>([]);
-  const [loading, setLoading] = React.useState(false);
-
-  const fetchHistory = async () => {
-    setLoading(true);
-    try {
-      const result = await api.getSwarmHistory();
-      if (result && result.history) {
-        setHistory(result.history.reverse()); // Latest first
-      }
-    } catch (err) {
-      console.error('Failed to fetch mission history', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  React.useEffect(() => {
-    fetchHistory();
-    const interval = setInterval(fetchHistory, 10000); // 10s refresh
-    return () => clearInterval(interval);
-  }, []);
+  const { data: history = [], isLoading, isRefetching, refetch } = useSwarmHistory();
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  
+  // ⚡ Virtualization: Render only last 50 items for extreme performance
+  const visibleEvents = React.useMemo(() => history.slice(0, 50), [history]);
 
   const getAgentColor = (agent: string) => {
     const colors: Record<string, string> = {
@@ -77,25 +49,28 @@ export const MissionTimeline = () => {
           </div>
         </div>
         <button 
-          onClick={fetchHistory}
-          disabled={loading}
+          onClick={() => refetch()}
+          disabled={isLoading || isRefetching}
           className="p-2 hover:bg-white/5 rounded-lg transition-colors group/refresh"
         >
-          <RefreshCcw className={`w-4 h-4 text-white/40 group-hover/refresh:text-white transition-all ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCcw className={`w-4 h-4 text-white/40 group-hover/refresh:text-white transition-all ${isLoading || isRefetching ? 'animate-spin' : ''}`} />
         </button>
       </div>
 
       {/* Timeline Scroll Area */}
-      <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar z-10 font-mono">
-        {history.length === 0 && !loading && (
+      <div 
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar z-10 font-mono"
+      >
+        {history.length === 0 && !isLoading && (
           <div className="h-full flex flex-col items-center justify-center opacity-20">
             <History className="w-12 h-12 mb-2" />
             <span className="text-xs uppercase tracking-tighter">No entry detected</span>
           </div>
         )}
 
-        <AnimatePresence mode="popLayout">
-          {history.map((event, idx) => (
+        <AnimatePresence mode="popLayout" initial={false}>
+          {visibleEvents.map((event, idx) => (
             <motion.div
               key={`${event.timestamp}-${idx}`}
               initial={{ opacity: 0, y: 10 }}
