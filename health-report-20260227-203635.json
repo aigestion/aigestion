@@ -1,0 +1,56 @@
+﻿{
+    "checks":  {
+                   "Node.js":  {
+                                   "status":  "SUCCESS",
+                                   "timestamp":  "2026-02-27 20:36:39",
+                                   "message":  "NPM: 10.9.4"
+                               },
+                   "Build":  {
+                                 "status":  "ERROR",
+                                 "timestamp":  "2026-02-27 20:38:17",
+                                 "message":  "Build fallo"
+                             },
+                   "Config":  {
+                                  "status":  "ERROR",
+                                  "timestamp":  "2026-02-27 20:38:17",
+                                  "message":  "vite.config.ts no encontrado"
+                              },
+                   "Dependencies":  {
+                                        "status":  "SUCCESS",
+                                        "timestamp":  "2026-02-27 20:36:39",
+                                        "message":  "vite instalado"
+                                    },
+                   "Git":  {
+                               "status":  "INFO",
+                               "timestamp":  "2026-02-27 20:36:37",
+                               "message":  "Remote: https://github.com/aigestion/aigestion.git"
+                           }
+               },
+    "recommendations":  [
+
+                        ],
+    "timestamp":  "2026-02-27 20:36:35",
+    "status":  "error",
+    "issues":  [
+                   {
+                       "message":  "Build fallo",
+                       "component":  "Build",
+                       "level":  "ERROR"
+                   },
+                   {
+                       "message":  ".env.local no encontrado",
+                       "component":  "Config",
+                       "level":  "WARNING"
+                   },
+                   {
+                       "message":  ".env.production no encontrado",
+                       "component":  "Config",
+                       "level":  "WARNING"
+                   },
+                   {
+                       "message":  "vite.config.ts no encontrado",
+                       "component":  "Config",
+                       "level":  "ERROR"
+                   }
+               ]
+}

@@ -11,7 +11,7 @@ param(
 
 # Configuracion
 $PROJECT_ROOT = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
-$FRONTEND_PATH = "$PROJECT_ROOT\frontend\website-epic"
+$FRONTEND_PATH = "$PROJECT_ROOT\frontend\apps\website-epic"
 $HEALTH_REPORT = "$PROJECT_ROOT\health-report-$(Get-Date -Format 'yyyyMMdd-HHmmss').json"
 
 Write-Host "[GOD MODE] AIGestion Health Check" -ForegroundColor Cyan
