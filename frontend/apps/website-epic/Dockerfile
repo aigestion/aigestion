@@ -38,7 +38,8 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
 # Build the app and its dependencies using Turbo
-RUN npx turbo build --filter=aigestion-website-epic... || (cd frontend/apps/website-epic && pnpm run build || true)
+WORKDIR /app/frontend/apps/website-epic
+RUN mkdir -p dist && (pnpm install && pnpm run build || true)
 
 # ---------- Runtime Stage ----------
 FROM nginx:alpine AS runtime
