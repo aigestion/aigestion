@@ -66,13 +66,13 @@ jobs:
 
       - name: 🔍 CodeQL Initialization
         if: matrix.scan-type == 'code'
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: javascript, typescript
 
       - name: 🔍 CodeQL Analysis
         if: matrix.scan-type == 'code'
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
 
       - name: 🛡️ Semgrep Security Scan
         if: matrix.scan-type == 'code'
