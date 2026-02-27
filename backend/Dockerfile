@@ -36,6 +36,7 @@ COPY packages/nexus-shared ./packages/nexus-shared
 # Compile TypeScript for the backend and its dependencies
 WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
+RUN mkdir -p backend/dist
 RUN pnpm --filter nexus-v1-dashboard-backend... build || (cd backend && npx tsc --outDir dist --noEmit false || true)
 RUN cd backend && npx tsc-alias -p tsconfig.json || true
 
@@ -45,7 +46,7 @@ RUN cd backend && npx tsc-alias -p tsconfig.json || true
 RUN pnpm --filter nexus-v1-dashboard-backend deploy --legacy --prod /app/deploy
 
 # Copy compiled artifacts into the deploy directory
-RUN mkdir -p /app/deploy/dist && cp -r /app/backend/dist/* /app/deploy/dist/ || true
+RUN mkdir -p /app/deploy/dist && (cp -r /app/backend/dist/* /app/deploy/dist/ || true)
 RUN cp /app/.env /app/deploy/.env
 
 # ---------- Runtime Stage ----------
