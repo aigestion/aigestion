@@ -71,7 +71,7 @@
     "@sentry/node": "^10.39.0",
     "@simplewebauthn/server": "^13.2.2",
     "@supabase/supabase-js": "^2.93.1",
-    "@tavily/core": "^0.6.4",
+    "@tavily/core": "^0.7.1",
     "@types/amqplib": "^0.10.8",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.10",
