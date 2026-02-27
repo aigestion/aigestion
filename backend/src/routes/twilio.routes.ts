@@ -12,19 +12,23 @@ const router = Router();
  */
 
 router.post('/call-handler', (req, res) =>
-  container.get<TwilioWebhookController>(TYPES.TwilioWebhookController).handleIncomingCall(req, res)
+  container
+    .get<TwilioWebhookController>(TYPES.TwilioWebhookController)
+    .handleIncomingCall(req, res),
 );
 
 router.post('/status-callback', (req, res) =>
-  container.get<TwilioWebhookController>(TYPES.TwilioWebhookController).handleStatusCallback(req, res)
+  container
+    .get<TwilioWebhookController>(TYPES.TwilioWebhookController)
+    .handleStatusCallback(req, res),
 );
 
 router.post('/failover-handler', (req, res) =>
-  container.get<TwilioWebhookController>(TYPES.TwilioWebhookController).handleFailover(req, res)
+  container.get<TwilioWebhookController>(TYPES.TwilioWebhookController).handleFailover(req, res),
 );
 
 router.post('/handle-recording', (req, res) =>
-  container.get<TwilioWebhookController>(TYPES.TwilioWebhookController).handleRecording(req, res)
+  container.get<TwilioWebhookController>(TYPES.TwilioWebhookController).handleRecording(req, res),
 );
 
 export default router;

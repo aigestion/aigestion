@@ -41,7 +41,7 @@ export class ComplianceService {
       metadata: {
         system: 'AIGestion Sovereign Backend',
         version: '60.0.0',
-      }
+      },
     };
   }
 
@@ -53,7 +53,7 @@ export class ComplianceService {
     logger.warn({ userId }, '[ComplianceService] INITIATING SOVEREIGN PURGE');
 
     const redis = getRedisClient();
-    
+
     // 1. Parallel DB Purge
     const results = await Promise.all([
       User.findByIdAndDelete(userId),
@@ -73,7 +73,10 @@ export class ComplianceService {
       const keys = await redis.keys(`*:${userId}*`);
       if (keys.length > 0) {
         await Promise.all(keys.map(key => redis.del(key)));
-        logger.info({ userId, keysCleared: keys.length }, '[ComplianceService] Cache purged for user');
+        logger.info(
+          { userId, keysCleared: keys.length },
+          '[ComplianceService] Cache purged for user',
+        );
       }
     }
 
@@ -81,7 +84,7 @@ export class ComplianceService {
 
     return {
       deleted: true,
-      recordsCleared
+      recordsCleared,
     };
   }
 }

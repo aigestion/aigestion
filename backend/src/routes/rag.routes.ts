@@ -17,7 +17,7 @@ const upload = multer();
  */
 router.post('/query', (req: any, res: any, next: any) => {
   (async () => {
-    const { query } = (req as any).body;
+    const { query } = req.body;
     if (!query) {
       return res.status(400).json({ error: 'Missing query in request body' });
     }
@@ -67,7 +67,7 @@ router.post('/query', (req: any, res: any, next: any) => {
 // Legacy support: GET /rag?query=...
 router.get('/', (req: any, res: any, next: any) => {
   (async () => {
-    const query = (req as any).query.query as string;
+    const query = req.query.query as string;
     if (!query) {
       return res.status(400).json({ error: 'Missing query parameter' });
     }

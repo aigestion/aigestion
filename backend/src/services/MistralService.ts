@@ -17,7 +17,7 @@ export const MISTRAL_MODELS = {
   OPEN_MIXTRAL: 'open-mixtral-8x22b',
 } as const;
 
-export type MistralModel = typeof MISTRAL_MODELS[keyof typeof MISTRAL_MODELS];
+export type MistralModel = (typeof MISTRAL_MODELS)[keyof typeof MISTRAL_MODELS];
 
 @injectable()
 export class MistralService {
@@ -34,7 +34,15 @@ export class MistralService {
   /**
    * Generates text using Mistral models.
    */
-  async generateText(prompt: string, options: { model?: string; temperature?: number; maxTokens?: number; systemInstruction?: string } = {}) {
+  async generateText(
+    prompt: string,
+    options: {
+      model?: string;
+      temperature?: number;
+      maxTokens?: number;
+      systemInstruction?: string;
+    } = {},
+  ) {
     const model = options.model || MISTRAL_MODELS.LARGE;
     try {
       const messages: any[] = [];
@@ -60,7 +68,11 @@ export class MistralService {
   /**
    * Streams a chat response from Mistral.
    */
-  async streamChat(prompt: string, history: any[] = [], options: { model?: string; systemInstruction?: string } = {}): Promise<Readable> {
+  async streamChat(
+    prompt: string,
+    history: any[] = [],
+    options: { model?: string; systemInstruction?: string } = {},
+  ): Promise<Readable> {
     const model = options.model || MISTRAL_MODELS.LARGE;
     const stream = new Readable({ read() {} });
 
@@ -74,7 +86,8 @@ export class MistralService {
       history.forEach(msg => {
         messages.push({
           role: msg.role === 'model' || msg.role === 'assistant' ? 'assistant' : 'user',
-          content: msg.content || (typeof msg.parts?.[0]?.text === 'string' ? msg.parts[0].text : ''),
+          content:
+            msg.content || (typeof msg.parts?.[0]?.text === 'string' ? msg.parts[0].text : ''),
         });
       });
 
@@ -117,7 +130,7 @@ export class MistralService {
   async generateStructured<T = any>(
     prompt: string,
     schema: Record<string, any>,
-    options: { model?: string; systemInstruction?: string; temperature?: number } = {}
+    options: { model?: string; systemInstruction?: string; temperature?: number } = {},
   ): Promise<T> {
     const model = options.model || MISTRAL_MODELS.LARGE;
     try {

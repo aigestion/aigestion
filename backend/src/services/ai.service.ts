@@ -32,82 +32,99 @@ export class AIService {
     const stream = new Readable({ read() {} });
 
     // Force tier for Admin/God
-    const tier = params.userRole === 'god' || params.userRole === 'admin'
-      ? AIModelTier.PREMIUM
-      : AIModelRouter.route(params.prompt);
+    const tier =
+      params.userRole === 'god' || params.userRole === 'admin'
+        ? AIModelTier.PREMIUM
+        : AIModelRouter.route(params.prompt);
 
     const runner = async () => {
       try {
-        const { provider: providerName, modelId, reason } = await this.arbitrationService.getOptimalConfig(tier, params.prompt);
+        const {
+          provider: providerName,
+          modelId,
+          reason,
+        } = await this.arbitrationService.getOptimalConfig(tier, params.prompt);
         logger.info(`[AIService] Arbitrated to: ${providerName}/${modelId} | Reason: ${reason}`);
 
         const provider = this.providerFactory.getProvider(providerName);
-        
+
         // 🚀 DX: AI Prompt Hot-reload
         let systemInstruction = `Eres Nexus AI, un agente avanzado. ID de usuario: ${params.userId}`;
         const dynamicPromptKey = `prompt:system:${params.personaId || 'default'}`;
         const dynamicPrompt = await getCache<string>(dynamicPromptKey);
-        
+
         if (dynamicPrompt) {
           systemInstruction = dynamicPrompt;
-          logger.debug({ personaId: params.personaId }, '[AIService] Hot-reloaded system instruction from Redis');
+          logger.debug(
+            { personaId: params.personaId },
+            '[AIService] Hot-reloaded system instruction from Redis',
+          );
         } else if (params.personaId) {
           const persona = await Persona.findById(params.personaId);
           if (persona) systemInstruction = persona.systemPrompt;
         }
 
         const startTime = Date.now();
-        const aiStream = await provider.streamChat(params, { modelId, tools: this.toolExecutor.getStaticToolDefinitions(), systemInstruction });
+        const aiStream = await provider.streamChat(params, {
+          modelId,
+          tools: this.toolExecutor.getStaticToolDefinitions(),
+          systemInstruction,
+        });
         const ttft = Date.now() - startTime; // Time to First Thought (approx)
-        
-        logger.info({ ttft, provider: providerName, modelId }, '[AIService] Performance Profile: TTFT');
 
-        aiStream.on('data', async (chunkData) => {
-           try {
-             // If chunkData is a buffer, convert to string
-             const dataStr = chunkData.toString();
-             // Gemini provider specific parsing
-             if (providerName === 'gemini') {
-                const parsed = JSON.parse(dataStr);
-                if (parsed.text) {
-                   stream.push(`data: ${JSON.stringify({ type: 'text', content: parsed.text })}\n\n`);
+        logger.info(
+          { ttft, provider: providerName, modelId },
+          '[AIService] Performance Profile: TTFT',
+        );
+
+        aiStream.on('data', async chunkData => {
+          try {
+            // If chunkData is a buffer, convert to string
+            const dataStr = chunkData.toString();
+            // Gemini provider specific parsing
+            if (providerName === 'gemini') {
+              const parsed = JSON.parse(dataStr);
+              if (parsed.text) {
+                stream.push(`data: ${JSON.stringify({ type: 'text', content: parsed.text })}\n\n`);
+              }
+              if (parsed.functionCalls) {
+                for (const call of parsed.functionCalls) {
+                  await this.toolExecutor.handleToolCall(call, stream, params.userId);
                 }
-                if (parsed.functionCalls) {
-                   for (const call of parsed.functionCalls) {
-                      await this.toolExecutor.handleToolCall(call, stream, params.userId);
-                   }
-                }
-             } else {
-                // Mistral or other providers just piping raw if simple string
-                stream.push(chunkData);
-             }
-           } catch (e) {
-             stream.push(chunkData);
-           }
+              }
+            } else {
+              // Mistral or other providers just piping raw if simple string
+              stream.push(chunkData);
+            }
+          } catch (e) {
+            stream.push(chunkData);
+          }
         });
 
         aiStream.on('end', () => {
           const totalTime = Date.now() - startTime;
           stream.push('data: [DONE]\n\n');
           stream.push(null);
-          
-          logger.info({ totalTime, provider: providerName, modelId }, '[AIService] Performance Profile: Completed');
-          
+
+          logger.info(
+            { totalTime, provider: providerName, modelId },
+            '[AIService] Performance Profile: Completed',
+          );
+
           this.usageService.trackUsage({
             userId: params.userId,
             provider: providerName,
             modelId,
             prompt: params.prompt,
             completion: 'Streamed',
-            arbitrationReason: reason
+            arbitrationReason: reason,
           });
         });
 
-        aiStream.on('error', (err) => {
+        aiStream.on('error', err => {
           stream.emit('error', err);
           stream.push(null);
         });
-
       } catch (err: any) {
         logger.error(err, '[AIService] streamChat error');
         stream.emit('error', err);
@@ -119,10 +136,17 @@ export class AIService {
     return stream;
   }
 
-  public async generateContent(prompt: string, userId: string = 'anonymous', userRole: string = 'user'): Promise<string> {
+  public async generateContent(
+    prompt: string,
+    userId: string = 'anonymous',
+    userRole: string = 'user',
+  ): Promise<string> {
     try {
       // God Mode Force
-      const tier = userRole === 'god' || userRole === 'admin' ? AIModelTier.PREMIUM : AIModelRouter.route(prompt);
+      const tier =
+        userRole === 'god' || userRole === 'admin'
+          ? AIModelTier.PREMIUM
+          : AIModelRouter.route(prompt);
 
       // Semantic Cache
       const cached = await this.semanticCache.getSemantic(prompt);
@@ -134,18 +158,29 @@ export class AIService {
         return result.supremeVerdict;
       }
 
-      const { provider: providerName, modelId, reason } = await this.arbitrationService.getOptimalConfig(tier, prompt);
+      const {
+        provider: providerName,
+        modelId,
+        reason,
+      } = await this.arbitrationService.getOptimalConfig(tier, prompt);
       const provider = this.providerFactory.getProvider(providerName);
-      
+
       const text = await provider.generateContent(prompt, { modelId });
 
-      await this.usageService.trackUsage({ userId, provider: providerName, modelId, prompt, completion: text, arbitrationReason: reason });
+      await this.usageService.trackUsage({
+        userId,
+        provider: providerName,
+        modelId,
+        prompt,
+        completion: text,
+        arbitrationReason: reason,
+      });
       await this.semanticCache.setSemantic(prompt, text);
 
       return text;
     } catch (err) {
       logger.error(err, '[AIService] generateContent failed, falling back to local');
-      return "Error generating content. System stable but AI provider unreachable.";
+      return 'Error generating content. System stable but AI provider unreachable.';
     }
   }
 

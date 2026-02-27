@@ -6,9 +6,7 @@ import { logger } from '../utils/logger';
 
 @injectable()
 export class MissionWatcherService {
-  constructor(
-    @inject(TYPES.SocketService) private readonly socketService: SocketService
-  ) {}
+  constructor(@inject(TYPES.SocketService) private readonly socketService: SocketService) {}
 
   /**
    * 📡 Start watching Mission collection changes
@@ -18,7 +16,7 @@ export class MissionWatcherService {
 
     const changeStream = Mission.watch();
 
-    changeStream.on('change', (change) => {
+    changeStream.on('change', change => {
       try {
         if (change.operationType === 'insert') {
           const mission = change.fullDocument;
@@ -29,11 +27,11 @@ export class MissionWatcherService {
         if (change.operationType === 'update') {
           const missionId = change.documentKey._id.toString();
           const updatedFields = change.updateDescription.updatedFields;
-          
+
           // Notify the mission room for granular updates
           this.socketService.emitMissionUpdate(missionId, {
             id: missionId,
-            ...updatedFields
+            ...updatedFields,
           });
 
           logger.debug({ missionId }, '[MissionWatcher] Mission updated');
@@ -43,7 +41,7 @@ export class MissionWatcherService {
       }
     });
 
-    changeStream.on('error', (err) => {
+    changeStream.on('error', err => {
       logger.error(err, '[MissionWatcherService] Change Stream CRITICAL ERROR');
       // Potential reconnection logic here if needed, but Mongoose usually handles it
     });

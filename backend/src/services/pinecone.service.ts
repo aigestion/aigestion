@@ -83,7 +83,7 @@ export class PineconeService {
     const cached = await getCache<number[]>(cacheKey);
     if (cached) {
       logger.debug({ hash }, '[PineconeService] Embedding Cache Hit');
-      return cached as number[];
+      return cached;
     }
 
     const embedding = await this.vertexAIService.generateEmbeddings(text);

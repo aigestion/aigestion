@@ -78,7 +78,7 @@ setInterval(async () => {
       lastBackup: new Date().toISOString(),
     };
 
-    if (io) (io as any).emit('system:metrics', systemMetrics);
+    if (io) io.emit('system:metrics', systemMetrics);
   } catch (err) {
     logger.error('Error fetching metrics for broadcast:', err);
   }
@@ -171,9 +171,17 @@ export async function initializeAndStart() {
         socket: Socket<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>,
       ) => {
         logger.info('New WebSocket connection');
-        socket.on('joinRoom', (room: string) => { socket.join(room); logger.info(`User joined room: ${room}`); });
-        socket.on('leaveRoom', (room: string) => { socket.leave(room); logger.info(`User left room: ${room}`); });
-        socket.on('disconnect', () => { logger.info('Client disconnected'); });
+        socket.on('joinRoom', (room: string) => {
+          socket.join(room);
+          logger.info(`User joined room: ${room}`);
+        });
+        socket.on('leaveRoom', (room: string) => {
+          socket.leave(room);
+          logger.info(`User left room: ${room}`);
+        });
+        socket.on('disconnect', () => {
+          logger.info('Client disconnected');
+        });
       },
     );
 
@@ -198,7 +206,9 @@ export async function initializeAndStart() {
         isReady = true;
         logger.info('✅ [DB] MongoDB connected — server is READY');
       } catch (error) {
-        logger.warn('⚠️ [DB] MongoDB failed — running in degraded mode: ' + (error as Error).message);
+        logger.warn(
+          '⚠️ [DB] MongoDB failed — running in degraded mode: ' + (error as Error).message,
+        );
         isReady = true; // still serve traffic — let individual routes handle DB errors
       }
 
@@ -207,11 +217,7 @@ export async function initializeAndStart() {
         WorkerSetup.startWorkers();
 
         const jobQueue = container.get<JobQueue>(TYPES.JobQueue);
-        await jobQueue.addJob(
-          JobName.MALWARE_CLEANUP,
-          {},
-          { repeat: { pattern: '0 0 * * *' } },
-        );
+        await jobQueue.addJob(JobName.MALWARE_CLEANUP, {}, { repeat: { pattern: '0 0 * * *' } });
       } catch (err) {
         logger.warn('Failed to schedule Malware Cleanup job (likely Redis/DB missing):', err);
       }
@@ -220,9 +226,13 @@ export async function initializeAndStart() {
       try {
         const credManager = container.get<CredentialManagerService>(TYPES.CredentialManagerService);
         const report = await credManager.verifyAll();
-        const criticalFailures = report.filter(r => r.status === 'missing' || r.status === 'invalid').length;
+        const criticalFailures = report.filter(
+          r => r.status === 'missing' || r.status === 'invalid',
+        ).length;
         if (criticalFailures > 0) {
-          logger.error(`⚠️ ${criticalFailures} Critical credentials issues detected. System may be unstable.`);
+          logger.error(
+            `⚠️ ${criticalFailures} Critical credentials issues detected. System may be unstable.`,
+          );
         }
       } catch (error) {
         logger.error('Critical: Credential verification failed during startup:', error);
@@ -262,14 +272,12 @@ export async function initializeAndStart() {
 
       logger.info('✅ Background services initialization completed');
     });
-
   } catch (error: any) {
     console.error('❌ [DEBUG] Critical startup failure:', error);
     logger.error('Critical failure during startup:', error);
     process.exit(1);
   }
 }
-
 
 // 4. Graceful Shutdown
 const gracefullyShutdown = async (signal: string) => {

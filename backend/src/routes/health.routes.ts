@@ -31,8 +31,8 @@ healthRouter.get('/', monitoringLimit, (req: Request, res: Response) => {
         version: config.apiDocs.version || '1.0.0',
       },
       200,
-      requestId
-    )
+      requestId,
+    ),
   );
 });
 
@@ -48,13 +48,11 @@ healthRouter.get('/readyz', (req: Request, res: Response) => {
   const { isReady } = require('../server');
   const requestId = (req as any).requestId || 'unknown';
   if (!isReady) {
-    return res.status(503).json(
-      buildResponse({ status: 'starting', uptime: process.uptime() }, 503, requestId)
-    );
+    return res
+      .status(503)
+      .json(buildResponse({ status: 'starting', uptime: process.uptime() }, 503, requestId));
   }
-  return res.json(
-    buildResponse({ status: 'ready', uptime: process.uptime() }, 200, requestId)
-  );
+  return res.json(buildResponse({ status: 'ready', uptime: process.uptime() }, 200, requestId));
 });
 
 /**

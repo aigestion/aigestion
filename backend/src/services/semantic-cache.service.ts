@@ -25,16 +25,30 @@ export class SemanticCacheService {
 
     try {
       await client.sendCommand([
-        'FT.CREATE', 'idx:semantic_cache',
-        'ON', 'HASH',
-        'PREFIX', '1', 'vec:semantic_cache:',
+        'FT.CREATE',
+        'idx:semantic_cache',
+        'ON',
+        'HASH',
+        'PREFIX',
+        '1',
+        'vec:semantic_cache:',
         'SCHEMA',
-        'prompt', 'TEXT', 'SORTABLE',
-        'response', 'TEXT', 'NOINDEX',
-        'embedding', 'VECTOR', 'HNSW', '6',
-        'TYPE', 'FLOAT32',
-        'DIM', '768', // text-embedding-004 is 768
-        'DISTANCE_METRIC', 'COSINE'
+        'prompt',
+        'TEXT',
+        'SORTABLE',
+        'response',
+        'TEXT',
+        'NOINDEX',
+        'embedding',
+        'VECTOR',
+        'HNSW',
+        '6',
+        'TYPE',
+        'FLOAT32',
+        'DIM',
+        '768', // text-embedding-004 is 768
+        'DISTANCE_METRIC',
+        'COSINE',
       ]);
       logger.info('[SemanticCache] Vector index created successfully');
     } catch (err: any) {

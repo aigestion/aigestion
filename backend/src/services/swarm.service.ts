@@ -442,7 +442,7 @@ export class SwarmService {
     const chat = await this.gemini.chatWithTools(history, tools, systemInstruction);
 
     let lastResult = '';
-    let currentPrompt = objective;
+    const currentPrompt = objective;
 
     while (currentTurn < maxTurns) {
       currentTurn++;

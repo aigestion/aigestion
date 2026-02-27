@@ -626,7 +626,10 @@ export class TwilioService {
    * 🌌 [GOD LEVEL] Generate Sovereign TwiML in Spanish
    * Ensures the voice assistant speaks correctly and follow-up logic is local.
    */
-  public generateSovereignTwiML(message: string, options: { voice?: string; language?: string; pause?: number } = {}): string {
+  public generateSovereignTwiML(
+    message: string,
+    options: { voice?: string; language?: string; pause?: number } = {},
+  ): string {
     const voice = options.voice || 'Polly.Lucia'; // Premium Spanish Voice
     const language = options.language || 'es-ES';
     const pause = options.pause || 1;
@@ -650,7 +653,7 @@ export class TwilioService {
    */
   async updateWebhookConfig(phoneNumberSid: string): Promise<any> {
     const baseUrl = 'https://aigestion.net/api/v1/twilio';
-    
+
     return this.withRetry(async () => {
       logger.info(`[TwilioService] 🌌 Synchronizing Webhooks for SID: ${phoneNumberSid}`);
 
@@ -671,7 +674,7 @@ export class TwilioService {
             Authorization: `Basic ${Buffer.from(`${this.accountSid}:${this.authToken}`).toString('base64')}`,
           },
           timeout: 15000,
-        }
+        },
       );
 
       logger.info(`[TwilioService] ✅ Webhooks synchronized to God Level Node`);

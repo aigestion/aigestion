@@ -10,7 +10,7 @@ export class AgentMockService {
     }
 
     console.log(`[AGENT MOCK] Simulating ${model} response for: ${prompt.substring(0, 50)}...`);
-    
+
     // Simulate AI thinking delay
     await new Promise(resolve => setTimeout(resolve, 800));
 

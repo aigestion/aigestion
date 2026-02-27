@@ -92,8 +92,8 @@ documentRouter.post('/process', malwareScanner.uploadSingle('file'), async (req:
           status: 'indexed',
         },
         200,
-        requestId
-      )
+        requestId,
+      ),
     );
   } catch (error) {
     console.error('Document Processing Failed:', error);
@@ -156,11 +156,11 @@ documentRouter.post(
               type,
               requestId,
             },
-            { jobId }
+            { jobId },
           );
 
           return jobId;
-        })
+        }),
       );
 
       return res.json(
@@ -171,18 +171,18 @@ documentRouter.post(
             jobIds,
           },
           200,
-          requestId
-        )
+          requestId,
+        ),
       );
     } catch (error) {
       console.error('Failed to queue bulk processing jobs:', error);
       return res
         .status(500)
         .json(
-          buildError('Failed to queue processing jobs', 'QUEUE_ERROR', 500, requestId as string)
+          buildError('Failed to queue processing jobs', 'QUEUE_ERROR', 500, requestId as string),
         );
     }
-  }
+  },
 );
 
 /**

@@ -128,15 +128,15 @@ export class RagService {
             );
             sortedFiles = rustResults;
           } else {
-            sortedFiles = this.rankFiles(files, query!);
+            sortedFiles = this.rankFiles(files, query);
           }
         } catch (err) {
           logger.warn(`[RagService] Rust RagCore failed, falling back to JS ranking: ${err}`);
-          sortedFiles = this.rankFiles(files, query!);
+          sortedFiles = this.rankFiles(files, query);
         }
 
         // 🧠 Re-ranking Phase: Pick the absolute best candidates
-        sortedFiles = this.reRankResults(sortedFiles, query!);
+        sortedFiles = this.reRankResults(sortedFiles, query);
 
         // Append Sovereign Vault Context (Unified Memory)
         if (vaultResults && vaultResults.length > 0) {
@@ -148,7 +148,7 @@ export class RagService {
           });
         }
 
-        const localContext = await this.queryLocalMemory(query!);
+        const localContext = await this.queryLocalMemory(query);
         if (localContext) {
           context += `[Local Neural Memory (NeuroCore)]\n${localContext}\n\n`;
         }

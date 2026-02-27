@@ -76,7 +76,7 @@ export async function loadSecrets(): Promise<void> {
         // We throw so Promise.allSettled marks as rejected
         throw new Error(`Failed to fetch ${name}: ${err.message}`);
       }
-    })
+    }),
   );
 
   const loaded = results.filter(r => r.status === 'fulfilled').map((r: any) => r.value);
@@ -98,7 +98,7 @@ export async function loadSecrets(): Promise<void> {
 export async function deriveMissionKey(
   masterSeed: string,
   missionId: string,
-  userId: string
+  userId: string,
 ): Promise<Buffer> {
   const salt = Buffer.from(userId);
   const info = `AIG_SOVEREIGN_MISSION_${missionId}`;
@@ -110,7 +110,7 @@ export async function deriveMissionKey(
       Buffer.from(masterSeed),
       salt,
       Buffer.from(info),
-      keyLength
+      keyLength,
     );
     return Buffer.from(derivedKey);
   } catch (error) {

@@ -277,7 +277,7 @@ export class WAFService {
 
     const ipEvents = this.events.filter(e => e.ip === ip);
     const blockedRequests = ipEvents.filter(e => e.type === 'block').length;
-    const rulesTriggered = Array.from(new Set(ipEvents.map(e => e.rule as string)));
+    const rulesTriggered = Array.from(new Set(ipEvents.map(e => e.rule)));
 
     // Calculate reputation score (0-100)
     let score = 100;

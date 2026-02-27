@@ -130,20 +130,20 @@ export class SovereignOrchestratorService {
   public async getWorkspaceStatus() {
     const tiers = ['AIGestion', 'PROJECTS', 'TOOLS', 'RESEARCH', 'ARCHIVE', 'SCRIPTS'];
     const status: any = {};
-    
+
     for (const tier of tiers) {
       status[tier] = {
         online: true,
         health: 'optimal',
-        path: `C:/Users/Alejandro/${tier}`
+        path: `C:/Users/Alejandro/${tier}`,
       };
     }
-    
+
     return {
-        timestamp: new Date().toISOString(),
-        tiers: status,
-        agentStatus: 'active',
-        neuralSync: 'complete'
+      timestamp: new Date().toISOString(),
+      tiers: status,
+      agentStatus: 'active',
+      neuralSync: 'complete',
     };
   }
 }
