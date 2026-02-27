@@ -2,7 +2,7 @@
 
 # Configuración
 $TWILIO_ACCOUNT_SID = $env:TWILIO_ACCOUNT_SID
-$TWILIO_AUTH_TOKEN = "REDACTED_TWILIO_TOKEN"
+$TWILIO_AUTH_TOKEN = $env:TWILIO_AUTH_TOKEN
 $TWILIO_PHONE_NUMBER = "+16183581369"
 
 Write-Host "🚀 Probando Twilio..." -ForegroundColor Cyan

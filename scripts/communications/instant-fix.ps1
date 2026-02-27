@@ -1,7 +1,7 @@
 # Instant Fix for Daniela IA Voice
 
 $sid = "REDACTED_TWILIO_SID"
-$token = "REDACTED_TWILIO_TOKEN"
+$token = $env:TWILIO_AUTH_TOKEN
 $phone = "+16183581369"
 
 Write-Host "🔧 Arreglando voz de Daniela IA..." -ForegroundColor Yellow

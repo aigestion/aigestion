@@ -170,7 +170,7 @@ npm install express twilio body-parser
 
 # Variables de entorno
 TWILIO_ACCOUNT_SID=REDACTED_TWILIO_SID
-TWILIO_AUTH_TOKEN=REDACTED_TWILIO_TOKEN
+TWILIO_AUTH_TOKEN=AUTH_TOKEN_REDACTED
 PORT=3000
 BASE_URL=https://aigestion.net
 ```

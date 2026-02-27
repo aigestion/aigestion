@@ -1,7 +1,7 @@
 # Llamar ahora - Daniela IA
 
 $sid = "REDACTED_TWILIO_SID"
-$token = "REDACTED_TWILIO_TOKEN"
+$token = $env:TWILIO_AUTH_TOKEN
 $phone = "+16183581369"
 
 Write-Host "Daniela IA llamando..." -ForegroundColor Yellow

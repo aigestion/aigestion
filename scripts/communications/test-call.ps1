@@ -1,7 +1,7 @@
 # Test Call - Daniela IA Spanish
 
 $sid = "REDACTED_TWILIO_SID"
-$token = "REDACTED_TWILIO_TOKEN"
+$token = $env:TWILIO_AUTH_TOKEN
 $phone = "+16183581369"
 
 $auth = "Basic " + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$sid`:$token"))
