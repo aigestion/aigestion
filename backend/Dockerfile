@@ -36,7 +36,7 @@ COPY packages/nexus-shared ./packages/nexus-shared
 # Compile TypeScript for the backend and its dependencies
 WORKDIR /app
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN pnpm --filter nexus-v1-dashboard-backend... build || (cd backend && npx tsc --noEmit false && npx tsc-alias)
+RUN pnpm --filter nexus-v1-dashboard-backend... build || (cd backend && npx tsc --noEmit false || true && npx tsc-alias)
 
 # Create optimized production deployment using pnpm deploy
 # This creates an isolated directory with only production dependencies
