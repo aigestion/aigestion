@@ -126,9 +126,19 @@ try {
 Write-Host "
 [STEP 5] Verificando configuracion..." -ForegroundColor Yellow
 try {
-    foreach ($envFile in @(".env", ".env.local", ".env.production")) {
-        if (Test-Path $envFile) { Write-HealthCheck "$envFile encontrado" "SUCCESS" "Config" }
-        else { Write-HealthCheck "$envFile no encontrado" "WARNING" "Config" }
+    # Single source of truth: only root .env (no .env.local or .env.production)
+    $rootEnv = Join-Path $PROJECT_ROOT ".env"
+    if (Test-Path $rootEnv) {
+        $envLineCount = (Get-Content $rootEnv | Measure-Object -Line).Lines
+        Write-HealthCheck ".env encontrado ($envLineCount lineas)" "SUCCESS" "Config"
+        # Check for unrestored placeholders
+        $envRaw = Get-Content $rootEnv -Raw
+        $redacted = ([regex]::Matches($envRaw, '\[REDACTED\]|NEEDS_RESTORE_FROM_PLATFORM', 'IgnoreCase')).Count
+        if ($redacted -gt 0) { Write-HealthCheck "$redacted credenciales sin restaurar en .env" "WARNING" "Config" }
+        else { Write-HealthCheck "Credenciales .env: validadas" "SUCCESS" "Config" }
+    }
+    else {
+        Write-HealthCheck ".env NO ENCONTRADO (CRITICO)" "ERROR" "Config"
     }
     if (Test-Path "vite.config.ts") { Write-HealthCheck "vite.config.ts encontrado" "SUCCESS" "Config" }
     else { Write-HealthCheck "vite.config.ts no encontrado" "ERROR" "Config" }

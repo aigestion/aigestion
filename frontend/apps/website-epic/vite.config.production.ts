@@ -59,6 +59,28 @@ export default defineConfig({
             ) {
               return 'vendor-ui';
             }
+            if (id.includes('@sentry')) {
+              return 'vendor-sentry';
+            }
+            if (id.includes('@supabase') || id.includes('supabase')) {
+              return 'vendor-supabase';
+            }
+            if (id.includes('@tanstack') || id.includes('recharts') || id.includes('d3')) {
+              return 'vendor-data';
+            }
+            if (id.includes('socket.io') || id.includes('@vapi-ai')) {
+              return 'vendor-realtime';
+            }
+            if (
+              id.includes('crystals-kyber') ||
+              id.includes('tweetnacl') ||
+              id.includes('@simplewebauthn')
+            ) {
+              return 'vendor-crypto';
+            }
+            if (id.includes('axios') || id.includes('zod') || id.includes('zustand')) {
+              return 'vendor-core';
+            }
             return 'vendor-others';
           }
         },
