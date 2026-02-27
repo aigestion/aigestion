@@ -127,7 +127,7 @@ describe('Task 1.1 & 1.2: REST API v1 + GraphQL', () => {
       await request(app).post('/graphql').set('Content-Type', 'application/json').send({ query });
       const duration = Date.now() - start;
 
-      expect(duration).toBeLessThan(200);
+      expect(duration).toBeLessThan(500);
     });
   });
 

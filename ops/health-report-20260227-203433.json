@@ -1,0 +1,71 @@
+﻿{
+    "checks":  {
+                   "Node.js":  {
+                                   "status":  "SUCCESS",
+                                   "timestamp":  "2026-02-27 20:34:37",
+                                   "message":  "NPM: 10.9.4"
+                               },
+                   "Build":  {
+                                 "status":  "ERROR",
+                                 "timestamp":  "2026-02-27 20:34:39",
+                                 "message":  "Build fallo"
+                             },
+                   "Config":  {
+                                  "status":  "ERROR",
+                                  "timestamp":  "2026-02-27 20:34:39",
+                                  "message":  "vite.config.ts no encontrado"
+                              },
+                   "Dependencies":  {
+                                        "status":  "ERROR",
+                                        "timestamp":  "2026-02-27 20:34:37",
+                                        "message":  "node_modules no existe - ejecutar npm install"
+                                    },
+                   "Git":  {
+                               "status":  "INFO",
+                               "timestamp":  "2026-02-27 20:34:35",
+                               "message":  "Remote: https://github.com/aigestion/aigestion.git"
+                           }
+               },
+    "recommendations":  [
+
+                        ],
+    "timestamp":  "2026-02-27 20:34:33",
+    "status":  "error",
+    "issues":  [
+                   {
+                       "message":  "Hay cambios sin commit",
+                       "component":  "Git",
+                       "level":  "WARNING"
+                   },
+                   {
+                       "message":  "node_modules no existe - ejecutar npm install",
+                       "component":  "Dependencies",
+                       "level":  "ERROR"
+                   },
+                   {
+                       "message":  "Build fallo",
+                       "component":  "Build",
+                       "level":  "ERROR"
+                   },
+                   {
+                       "message":  ".env no encontrado",
+                       "component":  "Config",
+                       "level":  "WARNING"
+                   },
+                   {
+                       "message":  ".env.local no encontrado",
+                       "component":  "Config",
+                       "level":  "WARNING"
+                   },
+                   {
+                       "message":  ".env.production no encontrado",
+                       "component":  "Config",
+                       "level":  "WARNING"
+                   },
+                   {
+                       "message":  "vite.config.ts no encontrado",
+                       "component":  "Config",
+                       "level":  "ERROR"
+                   }
+               ]
+}
