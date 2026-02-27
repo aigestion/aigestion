@@ -13,6 +13,8 @@ RUN npm install -g pnpm
 # Copy workspace configuration and master environment
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
 COPY .env ./.env
+COPY tsconfig*.json ./
+COPY turbo.json ./
 
 # Copy all package manifests for correct workspace resolution
 # This is crucial for pnpm to understand the dependency graph
