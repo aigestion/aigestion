@@ -9,17 +9,14 @@ const fs = require('fs');
 const path = require('path');
 
 // ------------------------------------------------------------
-// Configuration – Load from backend/.env if available
+// Configuration – Load from root .env (single source of truth)
 // ------------------------------------------------------------
-const envPath = path.resolve(__dirname, '..', 'backend', '.env');
-const envLocalPath = path.resolve(__dirname, '..', '.env.local');
+const envPath = path.resolve(__dirname, '..', '.env');
 
-// Load root .env.local first, then backend .env (backend takes priority for credentials)
-if (fs.existsSync(envLocalPath)) {
-  require('dotenv').config({ path: envLocalPath });
-}
 if (fs.existsSync(envPath)) {
   require('dotenv').config({ path: envPath });
+} else {
+  console.warn('⚠️ Root .env not found at', envPath);
 }
 
 const PROJECT_ID =

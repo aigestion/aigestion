@@ -30,12 +30,13 @@ try {
   writePulse('ADB not found or error.', '\x1b[31m');
 }
 
-// 3. Vault Check
-const vaultPath = path.resolve(process.env.USERPROFILE, 'AppData/Roaming/Antigravity/sovereign_vault/.env.master_recovery');
-if (fs.existsSync(vaultPath)) {
-  writePulse('System Vault: HARDENED', '\x1b[32m');
+// 3. Vault Check — validate root .env has real credentials (single source of truth)
+const envContent = fs.readFileSync(envPath, 'utf8');
+const redactedCount = (envContent.match(/\[REDACTED\]|NEEDS_RESTORE_FROM_PLATFORM/g) || []).length;
+if (redactedCount === 0) {
+  writePulse('Credential Vault (.env): HARDENED', '\x1b[32m');
 } else {
-  writePulse('System Vault: VULNERABLE', '\x1b[31m');
+  writePulse(`Credential Vault (.env): ${redactedCount} UNRESTORED values`, '\x1b[31m');
 }
 
 writePulse('Audit Complete. Sovereignty Level: OPTIMAL.', '\x1b[35m');

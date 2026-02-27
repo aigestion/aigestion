@@ -421,10 +421,10 @@ GMAIL_API_ENABLED=true
 CALENDAR_API_ENABLED=true
 `;
 
-    const envFile = path.join(__dirname, '../../.env.gcp-divine');
-    fs.writeFileSync(envFile, envConfig);
-
-    this.log(`✅ Archivo de entorno generado: ${envFile}`, 'SUCCESS');
+    // Print to console — merge manually into root .env (single source of truth)
+    this.log('📋 GCP environment variables to add to root .env:', 'INFO');
+    console.log(envConfig);
+    this.log('⚠️ Copy the above into your root .env file (single source of truth). No separate env files.', 'WARNING');
   }
 
   async run() {
