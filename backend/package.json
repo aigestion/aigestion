@@ -167,7 +167,7 @@
     "@types/jest": "^29.5.14",
     "@types/memcached": "^2.2.10",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^22.19.3",
+    "@types/node": "^25.3.2",
     "@types/node-fetch": "2",
     "@types/opossum": "^8.1.9",
     "@types/pg": "^8.16.0",
