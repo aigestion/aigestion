@@ -78,6 +78,7 @@ class CacheManager {
   }
 
   static async addToCache(cacheName: string, request: Request, response: Response): Promise<void> {
+    if (response.status !== 200) return;
     const cache = await this.openCache(cacheName);
     await cache.put(request, response.clone());
   }
@@ -146,7 +147,7 @@ class CacheStrategies {
     performanceMonitor.recordCacheMiss();
     const networkResponse = await fetch(request);
     
-    if (networkResponse.ok) {
+    if (networkResponse.status === 200) {
       await CacheManager.addToCache(STATIC_CACHE, request, networkResponse);
     }
     
@@ -158,7 +159,7 @@ class CacheStrategies {
       performanceMonitor.recordNetworkRequest();
       const networkResponse = await fetch(request);
       
-      if (networkResponse.ok) {
+      if (networkResponse.status === 200) {
         await CacheManager.addToCache(DYNAMIC_CACHE, request, networkResponse);
       }
       
@@ -184,7 +185,7 @@ class CacheStrategies {
     performanceMonitor.recordCacheMiss();
     const networkResponse = await fetch(request);
     
-    if (networkResponse.ok) {
+    if (networkResponse.status === 200) {
       await CacheManager.addToCache(RUNTIME_CACHE, request, networkResponse);
     }
     
@@ -199,7 +200,7 @@ class CacheStrategies {
   private static async revalidateInBackground(request: Request): Promise<void> {
     try {
       const networkResponse = await fetch(request);
-      if (networkResponse.ok) {
+      if (networkResponse.status === 200) {
         await CacheManager.addToCache(RUNTIME_CACHE, request, networkResponse);
       }
     } catch (error) {
@@ -304,7 +305,7 @@ self.addEventListener('activate', (event: ExtendableEvent) => {
 });
 
 self.addEventListener('fetch', (event: FetchEvent) => {
-  if (!RequestRouter.isGetRequest(event.request)) {
+  if (!RequestRouter.isGetRequest(event.request) || event.request.headers.has('range')) {
     return;
   }
 

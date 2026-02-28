@@ -87,24 +87,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" media="print" onload="this.media='all'" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" media="print" onload="this.media='all'" />
 
-    <!-- 💥 NUCLEAR SW KILLER: Unregister SW immediately before app loads -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
-          for (let registration of registrations) {
-            registration.unregister().then(function () {
-              console.log('💥 SW Force Unregistered from index.html:', registration.scope);
-              // Clear caches as well for good measure
-              if ('caches' in window) {
-                caches.keys().then(function (names) {
-                  for (let name of names) caches.delete(name);
-                });
-              }
-            });
-          }
-        });
-      }
-    </script>
 
     <!-- Critical inline styles (skeleton only) -->
     <style>

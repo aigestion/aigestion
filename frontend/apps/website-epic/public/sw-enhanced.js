@@ -81,12 +81,17 @@ self.addEventListener('activate', (event) => {
 });
 
 // Fetch event - implement caching strategies
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
   // Skip non-GET requests
   if (request.method !== 'GET') {
+    return;
+  }
+
+  // Skip range requests (Cache API doesn't support them well)
+  if (request.headers.has('range')) {
     return;
   }
 
@@ -105,7 +110,7 @@ self.addEventListener('fetch', (event) => {
   } else {
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));
   }
-});
+};);
 
 // Cache strategy: Cache First
 async function cacheFirst(request, cacheName) {
@@ -149,17 +154,22 @@ async function networkFirst(request, cacheName) {
     // Try network first with timeout
     const networkResponse = await Promise.race([
       fetch(request),
-      new Promise((_, reject) => 
+      new Promise((_, reject) =>
         setTimeout(() => reject(new Error('Network timeout')), NETWORK_TIMEOUT)
-      )
+      ),
     ]);
-    
-    if (networkResponse.ok) {
+
+    if (networkResponse.status === 200) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
       return networkResponse;
     }
-    
+
+    // Return early if it's a 206 or other non-200 but "ok" response
+    if (networkResponse.ok) {
+      return networkResponse;
+    }
+
     throw new Error('Network response not ok');
   } catch (error) {
     console.log('Network failed, trying cache:', error.message);
@@ -188,7 +198,7 @@ async function staleWhileRevalidate(request, cacheName) {
   
   // Always try to update cache
   const fetchPromise = fetch(request).then((response) => {
-    if (response.ok) {
+    if (response.status === 200) {
       cache.put(request, response.clone());
     }
     return response;
