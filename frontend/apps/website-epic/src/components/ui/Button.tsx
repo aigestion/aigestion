@@ -2,15 +2,18 @@ import { forwardRef } from 'react';
 import { cn } from '../../utils/cn';
 import { Loader2 } from 'lucide-react';
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<
+  HTMLButtonElement | HTMLAnchorElement
+> {
   readonly variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
   readonly size?: 'sm' | 'md' | 'lg' | 'xl';
   readonly loading?: boolean;
   readonly icon?: React.ReactNode;
   readonly iconPosition?: 'left' | 'right';
+  readonly as?: any;
 }
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = forwardRef<any, ButtonProps>(
   (
     {
       className,
@@ -19,6 +22,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       loading = false,
       icon,
       iconPosition = 'left',
+      as: Component = 'button',
       children,
       disabled,
       ...props
@@ -90,10 +94,24 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       );
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+      if (props.onKeyDown) props.onKeyDown(e);
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        (e.currentTarget as HTMLElement).click();
+      }
+    };
+
     return (
-      <button ref={ref} className={classes} disabled={disabled || loading} {...props}>
+      <Component
+        ref={ref}
+        className={classes}
+        disabled={disabled || loading}
+        {...props}
+        onKeyDown={handleKeyDown}
+      >
         {renderContent()}
-      </button>
+      </Component>
     );
   }
 );

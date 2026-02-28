@@ -41,7 +41,7 @@ describe('DanielaConversationPanel', () => {
 
       expect(screen.getByText('Daniela AI')).toBeInTheDocument();
       expect(screen.getByText('ONLINE // V2.4')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Escribe un mensaje...')).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Escribe o habla con Daniela...')).toBeInTheDocument();
     });
 
     it('should display the voice recording button', () => {
@@ -111,7 +111,7 @@ describe('DanielaConversationPanel', () => {
     it('should allow typing text messages', async () => {
       render(<DanielaConversationPanel />);
 
-      const input = screen.getByPlaceholderText('Escribe un mensaje...');
+      const input = screen.getByPlaceholderText('Escribe o habla con Daniela...');
       fireEvent.change(input, { target: { value: 'Hola Daniela' } });
 
       expect(input).toHaveValue('Hola Daniela');
@@ -125,7 +125,7 @@ describe('DanielaConversationPanel', () => {
 
       render(<DanielaConversationPanel />);
 
-      const input = screen.getByPlaceholderText('Escribe un mensaje...');
+      const input = screen.getByPlaceholderText('Escribe o habla con Daniela...');
       fireEvent.change(input, { target: { value: 'Hola' } });
 
       const buttons = screen.getAllByRole('button');

@@ -115,8 +115,14 @@ interface ThemeProviderProps {
 export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProviderProps) {
   const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('theme-mode') as ThemeMode;
-      return saved || defaultTheme;
+      try {
+        const saved = localStorage.getItem('theme-mode');
+        if (saved && ['light', 'dark', 'system'].includes(saved)) {
+          return saved as ThemeMode;
+        }
+      } catch (error) {
+        console.error('Error loading theme from localStorage:', error);
+      }
     }
     return defaultTheme;
   });
@@ -179,9 +185,14 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
 
   // Save theme preference
   const setThemeMode = (mode: ThemeMode) => {
+    if (!['light', 'dark', 'system'].includes(mode)) return;
     setThemeModeState(mode);
     if (typeof window !== 'undefined') {
-      localStorage.setItem('theme-mode', mode);
+      try {
+        localStorage.setItem('theme-mode', mode);
+      } catch (error) {
+        console.error('Error saving theme to localStorage:', error);
+      }
     }
   };
 
@@ -240,8 +251,6 @@ export function useResponsiveTheme() {
       document.documentElement.classList.remove('dark');
     } else if (!isDaytime && systemTheme === 'light') {
       // Force dark theme during night
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
     }
     */
   }, [themeMode, systemTheme]);

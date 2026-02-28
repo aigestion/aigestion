@@ -147,6 +147,8 @@ export const CinematicPresentation: React.FC = () => {
 
   return (
     <div
+      role="region"
+      aria-label="presentation"
       className="relative w-full h-screen overflow-hidden bg-nexus-obsidian text-white font-orbitron"
       onMouseMove={handleMouseMove}
     >
@@ -304,6 +306,7 @@ export const CinematicPresentation: React.FC = () => {
           <button
             key={slide.id}
             onClick={() => setCurrentSlide(index)}
+            aria-label={`slide ${index + 1}`}
             className="group relative flex items-center justify-end"
           >
             <div

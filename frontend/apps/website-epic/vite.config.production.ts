@@ -68,20 +68,19 @@ export default defineConfig({
             if (id.includes('@tanstack') || id.includes('recharts') || id.includes('d3')) {
               return 'vendor-data';
             }
-            if (id.includes('socket.io') || id.includes('@vapi-ai')) {
-              return 'vendor-realtime';
-            }
             if (
+              id.includes('socket.io') ||
+              id.includes('@vapi-ai') ||
               id.includes('crystals-kyber') ||
               id.includes('tweetnacl') ||
-              id.includes('@simplewebauthn')
+              id.includes('@simplewebauthn') ||
+              id.includes('axios') ||
+              id.includes('zod') ||
+              id.includes('zustand')
             ) {
-              return 'vendor-crypto';
+              return 'vendor-lib';
             }
-            if (id.includes('axios') || id.includes('zod') || id.includes('zustand')) {
-              return 'vendor-core';
-            }
-            return 'vendor-others';
+            // Let other dependencies be handled by Vite
           }
         },
         // Consistent chunk naming for caching

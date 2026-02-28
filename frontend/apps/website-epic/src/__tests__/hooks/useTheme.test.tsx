@@ -2,45 +2,10 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useTheme, ThemeProvider } from '../../contexts/ThemeContext';
 
-// Mock localStorage
-const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  clear: vi.fn(),
-};
+// Local handles for the global mocks set up in setup.ts
+const localStorageMock = localStorage as any;
 
-Object.defineProperty(globalThis, 'localStorage', {
-  value: localStorageMock,
-  writable: true,
-});
-
-// Mock matchMedia
-const mockMatchMedia = vi.fn();
-Object.defineProperty(globalThis, 'matchMedia', {
-  value: mockMatchMedia,
-  writable: true,
-});
-
-// Mock document
-Object.defineProperty(globalThis, 'document', {
-  value: {
-    documentElement: {
-      classList: {
-        add: vi.fn(),
-        remove: vi.fn(),
-        contains: vi.fn(),
-      },
-      style: {
-        setProperty: vi.fn(),
-      },
-    },
-    querySelector: vi.fn(),
-    referrer: '',
-  },
-  writable: true,
-});
-
+// Wrapper for the hook
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <ThemeProvider>{children}</ThemeProvider>
 );
@@ -49,12 +14,23 @@ describe('useTheme Hook', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     localStorageMock.getItem.mockReturnValue(null);
-    mockMatchMedia.mockReturnValue({
+    
+    // Setup spies for document methods
+    vi.spyOn(document.documentElement.classList, 'add');
+    vi.spyOn(document.documentElement.classList, 'remove');
+    vi.spyOn(document.documentElement.style, 'setProperty');
+    
+    // matchMedia is already mocked in setup.ts, we can spy on it
+    vi.mocked(window.matchMedia).mockReturnValue({
       matches: false,
       media: '(prefers-color-scheme: dark)',
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
-    });
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    } as any);
   });
 
   it('returns default theme values', () => {
@@ -76,12 +52,16 @@ describe('useTheme Hook', () => {
   });
 
   it('detects system dark theme preference', () => {
-    mockMatchMedia.mockReturnValue({
+    vi.mocked(window.matchMedia).mockReturnValue({
       matches: true,
       media: '(prefers-color-scheme: dark)',
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
-    });
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    } as any);
 
     const { result } = renderHook(() => useTheme(), { wrapper });
 
@@ -148,12 +128,16 @@ describe('useTheme Hook', () => {
   });
 
   it('toggles from system to opposite theme', () => {
-    mockMatchMedia.mockReturnValue({
+    vi.mocked(window.matchMedia).mockReturnValue({
       matches: true,
       media: '(prefers-color-scheme: dark)',
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
-    });
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    } as any);
 
     const { result } = renderHook(() => useTheme(), { wrapper });
 
@@ -177,7 +161,7 @@ describe('useTheme Hook', () => {
     });
 
     expect(document.documentElement.classList.add).toHaveBeenCalledWith('dark');
-    expect(document.documentElement.classList.remove).toHaveBeenCalledWith('light');
+    expect(document.documentElement.classList.remove).toHaveBeenCalledWith('light', 'dark');
   });
 
   it('sets CSS custom properties', () => {
@@ -195,12 +179,16 @@ describe('useTheme Hook', () => {
 
   it('listens to system theme changes', () => {
     const addEventListenerSpy = vi.fn();
-    mockMatchMedia.mockReturnValue({
+    vi.mocked(window.matchMedia).mockReturnValue({
       matches: false,
       media: '(prefers-color-scheme: dark)',
       addEventListener: addEventListenerSpy,
       removeEventListener: vi.fn(),
-    });
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    } as any);
 
     renderHook(() => useTheme(), { wrapper });
 
@@ -210,7 +198,7 @@ describe('useTheme Hook', () => {
   it('updates theme when system preference changes', () => {
     let changeCallback: ((event: MediaQueryListEvent) => void) | null = null;
 
-    mockMatchMedia.mockImplementation(query => ({
+    vi.mocked(window.matchMedia).mockImplementation(query => ({
       matches: false,
       media: query,
       addEventListener: (event, callback) => {
@@ -219,7 +207,11 @@ describe('useTheme Hook', () => {
         }
       },
       removeEventListener: vi.fn(),
-    }));
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    } as any));
 
     const { result } = renderHook(() => useTheme(), { wrapper });
 
@@ -232,12 +224,16 @@ describe('useTheme Hook', () => {
   });
 
   it('uses light theme when system preference is light', () => {
-    mockMatchMedia.mockReturnValue({
+    vi.mocked(window.matchMedia).mockReturnValue({
       matches: false,
       media: '(prefers-color-scheme: light)',
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
-    });
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    } as any);
 
     const { result } = renderHook(() => useTheme(), { wrapper });
 
