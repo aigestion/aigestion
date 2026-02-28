@@ -80,9 +80,9 @@ export const generalLimiter = createRateLimiter(
  * 5 requests per 15 minutes
  */
 export const strictLimiter = createRateLimiter(
-  15 * 60 * 1000, // 15 minutes
-  1000000,
-  'Too many attempts, please try again in 15 minutes.'
+  config.rateLimit.auth.windowMs,
+  config.rateLimit.auth.max,
+  'Too many attempts, please try again in 15 minutes.',
 );
 
 /**
@@ -90,9 +90,9 @@ export const strictLimiter = createRateLimiter(
  * 10 requests per hour to prevent brute force
  */
 export const authLimiter = createRateLimiter(
-  60 * 60 * 1000, // 1 hour
-  1000000,
-  'Too many authentication attempts, please try again in an hour.'
+  config.rateLimit.auth.windowMs,
+  config.rateLimit.auth.max,
+  'Too many authentication attempts, please try again in an hour.',
 );
 
 /**
@@ -101,8 +101,8 @@ export const authLimiter = createRateLimiter(
  */
 export const uploadLimiter = createRateLimiter(
   60 * 60 * 1000, // 1 hour
-  1000000,
-  'Upload limit exceeded, please try again later.'
+  20,
+  'Upload limit exceeded, please try again later.',
 );
 
 /**
@@ -110,9 +110,9 @@ export const uploadLimiter = createRateLimiter(
  * 30 requests per 10 minutes
  */
 export const aiLimiter = createRateLimiter(
-  10 * 60 * 1000, // 10 minutes
-  1000000,
-  'AI request limit exceeded, please try again in 10 minutes.'
+  config.rateLimit.ai.windowMs,
+  config.rateLimit.ai.max,
+  'AI request limit exceeded, please try again in 10 minutes.',
 );
 
 /**
@@ -125,19 +125,19 @@ export const aiLimiter = createRateLimiter(
 // Define limiters per role outside the request handler to persist state
 const roleLimiters: Record<string, any> = {
   guest: createRateLimiter(
-    15 * 60 * 1000, // 15 minutes
-    1000000,
-    'Rate limit exceeded for guest users. Please try again later.'
+    15 * 60 * 1000,
+    config.rateLimit.plans.free.max,
+    'Rate limit exceeded for guest users. Please try again later.',
   ),
   authenticated: createRateLimiter(
-    15 * 60 * 1000, // 15 minutes
-    1000000,
-    'Rate limit exceeded for authenticated users. Please try again later.'
+    15 * 60 * 1000,
+    config.rateLimit.plans.pro.max,
+    'Rate limit exceeded for authenticated users. Please try again later.',
   ),
   premium: createRateLimiter(
-    15 * 60 * 1000, // 15 minutes
-    1000000,
-    'Rate limit exceeded for premium users. Please try again later.'
+    15 * 60 * 1000,
+    config.rateLimit.plans.god.max,
+    'Rate limit exceeded for premium users. Please try again later.',
   ),
 };
 
@@ -171,8 +171,8 @@ export const dynamicRoleLimiter = (req: Request, res: Response, next: NextFuncti
  */
 export const websocketLimiter = createRateLimiter(
   60 * 1000, // 1 minute
-  1000000,
-  'Too many WebSocket connection attempts, please try again later.'
+  10,
+  'Too many WebSocket connection attempts, please try again later.',
 );
 
 export default {

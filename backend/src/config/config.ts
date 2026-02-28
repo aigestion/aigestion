@@ -24,19 +24,19 @@ export const config = {
     },
     plans: {
       free: {
-        max: 1000000, // Effectively unlimited for development
-        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 30, // Guest: 30 req/15min
+        windowMs: 15 * 60 * 1000,
       },
       pro: {
-        max: 1000000,
+        max: 100, // Authenticated: 100 req/15min
         windowMs: 15 * 60 * 1000,
       },
       god: {
-        max: 1000000,
+        max: 1000, // God Tier: 1000 req/15min
         windowMs: 15 * 60 * 1000,
       },
       default: {
-        max: 1000000,
+        max: 50, // Default: 50 req/15min
         windowMs: 15 * 60 * 1000,
       },
     },
