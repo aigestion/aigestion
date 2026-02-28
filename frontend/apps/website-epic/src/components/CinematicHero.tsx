@@ -1,8 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useSound } from '../hooks/useSound';
-import { NeuralServer } from './3d/NeuralServer';
-import { FluidBackground } from './FluidBackground';
+
+// LAZY LOAD: Heavy 3D Components
+const NeuralServer = lazy(() => import('./3d/NeuralServer').then(m => ({ default: m.NeuralServer })));
+const FluidBackground = lazy(() => import('./FluidBackground').then(m => ({ default: m.FluidBackground })));
+
 import { MiniDashboard } from './MiniDashboard';
 import { useAppContext } from '../contexts/AppContext';
 import { useLocation } from 'react-router-dom';
@@ -192,14 +195,24 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
               className={`absolute inset-0 z-10 flex items-center justify-center pointer-events-none transition-opacity duration-1000 ${videoError ? 'opacity-100' : 'opacity-80'}`}
             >
               <div className="w-full h-full md:w-1/2 md:h-1/2 mix-blend-screen pointer-events-auto">
-                <NeuralServer />
+                <Suspense
+                  fallback={
+                    <div className="w-full h-full flex items-center justify-center">
+                      <div className="w-8 h-8 border-2 border-nexus-cyan border-t-transparent rounded-full animate-spin opacity-20" />
+                    </div>
+                  }
+                >
+                  <NeuralServer />
+                </Suspense>
               </div>
             </div>
           </motion.div>
         </AnimatePresence>
 
         {/* Fluid Interaction Layer */}
-        <FluidBackground />
+        <Suspense fallback={null}>
+          <FluidBackground />
+        </Suspense>
 
         {/* Scanline Effect Overlay */}
         <div className="scanline" />
@@ -331,7 +344,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onHeroComplete }) 
                   transition={{ delay: 0.6 }}
                 >
                   <div className="max-w-xs mx-auto">
-                     <img
+                    <img
                       src="/images/nexus/nexus_guardian_godmode.png"
                       alt="Nexus Control"
                       className="w-full h-auto drop-shadow-[0_0_30px_rgba(0,240,255,0.3)]"
