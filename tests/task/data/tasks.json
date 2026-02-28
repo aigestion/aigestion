@@ -1,11 +1,11 @@
-﻿{
+{
   "metadata": {
     "version": "1.0.0",
     "created": "2025-12-07T00:00:00Z",
-    "lastUpdated": "2025-12-16T21:05:00.0000000Z",
-    "totalTasks": 19,
+    "lastUpdated": "2026-03-02T12:00:00.0000000Z",
+    "totalTasks": 20,
     "completedTasks": 0,
-    "activeTasks": 19
+    "activeTasks": 20
   },
   "tasks": [
     {
@@ -394,6 +394,26 @@
       "progress": 0,
       "assignee": "Alejandro",
       "dependencies": [1],
+      "notes": []
+    },
+    {
+      "id": 20,
+      "title": "Sprint 11: Estabilidad y Refinamiento de Rendimiento",
+      "type": "feature",
+      "priority": "high",
+      "priorityValue": 4,
+      "status": "todo",
+      "description": "Implementación de MongoDB Memory Server para tests, finalización de optimizaciones de Vite/Service Workers, y mejora de capacidades auto-heal en herramientas de diagnóstico.",
+      "tags": "\"stability\",\"performance\",\"testing\",\"dx\"",
+      "dueDate": "2026-04-15",
+      "created": "2026-03-02T12:00:00.0000000Z",
+      "updated": "2026-03-02T12:00:00.0000000Z",
+      "completed": null,
+      "estimatedHours": 40,
+      "actualHours": 0,
+      "progress": 0,
+      "assignee": "Alejandro",
+      "dependencies": [1, 10, 13, 14],
       "notes": []
     }
   ]
