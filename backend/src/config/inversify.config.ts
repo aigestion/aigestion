@@ -125,7 +125,7 @@ import { SemanticCacheService } from '../services/semantic-cache.service';
 import { ServiceMeshService } from '../services/service-mesh.service';
 import { SocketService } from '../services/socket.service';
 import { StripeService } from '../services/stripe.service';
-import { SupabaseService } from '../services/supabase.service';
+import { SupabaseService } from '../services/SupabaseService';
 import { SwarmInternalClient } from '../services/swarm-internal.client';
 import { SwarmService } from '../services/swarm.service';
 import { SystemMetricsService } from '../services/system-metrics.service';
@@ -224,7 +224,6 @@ import { MissionWatcherService } from '../services/mission-watcher.service';
 import { config } from './config';
 
 import { TreasuryController } from '../controllers/treasury.controller';
-import { WisdomController } from '../controllers/wisdom.controller';
 import { TwilioWebhookController } from '../controllers/twilio-webhook.controller';
 
 // Infrastructure

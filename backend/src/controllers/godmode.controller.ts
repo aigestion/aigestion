@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '../types';
-import { SupabaseService } from '../services/supabase.service';
+import { SupabaseService } from '../services/SupabaseService';
 import { GodNotificationService } from '../services/god-notification.service';
 // MastraService: removed (not installed, routed through SwarmService)
 import { SwarmService } from '../services/swarm.service';

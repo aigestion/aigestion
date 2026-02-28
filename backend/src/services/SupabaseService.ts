@@ -2,7 +2,9 @@ import { injectable } from 'inversify';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { env } from '../config/env.schema';
 import { logger } from '../utils/logger';
-import { Pool, PoolClient } from 'pg';
+import pg from 'pg';
+import type { PoolClient } from 'pg';
+const { Pool } = pg;
 import { getCache, setCache } from '../cache/redis';
 import crypto from 'crypto';
 
@@ -119,14 +121,14 @@ export class SupabaseService {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
 
+        const headers = new Headers(init?.headers);
+        headers.set('x-attempt', (attempt + 1).toString());
+        headers.set('x-god-mode', 'supreme');
+
         const response = await fetch(input, {
           ...init,
           signal: controller.signal,
-          headers: {
-            'x-attempt': (attempt + 1).toString(),
-            'x-god-mode': 'supreme',
-            ...init?.headers,
-          },
+          headers,
         });
 
         clearTimeout(timeoutId);
@@ -334,7 +336,7 @@ export class SupabaseService {
   }
 
   // New method to get a Postgres client from SUPABASE_DB_URL
-  private pgPool: Pool | null = null;
+  private pgPool: pg.Pool | null = null;
 
   private initializePostgresPool() {
     const dbUrl = env.SUPABASE_DB_URL;
